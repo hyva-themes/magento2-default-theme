@@ -73,12 +73,13 @@ $graphqlQuery = $query ?: "
             query: `<?= $graphqlQuery ?>`,
             getProducts($nextTick, $dispatch) {
 
-                let response = fetch('<?= $block->getBaseUrl() ?>graphql?query=' + encodeURIComponent(
+                fetch('<?= $block->getBaseUrl() ?>graphql?query=' + encodeURIComponent(
                     this.query
                 ), {
                     method: 'GET',
                     headers: {'Content-Type': 'application/json'},
-                }).then(response => response.json())
+                })
+                    .then(response => response.json())
                     .then(
                         data => {
                             this.products = (data && data.data && data.data.products && data.data.products.items) || [];
