@@ -1,25 +1,27 @@
 {
-  "name": "tailwind",
-  "version": "1.0.0",
-  "description": "Tailwind CSS compiler",
-  "main": "tailwind.config.js",
-  "dependencies": {
-    "autoprefixer": "^9.8.0",
-    "csso-cli": "^3.0.0",
-    "postcss-cli": "^7.1.1",
-    "postcss-import": "^12.0.1",
-    "tailwindcss": "^1.4.6",
-    "terser": "^4.7.0"
-  },
-  "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx postcss tailwind-source.css -o tailwind-output.css",
-    "minify": "npx csso tailwind-output.css --output ../css/styles.css",
-    "build-dev": "NODE_ENV=development npm run build && npm run minify",
-    "build-prod": "NODE_ENV=production npm run build && npm run minify"
-  },
-  "author": "Willem Wigman",
-  "license": "ISC",
-  "private": true
+    "name": "tailwind",
+    "version": "1.0.0",
+    "description": "Tailwind CSS compiler",
+    "main": "tailwind.config.js",
+    "dependencies": {
+        "autoprefixer": "^9.8.0",
+        "csso-cli": "^3.0.0",
+        "postcss-cli": "^7.1.1",
+        "postcss-import": "^12.0.1",
+        "postcss-nested": "^4.2.3",
+        "postcss-custom-properties": "^9.1.1",
+        "tailwindcss": "^1.4.6",
+        "terser": "^4.7.0"
+    },
+    "devDependencies": {},
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "npx postcss tailwind-source.css -o tailwind-output.css",
+        "minify": "npx csso tailwind-output.css --output ../css/styles.css",
+        "build-dev": "NODE_ENV=development npm run build && npm run minify",
+        "build-prod": "NODE_ENV=production npm run build && npm run minify"
+    },
+    "author": "Willem Wigman",
+    "license": "ISC",
+    "private": true
 }

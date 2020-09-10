@@ -11,35 +11,17 @@
 html {
     @apply antialiased;
 }
+
 body {
     @apply text-gray-600 /*text-open-sans*/ leading-normal text-base tracking-normal;
 }
+
 .page-header {
     @apply sticky top-0 z-10;
 }
+
 .page-main {
 }
-
-.container {
-    @apply mx-auto;
-}
-.columns {
-    @apply flex flex-wrap text-center order-first;
-}
-.columns .sidebar {
-    @apply w-1/5 pr-4;
-}
-.columns .main {
-    @apply w-full;
-}
-.page-layout-2columns-left .columns .main {
-    @apply w-4/5;
-}
-
-.page-layout-2columns-right .columns .main {
-    @apply w-4/5;
-}
-
 
 .input {
     @apply w-auto rounded mr-2 border text-base py-2 px-4;
@@ -56,9 +38,11 @@ body {
 .btn {
     @apply inline-flex text-white bg-black border-0 py-2 px-6 rounded text-lg
 }
+
 .btn:focus {
     @apply outline-none;
 }
+
 .btn:hover {
     @apply text-black bg-white;
 }
@@ -66,6 +50,7 @@ body {
 .btn-primary {
     @apply bg-primary;
 }
+
 .btn-primary:hover {
     @apply bg-primary-lighter;
 }
@@ -73,6 +58,7 @@ body {
 .btn-secondary {
     @apply bg-secondary;
 }
+
 .btn-secondary:hover {
     @apply bg-secondary-lighter;
 }
@@ -88,6 +74,7 @@ body {
         @apply mr-0;
     }
 }
+
 @media (min-width: 1280px) {
     .input {
         @apply mr-4;
@@ -97,9 +84,11 @@ body {
 .duration-200 {
     transition-duration: 200ms;
 }
+
 .ease-in {
     transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
 }
+
 .ease-out {
     transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 }
@@ -107,6 +96,7 @@ body {
 .transition {
     transition: transform 250ms ease, color 250ms ease;
 }
+
 .transform-180 {
     transform: rotate(-180deg);
 }

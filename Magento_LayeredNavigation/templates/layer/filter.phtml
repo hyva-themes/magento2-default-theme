@@ -1,0 +1,36 @@
+<?php
+declare(strict_types=1);
+
+// phpcs:disable Magento2.Templates.ThisInTemplate
+
+use Magento\Catalog\Helper\Data;
+use Magento\LayeredNavigation\Block\Navigation\FilterRenderer;
+use Magento\Framework\Escaper;
+
+/** @var $escaper Escaper */
+/**@var $block FilterRenderer */
+$catalogHelper = $this->helper(Data::class);
+/** @var array $filterItems */
+?>
+<?php foreach ($filterItems as $filterItem): ?>
+    <?php if ($filterItem->getCount() > 0): ?>
+        <a href="<?= $escaper->escapeUrl($filterItem->getUrl()) ?>"
+           class="flex justify-between py-1 hover:text-black">
+            <span><?= /* @noEscape */
+                $filterItem->getLabel() ?></span>
+            <?php if ($catalogHelper->shouldDisplayProductCountOnLayer()): ?>
+                <span class="count text-primary">(<?= /* @noEscape */
+                    (int)$filterItem->getCount() ?>)</span>
+            <?php endif; ?>
+        </a>
+    <?php else: ?>
+        <span class="flex justify-between py-1 hover:text-black">
+                <span><?= /* @noEscape */
+                    $filterItem->getLabel() ?></span>
+            <?php if ($catalogHelper->shouldDisplayProductCountOnLayer()): ?>
+                <span class="count text-primary">(<?= /* @noEscape */
+                    (int)$filterItem->getCount() ?>)</span>
+            <?php endif; ?>
+        </span>
+    <?php endif; ?>
+<?php endforeach ?>

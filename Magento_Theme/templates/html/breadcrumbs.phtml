@@ -1,0 +1,40 @@
+<?php
+/**
+ * Copyright © Wigman Interactive. All rights reserved.
+ * This product is licensed per Magento production install
+ */
+declare(strict_types=1);
+
+use Magento\Theme\Block\Html\Breadcrumbs;
+use Magento\Framework\Escaper;
+
+/** @var $escaper Escaper */
+/** @var Breadcrumbs $block */
+/** @var array $crumbs */
+?>
+<?php if ($crumbs && is_array($crumbs)): ?>
+<div class="breadcrumbs bg-background-lighter">
+    <div class="container">
+        <ul class="items list-reset p-4 rounded flex text-grey text-sm">
+            <?php foreach ($crumbs as $crumbName => $crumbInfo) : ?>
+                <li class="item px-2 <?= $escaper->escapeHtmlAttr($crumbName) ?>">
+                <?php if ($crumbInfo['link']) : ?>
+                    <a href="<?= $escaper->escapeUrl($crumbInfo['link']) ?>"
+                       class="no-underline text-indigo"
+                       title="<?= $escaper->escapeHtmlAttr($crumbInfo['title']) ?>">
+                        <?= $escaper->escapeHtml($crumbInfo['label']) ?>
+                    </a>
+                <?php elseif ($crumbInfo['last']) : ?>
+                    <span class="text-ciHighlight"><?= $escaper->escapeHtml($crumbInfo['label']) ?></span>
+                <?php else : ?>
+                    <?= $escaper->escapeHtml($crumbInfo['label']) ?>
+                <?php endif; ?>
+                </li>
+                <?php if (!$crumbInfo['last']) : ?>
+                    <li>|</li>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+</div>
+<?php endif; ?>

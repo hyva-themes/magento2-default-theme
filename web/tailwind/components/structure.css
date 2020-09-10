@@ -1,0 +1,60 @@
+
+.container {
+    @apply mx-auto;
+}
+
+.columns {
+    @apply flex flex-wrap text-center order-first;
+}
+
+.columns .sidebar {
+    @apply w-full;
+
+    @screen md {
+        @apply py-8 pr-4 w-1/3;
+    }
+
+    @screen lg {
+        @apply py-8 pr-4 w-1/4;
+    }
+
+    @screen xl {
+        @apply py-8 pr-4 w-1/5;
+    }
+}
+
+.columns .main {
+    @apply w-full;
+}
+
+.page-layout-2columns-left .columns .main {
+    @apply w-full;
+
+    @screen md {
+        @apply w-2/3;
+    }
+
+    @screen lg {
+        @apply w-3/4;
+    }
+
+    @screen xl {
+        @apply w-4/5;
+    }
+}
+
+.page-layout-2columns-right .columns .main {
+    @apply w-full;
+
+    @screen md {
+        @apply w-2/3;
+    }
+
+    @screen lg {
+        @apply w-3/4;
+    }
+
+    @screen xl {
+        @apply w-4/5;
+    }
+}

@@ -1,0 +1,75 @@
+<?php
+declare(strict_types=1);
+
+/** @var $block \Magento\LayeredNavigation\Block\Navigation */
+
+// phpcs:disable Generic.Files.LineLength.TooLong
+?>
+<?php
+/**
+ * Category layered navigation
+ *
+ * @var $block \Magento\LayeredNavigation\Block\Navigation
+ */
+
+use Magento\Framework\Escaper;
+
+/** @var $escaper Escaper */
+?>
+<?php if ($block->canShowBlock()) : ?>
+    <div class="block rounded border border-background p-4 mx-6 md:mx-0 mb-8" x-data="initLayeredNavigation()"
+         x-init="checkIsMobileResolution()">
+        <div class="block-title flex items-center justify-between" @click="blockOpen = !blockOpen">
+            <span class="text-xl"><?= $escaper->escapeHtml(__('Shop By')) ?></span>
+            <span class="py-1 px-1 rounded border border-background" x-show="isMobile">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                     xmlns="http://www.w3.org/2000/svg"
+                     class="transition-transform transform duration-300 ease-in-out"
+                     :class="open ? 'rotate-180' : ''">
+                    <path d="M19 9L12 16L5 9" stroke="#4A5568" stroke-width="2" stroke-linecap="round"
+                          stroke-linejoin="round"/>
+                </svg>
+            </span>
+        </div>
+        <div class="block-content filter-content pt-6" x-show="isMobile && blockOpen || !isMobile">
+            <?= $block->getChildHtml('state') ?>
+            <?php foreach ($block->getFilters() as $filter): ?>
+                <?php if ($filter->getItemsCount()): ?>
+                    <div class="filter-option " x-data="{ open: true }">
+                        <div
+                            class="filter-options-title flex justify-between items-center cursor-pointer hover:text-black pointer-events-none md:pointer-events-auto"
+                            @click="open = !open">
+                            <span class="title text-lg">
+                                <?= $escaper->escapeHtml(__($filter->getName())) ?>
+                                </span>
+                            <span class="py-1 px-1 rounded border border-background hidden md:block">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     class="transition-transform transform duration-300 ease-in-out"
+                                     :class="open ? 'rotate-180' : ''">
+                                    <path d="M19 9L12 16L5 9" stroke="#4A5568" stroke-width="2" stroke-linecap="round"
+                                          stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="filter-options-content pt-3" x-show="open">
+                            <?= /* @noEscape */
+                            $block->getChildBlock('renderer')->render($filter) ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <script>
+        function initLayeredNavigation() {
+            return {
+                isMobile: false,
+                blockOpen: false,
+                checkIsMobileResolution: function () {
+                    this.isMobile = window.outerWidth < 768
+                }
+            }
+        }
+    </script>
+<?php endif; ?>

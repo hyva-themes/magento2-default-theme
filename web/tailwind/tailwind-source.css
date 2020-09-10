@@ -2,6 +2,7 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 
+@import url(components/structure.css);
 @import url(components/theming.css);
 @import url(components/product-page.css);
 @import url(components/messages.css);
