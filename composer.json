@@ -11,10 +11,11 @@
         "hyva-themes/magento2-theme-module": "*"
     },
     "type": "magento2-theme",
-    "license": [
-        "OSL-3.0",
-        "AFL-3.0"
-    ],
+    "authors": [{
+        "name": "Hyvä Themes, Wigman Interactive",
+        "email": "info@hyva.io"
+    }],
+    "license": "see LICENSE.md",
     "autoload": {
         "files": [
             "registration.php"
