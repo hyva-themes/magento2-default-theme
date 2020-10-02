@@ -132,8 +132,8 @@ $graphqlQuery = $query ?: "
                      x-on:scroll.debounce="active = Math.round($event.target.scrollLeft / ($event.target.scrollWidth / products.length))"
                 >
                     <template x-for="product in products">
-                        <div class="js_slide w-full md:w-1/2 lg:w-1/3 xl:w-1/4 flex-none">
-                            <div class="p-2 mr-2 rounded-md bg-background-lighter hover:bg-background">
+                        <div class="js_slide w-full md:w-1/2 lg:w-1/3 xl:w-1/4 flex-none py-1">
+                            <div class="card card-interactive mx-1">
                                 <a :href="'<?= $block->getBaseUrl() ?>' + product.url_key + '.html'"
                                    class="relative product photo product-item-photo flex items-center bg-white"
                                    style="padding-top:100%"
