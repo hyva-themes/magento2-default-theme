@@ -49,9 +49,11 @@
 }
 
 .card {
-    @apply p-4 rounded-md bg-gray-100 shadow;
+    @apply p-4 rounded-md bg-background-lighter border-2 border-background;
+}
 
+.card-interactive {
     &:hover {
-         @apply bg-gray-200;
-     }
+        @apply bg-background border-background-darker;
+    }
 }

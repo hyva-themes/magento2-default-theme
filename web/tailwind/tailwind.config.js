@@ -26,6 +26,21 @@ module.exports = {
                 darker: colors.orange['300'],
             }
         },
+        textColor: {
+            black: colors.black,
+            white: colors.white,
+            gray: colors.gray,
+            primary: {
+                lighter: colors.gray['700'],
+                default: colors.gray['800'],
+                darker: colors.gray['900'],
+            },
+            secondary: {
+                lighter: colors.gray['400'],
+                default: colors.gray['500'],
+                darker: colors.gray['600'],
+            },
+        },
         screens: {
             'sm': '640px',
             // => @media (min-width: 640px) { ... }
