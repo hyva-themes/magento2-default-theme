@@ -1,0 +1,53 @@
+<div class="navigation bg-container-lighter lg:bg-background"
+     x-data="initHeaderNavigation()"
+     @toggle-mobile-menu.window="menuOpen = !menuOpen"
+>
+    <div class="flex justify-between items-baseline lg:hidden">
+        <div class="flex justify-end">
+            <label for="menu-toggle" @click="$dispatch('toggle-mobile-menu')"
+                   class="flex justify-center items-center w-12 h-12 p-3 cursor-pointer"
+                   :class="{ 'transition transform-180': menuOpen }">
+                <svg class="fill-current h-8 w-8" xmlns="http://www.w3.org/2000/svg" width="20" height="20" x-cloak
+                     viewBox="0 0 20 20">
+                    <path x-show="menuOpen" fill-rule="evenodd" clip-rule="evenodd"
+                          d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"></path>
+                    <path x-show="!menuOpen" d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
+                </svg>
+            </label>
+        </div>
+    </div>
+
+    <div
+        class="w-full lg:flex lg:justify-start lg:w-auto lg:relative lg:-left-6 transition-display transform duration-150 ease-in-out"
+        :class="{'block min-h-screen fixed mt-4 z-10 bg-container-lighter left-0 px-8' : menuOpen, 'hidden' : !menuOpen}"
+         @click.away="menuOpen = false"
+    >
+        <nav>
+            <ul class="md:flex items-center justify-between text-base text-gray-700 py-4 md:py-0">
+                <li class="inline-block no-underline hover:text-black hover:underline py-2 px-4">
+                    <?php echo $this->getLayout()
+                        ->createBlock("Magento\Catalog\Block\Category\Widget\Link")
+                        ->setAnchorText("Women")
+                        ->setIdPath("category/20")
+                        ->setTemplate("category/widget/link/link_inline.phtml")
+                        ->toHtml(); ?>
+                </li>
+                <li class="inline-block no-underline hover:text-black hover:underline py-2 px-4">
+                    <?php echo $this->getLayout()
+                        ->createBlock("Magento\Catalog\Block\Category\Widget\Link")
+                        ->setAnchorText("Men")
+                        ->setIdPath("category/11")
+                        ->setTemplate("category/widget/link/link_inline.phtml")
+                        ->toHtml(); ?>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<script>
+    function initHeaderNavigation() {
+        return {
+            menuOpen: false
+        }
+    }
+</script>

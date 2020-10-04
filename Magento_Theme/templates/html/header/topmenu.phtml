@@ -1,0 +1,110 @@
+<?php
+/** @var Template $block */
+/** @var Escaper $escaper */
+
+/** @var NavigationAsJson $viewModelNavigationAsJson */
+
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\Escaper;
+use Hyva\Theme\ViewModel\NavigationAsJson;
+
+$viewModelNavigationAsJson = $block->getData('viewModelNavigationAsJson');
+$menuJson = $viewModelNavigationAsJson->getNavigationAsJson();
+
+?>
+<div class="navigation bg-container-lighter lg:bg-background"
+     x-data="initHeaderNavigation()"
+     x-init="checkIsSmallResolution()"
+     x-on:resize.window.debounce.200="checkIsSmallResolution()"
+     @toggle-mobile-menu.window="menuOpen = !menuOpen"
+>
+    <div class="flex justify-between items-baseline lg:hidden">
+        <div class="flex justify-end">
+            <label for="menu-toggle" @click="$dispatch('toggle-mobile-menu')"
+                   class="flex justify-center items-center w-12 h-12 p-3 cursor-pointer"
+                   :class="{ 'transition transform-180': menuOpen }">
+                <svg class="fill-current h-8 w-8" xmlns="http://www.w3.org/2000/svg" width="20" height="20" x-cloak
+                     viewBox="0 0 20 20">
+                    <path x-show="menuOpen" fill-rule="evenodd" clip-rule="evenodd"
+                          d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"></path>
+                    <path x-show="!menuOpen" d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
+                </svg>
+            </label>
+        </div>
+    </div>
+    <input class="hidden" type="checkbox" id="menu-toggle">
+    <nav
+        class="w-full lg:flex lg:justify-start lg:w-auto lg:relative lg:-left-6 transition-display transform duration-150 ease-in-out"
+        :class="{'block min-h-screen fixed mt-4 z-10 bg-container-lighter left-0 px-8' : menuOpen, 'hidden' : !menuOpen}"
+    >
+        <template x-for="item in navigation" :key="item.id">
+            <div class="lg:relative lg:mr-2 lg:hover:bg-container-lighter hover:lg:shadow-lg"
+                 x-on:mouseenter="isSmallResolution ? hoverPanelActiveId =  0 : hoverPanelActiveId = item.id"
+                 x-on:mouseleave="hoverPanelActiveId = 0">
+                <span
+                    class="px-3 py-2 lg:py-3 lg:text-lg flex lg:block transition-transform transform duration-150 ease-in-out items-center lg:bg-opacity-95"
+                    :class="{'-translate-x-full' : mobilePanelActiveId && isSmallResolution, 'translate-x-0' : !mobilePanelActiveId && isSmallResolution }"
+                >
+                    <a class="w-8/12 lg:w-full font-semibold py-3" x-text="item.name"
+                       :class="{'underline' : item.is_active || item.has_active}"
+                       :href="item.url"
+                       :title="item.name"></a>
+                    <span class="w-4/12 lg:hidden text-right"
+                          :class="{'hidden' : !Object.keys(item.childData).length, 'block' : Object.keys(item.childData).length}"
+                          @click="mobilePanelActiveId = mobilePanelActiveId === item.id ? 0 : item.id">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24" width="24"
+                             stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </span>
+                </span>
+                <template x-if="Object.values(item.childData).length">
+                    <div
+                        class="absolute h-full z-10 lg:h-auto right-0 top-0 lg:top-auto lg:right-auto lg:left-0 lg:bottom-0 lg:-ml-6 lg:pl-6 lg:pr-6 transform lg:translate-y-full w-full lg:w-auto bg-container-lighter transition-transform transform duration-200 ease-in-out pb-4 lg:bg-opacity-95"
+                        :class="{'translate-x-full' : mobilePanelActiveId !== item.id && isSmallResolution, 'translate-x-0' : mobilePanelActiveId === item.id && isSmallResolution, 'hidden' : hoverPanelActiveId !== item.id && !isSmallResolution, 'block' : hoverPanelActiveId === item.id && !isSmallResolution}"
+                    >
+                        <span class="flex lg:hidden items-center px-8 py-2 my-1"
+                              @click="mobilePanelActiveId = 0">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24"
+                                 width="24"
+                                 stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 19l-7-7 7-7"/>
+                            </svg>
+                            <span class="ml-4" x-text="item.name"></span>
+                        </span>
+                        <a :href="item.url" :title="item.name"
+                           class="flex lg:hidden px-8 py-1 my-1 first:mt-0"
+                           :class="{'underline' : item.is_active }">
+                            <svg class="lg:hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24"
+                                 width="24"></svg>
+                            <span class="ml-4 lg:ml-0"><?= $escaper->escapeHtml(__('View All')) ?></span></a>
+                        <template x-for="child in Object.values(item.childData)" :key="child.id">
+                            <a :href="child.url" :title="child.name"
+                               class="flex lg:block px-8 lg:px-3 py-1 my-1 first:mt-0 lg:hover:underline w-full lg:whitespace-no-wrap"
+                               :class="{'underline' : child.is_active || child.has_active}">
+                                <svg class="lg:hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24"
+                                     width="24"></svg>
+                                <span class="ml-4 lg:ml-0" x-text="child.name"></span></a>
+                        </template>
+                    </div>
+                </template>
+            </div>
+        </template>
+    </nav>
+</div>
+<script>
+    function initHeaderNavigation() {
+        return {
+            navigation: Object.values(<?= /** @noEscape */ $menuJson ?>),
+            isSmallResolution: false,
+            checkIsSmallResolution: function () {
+                this.isSmallResolution = document.body.offsetWidth < 1024
+            },
+            mobilePanelActiveId: null,
+            hoverPanelActiveId: null,
+            menuOpen: false
+        }
+    }
+</script>
+

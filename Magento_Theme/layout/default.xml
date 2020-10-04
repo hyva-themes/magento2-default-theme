@@ -25,6 +25,14 @@
                 </block>
                 <block name="header-search" template="Magento_Theme::html/header/search-form.phtml"/>
                 <block name="cart-drawer" template="Magento_Theme::html/cart/cart-drawer.phtml"/>
+<!--                <block name="topmenu_static" template="Magento_Theme::html/header/topmenu_static.phtml"/>-->
+                <block name="topmenu_generic" template="Magento_Theme::html/header/topmenu.phtml" ttl="3600">
+                    <arguments>
+                        <argument name="viewModelNavigationAsJson"
+                                  xsi:type="object">Hyva\Theme\ViewModel\NavigationAsJson
+                        </argument>
+                    </arguments>
+                </block>
             </block>
         </referenceContainer>
         <referenceContainer name="top.container">
