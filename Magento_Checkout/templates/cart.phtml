@@ -1,0 +1,29 @@
+<?php
+
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\Escaper;
+
+/** @var $block Template */
+/** @var $escaper Escaper */
+?>
+<?= $block->getChildHtml('cart_main_js') ?>
+<div class="container">
+    <section class="relative"
+             style="min-height: 200px;"
+             x-data="initCart()"
+             x-init="getCart(); isTouchEnabled();"
+    >
+        <?= $block->getChildHtml('loading') ?>
+        <?= $block->getChildHtml('items') ?>
+        <div class="md:grid grid-cols-2">
+            <div>
+                <?= $block->getChildHtml('coupon') ?>
+            </div>
+            <div>
+                <?= $block->getChildHtml('totals') ?>
+            </div>
+        </div>
+        <?= $block->getChildHtml('checkout.cart.methods.bottom') ?>
+        <?= $block->getChildHtml('empty') ?>
+    </section>
+</div>

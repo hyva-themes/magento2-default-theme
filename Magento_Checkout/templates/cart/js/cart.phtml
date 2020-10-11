@@ -1,0 +1,192 @@
+<?php
+
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\Escaper;
+use Hyva\Theme\ViewModel\Cart\GraphQlQueries;
+
+/** @var $block Template */
+/** @var $escaper Escaper */
+/** @var $viewModelCart Cart */
+$viewModelCart = $block->getData('viewModelCart');
+?>
+<script>
+
+    <?= $block->getChildHtml('js_localstorage_config') ?>
+
+    const cartId = getConfigFromLocalStorage(activeSource.cartId);
+    const signInToken = getConfigFromLocalStorage(activeSource.token);
+
+    <?php /* customer not logged in */ ?>
+    const getCartQuery = `query {cart (cart_id: "${cartId}") {<?= /* @noEscape */ $viewModelCart->getCartGraphQlQuery(
+    ) ?>}}`;
+
+    <?php /* customer is logged in */ ?>
+    const getCustomerCartQuery = `query {customerCart {<?= /* @noEscape */ $viewModelCart->getCartGraphQlQuery() ?>}}`;
+
+    const cartQuery = (signInToken && getCustomerCartQuery) || getCartQuery;
+
+    function initCart() {
+        return {
+            cartData: [],
+            cartEmpty: true,
+            isLoading: true,
+            cartQuery: cartQuery,
+            isTouchDevice: false,
+            getCart() {
+                if (cartId) {
+                    fetch('<?= $escaper->escapeUrl($block->getBaseUrl()) ?>graphql?query=' + encodeURIComponent(
+                        this.cartQuery
+                    ), {
+                        method: 'GET',
+                        headers: {'Content-Type': 'application/json'},
+                    })
+                        .then(response => response.json())
+                        .then(
+                            data => {
+                                if (data && data.errors) {
+                                    this.initErrorMessages(data.errors);
+                                } else {
+                                    this.cartData = (data && data.data && (data.data.customerCart || data.data.cart)) || [];
+                                    this.updateCartDataDependencies();
+                                }
+                            }
+                        ).finally(() => {
+                        this.isLoading = false
+                    });
+                }else {
+                    this.cartEmpty = true;
+                    this.isLoading = false;
+                }
+            },
+            formatPrice(price) {
+                return price.toLocaleString(false, {
+                    style: 'currency',
+                    currency: this.cartData.prices.subtotal_excluding_tax.currency
+                })
+            },
+            isTouchEnabled: function () {
+                this.isTouchDevice = ('ontouchstart' in window) ||
+                    (navigator.maxTouchPoints > 0) ||
+                    (navigator.msMaxTouchPoints > 0);
+            },
+            updateCartDataDependencies() {
+                this.showCouponForm = this.cartData.applied_coupons;
+                if (this.cartData && this.cartData.items && Object.keys(this.cartData.items).length) {
+                    this.cartEmpty = false;
+                }
+            },
+            showCouponForm: false,
+            dispatchCouponMutationRequest: function () {
+                if (!this.cartData.applied_coupons && document.getElementById('coupon_code').value == '') {
+                    dispatchMessages([{
+                        type: 'error',
+                        text: '<?= $escaper->escapeJs(__('Please enter a coupon code')) ?>'
+                    }], 5000)
+                } else {
+                    this.mutateCouponCode();
+                }
+            },
+            mutateCouponCode() {
+                this.isLoading = true;
+
+                const couponCode = document.getElementById('coupon_code').value;
+                const couponQuery = couponCode ? `mutation {<?= /** @noEscape */ $viewModelCart->getCouponAddQuery(
+                ) ?>}` : `mutation {<?= /** @noEscape */ $viewModelCart->getCouponRemoveQuery() ?>}`;
+
+                fetch('<?= $escaper->escapeUrl($block->getBaseUrl()) ?>graphql', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=utf-8'
+                    },
+                    body: JSON.stringify({query: couponQuery})
+                })
+                    .then(response => response.json())
+                    .then(
+                        data => {
+                            this.clearErrorMessages();
+                            if (data && data.errors) {
+                                this.initErrorMessages(data.errors);
+                                this.getCart();
+                            } else {
+                                this.cartData = (data && data.data && ((data.data.removeCouponFromCart && (data.data.removeCouponFromCart.cart)) || (data.data.applyCouponToCart && (data.data.applyCouponToCart.cart)))) || [];
+                                this.updateCartDataDependencies();
+                                document.getElementById('coupon_code').value = '';
+                            }
+                        }
+                    ).finally(() => {
+                    this.isLoading = false
+                });
+            },
+            clearErrorMessages() {
+                dispatchMessages([]);
+            },
+            initErrorMessages(errors) {
+                let messages = [];
+                for (const error in Object.keys(errors)) {
+                    messages.push({type: 'error', text: errors[error].message});
+                }
+                dispatchMessages(messages)
+            },
+            mutateItemQty: function (itemId, qty) {
+                this.isLoading = true;
+
+                const cartItemUpdateQuery = `mutation {<?= /** @noEscape */ $viewModelCart->getCartItemUpdateQuery(
+                ) ?>}`;
+
+                fetch('<?= $escaper->escapeUrl($block->getBaseUrl()) ?>graphql', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=utf-8'
+                    },
+                    body: JSON.stringify({query: cartItemUpdateQuery})
+                })
+                    .then(response => response.json())
+                    .then(
+                        data => {
+                            this.clearErrorMessages();
+                            if (data.errors) {
+                                this.initErrorMessages(data.errors);
+                                this.getCart();
+
+                            } else {
+                                this.cartData = (data && data.data && (data.data.updateCartItems && (data.data.updateCartItems.cart))) || [];
+                                this.updateCartDataDependencies();
+                            }
+                        }
+                    ).finally(() => {
+                    this.isLoading = false
+                });
+            },
+            mutateItemRemove: function (itemId) {
+                this.isLoading = true;
+
+                const cartItemRemoveQuery = `mutation {<?= /** @noEscape */ $viewModelCart->getCartItemRemoveQuery(
+                ) ?>}`;
+
+                fetch('<?= $escaper->escapeUrl($block->getBaseUrl()) ?>graphql', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=utf-8'
+                    },
+                    body: JSON.stringify({query: cartItemRemoveQuery})
+                })
+                    .then(response => response.json())
+                    .then(
+                        data => {
+                            this.clearErrorMessages();
+                            if (data.errors) {
+                                this.initErrorMessages(data.errors);
+                                this.getCart();
+
+                            } else {
+                                this.cartData = (data && data.data && (data.data.removeItemFromCart && (data.data.removeItemFromCart.cart))) || [];
+                                this.updateCartDataDependencies();
+                            }
+                        }
+                    ).finally(() => {
+                    this.isLoading = false
+                });
+            }
+        }
+    }
+</script>

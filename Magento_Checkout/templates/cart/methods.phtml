@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+?>
+<?php
+/** @var $block \Magento\Checkout\Block\Cart */
+?>
+<?php $methods = $block->getMethods('methods') ?: $block->getMethods('top_methods') ?>
+<template x-if="cartData && cartData.available_payment_methods && cartData.available_payment_methods.length">
+    <div class="flex justify-center lg:justify-end">
+        <?php foreach ($methods as $method) : ?>
+            <?php $methodHtml = $block->getMethodHtml($method); ?>
+            <?php if (trim($methodHtml) !== '') : ?><?= /* @noEscape */
+                $methodHtml ?>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </div>
+</template>

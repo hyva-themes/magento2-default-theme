@@ -1,26 +1,24 @@
 <?php
-/**
- * Hyvä Themes - https://hyva.io
- * Copyright © Wigman Interactive. All rights reserved.
- * This product is licensed per Magento production install
- */
 
-declare(strict_types=1);
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\Escaper;
 
-use Magento\Checkout\Block\Cart;
+/** @var $block Template */
+/** @var $escaper Escaper */
 
-/**  @var $block Cart */
 ?>
-<div class="cart-empty container py-4 px-6">
-    <?= $block->getChildHtml('checkout_cart_empty_widget') ?>
-    <p><?= $block->escapeHtml(__('You have no items in your shopping cart.')) ?></p>
-    <p><?= $block->escapeHtml(
-        __(
-            'Click <a href="%1">here</a> to continue shopping.',
-            $block->escapeUrl($block->getContinueShoppingUrl())
-        ),
-        ['a']
-    ) ?>
-    </p>
-    <?= $block->getChildHtml('shopping.cart.table.after') ?>
-</div>
+<template x-if="!isLoading && cartEmpty === true">
+    <div>
+        <?= $block->getChildHtml('checkout_cart_empty_widget') ?>
+        <p><?= $block->escapeHtml(__('You have no items in your shopping cart.')) ?></p>
+        <p><?= $escaper->escapeHtml(
+                __(
+                    'Click <a href="%1">here</a> to continue shopping.',
+                    $escaper->escapeUrl('')
+                ),
+                ['a']
+            ) ?>
+        </p>
+        <?= $block->getChildHtml('shopping.cart.table.after') ?>
+    </div>
+</template>

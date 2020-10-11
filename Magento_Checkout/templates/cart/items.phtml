@@ -1,0 +1,169 @@
+<?php
+
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\Escaper;
+use Hyva\Theme\ViewModel\Cart\ItemOutput;
+
+/** @var $block Template */
+/** @var $escaper Escaper */
+/** @var $viewModelItemOutput ItemOutput */
+
+$viewModelItemOutput = $block->getData('viewModelItemOutput');
+
+$displayPriceTaxBoth = $viewModelItemOutput->isItemPriceDisplayBoth();
+$displayPriceInclTax = $viewModelItemOutput->isItemPriceInclTax();
+$displayPriceExclTax = $viewModelItemOutput->isItemPriceExclTax();
+
+?>
+<template x-if="cartData.items && cartData.items.length">
+    <div class="table-row-items border-b border-primary-lighter">
+        <div
+            class="hidden lg:grid lg:grid-cols-7 xl:grid-cols-8 text-sm text-primary-lighter border-b border-container">
+            <div class="p-2 lg:col-span-4 xl:col-span-5"><?= $escaper->escapeHtml(__('Product Name')) ?></div>
+            <div class="p-2 text-center"><?= $escaper->escapeHtml(__('Price')) ?></div>
+            <div class="p-2 text-center"><?= $escaper->escapeHtml(__('Qty')) ?></div>
+            <div class="p-2 text-right"><?= $escaper->escapeHtml(__('Subtotal')) ?></div>
+        </div>
+        <template x-for="item in cartData.items">
+            <div
+                class="table-row-item flex flex-row flex-wrap lg:grid lg:grid-cols-7 xl:grid-cols-8 py-4 justify-end md:justify-start">
+                <div class="p-2 w-full lg:w-auto lg:col-span-4 xl:col-span-5 flex flex-no-wrap flex-row">
+                    <div class="w-3/12 mr-2 md:mr-1 px-1">
+                        <a class=""
+                           :href="'<?= $escaper->escapeUrl(
+                               $block->getBaseUrl()
+                           ) ?>' + item.product.url_key + '.html'" :title="item.product.small_image.label">
+                            <img :src="item.product.small_image.url" :alt="item.product.small_image.label"/>
+                        </a>
+                    </div>
+                    <div class="w-9/12">
+                        <a class="" x-html="item.product.name" :title="item.product.name"
+                           :href="'<?= $escaper->escapeUrl(
+                               $block->getBaseUrl()
+                           ) ?>' + item.product.url_key + '.html'"></a>
+                        <div class="item-options col-span-2 lg:col-span-1 lg:grid grid-cols-4 mt-2">
+                            <div class="text-sm inline-block"><?= $escaper->escapeHtml(__('Sku')) ?>:</div>
+                            <div class="text-sm col-span-3 inline-block" x-html="item.product.sku"></div>
+                        </div>
+                        <template
+                            x-if="item.configurable_options && Object.keys(item.configurable_options).length > 0">
+                            <div>
+                                <template x-for="configurable_option in item.configurable_options">
+                                    <div class="lg:grid grid-cols-4">
+                                        <div class="text-sm inline-block"><span
+                                                x-text="configurable_option.option_label"></span>:
+                                        </div>
+                                        <div class="text-sm col-span-3 inline-block">
+                                            <span x-text="configurable_option.value_label"></span>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                        <template
+                            x-if="item.customizable_options && Object.keys(item.customizable_options).length > 0">
+                            <div>
+                                <template x-for="option in item.customizable_options">
+                                    <div class="lg:grid grid-cols-4">
+                                        <div class="text-sm inline-block"><span x-text="option.label"></span>:</div>
+                                        <template x-for="selected_option in option.values">
+                                            <div class="text-sm col-span-3 inline-block">
+                                                <span x-text="selected_option.label"></span>
+                                                <template x-if="selected_option.price.value">
+                                                    <span class="text-red-700">
+                                                        + <span
+                                                            x-text="formatPrice(selected_option.price.value)"></span>
+                                                    </span>
+                                                </template>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                        <p><a class="mt-2 underline text-sm inline-block text-primary-dark"
+                              :href="'<?= $escaper->escapeUrl(
+                                  $block->getUrl('checkout/cart/configure')
+                              ) ?>id/' + item.id + '/product_id/' + item.product.id"><?= $escaper->escapeHtml(
+                                    __('Edit')
+                                ) ?></a></p>
+                    </div>
+                </div>
+                <div
+                    class="px-2 sm:py-1 lg:p-2 w-9/12 sm:w-4/12 lg:w-auto flex <?php if ($displayPriceTaxBoth) : ?>flex-col lg:flex-row items-start <?php else : ?>items-center <?php endif; ?>lg:block sm:order-2 lg:order-none md:justify-center">
+                    <?php if ($displayPriceTaxBoth || $displayPriceInclTax) : ?>
+                    <div class="flex <?php if (!$displayPriceTaxBoth) : ?>items-center<?php endif; ?> sm:items-center justify-center text-sm sm:text-base <?php if ($displayPriceTaxBoth) : ?>flex-col lg:flex-row<?php endif; ?>">
+                        <p class="lg:hidden md:text-left"><?= $escaper->escapeHtml(
+                                __('Unit Price')
+                            ) ?></p>
+                        <span
+                            class="block <?php if (!$displayPriceTaxBoth) : ?>p-2 <?php endif; ?>md:text-right lg:text-center lg:whitespace-no-wrap"><span
+                                x-html="formatPrice(item.prices.price_incl_tax.value)"></span><?php if($displayPriceTaxBoth):?> <span class="text-sm">(<?= $escaper->escapeHtml(__('incl. VAT')) ?>)</span><?php endif; ?></span>
+                    </div>
+                    <?php endif; ?>
+                    <?php if ($displayPriceTaxBoth|| $displayPriceExclTax) : ?>
+                        <div class="flex items-center justify-center text-sm sm:text-base">
+                            <?php if($displayPriceExclTax) : ?>
+                            <p class="lg:hidden text-right md:text-left"><?= $escaper->escapeHtml(
+                                    __('Unit Price')
+                                ) ?></p><?php endif; ?>
+                            <span
+                                class="block <?php if(!$displayPriceTaxBoth): ?>p-2 <?php else : ?>pb-2 <?php endif; ?>text-left md:text-right lg:text-center lg:whitespace-no-wrap"><span
+                                x-html="formatPrice(item.prices.price.value)"></span><?php if($displayPriceTaxBoth):?> <span class="text-sm">(<?= $displayPriceTaxBoth ? $escaper->escapeHtml(__('excl. VAT')) : '' ?>)</span><?php endif; ?></span>
+                        </div>
+                    <?php endif; ?>
+                </div>
+                <div
+                    class="px-2 sm:py-1 lg:p-2 w-9/12 sm:w-4/12 lg:w-auto flex lg:block items-center sm:order-1 lg:order-none md:justify-center">
+                    <div class="flex items-center lg:justify-center">
+                        <p class="lg:hidden text-right md:text-left mr-2">
+                            <?= $escaper->escapeHtml(__('Qty')) ?>
+                        </p>
+                        <div class="block text-left">
+                            <input type="number" :name="'qty' + item.id" x-model.number="item.quantity"
+                                   :value="item.quantity" class="w-16 p-2 border border-background text-center" max="99"
+                                   min="1"
+                                   x-on:change.debounce="mutateItemQty(item.id, $event.target.value);"/>
+                        </div>
+                    </div>
+                    <div class="lg:text-center">
+                        <p class="text-sm underline lg:mt-3 cursor-pointer" x-on:click="mutateItemRemove(item.id)"
+                           title="<?= $escaper->escapeHtmlAttr(__('Remove')) ?>">
+                            <span class="hidden lg:block"><?= $escaper->escapeHtml(__('Remove')) ?>?</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                 stroke="currentColor" class="w-5 h-5 ml-3 lg:hidden cursor-pointer">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                        </p>
+                    </div>
+                </div>
+                <div
+                    class="px-2 sm:py-1 lg:p-2 w-9/12 sm:w-4/12 lg:w-auto flex lg:block md:justify-end sm:order-3 lg:order-none font-medium lg:font-normal <?php if ($displayPriceTaxBoth) : ?>flex-col lg:flex-row items-start <?php else : ?>items-center <?php endif; ?>">
+                    <div class="flex <?php if (!$displayPriceTaxBoth) : ?>items-center<?php endif; ?> sm:items-center sm:justify-center lg:justify-end sm:text-base <?php if ($displayPriceTaxBoth) : ?>flex-col<?php endif; ?>">
+                        <?php if ($displayPriceTaxBoth || $displayPriceInclTax) : ?>
+                            <div class="flex <?php if (!$displayPriceTaxBoth) : ?>items-center<?php endif; ?> sm:items-center sm:justify-center sm:text-base <?php if ($displayPriceTaxBoth) : ?>flex-col lg:flex-row<?php endif; ?>">
+                                <p class="lg:hidden text-right md:text-left"><?= $escaper->escapeHtml(
+                                        __('Subtotal')
+                                    ) ?></p>
+                                <span
+                                    class="block <?php if (!$displayPriceTaxBoth) : ?>p-2 <?php endif; ?>md:text-right lg:text-center lg:whitespace-no-wrap"><span
+                                        x-html="formatPrice(item.prices.row_total_incl_tax.value)"></span><?php if($displayPriceTaxBoth):?> <span class="text-sm">(<?= $escaper->escapeHtml(__('incl. VAT')) ?>)</span><?php endif; ?></span>
+                            </div>
+                        <?php endif; ?>
+                        <?php if ($displayPriceTaxBoth|| $displayPriceExclTax) : ?>
+                            <div class="flex items-center sm:justify-center">
+                                <?php if($displayPriceExclTax) : ?>
+                                    <p class="lg:hidden text-right md:text-left"><?= $escaper->escapeHtml(
+                                    __('Unit Price')
+                                ) ?></p><?php endif; ?>
+                                <span
+                                    class="block <?php if(!$displayPriceTaxBoth): ?>p-2 <?php else : ?>pb-2 <?php endif; ?>text-left md:text-right lg:text-center lg:whitespace-no-wrap"><span
+                                        x-html="formatPrice(item.prices.row_total.value)"></span><?php if($displayPriceTaxBoth):?> <span class="text-sm">(<?= $displayPriceTaxBoth ? $escaper->escapeHtml(__('excl. VAT')) : '' ?>)</span><?php endif; ?></span>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+        </template>
+    </div>
+</template>

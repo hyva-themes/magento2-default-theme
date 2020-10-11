@@ -1371,6 +1371,12 @@ body {
   border-color: rgba(226, 232, 240, var(--border-opacity));
 }
 
+.border-primary-lighter {
+  --border-opacity: 1;
+  border-color: #90cdf4;
+  border-color: rgba(144, 205, 244, var(--border-opacity));
+}
+
 .border-primary {
   --border-opacity: 1;
   border-color: #4299e1;
@@ -1413,6 +1419,11 @@ body {
 
 .rounded-full {
   border-radius: 9999px;
+}
+
+.rounded-t-none {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 .rounded-r-md {
@@ -1491,6 +1502,10 @@ body {
 
 .hidden {
   display: none;
+}
+
+.flex-row {
+  flex-direction: row;
 }
 
 .flex-col {
@@ -1811,6 +1826,10 @@ body {
   margin-bottom: 2.5rem;
 }
 
+.ml-10 {
+  margin-left: 2.5rem;
+}
+
 .mb-12 {
   margin-bottom: 3rem;
 }
@@ -1989,6 +2008,11 @@ body {
   padding-right: 2rem;
 }
 
+.px-10 {
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+}
+
 .pt-1 {
   padding-top: 0.25rem;
 }
@@ -2087,6 +2111,10 @@ body {
   fill: currentColor;
 }
 
+.stroke-current {
+  stroke: currentColor;
+}
+
 .text-left {
   text-align: left;
 }
@@ -2145,6 +2173,12 @@ body {
   --text-opacity: 1;
   color: #1a202c;
   color: rgba(26, 32, 44, var(--text-opacity));
+}
+
+.text-primary-lighter {
+  --text-opacity: 1;
+  color: #4a5568;
+  color: rgba(74, 85, 104, var(--text-opacity));
 }
 
 .text-primary {
@@ -2223,12 +2257,23 @@ body {
   letter-spacing: 0.1em;
 }
 
+.select-none {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
 .visible {
   visibility: visible;
 }
 
 .invisible {
   visibility: hidden;
+}
+
+.whitespace-no-wrap {
+  white-space: nowrap;
 }
 
 .truncate {
@@ -2278,6 +2323,26 @@ body {
 }
 
 .w-5\/6 {
+  width: 83.333333%;
+}
+
+.w-3\/12 {
+  width: 25%;
+}
+
+.w-5\/12 {
+  width: 41.666667%;
+}
+
+.w-7\/12 {
+  width: 58.333333%;
+}
+
+.w-9\/12 {
+  width: 75%;
+}
+
+.w-10\/12 {
   width: 83.333333%;
 }
 
@@ -2432,6 +2497,10 @@ body {
   transition-duration: 150ms;
 }
 
+.duration-200 {
+  transition-duration: 200ms;
+}
+
 .duration-300 {
   transition-duration: 300ms;
 }
@@ -2513,6 +2582,12 @@ body {
 }
 
 .page-main {
+}
+
+.table-row-items > div.table-row-item:nth-child(2n + 1) {
+  --bg-opacity: 1;
+  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, var(--bg-opacity));
 }
 
 .category-view .sidebar .block.filter {
@@ -2697,8 +2772,8 @@ body {
 
 .order-items > div:nth-child(even) {
   --bg-opacity: 1;
-  background-color: #90cdf4;
-  background-color: rgba(144, 205, 244, var(--bg-opacity));
+  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, var(--bg-opacity));
 }
 
 form .field {
@@ -2810,12 +2885,28 @@ form select {
     flex-direction: row;
   }
 
+  .sm\:items-center {
+    align-items: center;
+  }
+
+  .sm\:justify-center {
+    justify-content: center;
+  }
+
   .sm\:order-1 {
     order: 1;
   }
 
   .sm\:order-2 {
     order: 2;
+  }
+
+  .sm\:order-3 {
+    order: 3;
+  }
+
+  .sm\:text-base {
+    font-size: 1rem;
   }
 
   .sm\:text-2xl {
@@ -2850,6 +2941,11 @@ form select {
     margin-right: 2rem;
   }
 
+  .sm\:py-1 {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+
   .sm\:px-6 {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
@@ -2861,6 +2957,14 @@ form select {
 
   .sm\:w-auto {
     width: auto;
+  }
+
+  .sm\:w-4\/12 {
+    width: 33.333333%;
+  }
+
+  .sm\:w-8\/12 {
+    width: 66.666667%;
   }
 
   .sm\:gap-8 {
@@ -2958,6 +3062,14 @@ form select {
     justify-content: flex-start;
   }
 
+  .md\:justify-end {
+    justify-content: flex-end;
+  }
+
+  .md\:justify-center {
+    justify-content: center;
+  }
+
   .md\:order-1 {
     order: 1;
   }
@@ -2996,8 +3108,16 @@ form select {
     margin-bottom: 0;
   }
 
+  .md\:mr-1 {
+    margin-right: 0.25rem;
+  }
+
   .md\:min-h-50 {
     min-height: 50vh;
+  }
+
+  .md\:p-2 {
+    padding: 0.5rem;
   }
 
   .md\:py-0 {
@@ -3032,6 +3152,10 @@ form select {
     text-align: left;
   }
 
+  .md\:text-right {
+    text-align: right;
+  }
+
   .md\:w-auto {
     width: auto;
   }
@@ -3048,12 +3172,24 @@ form select {
     width: 66.666667%;
   }
 
+  .md\:w-full {
+    width: 100%;
+  }
+
+  .md\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .md\:grid-cols-4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .md\:col-span-1 {
     grid-column: span 1 / span 1;
+  }
+
+  .md\:col-span-2 {
+    grid-column: span 2 / span 2;
   }
 
   .md\:col-span-3 {
@@ -3090,6 +3226,15 @@ form select {
     }
   }
 
+  .lg\:rounded-l-none {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .lg\:rounded-tr {
+    border-top-right-radius: 0.25rem;
+  }
+
   .lg\:block {
     display: block;
   }
@@ -3106,8 +3251,20 @@ form select {
     display: none;
   }
 
+  .lg\:flex-row {
+    flex-direction: row;
+  }
+
   .lg\:flex-wrap {
     flex-wrap: wrap;
+  }
+
+  .lg\:justify-end {
+    justify-content: flex-end;
+  }
+
+  .lg\:justify-center {
+    justify-content: center;
   }
 
   .lg\:flex-grow {
@@ -3116,6 +3273,14 @@ form select {
 
   .lg\:order-2 {
     order: 2;
+  }
+
+  .lg\:order-none {
+    order: 0;
+  }
+
+  .lg\:font-normal {
+    font-weight: 400;
   }
 
   .lg\:h-auto {
@@ -3134,12 +3299,28 @@ form select {
     margin-top: 0.5rem;
   }
 
+  .lg\:mt-3 {
+    margin-top: 0.75rem;
+  }
+
+  .lg\:mb-6 {
+    margin-bottom: 1.5rem;
+  }
+
+  .lg\:mt-16 {
+    margin-top: 4rem;
+  }
+
   .lg\:-mt-12 {
     margin-top: -3rem;
   }
 
   .lg\:max-w-lg {
     max-width: 32rem;
+  }
+
+  .lg\:p-2 {
+    padding: 0.5rem;
   }
 
   .lg\:px-4 {
@@ -3164,6 +3345,18 @@ form select {
     text-align: left;
   }
 
+  .lg\:text-center {
+    text-align: center;
+  }
+
+  .lg\:whitespace-no-wrap {
+    white-space: nowrap;
+  }
+
+  .lg\:w-auto {
+    width: auto;
+  }
+
   .lg\:w-1\/2 {
     width: 50%;
   }
@@ -3180,6 +3373,14 @@ form select {
     width: 25%;
   }
 
+  .lg\:w-5\/12 {
+    width: 41.666667%;
+  }
+
+  .lg\:w-7\/12 {
+    width: 58.333333%;
+  }
+
   .lg\:w-full {
     width: 100%;
   }
@@ -3192,6 +3393,10 @@ form select {
     grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 
+  .lg\:grid-cols-7 {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
   .lg\:grid-cols-8 {
     grid-template-columns: repeat(8, minmax(0, 1fr));
   }
@@ -3202,6 +3407,10 @@ form select {
 
   .lg\:col-span-2 {
     grid-column: span 2 / span 2;
+  }
+
+  .lg\:col-span-4 {
+    grid-column: span 4 / span 4;
   }
 
   .lg\:col-span-6 {
@@ -3252,5 +3461,13 @@ form select {
 
   .xl\:w-1\/4 {
     width: 25%;
+  }
+
+  .xl\:grid-cols-8 {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+
+  .xl\:col-span-5 {
+    grid-column: span 5 / span 5;
   }
 }

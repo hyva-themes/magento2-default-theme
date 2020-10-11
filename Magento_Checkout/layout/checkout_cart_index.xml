@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="checkout_cart_item_renderers"/>
+    <body>
+        <referenceBlock name="cart-drawer" remove="true"/>
+
+        <referenceBlock name="header-content">
+            <arguments>
+                <argument name="cart_amount_hidden" xsi:type="boolean">true</argument>
+            </arguments>
+        </referenceBlock>
+
+        <referenceContainer name="page.messages">
+            <block class="Magento\Checkout\Block\Cart\ValidationMessages" name="checkout.cart.validationmessages"/>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <block name="cart_dynamic" template="Magento_Checkout::cart.phtml" cacheable="false">
+                <block name="cart_main_js" template="Magento_Checkout::cart/js/cart.phtml">
+                    <arguments>
+                        <argument name="viewModelCart"
+                                  xsi:type="object">Hyva\Theme\ViewModel\Cart\GraphQlQueries
+                        </argument>
+                    </arguments>
+                    <block name="js_localstorage_config" template="Magento_Checkout::cart/js/localStorageConfig.phtml">
+                        <arguments>
+                            <argument name="render_in_script_tag" xsi:type="boolean">false</argument>
+                        </arguments>
+                    </block>
+                </block>
+                <block name="loading" template="Magento_Checkout::cart/loading.phtml"/>
+                <block name="items" template="Magento_Checkout::cart/items.phtml">
+                    <arguments>
+                        <argument name="viewModelItemOutput"
+                                  xsi:type="object">Hyva\Theme\ViewModel\Cart\ItemOutput
+                        </argument>
+                    </arguments>
+                </block>
+                <block name="coupon" class="Magento\Checkout\Block\Cart\Coupon"
+                       template="Magento_Checkout::cart/coupon/form.phtml"/>
+                <block name="totals" template="Magento_Checkout::cart/totals.phtml">
+                    <arguments>
+                        <argument name="viewModelTotalsOutput"
+                                  xsi:type="object">Hyva\Theme\ViewModel\Cart\TotalsOutput
+                        </argument>
+                    </arguments>
+                </block>
+                <block name="empty" template="Magento_Checkout::cart/noItems.phtml"/>
+                <block name="checkout.cart.methods.bottom" class="Magento\Checkout\Block\Cart"
+                       template="Magento_Checkout::cart/methods.phtml">
+                    <container name="checkout.cart.methods" as="methods" label="Payment Methods After Checkout Button">
+                        <block class="Magento\Checkout\Block\Onepage\Link" name="checkout.cart.methods.onepage.bottom"
+                               template="Magento_Checkout::onepage/link.phtml"/>
+                        <block class="Magento\Checkout\Block\QuoteShortcutButtons"
+                               name="checkout.cart.shortcut.buttons"/>
+                    </container>
+                </block>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

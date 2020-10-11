@@ -1,0 +1,75 @@
+<?php
+
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\Escaper;
+use Hyva\Theme\ViewModel\Cart\TotalsOutput;
+
+/** @var $block Template */
+/** @var $escaper Escaper */
+/** @var $viewModelTotalsOutput TotalsOutput */
+
+$viewModelTotalsOutput = $block->getData('viewModelTotalsOutput');
+$subtotalField = $viewModelTotalsOutput->getSubtotalField();
+$subtotalFieldShowBoth = $viewModelTotalsOutput->getSubtotalFieldDisplayBoth();
+$taxLabelAddition = $viewModelTotalsOutput->getTaxLabelAddition();
+?>
+<template x-if="cartData.prices && Object.keys(cartData.prices).length">
+    <div class="pt-6">
+        <?php if($subtotalFieldShowBoth) : ?>
+            <template x-if="cartData.prices['subtotal_excluding_tax']">
+                <div class="flex md:grid md:grid-cols-3 mx-auto w-10/12 md:w-full">
+                    <div class="w-7/12 md:w-auto text-left md:text-right md:p-2 md:col-span-2"><?= $escaper->escapeHtml(__('Subtotal')) ?> (<?= $escaper->escapeHtml(__('excl. VAT')) ?>)</div>
+                    <div class="w-5/12 md:w-auto text-right md:p-2"
+                         x-text="formatPrice(cartData.prices['<?= /** @noEscape */ $subtotalFieldShowBoth ?>']['value'])"></div>
+                </div>
+            </template>
+        <?php endif; ?>
+        <template x-if="cartData.prices['subtotal_including_tax']">
+            <div class="flex md:grid md:grid-cols-3 mx-auto w-10/12 md:w-full">
+                <div class="w-7/12 md:w-auto text-left md:text-right md:p-2 md:col-span-2"><?= $escaper->escapeHtml(__('Subtotal')) ?> <?php if($subtotalFieldShowBoth) : ?>(<?= $escaper->escapeHtml(__('incl. VAT')) ?>)<?php endif; ?></div>
+                <div class="w-5/12 md:w-auto text-right md:p-2"
+                     x-text="formatPrice(cartData.prices['<?= /** @noEscape */ $subtotalField ?>']['value'])"></div>
+            </div>
+        </template>
+        <template x-if="cartData.prices['discounts']">
+            <div>
+            <template x-for="item in cartData.prices['discounts']">
+            <div class="flex md:grid md:grid-cols-3 mx-auto w-10/12 md:w-full">
+                <div class="w-7/12 md:w-auto text-left md:text-right md:p-2 md:col-span-2"><?= $escaper->escapeHtml(__('Discount')) ?></span></div>
+                <div class="w-5/12 md:w-auto text-right md:p-2">-<span
+                        x-text="formatPrice(item['amount']['value'])"></span></div>
+            </div>
+            </template>
+                </div>
+        </template>
+        <template x-if="cartData.prices['applied_taxes']">
+            <div>
+                <template x-for="item in cartData.prices['applied_taxes']">
+                    <div class="flex md:grid md:grid-cols-3 mx-auto w-10/12 md:w-full">
+                        <div class="w-7/12 md:w-auto text-left md:text-right md:p-2 md:col-span-2"><?= $escaper->escapeHtml($viewModelTotalsOutput->getTaxLabelAddition()) ?> <?= $escaper->escapeHtml(__('VAT')) ?> <span
+                                x-text="item.label"></span></div>
+                        <div class="w-5/12 md:w-auto text-right md:p-2" x-text="formatPrice(item.amount.value)"></div>
+                    </div>
+                </template>
+            </div>
+        </template>
+        <template x-if="cartData.shipping_addresses['selected_shipping_method']">
+            <div>
+                <template x-for="item in cartData.prices['applied_taxes']">
+                    <div class="flex md:grid md:grid-cols-3 mx-auto w-10/12 md:w-full">
+                        <div class="w-7/12 md:w-auto text-left md:text-right md:p-2 md:col-span-2"><?= $escaper->escapeHtml($viewModelTotalsOutput->getShippingLabelAddition()) ?><span
+                                x-text="cartData.shipping_addresses['selected_shipping_method'].carrier_title"></span> <span
+                                x-text="cartData.shipping_addresses['selected_shipping_method'].method_title"></span></div>
+                        <div class="w-5/12 md:w-auto text-right md:p-2" x-text="formatPrice(cartData.shipping_addresses['selected_shipping_method'].amount.value)"></div>
+                    </div>
+                </template>
+            </div>
+        </template>
+        <template x-if="cartData.prices['grand_total']">
+            <div class="flex md:grid md:grid-cols-3 mx-auto w-10/12 md:w-full pt-6 mb-12 text-xl">
+                <div class="w-7/12 md:w-auto text-left md:text-right md:p-2 md:col-span-2"><?= $escaper->escapeHtml(__('Grand Total')) ?></div>
+                <div class="w-5/12 md:w-auto text-right md:p-2" x-text="formatPrice(cartData.prices['grand_total']['value'])"></div>
+            </div>
+        </template>
+    </div>
+</template>

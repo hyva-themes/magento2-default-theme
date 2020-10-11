@@ -1,3 +1,7 @@
 .page-main {
 
 }
+
+.table-row-items > div.table-row-item:nth-child(2n + 1) {
+    @apply bg-container-lighter;
+}
