@@ -16,7 +16,7 @@ $menuJson = $viewModelNavigationAsJson->getNavigationAsJson();
      x-on:resize.window.debounce.200="menu.checkIsSmallResolution()"
      @toggle-mobile-menu.window="menu.open = !menu.open"
      @keydown.window.escape="menu.open=false"
-     :class="{'block min-h-screen fixed top-0 z-20 left-0 px-8 pt-8 w-full' : menu.open}"
+     :class="{'block min-h-screen fixed top-0 left-0 px-8 pt-8 w-full' : menu.open}"
 >
     <div class="menu-icon flex justify-between items-baseline lg:hidden">
         <div class="flex justify-end">
