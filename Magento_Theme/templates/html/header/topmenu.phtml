@@ -12,7 +12,7 @@ $viewModelNavigationAsJson = $block->getData('viewModelNavigationAsJson');
 $menuJson = $viewModelNavigationAsJson->getNavigationAsJson();
 
 ?>
-<div class="navigation bg-container-lighter lg:bg-transparent order-2 sm:order-1 md:order-1 lg:order-2 lg:relative lg:min-h-0 lg:px-8 lg:w-auto lg:pt-0"
+<div class="navigation bg-container-lighter lg:bg-transparent order-2 sm:order-1 md:order-1 lg:order-2 lg:relative lg:min-h-0 lg:px-8 lg:w-auto lg:pt-0 z-20"
      x-on:resize.window.debounce.200="menu.checkIsSmallResolution()"
      @toggle-mobile-menu.window="menu.open = !menu.open"
      @keydown.window.escape="menu.open=false"
