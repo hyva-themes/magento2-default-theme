@@ -5,11 +5,23 @@
  * This product is licensed per Magento production install
  */
 
-/** @var \Magento\Framework\View\Element\Template $block */
+declare(strict_types=1);
+
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
 ?>
 
-<script type="module" src="<?= $block->escapeUrl($block->getViewFileUrl('js/alpine-2.3.5.min.js')) ?>" defer crossorigin></script>
-<script nomodule src="<?= $block->escapeUrl($block->getViewFileUrl('js/alpine-ie11-2.3.5.min.js')) ?>" defer crossorigin></script>
+<script type="module"
+        src="<?= $block->escapeUrl($block->getViewFileUrl('js/alpine-2.3.5.min.js')) ?>"
+        defer
+        crossorigin
+></script>
+<script nomodule
+        src="<?= $block->escapeUrl($block->getViewFileUrl('js/alpine-ie11-2.3.5.min.js')) ?>"
+        defer
+        crossorigin
+></script>
 
 <?php /*
 <script type="module" src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
