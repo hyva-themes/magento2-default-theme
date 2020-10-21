@@ -1,12 +1,19 @@
 <?php
-/** @var Template $block */
-/** @var Escaper $escaper */
-
-/** @var NavigationAsJson $viewModelNavigationAsJson */
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Escaper;
 use Hyva\Theme\ViewModel\NavigationAsJson;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+
+/** @var NavigationAsJson $viewModelNavigationAsJson */
 
 $viewModelNavigationAsJson = $block->getData('viewModelNavigationAsJson');
 $menuJson = $viewModelNavigationAsJson->getNavigationAsJson();

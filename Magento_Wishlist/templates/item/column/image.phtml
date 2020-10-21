@@ -1,12 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
  */
 
-/** @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Image $block */
+use Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Image;
+use Magento\Wishlist\Model\Item;
 
-/** @var \Magento\Wishlist\Model\Item $item */
+/** @var Image $block */
+
+/** @var Item $item */
 $item = $block->getItem();
 $product = $item->getProduct();
 ?>

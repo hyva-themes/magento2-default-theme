@@ -1,6 +1,6 @@
 {
     "name": "hyva-themes/magento2-default-theme",
-    "description": "N/A",
+    "description": "Default Hyvä Theme",
     "config": {
         "sort-packages": true
     },
@@ -15,7 +15,7 @@
         "name": "Hyvä Themes, Wigman Interactive",
         "email": "info@hyva.io"
     }],
-    "license": "see LICENSE.md",
+    "license": "see LICENSE.md or https://hyva.io/license",
     "autoload": {
         "files": [
             "registration.php"
