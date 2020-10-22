@@ -34,7 +34,7 @@ $product = $productViewModel->getProduct();
 
     <?php if ($shortDescription = $productViewModel->getShortDescription()) { ?>
     <div class="product-description leading-relaxed mb-4 prose"><?= /* @noEscape */ $shortDescription ?></div>
-    <? } ?>
+    <?php } ?>
 
     <div>
     <?php foreach ($block->getAttributes() as $attributeConfig ) {
