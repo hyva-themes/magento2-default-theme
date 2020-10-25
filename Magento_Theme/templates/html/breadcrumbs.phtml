@@ -20,7 +20,10 @@ use Magento\Framework\Escaper;
     <div class="container">
         <ul class="items list-reset py-4 rounded flex flex-wrap text-grey text-sm">
             <?php foreach ($crumbs as $crumbName => $crumbInfo) : ?>
-                <li class="item px-2 <?= $escaper->escapeHtmlAttr($crumbName) ?>">
+                <li class="item flex <?= $escaper->escapeHtmlAttr($crumbName) ?>">
+                <?php if (!$crumbInfo['first']) : ?>
+                    <span aria-hidden="true" class="separator text-primary-lighter px-2">/</span>
+                <?php endif; ?>
                 <?php if ($crumbInfo['link']) : ?>
                     <a href="<?= $escaper->escapeUrl($crumbInfo['link']) ?>"
                        class="no-underline text-primary"
@@ -33,9 +36,6 @@ use Magento\Framework\Escaper;
                     <?= $escaper->escapeHtml($crumbInfo['label']) ?>
                 <?php endif; ?>
                 </li>
-                <?php if (!$crumbInfo['last']) : ?>
-                    <li>|</li>
-                <?php endif; ?>
             <?php endforeach; ?>
         </ul>
     </div>
