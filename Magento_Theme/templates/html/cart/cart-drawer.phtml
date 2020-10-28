@@ -71,7 +71,11 @@ use Magento\Framework\View\Element\Template;
          @keydown.window.escape="open=false"
 >
     <template x-if="cart && cart.summary_count">
-        <section @click.away="open = false" class="fixed inset-y-0 right-0 max-w-full flex z-20">
+        <div role="dialog"
+             aria-labelledby="cart-drawer-title"
+             aria-modal="true"
+             @click.away="open = false"
+             class="fixed inset-y-0 right-0 max-w-full flex">
             <div class="relative w-screen max-w-md"
                  x-show="open"
                  x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700"
@@ -97,7 +101,7 @@ use Magento\Framework\View\Element\Template;
                 </div>
                 <div class="h-full flex flex-col space-y-6 py-6 bg-white shadow-xl">
                     <header class="px-4 sm:px-6">
-                        <h2 class="text-lg leading-7 font-medium text-gray-900">
+                        <h2 id="cart-drawer-title" class="text-lg leading-7 font-medium text-gray-900">
                             <?= $block->escapeHtml(__('My Cart')) ?>
                         </h2>
                     </header>
@@ -157,6 +161,6 @@ use Magento\Framework\View\Element\Template;
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
     </template>
 </section>
