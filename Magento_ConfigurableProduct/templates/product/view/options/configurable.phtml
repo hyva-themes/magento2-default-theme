@@ -1,0 +1,145 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+use Magento\ConfigurableProduct\Block\Product\View\Type\Configurable;
+use Magento\Framework\Escaper;
+
+/** @var $block Configurable*/
+/** @var $escaper Escaper */
+
+$product    = $block->getProduct();
+$attributes = $block->decorateArray($block->getAllowAttributes());
+?>
+<?php if ($product->isSaleable() && count($attributes)) :?>
+    <script>
+        function initConfigurableOptions() {
+            return {
+                optionConfig: <?= /* @noEscape */ $block->getJsonConfig() ?>,
+                allowedAttributeOptions: [],
+                selectedValues: [],
+                findSimpleIndex: function findSimpleIndex () {
+/*                  if ( Object.keys(this.selectedValues).length !== Object.keys(this.optionConfig.attributes).length) {
+                      return;
+                  }*/
+                  var productIndexes = this.optionConfig.index;
+                  var $this = this;
+                  this.productIndex = Object.keys(productIndexes).find(function(productIndex) {
+                      var currentProductIndex = productIndexes[productIndex];
+
+                      for (var productOption in currentProductIndex) {
+                          if (
+                              $this.selectedValues[productOption] &&
+                              $this.selectedValues[productOption] !== currentProductIndex[productOption]
+                          ) {
+                              return false;
+                          }
+                      }
+                      return productIndex;
+                  });
+                },
+                productIndex: 0,
+                findAllowedAttributeOptions: function findAllowedAttributeOptions() {
+                    var $this = this;
+
+                    var allAttributes = this.optionConfig.attributes;
+                    var allAttributesSorted = Object.values(allAttributes).sort(function (a,b) {
+                        return a.position - b.position
+                    });
+                    var previousOption = false;
+                    var productIndexes = this.optionConfig.index;
+                    var availableIndexes = Object.keys(productIndexes);
+
+                    allAttributesSorted.forEach(function (attribute) {
+                        if (previousOption && $this.selectedValues[previousOption]) {
+                            availableIndexes = availableIndexes.filter(function(availableIndex) {
+                                return productIndexes[availableIndex][previousOption] === $this.selectedValues[previousOption]
+                            })
+                        }
+                        $this.allowedAttributeOptions[attribute.id] = allAttributes[attribute.id].options.filter(function (option) {
+                            return !!option.products.find(function (product) {
+                                return availableIndexes.includes(product);
+                            })
+                        });
+                        previousOption = attribute.id;
+                    });
+
+                },
+                getAllowedAttributeOptions: function getAllowedAttributeOptions(attributeId) {
+                    return this.allowedAttributeOptions[attributeId] || []
+                },
+                changeOption: function changeOption (optionId, value) {
+                    this.selectedValues[optionId] = value;
+                    this.findSimpleIndex();
+                    this.findAllowedAttributeOptions();
+                    this.updatePrices();
+                    this.updateGallery();
+                },
+                updatePrices: function updatePrices () {
+                    var value = this.productIndex ?
+                        this.optionConfig.optionPrices[this.productIndex] :
+                        this.optionConfig.prices;
+                    window.dispatchEvent(
+                        new CustomEvent(
+                            "update-prices-<?= $product->getId() ?>",
+                            { detail: value }
+                        )
+                    );
+                },
+                updateGallery: function updateGallery () {
+                    var value = this.productIndex ?
+                        this.optionConfig.images[this.productIndex] :
+                        Object.values(this.optionConfig.images)[0];
+
+                    window.dispatchEvent(
+                        new CustomEvent(
+                            "update-gallery",
+                            { detail: value }
+                        )
+                    );
+                }
+            }
+        }
+    </script>
+    <div x-data="initConfigurableOptions()"
+         x-init="findAllowedAttributeOptions()"
+    >
+        <h2 class="text-gray-900 text-xl title-font font-medium mb-4">
+            <?= __('Select options:') ?>
+        </h2>
+    <?php foreach ($attributes as $attribute) : ?>
+        <div class="flex border-t border-gray-300 py-2 last:mb-6 last:border-b w-full items-center">
+
+            <label class="label text-gray-500 text-left w-1/2"
+                   for="attribute<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>"
+            >
+                <span>
+                    <?= $escaper->escapeHtml($attribute->getProductAttribute()->getStoreLabel()) ?>
+                </span>
+            </label>
+            <div class="ml-2 text-gray-900 text-left w-1/2">
+                <select name="super_attribute[<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>]"
+                        data-selector="super_attribute[<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>]"
+                        data-validate="{required:true}"
+                        id="attribute<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>"
+                        class="form-select super-attribute-select"
+                        x-on:change="changeOption(<?= (int) $attribute->getAttributeId() ?>, event.target.value)"
+                        required="required">
+                    <option value="">
+                        <?= $escaper->escapeHtml(__('Choose an Option...')) ?>
+                    </option>
+                    <template x-for="(item, index) in getAllowedAttributeOptions(<?= (int) $attribute->getAttributeId() ?>)"
+                              :key="item.id"
+                    >
+                        <option :value="item.id" x-html="item.label"></option>
+                    </template>
+                </select>
+            </div>
+        </div>
+    <?php endforeach; ?>
+    </div>
+<?php endif;?>

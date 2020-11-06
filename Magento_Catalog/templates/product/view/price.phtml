@@ -1,0 +1,56 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Catalog\Block\Product\View;
+use Magento\Catalog\Model\Product;
+
+/** @var View $block */
+/** @var Product $product */
+$product = $block->getProduct();
+?>
+<script>
+    function initPrice<?= (int) $product->getId() ?>(){
+        return {
+            prices: false,
+            formatPrice(price) {
+                return price.toLocaleString(false, {
+                    style: 'currency',
+                    currency: 'EUR'
+                })
+            }
+        }
+    }
+</script>
+<div x-data="initPrice<?= (int) $product->getId() ?>()"
+     @update-prices-<?= (int) $product->getId() ?>.window="prices = event.detail"
+     class="price-box price-final_price" data-role="priceBox" data-product-id="<?= (int) $product->getId() ?>"
+     data-price-box="product-id-<?= (int) $product->getId() ?>">
+    <template x-if="!prices">
+    <span class="normal-price">
+        <span class="price-container price-final_price tax" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
+            <?php if ($product->canConfigure() && is_int($product->getPrice())) : ?>
+                <span class="price-label">As low as</span>
+            <?php endif; ?>
+            <span id="product-price-<?= (int) $product->getId() ?>" class="price-wrapper ">
+                <span class="price"><?= $product->getFormattedPrice() ?></span>
+            </span>
+            <meta itemprop="price" content="<?= $product->getFinalPrice() ?>">
+            <meta itemprop="priceCurrency" content="EUR">
+        </span>
+    </span>
+    </template>
+    <template x-if="prices">
+        <span class="normal-price">
+            <span id="product-price-<?= (int) $product->getId() ?>" class="price-wrapper ">
+                <span class="price" x-html="formatPrice(prices.finalPrice.amount)"></span>
+            </span>
+        </span>
+    </template>
+</div>

@@ -48,27 +48,17 @@ $product = $productViewModel->getProduct();
         <?php } ?>
     <?php } ?>
     </div>
+
+    <?= $block->getBlockHtml('product.info.form') ?>
+
     <div class="flex sticky" style="top:6em;">
         <span class="title-font font-medium text-2xl text-gray-900">
-            <?= $block->getChildHtml("product.price.final") ?>
+            <?= $block->getChildHtml("product.info.price") ?>
         </span>
         <?php if ($product->isSaleable()) : ?>
-        <?php
-        /** @var \Magento\Framework\Data\Helper\PostHelper $postDataHelper */
-            $postDataHelper = $this->helper(\Magento\Framework\Data\Helper\PostHelper::class);
-            $postParams = json_decode($postDataHelper->getPostData($block->getAddToCartUrl($product), ['product' => $product->getEntityId()]));
-        ?>
-        <form method="post"
-              action="<?= $block->escapeUrl($productViewModel->getAddToCartUrl($product)) ?>"
-              id="product_addtocart_form"<?php if ($product->getOptions()) :?> enctype="multipart/form-data"<?php endif; ?>
-              class="flex ml-auto"
-        >
-            <input type="hidden" name="product" value="<?= (int)$product->getId() ?>" />
-            <input type="hidden" name="selected_configurable_option" value="" />
-            <input type="hidden" name="related_product" id="related-products-field" value="" />
-            <input type="hidden" name="item"  value="<?= (int)$block->getRequest()->getParam('id') ?>">
-            <?= $block->getBlockHtml('formkey') ?>
+        <div class="flex ml-auto">
             <button type="submit"
+                    form="product_addtocart_form"
                     title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>"
                     class="btn btn-primary"
             >
@@ -77,7 +67,7 @@ $product = $productViewModel->getProduct();
                 </svg>
                 <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
             </button>
-        </form>
+        </div>
         <?php endif; ?>
         <script>
             function initWishlist() {

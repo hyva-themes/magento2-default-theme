@@ -1,0 +1,48 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Catalog\Model\Product;
+use Magento\Framework\View\Element\Template;
+use Hyva\Theme\ViewModel\ProductAttributes;
+use Hyva\Theme\ViewModel\ProductPage;
+
+/** @var Template $block */
+/** @var ProductPage $productViewModel */
+$productViewModel = $block->getProductViewModel();
+/** @var ProductAttributes $attributesViewModel */
+$attributesViewModel = $block->getAttributesViewModel();
+/** @var Product $product */
+$product = $productViewModel->getProduct();
+
+use Magento\Catalog\Block\Product\View\Options;
+
+/* @var $block Options */
+?>
+
+<?php if ($product->isSaleable()) : ?>
+    <?php
+    /** @var \Magento\Framework\Data\Helper\PostHelper $postDataHelper */
+    $postDataHelper = $this->helper(\Magento\Framework\Data\Helper\PostHelper::class);
+    $postParams = json_decode($postDataHelper->getPostData($block->getAddToCartUrl($product), ['product' => $product->getEntityId()]));
+    ?>
+    <form method="post" x-data=""
+          action="<?= $block->escapeUrl($productViewModel->getAddToCartUrl($product)) ?>"
+          id="product_addtocart_form"<?php if ($product->getOptions()) :?> enctype="multipart/form-data"<?php endif; ?>
+    >
+        <input type="hidden" name="product" value="<?= (int)$product->getId() ?>" />
+        <input type="hidden" name="selected_configurable_option" value=""  />
+        <input type="hidden" name="related_product" id="related-products-field" value="" />
+        <input type="hidden" name="item"  value="<?= (int)$block->getRequest()->getParam('id') ?>">
+        <?= $block->getBlockHtml('formkey') ?>
+
+        <?= $block->getChildHtml() ?>
+
+    </form>
+<?php endif; ?>

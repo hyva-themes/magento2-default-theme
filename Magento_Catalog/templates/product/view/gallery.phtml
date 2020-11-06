@@ -36,6 +36,7 @@ $mediumHeight = $block->getImageAttribute('product_page_image_medium', 'height',
 <div id="gallery"
      x-data="initGallery()"
      @keydown.window.escape="fullscreen = false"
+     @update-gallery.window="receiveImages($event.detail)"
      class="lg:w-1/2 w-full lg:h-auto order-1"
     >
     <div class="relative border border-gray-300 mb-6">
@@ -57,13 +58,7 @@ $mediumHeight = $block->getImageAttribute('product_page_image_medium', 'height',
                 height="<?= /* @noEscape */ $mediumHeight ?>"
                 loading="lazy"
                 :src="image.img"
-                x-show="active===index+1"
-                x-transition:enter="ease-out duration-500"
-                x-transition:enter-start="opacity-0"
-                x-transition:enter-end="opacity-100"
-                x-transition:leave="ease-in duration-500"
-                x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0"
+                x-show.transition.opacity.duration.400ms="active===index+1"
                 @click="fullscreen = true"
             />
         </template>
@@ -74,8 +69,8 @@ $mediumHeight = $block->getImageAttribute('product_page_image_medium', 'height',
     <div class="absolute top-0 right-0 pt-4 pr-4">
         <button @click="fullscreen = false"
                 type="button"
-                class="text-gray-400 hover:text-gray-500 focus:outline-none focus:text-gray-500 transition ease-in-out duration-150"
-                x-show="fullscreen"
+                class="hidden text-gray-400 hover:text-gray-500 focus:outline-none focus:text-gray-500 transition ease-in-out duration-150"
+                :class="{ 'hidden': !fullscreen, 'block': fullscreen }"
                 aria-label="Close"
         >
             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -107,13 +102,7 @@ $mediumHeight = $block->getImageAttribute('product_page_image_medium', 'height',
             height="<?= /* @noEscape */ $mediumHeight ?>"
             loading="lazy"
             :src="image.full"
-            x-show="active===index+1"
-            x-transition:enter="ease-out duration-500"
-            x-transition:enter-start="opacity-0"
-            x-transition:enter-end="opacity-100"
-            x-transition:leave="ease-in duration-500"
-            x-transition:leave-start="opacity-100"
-            x-transition:leave-end="opacity-0"
+            x-show.transition.opacity.duration.400ms="active===index+1"
         />
     </template>
         </div>
@@ -141,6 +130,10 @@ $mediumHeight = $block->getImageAttribute('product_page_image_medium', 'height',
             "active": 0,
             "fullscreen": false,
             "images": <?= /* @noEscape */ $block->getGalleryImagesJson() ?>,
+            receiveImages: function receiveImages(images) {
+                this.images = images;
+                this.active = 1;
+            }
         }
      }
 </script>

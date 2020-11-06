@@ -1,0 +1,27 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+use Magento\Catalog\Block\Product\View\Options;
+
+/* @var $block Options */
+?>
+
+<?php $_options = $block->decorateArray($block->getOptions()) ?>
+<?php if (count($_options)) :?>
+    <script>
+        function initOptions() {
+            return {
+                optionConfig: <?= /* @noEscape */ $block->getJsonConfig() ?>
+            }
+        }
+    </script>
+
+    <?php foreach ($_options as $_option) :?>
+        <?= $block->getOptionHtml($_option) ?>
+    <?php endforeach; ?>
+<?php endif; ?>
