@@ -10,6 +10,9 @@
         "hyva-themes/magento2-reset-theme":  "*",
         "hyva-themes/magento2-theme-module": "*"
     },
+    "suggest": {
+        "hyva-themes/magento2-review-graphql": "*"
+    },
     "type": "magento2-theme",
     "authors": [{
         "name": "Hyvä Themes, Wigman Interactive",

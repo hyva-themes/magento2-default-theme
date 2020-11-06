@@ -1,0 +1,358 @@
+<?php
+
+use Magento\Framework\Escaper;
+use Magento\Review\Block\Form;
+
+/* @var Escaper $escaper */
+/* @var Form $block */
+?>
+<div class="container mx-auto px-5 py-6 items-center" id="customer-reviews">
+    <div class="card w-full px-6 py-3" x-data="initReviewForm()">
+        <div class="text-xl my-3">
+            <?= $escaper->escapeHtml(__('Write Your Own Review')) ?>
+        </div>
+        <?php if ($block->getAllowWriteReviewFlag()): ?>
+            <form class="review-form" id="review-form" @submit.prevent="placeReview()">
+                <?= $block->getChildHtml('form_fields_before') ?>
+                <fieldset>
+                    <legend class="text-xs">
+                        <span>
+                            <?= $escaper->escapeHtml(
+                                __("You're reviewing:")
+                            ) ?>
+                        </span>
+                        <span class="font-semibold">
+                            <?= $escaper->escapeHtml($block->getProductInfo()->getName()) ?>
+                        </span>
+                    </legend>
+                    <?php if ($block->getRatings() && $block->getRatings()->getSize()): ?>
+                        <fieldset>
+                            <div class="flex flex-row items-center mt-4 mb-3">
+                                <div class="text-md"><?= $escaper->escapeHtml(__('Your Rating')) ?>:</div>
+                                <div class="ml-1">
+                                    <div id="product-review-table">
+                                        <?php foreach ($block->getRatings() as $rating): ?>
+                                            <div class="ml-1">
+                                                <label class="hidden" id="<?= $escaper->escapeHtml(
+                                                    $rating->getRatingCode()
+                                                ) ?>_rating_label">
+                                                <span>
+                                                    <?= $escaper->escapeHtml($rating->getRatingCode()) ?>
+                                                </span>
+                                                </label>
+                                                <div class="flex flex-row flex-grow-0"
+                                                     x-data="{ ratingIdentifierClicked: 0 }">
+                                                    <?php $options = $rating->getOptions(); ?>
+                                                    <?php $iterator = 1;
+                                                    foreach ($options as $_option): ?>
+                                                        <div class="cursor-pointer relative">
+                                                            <input
+                                                                class="absolute opacity-0 bottom-0 left-0"
+                                                                type="radio"
+                                                                <?php if ($iterator === 1) : ?>required<?php endif; ?>
+                                                                name="ratings[<?= $escaper->escapeHtmlAttr(
+                                                                    $rating->getId()
+                                                                ) ?>]"
+                                                                id="<?= $escaper->escapeHtmlAttr(
+                                                                    $rating->getRatingCode()
+                                                                ) ?>_<?= $escaper->escapeHtmlAttr(
+                                                                    $_option->getValue()
+                                                                ) ?>"
+                                                                value="<?= $escaper->escapeHtmlAttr(
+                                                                    $_option->getId()
+                                                                ) ?>"/>
+                                                            <label
+                                                                @click="ratingIdentifierClicked === <?= /* @noEscape */
+                                                                $iterator ?> ? ratingIdentifierClicked = 0 : ratingIdentifierClicked = <?= /* @noEscape */
+                                                                $iterator ?>"
+                                                                class="rating-<?= $escaper->escapeHtmlAttr(
+                                                                    $iterator
+                                                                ) ?> cursor-pointer m-0"
+                                                                for="<?= $escaper->escapeHtmlAttr(
+                                                                    $rating->getRatingCode()
+                                                                ) ?>_<?= $escaper->escapeHtmlAttr(
+                                                                    $_option->getValue()
+                                                                ) ?>"
+                                                                title="<?= $escaper->escapeHtmlAttr(
+                                                                    __(
+                                                                        '%1 %2',
+                                                                        $iterator,
+                                                                        $iterator > 1
+                                                                            ? __('stars')
+                                                                            : __(
+                                                                            'star'
+                                                                        )
+                                                                    )
+                                                                ) ?>"
+                                                                id="<?= $escaper->escapeHtmlAttr(
+                                                                    $rating->getRatingCode()
+                                                                ) ?>_<?= $escaper->escapeHtmlAttr(
+                                                                    $_option->getValue()
+                                                                ) ?>_label">
+                                                                <span>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                         viewBox="0 0 20 20" fill="currentColor"
+                                                                         class="fill-current w-8"
+                                                                     <?php // phpcs:ignore ?>
+                                                                    :class="<?= $iterator ?> <= ratingIdentifierClicked ? 'text-yellow-400' : 'text-gray-400'">
+                                                                      <path
+                                                                          d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                                    </svg>
+                                                                </span>
+                                                            </label>
+                                                        </div>
+                                                        <?php $iterator++; ?>
+                                                    <?php endforeach; ?>
+                                                </div>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                    <input type="hidden" name="validate_rating" value=""/>
+                                </div>
+                            </div>
+                        </fieldset>
+                    <?php endif ?>
+                    <div>
+                        <div>
+                            <label for="nickname_field" class="hidden">
+                                <span>
+                                    <?= $escaper->escapeHtml(__('Nickname')) ?>
+                                </span>
+                            </label>
+                            <div>
+                                <input class="form-input mt-3 block w-full text-sm"
+                                       required
+                                       title="<?= $escaper->escapeHtmlAttr(__('Nickname')) ?>"
+                                       placeholder="<?= $escaper->escapeHtmlAttr(__('Nickname') . '*') ?>" type="text"
+                                       name="nickname" id="nickname_field"/>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="summary_field" class="hidden">
+                            <span>
+                                <?= $escaper->escapeHtml(__('Summary')) ?>
+                            </span>
+                            </label>
+                            <div>
+                                <input class="form-input mt-3 block w-full text-sm"
+                                       required
+                                       title="<?= $escaper->escapeHtml(__('Summary')) ?>"
+                                       placeholder="<?= $escaper->escapeHtml(__('Summary') . '*') ?>" type="text"
+                                       name="title"
+                                       id="summary_field"/>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="review_field" class="hidden">
+                            <span>
+                                <?= $escaper->escapeHtml(__('Review')) ?>
+                            </span>
+                            </label>
+                            <div>
+                            <textarea class="form-input mt-3 block w-full text-sm"
+                                      required
+                                      title="<?= $escaper->escapeHtml(__('Review')) ?>"
+                                      placeholder="<?= $escaper->escapeHtml(__('Review') . '*') ?>" name="detail"
+                                      id="review_field" cols="5"
+                                      rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="my-3">
+                    <div>
+                        <button x-show="!displaySuccessMessage" type="submit"
+                                class="btn btn-primary">
+                            <span>
+                                <?= $escaper->escapeHtml(__('Submit Review')) ?>
+                            </span>
+                        </button>
+                        <div class="flex flex-row justify-start items-center w-full"
+                             x-show="isLoading">
+                            <!-- By Sam Herbert (@sherb), for everyone. More @ http://goo.gl/7AJzbL -->
+                            <svg width="57" height="57" viewBox="0 0 57 57" xmlns="http://www.w3.org/2000/svg"
+                                 stroke="#fff" style="transform: scale(0.6)"
+                                 class="stroke-current text-primary">
+                                <g fill="none" fill-rule="evenodd">
+                                    <g transform="translate(1 1)" stroke-width="2">
+                                        <circle cx="5" cy="50" r="5">
+                                            <animate attributeName="cy"
+                                                     begin="0s" dur="2.2s"
+                                                     values="50;5;50;50"
+                                                     calcMode="linear"
+                                                     repeatCount="indefinite"/>
+                                            <animate attributeName="cx"
+                                                     begin="0s" dur="2.2s"
+                                                     values="5;27;49;5"
+                                                     calcMode="linear"
+                                                     repeatCount="indefinite"/>
+                                        </circle>
+                                        <circle cx="27" cy="5" r="5">
+                                            <animate attributeName="cy"
+                                                     begin="0s" dur="2.2s"
+                                                     from="5" to="5"
+                                                     values="5;50;50;5"
+                                                     calcMode="linear"
+                                                     repeatCount="indefinite"/>
+                                            <animate attributeName="cx"
+                                                     begin="0s" dur="2.2s"
+                                                     from="27" to="27"
+                                                     values="27;49;5;27"
+                                                     calcMode="linear"
+                                                     repeatCount="indefinite"/>
+                                        </circle>
+                                        <circle cx="49" cy="50" r="5">
+                                            <animate attributeName="cy"
+                                                     begin="0s" dur="2.2s"
+                                                     values="50;50;5;50"
+                                                     calcMode="linear"
+                                                     repeatCount="indefinite"/>
+                                            <animate attributeName="cx"
+                                                     from="49" to="49"
+                                                     begin="0s" dur="2.2s"
+                                                     values="49;5;27;49"
+                                                     calcMode="linear"
+                                                     repeatCount="indefinite"/>
+                                        </circle>
+                                    </g>
+                                </g>
+                            </svg>
+                            <div class="ml-4 text-primary">
+                                <?= $escaper->escapeHtml(__('Loading...')) ?>
+                            </div>
+                        </div>
+                        <p x-show="displaySuccessMessage" class="text-green flex items-center">
+                            <span class="inline-block w-8 mr-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2"
+                                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </span>
+                            <?= $escaper->escapeHtml(__('You submitted your review for moderation.')) ?>
+                        </p>
+                        <p x-show="displayErrorMessage" class="text-red flex items-center">
+                            <span class="inline-block w-8 mr-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </span>
+                            <template x-for="errorMessage in errorMessages">
+                                <span x-html="errorMessage"></span>
+                            </template>
+                        </p>
+                    </div>
+                </div>
+            </form>
+
+            <script>
+                function initReviewForm() {
+
+                    return {
+                        isLoading: false,
+                        displayNickname: false,
+                        displaySuccessMessage: false,
+                        displayErrorMessage: false,
+                        errorMessages: [],
+                        setErrorMessages(messages) {
+                            this.errorMessages = [messages]
+                        },
+                        placeReview: function (itemId, qty) {
+                            var $this = this;
+                            var nickname = document.getElementById('nickname_field').value;
+                            var summary = document.getElementById('summary_field').value;
+                            var review = document.getElementById('review_field').value;
+                            var ratings = [];
+
+                            var ratingValue;
+                            <?php foreach ($block->getRatings() as $rating): ?>
+                            try {
+                                ratingValue = document.querySelector('input[name="ratings[<?= $escaper->escapeJs(
+                                    $rating->getId()
+                                ) ?>]"]:checked').value;
+                                ratings[<?= $escaper->escapeJs($rating->getId()) ?>] = btoa(ratingValue);
+                            } catch (e) {
+                                console.log(e);
+                            }
+                            <?php endforeach; ?>
+
+                            if (nickname && summary && review && Object.keys(ratings).length === <?= count(
+                                $block->getRatings()
+                            ) ?>) {
+                                this.isLoading = true;
+                                this.displayErrorMessage = false;
+
+                                var createProductReviewQuery = `
+                        mutation {
+                            createProductReview(
+                                input: {
+                                  sku: "<?= $escaper->escapeJs($block->getProductInfo()->getSku()) ?>",
+                                  nickname: "${nickname}",
+                                  summary: "${summary}",
+                                  text: "${review}",
+                                  ratings: [
+                                    <?php foreach ($block->getRatings() as $rating): ?>
+                                    {
+                                      id: "<?= base64_encode($rating->getId()) ?>",
+                                      value_id: "${ratings[<?= $rating->getId() ?>]}"
+                                    },
+                                    <?php endforeach; ?>
+                                  ]
+                                }
+                            ) {
+                            review {
+                              nickname
+                            }
+                            }
+                          }`;
+
+                                fetch('<?= $escaper->escapeUrl($block->getBaseUrl()) ?>graphql', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json;charset=utf-8'
+                                    },
+                                    body: JSON.stringify({query: createProductReviewQuery})
+                                })
+                                    .then(function(response){ return response.json() })
+                                    .then(
+                                        function(data) {
+                                            $this.isLoading = false;
+                                            if (data.errors) {
+                                                $this.setErrorMessages(['<?= $escaper->escapeJs(
+                                                    __('Submitting your review failed, please try again.')
+                                                ) ?>']);
+                                                $this.displayErrorMessage = true;
+                                            } else {
+                                                $this.displaySuccessMessage = true;
+                                            }
+                                        }
+                                    );
+                            } else {
+                                this.setErrorMessages(['<?= $escaper->escapeJs(
+                                    __('Please verify you\'ve entered all required information')
+                                ) ?>']);
+                                this.displayErrorMessage = true;
+                            }
+                        }
+                    }
+                }
+            </script>
+        <?php else: ?>
+            <div id="review-form">
+                <div class="pb-6">
+                    <?= $escaper->escapeHtml(
+                        __(
+                            'Only registered users can write reviews. Please <a href="%1" class="underline">Sign in</a> or <a href="%2" class="underline">create an account</a>',
+                            $block->getLoginLink(),
+                            $block->getRegisterUrl()
+                        ),
+                        ['a']
+                    ) ?>
+                </div>
+            </div>
+        <?php endif ?>
+    </div>
+</div>

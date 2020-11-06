@@ -7,31 +7,37 @@
  * See https://hyva.io/license
  */
  -->
-<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <update handle="catalog_product_opengraph" />
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="catalog_product_opengraph"/>
     <body>
-        <attribute name="itemtype" value="http://schema.org/Product" />
+        <attribute name="itemtype" value="http://schema.org/Product"/>
         <attribute name="itemscope" value="itemscope"/>
         <referenceBlock name="page.main.title">
             <arguments>
-                <argument name="css_class" xsi:type="string">product</argument>
+                <argument name="css_class" xsi:type="string">product lg:hidden</argument>
                 <argument name="add_base_attribute" xsi:type="string">itemprop="name"</argument>
             </arguments>
         </referenceBlock>
         <referenceBlock name="root">
             <arguments>
-                <argument name="add_attribute" xsi:type="string">itemscope itemtype="http://schema.org/Product"</argument>
+                <argument name="add_attribute" xsi:type="string">itemscope itemtype="http://schema.org/Product"
+                </argument>
             </arguments>
         </referenceBlock>
 
         <referenceContainer name="content">
             <referenceContainer name="product.info.main">
-                <block class="Magento\Catalog\Block\Product\View" name="product.detail.page" template="Magento_Catalog::product/product-detail-page.phtml">
+                <block class="Magento\Catalog\Block\Product\View" name="product.detail.page"
+                       template="Magento_Catalog::product/product-detail-page.phtml">
                     <block name="product.info"
                            template="Magento_Catalog::product/view/product-info.phtml">
                         <arguments>
-                            <argument name="product_view_model" xsi:type="object">Hyva\Theme\ViewModel\ProductPage</argument>
-                            <argument name="attributes_view_model" xsi:type="object">Hyva\Theme\ViewModel\ProductAttributes</argument>
+                            <argument name="product_view_model" xsi:type="object">Hyva\Theme\ViewModel\ProductPage
+                            </argument>
+                            <argument name="attributes_view_model"
+                                      xsi:type="object">Hyva\Theme\ViewModel\ProductAttributes
+                            </argument>
                             <argument name="attributes" xsi:type="array">
                                 <item name="sku" xsi:type="array">
                                     <item name="call" xsi:type="string">getSku</item>
@@ -72,7 +78,8 @@
                             </argument>
                         </arguments>
 
-                        <block class="Magento\Catalog\Block\Product\View" name="product.info.review" template="Magento_Catalog::product/view/review.phtml" />
+                        <block class="Magento\Catalog\Block\Product\View" name="product.info.review"
+                               template="Magento_Catalog::product/view/review.phtml" ifconfig="catalog/review/active"/>
 
                         <block class="Magento\Catalog\Block\Product\View" name="product.info.price"  template="Magento_Catalog::product/view/price.phtml"/>
                         <block class="Magento\Catalog\Pricing\Render" name="product.price.final">
@@ -97,9 +104,12 @@
                         </block>
                     </block>
 
-                    <block class="Magento\Catalog\Block\Product\View\Gallery" name="product.media" template="Magento_Catalog::product/view/gallery.phtml">
+                    <block class="Magento\Catalog\Block\Product\View\Gallery" name="product.media"
+                           template="Magento_Catalog::product/view/gallery.phtml">
                         <arguments>
-                            <argument name="gallery_options" xsi:type="object">Magento\Catalog\Block\Product\View\GalleryOptions</argument>
+                            <argument name="gallery_options"
+                                      xsi:type="object">Magento\Catalog\Block\Product\View\GalleryOptions
+                            </argument>
                             <argument name="imageHelper" xsi:type="object">Magento\Catalog\Helper\Image</argument>
                         </arguments>
                     </block>
@@ -107,7 +117,8 @@
                     <block name="description"
                            template="Magento_Catalog::product/view/description.phtml">
                         <arguments>
-                            <argument name="product_view_model" xsi:type="object">Hyva\Theme\ViewModel\ProductPage</argument>
+                            <argument name="product_view_model" xsi:type="object">Hyva\Theme\ViewModel\ProductPage
+                            </argument>
                         </arguments>
                     </block>
 
@@ -115,7 +126,9 @@
                            template="Magento_Theme::elements/slider.phtml">
                         <arguments>
                             <argument name="type" xsi:type="string">upsell</argument>
-                            <argument name="title" xsi:type="string" translate="true">We found other products you might like!</argument>
+                            <argument name="title" xsi:type="string"
+                                      translate="true">We found other products you might like!
+                            </argument>
                         </arguments>
                     </block>
 

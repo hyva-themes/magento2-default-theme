@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="product.detail.page">
+            <block class="Magento\Review\Block\Product\View\ListView" name="review_list"
+                   template="Magento_Review::product/view/list.phtml"
+                   ifconfig="catalog/review/active">
+                <block class="Magento\Theme\Block\Html\Pager" name="product_review_list.toolbar" ifconfig="catalog/review/active"/>
+            </block>
+            <block class="Magento\Review\Block\Form" name="review_form"
+                   template="Magento_Review::form.phtml"
+                   ifconfig="catalog/review/active">
+                <container name="product.review.form.fields.before" as="form_fields_before"
+                           label="Review Form Fields Before"/>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

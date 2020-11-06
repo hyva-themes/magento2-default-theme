@@ -71,7 +71,9 @@ if (!$product) return; ?>
                 <?= /* @noEscape */
                 $catalogOutputHelper->productAttribute($product, $product->getName(), 'name') ?>
             </a>
-
+        </div>
+        <div class="py-1 mx-auto w-6/12">
+            <?= $block->getReviewsSummaryHtml($product, $templateType) ?>
         </div>
         <p class="pt-1 text-gray-900">
             <?= /* @noEscape */ $block->getProductPrice($product) ?>

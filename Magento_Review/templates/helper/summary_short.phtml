@@ -1,0 +1,65 @@
+<?php
+
+use Magento\Framework\Escaper;
+
+/** @var \Magento\Review\Block\Product\ReviewRenderer $block */
+/** @var $escaper Escaper */
+
+$rating = $block->getRatingSummary();
+$ratingSteps = 5;
+$starsFilled = is_numeric($rating) ? floor($rating / 100 * $ratingSteps) : 0;
+$starFragment = $rating / 100 * $ratingSteps - $starsFilled;
+$starsEmpty = floor($ratingSteps - $starsFilled - $starFragment);
+?>
+<?php if ($block->isReviewEnabled()): ?>
+    <div class="rating-summary flex" <?php if(!$rating): ?>title="<?= $escaper->escapeHtmlAttr(__('Be the first to review this product')) ?>"<?php endif; ?>>
+        <?php if ($rating): ?>
+            <?php
+            $i = 0;
+            while ($i < $starsFilled) : ?>
+                <svg xmlns="http://www.w3.org/2000/svg" class="fill-current text-yellow-400 w-6" viewBox="3 0 20 20"
+                     fill="currentColor">
+                    <path
+                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+                <?php $i++; endwhile; ?>
+            <?php if ($starFragment) : ?>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="3 0 20 20" fill="currentColor" class="w-6">
+                    <defs>
+                        <linearGradient id="partialFill<?= /* @noEscape */
+                        $block->getProduct()->getId() ?>">
+                            <stop offset="0%" stop-color="#f6e05e"/>
+                            <stop offset="<?php echo $starFragment * 100 ?>%" stop-color="#f6e05e"/>
+                            <stop offset="<?php echo $starFragment * 100 ?>%" stop-color="#cbd5e0"/>
+                            <stop offset="100%" stop-color="#cbd5e0"/>
+                        </linearGradient>
+                    </defs>
+                    <g fill="url(#partialFill<?= /* @noEscape */
+                    $block->getProduct()->getId() ?>)">
+                        <path
+                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                    </g>
+                </svg>
+            <?php endif; ?>
+            <?php
+            $i = 0;
+            while ($i < $starsEmpty) : ?>
+                <svg xmlns="http://www.w3.org/2000/svg" class="fill-current text-gray-400 w-6" viewBox="3 0 20 20"
+                     fill="currentColor">
+                    <path
+                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+                <?php $i++; endwhile; ?>
+        <?php else : ?>
+            <?php
+            $i = 0;
+            while ($i < $ratingSteps) : ?>
+                <svg xmlns="http://www.w3.org/2000/svg" class="fill-current text-gray-200 w-6" viewBox="3 0 20 20"
+                     fill="currentColor">
+                    <path
+                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+            <?php $i++; endwhile; ?>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>
