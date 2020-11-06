@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="contactForm">
+            <block name="recaptcha_validation" template="Hyva_ReCaptcha::script_token.phtml"
+                   ifconfig="recaptcha_frontend/type_for/contact">
+                <arguments>
+                    <argument name="viewModelStoreConfig" xsi:type="object">Hyva\Theme\ViewModel\StoreConfig</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+        <referenceContainer name="form.additional.info">
+            <block class="Magento\ReCaptchaUi\Block\ReCaptcha"
+                   name="recaptcha"
+                   after="-"
+                   template="Magento_ReCaptchaFrontendUi::recaptcha.phtml"
+                   ifconfig="recaptcha_frontend/type_for/contact">
+                <arguments>
+                    <argument name="recaptcha_for" xsi:type="string">contact</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="form.additional.after">
+            <block name="recaptcha_legal_notice_contact"
+                   template="Hyva_ReCaptcha::legal_notice.phtml"
+                   ifconfig="recaptcha_frontend/type_for/contact">
+            </block>
+        </referenceContainer>
+        <referenceContainer name="before.body.end">
+            <block name="recaptcha_base" template="Hyva_ReCaptcha::script_loader.phtml"
+                   ifconfig="recaptcha_frontend/type_for/contact">
+                <arguments>
+                    <argument name="viewModelStoreConfig" xsi:type="object">Hyva\Theme\ViewModel\StoreConfig</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

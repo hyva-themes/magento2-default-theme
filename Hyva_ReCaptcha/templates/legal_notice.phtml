@@ -1,0 +1,24 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+?>
+<p class="my-4 text-sm text-gray-900">
+<?= $escaper->escapeHtml(
+    __(
+        'This form is protected by reCAPTCHA - the <a class="underline" href="%1">Google Privacy Policy</a> and <a class="underline" href="%2">Terms of Service</a> apply.',
+        'https://policies.google.com/privacy',
+        'https://policies.google.com/terms'
+    ),
+    ['a']
+) ?>
+</p>

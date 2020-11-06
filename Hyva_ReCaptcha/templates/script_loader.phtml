@@ -1,0 +1,22 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Hyva\Theme\ViewModel\StoreConfig;
+
+/** @var $escaper Escaper */
+/** @var $storeConfig StoreConfig */
+
+$storeConfig = $block->getData('viewModelStoreConfig');
+$siteKey = $storeConfig->getStoreConfig('recaptcha_frontend/type_recaptcha_v3/public_key');
+?>
+<?php if ($siteKey) : ?>
+    <script src="https://www.google.com/recaptcha/api.js?render=<?= $escaper->escapeJs($siteKey) ?>" defer
+            async></script>
+<?php endif; ?>

@@ -1,0 +1,5 @@
+body > div > div.grecaptcha-badge {
+    visibility: hidden;
+    height: 0 !important;
+    width: 0 !important;
+}

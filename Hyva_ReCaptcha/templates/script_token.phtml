@@ -1,0 +1,45 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Hyva\Theme\ViewModel\StoreConfig;
+
+/** @var Escaper $escaper */
+/** @var StoreConfig $storeConfig */
+
+$storeConfig = $block->getData('viewModelStoreConfig');
+$siteKey = $storeConfig->getStoreConfig('recaptcha_frontend/type_recaptcha_v3/public_key');
+?>
+<?php if ($siteKey) : ?>
+    <?php if ($block->getData('render_script_tag')) : ?>
+    <script>
+        <?php endif; ?>
+        if (!this.hasCaptchaToken) {
+            this.errors = 1;
+
+            $this = this;
+            grecaptcha.ready(function () {
+                grecaptcha.execute('<?= $escaper->escapeJs(
+                    $siteKey
+                ) ?>', {action: 'submit'}).then(function (token) {
+                    var $recaptchaResponseInput = $form.querySelector('input[name="g-recaptcha-response"]');
+                    if ($recaptchaResponseInput != null) {
+                        $recaptchaResponseInput.value = token;
+                        $this.errors = 0;
+                        $this.hasCaptchaToken = 1;
+                        $this.submitForm();
+                    }
+                });
+            });
+        }
+        <?php if($block->getData('render_script_tag')) : ?>
+    </script>
+<?php endif; ?>
+<?php endif; ?>

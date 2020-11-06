@@ -35,8 +35,8 @@ declare(strict_types=1);
                 });
             },
             getMessages: function (data) {
-                if (data.messages && data.messages.length) {
-                    this.addMessages(data.messages);
+                if (data.messages && data.messages.messages && data.messages.messages.length) {
+                    this.addMessages(data.messages.messages);
                 }
             },
             setHideTimeOut: function (messageIndex, hideAfter) {
