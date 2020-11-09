@@ -9,7 +9,7 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="contactForm">
-            <block name="recaptcha_validation" template="Magento_ReCaptchaFrontendUi::base/script_token.phtml"
+            <block name="recaptcha_validation" template="Magento_ReCaptchaFrontendUi::js/script_token.phtml"
                    ifconfig="recaptcha_frontend/type_for/contact">
                 <arguments>
                     <argument name="viewModelStoreConfig" xsi:type="object">Hyva\Theme\ViewModel\StoreConfig</argument>
@@ -29,12 +29,12 @@
         </referenceContainer>
         <referenceContainer name="form.additional.after">
             <block name="recaptcha_legal_notice_contact"
-                   template="Magento_ReCaptchaFrontendUi::base/legal_notice.phtml"
+                   template="Magento_ReCaptchaFrontendUi::legal_notice.phtml"
                    ifconfig="recaptcha_frontend/type_for/contact">
             </block>
         </referenceContainer>
         <referenceContainer name="before.body.end">
-            <block name="recaptcha_base" template="Magento_ReCaptchaFrontendUi::base/script_loader.phtml"
+            <block name="recaptcha_base" template="Magento_ReCaptchaFrontendUi::js/script_loader.phtml"
                    ifconfig="recaptcha_frontend/type_for/contact">
                 <arguments>
                     <argument name="viewModelStoreConfig" xsi:type="object">Hyva\Theme\ViewModel\StoreConfig</argument>
