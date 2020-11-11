@@ -4,7 +4,7 @@
     }
 
     .order-items .lg\:grid-cols-5 {
-        grid-template-columns: repeat(5,minmax(0,1fr)) !important;
+        grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
     }
 
     .order-items .lg\:hidden {
@@ -13,5 +13,13 @@
 
     .order-items div.flex.lg\:block {
         display: block !important;
+    }
+
+    .order-items div.text-right.lg\:text-left {
+        text-align: left !important;
+    }
+
+    .actions-toolbar {
+        display: none;
     }
 }
