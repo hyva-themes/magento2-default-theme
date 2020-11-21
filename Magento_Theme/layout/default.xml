@@ -10,7 +10,6 @@
 <page layout="3columns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="after.body.start">
-            <block name="head.js" class="Magento\Framework\View\Element\Template" template="Magento_Theme::html/head/js_variables.phtml" />
             <block class="Magento\Framework\View\Element\FormKey" name="formkey" />
         </referenceContainer>
         <referenceContainer name="page.messages">
@@ -50,11 +49,6 @@
                     </arguments>
                 </block>
             </block>
-        </referenceContainer>
-        <referenceContainer name="before.body.end">
-            <block name="script-alpine-js" template="Magento_Theme::html/footer_scripts/script-alpine-js.phtml"/>
-            <block name="script-cookies" template="Magento_Theme::html/footer_scripts/script-cookies.phtml"/>
-            <block name="script-private-content" template="Magento_Theme::html/footer_scripts/script-private-content.phtml"/>
         </referenceContainer>
     </body>
 </page>

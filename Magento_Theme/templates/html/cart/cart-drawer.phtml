@@ -20,10 +20,12 @@ use Magento\Framework\View\Element\Template;
             getData: function (data) {
                 if (data.cart) {
                     this.cart = data.cart
+                    this.setCartItems();
                 }
             },
-            getCartItems: function getCartItems () {
-                return this.cart && this.cart.items.sort(function(a,b) { return a.item_id - b.item_id }) || {}
+            cartItems: {},
+            setCartItems: function getCartItems () {
+                this.cartItems = this.cart && this.cart.items.sort(function(a,b) { return a.item_id - b.item_id }) || {}
             },
             deleteItemFromCart: function deleteItemFromCart (itemId) {
                 var formKey = document.querySelector('input[name=form_key]').value;
@@ -75,7 +77,7 @@ use Magento\Framework\View\Element\Template;
              aria-labelledby="cart-drawer-title"
              aria-modal="true"
              @click.away="open = false"
-             class="fixed inset-y-0 right-0 max-w-full flex">
+             class="fixed inset-y-0 right-0 max-w-full flex z-30">
             <div class="relative w-screen max-w-md"
                  x-show="open"
                  x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700"
@@ -106,7 +108,7 @@ use Magento\Framework\View\Element\Template;
                         </h2>
                     </header>
                     <div class="relative grid gap-6 bg-white py-6 sm:gap-8 px-4 sm:px-6 border-b border-container overflow-y-auto">
-                        <template x-for="item in getCartItems()">
+                        <template x-for="item in cartItems">
                             <div class="-m-3 p-3 flex items-start space-x-4 rounded-lg hover:bg-gray-100 transition ease-in-out duration-150">
                                 <a :href="item.product_url" class="w-1/4">
                                     <img

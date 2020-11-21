@@ -34,9 +34,9 @@ declare(strict_types=1);
                     }
                 });
             },
-            getMessages: function (data) {
-                if (data.messages && data.messages.length) {
-                    this.addMessages(data.messages);
+            getData: function (data) {
+                if (data.messages && data.messages.messages && data.messages.messages.length) {
+                    this.addMessages(data.messages.messages);
                 }
             },
             setHideTimeOut: function (messageIndex, hideAfter) {
@@ -55,7 +55,7 @@ declare(strict_types=1);
 <section id="messages"
          x-data="initMessages()"
          @messages-loaded.window="addMessages(event.detail.messages, event.detail.hideAfter)"
-         @private-content-loaded.window="getMessages(event.detail.data)"
+         @private-content-loaded.window="getData(event.detail.data)"
 >
     <template x-if="!isEmpty()">
         <div class="w-full">

@@ -92,7 +92,7 @@ use Magento\Review\Block\Form;
                                                                 <span>
                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                          viewBox="0 0 20 20" fill="currentColor"
-                                                                         class="fill-current w-8"
+                                                                         class="fill-current h-8 w-8"
                                                                      <?php // phpcs:ignore ?>
                                                                     :class="<?= $iterator ?> <= ratingIdentifierClicked ? 'text-yellow-400' : 'text-gray-400'">
                                                                       <path
@@ -222,7 +222,7 @@ use Magento\Review\Block\Form;
                             </div>
                         </div>
                         <p x-show="displaySuccessMessage" class="text-green flex items-center">
-                            <span class="inline-block w-8 mr-3">
+                            <span class="inline-block w-8 h-8 mr-3">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                      stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -233,7 +233,7 @@ use Magento\Review\Block\Form;
                             <?= $escaper->escapeHtml(__('You submitted your review for moderation.')) ?>
                         </p>
                         <p x-show="displayErrorMessage" class="text-red flex items-center">
-                            <span class="inline-block w-8 mr-3">
+                            <span class="inline-block w-8 h-8 mr-3">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                      stroke="currentColor">
                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -257,7 +257,7 @@ use Magento\Review\Block\Form;
                         displaySuccessMessage: false,
                         displayErrorMessage: false,
                         errorMessages: [],
-                        setErrorMessages(messages) {
+                        setErrorMessages: function setErrorMessages(messages) {
                             this.errorMessages = [messages]
                         },
                         placeReview: function (itemId, qty) {
@@ -285,29 +285,29 @@ use Magento\Review\Block\Form;
                                 this.isLoading = true;
                                 this.displayErrorMessage = false;
 
-                                var createProductReviewQuery = `
+                                var createProductReviewQuery = <?= /** @noEscape */ json_encode('
                         mutation {
                             createProductReview(
                                 input: {
-                                  sku: "<?= $escaper->escapeJs($block->getProductInfo()->getSku()) ?>",
-                                  nickname: "${nickname}",
-                                  summary: "${summary}",
-                                  text: "${review}",
-                                  ratings: [
-                                    <?php foreach ($block->getRatings() as $rating): ?>
-                                    {
-                                      id: "<?= base64_encode($rating->getId()) ?>",
-                                      value_id: "${ratings[<?= $rating->getId() ?>]}"
-                                    },
-                                    <?php endforeach; ?>
-                                  ]
+                                  sku: "'. $escaper->escapeJs($block->getProductInfo()->getSku()) .'",
+                                  nickname: "%nickname",
+                                  summary: "%summary",
+                                  text: "%review",
+                                  ratings: [%ratings]
                                 }
                             ) {
                             review {
                               nickname
                             }
                             }
-                          }`;
+                          }'); ?>
+                            .replace('%nickname',nickname)
+                            .replace('%summary',summary)
+                            .replace('%review',review)
+                            .replace('%ratings',Object.keys(ratings).map(function(key){
+                                return '{ id: "'+btoa(key)+'", value_id: "'+ratings[key]+'" }'
+                            }).join(','));
+
 
                                 fetch('<?= $escaper->escapeUrl($block->getBaseUrl()) ?>graphql', {
                                     method: 'POST',

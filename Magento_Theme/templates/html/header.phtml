@@ -17,7 +17,7 @@ use Magento\Framework\View\Element\Template;
         return {
             searchOpen: false,
             cart: {},
-            getCart (data) {
+            getData: function getData(data) {
                 if (data.cart) { this.cart = data.cart }
             },
             menu: initHeaderNavigation()
@@ -28,7 +28,7 @@ use Magento\Framework\View\Element\Template;
      class="w-full z-30 bg-container-lighter border-b border-container-lighter shadow"
      x-data="initHeader()"
      @keydown.window.escape="searchOpen = false;"
-     @private-content-loaded.window="getCart($event.detail.data)"
+     @private-content-loaded.window="getData(event.detail.data)"
 >
     <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-6 py-3">
 
