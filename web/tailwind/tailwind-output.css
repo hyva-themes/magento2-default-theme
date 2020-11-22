@@ -2078,6 +2078,18 @@ video {
   margin-bottom: 0;
 }
 
+#category-view-container {
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  flex-direction: column;
+  align-items: center;
+}
+
 .toolbar-products .modes-mode {
     width: 1.5rem;
     height: 1.5rem;
@@ -2102,6 +2114,21 @@ video {
 .toolbar-products .modes-mode.mode-list {
       background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" /></svg>');
     }
+
+#customer-login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+
+#customer-login-container {
+    flex-direction: row
+}
+  }
 
 .page.messages {
   position: -webkit-sticky;

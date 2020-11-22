@@ -12,7 +12,8 @@
     <body>
         <referenceContainer name="columns.top">
             <container name="category.view.container" htmlTag="div"
-                       htmlClass="category-view container mx-auto flex px-5 py-12 flex-col items-center" after="-">
+                       htmlId="category-view-container"
+                       htmlClass="category-view container" after="-">
                 <block class="Magento\Catalog\Block\Category\View" name="category.image" template="Magento_Catalog::category/image.phtml">
                     <arguments>
                         <argument name="image" xsi:type="object">Magento\Catalog\ViewModel\Category\Image</argument>

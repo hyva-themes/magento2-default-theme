@@ -15,7 +15,8 @@
         <referenceContainer name="content">
             <container name="customer.login.container"
                        htmlTag="div"
-                       htmlClass="login-container container flex-columns-wrapper justify-between py-8">
+                       htmlId="customer-login-container"
+                       htmlClass="login-container container">
                 <block class="Magento\Customer\Block\Form\Login" name="customer_form_login" template="Magento_Customer::form/login.phtml">
                     <container name="form.additional.info" as="form_additional_info"/>
                 </block>
