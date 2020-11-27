@@ -8,32 +8,28 @@
 
 declare(strict_types=1);
 
+use Magento\Catalog\Block\Product\View;
 use Magento\Catalog\Model\Product;
-use Magento\Framework\View\Element\Template;
-use Hyva\Theme\ViewModel\ProductAttributes;
-use Hyva\Theme\ViewModel\ProductPage;
+use Magento\Framework\Escaper;
 
-/** @var Template $block */
-/** @var ProductPage $productViewModel */
-$productViewModel = $block->getProductViewModel();
-/** @var ProductAttributes $attributesViewModel */
-$attributesViewModel = $block->getAttributesViewModel();
+/* @var $block View */
+/** @var Escaper $escaper */
+
 /** @var Product $product */
-$product = $productViewModel->getProduct();
+$product = $block->getProduct();
 
-use Magento\Catalog\Block\Product\View\Options;
+/**
+ * Add to cart url is set on 'product.info' block by
+ * @see \Magento\Checkout\Block\Cart\Item\Configure::_prepareLayout
+ */
+$productInfoBlock = $block->getLayout()->getBlock('product.info');
 
-/* @var $block Options */
 ?>
 
 <?php if ($product->isSaleable()) : ?>
-    <?php
-    /** @var \Magento\Framework\Data\Helper\PostHelper $postDataHelper */
-    $postDataHelper = $this->helper(\Magento\Framework\Data\Helper\PostHelper::class);
-    $postParams = json_decode($postDataHelper->getPostData($block->getAddToCartUrl($product), ['product' => $product->getEntityId()]));
-    ?>
     <form method="post" x-data=""
-          action="<?= $block->escapeUrl($productViewModel->getAddToCartUrl($product)) ?>"
+          action="<?= $escaper->escapeUrl($productInfoBlock->getSubmitUrl($product)) ?>"
+          class="mb-6"
           id="product_addtocart_form"<?php if ($product->getOptions()) :?> enctype="multipart/form-data"<?php endif; ?>
     >
         <input type="hidden" name="product" value="<?= (int)$product->getId() ?>" />

@@ -10,47 +10,155 @@ declare(strict_types=1);
 
 use Magento\Catalog\Block\Product\View;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Framework\Pricing\Helper\Data as PriceHelper;
 
 /** @var View $block */
 /** @var Product $product */
 $product = $block->getProduct();
+
+// todo: refactor to use a priceViewModel
+/** @var PriceHelper $priceHelper */
+$priceHelper = $this->helper(PriceHelper::class);
 ?>
 <script>
     function initPrice<?= (int) $product->getId() ?>(){
         return {
-            prices: false,
+            activeProductsPriceData: false,
+            initialFinalPrice: <?= (float)$product->getFinalPrice()?>,
+            configuredFinalPrice: false,
+            configuredFinalPriceWithCustomOptions: false,
+            initialTierPrices: <?= json_encode($product->getTierPrice()) ?>,
+            customOptionPrices: [],
+            activeCustomOptions: [],
+            updateCustomOptionActive: function updateCustomOptionActive(data) {
+
+                let activeCustomOptions = this.activeCustomOptions;
+                const customOptionId = data.customOptionId;
+
+                if(data.active) {
+                    if (!activeCustomOptions.includes(customOptionId)) {
+                        activeCustomOptions.push(data.customOptionId);
+                    }
+                } else {
+                    if (activeCustomOptions.includes(customOptionId)) {
+                        let index = activeCustomOptions.indexOf(customOptionId);
+                        activeCustomOptions.splice(index, 1);
+                    }
+                }
+                this.calculateFinalPriceWithCustomOptions()
+            },
+            updateCustomOptionPrices: function updateCustomOptionPrices(prices) {
+
+                if (prices) {
+                    this.customOptionPrices = prices;
+                }
+
+                this.calculateFinalPriceWithCustomOptions();
+            },
             formatPrice: function formatPrice(price) {
                 return price.toLocaleString(false, {
                     style: 'currency',
-                    currency: 'EUR'
+                    currency: 'EUR' // todo: fetch currency from priceViewModel
                 })
+            },
+            qty: 1,
+            calculateFinalPrice: function calculatePrice() {
+                let finalPrice = this.initialFinalPrice;
+
+                if (this.activeProductsPriceData) {
+                    finalPrice = this.activeProductsPriceData.tierPrices.reduce((finalValue, tierPrice) => {
+                        if (this.qty >= tierPrice.qty) {
+                            return tierPrice.price < finalValue ? tierPrice.price : finalValue;
+                        }
+                        return finalValue;
+                    }, this.activeProductsPriceData.finalPrice.amount);
+
+                } else {
+                    finalPrice = Object.values(this.initialTierPrices).reduce((finalValue, tierPrice) => {
+                        if (this.qty >= tierPrice.price_qty) {
+                            return parseFloat(tierPrice.website_price) < finalValue ? parseFloat(tierPrice.website_price) : finalValue;
+                        }
+                        return finalValue;
+                    }, finalPrice);
+
+                }
+                window.dispatchEvent(
+                    new CustomEvent(
+                        "update-product-final-price",
+                        {detail: finalPrice}
+                    )
+                );
+                this.configuredFinalPrice = finalPrice;
+            },
+            calculateFinalPriceWithCustomOptions: function calculateFinalPriceWithCustomOptions() {
+                let finalPrice = this.configuredFinalPrice ||
+                    this.initialFinalPrice;
+
+                this.configuredFinalPriceWithCustomOptions = this.activeCustomOptions.reduce((priceAccumulator, activeCustomOptionId) => {
+                    const customOptionPrice = this.customOptionPrices[activeCustomOptionId];
+                    if(customOptionPrice) {
+                        return Number.parseFloat(priceAccumulator) + Number.parseFloat(customOptionPrice);
+                    }
+                    return finalPrice;
+                }, finalPrice);
+
+            },
+            getFormattedFinalPrice: function getFormattedFinalPrice () {
+                return this.formatPrice(
+                    this.configuredFinalPriceWithCustomOptions ||
+                    this.configuredFinalPrice ||
+                    this.initialFinalPrice
+                )
             }
         }
     }
 </script>
 <div x-data="initPrice<?= (int) $product->getId() ?>()"
-     @update-prices-<?= (int) $product->getId() ?>.window="prices = event.detail"
+     @update-prices-<?= (int) $product->getId() ?>.window="activeProductsPriceData = event.detail; calculateFinalPrice(); calculateFinalPriceWithCustomOptions();"
+     @update-qty-<?= (int)$product->getId() ?>.window="qty = event.detail; calculateFinalPrice(); calculateFinalPriceWithCustomOptions();"
+     @update-custom-option-active.window="updateCustomOptionActive(event.detail)"
+     @update-custom-option-prices.window="updateCustomOptionPrices(event.detail)"
      class="price-box price-final_price" data-role="priceBox" data-product-id="<?= (int) $product->getId() ?>"
      data-price-box="product-id-<?= (int) $product->getId() ?>">
-    <template x-if="!prices">
-    <span class="normal-price">
-        <span class="price-container price-final_price tax" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-            <?php if ($product->canConfigure() && is_int($product->getPrice())) : ?>
-                <span class="price-label">As low as</span>
+    <template x-if="!activeProductsPriceData">
+        <div class="price-container">
+            <?php
+                $regularPrice = $product->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE)->getValue();
+            if(
+                $product->getFinalPrice() < $regularPrice
+            ): ?>
+                <div class="old-price mr-2 inline-block">
+                    <span id="product-price-<?= (int) $product->getId() ?>" class="price-wrapper title-font font-regular text-xl line-through text-gray-900">
+                        <span class="price" ><?= $priceHelper->currency($regularPrice) ?></span>
+                    </span>
+                </div>
             <?php endif; ?>
-            <span id="product-price-<?= (int) $product->getId() ?>" class="price-wrapper ">
-                <span class="price"><?= $product->getFormattedPrice() ?></span>
-            </span>
-            <meta itemprop="price" content="<?= $product->getFinalPrice() ?>">
-            <meta itemprop="priceCurrency" content="EUR">
-        </span>
-    </span>
+
+            <div class="final-price inline-block" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
+                <?php if ($product->canConfigure() && is_int($product->getPrice())): ?>
+                    <span class="price-label block"><?= /* @noEscape */ __('As low as') ?>:</span>
+                <?php endif; ?>
+                <span id="product-price-<?= (int) $product->getId() ?>" class="price-wrapper title-font font-medium text-2xl text-gray-900">
+                    <span class="price" x-html="getFormattedFinalPrice()"><?= $product->getFormattedPrice() ?></span>
+                </span>
+                <meta itemprop="price" content="<?= $product->getFinalPrice() ?>">
+                <meta itemprop="priceCurrency" content="EUR">
+            </div>
+        </div>
     </template>
-    <template x-if="prices">
-        <span class="normal-price">
-            <span id="product-price-<?= (int) $product->getId() ?>" class="price-wrapper ">
-                <span class="price" x-html="formatPrice(prices.finalPrice.amount)"></span>
+    <template x-if="activeProductsPriceData && activeProductsPriceData.oldPrice && activeProductsPriceData.finalPrice.amount < activeProductsPriceData.oldPrice.amount">
+        <div class="old-price inline-block mr-2">
+            <span id="product-price-<?= (int) $product->getId() ?>" class="price-wrapper title-font font-regular text-xl line-through text-gray-900">
+                <span class="price" x-html="formatPrice(activeProductsPriceData.oldPrice.amount)"></span>
             </span>
-        </span>
+        </div>
+    </template>
+    <template x-if="activeProductsPriceData">
+        <div class="final-price inline-block">
+            <span id="product-price-<?= (int) $product->getId() ?>" class="price-wrapper title-font font-medium text-2xl text-gray-900">
+                <span class="price" x-html="getFormattedFinalPrice()"></span>
+            </span>
+        </div>
     </template>
 </div>

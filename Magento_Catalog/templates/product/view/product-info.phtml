@@ -9,11 +9,14 @@
 declare(strict_types=1);
 
 use Magento\Catalog\Model\Product;
+use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 use Hyva\Theme\ViewModel\ProductAttributes;
 use Hyva\Theme\ViewModel\ProductPage;
 
 /** @var Template $block */
+/** @var Escaper $escaper */
+
 /** @var ProductPage $productViewModel */
 $productViewModel = $block->getProductViewModel();
 /** @var ProductAttributes $attributesViewModel */
@@ -57,12 +60,13 @@ $product = $productViewModel->getProduct();
 
     <?= $block->getBlockHtml('product.info.form') ?>
 
-    <div class="flex sticky" style="top:6em;">
-        <span class="title-font font-medium text-2xl text-gray-900">
-            <?= $block->getChildHtml("product.info.price") ?>
-        </span>
+    <div class="flex sticky items-end flex-col sm:flex-row" style="top:6em;">
+
+        <?= $block->getChildHtml("product.info.price") ?>
+
+        <div class="flex ml-auto mt-4 sm:mt-0">
         <?php if ($product->isSaleable()) : ?>
-        <div class="flex ml-auto">
+            <?= $block->getChildHtml("product.info.quantity") ?>
             <button type="submit"
                     form="product_addtocart_form"
                     title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>"
@@ -71,9 +75,12 @@ $product = $productViewModel->getProduct();
                 <svg class="h-6 w-6 border-current" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
                 </svg>
-                <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
+                <span><?= $block->getData('submit_route_data') ?
+                        $escaper->escapeHtml(__('Update item')) :
+                        $escaper->escapeHtml(__('Add to Cart')) ?>
+                </span>
             </button>
-        </div>
+
         <?php endif; ?>
         <script>
             function initWishlist() {
@@ -140,5 +147,6 @@ $product = $productViewModel->getProduct();
                     d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
             </svg>
         </button>
+        </div>
     </div>
 </div>

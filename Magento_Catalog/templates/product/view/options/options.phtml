@@ -7,21 +7,85 @@
  */
 
 use Magento\Catalog\Block\Product\View\Options;
+use Magento\Catalog\Model\Product\Option;
 
 /* @var $block Options */
+/** @var Option $option */
 ?>
 
 <?php $_options = $block->decorateArray($block->getOptions()) ?>
+
 <?php if (count($_options)) :?>
     <script>
         function initOptions() {
             return {
-                optionConfig: <?= /* @noEscape */ $block->getJsonConfig() ?>
+                optionConfig: <?= /* @noEscape */ $block->getJsonConfig() ?>,
+                productFinalPrice: false,
+                customOptionPrices: [],
+                refs: [],
+                formatPrice: function formatPrice(price) {
+                    return Number.parseFloat(price).toLocaleString(false, {
+                        style: 'currency',
+                        currency: 'EUR' // todo: fetch currency from priceViewModel
+                    });
+                },
+                getFormattedOptionPrice: function getFormattedOptionPrice (optionId) {
+                    if (this.customOptionPrices[optionId]) {
+                        return this.formatPrice(this.customOptionPrices[optionId]);
+                    }
+                    return false;
+                },
+                calculateOptionPrices: function calculateOptionPrices() {
+                    for (const [customOptionId, customOption] of Object.entries(this.optionConfig)) {
+                        if (customOption.prices) {
+                            this.customOptionPrices[customOptionId] = this.calculateOptionPrice(customOption,customOptionId);
+                        } else {
+                            for (const [childCustomOptionId, childCustomOption] of Object.entries(customOption)) {
+                                this.customOptionPrices[customOptionId + '_' + childCustomOptionId] = this.calculateOptionPrice(childCustomOption,customOptionId,childCustomOptionId);
+                            }
+                        }
+                    }
+
+                    window.dispatchEvent(
+                        new CustomEvent(
+                            "update-custom-option-prices",
+                            {detail: this.customOptionPrices}
+                        )
+                    );
+                },
+                calculateOptionPrice: function calculateOptionPrice(customOption, customOptionId, childCustomOptionId) {
+                    var customOptionCode = customOptionId + (childCustomOptionId ? '-' + childCustomOptionId : '') ;
+
+                    var optionElement = this.refs && this.refs['option-'+customOptionCode];
+
+                    var price = customOption.prices.finalPrice.amount;
+
+                    if (this.productFinalPrice && optionElement && optionElement.dataset.priceAmount && optionElement.dataset.priceType ) {
+                        price = optionElement.dataset.priceType !== 'percent' ?
+                            optionElement.dataset.priceAmount :
+                            this.productFinalPrice * (optionElement.dataset.priceAmount / 100)
+                    }
+
+                    return price;
+                },
+                updateCustomOptionValue: function updateCustomOptionValue($dispatch, customOptionId, target) {
+                    var active = !!target.value;
+                    //var amount = this.customOptionPrices[customOptionId];
+
+                    $dispatch('update-custom-option-active', { customOptionId, active });
+                }
             }
         }
     </script>
-
+    <h2 class="text-gray-900 text-xl title-font font-medium mb-4">
+        <?= __('Customizable Options:') ?>
+    </h2>
+    <div x-data="initOptions()"
+         x-init="refs = $refs; $nextTick(() => {calculateOptionPrices()})"
+         @update-product-final-price.window="productFinalPrice = event.detail; calculateOptionPrices()"
+         class="mb-6">
     <?php foreach ($_options as $_option) :?>
         <?= $block->getOptionHtml($_option) ?>
     <?php endforeach; ?>
+    </div>
 <?php endif; ?>

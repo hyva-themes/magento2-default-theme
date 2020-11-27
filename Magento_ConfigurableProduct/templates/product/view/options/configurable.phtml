@@ -100,39 +100,40 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
                             { detail: value }
                         )
                     );
+                },
+                itemId: '<?= (int)$block->getRequest()->getParam('id') ?>',
+                productId: '<?= (int)$product->getId() ?>',
+                onGetCartData: function onGetCartData($dispatch) {
+                    var cart = event.detail.data && event.detail.data.cart;
+                    if (cart && cart.items) {
+                        $this = this;
+                        var cartItem = cart.items.find(function (item) {
+                            return (
+                                item.item_id === $this.itemId
+                                && item.product_id === $this.productId
+                            )
+                        });
+                        if (cartItem && cartItem.options && cartItem.options.length) {
+                            cartItem.options.map(option => {
+                                this.changeOption(option.option_id,option.option_value);
+                            })
+                        }
+                    }
                 }
             }
         }
 
     </script>
     <div x-data="initConfigurableOptions()"
-         x-init="$watch('allowedAttributeOptions', function(allowedOptions) {
-            var select = document.querySelectorAll('select[name^=super_attribute]');
-                select.forEach(function (element) {
-                    var previousSelectedIndex = element.value;
-                    element.innerHTML = '<option value> <?= $escaper->escapeHtml(__('Choose an Option...')) ?></option>';
-                    var id = element.dataset.id;
-                    var options = allowedOptions[id] || [];
-
-                    options.forEach(function (item) {
-                        console.log(item);
-                        var option = document.createElement('option');
-                        option.textContent = item.label;
-                        option.value = item.id;
-                        element.appendChild(option);
-                        if (item.id === previousSelectedIndex) {
-                            element.value = item.id;
-                        }
-                    });
-                })
-
-         }); findAllowedAttributeOptions();"
+         x-init="findAllowedAttributeOptions();"
+         @private-content-loaded.window="onGetCartData($dispatch)"
+         class="mb-6"
     >
         <h2 class="text-gray-900 text-xl title-font font-medium mb-4">
-            <?= __('Select options:') ?>
+            <?= __('Product Options:') ?>
         </h2>
     <?php foreach ($attributes as $attribute) : ?>
-        <div class="flex border-t border-gray-300 py-2 last:mb-6 last:border-b w-full items-center">
+        <div class="flex border-t last:border-b  border-gray-300 py-2 w-full items-center">
 
             <label class="label text-gray-500 text-left w-1/2"
                    for="attribute<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>"
@@ -153,6 +154,11 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
                     <option value="">
                         <?= $escaper->escapeHtml(__('Choose an Option...')) ?>
                     </option>
+                    <template x-for="(item, index) in getAllowedAttributeOptions(<?= (int) $attribute->getAttributeId() ?>)"
+                              :key="item.id"
+                    >
+                        <option :value="item.id" x-html="item.label" :selected="selectedValues[<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>] === item.id"></option>
+                    </template>
                 </select>
             </div>
         </div>

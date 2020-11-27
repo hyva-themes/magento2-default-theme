@@ -1,0 +1,10 @@
+<?php
+
+use Magento\Catalog\Block\Product\View\Options\Type\DefaultType;
+
+/** @var $block DefaultType */
+?>
+<?php $_option = $block->getOption() ?>
+<div class="field">
+    <label class="label"><span><?= $block->escapeHtml($_option->getTitle()) ?></span></label>
+</div>

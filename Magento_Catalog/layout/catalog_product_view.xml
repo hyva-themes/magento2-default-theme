@@ -19,6 +19,9 @@
                 <argument name="add_base_attribute" xsi:type="string">itemprop="name"</argument>
             </arguments>
         </referenceBlock>
+        <referenceContainer name="after.body.start">
+            <block name="product_breadcrumbs" class="Hyva\Theme\Block\Catalog\Breadcrumbs"/>
+        </referenceContainer>
         <referenceBlock name="root">
             <arguments>
                 <argument name="add_attribute" xsi:type="string">itemscope itemtype="http://schema.org/Product"
@@ -30,7 +33,8 @@
             <referenceContainer name="product.info.main">
                 <block class="Magento\Catalog\Block\Product\View" name="product.detail.page"
                        template="Magento_Catalog::product/product-detail-page.phtml">
-                    <block name="product.info"
+                    <block class="Magento\Catalog\Block\Product\View"
+                           name="product.info"
                            template="Magento_Catalog::product/view/product-info.phtml">
                         <arguments>
                             <argument name="product_view_model" xsi:type="object">Hyva\Theme\ViewModel\ProductPage
@@ -81,37 +85,21 @@
                         <block class="Magento\Catalog\Block\Product\View" name="product.info.review"
                                template="Magento_Catalog::product/view/review.phtml" ifconfig="catalog/review/active"/>
 
+                        <block class="Magento\Catalog\Block\Product\View" name="product.info.quantity"  template="Magento_Catalog::product/view/quantity.phtml"/>
                         <block class="Magento\Catalog\Block\Product\View" name="product.info.price"  template="Magento_Catalog::product/view/price.phtml"/>
-                        <block class="Magento\Catalog\Pricing\Render" name="product.price.final">
-                            <arguments>
-                                <argument name="price_render" xsi:type="string">product.price.render.default</argument>
-                                <argument name="price_type_code" xsi:type="string">final_price</argument>
-                                <argument name="zone" xsi:type="string">item_view</argument>
-                            </arguments>
-                        </block>
-                        <block class="Magento\Catalog\Pricing\Render" name="product.price.render.bundle.customization">
-                            <arguments>
-                                <argument name="price_render" xsi:type="string">product.price.render.default</argument>
-                                <argument name="price_type_code" xsi:type="string">configured_price</argument>
-                                <argument name="zone" xsi:type="string">item_view</argument>
-                            </arguments>
-                        </block>
 
-                        <block class="Magento\Catalog\Block\Product\View\Options" name="product.info.form" as="product_info_form" template="Magento_Catalog::product/view/product-form.phtml">
-                            <arguments>
-                                <argument name="product_view_model" xsi:type="object">Hyva\Theme\ViewModel\ProductPage</argument>
-                            </arguments>
-                        </block>
-
-                        <block name="product.info.form" as="product_info_form" template="Magento_Catalog::product/view/product-form.phtml">
-                            <!-- work in progress -->
-                            <!--<block class="Magento\Catalog\Block\Product\View\Options" as="product.options" template="Magento_Catalog::product/view/options/options.phtml">
+                        <block class="Magento\Catalog\Block\Product\View"
+                               name="product.info.form"
+                               as="product_info_form"
+                               template="Magento_Catalog::product/view/product-form.phtml"
+                        >
+                            <block class="Magento\Catalog\Block\Product\View\Options" as="product.options" template="Magento_Catalog::product/view/options/options.phtml">
                                 <block class="Magento\Catalog\Block\Product\View\Options\Type\DefaultType" name="product.info.options.default" as="default" template="Magento_Catalog::product/view/options/type/default.phtml"/>
                                 <block class="Magento\Catalog\Block\Product\View\Options\Type\Text" name="product.info.options.text" as="text" template="Magento_Catalog::product/view/options/type/text.phtml"/>
                                 <block class="Magento\Catalog\Block\Product\View\Options\Type\File" name="product.info.options.file" as="file" template="Magento_Catalog::product/view/options/type/file.phtml"/>
                                 <block class="Magento\Catalog\Block\Product\View\Options\Type\Select" name="product.info.options.select" as="select" template="Magento_Catalog::product/view/options/type/select.phtml"/>
                                 <block class="Magento\Catalog\Block\Product\View\Options\Type\Date" name="product.info.options.date" as="date" template="Magento_Catalog::product/view/options/type/date.phtml"/>
-                            </block>-->
+                            </block>
                             <arguments>
                                 <argument name="product_view_model" xsi:type="object">Hyva\Theme\ViewModel\ProductPage</argument>
                             </arguments>

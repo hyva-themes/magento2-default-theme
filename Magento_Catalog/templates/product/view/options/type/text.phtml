@@ -1,0 +1,66 @@
+<?php
+
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
+use Magento\Catalog\Block\Product\View\Options\Type\Text;
+use Magento\Catalog\Model\Product\Option;
+use Magento\Framework\Escaper;
+
+/** @var Text $block */
+/** @var Escaper $escaper */
+/** @var Option $option */
+$option = $block->getOption();
+print_r($option->getPrice(),$option->getPriceType());
+?>
+
+<div class="flex border-t border-gray-300 py-2 last:mb-6 last:border-b w-full items-center">
+    <label class="label text-gray-500 text-left w-1/2" for="options_<?= $escaper->escapeHtmlAttr($option->getId()) ?>_text">
+        <span><?= $escaper->escapeHtml($option->getTitle()) ?></span>
+        <span x-html="'+ ' + getFormattedOptionPrice(<?= $escaper->escapeHtmlAttr($option->getId()) ?>) || '<?= /* @noEscape */ $escaper->escapeJs($block->getFormattedPrice()) ?>'"><?= /* @noEscape */ $block->getFormattedPrice() ?></span>
+    </label>
+
+    <div class="ml-2 text-gray-900 text-left w-1/2">
+        <?php if ($option->getType() == ProductCustomOptionInterface::OPTION_TYPE_FIELD): ?>
+            <input type="text"
+                   id="options_<?= $escaper->escapeHtmlAttr($option->getId()) ?>_text"
+                   class="product-custom-option form-input w-full"
+                   name="options[<?= $escaper->escapeHtmlAttr($option->getId()) ?>]"
+                   data-selector="options[<?= $escaper->escapeHtmlAttr($option->getId()) ?>]"
+                   value="<?= $escaper->escapeHtml($block->getDefaultValue()) ?>"
+                   maxlength="<?= (int)$option->getMaxCharacters() ?>"
+                   <?= $option->getIsRequire() ? 'required' : '' ?>
+                   data-price-amount="<?= $option->getPrice() ?>"
+                   data-price-type="<?=$option->getPriceType() ?>"
+                   x-ref="option-<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
+                   x-on:input="updateCustomOptionValue($dispatch, '<?= $escaper->escapeHtmlAttr($option->getId()) ?>', $event.target)"
+            />
+        <?php elseif ($option->getType() == ProductCustomOptionInterface::OPTION_TYPE_AREA) :?>
+            <?php $_textAreaValidate = null;
+            if ($option->getIsRequire()) {
+                $_textAreaValidate['required'] = true;
+            }
+            if ($option->getMaxCharacters()) {
+                $_textAreaValidate['maxlength'] = $option->getMaxCharacters();
+            }
+            $_textAreaValidate['validate-no-utf8mb4-characters'] = true;
+            ?>
+            <textarea id="options_<?= $escaper->escapeHtmlAttr($option->getId()) ?>_text"
+                      class="product-custom-option form-textarea"
+                      maxlength="<?= (int)$option->getMaxCharacters() ?>"
+                      <?= $option->getIsRequire() ? 'required' : '' ?>
+                      name="options[<?= $escaper->escapeHtmlAttr($option->getId()) ?>]"
+                      rows="5"
+                      cols="25"
+                      data-price-amount="<?= $option->getPrice() ?>"
+                      data-price-type="<?=$option->getPriceType() ?>"
+                      x-ref="option-<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
+                      x-on:input="updateCustomOptionValue($dispatch, '<?= $escaper->escapeHtmlAttr($option->getId()) ?>', $event.target)"
+            ><?= $escaper->escapeHtml($block->getDefaultValue()) ?></textarea>
+        <?php endif; ?>
+        <?php if ($option->getMaxCharacters()) :?>
+            <p class="note note_<?= $escaper->escapeHtmlAttr($option->getId()) ?>">
+                <?= $escaper->escapeHtml(__('Maximum %1 characters', $option->getMaxCharacters())) ?>
+                <span class="character-counter no-display"></span>
+            </p>
+        <?php endif; ?>
+    </div>
+</div>
