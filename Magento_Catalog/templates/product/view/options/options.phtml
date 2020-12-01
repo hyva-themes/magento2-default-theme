@@ -27,7 +27,7 @@ $options = $block->decorateArray($block->getOptions());
                 productFinalPrice: false,
                 customOptionPrices: [],
                 refs: [],
-                formatPrice: function (value, showSign) {
+                formatPrice(value, showSign) {
                     var formatter = new Intl.NumberFormat(
                         document.documentElement.lang,
                         {
@@ -51,14 +51,14 @@ $options = $block->decorateArray($block->getOptions());
                         }).reduce((string, part) => string + part) :
                         formatter.format(value);
                 },
-                getFormattedOptionPrice: function getFormattedOptionPrice (optionId) {
+                getFormattedOptionPrice(optionId) {
                     if (this.customOptionPrices[optionId]) {
                         const showSign = true;
                         return this.formatPrice(this.customOptionPrices[optionId], showSign);
                     }
                     return false;
                 },
-                calculateOptionPrices: function calculateOptionPrices() {
+                calculateOptionPrices() {
                     for (const [customOptionId, customOption] of Object.entries(this.optionConfig)) {
                         if (customOption.prices) {
                             this.customOptionPrices[customOptionId] = this.calculateOptionPrice(customOption,customOptionId);
@@ -77,7 +77,7 @@ $options = $block->decorateArray($block->getOptions());
                         )
                     );
                 },
-                calculateOptionPrice: function calculateOptionPrice(customOption, customOptionId, childCustomOptionId) {
+                calculateOptionPrice(customOption, customOptionId, childCustomOptionId) {
                     const customOptionCode = customOptionId + (childCustomOptionId ? '-' + childCustomOptionId : '') ;
 
                     const optionElement = this.refs && this.refs['option-'+customOptionCode];
@@ -96,7 +96,7 @@ $options = $block->decorateArray($block->getOptions());
 
                     return price;
                 },
-                updateCustomOptionValue: function updateCustomOptionValue($dispatch, customOptionId, target) {
+                updateCustomOptionValue($dispatch, customOptionId, target) {
                     let active;
                     switch (target.type) {
                         case 'text':
@@ -122,8 +122,13 @@ $options = $block->decorateArray($block->getOptions());
                             active = target.checked;
                         break;
                     }
-
                     $dispatch('update-custom-option-active', { customOptionId, active });
+                },
+                eventListeners: {
+                    ['@update-product-final-price.window'](event) {
+                        this.productFinalPrice = event.detail;
+                        this.calculateOptionPrices();
+                    }
                 }
             }
         }
@@ -132,8 +137,11 @@ $options = $block->decorateArray($block->getOptions());
         <?= __('Customizable Options:') ?>
     </h2>
     <div x-data="initOptions()"
-         x-init="refs = $refs; $nextTick(() => { calculateOptionPrices() })"
-         @update-product-final-price.window="productFinalPrice = event.detail; calculateOptionPrices()"
+         x-init="
+            refs = $refs;
+            $nextTick(() => { calculateOptionPrices() })
+         "
+         x-spread="eventListeners"
          class="mb-6">
     <?php foreach ($options as $option) :?>
         <?= $block->getOptionHtml($option) ?>

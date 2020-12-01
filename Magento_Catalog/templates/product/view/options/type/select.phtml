@@ -18,6 +18,9 @@ $option = $block->getOption();
 <div class="flex border-t border-gray-300 py-2 last:mb-6 last:border-b w-full items-center">
     <label class="label text-gray-500 text-left w-1/2" for="select_<?= $block->escapeHtmlAttr($option->getId()) ?>">
         <span><?= $block->escapeHtml($option->getTitle()) ?></span>
+        <?php if($option->getIsRequire()): ?>
+            <span class="sup text-sm">*</span>
+        <?php endif; ?>
     </label>
     <div class="ml-2 text-gray-900 text-left w-1/2">
         <?= $block->getValuesHtml() ?>

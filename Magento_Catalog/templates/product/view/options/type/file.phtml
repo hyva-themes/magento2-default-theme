@@ -27,8 +27,11 @@ use Magento\Catalog\Block\Product\View\Options\Type\File;
 <div class="flex border-t border-gray-300 py-2 last:mb-6 last:border-b w-full items-center">
     <label class="label text-gray-500 text-left w-1/2" for="options_<?= $escaper->escapeHtmlAttr($option->getId()) ?>_text">
         <span><?= $escaper->escapeHtml($option->getTitle()) ?></span>
+        <?php if($option->getIsRequire()): ?>
+            <span class="sup text-sm">*</span>
+        <?php endif; ?>
         <span x-html="getFormattedOptionPrice(<?= $escaper->escapeHtmlAttr($option->getId()) ?>) || ''">
-            <?= /* @noEscape */ $block->getFormattedPrice() ?>
+            <?= $escaper->escapeHtml($block->getFormattedPrice()) ?>
         </span>
     </label>
 

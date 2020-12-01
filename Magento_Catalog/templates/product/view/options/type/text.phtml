@@ -23,8 +23,11 @@ $option = $block->getOption();
 <div class="flex border-t border-gray-300 py-2 last:mb-6 last:border-b w-full items-center">
     <label class="label text-gray-500 text-left w-1/2" for="options_<?= $escaper->escapeHtmlAttr($option->getId()) ?>_text">
         <span><?= $escaper->escapeHtml($option->getTitle()) ?></span>
+        <?php if($option->getIsRequire()): ?>
+            <span class="sup text-sm">*</span>
+        <?php endif; ?>
         <span x-html="getFormattedOptionPrice(<?= $escaper->escapeHtmlAttr($option->getId()) ?>) || ''">
-            <?= /* @noEscape */ $block->getFormattedPrice() ?>
+            <?= $escaper->escapeHtml($block->getFormattedPrice()) ?>
         </span>
     </label>
 
@@ -34,7 +37,6 @@ $option = $block->getOption();
                    id="options_<?= $escaper->escapeHtmlAttr($option->getId()) ?>_text"
                    class="product-custom-option form-input w-full"
                    name="options[<?= $escaper->escapeHtmlAttr($option->getId()) ?>]"
-                   data-selector="options[<?= $escaper->escapeHtmlAttr($option->getId()) ?>]"
                    value="<?= $escaper->escapeHtml($block->getDefaultValue()) ?>"
                    maxlength="<?= (int)$option->getMaxCharacters() ?>"
                    <?= $option->getIsRequire() ? 'required' : '' ?>
@@ -44,15 +46,6 @@ $option = $block->getOption();
                    x-on:input="updateCustomOptionValue($dispatch, '<?= $escaper->escapeHtmlAttr($option->getId()) ?>', $event.target)"
             />
         <?php elseif ($option->getType() == ProductCustomOptionInterface::OPTION_TYPE_AREA) :?>
-            <?php $textAreaValidate = null;
-            if ($option->getIsRequire()) {
-                $textAreaValidate['required'] = true;
-            }
-            if ($option->getMaxCharacters()) {
-                $textAreaValidate['maxlength'] = $option->getMaxCharacters();
-            }
-            $textAreaValidate['validate-no-utf8mb4-characters'] = true;
-            ?>
             <textarea id="options_<?= $escaper->escapeHtmlAttr($option->getId()) ?>_text"
                       class="product-custom-option form-textarea"
                       maxlength="<?= (int)$option->getMaxCharacters() ?>"
@@ -67,9 +60,8 @@ $option = $block->getOption();
             ><?= $escaper->escapeHtml($block->getDefaultValue()) ?></textarea>
         <?php endif; ?>
         <?php if ($option->getMaxCharacters()) :?>
-            <p class="note note_<?= $escaper->escapeHtmlAttr($option->getId()) ?>">
+            <p class="note text-sm">
                 <?= $escaper->escapeHtml(__('Maximum %1 characters', $option->getMaxCharacters())) ?>
-                <span class="character-counter no-display"></span>
             </p>
         <?php endif; ?>
     </div>

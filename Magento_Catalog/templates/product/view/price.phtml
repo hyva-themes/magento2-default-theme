@@ -12,9 +12,11 @@ use Hyva\Theme\ViewModel\ProductPage;
 use Magento\Catalog\Block\Product\View;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Framework\Escaper;
 use Magento\Framework\Pricing\Helper\Data as PriceHelper;
 
 /** @var View $block */
+/** @var Escaper $escaper */
 /** @var Product $product */
 $product = $block->getProduct();
 
@@ -26,7 +28,7 @@ $productViewModel = $block->getProductViewModel();
 $priceHelper = $this->helper(PriceHelper::class);
 ?>
 <script>
-    function initPrice<?= (int) $product->getId() ?>(){
+    function initPrice<?= (int) $product->getId() ?>() {
         return {
             activeProductsPriceData: false,
             initialFinalPrice: <?= (float)$product->getFinalPrice()?>,
@@ -35,7 +37,8 @@ $priceHelper = $this->helper(PriceHelper::class);
             initialTierPrices: <?= json_encode($product->getTierPrice()) ?>,
             customOptionPrices: [],
             activeCustomOptions: [],
-            updateCustomOptionActive: function updateCustomOptionActive(data) {
+            qty: 1,
+            updateCustomOptionActive(data) {
 
                 let activeCustomOptions = this.activeCustomOptions;
                 const customOptionId = data.customOptionId;
@@ -52,7 +55,7 @@ $priceHelper = $this->helper(PriceHelper::class);
                 }
                 this.calculateFinalPriceWithCustomOptions()
             },
-            updateCustomOptionPrices: function updateCustomOptionPrices(prices) {
+            updateCustomOptionPrices(prices) {
 
                 if (prices) {
                     this.customOptionPrices = prices;
@@ -60,7 +63,7 @@ $priceHelper = $this->helper(PriceHelper::class);
 
                 this.calculateFinalPriceWithCustomOptions();
             },
-            formatPrice: function (value, showSign) {
+            formatPrice(value, showSign) {
                 var formatter = new Intl.NumberFormat(
                     document.documentElement.lang,
                     {
@@ -84,8 +87,7 @@ $priceHelper = $this->helper(PriceHelper::class);
                     }).reduce((string, part) => string + part) :
                     formatter.format(value);
             },
-            qty: 1,
-            calculateFinalPrice: function calculatePrice() {
+            calculateFinalPrice() {
                 let finalPrice = this.initialFinalPrice;
 
                 if (this.activeProductsPriceData) {
@@ -105,15 +107,16 @@ $priceHelper = $this->helper(PriceHelper::class);
                     }, finalPrice);
 
                 }
+                this.calculatedFinalPrice = finalPrice;
+
                 window.dispatchEvent(
                     new CustomEvent(
                         "update-product-final-price",
-                        {detail: finalPrice}
+                        {detail: this.calculatedFinalPrice}
                     )
                 );
-                this.calculatedFinalPrice = finalPrice;
             },
-            calculateFinalPriceWithCustomOptions: function calculateFinalPriceWithCustomOptions() {
+            calculateFinalPriceWithCustomOptions() {
                 let finalPrice = this.calculatedFinalPrice ||
                     this.initialFinalPrice;
 
@@ -126,23 +129,38 @@ $priceHelper = $this->helper(PriceHelper::class);
                 }, finalPrice);
 
             },
-            getFormattedFinalPrice: function getFormattedFinalPrice () {
+            getFormattedFinalPrice() {
                 return this.formatPrice(
                     this.calculatedFinalPriceWithCustomOptions ||
                     this.calculatedFinalPrice ||
                     this.initialFinalPrice
                 )
+            },
+            eventListeners: {
+                ['@update-prices-<?= (int) $product->getId() ?>.window'](event) {
+                    this.activeProductsPriceData = event.detail;
+                    this.calculateFinalPrice();
+                    this.calculateFinalPriceWithCustomOptions();
+                },
+                ['@update-qty-<?= (int)$product->getId() ?>.window'](event) {
+                    this.qty = event.detail;
+                    this.calculateFinalPrice();
+                    this.calculateFinalPriceWithCustomOptions();
+                },
+                ['@update-custom-option-active.window'](event) {
+                    this.updateCustomOptionActive(event.detail);
+                },
+                ['@update-custom-option-prices.window'](event) {
+                    this.updateCustomOptionPrices(event.detail);
+                }
             }
         }
     }
 </script>
 <div x-data="initPrice<?= (int) $product->getId() ?>()"
-     @update-prices-<?= (int) $product->getId() ?>.window="activeProductsPriceData = event.detail; calculateFinalPrice(); calculateFinalPriceWithCustomOptions();"
-     @update-qty-<?= (int)$product->getId() ?>.window="qty = event.detail; calculateFinalPrice(); calculateFinalPriceWithCustomOptions();"
-     @update-custom-option-active.window="updateCustomOptionActive(event.detail)"
-     @update-custom-option-prices.window="updateCustomOptionPrices(event.detail)"
-     class="price-box price-final_price" data-role="priceBox" data-product-id="<?= (int) $product->getId() ?>"
-     data-price-box="product-id-<?= (int) $product->getId() ?>">
+     x-spread="eventListeners"
+     class="price-box price-final_price"
+>
     <template x-if="!activeProductsPriceData">
         <div class="price-container">
             <?php
@@ -160,7 +178,7 @@ $priceHelper = $this->helper(PriceHelper::class);
             <div class="final-price inline-block" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
                     <span class="price-label block">
                         <?= ($product->canConfigure() && is_int($product->getPrice())) ?
-                            /* @noEscape */ __('As low as') . ':' :
+                            $escaper->escapeHtml(__('As low as')) . ':' :
                             '' ?>
                     </span>
                 <span id="product-price-<?= (int) $product->getId() ?>" class="price-wrapper title-font font-medium text-2xl text-gray-900">

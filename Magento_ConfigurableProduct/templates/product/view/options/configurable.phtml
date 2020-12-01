@@ -144,9 +144,6 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
             </label>
             <div class="ml-2 text-gray-900 text-left w-1/2">
                 <select name="super_attribute[<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>]"
-                        data-selector="super_attribute[<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>]"
-                        data-validate="{required:true}"
-                        data-id="<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>"
                         id="attribute<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>"
                         class="form-select super-attribute-select"
                         x-on:change="changeOption(<?= (int) $attribute->getAttributeId() ?>, event.target.value)"
@@ -157,7 +154,10 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
                     <template x-for="(item, index) in getAllowedAttributeOptions(<?= (int) $attribute->getAttributeId() ?>)"
                               :key="item.id"
                     >
-                        <option :value="item.id" x-html="item.label" :selected="selectedValues[<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>] === item.id"></option>
+                        <option :value="item.id"
+                                x-html="item.label"
+                                :selected="selectedValues[<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>] === item.id">
+                        </option>
                     </template>
                 </select>
             </div>

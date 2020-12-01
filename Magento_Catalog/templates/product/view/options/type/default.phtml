@@ -15,4 +15,7 @@ use Magento\Catalog\Block\Product\View\Options\Type\DefaultType;
 <?php $option = $block->getOption() ?>
 <div class="field">
     <label class="label"><span><?= $block->escapeHtml($option->getTitle()) ?></span></label>
+    <?php if($option->getIsRequire()): ?>
+        <span class="sup text-sm">*</span>
+    <?php endif; ?>
 </div>
