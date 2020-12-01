@@ -30,8 +30,8 @@ $priceHelper = $this->helper(PriceHelper::class);
         return {
             activeProductsPriceData: false,
             initialFinalPrice: <?= (float)$product->getFinalPrice()?>,
-            configuredFinalPrice: false,
-            configuredFinalPriceWithCustomOptions: false,
+            calculatedFinalPrice: false,
+            calculatedFinalPriceWithCustomOptions: false,
             initialTierPrices: <?= json_encode($product->getTierPrice()) ?>,
             customOptionPrices: [],
             activeCustomOptions: [],
@@ -111,13 +111,13 @@ $priceHelper = $this->helper(PriceHelper::class);
                         {detail: finalPrice}
                     )
                 );
-                this.configuredFinalPrice = finalPrice;
+                this.calculatedFinalPrice = finalPrice;
             },
             calculateFinalPriceWithCustomOptions: function calculateFinalPriceWithCustomOptions() {
-                let finalPrice = this.configuredFinalPrice ||
+                let finalPrice = this.calculatedFinalPrice ||
                     this.initialFinalPrice;
 
-                this.configuredFinalPriceWithCustomOptions = this.activeCustomOptions.reduce((priceAccumulator, activeCustomOptionId) => {
+                this.calculatedFinalPriceWithCustomOptions = this.activeCustomOptions.reduce((priceAccumulator, activeCustomOptionId) => {
                     const customOptionPrice = this.customOptionPrices[activeCustomOptionId];
                     if(customOptionPrice) {
                         return Number.parseFloat(priceAccumulator) + Number.parseFloat(customOptionPrice);
@@ -128,8 +128,8 @@ $priceHelper = $this->helper(PriceHelper::class);
             },
             getFormattedFinalPrice: function getFormattedFinalPrice () {
                 return this.formatPrice(
-                    this.configuredFinalPriceWithCustomOptions ||
-                    this.configuredFinalPrice ||
+                    this.calculatedFinalPriceWithCustomOptions ||
+                    this.calculatedFinalPrice ||
                     this.initialFinalPrice
                 )
             }
