@@ -79,6 +79,7 @@ $viewModelCart = $block->getData('viewModelCart');
                     this.getCart();
                 } else {
                     this.cartEmpty = true;
+                    this.isLoading = false;
                 }
             },
             formatPrice(price) {
