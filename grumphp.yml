@@ -1,15 +1,12 @@
-parameters:
-  module_namespace: IntegerNet
-  theme_namespace: IntegerNet
-  magento_dir: src
 grumphp:
   hide_circumvention_tip: true
   process_timeout: 120
   git_hook_variables:
-    EXEC_GRUMPHP_COMMAND: ../.php-docker
+      EXEC_GRUMPHP_COMMAND: $PHP_BIN
+      ENV:
+          PHP_BIN: 'docker exec $(docker container ps -q --filter="name=phpcli") -w /var/www/html/src/vendor/hyva-themes/magento2-default-theme php'
   tasks:
     composer:
-      file: '%magento_dir%/composer.json'
       no_check_all: true
       no_check_lock: false
       no_check_publish: false
@@ -21,40 +18,19 @@ grumphp:
         - "var_dump("
         - "exit;"
         - "console.log("
-        - "Magento_TestModule"
     git_commit_message:
       allow_empty_message: false
       enforce_capitalized_subject: false
       enforce_single_lined_subject: false
       max_subject_width: 80
       max_body_width: 200
-      matchers:
-        Must contain Redmine ticket number preceded by hash tag '#'.: /#\d{5,}/
       case_insensitive: false
       multiline: true
       additional_modifiers: ''
     phpcs:
-      standard: "%magento_dir%/vendor/integer-net/magento2-coding-standards/phpcs.xml"
-        # "7" is "Project" severity for Extdn.
-        # The core standard uses default "5" for everything, so the standards we want to use have to be configured
-        # with a severity >= 7 in our ruleset
-        # MEQP uses 6, 8 and 10
-        #
-      # The same configuration is used by Jenkins (build.xml), but with report:junit
+      standard: "vendor/magento/magento-coding-standard/Magento2"
       severity: 7
       tab_width: 4
-      whitelist_patterns:
-        - /^src\/app\/code\/%module_namespace%/
-        - /^src\/app\/design\/frontend\/%theme_namespace%/
-        - /^src\/vendor\/hyva-themes\/
       triggered_by:
         - php
         - phtml
-    phpmd:
-      # The same configuration is used by Jenkins (build.xml), but with "xml" output argument
-      ruleset: ["%magento_dir%/vendor/integer-net/magento2-coding-standards/phpmd.xml"]
-
-      whitelist_patterns:
-        - /^src\/app\/code\/%module_namespace%/
-        - /^src\/app\/design\/frontend\/%theme_namespace%/
-        - /^src\/vendor\/hyva-themes\/
