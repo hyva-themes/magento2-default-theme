@@ -68,11 +68,11 @@ $uniqueId = '_' . uniqid();
                          */
                         createOrder: function () {
                             var params = "quote_id="+clientConfig.quoteId +
-                                ( clientConfig.customerId &&
-                                    "&customer_id="+clientConfig.customerId ||
+                                "&customer_id=" + ( clientConfig.customerId ?
+                                    clientConfig.customerId :
                                     ''
                                 ) +
-                                "&form_key=" + getCookie('form_key') || '' +
+                                "&form_key=" + (getCookie('form_key') || '') +
                                 "&button=" + clientConfig.button;
 
                             return window.fetch(clientConfig.getTokenUrl, {
@@ -153,7 +153,7 @@ $uniqueId = '_' . uniqid();
                          */
                         onError: function (err) {
                             //clientConfig.rendererComponent.onError(err);
-                            
+
                         }
                     }).render(element);
                 });
