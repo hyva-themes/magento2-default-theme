@@ -6,64 +6,67 @@
  * See https://hyva.io/license
  */
 
-/** @var \Magento\Sales\Block\Order\Items $block */
-/** @var \Magento\Framework\Escaper $escaper */
+use Magento\Framework\Escaper;
+use Magento\Sales\Block\Order\Items;
+use Magento\Shipping\Helper\Data as ShippingHelper;
+
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
+
+/** @var Items $block */
+/** @var Escaper $escaper */
 
 $order = $block->getOrder();
+$shippingHelper = $this->helper(ShippingHelper::class);
 ?>
-<?php foreach ($order->getShipmentsCollection() as $shipment) : ?>
+<?php foreach ($order->getShipmentsCollection() as $shipment): ?>
     <?php $tracks = $shipment->getTracksCollection(); ?>
     <div class="order-title text-center md:text-left font-semibold">
-        <?= $block->escapeHtml(__('Shipment #')) ?><?= $block->escapeHtml(
-            $shipment->getIncrementId()
-        ) ?>
-        <a href="<?= $block->escapeUrl($block->getUrl('*/*/printShipment', ['shipment_id' => $shipment->getId()])) ?>"
+        <?= $escaper->escapeHtml(__('Shipment #')) ?><?= $escaper->escapeHtml($shipment->getIncrementId()) ?>
+        <a href="<?= $escaper->escapeUrl($block->getUrl('*/*/printShipment', ['shipment_id' => $shipment->getId()])) ?>"
            class="text-primary inline-block ml-2 pl-2 border-l text-sm font-normal"
            target="_blank"
            rel="noopener">
             <svg class="inline-block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                  width="20" height="20">
                 <path fill-rule="evenodd"
-                      d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z"
+                      d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2
+                      0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z"
                       clip-rule="evenodd"/>
             </svg>
-            <span class="inline-block ml-1 underline"><?= $block->escapeHtml(__('Print Shipment')) ?></span>
+            <span class="inline-block ml-1 underline"><?= $escaper->escapeHtml(__('Print Shipment')) ?></span>
         </a>
-        <?php if ($tracks->count()) : ?>
-            <a href="<?= $block->escapeUrl(
-                $this->helper(Magento\Shipping\Helper\Data::class)->getTrackingPopupUrlBySalesModel($shipment)
-            ) ?>" target="_blank" rel="noopener" title="<?= $block->escapeHtml(__('Track Shipment')) ?>"
+        <?php if ($tracks->count()): ?>
+            <a href="<?= $escaper->escapeUrl($shippingHelper->getTrackingPopupUrlBySalesModel($shipment)) ?>"
+               target="_blank" rel="noopener" title="<?= $escaper->escapeHtml(__('Track Shipment')) ?>"
                class="text-primary inline-block ml-2 pl-2 border-l text-sm font-normal">
                 <svg class="inline-block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                      width="20" height="20">
                     <path fill-rule="evenodd"
-                          d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                          d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414
+                            1.414l-4.816-4.816A6 6 0 012 8z"
                           clip-rule="evenodd"/>
                 </svg>
-                <span class="inline-block ml-1 underline"><?= $block->escapeHtml(__('Track Shipment')) ?></span>
+                <span class="inline-block ml-1 underline"><?= $escaper->escapeHtml(__('Track Shipment')) ?></span>
             </a>
         <?php endif; ?>
     </div>
-    <?php if ($tracks->count()) : ?>
+    <?php if ($tracks->count()): ?>
         <div class="my-2">
-            <p><?= $block->escapeHtml(__('Tracking Number(s):')) ?></p>
+            <p><?= $escaper->escapeHtml(__('Tracking Number(s):')) ?></p>
             <div class="tracking-content">
                 <?php
                 $i = 1;
                 $_size = $tracks->count();
-                foreach ($tracks as $track) : ?>
-                    <?php if ($track->isCustom()) : ?>
-                        <?= $block->escapeHtml($track->getNumber()) ?>
-                    <?php else : ?>
-                        <a href="<?= $block->escapeUrl(
-                            $this->helper(Magento\Shipping\Helper\Data::class)->getTrackingPopupUrlBySalesModel(
-                                $track
-                            )
-                        ) ?>" target="_blank" rel="noopener"
-                           class="inline-block underline"><span><?= $block->escapeHtml($track->getNumber()) ?></span>
+                foreach ($tracks as $track): ?>
+                    <?php if ($track->isCustom()): ?>
+                        <?= $escaper->escapeHtml($track->getNumber()) ?>
+                    <?php else: ?>
+                        <a href="<?= $escaper->escapeUrl($shippingHelper->getTrackingPopupUrlBySalesModel($track)) ?>"
+                           target="_blank" rel="noopener"
+                           class="inline-block underline"><span><?= $escaper->escapeHtml($track->getNumber()) ?></span>
                         </a>
                     <?php endif; ?>
-                    <?php if ($i != $_size) : ?>, <?php endif; ?>
+                    <?php if ($i != $_size): ?>, <?php endif; ?>
                     <?php $i++;
                 endforeach; ?>
             </div>
@@ -72,12 +75,14 @@ $order = $block->getOrder();
 
     <div class="order-items shipment">
         <div class="hidden lg:grid grid-cols-3 text-sm text-secondary ">
-            <div class="p-2 col-span-2"><?= $escaper->escapeHtml(__('Product Name')) ?></div>
+            <div class="p-2 col-span-2">
+                <?= $escaper->escapeHtml(__('Product Name')) ?>
+            </div>
             <div class="p-2"><?= $escaper->escapeHtml(__('Qty')) ?></div>
         </div>
         <?php $items = $shipment->getAllItems(); ?>
-        <?php foreach ($items as $item) : ?>
-            <?php if (!$item->getOrderItem()->getParentItem()) : ?>
+        <?php foreach ($items as $item): ?>
+            <?php if (!$item->getOrderItem()->getParentItem()): ?>
                 <?= $block->getItemHtml($item) ?>
             <?php endif; ?>
         <?php endforeach; ?>

@@ -23,7 +23,8 @@
                 <?= $block->escapeHtml($_total->getLabel()) ?>
             <?php endif ?>
         </div>
-        <div <?= /* @noEscape */ $block->getValueProperties() ?> data-th="<?= $escaper->escapeHtmlAttr($_total->getLabel()) ?>">
+        <div <?= /* @noEscape */ $block->getValueProperties() ?>
+             data-th="<?= $escaper->escapeHtmlAttr($_total->getLabel()) ?>">
             <?php if ($_total->getStrong()): ?>
                 <strong><?= /* @noEscape */ $block->formatValue($_total) ?></strong>
             <?php else: ?>

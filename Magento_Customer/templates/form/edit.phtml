@@ -145,10 +145,11 @@ use Magento\Framework\Escaper;
                     'false'
                 ) ?>,
             checkPasswordsMatch: function () {
-                if (document.getElementById('password').value === document.getElementById('password-confirmation').value) {
-                    this.passwordsMatching = true;
-                    return true;
-                }
+                if (document.getElementById('password').value ===
+                    document.getElementById('password-confirmation').value) {
+                        this.passwordsMatching = true;
+                        return true;
+                    }
                 this.passwordsMatching = false;
                 return false;
             }

@@ -12,6 +12,8 @@ use Magento\Review\Block\Form;
 /* @var Escaper $escaper */
 /* @var Form $block */
 
+//phpcs:disable Generic.Files.LineLength
+
 $formId = 'review_form';
 ?>
 <div class="container mx-auto px-5 py-6 items-center" id="customer-reviews">
@@ -46,70 +48,75 @@ $formId = 'review_form';
                                     <div id="product-review-table">
                                         <?php foreach ($block->getRatings() as $rating): ?>
                                             <div class="ml-1">
-                                                <label class="hidden" id="<?= $escaper->escapeHtml(
-                                                    $rating->getRatingCode()
-                                                                          ) ?>_rating_label">
+                                                <label class="hidden"
+                                                       id="<?= $escaper
+                                                           ->escapeHtml($rating->getRatingCode()) ?>_rating_label"
+                                                >
                                                 <span>
                                                     <?= $escaper->escapeHtml($rating->getRatingCode()) ?>
                                                 </span>
                                                 </label>
                                                 <div class="flex flex-row flex-grow-0"
-                                                     x-data="{ ratingIdentifierClicked: 0 }">
+                                                     x-data="{ clickedRatingId: 0 }">
                                                     <?php $options = $rating->getOptions(); ?>
                                                     <?php $iterator = 1;
                                                     foreach ($options as $_option): ?>
-                                                        <div class="cursor-pointer relative">
+                                                        <div class="cursor-pointer relative cursor-pointer"
+                                                             @click="clickedRatingId === <?= (int)$iterator ?> || 0">
                                                             <input
                                                                 class="absolute opacity-0 bottom-0 left-0"
                                                                 type="radio"
                                                                 <?php if ($iterator === 1): ?>required<?php endif; ?>
-                                                                name="ratings[<?= $escaper->escapeHtmlAttr(
-                                                                    $rating->getId()
-                                                                              ) ?>]"
-                                                                id="<?= $escaper->escapeHtmlAttr(
-                                                                    $rating->getRatingCode()
-                                                                    ) ?>_<?= $escaper->escapeHtmlAttr(
-                                                                    $_option->getValue()
-                                                                ) ?>"
-                                                                value="<?= $escaper->escapeHtmlAttr(
-                                                                    $_option->getId()
-                                                                       ) ?>"/>
+                                                                name="ratings[<?= $escaper
+                                                                    ->escapeHtmlAttr($rating->getId()) ?>]"
+                                                                id="<?= $escaper
+                                                                    ->escapeHtmlAttr(
+                                                                        $rating->getRatingCode() .
+                                                                        '_' .
+                                                                        $_option->getValue()
+                                                                    ) ?>"
+                                                                value="<?= $escaper
+                                                                    ->escapeHtmlAttr($_option->getId()) ?>"/>
                                                             <label
-                                                                @click="ratingIdentifierClicked === <?= /* @noEscape */
-                                                                $iterator ?> ? ratingIdentifierClicked = 0 : ratingIdentifierClicked = <?= /* @noEscape */
-                                                                $iterator ?>"
-                                                                class="rating-<?= $escaper->escapeHtmlAttr(
-                                                                    $iterator
-                                                                              ) ?> cursor-pointer m-0"
-                                                                for="<?= $escaper->escapeHtmlAttr(
-                                                                    $rating->getRatingCode()
-                                                                     ) ?>_<?= $escaper->escapeHtmlAttr(
-                                                                    $_option->getValue()
-                                                                ) ?>"
-                                                                title="<?= $escaper->escapeHtmlAttr(
-                                                                    __(
-                                                                        '%1 %2',
-                                                                        $iterator,
-                                                                        $iterator > 1
-                                                                            ? __('stars')
-                                                                            : __(
-                                                                                'star'
-                                                                            )
-                                                                    )
+                                                                class="rating-<?= (int)$iterator ?> m-0"
+                                                                for="<?= $escaper
+                                                                     ->escapeHtmlAttr(
+                                                                         $rating->getRatingCode() .
+                                                                         '_' .
+                                                                         $_option->getValue()
+                                                                     ) ?>"
+                                                                title="<?= $escaper
+                                                                       ->escapeHtmlAttr(
+                                                                           __(
+                                                                               '%1 %2',
+                                                                               $iterator,
+                                                                               $iterator > 1
+                                                                                    ? __('stars')
+                                                                                    : __(
+                                                                                        'star'
+                                                                                    )
+                                                                           )
                                                                        ) ?>"
-                                                                id="<?= $escaper->escapeHtmlAttr(
-                                                                    $rating->getRatingCode()
-                                                                    ) ?>_<?= $escaper->escapeHtmlAttr(
-                                                                    $_option->getValue()
-                                                                ) ?>_label">
+                                                                id="<?= $escaper
+                                                                    ->escapeHtmlAttr(
+                                                                        $rating->getRatingCode() .
+                                                                        '_' .
+                                                                        $_option->getValue()
+                                                                    ) ?>_label">
                                                                 <span>
                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                          viewBox="0 0 20 20" fill="currentColor"
                                                                          class="fill-current h-8 w-8"
-                                                                     <?php // phpcs:ignore ?>
-                                                                    :class="<?= $iterator ?> <= ratingIdentifierClicked ? 'text-yellow-400' : 'text-gray-400'">
-                                                                      <path
-                                                                          d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                                    :class="<?= (int)$iterator ?> <= clickedRatingId ?
+                                                                        'text-yellow-400' :
+                                                                        'text-gray-400'"
+                                                                    >
+                                                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0
+                                                      00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364
+                                                      1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0
+                                                      00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1
+                                                      1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1
+                                                      0 00.951-.69l1.07-3.292z"/>
                                                                     </svg>
                                                                 </span>
                                                             </label>
@@ -299,22 +306,27 @@ $formId = 'review_form';
                             var ratingValue;
                             <?php foreach ($block->getRatings() as $rating): ?>
                             try {
-                                ratingValue = document.querySelector('input[name="ratings[<?= $escaper->escapeJs(
-                                    $rating->getId()
-                                                                                          ) ?>]"]:checked').value;
+                                ratingValue =
+                                    document
+                                        .querySelector('input[name="ratings[<?= (int)$rating->getId() ?>]"]:checked')
+                                        .value;
                                 this.ratings[<?= $escaper->escapeJs($rating->getId()) ?>] = btoa(ratingValue);
                             } catch (e) {
                                 console.log(e);
                             }
                             <?php endforeach; ?>
 
-
-                            if (!(this.nickname && this.summary && this.review && Object.keys(this.ratings).length === <?= count(
-                                $block->getRatings()
-                                                                                                                       ) ?>)) {
-                                this.setErrorMessages(['<?= $escaper->escapeJs(
-                                    __('Please verify you\'ve entered all required information')
-                                                        ) ?>']);
+                            if (!(this.nickname &&
+                                this.summary &&
+                                this.review &&
+                                Object.keys(this.ratings).length === <?= count($block->getRatings()) ?>
+                            )) {
+                                this.setErrorMessages(
+                                    ['<?= $escaper
+                                        ->escapeJs(
+                                            __('Please verify you\'ve entered all required information')
+                                        ) ?>']
+                                );
                                 this.displayErrorMessage = true;
                                 this.errors = 1;
                                 this.hasCaptchaToken = 0;
@@ -326,24 +338,27 @@ $formId = 'review_form';
                             $this.isLoading = true;
                             $this.displayErrorMessage = false;
 
-                            var createProductReviewQuery = <?= /** @noEscape */ json_encode(
+                            <?php $createProductReviewQuery = json_encode(
                                 '
-                        mutation {
-                            createProductReview(
-                                input: {
-                                  sku: "' . $escaper->escapeJs($block->getProductInfo()->getSku()) . '",
-                                  nickname: "%nickname",
-                                  summary: "%summary",
-                                  text: "%review",
-                                  ratings: [%ratings]
-                                }
-                            ) {
-                            review {
-                              nickname
-                            }
-                            }
-                          }'
-                                                           ); ?>
+                                    mutation {
+                                        createProductReview(
+                                            input: {
+                                            sku: "' . $escaper->escapeJs($block->getProductInfo()->getSku()) . '",
+                                                nickname: "%nickname",
+                                                summary: "%summary",
+                                                text: "%review",
+                                                ratings: [%ratings]
+                                        }
+                                    ) {
+                                            review {
+                                                nickname
+                                            }
+                                        }
+                                    }
+                                '
+                            ); ?>
+
+                            var createProductReviewQuery = <?= /** @noEscape */ $createProductReviewQuery ?>
                                 .replace('%nickname', $this.nickname)
                                 .replace('%summary', $this.summary)
                                 .replace('%review', $this.review)
@@ -366,9 +381,7 @@ $formId = 'review_form';
                                     function (data) {
                                         $this.isLoading = false;
                                         if (data.errors) {
-                                            $this.setErrorMessages(['<?= $escaper->escapeJs(
-                                                __('Submitting your review failed, please try again.')
-                                                                     ) ?>']);
+                                            $this.setErrorMessages(['<?= $escaper->escapeJs(__('Submitting your review failed, please try again.')) ?>']);
                                             $this.displayErrorMessage = true;
                                         } else {
                                             $this.displaySuccessMessage = true;

@@ -6,16 +6,18 @@
  * See https://hyva.io/license
  */
 
+use Magento\Framework\Escaper;
 use Magento\Wishlist\Block\Customer\Wishlist\Button;
 
+/** @var $escaper Escaper */
 /** @var Button $block */
 ?>
 
 <?php if ($block->getWishlist()->getItemsCount() && $block->getWishlist()->isSalable()): ?>
     <button type="button"
             data-role="all-tocart"
-            title="<?= $block->escapeHtmlAttr(__('Add All to Cart')) ?>"
+            title="<?= $escaper->escapeHtmlAttr(__('Add All to Cart')) ?>"
             class="action tocart">
-        <span><?= $block->escapeHtml(__('Add All to Cart')) ?></span>
+        <span><?= $escaper->escapeHtml(__('Add All to Cart')) ?></span>
     </button>
 <?php endif;?>

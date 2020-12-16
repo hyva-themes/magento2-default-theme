@@ -56,9 +56,8 @@ $suffix = $block->showSuffix();
                            required
                            value="<?= $escaper->escapeHtmlAttr($block->getObject()->getPrefix()) ?>"
                            title="<?= $escaper->escapeHtmlAttr($block->getStoreLabel('prefix')) ?>"
-                           class="form-input <?= $escaper->escapeHtmlAttr(
-                               $block->getAttributeValidationClass('prefix')
-                                             ) ?>"
+                           class="form-input
+                              <?= $escaper->escapeHtmlAttr($block->getAttributeValidationClass('prefix')) ?>"
                             <?= $block->isPrefixRequired() ? ' required' : '' ?>
                     >
                 <?php else: ?>
@@ -113,9 +112,8 @@ $suffix = $block->showSuffix();
                        name="<?= $escaper->escapeHtmlAttr($block->getFieldName('middlename')) ?>"
                        value="<?= $escaper->escapeHtmlAttr($block->getObject()->getMiddlename()) ?>"
                        title="<?= $escaper->escapeHtmlAttr($block->getStoreLabel('middlename')) ?>"
-                       class="form-input <?= $escaper->escapeHtmlAttr(
-                           $block->getAttributeValidationClass('middlename')
-                                         ) ?>"
+                       class="form-input
+                         <?= $escaper->escapeHtmlAttr($block->getAttributeValidationClass('middlename')) ?>"
                        <?= $isMiddlenameRequired ? ' required' : '' ?>
                 >
             </div>
@@ -153,9 +151,8 @@ $suffix = $block->showSuffix();
                            name="<?= $escaper->escapeHtmlAttr($block->getFieldName('suffix')) ?>"
                            value="<?= $escaper->escapeHtmlAttr($block->getObject()->getSuffix()) ?>"
                            title="<?= $escaper->escapeHtmlAttr($block->getStoreLabel('suffix')) ?>"
-                           class="form-input <?= $escaper->escapeHtmlAttr(
-                               $block->getAttributeValidationClass('suffix')
-                                             ) ?>"
+                           class="form-input
+                            <?= $escaper->escapeHtmlAttr($block->getAttributeValidationClass('suffix')) ?>"
                         <?= $block->isSuffixRequired() ? ' required' : '' ?>
                     >
                 <?php else: ?>

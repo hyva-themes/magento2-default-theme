@@ -6,12 +6,14 @@
  * See https://hyva.io/license
  */
 
+use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Shipping\Block\Tracking\Popup;
 
-/**
- * @var $block \Magento\Shipping\Block\Tracking\Popup
- * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
- */
+/** @var $escaper Escaper */
+/** @var $block Popup **/
+/** @var SecureHtmlRenderer $secureRenderer */
 
 $results = $block->getTrackingInfo();
 ?>
@@ -20,7 +22,7 @@ $results = $block->getTrackingInfo();
         <?php foreach ($results as $shipId => $result): ?>
             <?php if ($shipId): ?>
                 <div class="order subtitle caption">
-                    <?= /* @noEscape */ $block->escapeHtml(__('Shipment #')) . $shipId ?>
+                    <?= /* @noEscape */ $escaper->escapeHtml(__('Shipment #')) . $shipId ?>
                 </div>
             <?php endif; ?>
             <?php if (!empty($result)): ?>
@@ -51,13 +53,13 @@ $results = $block->getTrackingInfo();
                 <?php endforeach; ?>
             <?php else: ?>
                 <div class="message info empty">
-                    <div><?= $block->escapeHtml(__('There is no tracking available for this shipment.')) ?></div>
+                    <div><?= $escaper->escapeHtml(__('There is no tracking available for this shipment.')) ?></div>
                 </div>
             <?php endif; ?>
         <?php endforeach; ?>
     <?php else: ?>
         <div class="message info empty">
-            <div><?= $block->escapeHtml(__('There is no tracking available.')) ?></div>
+            <div><?= $escaper->escapeHtml(__('There is no tracking available.')) ?></div>
         </div>
     <?php endif; ?>
 </div>

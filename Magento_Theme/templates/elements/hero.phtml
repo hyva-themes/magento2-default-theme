@@ -8,8 +8,12 @@
 
 declare(strict_types=1);
 
+use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
+// phpcs:disable Generic.Files.LineLength
+
+/** @var $escaper Escaper */
 /** @var Template $block */
 
 $image1X = "https://images.unsplash.com/photo-1454111079122-eb76eb2d5754?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjExMzk2fQ&auto=format&fit=crop&w=1000&q=75";
@@ -23,15 +27,16 @@ $imageStyle = "background-image: url($image1X); background-image: -webkit-image-
 ?>
 
 <section class="text-gray-700 body-font -mt-8">
-    <section class="w-full mx-auto flex pt-8 md:pt-0 items-center bg-cover bg-right h-64 min-h-50 md:min-h-50 max-h-75" style="<?= $imageStyle ?>">
+    <section class="w-full mx-auto flex pt-8 md:pt-0 items-center bg-cover bg-right h-64 min-h-50 md:min-h-50 max-h-75"
+             style="<?= $escaper->escapeHtmlAttr($imageStyle) ?>">
         <div class="container mx-auto">
             <div class="flex flex-col w-full lg:w-2/3 justify-center items-start px-6 tracking-wide">
-                <h1 class="title-font text-4xl sm:text-5xl mb-2 font-medium text-white" style="text-shadow: 2px 2px 5px black"><?= $block->escapeHtml($title) ?></h1>
+                <h1 class="title-font text-4xl sm:text-5xl mb-2 font-medium text-white" style="text-shadow: 2px 2px 5px black"><?= $escaper->escapeHtml($title) ?></h1>
                 <?php if ($content): ?>
-                    <p class="text-2xl sm:text-3xl mb-4 font-medium text-white" style="text-shadow: 2px 2px 5px black"><?= $content ?></p>
+                    <p class="text-2xl sm:text-3xl mb-4 font-medium text-white" style="text-shadow: 2px 2px 5px black"><?= $escaper->escapeHtml($content) ?></p>
                 <?php endif; ?>
-                <a class="btn btn-primary border border-primary flex" href="<?= $link ?>">
-                    <?= $block->escapeHtml($cta) ?>
+                <a class="btn btn-primary border border-primary flex" href="<?= $escaper->escapeUrl($link) ?>">
+                    <?= $escaper->escapeHtml($cta) ?>
                     <svg class="w-4 h-4 inline-flex self-center ml-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>

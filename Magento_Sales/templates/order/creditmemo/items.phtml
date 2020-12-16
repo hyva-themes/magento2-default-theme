@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Hyvä Themes - https://hyva.io
  * Copyright © Hyvä Themes 2020-present. All rights reserved.
@@ -7,12 +6,15 @@
  * See https://hyva.io/license
  */
 
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+
 $order = $block->getOrder() ?>
 <?php foreach ($order->getCreditmemosCollection() as $creditmemo): ?>
     <div class="order-title text-center md:text-left font-semibold">
-        <?= $block->escapeHtml(__('Refund #')) ?><?= $block->escapeHtml(
-            $creditmemo->getIncrementId()
-        ) ?>
+        <?= $block->escapeHtml(__('Refund #')) ?>
+        <?= $block->escapeHtml($creditmemo->getIncrementId()) ?>
         <a href="<?= $block->escapeUrl($block->getPrintCreditmemoUrl($creditmemo)) ?>"
            class="text-primary inline-block ml-2 pl-2 border-l text-sm font-normal"
             target="_blank"
@@ -20,10 +22,14 @@ $order = $block->getOrder() ?>
             <svg class="inline-block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                  width="20" height="20">
                 <path fill-rule="evenodd"
-                      d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z"
-                      clip-rule="evenodd"/>
+                      d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2
+                        2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z"
+                      clip-rule="evenodd"
+                />
             </svg>
-            <span class="inline-block ml-1 underline"><?= $block->escapeHtml(__('Print Refund')) ?></span>
+            <span class="inline-block ml-1 underline">
+                <?= $block->escapeHtml(__('Print Refund')) ?>
+            </span>
         </a>
     </div>
 

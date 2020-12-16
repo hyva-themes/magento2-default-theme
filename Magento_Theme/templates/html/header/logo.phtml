@@ -13,18 +13,23 @@ use Magento\Theme\Block\Html\Header\Logo;
 /**
  * @var Logo $block
  */
-$storeName = $block->getThemeName() ? $block->getThemeName() : $block->getLogoAlt()
+$storeName = $block->getThemeName() ?: $block->getLogoAlt()
 ?>
-<div class="order-1 md:order-1 w-full sm:w-auto pb-2 sm:pb-0">
-    <a class="flex items-center justify-center tracking-wide no-underline hover:no-underline font-medium font-title text-gray-800 text-xl"
+<div class="order-1 w-full pb-2 md:order-1 sm:w-auto sm:pb-0">
+    <a class="flex items-center justify-center text-xl font-medium tracking-wide text-gray-800
+        no-underline hover:no-underline font-title"
        href="<?= $block->escapeUrl($block->getUrl('')) ?>"
        title="<?= $block->escapeHtmlAttr($storeName) ?>"
        aria-label="store logo">
         <img src="<?= $block->escapeUrl($block->getLogoSrc()) ?>"
              title="<?= $block->escapeHtmlAttr($block->getLogoAlt()) ?>"
              alt="<?= $block->escapeHtmlAttr($block->getLogoAlt()) ?>"
-            <?= $block->getLogoWidth() ? 'width="' . $block->escapeHtmlAttr($block->getLogoWidth()) . '"' : 'width="200"' ?>
-            <?= $block->getLogoHeight() ? 'height="' . $block->escapeHtmlAttr($block->getLogoHeight()) . '"' : 'height="150"' ?>
+            <?= $block->getLogoWidth() ?
+                'width="' . $block->escapeHtmlAttr($block->getLogoWidth()) . '"' :
+                'width="200"' ?>
+            <?= $block->getLogoHeight() ?
+                'height="' . $block->escapeHtmlAttr($block->getLogoHeight()) . '"' :
+                'height="150"' ?>
         />
         <?= $block->escapeHtml($storeName) ?>
     </a>

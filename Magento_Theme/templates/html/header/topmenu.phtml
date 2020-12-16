@@ -19,49 +19,63 @@ $viewModelNavigationAsJson = $block->getData('viewModelNavigationAsJson');
 $menuJson = $viewModelNavigationAsJson->getNavigationAsJson();
 
 ?>
-<div class="navigation bg-container-lighter lg:bg-transparent order-2 sm:order-1 md:order-1 lg:order-2 lg:relative lg:min-h-0 lg:px-8 lg:w-auto lg:pt-0 z-20"
+<div class="z-20 order-2 navigation bg-container-lighter lg:bg-transparent sm:order-1
+    md:order-1 lg:order-2 lg:relative lg:min-h-0 lg:px-8 lg:w-auto lg:pt-0"
      x-on:resize.window.debounce.200="menu.checkIsSmallResolution()"
      @toggle-mobile-menu.window="menu.open = !menu.open"
      @keydown.window.escape="menu.open=false"
      :class="{'block min-h-screen fixed top-0 left-0 px-8 pt-8 w-full' : menu.open}"
 >
-    <div class="menu-icon flex justify-between items-baseline lg:hidden">
+    <div class="flex items-baseline justify-between menu-icon lg:hidden">
         <div class="flex justify-end">
             <label for="menu-toggle" @click="$dispatch('toggle-mobile-menu')"
-                   class="flex justify-center items-center w-12 h-12 p-3 cursor-pointer"
+                   class="flex items-center justify-center w-12 h-12 p-3 cursor-pointer"
                    :class="{ 'transition transform-180': menu.open }">
-                <svg class="fill-current h-8 w-8" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                <svg class="w-8 h-8 fill-current" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                      viewBox="0 0 20 20">
                     <path class="hidden"
                           :class="{ 'hidden' : !menu.open, 'block': menu.open }"
                           fill-rule="evenodd" clip-rule="evenodd"
-                          d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"></path>
+                          d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0
+                          1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828
+                          4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z">
+                    </path>
                     <path class="block"
                           :class="{ 'hidden' : menu.open, 'block': !menu.open }"
-                          d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
+                          d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z">
+                    </path>
                 </svg>
             </label>
         </div>
     </div>
     <input class="hidden" type="checkbox" id="menu-toggle">
     <nav
-        class="w-full lg:flex lg:justify-start lg:w-auto lg:relative lg:min-h-0 lg:-left-6 transition-display transform duration-150 ease-in-out"
+        class="w-full duration-150 ease-in-out transform lg:flex lg:justify-start
+            lg:w-auto lg:relative lg:min-h-0 lg:-left-6 transition-display"
         :class="{ 'hidden' : !menu.open }"
     >
         <template x-for="item in (menu.navigation)" :key="item.id">
             <div class="lg:relative lg:mr-2 lg:hover:bg-container-lighter hover:lg:shadow-lg"
-                 x-on:mouseenter="menu.isSmallResolution ? menu.hoverPanelActiveId =  0 : menu.hoverPanelActiveId = item.id"
+                 x-on:mouseenter="menu.isSmallResolution ?
+                    menu.hoverPanelActiveId =  0 :
+                    menu.hoverPanelActiveId = item.id"
                  x-on:mouseleave="menu.hoverPanelActiveId = 0">
                 <span
-                    class="px-3 py-2 lg:py-3 lg:text-md flex lg:block lg:transform-none transition-transform transform duration-150 ease-in-out items-center lg:bg-opacity-95"
-                    :class="{'-translate-x-full' : menu.mobilePanelActiveId, 'translate-x-0' : !menu.mobilePanelActiveId }"
+                    class="flex items-center px-3 py-2 transition-transform duration-150 ease-in-out
+                    transform lg:py-3 lg:text-md lg:block lg:transform-none lg:bg-opacity-95"
+                    :class="{
+                        '-translate-x-full' : menu.mobilePanelActiveId,
+                        'translate-x-0' : !menu.mobilePanelActiveId }"
                 >
-                    <a class="w-8/12 lg:w-full text-base text-gray-700 py-3 hover:underline" x-text="item.name"
+                    <a class="w-8/12 py-3 text-base text-gray-700 lg:w-full hover:underline" x-text="item.name"
                        :class="{'underline' : item.is_active || item.has_active}"
                        :href="item.url"
                        :title="item.name"></a>
-                    <span class="w-4/12 lg:hidden text-right"
-                          :class="{'hidden' : !Object.keys(item.childData).length, 'block' : Object.keys(item.childData).length}"
+                    <span class="w-4/12 text-right lg:hidden"
+                          :class="{
+                            'hidden' : !Object.keys(item.childData).length,
+                            'block' : Object.keys(item.childData).length
+                          }"
                           @click="menu.mobilePanelActiveId = menu.mobilePanelActiveId === item.id ? 0 : item.id">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24" width="24"
                              stroke="currentColor">
@@ -71,10 +85,17 @@ $menuJson = $viewModelNavigationAsJson->getNavigationAsJson();
                 </span>
                 <template x-if="Object.values(item.childData).length">
                     <div
-                        class="absolute h-full z-10 lg:h-auto right-0 top-0 lg:top-auto lg:right-auto lg:left-0 lg:shadow-lg lg:-ml-6 lg:px-6 lg:py-4 transform lg:transform-none w-full lg:w-auto bg-container-lighter transition-transform transform duration-200 ease-in-out lg:bg-opacity-95"
-                        :class="{'translate-x-full' : menu.mobilePanelActiveId !== item.id && menu.isSmallResolution, 'translate-x-0' : menu.mobilePanelActiveId === item.id && menu.isSmallResolution, 'lg:hidden' : menu.hoverPanelActiveId !== item.id, 'lg:block' : menu.overPanelActiveId === item.id}"
+                        class="absolute top-0 right-0 z-10 w-full h-full transition-transform duration-200 ease-in-out
+                            transform lg:h-auto lg:top-auto lg:right-auto lg:left-0 lg:shadow-lg lg:-ml-6 lg:px-6
+                            lg:py-4 lg:transform-none lg:w-auto bg-container-lighter lg:bg-opacity-95"
+                        :class="{
+                            'translate-x-full' : menu.mobilePanelActiveId !== item.id && menu.isSmallResolution,
+                            'translate-x-0' : menu.mobilePanelActiveId === item.id && menu.isSmallResolution,
+                            'lg:hidden' : menu.hoverPanelActiveId !== item.id,
+                            'lg:block' : menu.overPanelActiveId === item.id
+                        }"
                     >
-                        <span class="flex lg:hidden items-center px-8 py-2 my-1"
+                        <span class="flex items-center px-8 py-2 my-1 lg:hidden"
                               @click="menu.mobilePanelActiveId = 0">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24"
                                  width="24"
@@ -85,18 +106,21 @@ $menuJson = $viewModelNavigationAsJson->getNavigationAsJson();
                             <span class="ml-4" x-text="item.name"></span>
                         </span>
                         <a :href="item.url" :title="item.name"
-                           class="flex lg:hidden px-8 py-1 my-1 first:mt-0"
+                           class="flex px-8 py-1 my-1 lg:hidden first:mt-0"
                            :class="{'underline' : item.is_active }">
-                            <svg class="lg:hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24"
+                            <svg class="lg:hidden" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                 viewBox="0 0 24 24" height="24"
                                  width="24"></svg>
                             <span class="ml-4 lg:ml-0"><?= $escaper->escapeHtml(__('View All')) ?></span></a>
                         <template x-for="child in Object.values(item.childData)" :key="child.id">
                             <a :href="child.url" :title="child.name"
-                               class="flex lg:block px-8 lg:px-3 py-1 my-1 first:mt-0 lg:hover:underline w-full lg:whitespace-no-wrap"
+                               class="flex w-full px-8 py-1 my-1 lg:block lg:px-3 first:mt-0
+                                lg:hover:underline lg:whitespace-no-wrap"
                                :class="{'underline' : child.is_active || child.has_active}">
-                                <svg class="lg:hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24"
+                                <svg class="lg:hidden" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                     viewBox="0 0 24 24" height="24"
                                      width="24"></svg>
-                                <span class="ml-4 lg:ml-0 text-base text-gray-700" x-text="child.name"></span></a>
+                                <span class="ml-4 text-base text-gray-700 lg:ml-0" x-text="child.name"></span></a>
                         </template>
                     </div>
                 </template>

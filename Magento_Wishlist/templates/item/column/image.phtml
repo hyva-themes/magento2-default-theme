@@ -6,15 +6,19 @@
  * See https://hyva.io/license
  */
 
+use Magento\Framework\Escaper;
 use Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Image;
 use Magento\Wishlist\Model\Item;
 
 /** @var Image $block */
+/** @var $escaper Escaper */
 
 /** @var Item $item */
 $item = $block->getItem();
 $product = $item->getProduct();
 ?>
-<a class="product-item-photo hover:shadow-sm flex mb-2" tabindex="-1" href="<?= $block->escapeUrl($block->getProductUrl($item)) ?>" title="<?= $block->escapeHtmlAttr($product->getName()) ?>">
+<a class="product-item-photo hover:shadow-sm flex mb-2" tabindex="-1"
+   href="<?= $escaper->escapeUrl($block->getProductUrl($item)) ?>"
+   title="<?= $escaper->escapeHtmlAttr($product->getName()) ?>">
     <?= $block->getImage($block->getProductForThumbnail($item), 'wishlist_thumbnail')->toHtml() ?>
 </a>

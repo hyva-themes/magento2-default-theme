@@ -55,7 +55,9 @@
                             __('Email')
                         ) ?></span></label>
                         <div class="control">
-                            <input type="email" class="form-input w-full" id="oar_email" name="oar_email" :required="authenticateBy !== 'zip'"/>
+                            <input type="email" class="form-input w-full"
+                                   id="oar_email" name="oar_email" :required="authenticateBy !== 'zip'"
+                            />
                         </div>
                     </div>
                     <div class="field" x-show="authenticateBy === 'zip'">
@@ -63,7 +65,9 @@
                             __('Billing ZIP Code')
                         ) ?></span></label>
                         <div class="control">
-                            <input type="text" class="form-input w-full" id="oar_zip" name="oar_zip" :required="authenticateBy === 'zip'"/>
+                            <input type="text" class="form-input w-full"
+                                   id="oar_zip" name="oar_zip" :required="authenticateBy === 'zip'"
+                            />
                         </div>
                     </div>
                 </div>

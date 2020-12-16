@@ -6,16 +6,18 @@
  * See https://hyva.io/license
  */
 
+use Magento\Framework\Escaper;
 use Magento\Wishlist\Block\Customer\Wishlist\Button;
 
+/** @var $escaper Escaper */
 /** @var Button $block */
 ?>
 
 <?php if ($block->getWishlist()->getItemsCount()): ?>
     <button type="submit"
             name="do"
-            title="<?= $block->escapeHtmlAttr(__('Update Wish List')) ?>"
+            title="<?= $escaper->escapeHtmlAttr(__('Update Wish List')) ?>"
             class="action update">
-        <span><?= $block->escapeHtml(__('Update Wish List')) ?></span>
+        <span><?= $escaper->escapeHtml(__('Update Wish List')) ?></span>
     </button>
 <?php endif;?>

@@ -12,65 +12,83 @@ $customerAddressView = $block->getData('customer_address');
 ?>
 
 <div class="block block-addresses-list">
-    <div class="block-title text-2xl mb-6"><?= $escaper->escapeHtml(__('My Customers')) ?></div>
+    <div class="block-title text-2xl mb-6">
+<?= $escaper->escapeHtml(__('My Customers')) ?></div>
     <div class="block-content" x-data="initAddresses()">
-        <?php if ($_pAddsses = $block->getAdditionalAddresses()) : ?>
+            <?php if ($additionalAddresses = $block->getAdditionalAddresses()): ?>
             <div class="grid grid-cols-3 lg:grid-cols-6">
-                <div class="text-sm text-secondary p-2"><?= $escaper->escapeHtml(
+                <div class="text-sm text-secondary p-2">
+                    <?= $escaper->escapeHtml(
                         __('Company')
                     ) ?></div>
-                <div class="hidden lg:block text-sm text-secondary p-2"><?= $escaper->escapeHtml(
-                        __('Name')
-                    ) ?></div>
-                <div class="hidden lg:block text-sm text-secondary p-2"><?= $escaper->escapeHtml(
-                        __('Street Address')
-                    ) ?></div>
-                <div class="text-sm text-secondary p-2"><?= $escaper->escapeHtml(
-                        __('City')
-                    ) ?></div>
-                <div class="hidden lg:block text-sm text-secondary p-2"><?= $escaper->escapeHtml(
-                        __('Country')
-                    ) ?></div>
+                <div class="hidden lg:block text-sm text-secondary p-2">
+                    <?= $escaper->escapeHtml(__('Name')) ?>
+                </div>
+                <div class="hidden lg:block text-sm text-secondary p-2">
+                    <?= $escaper->escapeHtml(__('Street Address')) ?>
+                </div>
+                <div class="text-sm text-secondary p-2">
+                    <?= $escaper->escapeHtml(__('City')) ?>
+                </div>
+                <div class="hidden lg:block text-sm text-secondary p-2">
+                    <?= $escaper->escapeHtml(__('Country')) ?>
+                </div>
                 <div class="text-sm text-secondary p-2"></div>
-                <?php
-                $i = 0;
-                foreach ($_pAddsses as $address) :
-                    $i++;
-                    ?>
-                    <div class="p-2 <?= $i % 2 === 0 ? '' : ' bg-primary-lighter' ?>"><?= $escaper->escapeHtml($address->getCompany()) ?></div>
-                    <div class="hidden lg:block p-2 <?= $i % 2 === 0 ? '' : ' bg-primary-lighter' ?>"><?= $escaper->escapeHtml($address->getLastname()) ?>, <?= $escaper->escapeHtml(
-                            $address->getFirstname()
-                        ) ?></div>
-                    <div class="hidden lg:block p-2 <?= $i % 2 === 0 ? '' : ' bg-primary-lighter' ?>"><?= $escaper->escapeHtml($block->getStreetAddress($address)) ?></div>
-                    <div class=" p-2 <?= $i % 2 === 0 ? '' : ' bg-primary-lighter' ?>"><?= $escaper->escapeHtml($address->getCity()) ?></div>
-                    <div class="hidden lg:block p-2 <?= $i % 2 === 0 ? '' : ' bg-primary-lighter' ?>"><?= $escaper->escapeHtml($block->getCountryByCode($address->getCountryId())) ?></div>
-                    <div class="p-2 <?= $i % 2 === 0 ? '' : ' bg-primary-lighter' ?>"><a class="action edit inline-block text-sm underline text-secondary-darker"
+                <?php $i = 0; ?>
+                <?php foreach ($additionalAddresses as $address): ?>
+                    <?php $i++ ?>
+                    <div class="p-2 <?= $i % 2 === 0 ? '' : ' bg-primary-lighter' ?>">
+                        <?= $escaper->escapeHtml($address->getCompany()) ?></div>
+                    <div class="hidden lg:block p-2 <?= $i % 2 === 0 ? '' : ' bg-primary-lighter' ?>">
+                        <?= $escaper->escapeHtml($address->getLastname()) ?>,
+                        <?= $escaper->escapeHtml($address->getFirstname()) ?>
+                    </div>
+                    <div class="hidden lg:block p-2 <?= $i % 2 === 0 ? '' : ' bg-primary-lighter' ?>">
+                        <?= $escaper->escapeHtml($block->getStreetAddress($address)) ?>
+                    </div>
+                    <div class=" p-2 <?= $i % 2 === 0 ? '' : ' bg-primary-lighter' ?>">
+                        <?= $escaper->escapeHtml($address->getCity()) ?>
+                    </div>
+                    <div class="hidden lg:block p-2 <?= $i % 2 === 0 ? '' : ' bg-primary-lighter' ?>">
+                        <?= $escaper->escapeHtml($block->getCountryByCode($address->getCountryId())) ?>
+                    </div>
+                    <div class="p-2 <?= $i % 2 === 0 ? '' : ' bg-primary-lighter' ?>">
+                        <a class="action edit inline-block text-sm underline text-secondary-darker"
                             title="<?= $escaper->escapeHtmlAttr(__('Edit')) ?>"
-                            href="<?= $escaper->escapeUrl(
-                                $block->getUrl('customer/address/edit', ['id' => $address->getId()])
-                            ) ?>">
+                            href="<?= $escaper->escapeUrl($block->getUrl(
+                                'customer/address/edit',
+                                ['id' => $address->getId()]
+                            )) ?>">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <path
-                                    d="M11 5H6C4.89543 5 4 5.89543 4 7V18C4 19.1046 4.89543 20 6 20H17C18.1046 20 19 19.1046 19 18V13M17.5858 3.58579C18.3668 2.80474 19.6332 2.80474 20.4142 3.58579C21.1953 4.36683 21.1953 5.63316 20.4142 6.41421L11.8284 15H9L9 12.1716L17.5858 3.58579Z"
+                                    d="M11 5H6C4.89543 5 4 5.89543 4 7V18C4 19.1046 4.89543 20 6 20H17C18.1046
+                                    20 19 19.1046 19 18V13M17.5858 3.58579C18.3668 2.80474 19.6332 2.80474
+                                    20.4142 3.58579C21.1953 4.36683 21.1953 5.63316 20.4142 6.41421L11.8284
+                                    15H9L9 12.1716L17.5858 3.58579Z"
                                     stroke="#4A5568" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
-                            <span></span></a>
+                            <span></span>
+                        </a>
                         <a class="action delete ml-2 inline-block text-sm underline text-secondary-darker"
                            title="<?= $escaper->escapeHtmlAttr(__('Delete')) ?>"
                            @click.prevent="deleteAddressById(<?= $escaper->escapeJs($address->getId()) ?>)" href="#">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <path
-                                    d="M19 7L18.1327 19.1425C18.0579 20.1891 17.187 21 16.1378 21H7.86224C6.81296 21 5.94208 20.1891 5.86732 19.1425L5 7M10 11V17M14 11V17M15 7V4C15 3.44772 14.5523 3 14 3H10C9.44772 3 9 3.44772 9 4V7M4 7H20"
+                                    d="M19 7L18.1327 19.1425C18.0579 20.1891 17.187 21 16.1378 21H7.86224C6.81296
+                                    21 5.94208 20.1891 5.86732 19.1425L5 7M10 11V17M14 11V17M15 7V4C15 3.44772
+                                    14.5523 3 14 3H10C9.44772 3 9 3.44772 9 4V7M4 7H20"
                                     stroke="#4A5568" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </a>
                     </div>
                 <?php endforeach; ?>
             </div>
-        <?php if ($block->getChildHtml('pager')) : ?>
-            <div class="customer-addresses-toolbar toolbar bottom"><?= $block->getChildHtml('pager') ?></div>
+                <?php if ($block->getChildHtml('pager')): ?>
+            <div class="customer-addresses-toolbar toolbar bottom">
+                    <?= $block->getChildHtml('pager') ?>
+            </div>
         <?php endif ?>
             <form x-ref="deleteAddressForm" name="delete_address" id="delete_address"
                   action="<?= $escaper->escapeUrl($block->getDeleteUrl()) ?>">
@@ -82,19 +100,19 @@ $customerAddressView = $block->getData('customer_address');
                     return {
                         deleteAddressById: function (id) {
                             this.$refs.inputId.value = id;
-                            if (window.confirm('<?= $escaper->escapeJs(
-                                __('Are you sure you want to delete this address?')
-                            ) ?>')) {
+                            if (window.confirm(
+                                '<?= $escaper->escapeJs(__('Are you sure you want to delete this address?')) ?>'
+                            )) {
                                 this.$refs.deleteAddressForm.submit();
                             }
                         }
                     }
                 }
             </script>
-        <?php else : ?>
-            <p class="empty"><?= $escaper->escapeHtml(
-                    __('You have no other address entries in your address book.')
-                ) ?></p>
+        <?php else: ?>
+            <p class="empty">
+                <?= $escaper->escapeHtml(__('You have no other address entries in your address book.')) ?>
+            </p>
         <?php endif ?>
     </div>
 </div>
@@ -102,14 +120,18 @@ $customerAddressView = $block->getData('customer_address');
 <div class="actions-toolbar">
     <div class="primary">
         <a href="<?= $escaper->escapeUrl($block->getUrl('customer/address/new')) ?>"
-           class="btn btn-primary block w-full uppercase text-center"><span><?= $escaper->escapeHtml(
-                    __('Add New Address')
-                ) ?></span></a>
+           class="btn btn-primary block w-full uppercase text-center">
+            <span>
+                <?= $escaper->escapeHtml(__('Add New Address')) ?>
+            </span>
+        </a>
     </div>
     <div class="secondary">
         <a class="action back"
-           href="<?= $escaper->escapeUrl($block->getUrl('customer/account')) ?>"><span><?= $escaper->escapeHtml(
-                    __('Back')
-                ) ?></span></a>
+           href="<?= $escaper->escapeUrl($block->getUrl('customer/account')) ?>">
+            <span>
+                <?= $escaper->escapeHtml(__('Back')) ?>
+            </span>
+        </a>
     </div>
 </div>

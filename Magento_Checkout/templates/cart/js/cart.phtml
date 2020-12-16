@@ -52,7 +52,10 @@ $viewModelStore = $block->getData('viewModelStore');
                         },
                         credentials: 'include',
                         body: JSON.stringify({
-                            query: ($this.getSignInToken() && $this.getCustomerCartQuery()) || this.getCartQuery(this.cartId)
+                            query: (
+                                $this.getSignInToken() &&
+                                $this.getCustomerCartQuery()) ||
+                                this.getCartQuery(this.cartId)
                         })
                     }
                 ).then(function (response) {
@@ -103,7 +106,7 @@ $viewModelStore = $block->getData('viewModelStore');
                 }
             },
             dispatchCouponMutationRequest: function () {
-                if (!this.cartData.applied_coupons && document.getElementById('coupon_code').value == '') {
+                if (!this.cartData.applied_coupons && document.getElementById('coupon_code').value === '') {
                     dispatchMessages([{
                         type: 'error',
                         text: '<?= $escaper->escapeJs(__('Please enter a coupon code')) ?>'
@@ -137,7 +140,14 @@ $viewModelStore = $block->getData('viewModelStore');
                         $this.initErrorMessages(data.errors);
                         $this.getCart();
                     } else {
-                        $this.cartData = (data && data.data && ((data.data.removeCouponFromCart && (data.data.removeCouponFromCart.cart)) || (data.data.applyCouponToCart && (data.data.applyCouponToCart.cart)))) || [];
+                        $this.cartData = (
+                            data &&
+                            data.data &&
+                            (
+                                (data.data.removeCouponFromCart && (data.data.removeCouponFromCart.cart)) ||
+                                (data.data.applyCouponToCart && (data.data.applyCouponToCart.cart))
+                            )
+                        ) || [];
                         $this.updateCartDataDependencies();
                         document.getElementById('coupon_code').value = '';
                     }
@@ -178,7 +188,11 @@ $viewModelStore = $block->getData('viewModelStore');
                         this.getCart();
 
                     } else {
-                        $this.cartData = (data && data.data && (data.data.updateCartItems && (data.data.updateCartItems.cart))) || [];
+                        $this.cartData = (
+                            data &&
+                            data.data &&
+                            (data.data.updateCartItems && (data.data.updateCartItems.cart))
+                        ) || [];
                         $this.updateCartDataDependencies();
                     }
                     $this.isLoading = false;
@@ -208,7 +222,14 @@ $viewModelStore = $block->getData('viewModelStore');
                         $this.getCart();
 
                     } else {
-                        $this.cartData = (data && data.data && (data.data.removeItemFromCart && (data.data.removeItemFromCart.cart))) || [];
+                        $this.cartData = (
+                            data &&
+                            data.data &&
+                            (
+                                data.data.removeItemFromCart &&
+                                (data.data.removeItemFromCart.cart)
+                            )
+                        ) || [];
                         $this.updateCartDataDependencies();
                     }
                     $this.isLoading = false;

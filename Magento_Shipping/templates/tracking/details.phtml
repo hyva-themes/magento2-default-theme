@@ -6,7 +6,12 @@
  * See https://hyva.io/license
  */
 
-/** @var $block \Magento\Framework\View\Element\Template */
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var $block Template */
+/** @var $escaper Escaper */
+
 //phpcs:disable Magento2.Files.LineLength.MaxExceeded
 
 $parentBlock = $block->getParentBlock();
@@ -22,32 +27,32 @@ $fields = [
 ];
 $number = is_object($track) ? $track->getTracking() : $track['number'];
 ?>
-<div class="text-xl"><?= $block->escapeHtml(__('Order tracking')) ?></div>
-<div id="tracking-table-popup-<?= $block->escapeHtml($number) ?>">
+<div class="text-xl"><?= $escaper->escapeHtml(__('Order tracking')) ?></div>
+<div id="tracking-table-popup-<?= $escaper->escapeHtml($number) ?>">
     <?php if (is_object($track)): ?>
         <div>
-            <div class="inline-block pr-1"><?= $block->escapeHtml(__('Tracking Number:')) ?></div>
-            <div class="inline-block px-1"><?= $block->escapeHtml($number) ?></div>
+            <div class="inline-block pr-1"><?= $escaper->escapeHtml(__('Tracking Number:')) ?></div>
+            <div class="inline-block px-1"><?= $escaper->escapeHtml($number) ?></div>
         </div>
         <?php if ($track->getCarrierTitle()): ?>
             <div>
-                <div class="inline-block pr-1"><?= $block->escapeHtml(__('Carrier:')) ?></div>
-                <div class="inline-block px-1"><?= $block->escapeHtml($track->getCarrierTitle()) ?></div>
+                <div class="inline-block pr-1"><?= $escaper->escapeHtml(__('Carrier:')) ?></div>
+                <div class="inline-block px-1"><?= $escaper->escapeHtml($track->getCarrierTitle()) ?></div>
             </div>
         <?php endif; ?>
         <?php if ($track->getErrorMessage()): ?>
             <div>
-                <div class="inline-block pr-1"><?= $block->escapeHtml(__('Error:')) ?></div>
+                <div class="inline-block pr-1"><?= $escaper->escapeHtml(__('Error:')) ?></div>
                 <div class="inline-block px-1">
-                    <?= $block->escapeHtml(__('Tracking information is currently not available. Please ')) ?>
+                    <?= $escaper->escapeHtml(__('Tracking information is currently not available. Please ')) ?>
                     <?php if ($parentBlock->getContactUsEnabled()): ?>
-                        <a href="<?= $block->escapeUrl($parentBlock->getContactUs()) ?>" target="_blank"
-                           title="<?= $block->escapeHtml(__('contact us')) ?>">
-                            <?= $block->escapeHtml(__('contact us')) ?>
+                        <a href="<?= $escaper->escapeUrl($parentBlock->getContactUs()) ?>" target="_blank"
+                           title="<?= $escaper->escapeHtml(__('contact us')) ?>">
+                            <?= $escaper->escapeHtml(__('contact us')) ?>
                         </a>
-                        <?= $block->escapeHtml(__(' for more information or ')) ?>
+                        <?= $escaper->escapeHtml(__(' for more information or ')) ?>
                     <?php endif; ?>
-                    <?= $block->escapeHtml(__('email us at ')) ?>
+                    <?= $escaper->escapeHtml(__('email us at ')) ?>
                     <a href="mailto:<?= /* @noEscape */
                     $email ?>"><?= /* @noEscape */
                         $email ?></a>
@@ -55,15 +60,15 @@ $number = is_object($track) ? $track->getTracking() : $track['number'];
             </div>
         <?php elseif ($track->getTrackSummary()): ?>
             <div>
-                <div class="inline-block pr-1"><?= $block->escapeHtml(__('Info:')) ?></div>
-                <div class="inline-block px-1"><?= $block->escapeHtml($track->getTrackSummary()) ?></div>
+                <div class="inline-block pr-1"><?= $escaper->escapeHtml(__('Info:')) ?></div>
+                <div class="inline-block px-1"><?= $escaper->escapeHtml($track->getTrackSummary()) ?></div>
             </div>
         <?php elseif ($track->getUrl()): ?>
             <div>
-                <div class="inline-block pr-1"><?= $block->escapeHtml(__('Track:')) ?></div>
+                <div class="inline-block pr-1"><?= $escaper->escapeHtml(__('Track:')) ?></div>
                 <div class="inline-block px-1">
-                    <a href="<?= $block->escapeUrl($track->getUrl()) ?>" target="_blank">
-                        <?= $block->escapeUrl($track->getUrl()) ?>
+                    <a href="<?= $escaper->escapeUrl($track->getUrl()) ?>" target="_blank">
+                        <?= $escaper->escapeUrl($track->getUrl()) ?>
                     </a>
                 </div>
             </div>
@@ -72,15 +77,17 @@ $number = is_object($track) ? $track->getTracking() : $track['number'];
                 <?php if (!empty($track->$property())): ?>
                     <div>
                         <div class="inline-block pr-1"><?= /* @noEscape */
-                            $block->escapeHtml(__($title . ':')) ?></div>
-                        <div class="inline-block px-1"><?= $block->escapeHtml($track->$property()) ?></div>
+                            $escaper->escapeHtml(__($title . ':')) ?></div>
+                        <div class="inline-block px-1"><?= $escaper->escapeHtml($track->$property()) ?></div>
                     </div>
                 <?php endif; ?>
             <?php endforeach; ?>
 
             <?php if ($track->getDeliverydate()): ?>
                 <div>
-                    <div class="inline-block pr-1"><?= $block->escapeHtml($parentBlock->getDeliveryDateTitle()->getTitle($track)) ?></div>
+                    <div class="inline-block pr-1">
+                        <?= $escaper->escapeHtml($parentBlock->getDeliveryDateTitle()->getTitle($track)) ?>
+                    </div>
                     <div class="inline-block px-1">
                         <?= /* @noEscape */
                         $parentBlock->formatDeliveryDateTime($track->getDeliverydate(), $track->getDeliverytime()) ?>
@@ -92,9 +99,11 @@ $number = is_object($track) ? $track->getTracking() : $track['number'];
         <?php /* if the tracking is custom value */ ?>
         <div>
             <div class="inline-block pr-1">
-                <?= ($track['title'] ? $block->escapeHtml($track['title']) : $block->escapeHtml(__('N/A'))) ?>:
+                <?= ($track['title'] ? $escaper->escapeHtml($track['title']) : $escaper->escapeHtml(__('N/A'))) ?>:
             </div>
-            <div class="inline-block px-1"><?= (isset($track['number']) ? $block->escapeHtml($track['number']) : '') ?></div>
+            <div class="inline-block px-1">
+                <?= (isset($track['number']) ? $escaper->escapeHtml($track['number']) : '') ?>
+            </div>
         </div>
     <?php endif; ?>
 </div>

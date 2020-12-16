@@ -8,8 +8,10 @@
 
 declare(strict_types=1);
 
+use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
+/** @var Escaper $escaper */
 /** @var Template $block */
 ?>
 <script>
@@ -46,7 +48,7 @@ use Magento\Framework\View\Element\Template;
                         typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
                             [{
                                 type: "warning",
-                                text: "<?= $block->escapeHtml(__('Could not remove item from quote.')) ?>"
+                                text: "<?= $escaper->escapeHtml(__('Could not remove item from quote.')) ?>"
                             }], 5000
                         );
                     }
@@ -55,7 +57,7 @@ use Magento\Framework\View\Element\Template;
                         [{
                             type: response.success ? "success" : "error",
                             text: response.success
-                                ? "<?= $block->escapeHtml(__('You removed the item.')) ?>"
+                                ? "<?= $escaper->escapeHtml(__('You removed the item.')) ?>"
                                 : response.error_message
                         }], 5000
                     );
@@ -77,7 +79,7 @@ use Magento\Framework\View\Element\Template;
              aria-labelledby="cart-drawer-title"
              aria-modal="true"
              @click.away="open = false"
-             class="fixed inset-y-0 right-0 max-w-full flex z-30">
+             class="fixed inset-y-0 right-0 z-30 flex max-w-full">
             <div class="relative w-screen max-w-md"
                  x-show="open"
                  x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700"
@@ -94,22 +96,27 @@ use Magento\Framework\View\Element\Template;
                     x-transition:enter-end="opacity-100"
                     x-transition:leave="ease-in-out duration-500"
                     x-transition:leave-start="opacity-100"
-                    x-transition:leave-end="opacity-0" class="absolute top-0 right-0 mt-2 p-2 flex">
-                    <button @click="open = false;" aria-label="Close panel" class="text-gray-300 hover:text-black transition ease-in-out duration-150 p-2">
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    x-transition:leave-end="opacity-0" class="absolute top-0 right-0 flex p-2 mt-2">
+                    <button @click="open = false;" aria-label="Close panel"
+                            class="p-2 text-gray-300 transition duration-150 ease-in-out hover:text-black">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                            </path>
                         </svg>
                     </button>
                 </div>
-                <div class="h-full flex flex-col space-y-6 py-6 bg-white shadow-xl">
+                <div class="flex flex-col h-full py-6 space-y-6 bg-white shadow-xl">
                     <header class="px-4 sm:px-6">
-                        <h2 id="cart-drawer-title" class="text-lg leading-7 font-medium text-gray-900">
-                            <?= $block->escapeHtml(__('My Cart')) ?>
+                        <h2 id="cart-drawer-title" class="text-lg font-medium leading-7 text-gray-900">
+                            <?= $escaper->escapeHtml(__('My Cart')) ?>
                         </h2>
                     </header>
-                    <div class="relative grid gap-6 bg-white py-6 sm:gap-8 px-4 sm:px-6 border-b border-container overflow-y-auto">
+                    <div class="relative grid gap-6 px-4 py-6 overflow-y-auto bg-white border-b
+                        sm:gap-8 sm:px-6 border-container">
                         <template x-for="item in cartItems">
-                            <div class="-m-3 p-3 flex items-start space-x-4 rounded-lg hover:bg-gray-100 transition ease-in-out duration-150">
+                            <div class="flex items-start p-3 -m-3 space-x-4 transition duration-150
+                                ease-in-out rounded-lg hover:bg-gray-100">
                                 <a :href="item.product_url" class="w-1/4">
                                     <img
                                         :src="item.product_image.src"
@@ -118,9 +125,11 @@ use Magento\Framework\View\Element\Template;
                                         loading="lazy"
                                     />
                                 </a>
-                                <div class="space-y-2 w-3/4">
+                                <div class="w-3/4 space-y-2">
                                     <div>
-                                        <p class="text-xl"><span x-html="item.qty"></span> x <span x-html="item.product_name"></span></p>
+                                        <p class="text-xl">
+                                            <span x-html="item.qty"></span> x <span x-html="item.product_name"></span>
+                                        </p>
                                         <p class="text-sm"><span x-html="item.product_sku"></p>
                                     </div>
                                     <template x-for="option in item.options">
@@ -132,18 +141,25 @@ use Magento\Framework\View\Element\Template;
                                     <p><span x-html="item.product_price"></span></p>
                                     <div class="pt-4">
                                         <a :href="item.configure_url"
-                                           class="btn btn-primary inline-flex mr-2 p-2">
-                                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" size="16" class="h-5 w-5">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
-
+                                           class="inline-flex p-2 mr-2 btn btn-primary">
+                                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                                 size="16" class="w-5 h-5">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536
+                                                      3.536L6.5 21.036H3v-3.572L16.732 3.732z">
                                                 </path>
                                             </svg>
                                         </a>
-                                        <button class="btn btn-primary inline-flex p-2"
+                                        <button class="inline-flex p-2 btn btn-primary"
                                             @click="deleteItemFromCart(item.item_id)"
                                         >
-                                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" size="16" class="h-5 w-5">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                                 size="16" class="w-5 h-5">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
+                                                      01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1
+                                                      0 00-1 1v3M4 7h16">
+                                                </path>
                                             </svg>
                                         </button>
                                     </div>
@@ -152,13 +168,22 @@ use Magento\Framework\View\Element\Template;
                             </div>
                         </template>
                     </div>
-                    <div class="relative grid gap-6 bg-white py-6 sm:gap-8 px-4 sm:px-6">
-                        <div class="w-full -m-3 p-3 space-x-4 rounded-lg hover:bg-gray-100 transition ease-in-out duration-150">
+                    <div class="relative grid gap-6 px-4 py-6 bg-white sm:gap-8 sm:px-6">
+                        <div class="w-full p-3 -m-3 space-x-4 transition duration-150 ease-in-out rounded-lg
+                            hover:bg-gray-100">
                             <p>Subtotal: <span x-html="cart.subtotal"></span></p>
                         </div>
-                        <div class="w-full -m-3 p-3 space-x-4 rounded-lg hover:bg-gray-100 transition ease-in-out duration-150">
-                            <a href="<?= $block->escapeUrl($block->getUrl('checkout/index')) ?>" class="btn btn-primary inline-flex">Checkout</a>
-                            <span>or</span> <a href="<?= $block->getUrl('checkout/cart') ?>" class="underline">Go to Cart</a>
+                        <div class="w-full p-3 -m-3 space-x-4 transition duration-150 ease-in-out
+                            rounded-lg hover:bg-gray-100">
+                            <a href="<?= $escaper->escapeUrl($block->getUrl('checkout/index')) ?>"
+                               class="inline-flex btn btn-primary">
+                                Checkout
+                            </a>
+                            <span>or</span>
+                            <a href="<?= $escaper->escapeUrl($block->getUrl('checkout/cart')) ?>"
+                               class="underline">
+                                Go to Cart
+                            </a>
                         </div>
                     </div>
                 </div>

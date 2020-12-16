@@ -6,13 +6,15 @@
  * See https://hyva.io/license
  */
 
+use Magento\Framework\Escaper;
 use Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Actions;
 
+/** @var $escaper Escaper */
 /** @var Actions $block */
 ?>
 <?php $children = $block->getChildNames(); ?>
 <?php if ($children): ?>
-    <div class="<?= $block->escapeHtmlAttr($block->getCssClass()) ?> mt-2">
+    <div class="<?= $escaper->escapeHtmlAttr($block->getCssClass()) ?> mt-2">
         <?php foreach ($children as $childName): ?>
             <?= /* @noEscape */ $block->getLayout()->renderElement($childName, false) ?>
         <?php endforeach;?>

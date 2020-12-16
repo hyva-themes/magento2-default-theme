@@ -7,6 +7,8 @@
  */
 
 // phpcs:disable Magento2.Templates.ThisInTemplate
+use Magento\Framework\Data\Helper\PostHelper;
+use Magento\Sales\Helper\Reorder;
 
 /** @var $block \Magento\Sales\Block\Order\Recent */
 /** @var \Magento\Framework\Escaper $escaper */
@@ -18,7 +20,7 @@
     ?>
     <div class="block-title order my-4 flex justify-between items-center">
         <span class="text-2xl block"><?= $escaper->escapeHtml(__('Recent Orders')) ?></span>
-        <?php if ($count > 0) : ?>
+        <?php if ($count > 0): ?>
             <a class="action view inline-block underline"
                href="<?= $escaper->escapeUrl($block->getUrl('sales/order/history')) ?>">
                 <span><?= $escaper->escapeHtml(__('View All')) ?></span>
@@ -27,36 +29,56 @@
     </div>
     <div class="block-content">
         <?= $block->getChildHtml() ?>
-        <?php if ($count > 0) : ?>
+        <?php if ($count > 0): ?>
             <div class="grid grid-cols-3 lg:grid-cols-6">
-                <div class="text-sm text-secondary p-2"><?= $escaper->escapeHtml(__('Order #')) ?></div>
-                <div class="text-sm hidden lg:block text-secondary p-2"><?= $escaper->escapeHtml(__('Date')) ?></div>
-                <div class="text-sm text-secondary p-2"><?= $escaper->escapeHtml(__('Ship To')) ?></div>
-                <div class="text-sm hidden lg:block text-secondary p-2"><?= $escaper->escapeHtml(__('Order Total')) ?></div>
-                <div class="text-sm hidden lg:block text-secondary p-2"><?= $escaper->escapeHtml(__('Status')) ?></div>
-                <div class="text-sm text-secondary p-2 text-center"><?= $escaper->escapeHtml(__('View')) ?><?php if ($this->helper(
-                        \Magento\Sales\Helper\Reorder::class
-                    )->isAllow()) : ?> / <?= $escaper->escapeHtml(__('Reorder')) ?><?php endif; ?></div>
+                <div class="text-sm text-secondary p-2">
+                    <?= $escaper->escapeHtml(__('Order #')) ?>
+                </div>
+                <div class="text-sm hidden lg:block text-secondary p-2">
+                    <?= $escaper->escapeHtml(__('Date')) ?>
+                </div>
+                <div class="text-sm text-secondary p-2">
+                    <?= $escaper->escapeHtml(__('Ship To')) ?>
+                </div>
+                <div class="text-sm hidden lg:block text-secondary p-2">
+                    <?= $escaper->escapeHtml(__('Order Total')) ?>
+                </div>
+                <div class="text-sm hidden lg:block text-secondary p-2">
+                    <?= $escaper->escapeHtml(__('Status')) ?>
+                </div>
+                <div class="text-sm text-secondary p-2 text-center">
+                    <?= $escaper->escapeHtml(__('View')) ?>
+                    <?php if ($this->helper(Reorder::class)->isAllow()): ?>
+                        / <?= $escaper->escapeHtml(__('Reorder')) ?>
+                    <?php endif; ?>
+                </div>
 
                 <?php $i = 0; ?>
-                <?php foreach ($_orders as $_order) : ?>
+                <?php foreach ($_orders as $_order): ?>
                     <?php $i++; ?>
-                    <div class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"><?= $escaper->escapeHtml(
-                            $_order->getRealOrderId()
-                        ) ?><p class="lg:hidden text-sm"><?= $escaper->escapeHtml(
-                                $block->formatDate($_order->getCreatedAt())
-                            ) ?></p></div>
-                    <div class="p-2 hidden lg:flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"><?= $escaper->escapeHtml(
+                    <div class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+                        <?= $escaper->escapeHtml($_order->getRealOrderId()) ?>
+                        <p class="lg:hidden text-sm">
+                            <?= $escaper->escapeHtml($block->formatDate($_order->getCreatedAt())) ?>
+                        </p>
+                    </div>
+                    <div class="p-2 hidden lg:flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+                        <?= $escaper->escapeHtml(
                             $block->formatDate($_order->getCreatedAt())
-                        ) ?></div>
-                    <div
-                        class="p-2 flex items-center<?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"><?= $_order->getBillingAddress()
-                            ? $escaper->escapeHtml($_order->getBillingAddress()->getCompany()) : "&nbsp;" ?></div>
-                    <div class="p-2 hidden lg:flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"><?= /* @noEscape */
-                        $_order->formatPrice($_order->getGrandTotal()) ?></div>
-                    <div class="p-2 hidden lg:flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"><?= $escaper->escapeHtml(
+                        ) ?>
+                    </div>
+                    <div class="p-2 flex items-center<?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+                        <?= $_order->getBillingAddress()
+                            ? $escaper->escapeHtml($_order->getBillingAddress()->getCompany()) : "&nbsp;" ?>
+                    </div>
+                    <div class="p-2 hidden lg:flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+                        <?= /* @noEscape */$_order->formatPrice($_order->getGrandTotal()) ?>
+                    </div>
+                    <div class="p-2 hidden lg:flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+                        <?= $escaper->escapeHtml(
                             $_order->getStatusLabel()
-                        ) ?></div>
+                        ) ?>
+                    </div>
                     <div class="p-2 flex items-center justify-evenly<?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
                         <a href="<?= $escaper->escapeUrl($block->getViewUrl($_order)) ?>"
                            class="inline-block text-sm underline text-secondary-darker"
@@ -66,28 +88,32 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                       d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274
+                                      4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                             </svg>
                         </a>
-                        <?php if ($this->helper(\Magento\Sales\Helper\Reorder::class)->canReorder(
-                            $_order->getEntityId()
-                        )) : ?>
+                        <?php if ($this->helper(Reorder::class)->canReorder($_order->getEntityId())): ?>
                             <?php $formData = json_decode(
-                                $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)->getPostData(
+                                $this->helper(PostHelper::class)->getPostData(
                                     $block->getReorderUrl($_order)
                                 ),
                                 true
                             ) ?>
-                            <form action="<?= $escaper->escapeUrl($formData['action']) ?>" method="post" class="inline-flex items-center">
+                            <form action="<?= $escaper->escapeUrl($formData['action']) ?>"
+                                  method="post" class="inline-flex items-center">
                                 <?= $block->getBlockHtml('formkey'); ?>
-                                <input type="hidden" name="data" value='<?= /* @noEscape */ json_encode($formData['data']) ?>'/>
+                                <input type="hidden" name="data"
+                                       value='<?= /* @noEscape */ json_encode($formData['data']) ?>'
+                                />
                                 <button title="<?= $escaper->escapeHtmlAttr(__('Reorder')) ?>"
                                         type="submit"
                                         class="inline-block text-sm text-secondary-darker">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                          stroke="currentColor" width="24" height="24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                                              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11
+                                                11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                                        />
                                     </svg>
                                 </button>
                             </form>
@@ -95,7 +121,7 @@
                     </div>
                 <?php endforeach; ?>
             </div>
-        <?php else : ?>
+        <?php else: ?>
             <div class="message info empty"><span><?= $escaper->escapeHtml(__('You have placed no orders.')) ?></span>
             </div>
         <?php endif; ?>

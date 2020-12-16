@@ -12,8 +12,12 @@ declare(strict_types=1);
 
 ?>
 <div class="container pt-6 pb-12">
-    <p><?= $escaper->escapeHtml(__('You have signed out and will be redirected to our homepage in 5 seconds.')) ?></p>
-    <p class="mt-6"><?= $escaper->escapeHtml(__('Thank you for your visit, we\'re looking forward to see you again soon.')) ?></p>
+    <p>
+        <?= $escaper->escapeHtml(__('You have signed out and will be redirected to our homepage in 5 seconds.')) ?>
+    </p>
+    <p class="mt-6">
+        <?= $escaper->escapeHtml(__('Thank you for your visit, we\'re looking forward to see you again soon.')) ?>
+    </p>
 </div>
 <script>
     setTimeout(function() {

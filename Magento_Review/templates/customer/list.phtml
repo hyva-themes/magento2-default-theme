@@ -7,11 +7,12 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\ViewModel\Customer\ReviewList;
 use Magento\Framework\Escaper;
 
 /** @var Escaper $escaper */
 
-/** @var Hyva\Theme\ViewModel\Customer\ReviewList $viewModelCustomerReviews */
+/** @var ReviewList $viewModelCustomerReviews */
 $viewModelCustomerReviews = $block->getData('viewModelCustomerReviews');
 
 /** @var Hyva\Theme\ViewModel\StoreConfig $viewModelStoreConfig */
@@ -21,7 +22,7 @@ $productUrlSuffix = $viewModelStoreConfig->getStoreConfig('catalog/seo/product_u
 $baseUrl = $block->getBaseUrl();
 $ratingSteps = 5;
 ?>
-<div class="text-2xl mb-6"><?= $escaper->escapeHtml(__('My Product Reviews')) ?></div>
+<div class="mb-6 text-2xl"><?= $escaper->escapeHtml(__('My Product Reviews')) ?></div>
 
 <div id="content"
      x-data="initReviewList()"
@@ -29,50 +30,68 @@ $ratingSteps = 5;
     <template x-if="pageInfo && pageInfo.page_size && pageInfo.total_pages">
         <div>
             <template x-if="pageInfo.total_pages > 1">
-                <div class="toolbar-pager flex items-center">
-                    <p class="toolbar-amount text-sm leading-5 text-gray-700 flex w-4/12"
+                <div class="flex items-center toolbar-pager">
+                    <p class="flex w-4/12 text-sm leading-5 text-gray-700 toolbar-amount"
                        id="toolbar-amount"><?= $escaper->escapeHtml('Items') ?>&nbsp;<span
                             x-text="currentPage > 1 && (currentPage - 1)* pageSize + 1 || 1"
                         ></span>&nbsp;-&nbsp;<span
                             x-text="currentPage > 1 && (currentPage) * pageSize || pageSize"></span>
                     </p>
-                    <ul class="items pages-items relative z-0 inline-flex w-8/12">
-                        <li class="item pages-item-previous relative border-r-0 inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150">
+                    <ul class="relative z-0 inline-flex w-8/12 items pages-items">
+                        <li class="relative inline-flex items-center px-2 py-2 text-sm font-medium leading-5
+                                text-gray-500 transition duration-150 ease-in-out bg-white border border-r-0
+                                border-gray-300 item pages-item-previous rounded-l-md hover:text-gray-400
+                                focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue
+                                active:bg-gray-100 active:text-gray-500"
+                        >
                             <a href="#" @click.prevent="currentPage > 1 && setCurrentPage(currentPage - 1)"
                                :class="{'cursor-default' : currentPage < 2}"
                                title="<?= $escaper->escapeHtmlAttr(__('Previous')) ?>">
                                 <span>
-                                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd"
-                                              d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                              d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0
+                                              01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
                                               clip-rule="evenodd"></path>
                                     </svg>
                                 </span>
                             </a>
                         </li>
                         <template x-for="i in Object.values(totalPagesObject)">
-                            <li :class="{'border-primary -ml-px ': i === pageInfo.current_page, 'border-gray-300' : i !== pageInfo.current_page }"
-                                class="item relative inline-flex items-center border bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
+                            <li :class="{
+                                    'border-primary -ml-px ': i === pageInfo.current_page,
+                                    'border-gray-300' : i !== pageInfo.current_page
+                                }"
+                                class="relative inline-flex items-center text-sm font-medium leading-5 text-gray-700
+                                    transition duration-150 ease-in-out bg-white border item hover:text-gray-500
+                                    focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue
+                                    active:bg-gray-100 active:text-gray-700">
                                 <template x-if="i === pageInfo.current_page">
-                                    <strong class="page px-4 py-2 cursor-default">
+                                    <strong class="px-4 py-2 cursor-default page">
                                         <span x-text="i"></span>
                                     </strong>
                                 </template>
                                 <template x-if="i !== pageInfo.current_page">
-                                    <a class="page px-4 py-2" href="#" @click.prevent="setCurrentPage(i)">
+                                    <a class="px-4 py-2 page" href="#" @click.prevent="setCurrentPage(i)">
                                         <span x-text="i"></span>
                                     </a>
                                 </template>
                             </li>
                         </template>
-                        <li class="item pages-item-next relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 border-l-0 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150">
+                        <li class="relative inline-flex items-center px-2 py-2 text-sm font-medium leading-5
+                            text-gray-500 transition duration-150 ease-in-out bg-white border border-l-0
+                            border-gray-300 item pages-item-next rounded-r-md hover:text-gray-400 focus:z-10
+                            focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100
+                            active:text-gray-500"
+                        >
                             <a @click.prevent="currentPage < pageInfo.total_pages && setCurrentPage(currentPage + 1)"
                                :class="{'cursor-default' : currentPage >= pageInfo.total_pages}"
                                href="#" title="<?= $escaper->escapeHtmlAttr(__('Next')) ?>">
                                 <span>
-                                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd"
-                                              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1
+                                              1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                                               clip-rule="evenodd"></path>
                                     </svg>
                                 </span>
@@ -86,19 +105,27 @@ $ratingSteps = 5;
     <template x-if="reviews && reviews.length">
         <div>
             <template x-for="review in reviews" :key="review">
-                <div class="my-6 flex card">
+                <div class="flex my-6 card">
                     <div class="w-32">
                         <img :src="review.product && review.product.image && review.product.image.url"
                              :alt="review.product && review.product.image && review.product.image.label"/>
                     </div>
                     <div class="pl-6">
-                        <p class="text-lg font-medium"><a
-                                :href="review.product && review.product.url_key && '<?= $escaper->escapeJs(
-                                    $baseUrl
-                                ) ?>' + review.product.url_key  + '<?= $escaper->escapeJs($productUrlSuffix) ?>'"
-                                x-text="review.product && review.product.name"></a></p>
-                        <p class="mb-2 text-sm"><?= $escaper->escapeHtml(__('Created at')) ?> <span
-                                x-text="review && review.created_at && new Date(review.created_at).toLocaleDateString()"></span>
+                        <p class="text-lg font-medium">
+                            <a :href="review.product && review.product.url_key && (
+                                '<?= $escaper->escapeJs($baseUrl) ?>' +
+                                 review.product.url_key  +
+                                 '<?= $escaper->escapeJs($productUrlSuffix) ?>'
+                               )"
+                               x-text="review.product && review.product.name">
+                            </a>
+                        </p>
+                        <p class="mb-2 text-sm">
+                            <?= $escaper->escapeHtml(__('Created at')) ?>
+                            <span x-text="review &&
+                                review.created_at &&
+                                new Date(review.created_at).toLocaleDateString()"
+                            ></span>
                         </p>
                         <template x-for="(item, index) in review.ratings_breakdown" :key="index">
                             <div class="flex">
@@ -106,20 +133,32 @@ $ratingSteps = 5;
                                     <div>
                                         <template x-if="i <= item.value">
                                             <svg xmlns="http://www.w3.org/2000/svg"
-                                                 class="fill-current text-yellow-400 w-6 h-6"
+                                                 class="w-6 h-6 text-yellow-400 fill-current"
                                                  viewBox="0 0 20 20"
                                                  fill="currentColor">
                                                 <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0
+                                                    00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0
+                                                    00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54
+                                                    1.118l-2.8-2.034a1 1 0 00-1.175
+                                                    0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0
+                                                    00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1
+                                                     0 00.951-.69l1.07-3.292z"
+                                                />
                                             </svg>
                                         </template>
                                         <template x-if="i > item.value">
                                             <svg xmlns="http://www.w3.org/2000/svg"
-                                                 class="fill-current text-gray-400 w-6 h-6"
+                                                 class="w-6 h-6 text-gray-400 fill-current"
                                                  viewBox="0 0 20 20"
                                                  fill="currentColor">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0
+                                                00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364
+                                                1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0
+                                                00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1
+                                                1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1
+                                                0 00.951-.69l1.07-3.292z"
+                                                />
                                             </svg>
                                         </template>
                                     </div>
@@ -182,9 +221,28 @@ $ratingSteps = 5;
                     if (data && data.errors) {
                         $this.initErrorMessages(data.errors);
                     } else {
-                        $this.reviews = (data && data.data && data.data.customer && data.data.customer.reviews && data.data.customer.reviews.items || []);
-                        $this.pageInfo = (data && data.data && data.data.customer && data.data.customer.reviews && data.data.customer.reviews.page_info || []);
-                        $this.totalPagesObject = ($this.pageInfo && $this.pageInfo.total_pages && Array.from({length: $this.pageInfo.total_pages}, (v, i) => i + 1) || []);
+                        $this.reviews = (
+                            data &&
+                            data.data &&
+                            data.data.customer &&
+                            data.data.customer.reviews &&
+                            data.data.customer.reviews.items || []
+                        );
+                        $this.pageInfo = (
+                            data &&
+                            data.data &&
+                            data.data.customer &&
+                            data.data.customer.reviews &&
+                            data.data.customer.reviews.page_info || []
+                        );
+                        $this.totalPagesObject = (
+                            $this.pageInfo &&
+                            $this.pageInfo.total_pages &&
+                            Array.from(
+                                { length: $this.pageInfo.total_pages },
+                                (v, i) => i + 1
+                            ) || []
+                        );
                     }
                     $this.isLoading = false;
                 });

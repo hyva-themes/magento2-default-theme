@@ -8,13 +8,18 @@
 
 // phpcs:disable Magento2.Templates.ThisInTemplate
 
-/** @var \Magento\Sales\Block\Order\Items $block */
-/** @var \Magento\Framework\Escaper $escaper */
+use Magento\Framework\Escaper;
+use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
+use Magento\Sales\Block\Order\Items;
 
+/** @var Items $block */
+/** @var Escaper $escaper */
+
+$helper = $this->helper(GiftMessageHelper::class);
 $cols = $block->getData('is_context_shipment') ? 3 : 5;
 ?>
 <div class="order-items">
-    <?php if ($block->isPagerDisplayed()) : ?>
+    <?php if ($block->isPagerDisplayed()): ?>
         <?= $block->getPagerHtml() ?>
     <?php endif ?>
     <div class="hidden lg:grid grid-cols-<?= $escaper->escapeHtmlAttr($cols) ?> text-sm text-secondary ">
@@ -27,16 +32,14 @@ $cols = $block->getData('is_context_shipment') ? 3 : 5;
     </div>
     <?php $items = $block->getItems(); ?>
     <?php $giftMessage = '' ?>
-    <?php foreach ($items as $item) :
-        if ($item->getParentItem()) :
+    <?php foreach ($items as $item):
+        if ($item->getParentItem()):
             continue;
         endif;
         ?>
         <?= $block->getItemHtml($item) ?>
-        <?php if ($this->helper(\Magento\GiftMessage\Helper\Message::class)->isMessagesAllowed('order_item', $item)
-        && $item->getGiftMessageId()) : ?>
-        <?php $giftMessage =
-            $this->helper(\Magento\GiftMessage\Helper\Message::class)->getGiftMessageForEntity($item); ?>
+        <?php if ($helper->isMessagesAllowed('order_item', $item) && $item->getGiftMessageId()): ?>
+            <?php $giftMessage = $helper->getGiftMessageForEntity($item); ?>
         <div class="col options">
             <a href="#"
                id="order-item-gift-message-link-<?= (int)$item->getId() ?>"
@@ -46,7 +49,7 @@ $cols = $block->getData('is_context_shipment') ? 3 : 5;
                 <?= $escaper->escapeHtml(__('Gift Message')) ?>
             </a>
             <?php $giftMessage =
-                $this->helper(\Magento\GiftMessage\Helper\Message::class)->getGiftMessageForEntity($item); ?>
+                $helper->getGiftMessageForEntity($item); ?>
             <div class="order-gift-message" id="order-item-gift-message-<?= (int)$item->getId() ?>" role="region"
                  aria-expanded="false" tabindex="-1">
                 <a href="#"
@@ -57,22 +60,27 @@ $cols = $block->getData('is_context_shipment') ? 3 : 5;
                     <?= $escaper->escapeHtml(__('Close')) ?>
                 </a>
                 <dl class="item-options">
-                    <dt class="item-sender"><strong class="label"><?= $escaper->escapeHtml(
-                                __('From')
-                            ) ?></strong><?= $escaper->escapeHtml($giftMessage->getSender()) ?></dt>
-                    <dt class="item-recipient"><strong class="label"><?= $escaper->escapeHtml(
-                                __('To')
-                            ) ?></strong><?= $escaper->escapeHtml($giftMessage->getRecipient()) ?></dt>
-                    <dd class="item-message"><?= /* @noEscape */
-                        $this->helper(\Magento\GiftMessage\Helper\Message::class)->getEscapedGiftMessage(
-                            $item
-                        ) ?></dd>
+                    <dt class="item-sender">
+                        <strong class="label">
+                            <?= $escaper->escapeHtml(__('From')) ?>
+                        </strong>
+                        <?= $escaper->escapeHtml($giftMessage->getSender()) ?>
+                    </dt>
+                    <dt class="item-recipient">
+                        <strong class="label">
+                            <?= $escaper->escapeHtml(__('To')) ?>
+                        </strong>
+                        <?= $escaper->escapeHtml($giftMessage->getRecipient()) ?>
+                    </dt>
+                    <dd class="item-message">
+                        <?= /* @noEscape */ $helper->getEscapedGiftMessage($item) ?>
+                    </dd>
                 </dl>
             </div>
         </div>
     <?php endif ?>
     <?php endforeach; ?>
-    <?php if ($block->isPagerDisplayed()) : ?>
+    <?php if ($block->isPagerDisplayed()): ?>
         <?= $block->getPagerHtml() ?>
     <?php endif ?>
 </div>

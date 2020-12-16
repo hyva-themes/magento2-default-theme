@@ -17,8 +17,8 @@ use Hyva\Theme\ViewModel\StoreConfig;
 $storeConfig = $block->getData('viewModelStoreConfig');
 $siteKey = $storeConfig->getStoreConfig('recaptcha_frontend/type_recaptcha_v3/public_key');
 ?>
-<?php if ($siteKey) : ?>
-    <?php if ($block->getData('render_script_tag')) : ?>
+<?php if ($siteKey): ?>
+    <?php if ($block->getData('render_script_tag')): ?>
     <script>
         <?php endif; ?>
         if (!this.hasCaptchaToken) {
@@ -26,9 +26,10 @@ $siteKey = $storeConfig->getStoreConfig('recaptcha_frontend/type_recaptcha_v3/pu
 
             var $this = this;
             grecaptcha.ready(function () {
-                grecaptcha.execute('<?= $escaper->escapeJs(
-                    $siteKey
-                ) ?>', {action: 'submit'}).then(function (token) {
+                grecaptcha.execute(
+                        '<?= $escaper->escapeJs($siteKey) ?>',
+                        { action: 'submit' }
+                    ).then(function (token) {
                     var $recaptchaResponseInput = $form.querySelector('input[name="g-recaptcha-response"]');
                     if ($recaptchaResponseInput != null) {
                         $recaptchaResponseInput.value = token;
@@ -44,7 +45,7 @@ $siteKey = $storeConfig->getStoreConfig('recaptcha_frontend/type_recaptcha_v3/pu
                 });
             });
         }
-        <?php if($block->getData('render_script_tag')) : ?>
+        <?php if ($block->getData('render_script_tag')): ?>
     </script>
 <?php endif; ?>
 <?php endif; ?>

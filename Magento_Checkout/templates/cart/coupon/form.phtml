@@ -47,13 +47,19 @@ use Magento\Framework\View\Element\Template;
                                    id="coupon_code"
                                    name="coupon_code"
                                    value=""
-                                   :placeholder="cartData.applied_coupons ? cartData.applied_coupons[0]['code'] : '<?= $escaper->escapeHtmlAttr(__('Discount Code')) ?>'"
+                                   :placeholder="cartData.applied_coupons ?
+                                    cartData.applied_coupons[0]['code'] :
+                                    '<?= $escaper->escapeHtmlAttr(__('Discount Code')) ?>'"
                                    :disabled="cartData.applied_coupons"
                             />
                                 <button class="btn btn-primary md:text-sm lg:text-base" type="submit"
                                         value="<?= $escaper->escapeHtmlAttr(__('Apply Discount')) ?>">
-                                    <span x-show="!cartData.applied_coupons"><?= $escaper->escapeHtml(__('Apply Discount')) ?></span>
-                                    <span x-show="cartData.applied_coupons"><?= $escaper->escapeHtml(__('Remove Discount')) ?></span>
+                                    <span x-show="!cartData.applied_coupons">
+                                        <?= $escaper->escapeHtml(__('Apply Discount')) ?>
+                                    </span>
+                                    <span x-show="cartData.applied_coupons">
+                                        <?= $escaper->escapeHtml(__('Remove Discount')) ?>
+                                    </span>
                                 </button>
                         </div>
                     </div>

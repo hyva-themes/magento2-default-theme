@@ -8,16 +8,21 @@
 
 declare(strict_types=1);
 
+use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 use Magento\Search\Helper\Data as SearchHelper;
 
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
+
+/** @var $escaper Escaper */
 /** @var Template $block */
 /** @var SearchHelper $helper */
 
 $helper = $this->helper(SearchHelper::class);
 ?>
-<div class="container mx-auto py-2 text-black">
-    <form class="form minisearch" id="search_mini_form" action="<?= $block->escapeUrl($helper->getResultUrl()) ?>" method="get">
+<div class="container py-2 mx-auto text-black">
+    <form class="form minisearch" id="search_mini_form"
+          action="<?= $block->escapeUrl($helper->getResultUrl()) ?>" method="get">
         <label class="hidden" for="search" data-role="minisearch-label">
             <span><?= $block->escapeHtml(__('Search')) ?></span>
         </label>
@@ -28,7 +33,8 @@ $helper = $this->helper(SearchHelper::class);
                value="<?= $block->escapeHtmlAttr($helper->getEscapedQueryText()) ?>"
                placeholder="<?= $block->escapeHtmlAttr(__('Search entire store here...')) ?>"
                maxlength="<?= $block->escapeHtmlAttr($helper->getMaxQueryLength()) ?>"
-               class="w-full text-grey-800 transition focus:outline-none focus:border-transparent p-2 appearance-none leading-normal text-lg lg:text-xl"
+               class="w-full p-2 text-lg leading-normal transition appearance-none text-grey-800
+                focus:outline-none focus:border-transparent lg:text-xl"
         />
     </form>
 </div>

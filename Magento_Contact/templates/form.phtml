@@ -9,12 +9,18 @@
 declare(strict_types=1);
 
 use Magento\Contact\Block\ContactForm;
+use Magento\Contact\Helper\Data as ContactHelper;
 use Magento\Framework\Escaper;
 
 /** @var ContactForm $block */
 /** @var Escaper $escaper */
 
+// phpcs:disable Magento2.Templates.ThisInTemplate
+
 $formId = 'contact';
+/** @var ContactHelper $contactHelper */
+$contactHelper = $this->helper(ContactHelper::class);
+
 ?>
 <div class="container flex-columns-wrapper justify-between py-8">
     <form class="form contact card lg:w-1/2 md:w-2/3 mr-4"
@@ -40,8 +46,8 @@ $formId = 'contact';
                     ) ?></span></label>
                     <input name="name" id="name" required title="<?= $block->escapeHtmlAttr(__('Name')) ?>"
                            value="<?= $block->escapeHtmlAttr(
-                               $this->helper(\Magento\Contact\Helper\Data::class)->getPostValue('name')
-                                   ?: $this->helper(\Magento\Contact\Helper\Data::class)->getUserName()
+                               $contactHelper->getPostValue('name')
+                                   ?: $contactHelper->getUserName()
                            ) ?>"
                            class="mt-2 input input-light w-full"
                            type="text"
@@ -54,8 +60,8 @@ $formId = 'contact';
                     ) ?></span></label>
                     <input name="email" id="email" required title="<?= $block->escapeHtmlAttr(__('Email')) ?>"
                            value="<?= $block->escapeHtmlAttr(
-                               $this->helper(\Magento\Contact\Helper\Data::class)->getPostValue('email')
-                                   ?: $this->helper(\Magento\Contact\Helper\Data::class)->getUserEmail()
+                               $contactHelper->getPostValue('email')
+                                   ?: $contactHelper->getUserEmail()
                            ) ?>"
                            class="mt-2 input input-light w-full"
                            placeholder="<?= $block->escapeHtmlAttr(__('Email')) ?>"
@@ -68,7 +74,7 @@ $formId = 'contact';
                     <input name="telephone" id="telephone"
                            title="<?= $block->escapeHtmlAttr(__('Phone Number')) ?>"
                            value="<?= $block->escapeHtmlAttr(
-                               $this->helper(\Magento\Contact\Helper\Data::class)->getPostValue('telephone')
+                               $contactHelper->getPostValue('telephone')
                            ) ?>"
                            class="mt-2 input input-light w-full"
                            placeholder="<?= $block->escapeHtmlAttr(__('Phone Number')) ?>"
@@ -81,7 +87,7 @@ $formId = 'contact';
                     <textarea name="comment" id="comment" required
                               title="<?= $block->escapeHtmlAttr(__('What’s on your mind?')) ?>"
                               class="mt-2 input input-light w-full h-48" cols="5" rows="3"><?= $block->escapeHtml(
-                                  $this->helper(\Magento\Contact\Helper\Data::class)->getPostValue('comment')
+                                  $contactHelper->getPostValue('comment')
                               ) ?></textarea>
                 </div>
                 <?= $block->getChildHtml('form.additional.info') ?>
