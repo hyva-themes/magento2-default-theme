@@ -1,0 +1,70 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Escaper;
+use Magento\ProductAlert\Block\Email\Price;
+
+/** @var $escaper Escaper */
+/** @var $block Price */
+?>
+<?php if ($products = $block->getProducts()): ?>
+    <p><?= $escaper
+            ->escapeHtml(
+                __('Price change alert! We wanted you to know that prices have changed for these products:')
+            ) ?>
+    </p>
+    <table>
+    <?php /** @var $product Product */ ?>
+    <?php foreach ($products as $product): ?>
+        <tr>
+            <td class="col photo">
+                <a href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>"
+                   title="<?= $escaper->escapeHtml($product->getName()) ?>"
+                   class="product photo">
+                    <?= $block->getImage($product, 'product_thumbnail_image', ['class' => 'photo image'])->toHtml() ?>
+                </a>
+            </td>
+            <td class="col item">
+                <p>
+                    <strong class="product name">
+                        <a href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>">
+                            <?= $escaper->escapeHtml($product->getName()) ?>
+                        </a>
+                    </strong>
+                </p>
+                <?php if ($shortDescription = $block->getFilteredContent($product->getShortDescription())): ?>
+                    <p><small><?= /* @noEscape */  $shortDescription ?></small></p>
+                <?php endif; ?>
+                <?=
+                $block->getProductPriceHtml(
+                    $product,
+                    \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
+                    \Magento\Framework\Pricing\Render::ZONE_EMAIL,
+                    [
+                        'display_label' => __('Price:'),
+                    ]
+                );
+                ?>
+                <p>
+                    <small>
+                        <a href="<?= $escaper->escapeUrl($block->getProductUnsubscribeUrl($product->getId())) ?>">
+                            <?= $escaper->escapeHtml(__('Click here to stop alerts for this product.')) ?>
+                        </a>
+                    </small>
+                </p>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    </table>
+    <p>
+        <a href="<?= $escaper->escapeUrl($block->getUnsubscribeUrl()) ?>">
+            <?= $escaper->escapeHtml(__('Unsubscribe from all price alerts')) ?>
+        </a>
+    </p>
+<?php endif; ?>

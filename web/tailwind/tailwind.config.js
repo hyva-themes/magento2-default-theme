@@ -32,6 +32,7 @@ module.exports = {
             white: colors.white,
             gray: colors.gray,
             yellow: colors.yellow,
+            orange: colors.orange,
             red: colors.red,
             green: colors.green,
             transparent: colors.transparent,
@@ -52,6 +53,7 @@ module.exports = {
             white: colors.white,
             red: colors.red,
             yellow: colors.yellow,
+            orange: colors.orange,
             green: colors.green,
             gray: colors.gray,
             primary: {

@@ -1,0 +1,32 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var $block Template */
+/** @var $escaper Escaper */
+
+/**
+ * @var int $productId
+ * @see \Magento\ProductAlert\Controller\Unsubscribe\Email::execute
+ */
+$productId = $block->getProductId();
+
+/**
+ * This template turns a GET request into a POST request by auto-submitting the form below
+ */
+?>
+
+<form action="<?= $escaper->escapeUrl($block->getUrl('productalert/unsubscribe/stock')) ?>"
+      method="post"
+      x-data=""
+      x-init="$el.submit()">
+    <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
+    <input type="hidden" id="productId" name="product" value="<?= $escaper->escapeHtml($productId) ?>" />
+</form>

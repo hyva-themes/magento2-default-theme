@@ -152,5 +152,8 @@
             </referenceContainer>
 
         </referenceContainer>
+
+        <move element="alert.urls" destination="product.info" as="alert.urls"/>
+
     </body>
 </page>

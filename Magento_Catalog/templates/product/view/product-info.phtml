@@ -40,6 +40,8 @@ $product = $productViewModel->getProduct();
             $shortDescription ?></div>
     <?php } ?>
 
+    <?= $block->getChildHtml("alert.urls") ?>
+
     <div>
         <?php foreach ($block->getAttributes() as $attributeConfig) {
             $attribute = $attributesViewModel->getAttributeFromLayoutConfig($attributeConfig);

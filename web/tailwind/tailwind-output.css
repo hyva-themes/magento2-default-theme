@@ -2497,12 +2497,6 @@ body {
   letter-spacing: 0;
 }
 
-.space-y-1 > :not(template) ~ :not(template) {
-  --space-y-reverse: 0;
-  margin-top: calc(0.25rem * calc(1 - var(--space-y-reverse)));
-  margin-bottom: calc(0.25rem * var(--space-y-reverse));
-}
-
 .space-x-1 > :not(template) ~ :not(template) {
   --space-x-reverse: 0;
   margin-right: calc(0.25rem * var(--space-x-reverse));
@@ -3636,6 +3630,12 @@ body {
   --text-opacity: 1;
   color: #f6e05e;
   color: rgba(246, 224, 94, var(--text-opacity));
+}
+
+.text-orange-400 {
+  --text-opacity: 1;
+  color: #f6ad55;
+  color: rgba(246, 173, 85, var(--text-opacity));
 }
 
 .text-red-700 {
