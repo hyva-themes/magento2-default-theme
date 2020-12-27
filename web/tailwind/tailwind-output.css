@@ -2551,6 +2551,18 @@ body {
   background-color: rgba(255, 255, 255, var(--bg-opacity));
 }
 
+.bg-red-500 {
+  --bg-opacity: 1;
+  background-color: #f56565;
+  background-color: rgba(245, 101, 101, var(--bg-opacity));
+}
+
+.bg-green-500 {
+  --bg-opacity: 1;
+  background-color: #48bb78;
+  background-color: rgba(72, 187, 120, var(--bg-opacity));
+}
+
 .bg-gray-100 {
   --bg-opacity: 1;
   background-color: #f7fafc;
@@ -2619,6 +2631,12 @@ body {
 
 .bg-cover {
   background-size: cover;
+}
+
+.border-green-400 {
+  --border-opacity: 1;
+  border-color: #68d391;
+  border-color: rgba(104, 211, 145, var(--border-opacity));
 }
 
 .border-gray-200 {
@@ -2727,6 +2745,10 @@ body {
 
 .border-l-2 {
   border-left-width: 2px;
+}
+
+.border-l-4 {
+  border-left-width: 4px;
 }
 
 .border-t {
@@ -3710,6 +3732,10 @@ body {
   color: rgba(160, 174, 192, var(--text-opacity));
 }
 
+.italic {
+  font-style: italic;
+}
+
 .uppercase {
   text-transform: uppercase;
 }
@@ -3754,6 +3780,10 @@ body {
      -moz-user-select: all;
       -ms-user-select: all;
           user-select: all;
+}
+
+.align-middle {
+  vertical-align: middle;
 }
 
 .visible {
@@ -5769,6 +5799,10 @@ form select {
 
   .sm\:w-auto {
     width: auto;
+  }
+
+  .sm\:w-1\/2 {
+    width: 50%;
   }
 
   .sm\:w-4\/12 {

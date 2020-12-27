@@ -1,28 +1,52 @@
 <?php
-    $_product = $block->getProduct();
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+
+/** @var $escaper Escaper */
+
+$product = $block->getProduct();
 ?>
-<?php if ($_product->isSaleable() && $block->hasOptions()) : ?>
+<?php if ($product->isSaleable() && $block->hasOptions()): ?>
 <div id="bundleSummary"
      class="block-bundle-summary card w-full sm:w-1/2 md:w-1/3">
     <div class="title mb-2">
-        <h3 class="text-gray-900 text-2xl title-font font-base text-center md:text-left w-full"><?= $block->escapeHtml(__('Your Customization')) ?></h3>
+        <h3 class="text-gray-900 text-2xl title-font font-base text-center md:text-left w-full">
+            <?= $block->escapeHtml(__('Your Customization')) ?>
+        </h3>
     </div>
     <div class="content">
         <div class="bundle-info">
-            <?= $block->getImage($_product, 'bundled_product_customization_page')->toHtml() ?>
             <div class="product-details">
-                <strong class="product name"><?= $block->escapeHtml($_product->getName()) ?></strong>
-                <?php if ($_product->getIsSalable()) : ?>
-                    <p class="available stock" title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
-                        <span><?= $block->escapeHtml(__('In stock')) ?></span>
-                    </p>
-                <?php else : ?>
-                    <p class="unavailable stock" title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
-                        <span><?= $block->escapeHtml(__('Out of stock')) ?></span>
-                    </p>
+                <h3 class="product-name text-lg font-semibold">
+                    <?= $block->escapeHtml($product->getName()) ?>
+                </h3>
+
+                <?= $block->getBlockHtml('product.info.form') ?>
+
+                <?= $block->getChildHtml("product.info.bundle.price") ?>
+
+                <?php if ($product->isSaleable()): ?>
+                <div class="flex my-4 sm:mt-0">
+                    <?= $block->getChildHtml("product.info.quantity") ?>
+                    <?= $block->getChildHtml("product.info.addtocart") ?>
+                </div>
                 <?php endif; ?>
-                <?= $block->getChildHtml('', true) ?>
+
+                </div>
+
             </div>
+            <div class="tier-price-container my-2 py-4">
+                <?= $block->getChildHtml("product.price.tier") ?>
+            </div>
+
         </div>
         <div class="bundle-summary">
             <strong class="subtitle"><?= $block->escapeHtml(__('Summary')) ?></strong>

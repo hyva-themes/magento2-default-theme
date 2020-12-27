@@ -30,7 +30,7 @@ if (!$currentProduct->exists() || !$productAlertViewModel->showPriceAlert($produ
 
 $signupLabel = __("Notify me when the price drops");
 ?>
-<div class="product alert price my-4 text-right">
+<div class="product alert price text-right">
     <a href="<?= $escaper->escapeUrl($productAlertViewModel->getSaveUrl($product, 'price')) ?>"
        title="<?= $escaper->escapeHtml($signupLabel) ?>" class="action alert">
         <span class="text-orange-400">

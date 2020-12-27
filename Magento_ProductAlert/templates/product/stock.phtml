@@ -30,7 +30,7 @@ if (!$currentProduct->exists() || !$productAlertViewModel->showStockAlert($produ
 
 $signupLabel = __("Notify me when this product is in stock");
 ?>
-<div class="product alert stock my-4 text-right">
+<div class="product alert stock text-right">
     <a href="<?= $escaper->escapeUrl($productAlertViewModel->getSaveUrl($currentProduct->get(), 'stock')) ?>"
        title="<?= $escaper->escapeHtml($signupLabel) ?>" class="action alert">
         <span class="text-orange-400">

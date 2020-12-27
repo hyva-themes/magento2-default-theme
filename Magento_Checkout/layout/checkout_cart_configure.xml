@@ -12,5 +12,10 @@
         <referenceBlock name="product.info">
             <block class="Magento\Checkout\Block\Cart\Item\Configure" name="checkout.cart.item.configure.block"/>
         </referenceBlock>
+        <referenceBlock name="product.info.addtocart">
+            <arguments>
+                <argument name="is_cart_configure" xsi:type="boolean">true</argument>
+            </arguments>
+        </referenceBlock>
     </body>
 </page>
