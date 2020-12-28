@@ -1,0 +1,41 @@
+<?php
+
+declare(strict_types=1);
+
+use Magento\Customer\Block\Account\Customer;
+
+/** @var Customer $block */
+?>
+
+<div x-data="{ open: false }" class="relative inline-block pl-1 sm:pl-3">
+    <button id="customer-menu" type="button" class="block hover:text-black focus:outline-none" @click="open = true"
+        aria-haspopup="true" aria-expanded="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
+            class="h-8 w-8 md:h-6 md:w-6" aria-hidden="true">
+            <circle fill="none" cx="12" cy="7" r="3"></circle>
+            <path d="M12 2C9.243 2 7 4.243 7 7s2.243 5 5 5 5-2.243 5-5S14.757 2 12 2zM12 10c-1.654 0-3-1.346-3-3s1.346-3 3-3 3 1.346 3 3S13.654 10 12 10zM21 21v-1c0-3.859-3.141-7-7-7h-4c-3.86 0-7 3.141-7 7v1h2v-1c0-2.757 2.243-5 5-5h4c2.757 0 5 2.243 5 5v1H21z"></path>
+        </svg>
+    </button>
+    <nav class="origin-top-right absolute z-10 right-0 w-40 sm:w-48 -mr-4 py-2 mt-2 lg:mt-3 rounded-sm shadow-lg bg-container-lighter overflow-auto"
+        x-show="open"
+        @click.away="open = false"
+        aria-labelledby="customer-menu">
+        <?php if ($block->customerLoggedIn()) : ?>
+            <a class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
+                href="<?= $escaper->escapeUrl($block->getUrl('customer/account')) ?>"><?= $escaper->escapeHtml(__('My Account')); ?></a>
+            <a class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
+                href="<?= $escaper->escapeUrl($block->getUrl('wishlist')) ?>"><?= $escaper->escapeHtml(__('My Wish List')); ?></a>
+            <a class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
+                href="<?= $escaper->escapeUrl($block->getUrl('sales/order/history')) ?>"><?= $escaper->escapeHtml(__('My Orders')); ?></a>
+            <a class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
+                href="<?= $escaper->escapeUrl($block->getUrl('customer/address')) ?>"><?= $escaper->escapeHtml(__('Address Book')); ?></a>
+            <a class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
+                href="<?= $escaper->escapeUrl($block->getUrl('customer/account/logout')) ?>"><?= $escaper->escapeHtml(__('Sign Out')); ?></a>
+        <?php else : ?>
+            <a class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
+                href="<?= $escaper->escapeUrl($block->getUrl('customer/account/index')) ?>"><?= $escaper->escapeHtml(__('Sign In')); ?></a>
+            <a class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
+                href="<?= $escaper->escapeUrl($block->getUrl('customer/account/create')) ?>"><?= $escaper->escapeHtml(__('Create an Account')); ?></a>
+        <?php endif; ?>
+    </nav>
+</div>
