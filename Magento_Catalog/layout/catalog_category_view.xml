@@ -28,14 +28,8 @@
 
             <block class="Magento\Catalog\Block\Category\View" name="category.products" template="Magento_Catalog::category/products.phtml">
                 <block class="Magento\Catalog\Block\Product\ListProduct" name="category.products.list" as="product_list" template="Magento_Catalog::product/list.phtml">
-                    <arguments>
-                        <argument name="product_view_model" xsi:type="object">Hyva\Theme\ViewModel\ProductPage</argument>
-                    </arguments>
                     <block name="category.products.list.options" as="product_options"
                            template="Magento_Catalog::product/options/options.phtml">
-                        <arguments>
-                            <argument name="product_view_model" xsi:type="object">Hyva\Theme\ViewModel\ProductPage</argument>
-                        </arguments>
                     </block>
                     <block class="Magento\Catalog\Block\Product\ProductList\Item\Container"
                            name="category.product.addto" as="addto"/>

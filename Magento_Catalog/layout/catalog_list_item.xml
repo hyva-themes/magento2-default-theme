@@ -7,23 +7,20 @@
  * See https://hyva.io/license
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <block class="Magento\Catalog\Block\Product\AbstractProduct" name="product_list_item"
-           template="Magento_Catalog::product/list/item.phtml">
-        <arguments>
-            <argument name="product_view_model"
-                      xsi:type="object">Hyva\Theme\ViewModel\ProductPage
-            </argument>
-        </arguments>
-        <container name="category.product.list.additional" as="additional" />
-        <block class="Magento\Framework\View\Element\RendererList" name="category.product.type.details.renderers" as="details.renderers">
-            <block class="Magento\Framework\View\Element\Template" name="category.product.type.details.renderers.default" as="default"/>
+    <body>
+        <block class="Magento\Catalog\Block\Product\AbstractProduct" name="product_list_item"
+               template="Magento_Catalog::product/list/item.phtml">
+            <container name="category.product.list.additional" as="additional" />
+            <block class="Magento\Framework\View\Element\RendererList" name="category.product.type.details.renderers" as="details.renderers">
+                <block class="Magento\Framework\View\Element\Template" name="category.product.type.details.renderers.default" as="default"/>
+            </block>
+            <block class="Magento\Catalog\Block\Product\ProductList\Item\Container" name="category.product.addto" as="addto">
+                <block class="Magento\Catalog\Block\Product\ProductList\Item\AddTo\Compare"
+                       name="category.product.addto.compare" as="compare"
+                       template="Magento_Catalog::product/list/addto/compare.phtml"/>
+            </block>
         </block>
-        <block class="Magento\Catalog\Block\Product\ProductList\Item\Container" name="category.product.addto" as="addto">
-            <block class="Magento\Catalog\Block\Product\ProductList\Item\AddTo\Compare"
-                   name="category.product.addto.compare" as="compare"
-                   template="Magento_Catalog::product/list/addto/compare.phtml"/>
-        </block>
-    </block>
-</layout>
+    </body>
+</page>

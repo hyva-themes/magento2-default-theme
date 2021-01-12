@@ -20,9 +20,9 @@ use Hyva\Theme\ViewModel\ProductPage;
 /** @var ViewModelRegistry $viewModels */
 
 /** @var ProductPage $productViewModel */
-$productViewModel = $block->getProductViewModel();
+$productViewModel = $viewModels->require(ProductPage::class);
 /** @var ProductAttributes $attributesViewModel */
-$attributesViewModel = $block->getAttributesViewModel();
+$attributesViewModel = $viewModels->require(ProductAttributes::class);
 /** @var Product $product */
 $product = $productViewModel->getProduct();
 
