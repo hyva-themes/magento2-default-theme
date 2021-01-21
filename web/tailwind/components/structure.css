@@ -1,4 +1,6 @@
-
+body {
+    overflow-y: scroll;
+}
 .page-main {
     @apply my-8;
 }
