@@ -18,6 +18,8 @@
                 as="customer"
                 template="Magento_Customer::header/customer-menu.phtml"
             />
+            <block class="Magento\Customer\Block\Account\Customer" name="authentication-popup"
+                   as="authentication-popup" template="Magento_Customer::account/authentication-popup.phtml"/>
         </referenceBlock>
     </body>
 </page>

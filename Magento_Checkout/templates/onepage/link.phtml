@@ -13,10 +13,12 @@ use Magento\Framework\Escaper;
 /** @var $block Link */
 ?>
 <?php if ($block->isPossibleOnepageCheckout()): ?>
-    <a href="<?= $escaper->escapeHtmlAttr($escaper->escapeUrl($block->getCheckoutUrl())) ?>"
-            title="<?= $escaper->escapeHtmlAttr(__('Proceed to Checkout')) ?>"
-            class="btn-primary rounded text-lg font-medium py-4 px-10 checkout mr-2
-                <?= ($block->isDisabled()) ? ' disabled' : '' ?>"
+    <a @click.prevent.stop="$dispatch('toggle-authentication',
+        {url: '<?= $escaper->escapeHtmlAttr($escaper->escapeUrl($block->getCheckoutUrl())) ?>'});"
+        href="<?= $escaper->escapeHtmlAttr($escaper->escapeUrl($block->getCheckoutUrl())) ?>"
+        title="<?= $escaper->escapeHtmlAttr(__('Proceed to Checkout')) ?>"
+        class="btn-primary rounded text-lg font-medium py-4 px-10 checkout mr-2
+            <?= ($block->isDisabled()) ? ' disabled' : '' ?>"
         <?php if ($block->isDisabled()): ?>
             disabled="disabled"
         <?php endif; ?>>

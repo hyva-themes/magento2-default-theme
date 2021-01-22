@@ -1,0 +1,189 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Customer\Block\Account\Customer;
+
+/** @var Escaper $escaper */
+/** @var Customer $block */
+?>
+<script>
+    function initAuthentication() {
+        return {
+            open: false,
+            forceAuthentication: false,
+            checkoutUrl: '<?= $escaper->escapeUrl($block->getUrl('checkout/index')) ?>',
+            onPrivateContentLoaded: function (data) {
+                const isLoggedIn = data.customer && data.customer.firstname;
+                if (data.cart && !isLoggedIn) {
+                    this.forceAuthentication = !data.cart.isGuestCheckoutAllowed;
+                }
+            },
+            redirectIfAuthenticated: function (event) {
+                if (event.detail && event.detail.url){
+                    this.checkoutUrl = event.detail.url;
+                }
+                if (!this.forceAuthentication) {
+                    window.location.href = this.checkoutUrl;
+                }
+            },
+            dispatchLoginRequest: function() {
+                var $this = this;
+                this.isLoading = true;
+                var username = document.getElementById('customer-email').value;
+                var password = document.getElementById('pass').value;
+                var formKey = document.querySelector('input[name=form_key]').value;
+                fetch('<?= $escaper->escapeUrl($block->getUrl('customer/ajax/login')) ?>', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: JSON.stringify({username: username, password: password, form_key: formKey})
+                    }
+                ).then(function (response) {
+                        return response.json()
+                    }
+                ).then(function (data) {
+                    $this.isLoading = false;
+                    if (data.errors) {
+                        dispatchMessages([{
+                            type: 'error',
+                            text: data.message
+                        }], 5000)
+                    } else {
+                        window.location.href = $this.checkoutUrl;
+                    }
+                });
+            }
+        }
+    }
+</script>
+<section id="authentcation-popup"
+         x-data="initAuthentication()"
+         @private-content-loaded.window="onPrivateContentLoaded(event.detail.data)"
+         @toggle-authentication.window="open = forceAuthentication; redirectIfAuthenticated(event)"
+         @keydown.window.escape="open = false"
+>
+        <div role="dialog"
+             aria-modal="true"
+             @click.away="open = false"
+             class="fixed inset-y-0 right-0 z-30 flex max-w-full">
+            <div class="relative w-screen max-w-md"
+                 x-show="open"
+                 x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700"
+                 x-transition:enter-start="translate-x-full"
+                 x-transition:enter-end="translate-x-0"
+                 x-transition:leave="transform transition ease-in-out duration-500 sm:duration-700"
+                 x-transition:leave-start="translate-x-0"
+                 x-transition:leave-end="translate-x-full"
+            >
+                <div
+                    x-show="open"
+                    x-transition:enter="ease-in-out duration-500"
+                    x-transition:enter-start="opacity-0"
+                    x-transition:enter-end="opacity-100"
+                    x-transition:leave="ease-in-out duration-500"
+                    x-transition:leave-start="opacity-100"
+                    x-transition:leave-end="opacity-0" class="absolute top-0 right-0 flex p-2 mt-2">
+                    <button @click="open = false;" aria-label="Close panel"
+                            class="p-2 text-gray-300 transition duration-150 ease-in-out hover:text-black">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex flex-col h-full py-6 space-y-6 bg-white shadow-xl">
+                    <div class="block-customer-login">
+                        <header class="px-4 sm:px-6">
+                            <h2 id="authenticate-customer-login" class="text-lg font-medium leading-7 text-gray-900">
+                                <?= $escaper->escapeHtml(__('Checkout using your account')) ?>
+                            </h2>
+                        </header>
+                    </div>
+                    <div class="block-content px-4 sm:px-6">
+                        <form class="form form-login"
+                              method="post"
+                              x-on:submit.prevent="dispatchLoginRequest();"
+                              id="login-form">
+                            <div class="fieldset login">
+                                <div class="field email required">
+                                    <label class="label" for="customer-email">
+                                        <span><?= $escaper->escapeHtml(__('Email Address')) ?></span>
+                                    </label>
+                                    <div class="control">
+                                        <input name="username"
+                                               id="customer-email"
+                                               type="email"
+                                               required
+                                               class="input-text"
+                                        >
+                                    </div>
+                                </div>
+                                <div class="field password required">
+                                    <label for="pass" class="label"><span><?= $escaper->escapeHtml(__('Password')) ?></span></label>
+                                    <div class="control">
+                                        <input name="password"
+                                               type="password"
+                                               class="input-text"
+                                               required
+                                               id="pass"
+                                        >
+                                    </div>
+                                </div>
+
+                                <input name="context" type="hidden" value="checkout" />
+                                <div class="w-half p-5 m-3 space-x-4 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100">
+                                    <button class="inline-flex btn btn-primary">
+                                        <?= $escaper->escapeHtml(__('Sign In')) ?>
+                                    </button>
+                                </div>
+
+                                <div class="w-half p-5 m-3 space-x-4 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100">
+                                    <a href="<?= $escaper->escapeUrl($block->getUrl('customer/account/forgotpassword')) ?>">
+                                        <?= $escaper->escapeHtml(__('Forgot Your Password?')) ?>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                    <div class="block-content px-4 sm:px-6">
+                        <span><?= $escaper->escapeHtml(__('or')) ?></span>
+                    </div>
+                    <div class="block-new-customer">
+                        <header class="px-4 sm:px-6">
+                            <h2 id="authenticate-new-customer" class="text-lg font-medium leading-7 text-gray-900">
+                                <?= $escaper->escapeHtml(__('Checkout as a new customer')) ?>
+                            </h2>
+                        </header>
+                    </div>
+
+                    <div class="block-content px-4 sm:px-6">
+                        <p> <?= $escaper->escapeHtml(__('Creating an account has many benefits:')) ?></p>
+                        <ul class="list-disc">
+                            <li> <?= $escaper->escapeHtml(__('See order and shipping status')) ?></li>
+                            <li> <?= $escaper->escapeHtml(__('Track order history')) ?></li>
+                            <li> <?= $escaper->escapeHtml(__('Check out faster')) ?></li>
+                        </ul>
+                        <div class="w-half p-5 m-3 space-x-4 transition duration-150 ease-in-out
+                                rounded-lg hover:bg-gray-100">
+                            <a href="<?= $escaper->escapeUrl($block->getUrl('customer/account/create')) ?>"
+                               class="inline-flex btn btn-secondary">
+                                <?= $escaper->escapeHtml(__('Create an Account')) ?>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>

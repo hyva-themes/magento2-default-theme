@@ -1,0 +1,92 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// @codingStandardsIgnoreFile
+use Magento\Downloadable\Model\Link\Purchased\Item;
+
+/**
+ * @var $block \Magento\Downloadable\Block\Customer\Products\ListProducts
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+?>
+<div class="text-2xl mb-6"><?= $escaper->escapeHtml(__('My Downloadable Products')) ?></div>
+<?php $_items = $block->getItems(); ?>
+<?php if (count($_items)): ?>
+<div class="downloadable-products card grid grid-cols-3 lg:grid-cols-6 mb-4 flex">
+    <div class="text-sm text-secondary p-2"><?= $escaper->escapeHtml(__('Order #')) ?></div>
+    <div class="text-sm lg:block text-secondary p-2"><?= $escaper->escapeHtml(__('Date')) ?></div>
+    <div class="text-sm lg:block text-secondary p-2"><?= $escaper->escapeHtml(__('Title')) ?></div>
+    <div class="text-sm lg:block text-secondary p-2 "><?= $escaper->escapeHtml(__('Download')) ?></div>
+    <div class="text-sm lg:block text-secondary p-2"><?= $escaper->escapeHtml(__('Status')) ?></div>
+    <div class="text-sm text-secondary p-2"><?= $escaper->escapeHtml(__('Remaining Downloads')) ?></div>
+    <?php $i = 0; ?>
+    <?php foreach ($_items as $_item): ?>
+        <?php $i++; ?>
+        <div class="p-2 items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+                <a href="<?= $block->escapeUrl($block->getOrderViewUrl($_item->getPurchased()->getOrderId()))?>"
+                    title="<?= $block->escapeHtml(__('View Order')) ?>">
+                    <?= $block->escapeHtml($_item->getPurchased()->getOrderIncrementId()) ?>
+                </a>
+        </div>
+        <div class="p-2 items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+                <?= $block->escapeHtml($block->formatDate($_item->getPurchased()->getCreatedAt())) ?>
+        </div>
+        <div class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+                <?= $block->escapeHtml($_item->getPurchased()->getProductName()) ?>
+        </div>
+        <div class="p-2 items-center text-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+                <?php if ($_item->getStatus() == Item::LINK_STATUS_AVAILABLE): ?>
+                    <a href="<?= $block->escapeUrl($block->getDownloadUrl($_item)) ?>"
+                       class="inline-block text-sm underline text-secondary-darker"
+                       id="download_<?= /* @noEscape */ $_item->getPurchased()->getProductId() ?>"
+                       title="<?= $block->escapeHtmlAttr(__('Start Download')) ?>"
+                       class="action download">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                             stroke="currentColor" width="24" height="24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </a>
+                    <?php if ($block->getIsOpenInNewWindow()): ?>
+                        <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                            'onclick',
+                            "this.target='_blank'",
+                            'a#download_' . $_item->getPurchased()->getProductId()
+                        ) ?>
+                    <?php endif; ?>
+                <?php endif; ?>
+            </div>
+            <div class="p-2 items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+                <?= $block->escapeHtml(__(ucfirst($_item->getStatus()))) ?>
+            </div>
+            <div class="p-2 items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+                <?= $block->escapeHtml($block->getRemainingDownloads($_item)) ?>
+            </div>
+
+    <?php endforeach; ?>
+</div>
+
+<?php if ($block->getChildHtml('pager')): ?>
+    <div class="toolbar downloadable-products-toolbar bottom">
+        <?= $block->getChildHtml('pager') ?>
+    </div>
+<?php endif; ?>
+<?php else: ?>
+    <div class="message info empty">
+        <span><?= $block->escapeHtml(__('You have not purchased any downloadable products yet.')) ?></span>
+    </div>
+<?php endif; ?>
+
+<div class="actions-toolbar">
+    <div class="secondary">
+        <a href="<?= $block->escapeUrl($block->getBackUrl()) ?>" class="action back">
+            <span><?= $block->escapeHtml(__('Back')) ?></span>
+        </a>
+    </div>
+</div>

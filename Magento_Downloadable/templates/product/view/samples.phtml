@@ -1,0 +1,30 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+/**
+ * Downloadable product links
+ *
+ * @var $block \Magento\Downloadable\Block\Catalog\Product\Samples
+ */
+?>
+
+<?php if ($block->hasSamples()) : ?>
+    <dl class="items samples">
+        <dt class="item-title samples-item-title"><?= $block->escapeHtml($block->getSamplesTitle()) ?></dt>
+        <?php $_samples = $block->getSamples() ?>
+        <?php foreach ($_samples as $_sample) : ?>
+            <dd class="item samples-item">
+                <a href="<?= $block->escapeHtml($block->getSampleUrl($_sample)) ?>" <?= $block->getIsOpenInNewWindow() ? 'onclick="this.target=\'_blank\'"' : '' ?>
+                   class="item-link samples-item-link">
+                    <?= $block->escapeHtml($_sample->getTitle()) ?>
+                </a>
+            </dd>
+        <?php endforeach; ?>
+    </dl>
+<?php endif; ?>
