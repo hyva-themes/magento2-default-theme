@@ -20,7 +20,7 @@ use Magento\Customer\Block\Account\Customer;
         x-show="open"
         @click.away="open = false"
         aria-labelledby="customer-menu">
-        <?php if ($block->customerLoggedIn()) : ?>
+        <?php if ($block->customerLoggedIn()): ?>
             <a class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
                 href="<?= $escaper->escapeUrl($block->getUrl('customer/account')) ?>"><?= $escaper->escapeHtml(__('My Account')); ?></a>
             <a class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
@@ -31,7 +31,7 @@ use Magento\Customer\Block\Account\Customer;
                 href="<?= $escaper->escapeUrl($block->getUrl('customer/address')) ?>"><?= $escaper->escapeHtml(__('Address Book')); ?></a>
             <a class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
                 href="<?= $escaper->escapeUrl($block->getUrl('customer/account/logout')) ?>"><?= $escaper->escapeHtml(__('Sign Out')); ?></a>
-        <?php else : ?>
+        <?php else: ?>
             <a class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
                 href="<?= $escaper->escapeUrl($block->getUrl('customer/account/index')) ?>"><?= $escaper->escapeHtml(__('Sign In')); ?></a>
             <a class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"

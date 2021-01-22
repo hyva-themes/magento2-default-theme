@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 use Magento\Catalog\Block\Product\ProductList\Toolbar;
 
-/**  @var $block Toolbar */
+/**  @var Toolbar $block */
 ?>
 <?php if ($block->isEnabledViewSwitcher()): ?>
     <div class="modes flex space-x-1 mr-2 items-center px-2 py-2 rounded-md border
@@ -18,7 +18,7 @@ use Magento\Catalog\Block\Product\ProductList\Toolbar;
         <?php $_modes = $block->getModes(); ?>
         <?php if ($_modes && count($_modes) > 1): ?>
             <strong class="modes-label sr-only" id="modes-label"><?= $block->escapeHtml(__('View as')) ?></strong>
-            <?php foreach ($block->getModes() as $_code => $_label) :?>
+            <?php foreach ($block->getModes() as $_code => $_label): ?>
                 <?php if ($block->isModeActive($_code)): ?>
                     <strong title="<?= $block->escapeHtmlAttr($_label) ?>"
                             class="modes-mode active mode-<?= $block->escapeHtmlAttr(strtolower($_code)) ?>"
