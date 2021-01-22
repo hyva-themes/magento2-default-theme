@@ -19,10 +19,10 @@ use Magento\Customer\Block\Account\Customer;
         return {
             open: false,
             forceAuthentication: false,
-            customerLoggedIn: <?= $block->customerLoggedIn() ? 'true' : 'false';?>,
             checkoutUrl: '<?= $escaper->escapeUrl($block->getUrl('checkout/index')) ?>',
-            getData: function (data) {
-                if (data.cart && !this.customerLoggedIn) {
+            onPrivateContentLoaded: function (data) {
+                const isLoggedIn = data.customer && data.customer.firstname;
+                if (data.cart && !isLoggedIn) {
                     this.forceAuthentication = !data.cart.isGuestCheckoutAllowed;
                 }
             },
@@ -68,7 +68,7 @@ use Magento\Customer\Block\Account\Customer;
 </script>
 <section id="authentcation-popup"
          x-data="initAuthentication()"
-         @private-content-loaded.window="getData(event.detail.data)"
+         @private-content-loaded.window="onPrivateContentLoaded(event.detail.data)"
          @toggle-authentication.window="open = forceAuthentication; redirectIfAuthenticated(event)"
          @keydown.window.escape="open = false"
 >
