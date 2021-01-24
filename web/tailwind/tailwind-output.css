@@ -2738,6 +2738,10 @@ body {
   border-left-width: 0;
 }
 
+.border-t-2 {
+  border-top-width: 2px;
+}
+
 .border-b-2 {
   border-bottom-width: 2px;
 }
@@ -3370,6 +3374,11 @@ body {
 
 .p-8 {
   padding: 2rem;
+}
+
+.py-0 {
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .py-1 {

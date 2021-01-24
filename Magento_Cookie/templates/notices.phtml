@@ -49,48 +49,45 @@ if ($cookieHelper->isCookieRestrictionModeEnabled()): ?>
 >
     <template x-if="showCookieBanner">
         <div role="dialog"
-             x-show="showCookieBanner"
              aria-modal="true"
-             class="container fixed py-0 right-0 z-30 flex max-w-full bg-gray-200">
-            <div class="w-screen"
-                 x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700"
-                 x-transition:enter-start="translate-x-full"
-                 x-transition:enter-end="translate-x-0"
-                 x-transition:leave="transform transition ease-in-out duration-500 sm:duration-700"
-                 x-transition:leave-start="translate-x-0"
-                 x-transition:leave-end="translate-x-full"
-            >
-                <div
-                    x-transition:enter="ease-in-out duration-500"
-                    x-transition:enter-start="opacity-0"
-                    x-transition:enter-end="opacity-100"
-                    x-transition:leave="ease-in-out duration-500"
-                    x-transition:leave-start="opacity-100"
-                    x-transition:leave-end="opacity-0" class="absolute top-0 right-0 flex">
-                    <button @click="showCookieBanner = false;" aria-label="Close panel"
-                            class="transition duration-150 ease-in-out hover:text-black">
-                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                            </path>
-                        </svg>
-                    </button>
-                </div>
+             class="container fixed py-0 right-0 bottom-0 z-30 flex max-w-full bg-container-darker
+                border-t-2 border-container-darker"
+        >
+            <button @click="showCookieBanner = false;" aria-label="Close panel"
+                    class="absolute right-0 top-0 p-4">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
 
-                <div class="p-2">
-                    <p>
-                        <strong><?= $escaper->escapeHtml(__('We use cookies to make your experience better.')) ?></strong>
-                        <span><?= $escaper->escapeHtml(__(
-                                'To comply with the new e-Privacy directive, we need to ask for your consent to set the cookies.'
-                            )) ?>
+            <div class="p-2 pr-4">
+                <p class="mb-1">
+                    <span class="font-semibold">
+                        <?= $escaper->escapeHtml(__('We use cookies to make your experience better.')) ?>
                     </span>
-                        <?= $escaper->escapeHtml(__('<a href="%1">Learn more</a>.', $block->getPrivacyPolicyLink()), ['a']) ?>
-                    </p>
-                    <div class="actions">
-                        <button @click="setAcceptCookies(); showCookieBanner = false" id="btn-cookie-allow" class="action allow primary">
-                            <span><?= $escaper->escapeHtml(__('Allow Cookies')) ?></span>
-                        </button>
-                    </div>
+                </p>
+                <p class="mb-1">
+                    <span>
+                        <?= $escaper->escapeHtml(__( // phpcs:disable Generic.Files.LineLength.TooLong
+                            'To comply with the new e-Privacy directive, we need to ask for your consent to set the cookies.'
+                        )) // phpcs:enable ?>
+                    </span>
+                </p>
+                <p class="mb-4">
+                    <a href="<?= $escaper->escapeUrl($block->getPrivacyPolicyLink()) ?>"
+                       class="underline">
+                        <?= $escaper->escapeHtml(__('Read our policy')) ?>
+                    </a>
+                </p>
+                <div class="my-2">
+                    <button @click="setAcceptCookies(); showCookieBanner = false"
+                            id="btn-cookie-allow"
+                            class="btn btn-primary"
+                    >
+                        <?= $escaper->escapeHtml(__('Allow Cookies')) ?>
+                    </button>
                 </div>
             </div>
         </div>
