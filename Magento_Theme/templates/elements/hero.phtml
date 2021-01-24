@@ -16,33 +16,52 @@ use Magento\Framework\View\Element\Template;
 /** @var $escaper Escaper */
 /** @var Template $block */
 
-$image1X = "https://images.unsplash.com/photo-1454111079122-eb76eb2d5754?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjExMzk2fQ&auto=format&fit=crop&w=1000&q=75";
+$image1X = "https://images.unsplash.com/photo-1454111079122-eb76eb2d5754?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjExMzk2fQ&auto=format&fit=crop&w=500&q=75";
 $image2X = "https://images.unsplash.com/photo-1454111079122-eb76eb2d5754?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjExMzk2fQ&auto=format&fit=crop&w=1024&q=75";
 $title = "Hyvä Themes";
 $content = "Magento Themes that are good.";
 $link = "https://hyva.io/";
-$cta = "Read more ";
-
-$imageStyle = "background-image: url($image1X); background-image: -webkit-image-set(url($image1X) 1x, url($image2X) 2x);";
+$cta = "Visit hyva.io";
 ?>
 
-<section class="text-gray-700 body-font -mt-8">
-    <section class="w-full mx-auto flex pt-8 md:pt-0 items-center bg-cover bg-right h-64 min-h-50 md:min-h-50 max-h-75"
-             style="<?= $escaper->escapeHtmlAttr($imageStyle) ?>">
-        <div class="container mx-auto">
-            <div class="flex flex-col w-full lg:w-2/3 justify-center items-start px-6 tracking-wide">
-                <h1 class="title-font text-4xl sm:text-5xl mb-2 font-medium text-white" style="text-shadow: 2px 2px 5px black"><?= $escaper->escapeHtml($title) ?></h1>
-                <?php if ($content): ?>
-                    <p class="text-2xl sm:text-3xl mb-4 font-medium text-white" style="text-shadow: 2px 2px 5px black"><?= $escaper->escapeHtml($content) ?></p>
-                <?php endif; ?>
-                <a class="btn btn-primary border border-primary flex" href="<?= $escaper->escapeUrl($link) ?>">
-                    <?= $escaper->escapeHtml($cta) ?>
-                    <svg class="w-4 h-4 inline-flex self-center ml-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                </a>
+<section class="hero-image text-gray-700 body-font -mt-8">
+    <div class="relative">
+        <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gray-100"></div>
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="relative shadow-xl sm:rounded-2xl sm:overflow-hidden">
+                <div class="absolute inset-0">
+                    <picture>
+                        <source class="h-full w-full object-cover"
+                             srcset="<?= (string) $image1X ?>"
+                             media="(max-width: 639px)"
+                        >
+                        <source class="h-full w-full object-cover"
+                             srcset="<?= (string) $image2X ?>"
+                             media="(min-width: 640px)"
+                        >
+                        <img class="h-full w-full object-cover"
+                             src="<?= (string) $image2X ?>"
+                             alt="Hyvä Hero Image"
+                             width="1024"
+                             height="576"
+                             loading="lazy"
+                        >
+                    </picture>
+                </div>
+                <div class="relative px-4 py-16 sm:px-6 sm:py-24 lg:py-32 lg:px-8">
+                    <h1 class="title-font text-4xl sm:text-5xl mb-2 font-medium text-white" style="text-shadow: 2px 2px 5px black"><?= $escaper->escapeHtml($title) ?></h1>
+                    <?php if ($content): ?>
+                        <p class="text-2xl sm:text-3xl mb-4 font-medium text-white" style="text-shadow: 2px 2px 5px black"><?= $escaper->escapeHtml($content) ?></p>
+                    <?php endif; ?>
+                    <a class="btn btn-primary inline-flex" href="<?= $escaper->escapeUrl($link) ?>">
+                        <?= $escaper->escapeHtml($cta) ?>
+                        <svg class="w-4 h-4 inline-flex self-center ml-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </a>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
 </section>
 

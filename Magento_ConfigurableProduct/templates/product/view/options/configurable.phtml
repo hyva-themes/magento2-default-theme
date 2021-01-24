@@ -16,7 +16,7 @@ $product    = $block->getProduct();
 $attributes = $block->decorateArray($block->getAllowAttributes());
 ?>
 <?php if ($product->isSaleable() && count($attributes)):?>
-    <script>
+    <script defer>
         function initConfigurableOptions() {
             return {
                 optionConfig: <?= /* @noEscape */ $block->getJsonConfig() ?>,
@@ -137,7 +137,7 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
     <?php foreach ($attributes as $attribute): ?>
         <div class="flex border-t last:border-b  border-gray-300 py-2 w-full items-center">
 
-            <label class="label text-gray-500 text-left w-1/2"
+            <label class="label text-gray-700 text-left w-1/2"
                    for="attribute<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>"
             >
                 <span>

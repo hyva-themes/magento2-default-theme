@@ -6,25 +6,32 @@
  * See https://hyva.io/license
  */
 
+use Magento\Framework\Escaper;
 use Magento\Newsletter\Block\Subscribe;
 
 /** @var Subscribe $block */
+/** @var Escaper $escaper */
 ?>
 <div class="lg:w-1/4 md:w-1/2 w-full px-4">
     <form class="form subscribe"
-          action="<?= $block->escapeUrl($block->getFormActionUrl()) ?>"
+          action="<?= $escaper->escapeUrl($block->getFormActionUrl()) ?>"
           method="post"
           id="newsletter-validate-detail">
-        <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3 uppercase">
-            <?= $block->escapeHtml(__('Newsletter')) ?>
-        </h2>
+        <div class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3 uppercase">
+            <?= $escaper->escapeHtml(__('Newsletter')) ?>
+        </div>
         <div class="flex xl:flex-no-wrap md:flex-no-wrap lg:flex-wrap flex-wrap justify-center md:justify-start">
-            <input name="email" type="email" required id="newsletter" class="input input-light"
-                   placeholder="<?= $block->escapeHtmlAttr(__('Enter your email address')) ?>" type="text"
+            <input name="email"
+                   type="email"
+                   aria-label="<?= $escaper->escapeHtml(__('Email Address')) ?>"
+                   required
+                   id="newsletter-subscribe"
+                   class="input input-light"
+                   placeholder="<?= $escaper->escapeHtmlAttr(__('Enter your email address')) ?>" type="text"
             />
             <?= $block->getBlockHtml('formkey') ?>
             <button class="lg:mt-2 xl:mt-0 flex-shrink-0 inline-flex btn btn-primary">
-                <?= $block->escapeHtmlAttr(__('Subscribe')) ?>
+                <?= $escaper->escapeHtmlAttr(__('Subscribe')) ?>
             </button>
         </div>
     </form>

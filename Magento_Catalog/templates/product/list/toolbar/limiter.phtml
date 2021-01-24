@@ -9,31 +9,36 @@
 declare(strict_types=1);
 
 use Magento\Catalog\Block\Product\ProductList\Toolbar;
+use Magento\Framework\Escaper;
 
 /** @var $block Toolbar */
+/** @var $escaper Escaper */
+
 ?>
 <div class="field limiter flex items-center order-3 sm:order-2 md:order-3 lg:order-2 col-span-2 justify-end">
-    <label class="text-sm mr-2 label" for="limiter">
-        <span><?= $block->escapeHtml(__('Show')) ?></span>
-    </label>
+    <span class="text-sm mr-2 label">
+        <?= $escaper->escapeHtml(__('Show')) ?>
+    </span>
     <div class="control">
-        <select id="limiter" data-role="limiter" class="form-select limiter-options"
+        <select data-role="limiter"
+                class="form-select limiter-options"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Show')) ?>"
                 @change="changeUrl(
                     'product_list_limit',
                     event.currentTarget.options[event.currentTarget.selectedIndex].value,
                     options.limitDefault
                 )">
             <?php foreach ($block->getAvailableLimit() as $_key => $_limit):?>
-                <option value="<?= $block->escapeHtmlAttr($_key) ?>"
+                <option value="<?= $escaper->escapeHtmlAttr($_key) ?>"
                     <?php if ($block->isLimitCurrent($_key)):?>
                         selected="selected"
                     <?php endif ?>>
-                    <?= $block->escapeHtml($_limit) ?>
+                    <?= $escaper->escapeHtml($_limit) ?>
                 </option>
             <?php endforeach; ?>
         </select>
     </div>
     <span class="limiter-text text-sm ml-2 sr-only">
-        <?= $block->escapeHtml(__('per page')) ?>
+        <?= $escaper->escapeHtml(__('per page')) ?>
     </span>
 </div>

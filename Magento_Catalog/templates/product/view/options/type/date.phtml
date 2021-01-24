@@ -21,7 +21,7 @@ use Magento\Framework\Escaper;
 <?php $optionId = $block->escapeHtmlAttr($option->getId()) ?>
 <?php $class = ($option->getIsRequire()) ? ' required' : ''; ?>
 <div class="flex border-t border-gray-300 py-2 last:mb-6 last:border-b w-full items-center">
-    <label class="label text-gray-500 text-left w-1/2"
+    <label class="label text-gray-700 text-left w-1/2"
            for="options_<?= $escaper->escapeHtmlAttr($option->getId()) ?>_text">
         <span><?= $escaper->escapeHtml($option->getTitle()) ?></span>
         <?php if ($option->getIsRequire()): ?>

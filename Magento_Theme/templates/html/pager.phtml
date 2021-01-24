@@ -38,10 +38,12 @@ use Magento\Theme\Block\Html\Pager;
 
     <div class="flex justify-center order-2 col-span-4 pages">
         <?php if ($block->getLastPageNum() > 1): ?>
-            <strong class="sr-only label pages-label" id="paging-label"><?= $escaper->escapeHtml(__('Page')) ?></strong>
-            <ul class="relative z-0 inline-flex shadow-sm items pages-items" aria-labelledby="paging-label">
+            <strong class="sr-only label pages-label"><?= $escaper->escapeHtml(__('Page')) ?></strong>
+            <ul class="relative z-0 inline-flex shadow-sm items pages-items"
+                aria-label="<?= $escaper->escapeHtml(__('Page')) ?>"
+            >
                 <?php if (!$block->isFirstPage()): ?>
-                    <li class="relative inline-flex items-center px-2 py-2 text-sm font-medium leading-5 text-gray-500
+                    <li class="relative inline-flex items-center px-3 py-2 text-sm font-medium leading-5 text-gray-500
                     transition duration-150 ease-in-out bg-white border border-gray-300 item pages-item-previous
                     rounded-l-md hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300
                     focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500">
@@ -136,7 +138,7 @@ use Magento\Theme\Block\Html\Pager;
                 <?php endif; ?>
 
                 <?php if (!$block->isLastPage()): ?>
-                    <li class="relative inline-flex items-center px-2 py-2 -ml-px text-sm font-medium
+                    <li class="relative inline-flex items-center px-3 py-2 -ml-px text-sm font-medium
                         leading-5 text-gray-500 transition duration-150 ease-in-out bg-white border border-gray-300
                         item pages-item-next rounded-r-md hover:text-gray-400 focus:z-10 focus:outline-none
                         focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500">

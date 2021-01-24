@@ -17,6 +17,31 @@ $storeConfig = $block->getData('viewModelStoreConfig');
 $siteKey = $storeConfig->getStoreConfig('recaptcha_frontend/type_recaptcha_v3/public_key');
 ?>
 <?php if ($siteKey): ?>
-    <script src="https://www.google.com/recaptcha/api.js?render=<?= $escaper->escapeJs($siteKey) ?>" defer
-            async></script>
+<script>
+    'use strict';
+
+    (function() {
+
+        const recaptchaUrl = "https://www.google.com/recaptcha/api.js?render=<?= $escaper->escapeJs($siteKey) ?>";
+
+        const loadRecaptchaScript = (event) => {
+            if (typeof window.grecaptcha !== 'undefined' || !event.target.form) {
+                return
+            }
+
+            let script = document.createElement('script');
+            script.setAttribute('type', 'text/javascript');
+            script.setAttribute('src', recaptchaUrl);
+            document.head.appendChild(script);
+
+            document.body.removeEventListener("click", loadRecaptchaScript);
+            document.body.removeEventListener("focus", loadRecaptchaScript);
+        }
+
+        document.body.addEventListener("click", loadRecaptchaScript);
+        document.body.addEventListener("focus", loadRecaptchaScript);
+
+    }());
+
+</script>
 <?php endif; ?>

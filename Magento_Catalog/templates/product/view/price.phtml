@@ -30,7 +30,7 @@ $productViewModel = $block->getProductViewModel();
 /** @var PriceHelper $priceHelper */
 $priceHelper = $this->helper(PriceHelper::class);
 ?>
-<script>
+<script defer>
     function initPrice<?= (int) $product->getId() ?>() {
         return {
             activeProductsPriceData: false,

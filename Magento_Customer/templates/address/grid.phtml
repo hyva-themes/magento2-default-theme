@@ -95,7 +95,7 @@ $customerAddressView = $block->getData('customer_address');
                 <input name="id" id="id" x-ref="inputId" value=""/>
                 <?= $block->getBlockHtml('formkey') ?>
             </form>
-            <script>
+            <script defer>
                 function initAddresses() {
                     return {
                         deleteAddressById: function (id) {
