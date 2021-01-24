@@ -13,8 +13,8 @@ module.exports = {
             teal: colors.teal,
             primary: {
                 lighter: colors.blue['300'],
-                default: colors.blue['500'],
-                darker: colors.blue['600'],
+                default: colors.blue['800'],
+                darker: colors.blue['900'],
             },
             secondary: {
                 lighter: colors.blue['100'],
@@ -43,8 +43,8 @@ module.exports = {
             },
             secondary: {
                 lighter: colors.gray['400'],
-                default: colors.gray['500'],
-                darker: colors.gray['600'],
+                default: colors.gray['600'],
+                darker: colors.gray['800'],
             },
         },
         backgroundColor: {
@@ -57,9 +57,9 @@ module.exports = {
             green: colors.green,
             gray: colors.gray,
             primary: {
-                lighter: colors.blue['300'],
-                default: colors.blue['500'],
-                darker: colors.blue['600'],
+                lighter: colors.blue['600'],
+                default: colors.blue['700'],
+                darker: colors.blue['800'],
             },
             secondary: {
                 lighter: colors.blue['100'],
@@ -81,9 +81,9 @@ module.exports = {
             green: colors.green,
             gray: colors.gray,
             primary: {
-                lighter: colors.blue['300'],
-                default: colors.blue['500'],
-                darker: colors.blue['600'],
+                lighter: colors.blue['600'],
+                default: colors.blue['700'],
+                darker: colors.blue['800'],
             },
             secondary: {
                 lighter: colors.blue['100'],

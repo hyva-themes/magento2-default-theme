@@ -14,7 +14,7 @@
 if ($block->isLoggedIn()):
     $dataPostParam = $block->getPostParams(); ?>
 
-<script>
+<script defer>
     function initAuthorizationLink() {
         return {
             'postParam': <?= /* @noEscape */ $dataPostParam ?>,

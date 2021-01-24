@@ -179,7 +179,7 @@ $ratingSteps = 5;
         <p><?= $escaper->escapeHtml(__('You have submitted no reviews.')) ?></p>
     </template>
 </div>
-<script>
+<script defer>
     <?= $block->getChildHtml('js_localstorage_config') ?>
 
     function initReviewList() {

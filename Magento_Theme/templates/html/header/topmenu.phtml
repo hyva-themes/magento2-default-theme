@@ -6,147 +6,204 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Navigation;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Escaper;
-use Hyva\Theme\ViewModel\NavigationAsJson;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
 
-/** @var NavigationAsJson $viewModelNavigationAsJson */
-
-$viewModelNavigationAsJson = $block->getData('viewModelNavigationAsJson');
-$menuJson = $viewModelNavigationAsJson->getNavigationAsJson();
-
+/** @var Navigation $viewModelNavigation */
+$viewModelNavigation = $viewModels->require(Navigation::class);
+$menuItems = $viewModelNavigation->getNavigation(4);
 ?>
-<div class="z-20 order-2 navigation bg-container-lighter lg:bg-transparent sm:order-1
-    md:order-1 lg:order-2 lg:relative lg:min-h-0 lg:px-8 lg:w-auto lg:pt-0"
-     x-on:resize.window.debounce.200="menu.checkIsSmallResolution()"
-     @toggle-mobile-menu.window="menu.open = !menu.open"
-     @keydown.window.escape="menu.open=false"
-     :class="{'block min-h-screen fixed top-0 left-0 px-8 pt-8 w-full' : menu.open}"
->
-    <div class="flex items-baseline justify-between menu-icon lg:hidden">
-        <div class="flex justify-end">
-            <label for="menu-toggle" @click="$dispatch('toggle-mobile-menu')"
-                   class="flex items-center justify-center w-12 h-12 p-3 cursor-pointer"
-                   :class="{ 'transition transform-180': menu.open }">
-                <svg class="w-8 h-8 fill-current" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                     viewBox="0 0 20 20">
-                    <path class="hidden"
-                          :class="{ 'hidden' : !menu.open, 'block': menu.open }"
-                          fill-rule="evenodd" clip-rule="evenodd"
-                          d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0
+<div class="z-20 order-2 sm:order-1 lg:order-2 navigation">
+    <!-- mobile -->
+    <div x-ref="nav-mobile"
+         @load.window="menu.setActiveMenu($refs['nav-mobile'])"
+         class="bg-container-lighter lg:hidden"
+         :class="{'min-h-screen fixed top-0 left-0 w-full' : menu.open}"
+         @toggle-mobile-menu.window="menu.open = !menu.open"
+         @keydown.window.escape="menu.open=false"
+    >
+        <div class="flex items-baseline justify-between menu-icon">
+            <div class="flex justify-end w-full">
+                <a @click="$dispatch('toggle-mobile-menu')"
+                       class="flex items-center justify-center cursor-pointer"
+                       :class="{ 'ml-auto': menu.open }">
+                    <svg class="hidden w-16 h-16 p-4 fill-current"
+                         :class="{ 'hidden' : !menu.open, 'block': menu.open }"
+                         xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                         viewBox="0 0 20 20">
+                        <path
+                              fill-rule="evenodd" clip-rule="evenodd"
+                              d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0
                           1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828
                           4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z">
-                    </path>
-                    <path class="block"
-                          :class="{ 'hidden' : menu.open, 'block': !menu.open }"
-                          d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z">
-                    </path>
-                </svg>
-            </label>
+                        </path>
+                    </svg>
+                    <svg class="block w-12 h-12 p-3 fill-current"
+                         :class="{ 'hidden' : menu.open, 'block': !menu.open }"
+                         xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                         viewBox="0 0 20 20">
+                        <path
+                              d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z">
+                        </path>
+                    </svg>
+                </a>
+            </div>
         </div>
-    </div>
-    <input class="hidden" type="checkbox" id="menu-toggle">
-    <nav
-        class="w-full duration-150 ease-in-out transform lg:flex lg:justify-start
-            lg:w-auto lg:relative lg:min-h-0 lg:-left-6 transition-display"
-        :class="{ 'hidden' : !menu.open }"
-    >
-        <template x-for="item in (menu.navigation)" :key="item.id">
-            <div class="lg:relative lg:mr-2 lg:hover:bg-container-lighter hover:lg:shadow-lg"
-                 x-on:mouseenter="menu.isSmallResolution ?
-                    menu.hoverPanelActiveId =  0 :
-                    menu.hoverPanelActiveId = item.id"
-                 x-on:mouseleave="menu.hoverPanelActiveId = 0">
+
+        <nav
+            class="hidden w-full duration-150 ease-in-out transform border-t transition-display border-container"
+            :class="{ 'hidden' : !menu.open }"
+        >
+        <?php foreach ($menuItems as $index => $menuItem): ?>
+            <div class="level-0">
                 <span
-                    class="flex items-center px-3 py-2 transition-transform duration-150 ease-in-out
-                    transform lg:py-3 lg:text-md lg:block lg:transform-none lg:bg-opacity-95"
+                    class="flex items-center transition-transform duration-150 ease-in-out transform"
                     :class="{
                         '-translate-x-full' : menu.mobilePanelActiveId,
-                        'translate-x-0' : !menu.mobilePanelActiveId }"
+                        'translate-x-0' : !menu.mobilePanelActiveId
+                    }"
                 >
-                    <a class="w-8/12 py-3 text-base text-gray-700 lg:w-full hover:underline" x-text="item.name"
-                       :class="{'underline' : item.is_active || item.has_active}"
-                       :href="item.url"
-                       :title="item.name"></a>
-                    <span class="w-4/12 text-right lg:hidden"
-                          :class="{
-                            'hidden' : !Object.keys(item.childData).length,
-                            'block' : Object.keys(item.childData).length
-                          }"
-                          @click="menu.mobilePanelActiveId = menu.mobilePanelActiveId === item.id ? 0 : item.id">
+                    <a class="flex items-center w-full px-8 py-4 border-b cursor-pointer
+                        bg-container-lighter border-container hover:bg-container-darker hover:underline level-0"
+                       href="<?= (string) $menuItem['url'] ?>"
+                       title="<?= (string) $menuItem['name'] ?>">
+                        <?= (string) $menuItem['name'] ?>
+                    </a>
+                    <?php if (!empty($menuItem['childData'])): ?>
+                    <a class="absolute right-0 flex w-8 h-8 mr-8 border rounded cursor-pointer
+                        bg-container-lighter border-container hover:bg-container hover:border-container"
+                          @click="menu.mobilePanelActiveId =
+                          menu.mobilePanelActiveId === '<?= (string) $index ?>' ?
+                           0 : '<?= (string) $index ?>'"
+                    >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24" width="24"
-                             stroke="currentColor">
+                             stroke="currentColor"
+                             class="w-full h-full p-1"
+                        >
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                         </svg>
-                    </span>
+                    </a>
+                    <?php endif; ?>
                 </span>
-                <template x-if="Object.values(item.childData).length">
+                <?php if (!empty($menuItem['childData'])): ?>
                     <div
                         class="absolute top-0 right-0 z-10 w-full h-full transition-transform duration-200 ease-in-out
-                            transform lg:h-auto lg:top-auto lg:right-auto lg:left-0 lg:shadow-lg lg:-ml-6 lg:px-6
-                            lg:py-4 lg:transform-none lg:w-auto bg-container-lighter lg:bg-opacity-95"
+                            translate-x-full transform bg-container-lighter"
                         :class="{
-                            'translate-x-full' : menu.mobilePanelActiveId !== item.id && menu.isSmallResolution,
-                            'translate-x-0' : menu.mobilePanelActiveId === item.id && menu.isSmallResolution,
-                            'lg:hidden' : menu.hoverPanelActiveId !== item.id,
-                            'lg:block' : menu.overPanelActiveId === item.id
+                            'translate-x-full' : menu.mobilePanelActiveId !== '<?= (string) $index ?>',
+                            'translate-x-0' : menu.mobilePanelActiveId === '<?= (string) $index ?>',
                         }"
                     >
-                        <span class="flex items-center px-8 py-2 my-1 lg:hidden"
-                              @click="menu.mobilePanelActiveId = 0">
+                        <a class="flex items-center px-8 py-4 border-b cursor-pointer bg-container border-container"
+                              @click="menu.mobilePanelActiveId = 0"
+                        >
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24"
                                  width="24"
                                  stroke="currentColor">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M15 19l-7-7 7-7"/>
                             </svg>
-                            <span class="ml-4" x-text="item.name"></span>
-                        </span>
-                        <a :href="item.url" :title="item.name"
-                           class="flex px-8 py-1 my-1 lg:hidden first:mt-0"
-                           :class="{'underline' : item.is_active }">
-                            <svg class="lg:hidden" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            <span class="ml-4">
+                                <?= (string) $menuItem['name'] ?>
+                            </span>
+                        </a>
+                        <a href="<?= (string) $menuItem['url'] ?>" title="<?= (string) $menuItem['name'] ?>"
+                           class="flex items-center w-full px-8 py-4 border-b cursor-pointer
+                            bg-container-lighter border-container hover:bg-container-darker hover:underline"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                  viewBox="0 0 24 24" height="24"
                                  width="24"></svg>
-                            <span class="ml-4 lg:ml-0"><?= $escaper->escapeHtml(__('View All')) ?></span></a>
-                        <template x-for="child in Object.values(item.childData)" :key="child.id">
-                            <a :href="child.url" :title="child.name"
-                               class="flex w-full px-8 py-1 my-1 lg:block lg:px-3 first:mt-0
-                                lg:hover:underline lg:whitespace-no-wrap"
-                               :class="{'underline' : child.is_active || child.has_active}">
-                                <svg class="lg:hidden" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            <span class="ml-4"><?= $escaper->escapeHtml(__('View All')) ?></span></a>
+                        <?php foreach ($menuItem['childData'] as $subMenuItem): ?>
+
+                            <a href="<?= (string) $subMenuItem['url'] ?>"
+                               title="<?= (string) $subMenuItem['name'] ?>"
+                               class="flex items-center w-full px-8 py-4 border-b cursor-pointer
+                                bg-container-lighter border-container hover:bg-container-darker hover:underline"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                      viewBox="0 0 24 24" height="24"
                                      width="24"></svg>
-                                <span class="ml-4 text-base text-gray-700 lg:ml-0" x-text="child.name"></span></a>
-                        </template>
+                                <span class="ml-4 text-base text-gray-700 lg:ml-0">
+                                    <?= (string) $subMenuItem['name'] ?>
+                                </span>
+                            </a>
+                        <?php endforeach; ?>
                     </div>
-                </template>
+                <?php endif; ?>
             </div>
-        </template>
-    </nav>
+        <?php endforeach; ?>
+        </nav>
+    </div>
+
+    <!-- desktop -->
+    <div x-ref="nav-desktop"
+         @load.window="menu.setActiveMenu($refs['nav-desktop'])"
+         class="hidden lg:block lg:relative lg:min-h-0 lg:px-8 lg:w-auto lg:pt-0">
+        <nav
+            class="w-full duration-150 ease-in-out transform flex justify-start
+            w-auto relative min-h-0 -left-6 transition-display"
+        >
+            <?php foreach ($menuItems as $index => $menuItem): ?>
+                <div class="relative mr-2 level-0"
+                     @mouseenter="menu.hoverPanelActiveId = '<?= (string) $index ?>'"
+                     @mouseleave="menu.hoverPanelActiveId = 0"
+                >
+                    <span class="flex items-center block p-3 text-md bg-opacity-95">
+                        <a class="w-full py-3 text-base text-gray-700 hover:underline level-0"
+                           href="<?= (string) $menuItem['url'] ?>"
+                           title="<?= (string) $menuItem['name'] ?>"
+                        >
+                            <?= (string) $menuItem['name'] ?>
+                        </a>
+                </span>
+                    <?php if (!empty($menuItem['childData'])): ?>
+                        <div
+                            class="absolute z-10 hidden px-6 py-4 -ml-6 shadow-lg bg-container-lighter bg-opacity-95"
+                            :class="{ 'hidden' : menu.hoverPanelActiveId !== '<?= (string) $index ?>',
+                                'block' : menu.hoverPanelActiveId === '<?= (string) $index ?>'}">
+                            <?php foreach ($menuItem['childData'] as $subMenuItem): ?>
+                                <a href="<?= (string) $subMenuItem['url'] ?>"
+                                   title="<?= (string) $subMenuItem['name'] ?>"
+                                   class="block w-full px-3 py-1 my-1 whitespace-no-wrap first:mt-0 hover:underline"
+                                >
+                                    <span class="text-base text-gray-700">
+                                        <?= (string) $subMenuItem['name'] ?>
+                                    </span>
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
+        </nav>
+    </div>
+
 </div>
 <script>
-    function initHeaderNavigation($this) {
-        var checkIsSmallResolution = function () {
-            var menuIcon = document.querySelector('.menu-icon');
-            return !(
-                window.getComputedStyle(menuIcon).display === 'none' ||
-                window.getComputedStyle(menuIcon).visibility === 'hidden'
-            );
-        };
+    'use strict';
+
+    const initHeaderNavigation = () => {
         return {
-            navigation: Object.values(<?= /** @noEscape */ $menuJson ?>),
-            isSmallResolution: checkIsSmallResolution(),
-            checkIsSmallResolution: function () {
-                this.isSmallResolution = checkIsSmallResolution();
-            },
             mobilePanelActiveId: null,
             hoverPanelActiveId: null,
-            open: false
+            open: false,
+            setActiveMenu(menuNode) {
+                Array.from(menuNode.querySelectorAll('a')).filter(link => {
+                    return link.href === window.location.href.split('?')[0];
+                }).map(item => {
+                    item.classList.add('underline');
+                    item.closest('div.level-0') &&
+                    item.closest('div.level-0').querySelector('a.level-0').classList.add('underline');
+                });
+            }
         }
     }
 </script>
-

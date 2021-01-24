@@ -9,35 +9,35 @@
 declare(strict_types=1);
 
 use Magento\Catalog\Block\Product\ProductList\Toolbar;
+use Magento\Framework\Escaper;
 
 /**  @var $block Toolbar */
+/**  @var $escaper Escaper */
 ?>
 <?php if ($block->isEnabledViewSwitcher()): ?>
     <div class="modes flex space-x-1 mr-2 items-center px-2 py-2 rounded-md border
     border-gray-300 bg-white text-sm leading-5 w-20 order-1 col-span-1 sm:col-span-2 md:col-span-1 lg:col-span-2">
         <?php $_modes = $block->getModes(); ?>
         <?php if ($_modes && count($_modes) > 1): ?>
-            <strong class="modes-label sr-only" id="modes-label"><?= $block->escapeHtml(__('View as')) ?></strong>
-            <?php foreach ($block->getModes() as $_code => $_label) :?>
+            <strong class="modes-label sr-only"><?= $escaper->escapeHtml(__('View as')) ?></strong>
+            <?php foreach ($block->getModes() as $_code => $_label): ?>
                 <?php if ($block->isModeActive($_code)): ?>
-                    <strong title="<?= $block->escapeHtmlAttr($_label) ?>"
-                            class="modes-mode active mode-<?= $block->escapeHtmlAttr(strtolower($_code)) ?>"
-                            data-value="<?= $block->escapeHtmlAttr(strtolower($_code)) ?>">
-                        <span><?= $block->escapeHtml($_label) ?></span>
+                    <strong title="<?= $escaper->escapeHtmlAttr($_label) ?>"
+                            class="modes-mode active mode-<?= $escaper->escapeHtmlAttr(strtolower($_code)) ?>"
+                            data-value="<?= $escaper->escapeHtmlAttr(strtolower($_code)) ?>">
+                        <span><?= $escaper->escapeHtml($_label) ?></span>
                     </strong>
                 <?php else:?>
-                    <a class="modes-mode mode-<?= $block->escapeHtmlAttr(strtolower($_code)) ?>
+                    <a class="modes-mode mode-<?= $escaper->escapeHtmlAttr(strtolower($_code)) ?>
                         opacity-25 hover:opacity-100"
-                       title="<?= $block->escapeHtmlAttr($_label) ?>"
+                       title="<?= $escaper->escapeHtmlAttr($_label) ?>"
                        href="#"
                        @click.prevent="changeUrl(
-                        'product_list_mode', '<?= $block->escapeHtmlAttr(strtolower($_code)) ?>', options.modeDefault
+                        'product_list_mode', '<?= $escaper->escapeHtmlAttr(strtolower($_code)) ?>', options.modeDefault
                        )"
                        data-role="mode-switcher"
-                       data-value="<?= $block->escapeHtmlAttr(strtolower($_code)) ?>"
-                       id="mode-<?= $block->escapeHtmlAttr(strtolower($_code)) ?>"
-                       aria-labelledby="modes-label mode-<?= $block->escapeHtmlAttr(strtolower($_code)) ?>">
-                        <span><?= $block->escapeHtml($_label) ?></span>
+                       aria-label="<?= $escaper->escapeHtmlAttr(__('View as')) ?>">
+                        <span><?= $escaper->escapeHtml($_label) ?></span>
                     </a>
                 <?php endif; ?>
             <?php endforeach; ?>

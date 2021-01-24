@@ -28,9 +28,11 @@ grumphp:
       multiline: true
       additional_modifiers: ''
     phpcs:
-      standard: "vendor/magento/magento-coding-standard/Magento2"
-      severity: 5
+      standard: "Magento2"
       tab_width: 4
       triggered_by:
         - php
         - phtml
+      exclude:
+        - Generic.Files.LineLength
+

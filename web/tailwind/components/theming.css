@@ -29,7 +29,7 @@ body {
 }
 
 .btn {
-    @apply flex bg-gray-500 rounded-lg px-4 py-2 text-white font-semibold leading-tight shadow-md items-center;
+    @apply flex bg-gray-500 rounded-lg px-4 py-1 text-white text-base font-medium shadow-md items-center;
 
     @screen md {
         @apply px-6 text-lg
@@ -50,10 +50,10 @@ body {
     }
 
     &-primary {
-        @apply bg-primary border border-primary-darker text-white shadow-md;
+        @apply bg-primary border-2 border-primary-darker text-white shadow-md;
 
         &:hover {
-            @apply bg-primary-darker border border-primary-darker text-white shadow-lg;
+            @apply bg-primary-lighter border-primary text-white shadow-lg;
         }
     }
 

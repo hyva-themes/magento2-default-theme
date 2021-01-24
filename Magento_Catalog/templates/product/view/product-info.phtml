@@ -25,8 +25,8 @@ $attributesViewModel = $block->getAttributesViewModel();
 $product = $productViewModel->getProduct();
 
 ?>
-<div class="lg:w-1/2 w-full lg:pl-10 lg:py-6 mb-6 lg:mb-0 order-2">
-    <h1 class="text-gray-900 text-3xl title-font font-medium mb-3">
+<div class="order-2 w-full mb-6 md:w-7/12 md:pl-5 lg:pl-10 md:py-6 lg:w-1/2 md:mb-0">
+    <h1 class="mb-3 text-3xl font-medium text-gray-900 title-font">
         <?= $escaper->escapeHtml($product->getName()) ?>
     </h1>
 
@@ -36,7 +36,7 @@ $product = $productViewModel->getProduct();
     </div>
 
     <?php if ($shortDescription = $productViewModel->getShortDescription()) { ?>
-        <div class="product-description leading-relaxed mb-4 prose"><?= /* @noEscape */
+        <div class="mb-4 leading-relaxed product-description prose"><?= /* @noEscape */
             $shortDescription ?></div>
     <?php } ?>
 
@@ -49,10 +49,10 @@ $product = $productViewModel->getProduct();
             <?php if ($value = $attribute['value'] ?? null) { ?>
                 <div
                     class="flex border-t border-gray-300 py-2 last:mb-6 last:border-b <?= $attribute['value'] ?: "" ?>">
-                    <span class="text-gray-500 text-left w-1/2">
+                    <span class="w-1/2 text-left text-gray-700">
                         <?= $escaper->escapeHtml($attribute['label']) ?>
                     </span>
-                    <span class="ml-2 text-gray-900 text-left w-1/2">
+                    <span class="w-1/2 ml-2 text-left text-gray-900">
                         <?= $escaper->escapeHtml($value) ?>
                     </span>
                 </div>
@@ -62,11 +62,11 @@ $product = $productViewModel->getProduct();
 
     <?= $block->getBlockHtml('product.info.form') ?>
 
-    <div class="flex sticky items-end flex-col sm:flex-row" style="top:6em;">
+    <div class="flex flex-col items-end sm:flex-row">
 
         <?= $block->getChildHtml("product.info.price") ?>
 
-        <div class="flex ml-auto mt-4 sm:mt-0">
+        <div class="flex mt-4 ml-auto sm:mt-0">
         <?php if ($product->isSaleable()): ?>
             <?= $block->getChildHtml("product.info.quantity") ?>
             <button type="submit"
@@ -74,20 +74,20 @@ $product = $productViewModel->getProduct();
                     title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>"
                     class="btn btn-primary"
             >
-                <svg class="h-6 w-6 border-current" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="w-6 h-6 border-current" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707
                           1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
                     />
                 </svg>
-                <span><?= $block->getData('submit_route_data') ?
+                <span class="hidden sm:block md:hidden lg:block"><?= $block->getData('submit_route_data') ?
                         $escaper->escapeHtml(__('Update item')) :
                         $escaper->escapeHtml(__('Add to Cart')) ?>
                 </span>
             </button>
 
         <?php endif; ?>
-        <script>
+        <script defer>
             function initWishlist() {
                 return {
                     addToWishlist: function addToWishlist(productId) {
@@ -147,6 +147,7 @@ $product = $productViewModel->getProduct();
         </script>
         <button x-data="initWishlist()"
                 @click.prevent="addToWishlist(<?= (int)$product->getId() ?>)"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Wish List')) ?>"
                 class="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex
                     items-center justify-center text-gray-500 hover:text-red-600 ml-4">
             <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5"

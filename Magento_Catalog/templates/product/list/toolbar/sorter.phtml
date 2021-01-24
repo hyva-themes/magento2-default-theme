@@ -9,34 +9,38 @@
 declare(strict_types=1);
 
 use Magento\Catalog\Block\Product\ProductList\Toolbar;
+use Magento\Framework\Escaper;
 
 /**  @var $block Toolbar */
+/**  @var $escaper Escaper */
 ?>
 <div class="toolbar-sorter sorter flex items-center order-1 col-span-3 sm:col-span-6
         md:col-span-3 lg:col-span-6 justify-end">
-    <label class="sr-only sorter-label" for="sorter"><?= $block->escapeHtml(__('Sort By')) ?></label>
-    <select id="sorter" data-role="sorter" class="form-select sorter-options mr-2"
+    <span class="sr-only sorter-label">
+        <?= $escaper->escapeHtml(__('Sort By')) ?>
+    </span>
+    <select data-role="sorter"
+            class="form-select sorter-options mr-3"
+            aria-label="<?= $escaper->escapeHtml(__('Sort By')) ?>"
             @change="changeUrl(
                 'product_list_order',
                 event.currentTarget.options[event.currentTarget.selectedIndex].value,
                 options.orderDefault
             )">
         <?php foreach ($block->getAvailableOrders() as $_key => $_order):?>
-            <option value="<?= $block->escapeHtmlAttr($_key) ?>"
+            <option value="<?= $escaper->escapeHtmlAttr($_key) ?>"
                 <?php if ($block->isOrderCurrent($_key)):?>
                     selected="selected"
                 <?php endif; ?>
                 >
-                <?= $block->escapeHtml(__($_order)) ?>
+                <?= $escaper->escapeHtml(__($_order)) ?>
             </option>
         <?php endforeach; ?>
     </select>
     <?php if ($block->getCurrentDirection() == 'desc'):?>
-        <a title="<?= $block->escapeHtmlAttr(__('Set Ascending Direction')) ?>"
+        <a title="<?= $escaper->escapeHtmlAttr(__('Set Ascending Direction')) ?>"
            href="#"
            class="action sorter-action sort-desc"
-           data-role="direction-switcher"
-           data-value="asc"
            @click.prevent="changeUrl('product_list_dir', 'asc', options.directionDefault)"
         >
             <span>
@@ -49,10 +53,9 @@ use Magento\Catalog\Block\Product\ProductList\Toolbar;
             </span>
         </a>
     <?php else:?>
-        <a title="<?= $block->escapeHtmlAttr(__('Set Descending Direction')) ?>"
+        <a title="<?= $escaper->escapeHtmlAttr(__('Set Descending Direction')) ?>"
            href="#"
            class="action sorter-action sort-asc"
-           data-role="direction-switcher"
            @click.prevent="changeUrl('product_list_dir', 'desc', options.directionDefault)"
         >
             <span>

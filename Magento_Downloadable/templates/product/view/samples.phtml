@@ -14,17 +14,34 @@ declare(strict_types=1);
  */
 ?>
 
-<?php if ($block->hasSamples()) : ?>
-    <dl class="items samples">
-        <dt class="item-title samples-item-title"><?= $block->escapeHtml($block->getSamplesTitle()) ?></dt>
+<?php if ($block->hasSamples()): ?>
+    <div class="items samples">
+        <h2 class="text-gray-900 text-xl title-font font-medium mb-4">
+            <?= $block->escapeHtml($block->getSamplesTitle()) ?>
+        </h2>
         <?php $_samples = $block->getSamples() ?>
-        <?php foreach ($_samples as $_sample) : ?>
-            <dd class="item samples-item">
-                <a href="<?= $block->escapeHtml($block->getSampleUrl($_sample)) ?>" <?= $block->getIsOpenInNewWindow() ? 'onclick="this.target=\'_blank\'"' : '' ?>
+        <div class="flex flex-col border-t border-gray-300 py-2 last:mb-6 last:border-b">
+        <?php foreach ($_samples as $_sample): ?>
+            <div class="block w-full text-left text-gray-700 mb-2">
+                <a href="<?= $block->escapeHtml($block->getSampleUrl($_sample)) ?>"
+                   download
+                   <?= $block->getIsOpenInNewWindow() ? 'onclick="this.target=\'_blank\'"' : '' ?>
                    class="item-link samples-item-link">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="w-6 h-6 mr-2 inline-flex"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke="currentColor"
+                    >
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0
+                                012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
                     <?= $block->escapeHtml($_sample->getTitle()) ?>
                 </a>
-            </dd>
+            </div>
         <?php endforeach; ?>
-    </dl>
+        </div>
+    </div>
 <?php endif; ?>

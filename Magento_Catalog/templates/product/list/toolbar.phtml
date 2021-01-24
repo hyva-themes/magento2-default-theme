@@ -19,7 +19,7 @@ use Magento\Framework\Escaper;
 
 $uniqueId = '_' . uniqid();
 ?>
-<script>
+<script defer>
     function initToolbar<?= /** @noEscape */  $uniqueId ?>() {
         return {
             options: <?= /* @noEscape */ $block->getWidgetOptionsJson() ?>.productListToolbarForm || {},
