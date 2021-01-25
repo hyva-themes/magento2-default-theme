@@ -10,6 +10,6 @@ declare(strict_types=1);
 
 use Magento\Catalog\Block\Product\ReviewRendererInterface;
 
-/** @var $block \Magento\Catalog\Block\Product\AbstractProduct */
+/** @var \Magento\Catalog\Block\Product\AbstractProduct $block */
 ?>
 <?= $block->getReviewsSummaryHtml($block->getProduct(), ReviewRendererInterface::SHORT_VIEW, true) ?>

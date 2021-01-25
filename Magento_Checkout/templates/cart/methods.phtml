@@ -8,7 +8,7 @@
 
 ?>
 <?php
-/** @var $block \Magento\Checkout\Block\Cart */
+/** @var \Magento\Checkout\Block\Cart $block */
 ?>
 <?php $methods = $block->getMethods('methods') ?: $block->getMethods('top_methods') ?>
 <template x-if="cartData && cartData.available_payment_methods && cartData.available_payment_methods.length">

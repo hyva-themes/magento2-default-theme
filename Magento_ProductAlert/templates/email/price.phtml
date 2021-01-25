@@ -10,8 +10,8 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\Escaper;
 use Magento\ProductAlert\Block\Email\Price;
 
-/** @var $escaper Escaper */
-/** @var $block Price */
+/** @var Escaper $escaper */
+/** @var Price $block */
 ?>
 <?php if ($products = $block->getProducts()): ?>
     <p><?= $escaper

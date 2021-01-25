@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 use Magento\Checkout\Block\Onepage\Success;
 
-/** @var $block Success */
+/** @var Success $block */
 ?>
 <?php if ($block->getCanViewOrder() && $block->getCanPrintOrder()):?>
     <a href="<?= $block->escapeUrl($block->getPrintUrl()) ?>"

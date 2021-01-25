@@ -10,8 +10,8 @@ declare(strict_types=1);
 use Magento\Framework\Escaper;
 use Hyva\Theme\ViewModel\StoreConfig;
 
-/** @var $escaper Escaper */
-/** @var $storeConfig StoreConfig */
+/** @var Escaper $escaper */
+/** @var StoreConfig $storeConfig */
 
 $storeConfig = $block->getData('viewModelStoreConfig');
 $siteKey = $storeConfig->getStoreConfig('recaptcha_frontend/type_recaptcha_v3/public_key');

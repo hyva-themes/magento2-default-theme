@@ -10,11 +10,11 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\Escaper;
 use Hyva\Theme\ViewModel\Cart\GraphQlQueries;
 
-/** @var $block Template */
-/** @var $escaper Escaper */
-/** @var $viewModelCart GraphQlQueries */
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var GraphQlQueries $viewModelCart */
 $viewModelCart = $block->getData('viewModelCart');
-/** @var $viewModelStore \Hyva\Theme\ViewModel\Store */
+/** @var \Hyva\Theme\ViewModel\Store $viewModelStore */
 $viewModelStore = $block->getData('viewModelStore');
 ?>
 <script defer>

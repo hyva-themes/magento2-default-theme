@@ -16,8 +16,8 @@ use Hyva\Theme\ViewModel\ProductPage;
 // phpcs:disable Magento2.Templates.ThisInTemplate
 // phpcs:disable Generic.Files.LineLength.TooLong
 
-/** @var $block AbstractProduct */
-/** @var $escaper Escaper */
+/** @var AbstractProduct $block */
+/** @var Escaper $escaper */
 
 /** @var ProductPage $productViewModel */
 $productViewModel = $block->getData('product_view_model');
@@ -25,7 +25,7 @@ $productViewModel = $block->getData('product_view_model');
 /** @var CatalogOutputHelper $catalogOutputHelper */
 $catalogOutputHelper = $this->helper(CatalogOutputHelper::class);
 
-/** @var $product Magento\Catalog\Model\Product */
+/** @var Magento\Catalog\Model\Product $product */
 $product = $block->getData('product');
 $imageDisplayArea = $block->getData('image_display_area');
 $templateType = $block->getData('template_type');

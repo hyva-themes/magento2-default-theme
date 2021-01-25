@@ -9,8 +9,8 @@
 use Magento\Checkout\Block\Onepage\Link;
 use Magento\Framework\Escaper;
 
-/** @var $escaper Escaper */
-/** @var $block Link */
+/** @var Escaper $escaper */
+/** @var Link $block */
 ?>
 <?php if ($block->isPossibleOnepageCheckout()): ?>
     <a @click.prevent.stop="$dispatch('toggle-authentication',

@@ -10,9 +10,9 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\Escaper;
 use Hyva\Theme\ViewModel\Cart\TotalsOutput;
 
-/** @var $block Template */
-/** @var $escaper Escaper */
-/** @var $viewModelTotalsOutput TotalsOutput */
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var TotalsOutput $viewModelTotalsOutput */
 
 $viewModelTotalsOutput = $block->getData('viewModelTotalsOutput');
 $subtotalField = $viewModelTotalsOutput->getSubtotalField();

@@ -12,10 +12,10 @@ use Hyva\Theme\ViewModel\Store;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
-/** @var $viewModelStore Store */
+/** @var Store $viewModelStore */
 $viewModelStore = $block->getData('viewModelStore');
 
-/** @var $escaper Escaper */
+/** @var Escaper $escaper */
 /** @var Template $block */
 $uniqueId = '_' . uniqid();
 $query = $block->getGraphqlQuery();
