@@ -1,0 +1,77 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var \Magento\Paypal\Block\Express\Shortcut $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+?>
+<?php
+$labelPosition = '';
+if ($block->isOrPositionBefore()) {
+    $labelPosition = ' before';
+} elseif ($block->isOrPositionAfter()) {
+    $labelPosition = ' after';
+}
+$shortcutHtmlId = $escaper->escapeHtml($block->getShortcutHtmlId());
+$isInCatalogProduct = false;
+if ($block->getIsInCatalogProduct()) {
+    $isInCatalogProduct = $block->getIsInCatalogProduct();
+}
+?>
+<div class="paypal checkout <?= /* @noEscape */ $labelPosition ?> paypal-logo <?= /* @noEscape */ $shortcutHtmlId ?>"
+>
+    <input type="image"
+           x-data="initPayPalExpress()"
+           @click.prevent="submitForm()"
+           src="<?= $escaper->escapeUrl($block->getImageUrl()) ?>"
+           alt="<?= $escaper->escapeHtml(__('Checkout with PayPal')) ?>"
+           title="<?= $escaper->escapeHtml(__('Checkout with PayPal')) ?>"/>
+    <?php if ($block->getAdditionalLinkImage()) : ?>
+        <?php $linkImage = $block->getAdditionalLinkImage(); ?>
+        <a href="<?= $escaper->escapeUrl($linkImage['href']) ?>">
+            <img loading="lazy" src="<?= $escaper->escapeHtml($linkImage['src']) ?>" />
+        </a>
+    <?php endif; ?>
+</div>
+
+<script>
+    function initPayPalExpress() {
+        return {
+            isInCatalogProduct: <?= $isInCatalogProduct ? 'true' : 'false' ?>,
+            returnUrlId: 'return_url',
+            submitForm: function submitForm() {
+                if(this.isInCatalogProduct) {
+                    this.submitFromCatalog();
+                }
+                if(!this.isInCatalogProduct){
+                    this.submitFromCart();
+                }
+            },
+            submitFromCatalog: function submitForm() {
+                const formParentId = 'product_addtocart_form';
+                const returnUrlValue = "<?= $escaper->escapeUrl($block->getCheckoutUrl()) ?>";
+                if(!document.getElementById(this.returnUrlId)){
+                    var elReturnUrl = document.createElement('input');
+                    elReturnUrl.setAttribute('type', 'hidden');
+                    elReturnUrl.setAttribute('name', 'return_url');
+                    elReturnUrl.setAttribute('value', returnUrlValue);
+                    elReturnUrl.setAttribute('id', this.returnUrlId);
+
+                    document.getElementById(formParentId).appendChild(elReturnUrl);
+                }
+                else {
+                    document.getElementById(this.returnUrlId).value = returnUrlValue;
+                }
+                document.getElementById(formParentId).submit();
+            },
+            submitFromCart: function submitForm() {
+                const returnUrlValue = "<?= $escaper->escapeUrl($block->getCheckoutUrl()) ?>";
+                window.location = returnUrlValue;
+            }
+        }
+    }
+</script>

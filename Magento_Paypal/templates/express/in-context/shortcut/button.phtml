@@ -1,0 +1,188 @@
+<?php
+
+use Magento\Framework\Escaper;
+use Magento\Framework\Json\Helper\Data;
+use Magento\Paypal\Block\Express\InContext\Minicart\SmartButton;
+
+/** @var SmartButton $block */
+/** @var Escaper $escaper */
+
+/** @var Data $widget */
+$widget = $this->helper(Data::class)->jsonDecode($block->getJsInitParams());
+$widgetConfig = $this->helper(Data::class)->jsonEncode($widget['Magento_Paypal/js/in-context/button']);
+$uniqueId = '_' . uniqid();
+?>
+<div x-data="initPayPalInContextButton<?= $escaper->escapeHtml($uniqueId) ?>()"
+     x-init="refs = $refs"
+     x-ref="buttonContainer-<?= $escaper->escapeHtml($uniqueId) ?>"
+     @private-content-loaded.window="getSectionData(event.detail.data);"
+     class="paypal checkout paypal-logo <?= $block->escapeHtml($block->getContainerId()) ?>-container">
+</div>
+
+<script>
+    function initPayPalInContextButton<?= $escaper->escapeHtml($uniqueId) ?>() {
+        return {
+            refs: false,
+            clientConfig: <?= /** @noEscape */ $widgetConfig ?>.clientConfig || {},
+            customerSection: {},
+            cartSection: false,
+            actions: {},
+            getSectionData(sectionData){
+                if (sectionData.customer){
+                    this.customerSection = sectionData.customer;
+                }
+                if (sectionData.cart){
+                    this.cartSection = sectionData.cart;
+                }
+                if (this.cartSection.items && this.cartSection.items.length) {
+                    // todo: check if allowed by verifying logged in and isGuestCheckoutAllowed = true
+                    this.initializeButtons();
+                }
+            },
+            initializeButtons() {
+                const element = this.refs['buttonContainer-<?= $escaper->escapeHtml($uniqueId) ?>'];
+                const clientConfig = this.clientConfig;
+
+                const loadPayPalScriptPromise = this.createScriptLoadPromise(clientConfig.sdkUrl);
+
+                Promise.all(loadPayPalScriptPromise).then(() => {
+                    const paypal = window.paypal;
+                    const getCookie = this.getCookie;
+
+                    paypal && paypal.Buttons({
+                        style: clientConfig.styles,
+
+                        /**
+                         * onInit is called when the button first renders
+                         * @param {Object} data
+                         * @param {Object} actions
+                         */
+                        onInit: function (data, actions) {
+
+                            this.actions = actions || this.actions;
+                        },
+
+                        /**
+                         * Triggers beforePayment action on PayPal buttons
+                         * @returns {Object} jQuery promise
+                         */
+                        createOrder: function () {
+                            var params = "quote_id="+clientConfig.quoteId +
+                                "&customer_id=" + ( clientConfig.customerId ?
+                                    clientConfig.customerId :
+                                    ''
+                                ) +
+                                "&form_key=" + (getCookie('form_key') || '') +
+                                "&button=" + clientConfig.button;
+
+                            return window.fetch(clientConfig.getTokenUrl, {
+                                "headers": {
+                                    "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                                },
+                                "body": params,
+                                "method": "POST",
+                                "mode": "cors",
+                                "credentials": "include"
+                            })
+                                .then(result => result.json())
+                                .then(data => data.token)
+                                .catch((error)=>console.log(error));
+
+                        },
+
+                        /**
+                         * Triggers beforeOnAuthorize action on PayPal buttons
+                         * @param {Object} data
+                         * @param {Object} actions
+                         */
+                        onApprove: function (data, actions) {
+                            var params = "paymentToken=" + (data.orderID || '') +
+                                "&payerId=" + (data.payerID || '') +
+                                "&quoteId=" + (clientConfig.quoteId || '') +
+                                "&customerId=" + (clientConfig.customerId || '') +
+                                "&form_key=" + (getCookie('form_key') || '');
+
+                            return window.fetch(clientConfig.onAuthorizeUrl, {
+                                "headers": {
+                                    "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                                },
+                                "body": params,
+                                "method": "POST",
+                                "mode": "cors",
+                                "credentials": "include"
+                            })
+                                .then(data => {
+                                    return data.json()
+                                }).then(response => {
+                                    if (response.success) {
+                                        return actions.redirect(response.redirectUrl);
+                                    }
+
+                                    throw new Error(response['error_message']);
+                                })
+                                .catch((error)=>console.log(error)).finally(()=>{
+                                    var reloadCustomerDataEvent = new CustomEvent("reload-customer-section-data");
+                                    window.dispatchEvent(reloadCustomerDataEvent);
+                                });
+                        },
+
+                        /**
+                         * Execute logic on Paypal button click
+                         */
+                        onClick: function () {
+
+                            paypal.actions = this.actions;
+                            //clientConfig.rendererComponent.validate();
+                            //clientConfig.rendererComponent.onClick();
+                        },
+
+                        /**
+                         * Process cancel action
+                         * @param {Object} data
+                         * @param {Object} actions
+                         */
+                        onCancel: function (data, actions) {
+                            //clientConfig.rendererComponent.onCancel(data, actions);
+
+                        },
+
+                        /**
+                         * Process errors
+                         *
+                         * @param {Error} err
+                         */
+                        onError: function (err) {
+                            //clientConfig.rendererComponent.onError(err);
+
+                        }
+                    }).render(element);
+                });
+            },
+            createScriptLoadPromise(url) {
+                var promises = [];
+
+                promises.push(new Promise(function(resolve, reject) {
+                    var script = document.createElement('script');
+                    script.src = url;
+
+                    script.addEventListener('load', function() {
+                        resolve(script);
+                    }, false);
+
+                    script.addEventListener('error', function() {
+                        reject(script);
+                        console.log('was rej');
+                    }, false);
+
+                    document.body.appendChild(script);
+                }));
+
+                return promises;
+            },
+            getCookie(name) {
+                var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+                return v ? v[2] : null;
+            }
+        }
+    }
+</script>
