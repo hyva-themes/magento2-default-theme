@@ -108,11 +108,6 @@
                                 </arguments>
                             </block>
                         </block>
-
-                        <block class="Magento\Catalog\Block\ShortcutButtons\InCatalog" name="addtocart.shortcut.buttons" />
-
-                        <container name="product.info.additional" />
-
                     </block>
 
                     <block class="Magento\Catalog\Block\Product\View\Gallery" name="product.media"
