@@ -10,7 +10,7 @@ use Magento\Sales\Block\Order\Info\Buttons;
 ?>
 <div class="flex items-center justify-center md:justify-end my-4 md:my-0">
     <?php $order = $block->getOrder() ?>
-    <a href="<?= $block->escapeUrl($block->getUrl('*/*/printInvoice', ['order_id' => $order->getId()])) ?>"
+    <a href="<?= $escaper->escapeUrl($block->getUrl('*/*/printInvoice', ['order_id' => $order->getId()])) ?>"
        class="ml-6 btn btn-secondary text-secondary-darker"
        target="_blank"
        rel="noopener">
@@ -21,7 +21,7 @@ use Magento\Sales\Block\Order\Info\Buttons;
                   0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
             />
         </svg>
-        <span><?= $block->escapeHtml(__('Print All Invoices')) ?></span>
+        <span><?= $escaper->escapeHtml(__('Print All Invoices')) ?></span>
     </a>
     <?= $block->getChildHtml() ?>
 </div>

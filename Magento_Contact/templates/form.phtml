@@ -24,7 +24,7 @@ $contactHelper = $this->helper(ContactHelper::class);
 ?>
 <div class="container flex-columns-wrapper justify-between py-8">
     <form class="form contact card lg:w-1/2 md:w-2/3 mr-4"
-          action="<?= $block->escapeUrl($block->getFormAction()) ?>"
+          action="<?= $escaper->escapeUrl($block->getFormAction()) ?>"
           id="<?= $escaper->escapeHtmlAttr($formId) ?>"
           method="post"
           x-data="initContactForm()"
@@ -32,61 +32,61 @@ $contactHelper = $this->helper(ContactHelper::class);
     >
         <fieldset class="">
             <div class="flex flex-col text-center w-full mb-12">
-                <h2 class="sm:text-2xl text-xl font-medium title-font mb-4 text-gray-900"><span><?= $block->escapeHtml(
+                <h2 class="sm:text-2xl text-xl font-medium title-font mb-4 text-gray-900"><span><?= $escaper->escapeHtml(
                     __('Write Us')
                 ) ?></span></h2>
-                <p class="w-full mx-auto leading-relaxed text-base"><?= $block->escapeHtml(
+                <p class="w-full mx-auto leading-relaxed text-base"><?= $escaper->escapeHtml(
                     __('Jot us a note and we’ll get back to you as quickly as possible.')
                 ) ?></p>
             </div>
             <div class="flex flex-wrap -m-2">
                 <div class="field name required p-2 w-1/2 text-left">
-                    <label class="label text-gray-700" for="name"><span><?= $block->escapeHtml(
+                    <label class="label text-gray-700" for="name"><span><?= $escaper->escapeHtml(
                         __('Name')
                     ) ?></span></label>
-                    <input name="name" id="name" required title="<?= $block->escapeHtmlAttr(__('Name')) ?>"
-                           value="<?= $block->escapeHtmlAttr(
+                    <input name="name" id="name" required title="<?= $escaper->escapeHtmlAttr(__('Name')) ?>"
+                           value="<?= $escaper->escapeHtmlAttr(
                                $contactHelper->getPostValue('name')
                                    ?: $contactHelper->getUserName()
                            ) ?>"
                            class="mt-2 input input-light w-full"
                            type="text"
-                           placeholder="<?= $block->escapeHtml(__('Name')) ?>"
+                           placeholder="<?= $escaper->escapeHtml(__('Name')) ?>"
                     />
                 </div>
                 <div class="field email required p-2 w-1/2 text-left">
-                    <label class="label text-gray-700" for="email"><span><?= $block->escapeHtml(
+                    <label class="label text-gray-700" for="email"><span><?= $escaper->escapeHtml(
                         __('Email')
                     ) ?></span></label>
-                    <input name="email" id="email" required title="<?= $block->escapeHtmlAttr(__('Email')) ?>"
-                           value="<?= $block->escapeHtmlAttr(
+                    <input name="email" id="email" required title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
+                           value="<?= $escaper->escapeHtmlAttr(
                                $contactHelper->getPostValue('email')
                                    ?: $contactHelper->getUserEmail()
                            ) ?>"
                            class="mt-2 input input-light w-full"
-                           placeholder="<?= $block->escapeHtmlAttr(__('Email')) ?>"
+                           placeholder="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
                            type="email"/>
                 </div>
                 <div class="field telephone p-2 w-1/2 text-left">
-                    <label class="label text-gray-700" for="telephone"><span><?= $block->escapeHtml(
+                    <label class="label text-gray-700" for="telephone"><span><?= $escaper->escapeHtml(
                         __('Phone Number')
                     ) ?></span></label>
                     <input name="telephone" id="telephone"
-                           title="<?= $block->escapeHtmlAttr(__('Phone Number')) ?>"
-                           value="<?= $block->escapeHtmlAttr(
+                           title="<?= $escaper->escapeHtmlAttr(__('Phone Number')) ?>"
+                           value="<?= $escaper->escapeHtmlAttr(
                                $contactHelper->getPostValue('telephone')
                            ) ?>"
                            class="mt-2 input input-light w-full"
-                           placeholder="<?= $block->escapeHtmlAttr(__('Phone Number')) ?>"
+                           placeholder="<?= $escaper->escapeHtmlAttr(__('Phone Number')) ?>"
                            type="text"/>
                 </div>
                 <div class="field comment required p-2 w-full text-left">
-                    <label class="label text-gray-700" for="comment"><span><?= $block->escapeHtml(
+                    <label class="label text-gray-700" for="comment"><span><?= $escaper->escapeHtml(
                         __('What’s on your mind?')
                     ) ?></span></label>
                     <textarea name="comment" id="comment" required
-                              title="<?= $block->escapeHtmlAttr(__('What’s on your mind?')) ?>"
-                              class="mt-2 input input-light w-full h-48" cols="5" rows="3"><?= $block->escapeHtml(
+                              title="<?= $escaper->escapeHtmlAttr(__('What’s on your mind?')) ?>"
+                              class="mt-2 input input-light w-full h-48" cols="5" rows="3"><?= $escaper->escapeHtml(
                                   $contactHelper->getPostValue('comment')
                               ) ?></textarea>
                 </div>
@@ -95,8 +95,8 @@ $contactHelper = $this->helper(ContactHelper::class);
         </fieldset>
         <div class="w-full">
             <?= $block->getBlockHtml('formkey') ?>
-            <button type="submit" title="<?= $block->escapeHtmlAttr(__('Submit')) ?>" class="btn btn-primary">
-                <span><?= $block->escapeHtml(__('Submit')) ?></span>
+            <button type="submit" title="<?= $escaper->escapeHtmlAttr(__('Submit')) ?>" class="btn btn-primary">
+                <span><?= $escaper->escapeHtml(__('Submit')) ?></span>
             </button>
         </div>
         <div class="w-full">
@@ -120,7 +120,7 @@ $contactHelper = $this->helper(ContactHelper::class);
         }
     </script>
     <div class="card lg:w-1/2 md:w-1/3">
-        <h2 class="sm:text-2xl text-xl font-medium title-font mb-4 text-gray-900"><span><?= $block->escapeHtml(
+        <h2 class="sm:text-2xl text-xl font-medium title-font mb-4 text-gray-900"><span><?= $escaper->escapeHtml(
             __('Contact Details')
         ) ?></span></h2>
         <p>Contact info</p></div>

@@ -71,7 +71,7 @@ $product = $productViewModel->getProduct();
             <?= $block->getChildHtml("product.info.quantity") ?>
             <button type="submit"
                     form="product_addtocart_form"
-                    title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>"
+                    title="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>"
                     class="btn btn-primary"
             >
                 <svg class="w-6 h-6 border-current" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -113,7 +113,7 @@ $product = $productViewModel->getProduct();
                                 typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
                                     [{
                                         type: "warning",
-                                        text: "<?= $block->escapeHtml(__('Could not add item to wishlist.')) ?>"
+                                        text: "<?= $escaper->escapeHtml(__('Could not add item to wishlist.')) ?>"
                                     }], 5000
                                 );
                             }
@@ -125,7 +125,7 @@ $product = $productViewModel->getProduct();
                                 [{
                                     type: (response.success) ? "success" : "error",
                                     text: (response.success)
-                                        ? "<?= $block->escapeHtml(
+                                        ? "<?= $escaper->escapeHtml(
                                             __("%1 has been added to your Wish List.", __("Product"))
                                         ) ?>"
                                         : response.error_message
@@ -157,7 +157,7 @@ $product = $productViewModel->getProduct();
                 </path>
             </svg>
         </button>
-        <?php if ($product->isSaleable()) : ?>
+        <?php if ($product->isSaleable()): ?>
             <div>
                 <?= $block->getChildHtml('addtocart.shortcut.buttons', true) ?>
             </div>

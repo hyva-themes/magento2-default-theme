@@ -28,7 +28,7 @@ use Magento\Sales\Block\Order\Info\Buttons;
                             0a8.003 8.003 0 01-15.357-2m15.357 2H15"
                     />
                 </svg>
-                <span><?= $block->escapeHtml(__('Reorder')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Reorder')) ?></span>
             </button>
         </form>
     <?php endif ?>
@@ -44,7 +44,7 @@ use Magento\Sales\Block\Order\Info\Buttons;
                   00-2-2H9a2 2 0 00-2 2v4h10z"
             />
         </svg>
-        <span><?= $block->escapeHtml(__('Print Order')) ?></span>
+        <span><?= $escaper->escapeHtml(__('Print Order')) ?></span>
     </a>
     <?= $block->getChildHtml() ?>
 </div>

@@ -8,29 +8,30 @@
 
 declare(strict_types=1);
 
+use Magento\Framework\Escaper;
 use Magento\Theme\Block\Html\Header\Logo;
 
-/**
- * @var Logo $block
- */
+/** @var Logo $block */
+/** @var Escaper $escaper */
+
 $storeName = $block->getThemeName() ?: $block->getLogoAlt()
 ?>
 <div class="order-1 sm:order-2 lg:order-1 w-full pb-2 sm:w-auto sm:pb-0">
     <a class="flex items-center justify-center text-xl font-medium tracking-wide text-gray-800
         no-underline hover:no-underline font-title"
-       href="<?= $block->escapeUrl($block->getUrl('')) ?>"
-       title="<?= $block->escapeHtmlAttr($storeName) ?>"
+       href="<?= $escaper->escapeUrl($block->getUrl('')) ?>"
+       title="<?= $escaper->escapeHtmlAttr($storeName) ?>"
        aria-label="store logo">
-        <img src="<?= $block->escapeUrl($block->getLogoSrc()) ?>"
-             title="<?= $block->escapeHtmlAttr($block->getLogoAlt()) ?>"
-             alt="<?= $block->escapeHtmlAttr($block->getLogoAlt()) ?>"
+        <img src="<?= $escaper->escapeUrl($block->getLogoSrc()) ?>"
+             title="<?= $escaper->escapeHtmlAttr($block->getLogoAlt()) ?>"
+             alt="<?= $escaper->escapeHtmlAttr($block->getLogoAlt()) ?>"
             <?= $block->getLogoWidth() ?
-                'width="' . $block->escapeHtmlAttr($block->getLogoWidth()) . '"' :
+                'width="' . $escaper->escapeHtmlAttr($block->getLogoWidth()) . '"' :
                 'width="200"' ?>
             <?= $block->getLogoHeight() ?
-                'height="' . $block->escapeHtmlAttr($block->getLogoHeight()) . '"' :
+                'height="' . $escaper->escapeHtmlAttr($block->getLogoHeight()) . '"' :
                 'height="150"' ?>
         />
-        <?= $block->escapeHtml($storeName) ?>
+        <?= $escaper->escapeHtml($storeName) ?>
     </a>
 </div>

@@ -7,14 +7,16 @@
  */
 
 use Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Remove;
+use Magento\Framework\Escaper;
 
-/* @var Remove $block */
+/** @var Remove $block */
+/** @var Escaper $escaper */
 ?>
 
 <a href="#"
    data-role="remove"
    data-post-remove='<?= /* @noEscape */ $block->getItemRemoveParams($block->getItem()) ?>'
-   title="<?= $block->escapeHtmlAttr(__('Remove Item')) ?>"
+   title="<?= $escaper->escapeHtmlAttr(__('Remove Item')) ?>"
    class="btn-remove action delete btn btn-secondary inline-flex p-2">
     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" size="16" class="h-5 w-5">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -22,5 +24,5 @@ use Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Remove;
               4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
         </path>
     </svg>
-    <span class="sr-only"><?= $block->escapeHtml(__('Remove item')) ?></span>
+    <span class="sr-only"><?= $escaper->escapeHtml(__('Remove item')) ?></span>
 </a>

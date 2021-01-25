@@ -9,15 +9,18 @@
 declare(strict_types=1);
 
 use Magento\Catalog\Block\Product\View\Options\Type\Select;
+use Magento\Framework\Escaper;
 
-/* @var $block Select */
+/** @var Select $block */
+/** @var Escaper $escaper */
+
 $option = $block->getOption();
 
 /* TODO: implement custom select elements */
 ?>
 <div class="flex border-t border-gray-300 py-2 last:mb-6 last:border-b w-full items-center">
-    <label class="label text-gray-700 text-left w-1/2" for="select_<?= $block->escapeHtmlAttr($option->getId()) ?>">
-        <span><?= $block->escapeHtml($option->getTitle()) ?></span>
+    <label class="label text-gray-700 text-left w-1/2" for="select_<?= $escaper->escapeHtmlAttr($option->getId()) ?>">
+        <span><?= $escaper->escapeHtml($option->getTitle()) ?></span>
         <?php if ($option->getIsRequire()): ?>
             <span class="sup text-sm">*</span>
         <?php endif; ?>

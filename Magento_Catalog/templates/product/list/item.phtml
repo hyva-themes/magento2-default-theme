@@ -117,7 +117,7 @@ if (!$product) {
                                     typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
                                         [{
                                             type: "warning",
-                                            text: "<?= $block->escapeHtml(__('Could not add item to wishlist.')) ?>"
+                                            text: "<?= $escaper->escapeHtml(__('Could not add item to wishlist.')) ?>"
                                         }], 5000
                                     );
                                 }
@@ -127,7 +127,7 @@ if (!$product) {
                                     [{
                                         type: (response.success) ? "success" : "error",
                                         text: (response.success)
-                                            ? "<?= $block->escapeHtml(__("%1 has been added to your Wish List.", __("Product"))) ?>"
+                                            ? "<?= $escaper->escapeHtml(__("%1 has been added to your Wish List.", __("Product"))) ?>"
                                             : response.error_message
                                     }], 5000
                                 );

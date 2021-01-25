@@ -8,6 +8,10 @@
 
 declare(strict_types=1);
 
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+
 /**
  * Category left navigation
  *
@@ -22,24 +26,24 @@ declare(strict_types=1);
 <?php if ($_count):?>
     <div class="card border border-container p-4 mx-6 md:mx-0 mb-8">
         <div class="title">
-            <strong><?= $block->escapeHtml(__('Shop By')) ?></strong>
+            <strong><?= $escaper->escapeHtml(__('Shop By')) ?></strong>
         </div>
         <div class="content">
-            <strong class="subtitle"><?= $block->escapeHtml(__('Shopping Options')) ?></strong>
+            <strong class="subtitle"><?= $escaper->escapeHtml(__('Shopping Options')) ?></strong>
             <dl class="options" id="narrow-by-list2">
-                <dt><?= $block->escapeHtml(__('Category')) ?></dt>
+                <dt><?= $escaper->escapeHtml(__('Category')) ?></dt>
                 <dd>
                     <ol class="items">
                         <?php /** @var \Magento\Catalog\Model\Category $_category */ ?>
                         <?php foreach ($_categories as $_category):?>
                             <?php if ($_category->getIsActive()):?>
                                 <li class="item">
-                                    <a href="<?= $block->escapeUrl($block->getCategoryUrl($_category)) ?>"
+                                    <a href="<?= $escaper->escapeUrl($block->getCategoryUrl($_category)) ?>"
                                         <?php if ($block->isCategoryActive($_category)):?>
                                             class="current"
                                         <?php endif; ?>
-                                    ><?= $block->escapeHtml($_category->getName()) ?></a>
-                                    <span class="count"><?= $block->escapeHtml($_category->getProductCount()) ?></span>
+                                    ><?= $escaper->escapeHtml($_category->getName()) ?></a>
+                                    <span class="count"><?= $escaper->escapeHtml($_category->getProductCount()) ?></span>
                                 </li>
                             <?php endif; ?>
                         <?php endforeach ?>

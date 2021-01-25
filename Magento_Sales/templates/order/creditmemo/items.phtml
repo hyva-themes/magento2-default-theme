@@ -13,9 +13,9 @@ use Magento\Framework\Escaper;
 $order = $block->getOrder() ?>
 <?php foreach ($order->getCreditmemosCollection() as $creditmemo): ?>
     <div class="order-title text-center md:text-left font-semibold">
-        <?= $block->escapeHtml(__('Refund #')) ?>
-        <?= $block->escapeHtml($creditmemo->getIncrementId()) ?>
-        <a href="<?= $block->escapeUrl($block->getPrintCreditmemoUrl($creditmemo)) ?>"
+        <?= $escaper->escapeHtml(__('Refund #')) ?>
+        <?= $escaper->escapeHtml($creditmemo->getIncrementId()) ?>
+        <a href="<?= $escaper->escapeUrl($block->getPrintCreditmemoUrl($creditmemo)) ?>"
            class="text-primary inline-block ml-2 pl-2 border-l text-sm font-normal"
             target="_blank"
             rel="noopener">
@@ -28,7 +28,7 @@ $order = $block->getOrder() ?>
                 />
             </svg>
             <span class="inline-block ml-1 underline">
-                <?= $block->escapeHtml(__('Print Refund')) ?>
+                <?= $escaper->escapeHtml(__('Print Refund')) ?>
             </span>
         </a>
     </div>
@@ -41,8 +41,8 @@ $order = $block->getOrder() ?>
             <div class="p-2"><?= $escaper->escapeHtml(__('Price')) ?></div>
             <div class="p-2"><?= $escaper->escapeHtml(__('Qty')) ?></div>
             <div class="p-2 text-right"><?= $escaper->escapeHtml(__('Subtotal')) ?></div>
-            <div class="p-2 text-right"><?= $block->escapeHtml(__('Discount Amount')) ?></div>
-            <div class="p-2 text-right"><?= $block->escapeHtml(__('Row Total')) ?></div>
+            <div class="p-2 text-right"><?= $escaper->escapeHtml(__('Discount Amount')) ?></div>
+            <div class="p-2 text-right"><?= $escaper->escapeHtml(__('Row Total')) ?></div>
         </div>
         <?php $items = $creditmemo->getAllItems(); ?>
         <?php foreach ($items as $item): ?>

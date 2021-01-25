@@ -8,12 +8,14 @@
 
 // phpcs:disable Magento2.Templates.ThisInTemplate
 // @codingStandardsIgnoreFile
+use Magento\Downloadable\Block\Customer\Products\ListProducts;
 use Magento\Downloadable\Model\Link\Purchased\Item;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
-/**
- * @var $block \Magento\Downloadable\Block\Customer\Products\ListProducts
- * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
- */
+/** @var ListProducts $block */
+/** @var Escaper $escaper */
+/** @var SecureHtmlRenderer $secureRenderer */
 ?>
 <div class="text-2xl mb-6"><?= $escaper->escapeHtml(__('My Downloadable Products')) ?></div>
 <?php $_items = $block->getItems(); ?>
@@ -29,23 +31,23 @@ use Magento\Downloadable\Model\Link\Purchased\Item;
     <?php foreach ($_items as $_item): ?>
         <?php $i++; ?>
         <div class="p-2 items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
-                <a href="<?= $block->escapeUrl($block->getOrderViewUrl($_item->getPurchased()->getOrderId()))?>"
-                    title="<?= $block->escapeHtml(__('View Order')) ?>">
-                    <?= $block->escapeHtml($_item->getPurchased()->getOrderIncrementId()) ?>
+                <a href="<?= $escaper->escapeUrl($block->getOrderViewUrl($_item->getPurchased()->getOrderId()))?>"
+                    title="<?= $escaper->escapeHtml(__('View Order')) ?>">
+                    <?= $escaper->escapeHtml($_item->getPurchased()->getOrderIncrementId()) ?>
                 </a>
         </div>
         <div class="p-2 items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
-                <?= $block->escapeHtml($block->formatDate($_item->getPurchased()->getCreatedAt())) ?>
+                <?= $escaper->escapeHtml($block->formatDate($_item->getPurchased()->getCreatedAt())) ?>
         </div>
         <div class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
-                <?= $block->escapeHtml($_item->getPurchased()->getProductName()) ?>
+                <?= $escaper->escapeHtml($_item->getPurchased()->getProductName()) ?>
         </div>
         <div class="p-2 items-center text-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
                 <?php if ($_item->getStatus() == Item::LINK_STATUS_AVAILABLE): ?>
-                    <a href="<?= $block->escapeUrl($block->getDownloadUrl($_item)) ?>"
+                    <a href="<?= $escaper->escapeUrl($block->getDownloadUrl($_item)) ?>"
                        class="inline-block text-sm underline text-secondary-darker"
                        id="download_<?= /* @noEscape */ $_item->getPurchased()->getProductId() ?>"
-                       title="<?= $block->escapeHtmlAttr(__('Start Download')) ?>"
+                       title="<?= $escaper->escapeHtmlAttr(__('Start Download')) ?>"
                        class="action download">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                              stroke="currentColor" width="24" height="24">
@@ -63,10 +65,10 @@ use Magento\Downloadable\Model\Link\Purchased\Item;
                 <?php endif; ?>
             </div>
             <div class="p-2 items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
-                <?= $block->escapeHtml(__(ucfirst($_item->getStatus()))) ?>
+                <?= $escaper->escapeHtml(__(ucfirst($_item->getStatus()))) ?>
             </div>
             <div class="p-2 items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
-                <?= $block->escapeHtml($block->getRemainingDownloads($_item)) ?>
+                <?= $escaper->escapeHtml($block->getRemainingDownloads($_item)) ?>
             </div>
 
     <?php endforeach; ?>
@@ -79,14 +81,14 @@ use Magento\Downloadable\Model\Link\Purchased\Item;
 <?php endif; ?>
 <?php else: ?>
     <div class="message info empty">
-        <span><?= $block->escapeHtml(__('You have not purchased any downloadable products yet.')) ?></span>
+        <span><?= $escaper->escapeHtml(__('You have not purchased any downloadable products yet.')) ?></span>
     </div>
 <?php endif; ?>
 
 <div class="actions-toolbar">
     <div class="secondary">
-        <a href="<?= $block->escapeUrl($block->getBackUrl()) ?>" class="action back">
-            <span><?= $block->escapeHtml(__('Back')) ?></span>
+        <a href="<?= $escaper->escapeUrl($block->getBackUrl()) ?>" class="action back">
+            <span><?= $escaper->escapeHtml(__('Back')) ?></span>
         </a>
     </div>
 </div>

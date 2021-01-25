@@ -19,7 +19,7 @@ use Magento\Catalog\Block\Product\View\Options\Type\File;
 <?php $option = $block->getOption(); ?>
 <?php $fileInfo = $block->getFileInfo(); ?>
 <?php $fileExists = $fileInfo->hasData(); ?>
-<?php $fileName = 'options_' . $block->escapeHtmlAttr($option->getId()) . '_file'; ?>
+<?php $fileName = 'options_' . $escaper->escapeHtmlAttr($option->getId()) . '_file'; ?>
 <?php $fieldNameAction = $fileName . '_action'; ?>
 <?php $fieldValueAction = $fileExists ? 'save_old' : 'save_new'; ?>
 <?php $fileNamed = $fileName . '_name'; ?>
@@ -38,7 +38,7 @@ use Magento\Catalog\Block\Product\View\Options\Type\File;
 
     <?php if ($fileExists):?>
     <div class="ml-2 text-gray-900 text-left w-1/2">
-        <span class="<?= /* @noEscape */ $fileNamed ?>"><?= $block->escapeHtml($fileInfo->getTitle()) ?></span>
+        <span class="<?= /* @noEscape */ $fileNamed ?>"><?= $escaper->escapeHtml($fileInfo->getTitle()) ?></span>
         <a href="#"
            class="btn btn-secondary inline-block ml-2"
            id="change-<?= /* @noEscape */ $fileName ?>"
@@ -46,7 +46,7 @@ use Magento\Catalog\Block\Product\View\Options\Type\File;
                 document.getElementById('input-box-<?= /* @noEscape */ $fileName ?>').style.display = 'block';
                 $refs['option-<?= $escaper->escapeHtmlAttr($option->getId()) ?>'].disabled = false;"
         >
-            <?= $block->escapeHtml(__('Change')) ?>
+            <?= $escaper->escapeHtml(__('Change')) ?>
         </a>
     </div>
     <?php endif; ?>
@@ -73,20 +73,20 @@ use Magento\Catalog\Block\Product\View\Options\Type\File;
                value="<?= /* @noEscape */ $fieldValueAction ?>" />
         <?php if ($option->getFileExtension()):?>
             <p class="my-2 text-sm">
-                <?= $block->escapeHtml(__('Compatible file extensions to upload')) ?>:
-                <strong><?= $block->escapeHtml($option->getFileExtension()) ?></strong>
+                <?= $escaper->escapeHtml(__('Compatible file extensions to upload')) ?>:
+                <strong><?= $escaper->escapeHtml($option->getFileExtension()) ?></strong>
             </p>
         <?php endif; ?>
         <?php if ($option->getImageSizeX() > 0):?>
             <p class="my-2 text-sm">
-                <?= $block->escapeHtml(__('Maximum image width')) ?>: <strong><?= (int)$option->getImageSizeX()
-                ?> <?= $block->escapeHtml(__('px.')) ?></strong>
+                <?= $escaper->escapeHtml(__('Maximum image width')) ?>: <strong><?= (int)$option->getImageSizeX()
+                ?> <?= $escaper->escapeHtml(__('px.')) ?></strong>
             </p>
         <?php endif; ?>
         <?php if ($option->getImageSizeY() > 0):?>
             <p class="my-2 text-sm">
-                <?= $block->escapeHtml(__('Maximum image height')) ?>: <strong><?= (int)$option->getImageSizeY()
-                ?> <?= $block->escapeHtml(__('px.')) ?></strong>
+                <?= $escaper->escapeHtml(__('Maximum image height')) ?>: <strong><?= (int)$option->getImageSizeY()
+                ?> <?= $escaper->escapeHtml(__('px.')) ?></strong>
             </p>
         <?php endif; ?>
     </div>

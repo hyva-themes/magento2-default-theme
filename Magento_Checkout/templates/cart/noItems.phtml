@@ -16,7 +16,7 @@ use Magento\Framework\Escaper;
 <template x-if="!isLoading && cartEmpty === true">
     <div>
         <?= $block->getChildHtml('checkout_cart_empty_widget') ?>
-        <p><?= $block->escapeHtml(__('You have no items in your shopping cart.')) ?></p>
+        <p><?= $escaper->escapeHtml(__('You have no items in your shopping cart.')) ?></p>
         <p><?= $escaper->escapeHtml(
             __(
                 'Click <a href="%1">here</a> to continue shopping.',

@@ -117,7 +117,7 @@ $graphqlQuery = $query ?: "
             },
             query: <?= /** @noEscape */ json_encode($graphqlQuery) ?>,
             getProducts($nextTick) {
-                fetch('<?= $block->escapeUrl($block->getBaseUrl()) ?>graphql?query=' + encodeURIComponent(
+                fetch('<?= $escaper->escapeUrl($block->getBaseUrl()) ?>graphql?query=' + encodeURIComponent(
                     this.query
                 ), {
                     method: 'GET',
@@ -138,7 +138,7 @@ $graphqlQuery = $query ?: "
                                 data.data.products &&
                                 data.data.products.items &&
                                 data.data.products.items[0] &&
-                                data.data.products.items[0]['<?= $block->escapeHtml($type) ?>_products']
+                                data.data.products.items[0]['<?= $escaper->escapeHtml($type) ?>_products']
                             ) || [];
                             <?php else: ?>
                             return this.products = (
@@ -174,7 +174,7 @@ $graphqlQuery = $query ?: "
                         typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
                             [{
                                 type: "warning",
-                                text: "<?= $block->escapeHtml(__('Could not add item to wishlist.')) ?>"
+                                text: "<?= $escaper->escapeHtml(__('Could not add item to wishlist.')) ?>"
                             }], 5000
                         );
                     }
@@ -184,7 +184,7 @@ $graphqlQuery = $query ?: "
                         [{
                             type: (response.success) ? "success" : "error",
                             text: (response.success)
-                                ? "<?= $block->escapeHtml(__("%1 has been added to your Wish List.", __("Product"))) ?>"
+                                ? "<?= $escaper->escapeHtml(__("%1 has been added to your Wish List.", __("Product"))) ?>"
                                 : response.error_message
                         }], 5000
                     );
@@ -261,7 +261,7 @@ $graphqlQuery = $query ?: "
                 <div class="container flex flex-col items-center pt-6 pb-3 mx-auto mb-6 border-b-2
                     border-gray-300 md:flex-row">
                     <h3 class="text-2xl font-medium text-gray-900 title-font">
-                        <?= $block->escapeHtml($title); ?>
+                        <?= $escaper->escapeHtml($title); ?>
                     </h3>
                 </div>
             <?php endif; ?>

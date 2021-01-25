@@ -20,7 +20,7 @@
             <?php if ($_total->getStrong()): ?>
                 <strong><?= $escaper->escapeHtml($_total->getLabel()) ?></strong>
             <?php else: ?>
-                <?= $block->escapeHtml($_total->getLabel()) ?>
+                <?= $escaper->escapeHtml($_total->getLabel()) ?>
             <?php endif ?>
         </div>
         <div <?= /* @noEscape */ $block->getValueProperties() ?>

@@ -1,22 +1,21 @@
 <?php
 
 use Magento\Framework\Escaper;
-use Magento\Framework\Json\Helper\Data;
 use Magento\Paypal\Block\Express\InContext\Minicart\SmartButton;
 
 /** @var SmartButton $block */
 /** @var Escaper $escaper */
 
-/** @var Data $widget */
-$widget = $this->helper(Data::class)->jsonDecode($block->getJsInitParams());
-$widgetConfig = $this->helper(Data::class)->jsonEncode($widget['Magento_Paypal/js/in-context/button']);
+/** @var array $widget */
+$widget = json_decode($block->getJsInitParams(), true);
+$widgetConfig = json_encode($widget['Magento_Paypal/js/in-context/button']);
 $uniqueId = '_' . uniqid();
 ?>
 <div x-data="initPayPalInContextButton<?= $escaper->escapeHtml($uniqueId) ?>()"
      x-init="refs = $refs"
      x-ref="buttonContainer-<?= $escaper->escapeHtml($uniqueId) ?>"
      @private-content-loaded.window="getSectionData(event.detail.data);"
-     class="paypal checkout paypal-logo <?= $block->escapeHtml($block->getContainerId()) ?>-container">
+     class="paypal checkout paypal-logo <?= $escaper->escapeHtml($block->getContainerId()) ?>-container">
 </div>
 
 <script>

@@ -7,20 +7,21 @@
  * See https://hyva.io/license
  */
 
-/**
- * @var $block \Magento\Sales\Block\Order\Comments
- * @see \Magento\Sales\Block\Order\Comments
- */
+use Magento\Framework\Escaper;
+use Magento\Sales\Block\Order\Comments;
+
+/** @var Comments $block */
+/** @var Escaper $escaper */
 ?>
 <?php if ($block->hasComments()): ?>
     <div class="my-6">
-        <div class="font-semibold"><?= $block->escapeHtml($block->getTitle()) ?></div>
+        <div class="font-semibold"><?= $escaper->escapeHtml($block->getTitle()) ?></div>
         <?php foreach ($block->getComments() as $commentItem): ?>
             <div class="my-3 pl-3 py-1 border-l-2 border-primary" style="margin-left: 2px"><h2
                     class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">
                     <?= /* @noEscape */
                     $block->formatDate($commentItem->getCreatedAt(), \IntlDateFormatter::MEDIUM, false) ?></h2>
-                <p class="leading-relaxed text-gray-600"><?= $block->escapeHtml($commentItem->getComment()) ?></p>
+                <p class="leading-relaxed text-gray-600"><?= $escaper->escapeHtml($commentItem->getComment()) ?></p>
             </div>
         <?php endforeach; ?>
     </div>

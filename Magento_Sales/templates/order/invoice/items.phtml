@@ -13,8 +13,8 @@ use Magento\Framework\Escaper;
 $order = $block->getOrder() ?>
 <?php foreach ($order->getInvoiceCollection() as $invoice): ?>
     <div class="order-title text-center md:text-left font-semibold">
-        <?= $block->escapeHtml(__('Invoice #')) ?><?= $block->escapeHtml($invoice->getIncrementId()) ?>
-        <a href="<?= $block->escapeUrl($block->getPrintInvoiceUrl($invoice)) ?>"
+        <?= $escaper->escapeHtml(__('Invoice #')) ?><?= $escaper->escapeHtml($invoice->getIncrementId()) ?>
+        <a href="<?= $escaper->escapeUrl($block->getPrintInvoiceUrl($invoice)) ?>"
            class="text-primary inline-block ml-2 pl-2 border-l text-sm font-normal"
            target="_blank"
            rel="noopener">
@@ -25,7 +25,7 @@ $order = $block->getOrder() ?>
                         002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z"
                       clip-rule="evenodd"/>
             </svg>
-            <span class="inline-block ml-1 underline"><?= $block->escapeHtml(__('Print Invoice')) ?></span>
+            <span class="inline-block ml-1 underline"><?= $escaper->escapeHtml(__('Print Invoice')) ?></span>
         </a>
     </div>
     <?= $block->getInvoiceCommentsHtml($invoice) ?>

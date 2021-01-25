@@ -6,9 +6,12 @@
  * See https://hyva.io/license
  */
 
-/** @var  $block \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
- * @var \Magento\Framework\Escaper $escaper
- */
+use Magento\Framework\Escaper;
+use Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer;
+
+/** @var DefaultRenderer $block */
+/** @var Escaper $escaper */
+
 $item = $block->getItem();
 $cols = $block->getData('is_context_shipment') ? 3 : ($block->getData('is_context_creditmemo') ? 7 : 5);
 ?>
@@ -43,9 +46,9 @@ $cols = $block->getData('is_context_shipment') ? 3 : ($block->getData('is_contex
             <?php /* downloadable */ ?>
             <?php if ($links = $block->getLinks()): ?>
                 <div class="item options my-2">
-                    <p><?= $block->escapeHtml($block->getLinksTitle()) ?></p>
+                    <p><?= $escaper->escapeHtml($block->getLinksTitle()) ?></p>
                     <?php foreach ($links->getPurchasedItems() as $link): ?>
-                        <p class="ml-1"><?= $block->escapeHtml($link->getLinkTitle()) ?></p>
+                        <p class="ml-1"><?= $escaper->escapeHtml($link->getLinkTitle()) ?></p>
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>

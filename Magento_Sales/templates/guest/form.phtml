@@ -6,21 +6,25 @@
  * See https://hyva.io/license
  */
 
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+/** @var Escaper $escaper */
+/** @var SecureHtmlRenderer $secureRenderer */
 ?>
 <div class="container">
     <div class="card">
         <form class="form form-orders-search"
               id="oar-widget-orders-and-returns-form"
-              action="<?= $block->escapeUrl($block->getActionUrl()) ?>"
+              action="<?= $escaper->escapeUrl($block->getActionUrl()) ?>"
               method="post" name="guest_post"
               x-data="initForm()">
             <fieldset class="fieldset">
                 <?= $block->getBlockHtml('formkey') ?>
-                <legend class="legend"><span><?= $block->escapeHtml(__('Order Information')) ?></span></legend>
+                <legend class="legend"><span><?= $escaper->escapeHtml(__('Order Information')) ?></span></legend>
                 <div class="md:grid grid-cols-2 gap-4">
                     <div class="field">
-                        <label class="label" for="oar-order-id"><span><?= $block->escapeHtml(
+                        <label class="label" for="oar-order-id"><span><?= $escaper->escapeHtml(
                             __('Order ID')
                         ) ?></span></label>
                         <div class="control">
@@ -30,19 +34,19 @@
                     </div>
                     <div class="field">
                         <label class="label" for="quick-search-type-id">
-                            <span><?= $block->escapeHtml(__('Find Order By')) ?></span>
+                            <span><?= $escaper->escapeHtml(__('Find Order By')) ?></span>
                         </label>
                         <div class="control">
                             <select name="oar_type" id="quick-search-type-id" class="select"
                                     @change="authenticateBy = event.originalTarget.value">
-                                <option value="email"><?= $block->escapeHtml(__('Email')) ?></option>
-                                <option value="zip"><?= $block->escapeHtml(__('ZIP Code')) ?></option>
+                                <option value="email"><?= $escaper->escapeHtml(__('Email')) ?></option>
+                                <option value="zip"><?= $escaper->escapeHtml(__('ZIP Code')) ?></option>
                             </select>
                         </div>
                     </div>
                     <div class="field">
                         <label class="label" for="oar-billing-lastname">
-                            <span><?= $block->escapeHtml(__('Billing Last Name')) ?></span>
+                            <span><?= $escaper->escapeHtml(__('Billing Last Name')) ?></span>
                         </label>
                         <div class="control">
                             <input type="text" class="form-input w-full" id="oar-billing-lastname"
@@ -51,7 +55,7 @@
                         </div>
                     </div>
                     <div class="field" x-show="authenticateBy !== 'zip'">
-                        <label class="label" for="oar_email"><span><?= $block->escapeHtml(
+                        <label class="label" for="oar_email"><span><?= $escaper->escapeHtml(
                             __('Email')
                         ) ?></span></label>
                         <div class="control">
@@ -61,7 +65,7 @@
                         </div>
                     </div>
                     <div class="field" x-show="authenticateBy === 'zip'">
-                        <label class="label" for="oar_zip"><span><?= $block->escapeHtml(
+                        <label class="label" for="oar_zip"><span><?= $escaper->escapeHtml(
                             __('Billing ZIP Code')
                         ) ?></span></label>
                         <div class="control">
@@ -74,9 +78,9 @@
             </fieldset>
             <div class="actions-toolbar">
                 <div class="primary">
-                    <button type="submit" title="<?= $block->escapeHtml(__('Continue')) ?>"
+                    <button type="submit" title="<?= $escaper->escapeHtml(__('Continue')) ?>"
                             class="action submit primary">
-                        <span><?= $block->escapeHtml(__('Continue')) ?></span>
+                        <span><?= $escaper->escapeHtml(__('Continue')) ?></span>
                     </button>
                 </div>
             </div>

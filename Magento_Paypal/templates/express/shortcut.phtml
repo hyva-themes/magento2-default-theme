@@ -30,7 +30,7 @@ if ($block->getIsInCatalogProduct()) {
            src="<?= $escaper->escapeUrl($block->getImageUrl()) ?>"
            alt="<?= $escaper->escapeHtml(__('Checkout with PayPal')) ?>"
            title="<?= $escaper->escapeHtml(__('Checkout with PayPal')) ?>"/>
-    <?php if ($block->getAdditionalLinkImage()) : ?>
+    <?php if ($block->getAdditionalLinkImage()): ?>
         <?php $linkImage = $block->getAdditionalLinkImage(); ?>
         <a href="<?= $escaper->escapeUrl($linkImage['href']) ?>">
             <img loading="lazy" src="<?= $escaper->escapeHtml($linkImage['src']) ?>" />

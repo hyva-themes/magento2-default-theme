@@ -76,7 +76,7 @@ if ($option): ?>
                    name="options[<?= $escaper->escapeHtmlAttr($option->getId()) ?>]<?= /* @noEscape */ $arraySign ?>"
                    id="options_<?= $escaper->escapeHtmlAttr($optionId) ?>"
                    value="<?= $escaper->escapeHtmlAttr($value->getOptionTypeId()) ?>"
-                   <?= $block->escapeHtml($checked) ?>
+                   <?= $escaper->escapeHtml($checked) ?>
                    <?= ($option->getIsRequire()) ? 'required' : '' ?>
                    data-price-amount="<?= $escaper->escapeHtmlAttr($block->getCurrencyByStore($value)) ?>"
                    data-price-type="<?= $escaper->escapeHtmlAttr($value->getPriceType()) ?>"

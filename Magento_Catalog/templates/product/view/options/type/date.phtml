@@ -13,12 +13,12 @@ use Magento\Catalog\Block\Product\View\Options\Type\Date;
 use Magento\Framework\Escaper;
 
 /** @var Escaper $escaper */
+/** @var Date $block */
 
 /* TODO: implement custom select elements */
 ?>
-<?php /* @var $block Date */ ?>
 <?php $option = $block->getOption() ?>
-<?php $optionId = $block->escapeHtmlAttr($option->getId()) ?>
+<?php $optionId = $escaper->escapeHtmlAttr($option->getId()) ?>
 <?php $class = ($option->getIsRequire()) ? ' required' : ''; ?>
 <div class="flex border-t border-gray-300 py-2 last:mb-6 last:border-b w-full items-center">
     <label class="label text-gray-700 text-left w-1/2"

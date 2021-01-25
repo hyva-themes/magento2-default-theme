@@ -9,27 +9,27 @@
 declare(strict_types=1);
 
 use Magento\Customer\Block\Form\Login\Info;
-
-// phpcs:disable Generic.Files.LineLength.TooLong
+use Magento\Framework\Escaper;
 
 /** @var Info $block */
+/** @var Escaper $escaper */
 ?>
 <?php if ($block->getRegistration()->isAllowed()): ?>
     <div class="block-new-customer card w-full md:w-1/2 my-8 md:my-0">
         <div class="block-title">
             <h2 class="sm:text-2xl text-xl font-medium title-font mb-4 text-gray-900" role="heading"
-                aria-level="2"><?= $block->escapeHtml(__('New Customers')) ?></h2>
+                aria-level="2"><?= $escaper->escapeHtml(__('New Customers')) ?></h2>
         </div>
         <div class="block-content" aria-labelledby="block-new-customer-heading">
             <p>
-                <?= $block->escapeHtml(
+                <?= $escaper->escapeHtml(
                     __('Creating an account has many benefits: check out faster, keep more than one address, track orders and more.')
                 ) ?>
             </p>
         </div>
         <div class="actions-toolbar pt-6 pb-2 flex self-end">
-            <a href="<?= $block->escapeUrl($block->getCreateAccountUrl()) ?>"
-               class="btn btn-primary"><span><?= $block->escapeHtml(__('Create an Account')) ?></span></a>
+            <a href="<?= $escaper->escapeUrl($block->getCreateAccountUrl()) ?>"
+               class="btn btn-primary"><span><?= $escaper->escapeHtml(__('Create an Account')) ?></span></a>
         </div>
     </div>
 <?php endif; ?>
