@@ -99,6 +99,7 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                                   $contactHelper->getPostValue('comment')
                               ) ?></textarea>
                 </div>
+                <?= $block->getChildHtml('form.additional.info') ?>
                 <?= $block->getBlockHtml($recaptchaInputFieldBlock) ?>
             </div>
         </fieldset>
@@ -109,6 +110,7 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
             </button>
         </div>
         <div class="w-full">
+            <?= $block->getChildHtml('form.additional.after') ?>
             <?= $block->getBlockHtml($recaptchaLegalNoticeBlock) ?>
         </div>
     </form>
