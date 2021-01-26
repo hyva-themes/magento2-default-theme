@@ -8,9 +8,19 @@
 
 use Magento\Framework\Escaper;
 use Magento\Newsletter\Block\Subscribe;
+use Hyva\Theme\ViewModel\ReCaptcha;
 
 /** @var Subscribe $block */
 /** @var Escaper $escaper */
+
+/** @var ReCaptcha $recaptchaViewModel */
+$recaptchaViewModel = $block->getData('viewModelRecaptcha');
+$recaptchaInputField = '';
+$recaptchaLegalNotice = '';
+if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRecaptchaData('newsletter')) {
+    $recaptchaInputField = $block->getBlockHtml($recaptchaData[ReCaptcha::RECAPTCHA_INPUT_FIELD]);
+    $recaptchaLegalNotice = $block->getBlockHtml($recaptchaData[ReCaptcha::RECAPTCHA_LEGAL_NOTICE_BLOCK]);
+}
 ?>
 <div class="lg:w-1/4 md:w-1/2 w-full px-4">
     <form class="form subscribe"
@@ -35,7 +45,7 @@ use Magento\Newsletter\Block\Subscribe;
             <button class="lg:mt-2 xl:mt-0 flex-shrink-0 inline-flex btn btn-primary">
                 <?= $escaper->escapeHtmlAttr(__('Subscribe')) ?>
             </button>
-            <?= $block->getChildHtml('form.subscribe.info') ?>
+            <?= $recaptchaInputField ?>
         </div>
         <div>
             <p x-show="displayErrorMessage" class="text-red flex items-center">
@@ -53,7 +63,7 @@ use Magento\Newsletter\Block\Subscribe;
         </div>
     </form>
     <div class="w-full">
-    <?= $block->getChildHtml('form.subscribe.after') ?>
+    <?= $recaptchaLegalNotice ?>
     </div>
     <script>
         function initNewsletterForm() {

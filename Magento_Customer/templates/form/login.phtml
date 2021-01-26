@@ -10,9 +10,19 @@ declare(strict_types=1);
 
 use Magento\Customer\Block\Form\Login;
 use Magento\Framework\Escaper;
+use Hyva\Theme\ViewModel\ReCaptcha;
 
 /** @var Escaper $escaper */
 /** @var Login $block */
+
+/** @var ReCaptcha $recaptchaViewModel */
+$recaptchaViewModel = $block->getData('viewModelRecaptcha');
+$recaptchaInputFieldBlock = '';
+$recaptchaLegalNoticeBlock = '';
+if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRecaptchaData('customer_login')) {
+    $recaptchaInputFieldBlock = $recaptchaData[ReCaptcha::RECAPTCHA_INPUT_FIELD];
+    $recaptchaLegalNoticeBlock = $recaptchaData[ReCaptcha::RECAPTCHA_LEGAL_NOTICE_BLOCK];
+}
 ?>
 <div class="w-full md:w-1/2 card mr-4">
     <div aria-labelledby="block-customer-login-heading">
@@ -21,7 +31,7 @@ use Magento\Framework\Escaper;
               method="post"
               x-data="initCustomerLoginForm()"
               @submit.prevent="submitForm()"
-              id="login-form">
+              id="customer-login-form">
             <?= $block->getBlockHtml('formkey') ?>
             <fieldset class="fieldset login">
                 <legend><?= $escaper->escapeHtml(__('Login')) ?></legend>
@@ -58,7 +68,7 @@ use Magento\Framework\Escaper;
                     </div>
                 </div>
 
-                <?= $block->getChildHtml('form.customer_login.info') ?>
+                <?= $block->getBlockHtml($recaptchaInputFieldBlock) ?>
                 <div class="actions-toolbar flex justify-between pt-6 pb-2 items-center">
                         <button type="submit" class="btn btn-primary" name="send">
                             <span><?= $escaper->escapeHtml(__('Sign In')) ?></span></button>
@@ -86,7 +96,7 @@ use Magento\Framework\Escaper;
         </form>
     </div>
     <div class="w-full">
-        <?= $block->getChildHtml('form.customer_login.after') ?>
+        <?= $block->getBlockHtml($recaptchaLegalNoticeBlock) ?>
     </div>
     <script>
         function initCustomerLoginForm() {
@@ -100,7 +110,7 @@ use Magento\Framework\Escaper;
                     this.displayErrorMessage = this.errorMessages.length
                 },
                 submitForm: function () {
-                    var $form = document.querySelector('#login-form');
+                    var $form = document.querySelector('#customer-login-form');
                     <?= $block->getChildHtml('recaptcha_validation_customer_login'); ?>
 
                     if (this.errors === 0) {

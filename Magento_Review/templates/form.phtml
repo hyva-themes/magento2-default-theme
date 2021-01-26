@@ -8,6 +8,7 @@
  */
 use Magento\Framework\Escaper;
 use Magento\Review\Block\Form;
+use Hyva\Theme\ViewModel\ReCaptcha;
 
 /* @var Escaper $escaper */
 /* @var Form $block */
@@ -15,6 +16,15 @@ use Magento\Review\Block\Form;
 //phpcs:disable Generic.Files.LineLength
 
 $formId = 'review_form';
+
+/** @var ReCaptcha $recaptchaViewModel */
+$recaptchaViewModel = $block->getData('viewModelRecaptcha');
+$recaptchaInputFieldBlock = '';
+$recaptchaLegalNoticeBlock = '';
+if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRecaptchaData('product_review')) {
+    $recaptchaInputFieldBlock = $recaptchaData[ReCaptcha::RECAPTCHA_INPUT_FIELD];
+    $recaptchaLegalNoticeBlock = $recaptchaData[ReCaptcha::RECAPTCHA_LEGAL_NOTICE_BLOCK];
+}
 ?>
 <div class="container mx-auto px-5 py-6 items-center" id="customer-reviews">
     <div class="card w-full px-6 py-3">
@@ -29,6 +39,7 @@ $formId = 'review_form';
                   x-data="initReviewForm()"
             >
                 <?= $block->getChildHtml('form_fields_before') ?>
+                <?= $block->getBlockHtml($recaptchaInputFieldBlock) ?>
                 <fieldset>
                     <legend class="text-xs">
                         <span>
@@ -266,6 +277,7 @@ $formId = 'review_form';
                         </p>
                     </div>
                     <?= $block->getChildHtml('form_additional_after') ?>
+                    <?= $block->getBlockHtml($recaptchaLegalNoticeBlock) ?>
                 </div>
             </form>
 

@@ -9,32 +9,16 @@
  -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <referenceBlock name="review_form">
-                <block name="recaptcha_validation" template="Magento_ReCaptchaFrontendUi::js/script_token.phtml"
-                       ifconfig="recaptcha_frontend/type_for/product_review">
-                    <arguments>
-                        <argument name="viewModelStoreConfig" xsi:type="object">Hyva\Theme\ViewModel\StoreConfig</argument>
-                    </arguments>
-                </block>
-        </referenceBlock>
-        <referenceContainer name="product.review.form.fields.before">
-            <block class="Magento\ReCaptchaUi\Block\ReCaptcha"
-                   name="recaptcha"
-                   after="-"
-                   template="Magento_ReCaptchaFrontendUi::recaptcha.phtml"
+        <referenceBlock name="product.review.form">
+            <block name="recaptcha_validation" template="Magento_ReCaptchaFrontendUi::js/script_token.phtml"
                    ifconfig="recaptcha_frontend/type_for/product_review">
                 <arguments>
-                    <argument name="recaptcha_for" xsi:type="string">product_review</argument>
+                    <argument name="viewModelStoreConfig" xsi:type="object">Hyva\Theme\ViewModel\StoreConfig</argument>
                 </arguments>
             </block>
-        </referenceContainer>
-        <referenceBlock name="review_form">
-            <container name="form_additional_after">
-                <block name="recaptcha_legal_notice_review"
-                       template="Magento_ReCaptchaFrontendUi::legal_notice.phtml"
-                       ifconfig="recaptcha_frontend/type_for/product_review">
-                </block>
-            </container>
+            <arguments>
+                <argument name="viewModelRecaptcha" xsi:type="object">Hyva\Theme\ViewModel\ReCaptcha</argument>
+            </arguments>
         </referenceBlock>
         <referenceContainer name="before.body.end">
             <block name="recaptcha_base" template="Magento_ReCaptchaFrontendUi::js/script_loader.phtml"

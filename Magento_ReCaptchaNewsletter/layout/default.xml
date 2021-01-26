@@ -17,24 +17,10 @@
                         <argument name="viewModelStoreConfig" xsi:type="object">Hyva\Theme\ViewModel\StoreConfig</argument>
                     </arguments>
                 </block>
-        </referenceBlock>
-        <referenceContainer name="form.subscribe.info">
-            <block class="Magento\ReCaptchaUi\Block\ReCaptcha"
-                   name="recaptcha_newsletter"
-                   after="-"
-                   template="Magento_ReCaptchaFrontendUi::recaptcha.phtml"
-                   ifconfig="recaptcha_frontend/type_for/newsletter">
                 <arguments>
-                    <argument name="recaptcha_for" xsi:type="string">newsletter</argument>
+                    <argument name="viewModelRecaptcha" xsi:type="object">Hyva\Theme\ViewModel\ReCaptcha</argument>
                 </arguments>
-            </block>
-        </referenceContainer>
-        <referenceContainer name="form.subscribe.after">
-            <block name="recaptcha_legal_notice_contact_newsletter"
-                   template="Magento_ReCaptchaFrontendUi::legal_notice.phtml"
-                   ifconfig="recaptcha_frontend/type_for/newsletter">
-            </block>
-        </referenceContainer>
+        </referenceBlock>
         <referenceContainer name="before.body.end">
             <block name="recaptcha_base" template="Magento_ReCaptchaFrontendUi::js/script_loader.phtml"
                    ifconfig="recaptcha_frontend/type_for/newsletter">
