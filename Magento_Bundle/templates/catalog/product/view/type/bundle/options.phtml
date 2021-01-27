@@ -13,9 +13,9 @@ use Hyva\Theme\ViewModel\ProductPage;
 use Magento\Bundle\Block\Catalog\Product\View\Type\Bundle;
 use Magento\Framework\Escaper;
 
-/** @var $block Bundle */
-/** @var $escaper Escaper */
-/** @var $viewModels ViewModelRegistry */
+/** @var Bundle $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
 
 $product = $block->getProduct();
 $stripSelection = $product->getConfigureMode() ? true : false;
