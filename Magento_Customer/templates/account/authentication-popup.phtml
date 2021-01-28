@@ -16,6 +16,8 @@ use Hyva\Theme\ViewModel\ReCaptcha;
 /** @var Customer $block */
 
 /** @var ReCaptcha $recaptchaViewModel */
+//Do not replace this with $viewModels->require(ReCaptcha::class); that might break the dependency on
+//Magento's Recaptcha module
 $recaptchaViewModel = $block->getData('viewModelRecaptcha');
 $recaptchaInputFieldBlock = '';
 $recaptchaLegalNoticeBlock = '';
