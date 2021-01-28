@@ -75,12 +75,12 @@ use Magento\Framework\View\Element\Template;
          @keydown.window.escape="open=false"
 >
     <template x-if="cart && cart.summary_count">
-        <div class="backdrop" x-show="open"></div>
         <div role="dialog"
              aria-labelledby="cart-drawer-title"
              aria-modal="true"
              @click.away="open = false"
              class="fixed inset-y-0 right-0 z-30 flex max-w-full">
+            <div class="backdrop" x-show="open" @click="open = false;" aria-label="Close panel"></div>
             <div class="relative w-screen max-w-md shadow-2xl"
                  x-show="open"
                  x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700"
