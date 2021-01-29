@@ -96,6 +96,13 @@
                         <block class="Magento\Catalog\Block\Product\View" name="product.info.quantity"  template="Magento_Catalog::product/view/quantity.phtml"/>
                         <block name="product.info.addtocart"  template="Magento_Catalog::product/view/addtocart.phtml"/>
 
+                        <block name="category.products.list.compare_init"
+                               as="compare_init"
+                               template="Magento_Catalog::product/compare/init.phtml"/>
+                        <block name="category.products.list.wishlist_init"
+                               as="wishlist_init"
+                               template="Magento_Wishlist::init.phtml"/>
+
                         <block class="Magento\Catalog\Block\Product\View" name="product.info.price"  template="Magento_Catalog::product/view/price.phtml">
                             <arguments>
                                 <argument name="product_view_model" xsi:type="object">Hyva\Theme\ViewModel\ProductPage</argument>
