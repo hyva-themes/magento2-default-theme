@@ -27,6 +27,8 @@ $productCollection = $block->getLoadedProductCollection();
     <?= $block->getToolbarHtml() ?>
     <?= $block->getAdditionalHtml() ?>
     <?php
+    $showAddToWishlist = true;
+    $showAddToCompare = true;
     if ($block->getMode() == 'grid') {
         $viewMode = 'grid';
         $imageDisplayArea = 'category_page_grid';
@@ -43,6 +45,65 @@ $productCollection = $block->getLoadedProductCollection();
      */
     $pos = $block->getPositioned();
     ?>
+
+    <?php if ($showAddToWishlist): ?>
+    <script defer>
+        function initWishlist() {
+            return {
+                addToWishlist: function addToWishlist(productId){
+                    var formKey = document.querySelector('input[name=form_key]').value;
+                    var postUrl = BASE_URL+"wishlist/index/add/";
+                    fetch(postUrl, {
+                        "headers": {
+                            "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                        },
+                        "body": "form_key="+ formKey + "&product="+productId+"&uenc="+btoa(window.location.href),
+                        "method": "POST",
+                        "mode": "cors",
+                        "credentials": "include"
+                    }).then(function (response) {
+                        if (response.redirected) {
+                            window.location.href = response.url;
+                        } else if (response.ok) {
+                            return response.json();
+                        } else {
+                            typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                                [{
+                                    type: "warning",
+                                    text: "<?= $escaper->escapeHtml(__('Could not add item to wishlist.')) ?>"
+                                }], 5000
+                            );
+                        }
+                    }).then(function (response) {
+                        if(!response) { return }
+                        typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                            [{
+                                type: (response.success) ? "success" : "error",
+                                text: (response.success)
+                                    ? "<?= $escaper->escapeHtml(__("%1 has been added to your Wish List.", __("Product"))) ?>"
+                                    : response.error_message
+                            }], 5000
+                        );
+                        var reloadCustomerDataEvent = new CustomEvent("reload-customer-section-data");
+                        window.dispatchEvent(reloadCustomerDataEvent);
+                    }).catch(function (error) {
+                        typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                            [{
+                                type: "error",
+                                text: error
+                            }], 5000
+                        );
+                    });
+                }
+            }
+        }
+    </script>
+    <?php endif; ?>
+
+    <?php if ($showAddToCompare): ?>
+        <?= $block->getChildHtml('compare_init'); ?>
+    <?php endif; ?>
+
     <div class="products wrapper mode-<?= /* @noEscape */ $viewMode ?> products-<?= /* @noEscape */ $viewMode ?>">
         <div class="mx-auto flex flex-wrap pt-4 pb-12 -mr-2">
             <?php /** @var \Magento\Catalog\Model\Product $product */ ?>
@@ -52,6 +113,8 @@ $productCollection = $block->getLoadedProductCollection();
                     ->setData('view_mode', $viewMode)
                     ->setData('image_display_area', $imageDisplayArea)
                     ->setData('show_description', $showDescription)
+                    ->setData('show_add_to_wishlist', $showAddToWishlist)
+                    ->setData('show_add_to_compare', $showAddToCompare)
                     ->setData('position', $pos)
                     ->setData('pos', $pos)
                     ->setData('template_type', $templateType)

@@ -37,11 +37,12 @@
                             <argument name="product_view_model" xsi:type="object">Hyva\Theme\ViewModel\ProductPage</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Catalog\Block\Product\ProductList\Item\Container"
-                           name="category.product.addto" as="addto"/>
                     <block class="Magento\Catalog\Block\Product\ProductList\Toolbar" name="product_list_toolbar" template="Magento_Catalog::product/list/toolbar.phtml">
                         <block class="Magento\Theme\Block\Html\Pager" name="product_list_toolbar_pager"/>
                     </block>
+                    <block name="category.products.list.compare_init"
+                           as="compare_init"
+                           template="Magento_Catalog::product/compare/init.phtml"/>
                     <action method="setToolbarBlockName">
                         <argument name="name" xsi:type="string">product_list_toolbar</argument>
                     </action>

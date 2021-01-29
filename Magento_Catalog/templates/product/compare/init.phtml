@@ -1,0 +1,107 @@
+<?php
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Framework\View\Element\Template $block */
+?>
+
+<script defer>
+    function initCompare() {
+        return {
+            addToCompare: function (productId) {
+                const formKey = document.querySelector('input[name=form_key]').value;
+                const postUrl = BASE_URL + 'catalog/product_compare/add/';
+
+                fetch(postUrl, {
+                    "headers": {
+                        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                    },
+                    "body": "form_key="+ formKey + "&product="+productId+"&uenc="+btoa(window.location.href),
+                    "method": "POST",
+                    "mode": "cors",
+                    "credentials": "include"
+                }).then(function (response) {
+                    if (response.redirected) {
+                        window.location.href = response.url;
+                    } else if (response.ok) {
+                        return response.json();
+                    } else {
+                        typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                            [{
+                                type: "warning",
+                                text: "<?= $escaper->escapeHtml(__('Could not add item to compare.')) ?>"
+                            }], 5000
+                        );
+                    }
+                }).then(function (response) {
+                    if (!response) { return; }
+                    typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                        [{
+                            type: (response.success) ? "success" : "error",
+                            text: (response.success)
+                                ? "<?= $escaper->escapeHtml(__("You added product %1 to the comparison list", __("Product"))) ?>"
+                                : response.error_message
+                        }], 5000
+                    );
+                    let reloadCustomerDataEvent = new CustomEvent("reload-customer-section-data");
+                    window.dispatchEvent(reloadCustomerDataEvent);
+                }).catch(function (error) {
+                    typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                        [{
+                            type: "error",
+                            text: error
+                        }], 5000
+                    );
+                });
+            },
+            removeFromCompare: function(productId) {
+                const formKey = document.querySelector('input[name=form_key]').value;
+                const postUrl = BASE_URL + 'catalog/product_compare/remove/';
+                const confirmMessage = "<?= $escaper->escapeHtml(__('Are you sure you want to remove this item from your Compare Products list?')) ?>";
+                if (!window.confirm(confirmMessage)) {
+                    return;
+                }
+
+                fetch(postUrl, {
+                    "headers": {
+                        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                    },
+                    "body": "form_key="+ formKey + "&product="+productId+"&uenc="+btoa(window.location.href),
+                    "method": "POST",
+                    "mode": "cors",
+                    "credentials": "include"
+                }).then(function (response) {
+                    if (response.redirected) {
+                        window.location.href = response.url;
+                    } else if (response.ok) {
+                        return response.json();
+                    } else {
+                        typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                            [{
+                                type: "warning",
+                                text: "<?= $escaper->escapeHtml(__('Could not remove item from compare.')) ?>"
+                            }], 5000
+                        );
+                    }
+                }).then(function (response) {
+                    if (!response) { return; }
+                    typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                        [{
+                            type: (response.success) ? "success" : "error",
+                            text: (response.success)
+                                ? "<?= $escaper->escapeHtml(__("You removed product %1 from the comparison list", __("Product"))) ?>"
+                                : response.error_message
+                        }], 5000
+                    );
+                    let reloadCustomerDataEvent = new CustomEvent("reload-customer-section-data");
+                    window.dispatchEvent(reloadCustomerDataEvent);
+                }).catch(function (error) {
+                    typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                        [{
+                            type: "error",
+                            text: error
+                        }], 5000
+                    );
+                });
+            }
+        };
+    }
+</script>
