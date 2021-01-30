@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\ProductAttributes;
+use Hyva\Theme\ViewModel\Wishlist;
 use Magento\Catalog\Block\Product\Compare\ListCompare;
 use Magento\Catalog\Helper\Product\Compare;
 use Magento\Catalog\Model\Product;
@@ -28,6 +29,8 @@ $compareHelper = $this->helper(Compare::class);
 $wishlistHelper = $this->helper(WishlistHelper::class);
 /** @var ProductAttributes $attributesViewModel */
 $attributesViewModel = $viewModels->require(ProductAttributes::class);
+/** @var Wishlist $wishlistViewModel */
+$wishlistViewModel = $viewModels->require(Wishlist::class);
 ?>
 <?php $total = $block->getItems()->getSize(); ?>
 <?php if ($total): ?>
@@ -210,7 +213,7 @@ function initWishlist() {
                                             </button>
                                         </form>
                                     <?php endif; ?>
-                                    <?php if ($wishlistHelper->isAllow()): ?>
+                                    <?php if ($wishlistViewModel->isEnabled()): ?>
                                         <button x-data="initWishlist()"
                                             @click.prevent="addToWishlist(<?= (int)$product->getId() ?>)"
                                             aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Wish List')) ?>"

@@ -28,8 +28,6 @@ $productCollection = $block->getLoadedProductCollection();
     <?= $block->getToolbarHtml() ?>
     <?= $block->getAdditionalHtml() ?>
     <?php
-    $showAddToWishlist = true;
-    $showAddToCompare = true;
     if ($block->getMode() === 'grid') {
         $viewMode = 'grid';
         $imageDisplayArea = 'category_page_grid';
@@ -56,8 +54,6 @@ $productCollection = $block->getLoadedProductCollection();
                     ->setData('view_mode', $viewMode)
                     ->setData('image_display_area', $imageDisplayArea)
                     ->setData('show_description', $showDescription)
-                    ->setData('show_add_to_wishlist', $showAddToWishlist)
-                    ->setData('show_add_to_compare', $showAddToCompare)
                     ->setData('position', $pos)
                     ->setData('pos', $pos)
                     ->setData('template_type', $templateType)

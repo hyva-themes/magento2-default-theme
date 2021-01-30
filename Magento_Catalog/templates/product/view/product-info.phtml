@@ -8,15 +8,22 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\ViewModel\ProductAttributes;
+use Hyva\Theme\ViewModel\ProductCompare;
+use Hyva\Theme\ViewModel\ProductPage;
+use Hyva\Theme\ViewModel\Wishlist;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
-use Hyva\Theme\ViewModel\ProductAttributes;
-use Hyva\Theme\ViewModel\ProductPage;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
 
+/** @var ProductCompare $compareViewModel */
+$compareViewModel = $viewModels->require(ProductCompare::class);
+/** @var Wishlist $wishlistViewModel */
+$wishlistViewModel = $viewModels->require(Wishlist::class);
 /** @var ProductPage $productViewModel */
 $productViewModel = $block->getProductViewModel();
 /** @var ProductAttributes $attributesViewModel */
@@ -24,8 +31,8 @@ $attributesViewModel = $block->getAttributesViewModel();
 /** @var Product $product */
 $product = $productViewModel->getProduct();
 
-$showAddToWishlist = true;
-$showAddToCompare = true;
+$showAddToWishlist = $wishlistViewModel->isEnabled();
+$showAddToCompare = $compareViewModel->showOnProductPage();
 ?>
 <div class="order-2 w-full mb-6 md:w-7/12 md:pl-5 lg:pl-10 md:py-6 lg:w-1/2 md:mb-0">
     <h1 class="mb-3 text-3xl font-medium text-gray-900 title-font">

@@ -8,16 +8,20 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\ProductCompare;
+use Hyva\Theme\ViewModel\ProductPage;
+use Hyva\Theme\ViewModel\Wishlist;
 use Magento\Catalog\Block\Product\AbstractProduct;
 use Magento\Catalog\Helper\Output as CatalogOutputHelper;
 use Magento\Framework\Escaper;
-use Hyva\Theme\ViewModel\ProductPage;
 
 // phpcs:disable Magento2.Templates.ThisInTemplate
 // phpcs:disable Generic.Files.LineLength.TooLong
 
 /** @var AbstractProduct $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
 
 /** @var ProductPage $productViewModel */
 $productViewModel = $block->getData('product_view_model');
@@ -25,14 +29,19 @@ $productViewModel = $block->getData('product_view_model');
 /** @var CatalogOutputHelper $catalogOutputHelper */
 $catalogOutputHelper = $this->helper(CatalogOutputHelper::class);
 
+/** @var ProductCompare $compareViewModel */
+$compareViewModel = $viewModels->require(ProductCompare::class);
+/** @var Wishlist $wishlistViewModel */
+$wishlistViewModel = $viewModels->require(Wishlist::class);
+
 /** @var Magento\Catalog\Model\Product $product */
 $product = $block->getData('product');
 $imageDisplayArea = $block->getData('image_display_area');
 $templateType = $block->getData('template_type');
 $viewMode = $block->getData('view_mode');
 $showDescription = $block->getData('show_description');
-$showAddToWishlist = $block->getData('show_add_to_wishlist');
-$showAddToCompare = $block->getData('show_add_to_compare');
+$showAddToWishlist = $wishlistViewModel->isEnabled();
+$showAddToCompare = $compareViewModel->showInProductList();
 
 if (!$product) {
     return '';
