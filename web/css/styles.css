@@ -2209,6 +2209,15 @@ body {
   padding-right: 1.5rem;
 }
 
+@media (min-width: 768px) {
+  .md\:container {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
 .flex-columns-wrapper {
   display: flex;
   flex-direction: column;
@@ -2259,7 +2268,7 @@ body {
 }
 
 .product-image-container img {
-    width: 100%
+    width: 100%;
   }
 
 .swatch-attribute .swatch-attribute-options {
@@ -19889,23 +19898,31 @@ body {
 }
 
 .min-w-0 {
-  min-width: 0px;
+  min-width: 0;
+}
+
+.min-w-40 {
+  min-width: 10rem;
+}
+
+.min-w-48 {
+  min-width: 12rem;
+}
+
+.min-w-1\/4 {
+  min-width: 25%;
+}
+
+.min-w-1\/2 {
+  min-width: 50%;
+}
+
+.min-w-3\/4 {
+  min-width: 75%;
 }
 
 .min-w-full {
   min-width: 100%;
-}
-
-.min-w-min {
-  min-width: -webkit-min-content;
-  min-width: -moz-min-content;
-  min-width: min-content;
-}
-
-.min-w-max {
-  min-width: -webkit-max-content;
-  min-width: -moz-max-content;
-  min-width: max-content;
 }
 
 .object-contain {
@@ -53844,23 +53861,31 @@ form select {
   }
 
   .sm\:min-w-0 {
-    min-width: 0px;
+    min-width: 0;
+  }
+
+  .sm\:min-w-40 {
+    min-width: 10rem;
+  }
+
+  .sm\:min-w-48 {
+    min-width: 12rem;
+  }
+
+  .sm\:min-w-1\/4 {
+    min-width: 25%;
+  }
+
+  .sm\:min-w-1\/2 {
+    min-width: 50%;
+  }
+
+  .sm\:min-w-3\/4 {
+    min-width: 75%;
   }
 
   .sm\:min-w-full {
     min-width: 100%;
-  }
-
-  .sm\:min-w-min {
-    min-width: -webkit-min-content;
-    min-width: -moz-min-content;
-    min-width: min-content;
-  }
-
-  .sm\:min-w-max {
-    min-width: -webkit-max-content;
-    min-width: -moz-max-content;
-    min-width: max-content;
   }
 
   .sm\:object-contain {
@@ -87427,23 +87452,31 @@ form select {
   }
 
   .md\:min-w-0 {
-    min-width: 0px;
+    min-width: 0;
+  }
+
+  .md\:min-w-40 {
+    min-width: 10rem;
+  }
+
+  .md\:min-w-48 {
+    min-width: 12rem;
+  }
+
+  .md\:min-w-1\/4 {
+    min-width: 25%;
+  }
+
+  .md\:min-w-1\/2 {
+    min-width: 50%;
+  }
+
+  .md\:min-w-3\/4 {
+    min-width: 75%;
   }
 
   .md\:min-w-full {
     min-width: 100%;
-  }
-
-  .md\:min-w-min {
-    min-width: -webkit-min-content;
-    min-width: -moz-min-content;
-    min-width: min-content;
-  }
-
-  .md\:min-w-max {
-    min-width: -webkit-max-content;
-    min-width: -moz-max-content;
-    min-width: max-content;
   }
 
   .md\:object-contain {
@@ -121010,23 +121043,31 @@ form select {
   }
 
   .lg\:min-w-0 {
-    min-width: 0px;
+    min-width: 0;
+  }
+
+  .lg\:min-w-40 {
+    min-width: 10rem;
+  }
+
+  .lg\:min-w-48 {
+    min-width: 12rem;
+  }
+
+  .lg\:min-w-1\/4 {
+    min-width: 25%;
+  }
+
+  .lg\:min-w-1\/2 {
+    min-width: 50%;
+  }
+
+  .lg\:min-w-3\/4 {
+    min-width: 75%;
   }
 
   .lg\:min-w-full {
     min-width: 100%;
-  }
-
-  .lg\:min-w-min {
-    min-width: -webkit-min-content;
-    min-width: -moz-min-content;
-    min-width: min-content;
-  }
-
-  .lg\:min-w-max {
-    min-width: -webkit-max-content;
-    min-width: -moz-max-content;
-    min-width: max-content;
   }
 
   .lg\:object-contain {
@@ -154593,23 +154634,31 @@ form select {
   }
 
   .xl\:min-w-0 {
-    min-width: 0px;
+    min-width: 0;
+  }
+
+  .xl\:min-w-40 {
+    min-width: 10rem;
+  }
+
+  .xl\:min-w-48 {
+    min-width: 12rem;
+  }
+
+  .xl\:min-w-1\/4 {
+    min-width: 25%;
+  }
+
+  .xl\:min-w-1\/2 {
+    min-width: 50%;
+  }
+
+  .xl\:min-w-3\/4 {
+    min-width: 75%;
   }
 
   .xl\:min-w-full {
     min-width: 100%;
-  }
-
-  .xl\:min-w-min {
-    min-width: -webkit-min-content;
-    min-width: -moz-min-content;
-    min-width: min-content;
-  }
-
-  .xl\:min-w-max {
-    min-width: -webkit-max-content;
-    min-width: -moz-max-content;
-    min-width: max-content;
   }
 
   .xl\:object-contain {
