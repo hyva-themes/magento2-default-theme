@@ -65,7 +65,5 @@
                 </block>
             </block>
         </referenceContainer>
-
-        <move element="page.main.title" destination="title-container" before="-"/>
     </body>
 </page>
