@@ -11,23 +11,22 @@
     <body>
         <referenceBlock name="product.review.form">
             <block name="recaptcha_validation" template="Magento_ReCaptchaFrontendUi::js/script_token.phtml"
-                   ifconfig="recaptcha_frontend/type_for/product_review">
-                <arguments>
-                    <argument name="viewModelStoreConfig" xsi:type="object">Hyva\Theme\ViewModel\StoreConfig</argument>
-                </arguments>
-            </block>
+                   ifconfig="recaptcha_frontend/type_for/product_review"/>
             <!-- Do not remove the view model from layout -->
+            <!--
+                Passing the view model in the layout xml keeps the recaptcha implementation in sync with Magento,
+                that means by disabling Magento's recaptcha modules, the ViewModel will not be available and therefore
+                the recaptcha code snippets will not be included.
+                If we would use the 'require' way, we would need some kind of logic inside the view model to detect
+                whether the corresponding recaptcha Magento modules are available or not.
+            -->
             <arguments>
                 <argument name="viewModelRecaptcha" xsi:type="object">Hyva\Theme\ViewModel\ReCaptcha</argument>
             </arguments>
         </referenceBlock>
         <referenceContainer name="before.body.end">
             <block name="recaptcha_base" template="Magento_ReCaptchaFrontendUi::js/script_loader.phtml"
-                   ifconfig="recaptcha_frontend/type_for/product_review">
-                <arguments>
-                    <argument name="viewModelStoreConfig" xsi:type="object">Hyva\Theme\ViewModel\StoreConfig</argument>
-                </arguments>
-            </block>
+                   ifconfig="recaptcha_frontend/type_for/product_review"/>
         </referenceContainer>
     </body>
 </page>

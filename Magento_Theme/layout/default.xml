@@ -32,13 +32,7 @@
                        name="topmenu_generic"
                        as="topmenu"
                        template="Magento_Theme::html/header/topmenu.phtml" ttl="3600"
-                >
-                    <arguments>
-                        <argument name="viewModelNavigationAsJson"
-                                  xsi:type="object">Hyva\Theme\ViewModel\NavigationAsJson
-                        </argument>
-                    </arguments>
-                </block>
+                />
             </block>
         </referenceContainer>
         <referenceContainer name="top.container">

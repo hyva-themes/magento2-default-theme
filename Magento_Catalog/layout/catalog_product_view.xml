@@ -37,11 +37,6 @@
                            name="product.info"
                            template="Magento_Catalog::product/view/product-info.phtml">
                         <arguments>
-                            <argument name="product_view_model" xsi:type="object">Hyva\Theme\ViewModel\ProductPage
-                            </argument>
-                            <argument name="attributes_view_model"
-                                      xsi:type="object">Hyva\Theme\ViewModel\ProductAttributes
-                            </argument>
                             <argument name="attributes" xsi:type="array">
                                 <item name="sku" xsi:type="array">
                                     <item name="call" xsi:type="string">getSku</item>
@@ -97,9 +92,6 @@
                         <block name="product.info.addtocart"  template="Magento_Catalog::product/view/addtocart.phtml"/>
 
                         <block class="Magento\Catalog\Block\Product\View" name="product.info.price"  template="Magento_Catalog::product/view/price.phtml">
-                            <arguments>
-                                <argument name="product_view_model" xsi:type="object">Hyva\Theme\ViewModel\ProductPage</argument>
-                            </arguments>
                         </block>
 
                         <block class="Magento\Catalog\Block\Product\View"
@@ -112,9 +104,6 @@
                                 <block class="Magento\Catalog\Block\Product\View\Options\Type\File" name="product.info.options.file" as="file" template="Magento_Catalog::product/view/options/type/file.phtml"/>
                                 <block class="Magento\Catalog\Block\Product\View\Options\Type\Select" name="product.info.options.select" as="select" template="Magento_Catalog::product/view/options/type/select.phtml"/>
                                 <block class="Magento\Catalog\Block\Product\View\Options\Type\Date" name="product.info.options.date" as="date" template="Magento_Catalog::product/view/options/type/date.phtml"/>
-                                <arguments>
-                                    <argument name="product_view_model" xsi:type="object">Hyva\Theme\ViewModel\ProductPage</argument>
-                                </arguments>
                             </block>
                         </block>
 
@@ -140,10 +129,6 @@
 
                     <block name="description"
                            template="Magento_Catalog::product/view/description.phtml">
-                        <arguments>
-                            <argument name="product_view_model" xsi:type="object">Hyva\Theme\ViewModel\ProductPage
-                            </argument>
-                        </arguments>
                     </block>
 
                     <block name="upsells" class="Magento\Catalog\Block\Product\View"
@@ -153,7 +138,6 @@
                             <argument name="title" xsi:type="string"
                                       translate="true">We found other products you might like!
                             </argument>
-                            <argument name="viewModelStore" xsi:type="object">Hyva\Theme\ViewModel\Store</argument>
                         </arguments>
                     </block>
 
@@ -162,7 +146,6 @@
                         <arguments>
                             <argument name="type" xsi:type="string">related</argument>
                             <argument name="title" xsi:type="string" translate="true">Related Products:</argument>
-                            <argument name="viewModelStore" xsi:type="object">Hyva\Theme\ViewModel\Store</argument>
                         </arguments>
                     </block>
                 </block>

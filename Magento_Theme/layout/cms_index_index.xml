@@ -17,7 +17,6 @@
                     <argument name="title" xsi:type="string" translate="true">Watches</argument>
                     <argument name="category_ids" xsi:type="string">6</argument>
                     <argument name="page_size" xsi:type="string">8</argument>
-                    <argument name="viewModelStore" xsi:type="object">Hyva\Theme\ViewModel\Store</argument>
                 </arguments>
             </block>
             <block name="slider-2" template="Magento_Theme::elements/slider.phtml">
@@ -37,7 +36,6 @@
                     <argument name="page_size" xsi:type="string">8</argument>
                     <argument name="sort_attribute" xsi:type="string">price</argument>
                     <argument name="sort_direction" xsi:type="string">DESC</argument>
-                    <argument name="viewModelStore" xsi:type="object">Hyva\Theme\ViewModel\Store</argument>
                 </arguments>
             </block>
         </referenceContainer>

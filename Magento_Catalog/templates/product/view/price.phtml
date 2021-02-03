@@ -8,6 +8,7 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\ProductPage;
 use Magento\Catalog\Block\Product\View;
 use Magento\Catalog\Model\Product;
@@ -17,11 +18,12 @@ use Magento\Framework\Pricing\Helper\Data as PriceHelper;
 
 /** @var View $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
 /** @var Product $product */
 $product = $block->getProduct();
 
 /** @var ProductPage $productViewModel */
-$productViewModel = $block->getProductViewModel();
+$productViewModel = $viewModels->require(ProductPage::class);
 
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper

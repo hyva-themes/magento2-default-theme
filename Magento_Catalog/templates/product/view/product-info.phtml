@@ -8,6 +8,7 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
@@ -16,11 +17,12 @@ use Hyva\Theme\ViewModel\ProductPage;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
 
 /** @var ProductPage $productViewModel */
-$productViewModel = $block->getProductViewModel();
+$productViewModel = $viewModels->require(ProductPage::class);
 /** @var ProductAttributes $attributesViewModel */
-$attributesViewModel = $block->getAttributesViewModel();
+$attributesViewModel = $viewModels->require(ProductAttributes::class);
 /** @var Product $product */
 $product = $productViewModel->getProduct();
 

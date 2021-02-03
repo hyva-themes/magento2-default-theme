@@ -8,12 +8,17 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\Store;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
-/** @var Store $viewModelStore */
-$viewModelStore = $block->getData('viewModelStore');
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var $viewModelStore Store */
+$viewModelStore = $viewModels->require(Store::class);
 
 /** @var Escaper $escaper */
 /** @var Template $block */

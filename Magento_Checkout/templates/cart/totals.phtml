@@ -6,15 +6,18 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\Model\ViewModelRegistry;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Escaper;
 use Hyva\Theme\ViewModel\Cart\TotalsOutput;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
 /** @var TotalsOutput $viewModelTotalsOutput */
 
-$viewModelTotalsOutput = $block->getData('viewModelTotalsOutput');
+$viewModelTotalsOutput = $viewModels->require(TotalsOutput::class);
 $subtotalField = $viewModelTotalsOutput->getSubtotalField();
 $subtotalFieldShowBoth = $viewModelTotalsOutput->getSubtotalFieldDisplayBoth();
 $taxLabelAddition = $viewModelTotalsOutput->getTaxLabelAddition();

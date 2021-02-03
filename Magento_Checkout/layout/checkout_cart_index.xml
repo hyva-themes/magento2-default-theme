@@ -23,12 +23,6 @@
         <referenceContainer name="content">
             <block name="cart_dynamic" template="Magento_Checkout::cart.phtml" cacheable="false">
                 <block name="cart_main_js" template="Magento_Checkout::cart/js/cart.phtml">
-                    <arguments>
-                        <argument name="viewModelCart"
-                                  xsi:type="object">Hyva\Theme\ViewModel\Cart\GraphQlQueries
-                        </argument>
-                        <argument name="viewModelStore" xsi:type="object">Hyva\Theme\ViewModel\Store</argument>
-                    </arguments>
                     <block name="js_localstorage_config" template="Hyva_Theme::js/localStorageConfig.phtml">
                         <arguments>
                             <argument name="render_in_script_tag" xsi:type="boolean">false</argument>
@@ -36,22 +30,10 @@
                     </block>
                 </block>
                 <block name="loading" template="Hyva_Theme::ui/loading.phtml"/>
-                <block name="items" template="Magento_Checkout::cart/items.phtml">
-                    <arguments>
-                        <argument name="viewModelItemOutput"
-                                  xsi:type="object">Hyva\Theme\ViewModel\Cart\ItemOutput
-                        </argument>
-                    </arguments>
-                </block>
+                <block name="items" template="Magento_Checkout::cart/items.phtml"/>
                 <block name="coupon" class="Magento\Checkout\Block\Cart\Coupon"
                        template="Magento_Checkout::cart/coupon/form.phtml"/>
-                <block name="totals" template="Magento_Checkout::cart/totals.phtml">
-                    <arguments>
-                        <argument name="viewModelTotalsOutput"
-                                  xsi:type="object">Hyva\Theme\ViewModel\Cart\TotalsOutput
-                        </argument>
-                    </arguments>
-                </block>
+                <block name="totals" template="Magento_Checkout::cart/totals.phtml"/>
                 <block name="empty" template="Magento_Checkout::cart/noItems.phtml"/>
                 <block name="checkout.cart.methods.bottom" class="Magento\Checkout\Block\Cart"
                        template="Magento_Checkout::cart/methods.phtml">
@@ -69,7 +51,6 @@
                 <arguments>
                     <argument name="type" xsi:type="string">crosssell</argument>
                     <argument name="title" xsi:type="string" translate="true">You might also like:</argument>
-                    <argument name="viewModelStore" xsi:type="object">Hyva\Theme\ViewModel\Store</argument>
                 </arguments>
             </block>
         </referenceContainer>

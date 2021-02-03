@@ -8,6 +8,7 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
 use Magento\Catalog\Block\Product\AbstractProduct;
 use Magento\Catalog\Helper\Output as CatalogOutputHelper;
 use Magento\Framework\Escaper;
@@ -18,9 +19,10 @@ use Hyva\Theme\ViewModel\ProductPage;
 
 /** @var AbstractProduct $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
 
 /** @var ProductPage $productViewModel */
-$productViewModel = $block->getData('product_view_model');
+$productViewModel = $viewModels->require(ProductPage::class);
 
 /** @var CatalogOutputHelper $catalogOutputHelper */
 $catalogOutputHelper = $this->helper(CatalogOutputHelper::class);

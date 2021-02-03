@@ -6,15 +6,18 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\Model\ViewModelRegistry;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Escaper;
 use Hyva\Theme\ViewModel\Cart\ItemOutput;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
 /** @var ItemOutput $viewModelItemOutput */
 
-$viewModelItemOutput = $block->getData('viewModelItemOutput');
+$viewModelItemOutput = $viewModels->require(ItemOutput::class);
 
 $displayPriceTaxBoth = $viewModelItemOutput->isItemPriceDisplayBoth();
 $displayPriceInclTax = $viewModelItemOutput->isItemPriceInclTax();

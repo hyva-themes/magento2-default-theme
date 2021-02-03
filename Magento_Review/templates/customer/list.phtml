@@ -7,16 +7,20 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\Customer\ReviewList;
 use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
 
+/** @var $block Template */
 /** @var Escaper $escaper */
+/** @var $viewModels ViewModelRegistry */
 
 /** @var ReviewList $viewModelCustomerReviews */
-$viewModelCustomerReviews = $block->getData('viewModelCustomerReviews');
+$viewModelCustomerReviews = $viewModels->require(ReviewList::class);
 
 /** @var Hyva\Theme\ViewModel\StoreConfig $viewModelStoreConfig */
-$viewModelStoreConfig = $block->getData('viewModelStoreConfig');
+$viewModelStoreConfig = $viewModels->require(\Hyva\Theme\ViewModel\StoreConfig::class);
 
 $productUrlSuffix = $viewModelStoreConfig->getStoreConfig('catalog/seo/product_url_suffix');
 $baseUrl = $block->getBaseUrl();

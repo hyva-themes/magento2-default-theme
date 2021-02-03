@@ -6,19 +6,21 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\Model\ViewModelRegistry;
 use Magento\Framework\Escaper;
 use Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Cart;
 use Magento\Wishlist\Model\Item;
 use Magento\Wishlist\ViewModel\AllowedQuantity;
 
-/** @var Escaper $escaper */
 /** @var Cart $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
 
 /** @var Item $item */
 $item = $block->getItem();
 $product = $item->getProduct();
 /** @var AllowedQuantity $viewModel */
-$viewModel = $block->getData('allowedQuantityViewModel');
+$viewModel = $viewModels->require(AllowedQuantity::class);
 $allowedQty = $viewModel->setItem($item)->getMinMaxQty();
 ?>
 <?php foreach ($block->getChildNames() as $childName): ?>

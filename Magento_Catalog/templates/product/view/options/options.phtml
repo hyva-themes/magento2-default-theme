@@ -6,6 +6,7 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\ProductPage;
 use Magento\Catalog\Block\Product\View\Options;
 use Magento\Catalog\Model\Product\Option;
@@ -13,10 +14,11 @@ use Magento\Framework\Escaper;
 
 /** @var Escaper $escaper */
 /** @var Options $block */
+/** @var ViewModelRegistry $viewModels */
 /** @var Option $option */
 
 /** @var ProductPage $productViewModel */
-$productViewModel = $block->getProductViewModel();
+$productViewModel = $viewModels->require(ProductPage::class);
 
 $options = $block->decorateArray($block->getOptions());
 
