@@ -19,10 +19,22 @@ use Magento\Framework\View\Element\Template;
         return {
             searchOpen: false,
             cart: {},
-            getData: function getData(data) {
+            getData: function (data) {
                 if (data.cart) { this.cart = data.cart }
             },
             menu: initHeaderNavigation()
+        }
+    }
+    function initCompareHeader() {
+        return {
+            compareProducts: null,
+            itemCount: 0,
+            receiveCompareData: function (data) {
+                if (data['compare-products']) {
+                    this.compareProducts = data['compare-products'];
+                    this.itemCount = this.compareProducts.count;
+                }
+            }
         }
     }
 </script>
@@ -39,6 +51,22 @@ use Magento\Framework\View\Element\Template;
         <?= $block->getChildHtml('topmenu') ?>
 
         <div class="flex items-center order-3">
+
+            <a id="compare-link" class="inline-block ml-1 no-underline sm:ml-3 hover:text-black hidden"
+               href="<?= $escaper->escapeUrl($block->getUrl('catalog/product_compare/index')) ?>"
+               x-data="initCompareHeader()"
+               @private-content-loaded.window="receiveCompareData($event.detail.data)"
+               :class="{ 'hidden': !(itemCount > 0) }">
+               <span><?= $escaper->escapeHtml('Compare Products') ?> </span>
+               <span class="text-gray-500">
+                   <span x-show="itemCount === 1">
+                       (<span x-text="itemCount"></span> <?= $escaper->escapeHtml(__('item')) ?>)
+                   </span>
+                   <span x-show="itemCount > 1">
+                       (<span x-text="itemCount"></span> <?= $escaper->escapeHtml(__('items')) ?>)
+                   </span>
+               </span>
+            </a>
 
             <a id="menu-search-icon" class="inline-block ml-1 no-underline sm:ml-3 hover:text-black" href="#"
                @click.prevent="searchOpen = !searchOpen; $nextTick(function () { $refs.searchInput.select(); });">
