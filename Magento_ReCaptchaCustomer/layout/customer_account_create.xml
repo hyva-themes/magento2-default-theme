@@ -18,24 +18,11 @@
                     <argument name="viewModelStoreConfig" xsi:type="object">Hyva\Theme\ViewModel\StoreConfig</argument>
                 </arguments>
             </block>
+            <!-- Do not remove the view model from layout -->
+            <arguments>
+                <argument name="viewModelRecaptcha" xsi:type="object">Hyva\Theme\ViewModel\ReCaptcha</argument>
+            </arguments>
         </referenceBlock>
-        <referenceContainer name="customer.form.register.fields.before">
-            <block class="Magento\ReCaptchaUi\Block\ReCaptcha"
-                   name="recaptcha"
-                   after="-"
-                   template="Magento_ReCaptchaFrontendUi::recaptcha.phtml"
-                   ifconfig="recaptcha_frontend/type_for/customer_create">
-                <arguments>
-                    <argument name="recaptcha_for" xsi:type="string">customer_create</argument>
-                </arguments>
-            </block>
-        </referenceContainer>
-        <referenceContainer name="form.additional.info">
-            <block name="recaptcha_legal_notice_customer_create"
-                   template="Magento_ReCaptchaFrontendUi::legal_notice.phtml"
-                   ifconfig="recaptcha_frontend/type_for/customer_create">
-            </block>
-        </referenceContainer>
         <referenceContainer name="before.body.end">
             <block name="recaptcha_base" template="Magento_ReCaptchaFrontendUi::js/script_loader.phtml"
                    ifconfig="recaptcha_frontend/type_for/customer_create">

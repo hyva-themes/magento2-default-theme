@@ -10,17 +10,29 @@ declare(strict_types=1);
 
 use Magento\Customer\Block\Widget\Name;
 use Magento\Framework\Escaper;
+use Hyva\Theme\ViewModel\ReCaptcha;
 
 /** @var \Magento\Customer\Block\Form\Edit $block */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 /** @var Escaper $escaper */
+
+/** @var ReCaptcha $recaptchaViewModel */
+//Do not replace this with $viewModels->require(ReCaptcha::class); that might break the dependency on
+//Magento's Recaptcha module
+$recaptchaViewModel = $block->getData('viewModelRecaptcha');
+$recaptchaInputFieldBlock = '';
+$recaptchaLegalNoticeBlock = '';
+if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRecaptchaData('customer_edit')) {
+    $recaptchaInputFieldBlock = $recaptchaData[ReCaptcha::RECAPTCHA_INPUT_FIELD];
+    $recaptchaLegalNoticeBlock = $recaptchaData[ReCaptcha::RECAPTCHA_LEGAL_NOTICE_BLOCK];
+}
 ?>
 <form class="form form-edit-account"
       action="<?= $escaper->escapeUrl($block->getUrl('customer/account/editPost')) ?>"
       method="post" id="form-validate"
       enctype="multipart/form-data"
       x-data="initForm()"
-      x-on:submit="return checkPasswordsMatch()"
+      @submit.prevent="submitForm()"
       autocomplete="off">
     <fieldset class="fieldset info">
         <?= $block->getBlockHtml('formkey') ?>
@@ -122,6 +134,7 @@ use Magento\Framework\Escaper;
         </p>
     </fieldset>
     <?= $block->getChildHtml('form_additional_info') ?>
+    <?= $block->getBlockHtml($recaptchaInputFieldBlock) ?>
     <div class="actions-toolbar">
         <div class="primary">
             <button type="submit" class="action save primary" title="<?= $escaper->escapeHtmlAttr(__('Save')) ?>">
@@ -135,9 +148,16 @@ use Magento\Framework\Escaper;
         </div>
     </div>
 </form>
+<div class="w-full">
+    <?= $block->getBlockHtml($recaptchaLegalNoticeBlock) ?>
+</div>
 <script defer>
     function initForm() {
         return {
+            errors: 0,
+            hasCaptchaToken: 0,
+            displayErrorMessage: false,
+            errorMessages: [],
             passwordsMatching: true,
             showPasswordFields: <?= $block->getChangePassword()
                 ? $escaper->escapeJs('true')
@@ -145,6 +165,9 @@ use Magento\Framework\Escaper;
                     'false'
                 ) ?>,
             checkPasswordsMatch: function () {
+                if (!this.showPasswordFields) {
+                    return true;
+                }
                 if (document.getElementById('password').value ===
                     document.getElementById('password-confirmation').value) {
                         this.passwordsMatching = true;
@@ -152,6 +175,21 @@ use Magento\Framework\Escaper;
                     }
                 this.passwordsMatching = false;
                 return false;
+            },
+            setErrorMessages: function setErrorMessages(messages) {
+                this.errorMessages = [messages]
+                this.displayErrorMessage = this.errorMessages.length
+            },
+            submitForm: function () {
+                if (!this.checkPasswordsMatch()){
+                    return;
+                }
+                var $form = document.querySelector('#form-validate');
+                <?= $block->getChildHtml('recaptcha_validation_customer_edit'); ?>
+
+                if (this.errors === 0) {
+                    $form.submit();
+                }
             }
         }
     }

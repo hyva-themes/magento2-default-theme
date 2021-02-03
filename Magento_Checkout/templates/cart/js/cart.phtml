@@ -184,8 +184,8 @@ $viewModelStore = $block->getData('viewModelStore');
                 ).then(function (data) {
                     $this.clearErrorMessages();
                     if (data.errors) {
-                        this.initErrorMessages(data.errors);
-                        this.getCart();
+                        $this.initErrorMessages(data.errors);
+                        $this.getCart();
 
                     } else {
                         $this.cartData = (

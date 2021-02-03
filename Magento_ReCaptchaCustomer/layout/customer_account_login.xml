@@ -9,10 +9,12 @@
  -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+
     <body>
-        <referenceBlock name="forgotPassword">
-            <block name="recaptcha_validation" template="Magento_ReCaptchaFrontendUi::js/script_token.phtml"
-                   ifconfig="recaptcha_frontend/type_for/customer_forgot_password">
+        <referenceBlock name="customer_form_login">
+            <block name="recaptcha_validation_customer_login"
+                   template="Magento_ReCaptchaFrontendUi::js/script_token.phtml"
+                   ifconfig="recaptcha_frontend/type_for/customer_login">
                 <arguments>
                     <argument name="viewModelStoreConfig" xsi:type="object">Hyva\Theme\ViewModel\StoreConfig</argument>
                 </arguments>
@@ -24,7 +26,7 @@
         </referenceBlock>
         <referenceContainer name="before.body.end">
             <block name="recaptcha_base" template="Magento_ReCaptchaFrontendUi::js/script_loader.phtml"
-                   ifconfig="recaptcha_frontend/type_for/customer_forgot_password">
+                   ifconfig="recaptcha_frontend/type_for/customer_login">
                 <arguments>
                     <argument name="viewModelStoreConfig" xsi:type="object">Hyva\Theme\ViewModel\StoreConfig</argument>
                 </arguments>

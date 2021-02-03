@@ -76,7 +76,7 @@ use Magento\Framework\View\Element\Template;
         </div>
     </div>
     <!--Search-->
-    <div class="absolute hidden w-full bg-container-lighter border-t border-container-lighter shadow-sm" id="search-content"
+    <div class="absolute hidden w-full bg-container-lighter border-t border-container-lighter shadow-sm z-10" id="search-content"
          :class="{ 'block': searchOpen, 'hidden': !searchOpen }"
          @click.away="searchOpen = false"
          x-show="true">

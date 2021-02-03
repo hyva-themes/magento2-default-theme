@@ -29,7 +29,7 @@ $product = $block->getProduct();
                     <?= $escaper->escapeHtml($product->getName()) ?>
                 </h3>
 
-                <?= $block->getBlockHtml('product.info.form') ?>
+                <?= $block->getChildHtml('product.info.form') ?>
 
                 <?= $block->getChildHtml("product.info.bundle.price") ?>
 

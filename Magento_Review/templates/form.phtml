@@ -8,6 +8,7 @@
  */
 use Magento\Framework\Escaper;
 use Magento\Review\Block\Form;
+use Hyva\Theme\ViewModel\ReCaptcha;
 
 /* @var Escaper $escaper */
 /* @var Form $block */
@@ -15,6 +16,17 @@ use Magento\Review\Block\Form;
 //phpcs:disable Generic.Files.LineLength
 
 $formId = 'review_form';
+
+/** @var ReCaptcha $recaptchaViewModel */
+//Do not replace this with $viewModels->require(ReCaptcha::class); that might break the dependency on
+//Magento's Recaptcha module
+$recaptchaViewModel = $block->getData('viewModelRecaptcha');
+$recaptchaInputFieldBlock = '';
+$recaptchaLegalNoticeBlock = '';
+if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRecaptchaData('product_review')) {
+    $recaptchaInputFieldBlock = $recaptchaData[ReCaptcha::RECAPTCHA_INPUT_FIELD];
+    $recaptchaLegalNoticeBlock = $recaptchaData[ReCaptcha::RECAPTCHA_LEGAL_NOTICE_BLOCK];
+}
 ?>
 <div class="container mx-auto px-5 py-6 items-center" id="customer-reviews">
     <div class="card w-full px-6 py-3">
@@ -29,6 +41,7 @@ $formId = 'review_form';
                   x-data="initReviewForm()"
             >
                 <?= $block->getChildHtml('form_fields_before') ?>
+                <?= $block->getBlockHtml($recaptchaInputFieldBlock) ?>
                 <fieldset>
                     <legend class="text-xs">
                         <span>
@@ -48,13 +61,9 @@ $formId = 'review_form';
                                     <div id="product-review-table">
                                         <?php foreach ($block->getRatings() as $rating): ?>
                                             <div class="ml-1">
-                                                <label class="hidden"
-                                                       id="<?= $escaper
-                                                           ->escapeHtml($rating->getRatingCode()) ?>_rating_label"
-                                                >
-                                                <span>
-                                                    <?= $escaper->escapeHtml($rating->getRatingCode()) ?>
-                                                </span>
+                                                <label class="sr-only"
+                                                    id="<?= $escaper->escapeHtml($rating->getRatingCode()) ?>_rating_label">
+                                                    <span><?= $escaper->escapeHtml($rating->getRatingCode()) ?></span>
                                                 </label>
                                                 <div class="flex flex-row flex-grow-0"
                                                      x-data="{ clickedRatingId: 0 }">
@@ -134,10 +143,8 @@ $formId = 'review_form';
                     <?php endif ?>
                     <div>
                         <div>
-                            <label for="nickname_field" class="hidden">
-                                <span>
-                                    <?= $escaper->escapeHtml(__('Nickname')) ?>
-                                </span>
+                            <label for="nickname_field" class="sr-only">
+                                <span><?= $escaper->escapeHtml(__('Nickname')) ?></span>
                             </label>
                             <div>
                                 <input class="form-input mt-3 block w-full text-sm"
@@ -148,10 +155,8 @@ $formId = 'review_form';
                             </div>
                         </div>
                         <div>
-                            <label for="summary_field" class="hidden">
-                            <span>
-                                <?= $escaper->escapeHtml(__('Summary')) ?>
-                            </span>
+                            <label for="summary_field" class="sr-only">
+                                <span><?= $escaper->escapeHtml(__('Summary')) ?></span>
                             </label>
                             <div>
                                 <input class="form-input mt-3 block w-full text-sm"
@@ -163,10 +168,8 @@ $formId = 'review_form';
                             </div>
                         </div>
                         <div>
-                            <label for="review_field" class="hidden">
-                            <span>
-                                <?= $escaper->escapeHtml(__('Review')) ?>
-                            </span>
+                            <label for="review_field" class="sr-only">
+                                <span><?= $escaper->escapeHtml(__('Review')) ?></span>
                             </label>
                             <div>
                             <textarea class="form-input mt-3 block w-full text-sm"
@@ -252,20 +255,23 @@ $formId = 'review_form';
                             </span>
                             <?= $escaper->escapeHtml(__('You submitted your review for moderation.')) ?>
                         </p>
-                        <p x-show="displayErrorMessage" class="text-red flex items-center">
-                            <span class="inline-block w-8 h-8 mr-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                     stroke="currentColor">
-                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                            </span>
-                            <template x-for="errorMessage in errorMessages">
-                                <span x-html="errorMessage"></span>
-                            </template>
-                        </p>
+                        <template x-if="displayErrorMessage">
+                            <p class="text-red flex items-center">
+                                <span class="inline-block w-8 h-8 mr-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                         stroke="currentColor">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </span>
+                                <template x-for="errorMessage in errorMessages">
+                                    <span x-html="errorMessage"></span>
+                                </template>
+                            </p>
+                        </template>
                     </div>
                     <?= $block->getChildHtml('form_additional_after') ?>
+                    <?= $block->getBlockHtml($recaptchaLegalNoticeBlock) ?>
                 </div>
             </form>
 

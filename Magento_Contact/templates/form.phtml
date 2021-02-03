@@ -11,6 +11,7 @@ declare(strict_types=1);
 use Magento\Contact\Block\ContactForm;
 use Magento\Contact\Helper\Data as ContactHelper;
 use Magento\Framework\Escaper;
+use Hyva\Theme\ViewModel\ReCaptcha;
 
 /** @var ContactForm $block */
 /** @var Escaper $escaper */
@@ -21,6 +22,16 @@ $formId = 'contact';
 /** @var ContactHelper $contactHelper */
 $contactHelper = $this->helper(ContactHelper::class);
 
+/** @var ReCaptcha $recaptchaViewModel */
+//Do not replace this with $viewModels->require(ReCaptcha::class); that might break the dependency on
+//Magento's Recaptcha module
+$recaptchaViewModel = $block->getData('viewModelRecaptcha');
+$recaptchaInputFieldBlock = '';
+$recaptchaLegalNoticeBlock = '';
+if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRecaptchaData('contact')) {
+    $recaptchaInputFieldBlock = $recaptchaData[ReCaptcha::RECAPTCHA_INPUT_FIELD];
+    $recaptchaLegalNoticeBlock = $recaptchaData[ReCaptcha::RECAPTCHA_LEGAL_NOTICE_BLOCK];
+}
 ?>
 <div class="container flex-columns-wrapper justify-between py-8">
     <form class="form contact card lg:w-1/2 md:w-2/3 mr-4"
@@ -91,6 +102,7 @@ $contactHelper = $this->helper(ContactHelper::class);
                               ) ?></textarea>
                 </div>
                 <?= $block->getChildHtml('form.additional.info') ?>
+                <?= $block->getBlockHtml($recaptchaInputFieldBlock) ?>
             </div>
         </fieldset>
         <div class="w-full">
@@ -101,6 +113,7 @@ $contactHelper = $this->helper(ContactHelper::class);
         </div>
         <div class="w-full">
             <?= $block->getChildHtml('form.additional.after') ?>
+            <?= $block->getBlockHtml($recaptchaLegalNoticeBlock) ?>
         </div>
     </form>
     <script defer>

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<page
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+            <referenceBlock name="authentication-popup">
+                <block name="recaptcha_validation_customer_login"
+                       template="Magento_ReCaptchaFrontendUi::js/script_token.phtml"
+                       ifconfig="recaptcha_frontend/type_for/customer_login">
+                    <arguments>
+                        <argument name="viewModelStoreConfig" xsi:type="object">Hyva\Theme\ViewModel\StoreConfig</argument>
+                    </arguments>
+                </block>
+                <!-- Do not remove the view model from layout -->
+                <arguments>
+                    <argument name="viewModelRecaptcha" xsi:type="object">Hyva\Theme\ViewModel\ReCaptcha</argument>
+                </arguments>
+            </referenceBlock>
+            <referenceContainer name="before.body.end">
+                <block name="recaptcha_base" template="Magento_ReCaptchaFrontendUi::js/script_loader.phtml"
+                       ifconfig="recaptcha_frontend/type_for/customer_login">
+                    <arguments>
+                        <argument name="viewModelStoreConfig" xsi:type="object">Hyva\Theme\ViewModel\StoreConfig</argument>
+                    </arguments>
+                </block>
+            </referenceContainer>
+    </body>
+</page>

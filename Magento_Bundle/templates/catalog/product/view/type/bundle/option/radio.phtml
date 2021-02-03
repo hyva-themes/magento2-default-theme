@@ -139,6 +139,7 @@ $activeSelectOptions = [];
         name="bundle_option_qty[<?= (int)$optionId ?>]"
         class="form-input w-20 disabled:opacity-75"
         type="number"
+        min="0"
         value="<?= $escaper->escapeHtmlAttr($defaultQty) ?>"
         :value="qtyHelper_<?= (int)$optionId ?>.getQtyValue(optionConfig, activeSelectOptions)"
         x-ref="option-<?= (int)$optionId ?>-qty"

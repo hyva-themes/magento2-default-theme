@@ -50,7 +50,7 @@ $product = $block->getProduct();
 <div x-data="initQtyField()"
      class="">
     <?php if ($product->isSaleable()): ?>
-        <span class="mr-2">
+        <div class="mr-2">
             <label for="qty[<?= (int)$product->getId() ?>]"
                    class="sr-only"
             >
@@ -68,6 +68,6 @@ $product = $block->getProduct();
                    x-model.number="qty"
                    @change="$dispatch('update-qty-<?= (int)$product->getId() ?>', qty)"
             />
-        </span>
+        </div>
     <?php endif; ?>
 </div>

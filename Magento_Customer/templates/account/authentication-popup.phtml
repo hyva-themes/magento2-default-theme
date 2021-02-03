@@ -10,9 +10,21 @@ declare(strict_types=1);
 
 use Magento\Framework\Escaper;
 use Magento\Customer\Block\Account\Customer;
+use Hyva\Theme\ViewModel\ReCaptcha;
 
 /** @var Escaper $escaper */
 /** @var Customer $block */
+
+/** @var ReCaptcha $recaptchaViewModel */
+//Do not replace this with $viewModels->require(ReCaptcha::class); that might break the dependency on
+//Magento's Recaptcha module
+$recaptchaViewModel = $block->getData('viewModelRecaptcha');
+$recaptchaInputFieldBlock = '';
+$recaptchaLegalNoticeBlock = '';
+if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRecaptchaData('customer_login')) {
+    $recaptchaInputFieldBlock = $recaptchaData[ReCaptcha::RECAPTCHA_INPUT_FIELD];
+    $recaptchaLegalNoticeBlock = $recaptchaData[ReCaptcha::RECAPTCHA_LEGAL_NOTICE_BLOCK];
+}
 ?>
 <script>
     function initAuthentication() {
@@ -20,6 +32,22 @@ use Magento\Customer\Block\Account\Customer;
             open: false,
             forceAuthentication: false,
             checkoutUrl: '<?= $escaper->escapeUrl($block->getUrl('checkout/index')) ?>',
+            errors: 0,
+            hasCaptchaToken: 0,
+            displayErrorMessage: false,
+            errorMessages: [],
+            setErrorMessages: function setErrorMessages(messages) {
+                this.errorMessages = [messages]
+                this.displayErrorMessage = this.errorMessages.length
+            },
+            submitForm: function () {
+                var $form = document.querySelector('#login-form');
+                <?= $block->getChildHtml('recaptcha_validation_customer_login'); ?>
+
+                if (this.errors === 0) {
+                    this.dispatchLoginRequest($form);
+                }
+            },
             onPrivateContentLoaded: function (data) {
                 const isLoggedIn = data.customer && data.customer.firstname;
                 if (data.cart && !isLoggedIn) {
@@ -34,18 +62,27 @@ use Magento\Customer\Block\Account\Customer;
                     window.location.href = this.checkoutUrl;
                 }
             },
-            dispatchLoginRequest: function() {
+            dispatchLoginRequest: function(form) {
                 this.isLoading = true;
                 var username = this.$refs['customer-email'].value;
                 var password = this.$refs['customer-password'].value;
                 var formKey = document.querySelector('input[name=form_key]').value;
+                var bodyFields = {
+                    'username': username,
+                    'password': password,
+                    'formKey': formKey
+                };
+                var recaptchaField = form.querySelector('input[name=g-recaptcha-response]');
+                if (recaptchaField != null) {
+                    bodyFields['g-recaptcha-response'] = recaptchaField.value;
+                }
                 fetch('<?= $escaper->escapeUrl($block->getUrl('customer/ajax/login')) ?>', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'X-Requested-With': 'XMLHttpRequest'
                         },
-                        body: JSON.stringify({username: username, password: password, form_key: formKey})
+                        body: JSON.stringify(bodyFields)
                     }
                 ).then(response => {
                         return response.json()
@@ -56,7 +93,9 @@ use Magento\Customer\Block\Account\Customer;
                         dispatchMessages([{
                             type: 'error',
                             text: data.message
-                        }], 5000)
+                        }], 5000);
+                        this.errors = 1;
+                        this.hasCaptchaToken = 0;
                     } else {
                         window.location.href = this.checkoutUrl;
                     }
@@ -113,9 +152,10 @@ use Magento\Customer\Block\Account\Customer;
 
                         <form class="form form-login"
                               method="post"
-                              @submit.prevent="dispatchLoginRequest();"
+                              @submit.prevent="submitForm();"
                               id="login-form"
                         >
+                            <?= $block->getBlockHtml($recaptchaInputFieldBlock) ?>
                             <div class="fieldset login">
                                 <div class="field email required">
                                     <label class="label" for="customer-email">
@@ -161,7 +201,9 @@ use Magento\Customer\Block\Account\Customer;
                             </div>
                         </form>
                     </div>
-
+                    <div class="w-full">
+                        <?= $block->getBlockHtml($recaptchaLegalNoticeBlock) ?>
+                    </div>
                     <div class="block-new-customer bg-container border border-container mx-4 p-4 shadow-sm">
                         <h2 id="authenticate-new-customer" class="text-lg mb-2 font-medium leading-7 text-gray-900">
                             <?= $escaper->escapeHtml(__('Checkout as a new customer')) ?>

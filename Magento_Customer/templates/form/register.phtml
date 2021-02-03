@@ -14,6 +14,7 @@ use Magento\Customer\Block\Widget\Gender;
 use Magento\Customer\Block\Widget\Taxvat;
 use Magento\Customer\Helper\Address;
 use Magento\Framework\Escaper;
+use Hyva\Theme\ViewModel\ReCaptcha;
 
 /** @var Register $block */
 /** @var Escaper $escaper */
@@ -21,6 +22,17 @@ use Magento\Framework\Escaper;
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
 
 $formId = 'accountcreate';
+
+/** @var ReCaptcha $recaptchaViewModel */
+//Do not replace this with $viewModels->require(ReCaptcha::class); that might break the dependency on
+//Magento's Recaptcha module
+$recaptchaViewModel = $block->getData('viewModelRecaptcha');
+$recaptchaInputFieldBlock = '';
+$recaptchaLegalNoticeBlock = '';
+if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRecaptchaData('customer_create')) {
+    $recaptchaInputFieldBlock = $recaptchaData[ReCaptcha::RECAPTCHA_INPUT_FIELD];
+    $recaptchaLegalNoticeBlock = $recaptchaData[ReCaptcha::RECAPTCHA_LEGAL_NOTICE_BLOCK];
+}
 ?>
 <div class="mb-8">
     <?php /* Extensions placeholder */ ?>
@@ -34,6 +46,7 @@ $formId = 'accountcreate';
         <?= /* @noEscape */
         $block->getBlockHtml('formkey'); ?>
         <?= $block->getChildHtml('form_fields_before') ?>
+        <?= $block->getBlockHtml($recaptchaInputFieldBlock) ?>
         <div class="md:grid grid-cols-2 gap-4">
             <fieldset class="my-8 card">
                 <legend>
@@ -143,6 +156,7 @@ $formId = 'accountcreate';
                 </p>
                 </div>
                 <?= $block->getChildHtml('form_additional_info') ?>
+                <?= $block->getBlockHtml($recaptchaLegalNoticeBlock) ?>
             </fieldset>
         </div>
 
