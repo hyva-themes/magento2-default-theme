@@ -93,7 +93,7 @@ if (!$product) {
         <p class="pt-1 text-gray-900">
             <?= /* @noEscape */ $block->getProductPrice($product) ?>
         </p>
-        <div class="pt-3 flex justify-center">
+        <div class="pt-3 flex flex-wrap justify-center">
             <?php if ($product->isSaleable()): ?>
             <button class="w-auto mr-auto btn btn-primary justify-center text-sm px-4 md:px-2 lg:px-4"
                     aria-label="<?= $escaper->escapeHtmlAttr('View Product') ?>"
@@ -161,7 +161,7 @@ if (!$product) {
                     @click.prevent="addToWishlist(<?= (int)$product->getId() ?>)"
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Wish List')) ?>"
                     type="button"
-                    class="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 hover:text-red-600 ml-4">
+                    class="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex flex-shrink-0 items-center justify-center text-gray-500 hover:text-red-600 ml-2">
                 <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5"
                      viewBox="0 0 24 24">
                     <path
@@ -205,7 +205,7 @@ if (!$product) {
                     @click.prevent="addToCompare(<?= (int)$product->getId() ?>)"
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Compare')) ?>"
                     type="button"
-                    class="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 hover:text-yellow-500 ml-4">
+                    class="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex flex-shrink-0 items-center justify-center text-gray-500 hover:text-yellow-500 ml-2">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
                 </svg>
