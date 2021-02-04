@@ -52,19 +52,20 @@ use Magento\Framework\View\Element\Template;
 
         <div class="flex items-center order-3">
 
-            <a id="compare-link" class="inline-block ml-1 no-underline sm:ml-3 hover:text-black hidden"
+            <a id="compare-link" class="relative inline-block ml-1 no-underline sm:ml-3 hover:text-black hidden"
                href="<?= $escaper->escapeUrl($block->getUrl('catalog/product_compare/index')) ?>"
+               title="<?= $escaper->escapeHtml('Compare Products') ?>"
                x-data="initCompareHeader()"
                @private-content-loaded.window="receiveCompareData($event.detail.data)"
                :class="{ 'hidden': !(itemCount > 0) }">
-               <span><?= $escaper->escapeHtml('Compare Products') ?> </span>
-               <span class="text-gray-500">
-                   <span x-show="itemCount === 1">
-                       (<span x-text="itemCount"></span> <?= $escaper->escapeHtml(__('item')) ?>)
-                   </span>
-                   <span x-show="itemCount > 1">
-                       (<span x-text="itemCount"></span> <?= $escaper->escapeHtml(__('items')) ?>)
-                   </span>
+               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-8 h-8 md:h-6 md:w-6 hover:text-black">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"></path>
+                </svg>
+               <span class="label sr-only"><?= $escaper->escapeHtml('Compare Products') ?></span>
+               <span class="absolute top-0 right-0 h-5 px-2 py-1 -mt-5 -mr-4 text-xs font-semibold leading-none text-center text-white uppercase transform -translate-x-1 translate-y-1/2 rounded-full bg-yellow-500">
+                    <span x-text="itemCount"></span>
+                    <span x-show="itemCount === 1" class="sr-only"><?= $escaper->escapeHtml(__('item')) ?></span>
+                    <span x-show="itemCount > 1" class="sr-only"><?= $escaper->escapeHtml(__('items')) ?></span>
                </span>
             </a>
 
