@@ -33,67 +33,69 @@ $imageDisplayArea = $block->getData('image_display_area');
 $templateType = $block->getData('template_type');
 $viewMode = $block->getData('view_mode');
 $showDescription = $block->getData('show_description');
+$viewIsGrid = $viewMode === 'grid' ? true : false;
 
 if (!$product) {
     return '';
 } ?>
-<div class="item product product-item w-full md:w-1/2 xl:w-1/3 flex">
-    <?php if ($product->isSaleable()): ?>
-    <form method="post"
-          action="<?= $escaper->escapeUrl($productViewModel->getAddToCartUrl($product)) ?>"
-          class="product_addtocart_form card card-interactive mr-2 mb-2"
-        <?php if ($product->getOptions()): ?>
-            enctype="multipart/form-data"
-        <?php endif; ?>
-    >
-        <?= /** @noEscape */
-        $block->getBlockHtml('formkey') ?>
-        <input type="hidden" name="product" value="<?= (int)$product->getId() ?>"/>
-    <?php else: ?>
-        <div class="card card-interactive mr-2 mb-2">
+
+<?php if ($product->isSaleable()): ?>
+<form method="post"
+    action="<?= $escaper->escapeUrl($productViewModel->getAddToCartUrl($product)) ?>"
+    class="item product product-item product_addtocart_form card card-interactive <?= $viewIsGrid ? 'flex flex-col' : 'flex flex-col md:flex-row' ?>"
+    <?php if ($product->getOptions()): ?>
+    enctype="multipart/form-data"
     <?php endif; ?>
-        <?php
-        $productImage = $block->getImage($product, $imageDisplayArea);
-        ?>
-        <?php // Product Image ?>
-        <a href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>"
-           class="product photo product-item-photo"
-           tabindex="-1">
-            <img class="hover:shadow-sm"
-                 loading="lazy"
-                 alt="<?= $escaper->escapeHtmlAttr($productImage->getLabel()) ?>"
-                 title="<?= $escaper->escapeHtmlAttr($productImage->getLabel()) ?>"
-                 src="<?= $escaper->escapeUrl($productImage->getImageUrl()) ?>"
-                 width="<?= $escaper->escapeHtmlAttr($productImage->getWidth()) ?>"
-                 height="<?= $escaper->escapeHtmlAttr($productImage->getHeight()) ?>"
-            />
-        </a>
-        <?php
-        $productNameStripped = $block->stripTags($product->getName(), null, true);
-        ?>
-        <div class="pt-3 flex items-center justify-center text-primary">
+>
+    <?= /** @noEscape */ $block->getBlockHtml('formkey') ?>
+    <input type="hidden" name="product" value="<?= (int)$product->getId() ?>"/>
+<?php else: ?>
+<div class="item product product-item card card-interactive <?= $viewIsGrid ? 'flex flex-col' : 'flex flex-col md:flex-row' ?>">
+<?php endif; ?>
+    <?php
+    $productImage = $block->getImage($product, $imageDisplayArea);
+    ?>
+    <?php // Product Image ?>
+    <a href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>"
+        class="product photo product-item-photo block <?= $viewIsGrid ? 'mx-auto mb-3' : 'mx-auto mb-3 md:w-2/6 md:mb-0 md:mr-5' ?>"
+        tabindex="-1">
+        <img class="hover:shadow-sm object-contain"
+            loading="lazy"
+            alt="<?= $escaper->escapeHtmlAttr($productImage->getLabel()) ?>"
+            title="<?= $escaper->escapeHtmlAttr($productImage->getLabel()) ?>"
+            src="<?= $escaper->escapeUrl($productImage->getImageUrl()) ?>"
+            width="<?= $escaper->escapeHtmlAttr($productImage->getWidth()) ?>"
+            height="<?= $escaper->escapeHtmlAttr($productImage->getHeight()) ?>"
+        />
+    </a>
+    <div class="product-info flex flex-col flex-grow">
+        <?php $productNameStripped = $block->stripTags($product->getName(), null, true); ?>
+        <div class="mt-2 mb-1 items-center justify-center text-primary font-semibold text-lg <?= $viewIsGrid ? 'text-center' : 'text-center md:text-left' ?>">
             <a class="product-item-link"
                href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>">
                 <?= /* @noEscape */
                 $catalogOutputHelper->productAttribute($product, $product->getName(), 'name') ?>
             </a>
         </div>
-        <div class="py-1 mx-auto w-6/12">
-            <?= $block->getReviewsSummaryHtml($product, $templateType) ?>
+        <div class="py-1 <?= $viewIsGrid ? 'mx-auto w-6/12' : 'mx-auto w-6/12 md:mx-0 md:w-auto' ?>">
+            <?= $block->getReviewsSummaryHtml($product, 'short') ?>
         </div>
         <p class="pt-1 text-gray-900">
             <?= /* @noEscape */ $block->getProductPrice($product) ?>
         </p>
-        <div class="pt-3 flex justify-center">
+        <div class="mt-auto pt-3 flex">
             <?php if ($product->isSaleable()): ?>
-            <button class="w-auto mr-auto btn btn-primary justify-center text-sm px-4 md:px-2 lg:px-4"
-                    aria-label="<?= $escaper->escapeHtmlAttr('View Product') ?>"
+            <button class="w-auto btn btn-primary justify-center text-sm px-4 md:px-2 lg:px-4
+                        <?= $viewIsGrid ? 'mr-auto' : 'mr-auto md:mr-0' ?>"
+                    aria-label="<?= $escaper->escapeHtmlAttr('Add to Cart') ?>"
                     href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>"
             >
                 <svg class="h-6 w-6 border-current inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
                 </svg>
-                <span class="inline md:hidden lg:inline"><?= $escaper->escapeHtml('Add to Cart') ?></span>
+                <span class="ml-1 <?= $viewIsGrid ? 'inline md:ml-0 md:hidden lg:ml-1 lg:inline' : 'inline' ?>">
+                    <?= $escaper->escapeHtml('Add to Cart') ?>
+                </span>
             </button>
             <?php endif; ?>
             <script defer>
@@ -152,15 +154,15 @@ if (!$product) {
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Wish List')) ?>"
                     class="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 hover:text-red-600 ml-4">
                 <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5"
-                     viewBox="0 0 24 24">
+                    viewBox="0 0 24 24">
                     <path
                         d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
                 </svg>
             </button>
         </div>
-    <?php if ($product->isSaleable()): ?>
-    </form>
-    <?php else: ?>
     </div>
-    <?php endif; ?>
+<?php if ($product->isSaleable()): ?>
+</form>
+<?php else: ?>
 </div>
+<?php endif; ?>

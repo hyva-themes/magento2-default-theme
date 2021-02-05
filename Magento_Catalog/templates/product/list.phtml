@@ -44,7 +44,7 @@ $productCollection = $block->getLoadedProductCollection();
     $pos = $block->getPositioned();
     ?>
     <div class="products wrapper mode-<?= /* @noEscape */ $viewMode ?> products-<?= /* @noEscape */ $viewMode ?>">
-        <div class="mx-auto flex flex-wrap pt-4 pb-12 -mr-2">
+        <div class="mx-auto pt-4 pb-12 grid gap-4 <?= $viewMode === 'grid' ? 'sm:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1' ?>">
             <?php /** @var \Magento\Catalog\Model\Product $product */ ?>
             <?php foreach ($productCollection as $product):?>
                 <?= $block->getLayout()->getBlock('product_list_item')
