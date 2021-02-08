@@ -14,7 +14,18 @@
             <block class="Magento\Review\Block\Product\View\ListView" name="review_list"
                    template="Magento_Review::product/view/list.phtml"
                    ifconfig="catalog/review/active">
-                <block class="Magento\Theme\Block\Html\Pager" name="product_review_list.toolbar" ifconfig="catalog/review/active"/>
+                <!--
+                    /**
+                      * Don't use the default block name `product_review_list.toolbar`. It depends on the product-registry in
+                      * the context of AJAX controllers, such as `page_cache/block/esi/blocks`. Since the product is not set
+                      * in that context, the page will fail to load with the error:
+                      * `Call to a member function getId() on null in vendor/magento/module-review/Block/Product/View.php:138`
+                      *
+                      * This is due to the method \Magento\Review\Block\Product\View\ListView::_prepareLayout which is
+                      * calling getReviewsCollection()
+                      */
+                  -->
+                <block class="Magento\Theme\Block\Html\Pager" name="review_list.toolbar" ifconfig="catalog/review/active"/>
             </block>
             <block class="Magento\Review\Block\Form"
                    name="product.review.form"

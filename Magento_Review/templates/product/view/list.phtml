@@ -14,7 +14,8 @@ use Magento\Framework\Escaper;
 /* @var SecureHtmlRenderer $secureRenderer */
 /* @var Escaper $escaper */
 
-$items = $block->getReviewsCollection()->getItems();
+$reviewCollection = $block->getReviewsCollection();
+$items = $reviewCollection->getItems();
 $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
 ?>
 <?php if (count($items)): ?>
@@ -103,8 +104,10 @@ $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
                 </div>
             <?php endforeach; ?>
         </div>
+        <?php if ($toolbar = $block->getChildBlock('review_list.toolbar')): ?>
         <div class="toolbar container review-toolbar mt-4">
-            <?= $block->getChildHtml('toolbar') ?>
+            <?= $toolbar->setCollection($reviewCollection)->toHtml() ?>
         </div>
+        <?php endif; ?>
     </div>
 <?php endif; ?>

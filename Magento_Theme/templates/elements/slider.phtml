@@ -278,7 +278,7 @@ $graphqlQuery = $query ?: "
                         <div class="flex-none w-full py-1 js_slide md:w-1/2 lg:w-1/3 xl:w-1/4">
                             <div class="mx-1 card card-interactive">
                                 <a :href="'<?= $escaper->escapeUrl($block->getBaseUrl()) ?>' +
-                                    product.url_key + product.url_suffix"
+                                    product.url_key + (product.url_suffix || '')"
                                    class="relative flex items-center bg-white product photo product-item-photo"
                                    style="padding-top:100%"
                                    tabindex="-1">
@@ -297,7 +297,7 @@ $graphqlQuery = $query ?: "
                                 <p class="flex items-center justify-center px-1 pt-3 text-primary">
                                     <a class="truncate product-item-link"
                                         :href="'<?= $escaper->escapeUrl($block->getBaseUrl()) ?>' +
-                                            product.url_key + product.url_suffix"
+                                            product.url_key + (product.url_suffix || '')"
                                        >
                                         <span x-text="product.name"></span>
                                     </a>
@@ -310,7 +310,7 @@ $graphqlQuery = $query ?: "
                                 <p class="flex flex-wrap inline p-3">
                                     <a class="justify-center w-auto mr-auto btn btn-primary"
                                        :href="'<?= $escaper->escapeUrl($block->getBaseUrl()) ?>' +
-                                            product.url_key + product.url_suffix">
+                                            product.url_key + (product.url_suffix || '')">
                                         <span class="inline"><?= $escaper->escapeHtml(__('View Product')) ?></span>
                                     </a>
                                     <button
