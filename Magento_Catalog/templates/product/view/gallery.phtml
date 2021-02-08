@@ -76,7 +76,7 @@ $mediumHeight = $block->getImageAttribute('product_page_image_medium', 'height',
                         :alt="image.caption"
                         :title="image.caption"
                         @click="fullscreen = true"
-                        class="absolute top-0 left-0 right-0 object-contain object-center w-full h-auto max-h-75"
+                        class="absolute inset-0 object-contain object-center max-h-75 m-auto"
                         :class="{ 'cursor-pointer': !fullscreen }"
                         width="<?= /* @noEscape */ $mediumWidth ?>"
                         height="<?= /* @noEscape */ $mediumHeight ?>"

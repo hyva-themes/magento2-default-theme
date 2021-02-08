@@ -1284,15 +1284,6 @@ body {
   padding-right: 1.5rem;
 }
 
-@media (min-width: 768px) {
-  .md\:container {
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-}
-
 .flex-columns-wrapper {
   display: flex;
   flex-direction: column;
@@ -2134,6 +2125,10 @@ body {
 
 .m-0 {
   margin: 0px;
+}
+
+.m-auto {
+  margin: auto;
 }
 
 .-m-2 {
