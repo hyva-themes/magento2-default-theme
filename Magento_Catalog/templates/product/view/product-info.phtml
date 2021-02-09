@@ -21,10 +21,6 @@ use Magento\Framework\View\Element\Template;
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var ProductCompare $compareViewModel */
-$compareViewModel = $viewModels->require(ProductCompare::class);
-/** @var Wishlist $wishlistViewModel */
-$wishlistViewModel = $viewModels->require(Wishlist::class);
 /** @var ProductPage $productViewModel */
 $productViewModel = $viewModels->require(ProductPage::class);
 /** @var ProductAttributes $attributesViewModel */
@@ -32,8 +28,6 @@ $attributesViewModel = $viewModels->require(ProductAttributes::class);
 /** @var Product $product */
 $product = $productViewModel->getProduct();
 
-$showAddToWishlist = $wishlistViewModel->isEnabled();
-$showAddToCompare = $compareViewModel->showOnProductPage();
 ?>
 <div class="order-2 w-full mb-6 md:w-7/12 md:pl-5 lg:pl-10 md:py-6 lg:w-1/2 md:mb-0">
     <h1 class="mb-3 text-3xl font-medium text-gray-900 title-font">
@@ -100,121 +94,10 @@ $showAddToCompare = $compareViewModel->showOnProductPage();
             <?= $block->getChildHtml("product.info.addtocart") ?>
         <?php endif; ?>
 
-        <?php if ($showAddToWishlist): ?>
-        <script defer>
-            function initWishlist() {
-                return {
-                    addToWishlist: function addToWishlist(productId) {
-                        var formKey = document.querySelector('input[name=form_key]').value;
-                        var postUrl = BASE_URL + "wishlist/index/add/";
-                        fetch(postUrl, {
-                            "headers": {
-                                "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-                            },
-                            "body": (
-                                "form_key=" + formKey + "&product=" + productId +
-                                "&uenc=" + btoa(window.location.href)
-                            ),
-                            "method": "POST",
-                            "mode": "cors",
-                            "credentials": "include"
-                        }).then(function (response) {
-                            if (response.redirected) {
-                                window.location.href = response.url;
-                            } else if (response.ok) {
-                                return response.json();
-                            } else {
-                                typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
-                                    [{
-                                        type: "warning",
-                                        text: "<?= $escaper->escapeHtml(__('Could not add item to wishlist.')) ?>"
-                                    }], 5000
-                                );
-                            }
-                        }).then(function (response) {
-                            if (!response) {
-                                return;
-                            }
-                            typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
-                                [{
-                                    type: (response.success) ? "success" : "error",
-                                    text: (response.success)
-                                        ? "<?= $escaper->escapeHtml(
-                                            __("%1 has been added to your Wish List.", __("Product"))
-                                        ) ?>"
-                                        : response.error_message
-                                }], 5000
-                            );
-                            var reloadCustomerDataEvent = new CustomEvent("reload-customer-section-data");
-                            window.dispatchEvent(reloadCustomerDataEvent);
-                        }).catch(function (error) {
-                            typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
-                                [{
-                                    type: "error",
-                                    text: error
-                                }], 5000
-                            );
-                        });
-                    }
-                }
-            }
-        </script>
+        <?= $block->getChildHtml('product.info.addtowishlist'); ?>
 
-        <button x-data="initWishlist()"
-                @click.prevent="addToWishlist(<?= (int)$product->getId() ?>)"
-                aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Wish List')) ?>"
-                class="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex
-                    items-center justify-center text-gray-500 hover:text-red-600 ml-4">
-            <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5"
-                 viewBox="0 0 24 24">
-                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12
-                21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
-            </svg>
-        </button>
-        <?php endif; ?>
+        <?= $block->getChildHtml('product.info.addtocompare'); ?>
 
-        <?php if ($showAddToCompare): ?>
-        <script defer>
-            function initCompare() {
-                return {
-                    addToCompare: function (productId) {
-                        const formKey = document.querySelector('input[name=form_key]').value;
-                        const postUrl = BASE_URL + 'catalog/product_compare/add/';
-
-                        fetch(postUrl, {
-                            "headers": {
-                                "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-                            },
-                            "body": "form_key="+ formKey + "&product="+productId+"&uenc="+btoa(window.location.href),
-                            "method": "POST",
-                            "mode": "cors",
-                            "credentials": "include"
-                        }).then(function (response) {
-                            if (response.redirected) {
-                                window.location.href = response.url;
-                            }
-                        }).catch(function (error) {
-                            typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
-                                [{
-                                    type: "error",
-                                    text: error
-                                }], 5000
-                            );
-                        });
-                    }
-                };
-            }
-        </script>
-
-        <button x-data="initCompare()"
-                @click.prevent="addToCompare(<?= (int)$product->getId() ?>)"
-                aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Compare')) ?>"
-                class="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 hover:text-yellow-500 ml-2">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
-            </svg>
-        </button>
-        <?php endif; ?>
         </div>
     </div>
 

@@ -17,9 +17,9 @@ use Magento\Wishlist\Model\Item;
 $item = $block->getItem();
 $product = $item->getProduct();
 ?>
-<strong class="product-item-name">
+<span class="product-item-name mt-2 mb-1 items-center justify-center text-primary font-semibold text-lg text-center">
     <a href="<?= $escaper->escapeUrl($block->getProductUrl($item)) ?>"
        title="<?= $escaper->escapeHtmlAttr($product->getName()) ?>" class="product-item-link">
         <?= $escaper->escapeHtml($product->getName()) ?>
     </a>
-</strong>
+</span>

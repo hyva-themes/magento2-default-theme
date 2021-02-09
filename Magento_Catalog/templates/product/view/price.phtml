@@ -95,7 +95,7 @@ $priceHelper = $this->helper(PriceHelper::class);
             calculateFinalPrice() {
                 let finalPrice = this.initialFinalPrice;
 
-                if (this.activeProductsPriceData) {
+                if (this.activeProductsPriceData && this.activeProductsPriceData.tierPrices) {
                     finalPrice = this.activeProductsPriceData.tierPrices.reduce((finalValue, tierPrice) => {
                         if (this.qty >= tierPrice.qty) {
                             return tierPrice.price < finalValue ? tierPrice.price : finalValue;

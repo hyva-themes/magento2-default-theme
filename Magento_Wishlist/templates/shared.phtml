@@ -1,0 +1,158 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+use Magento\Framework\Escaper;
+use Magento\Framework\Pricing\Render;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Wishlist\Block\Share\Wishlist;
+
+/** @var Wishlist $block */
+/** @var Escaper $escaper */
+/** @var SecureHtmlRenderer $secureRenderer */
+?>
+<div class="container">
+    <?php if ($block->hasWishlistItems()): ?>
+        <script>
+            function initSharedWishList() {
+                return {
+                    postForm(postParams) {
+                        const form = document.createElement("form");
+
+                        let data = postParams.data;
+
+                        if (!data.uenc) {
+                            data.uenc = btoa(window.location.href);
+                        }
+                        form.method = "POST";
+                        form.action = postParams.action;
+
+                        Object.keys(postParams.data).map(key => {
+                            const field = document.createElement("input");
+                            field.type = 'hidden'
+                            field.value = postParams.data[key];
+                            field.name = key;
+                            form.appendChild(field);
+                        });
+
+                        const form_key = document.createElement("input");
+                        form_key.type = 'hidden';
+                        form_key.value = document.querySelector('input[name=form_key]').value;
+                        form_key.name="form_key";
+                        form.appendChild(form_key);
+
+                        document.body.appendChild(form);
+
+                        form.submit();
+                    }
+                }
+            }
+        </script>
+        <form x-data="initSharedWishList()"
+              class="form shared wishlist card mb-4"
+              action="<?= $escaper->escapeUrl($block->getUrl('wishlist/index/update')) ?>"
+              method="post">
+            <div class="hidden md:grid grid-cols-3 " id="wishlist-items">
+                <div class="text-sm text-secondary p-2"><?= $escaper->escapeHtml(__('Product')) ?></div>
+                <div class="text-sm text-secondary p-2"><?= $escaper->escapeHtml(__('Comment')) ?></div>
+                <div class="text-sm text-secondary p-2"><?= $escaper->escapeHtml(__('Add to Cart')) ?></div>
+            </div>
+                <?php foreach ($block->getWishlistItems() as $item): ?>
+                    <?php
+                    $product = $item->getProduct();
+                    $isVisibleProduct = $product->isVisibleInSiteVisibility();
+                    ?>
+                    <div class="grid grid-cols-1 md:grid-cols-3 even:bg-container-darker" id="wishlist-items">
+                        <div class="p-4 flex flex-wrap gap-4 items-center">
+                            <div class="md:hidden text-sm text-secondary w-full ">
+                                <?= $escaper->escapeHtml(__('Product')) ?>
+                            </div>
+                            <a class="product shadow photo mr-4 inline-flex"
+                               href="<?= $escaper->escapeUrl($block->getProductUrl($item)) ?>"
+                               title="<?= $escaper->escapeHtmlAttr($product->getName()) ?>">
+                                <?= $block->getImage(
+                                    $product,
+                                    'customer_shared_wishlist'
+                                )->setTemplate('Magento_Catalog::product/image.phtml')->toHtml() ?>
+                            </a>
+
+                            <a class="inline-flex underline w-full"
+                               href="<?= $escaper->escapeUrl($block->getProductUrl($item)) ?>"
+                            >
+                                <?= $escaper->escapeHtml($product->getName()) ?>
+                            </a>
+
+                            <div class="w-full">
+                                <?=
+                                $block->getProductPriceHtml(
+                                    $product,
+                                    'wishlist_configured_price',
+                                    Render::ZONE_ITEM_LIST,
+                                    ['item' => $item]
+                                );
+                                ?>
+                                <?= $block->getDetailsHtml($item) ?>
+                            </div>
+                        </div>
+
+                        <div class="p-4 flex flex-wrap items-center">
+                            <?php if ($block->hasDescription($item)): ?>
+                                <div class="md:hidden text-sm text-secondary w-full ">
+                                    <?= $escaper->escapeHtml(__('Comment')) ?>
+                                </div>
+                                <?= /* @noEscape */ $block->getEscapedDescription($item) ?>
+                            <?php endif; ?>
+                        </div>
+
+                        <div class="p-4 flex flex-wrap gap-2 items-center">
+
+                            <?php if ($product->isSaleable()): ?>
+                                <?php if ($isVisibleProduct): ?>
+                                    <button type="button"
+                                            title="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>"
+                                            @click.prevent='postForm(<?= /* @noEscape */
+                                                $block->getSharedItemAddToCartUrl($item) ?>)'
+                                            class="inline-flex btn btn-primary"
+                                    >
+                                        <?= $escaper->escapeHtml(__('Add to Cart')) ?>
+                                    </button>
+                                <?php endif ?>
+                            <?php endif; ?>
+                            <a href="#"
+                               @click.prevent='postForm(<?= /* @noEscape */ $block->getAddToWishlistParams($item) ?>)'
+                               id="wishlist-shared-item-<?= /* @noEscape */ $item->getId() ?>"
+                               class="action towishlist underline"
+                            >
+                                <span><?= $escaper->escapeHtml(__('Add to Wish List')) ?></span>
+                            </a>
+                        </div>
+                    </div>
+                <?php endforeach ?>
+
+            <div class="actions-toolbar">
+                <?php if ($block->isSaleable()): ?>
+                    <div class="primary">
+                        <button type="button"
+                                title="<?= $escaper->escapeHtmlAttr(__('Add All to Cart')) ?>"
+                                @click.prevent='postForm(<?= $escaper
+                                    ->escapeUrl($block->getSharedAddAllToCartUrl()) ?>)'
+                                class="action tocart primary">
+                            <span><?= $escaper->escapeHtml(__('Add All to Cart')) ?></span>
+                        </button>
+                    </div>
+                <?php endif; ?>
+                <div class="secondary">
+                    <a href="<?= $escaper->escapeUrl($block->getBackUrl()) ?>" class="action back">
+                        <span><?= $escaper->escapeHtml(__('Back')) ?></span>
+                    </a>
+                </div>
+            </div>
+        </form>
+    <?php else: ?>
+        <div class="message info empty">
+            <div><?= $escaper->escapeHtml(__('Wish List is empty now.')) ?></div>
+        </div>
+    <?php endif ?>
+</div>

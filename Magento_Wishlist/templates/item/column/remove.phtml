@@ -15,7 +15,7 @@ use Magento\Framework\Escaper;
 
 <a href="#"
    data-role="remove"
-   data-post-remove='<?= /* @noEscape */ $block->getItemRemoveParams($block->getItem()) ?>'
+   @click.prevent='postForm(<?= /* @noEscape */ $block->getItemRemoveParams($block->getItem()) ?>)'
    title="<?= $escaper->escapeHtmlAttr(__('Remove Item')) ?>"
    class="btn-remove action delete btn btn-secondary inline-flex p-2">
     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" size="16" class="h-5 w-5">

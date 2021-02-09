@@ -11,4 +11,4 @@ use Magento\Wishlist\Block\Customer\Wishlist\Item\Column;
 /** @var Column $block */
 $product = $block->getItem()->getProduct();
 ?>
-<?= '' //$block->getReviewsSummaryHtml($product, 'short') ?>
+<?= $block->getReviewsSummaryHtml($product, 'short') ?>

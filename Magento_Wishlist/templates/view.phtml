@@ -22,6 +22,7 @@ $wishlistHelper = $this->helper(WishlistHelper::class);
     <?= ($block->getChildHtml('wishlist.rss.link')) ?>
     <form class="form-wishlist-items mt-4"
           id="wishlist-view-form"
+          x-data="initMyWishList()"
           action="
           <?= $escaper->escapeUrl(
               $block->getUrl(
@@ -43,31 +44,73 @@ $wishlistHelper = $this->helper(WishlistHelper::class);
             </div>
         <?php endif ?>
         <?= $block->getChildHtml('bottom') ?>
-        <div class="actions-toolbar">
-            <div class="primary flex gap-x-1">
+        <div class="actions-toolbar my-4">
+            <div class="flex flex-wrap gap-2">
                 <?= $block->getChildHtml('control_buttons') ?>
             </div>
-            <div class="secondary">
+            <div class="secondary mr-10">
                 <a href="<?= $escaper->escapeUrl($block->getBackUrl()) ?>" class="action back">
                     <span><?= $escaper->escapeHtml(__('Back')) ?></span>
                 </a>
             </div>
         </div>
     </form>
-    <script id="form-tmpl" type="text/x-magento-template">
-      <form id="wishlist-hidden-form" method="post" action="<%- data.url %>" class="no-display">
-          <% if (data.qty) { %>
-          <input name="qty" value="<%- data.qty %>">
-          <% } %>
+    <div class="toolbar wishlist-toolbar">
+        <?= $block->getChildHtml('wishlist_item_pager') ?>
+    </div>
 
-          <% if (data.item) { %>
-          <input name="item" value="<%- data.item %>">
-          <% } %>
+    <script>
+        function initMyWishList() {
+            return {
+                addToCart(productId, postParams) {
 
-          <% if (data.entity) { %>
-          <input name="entity" value="<%- data.entity %>">
-          <% } %>
-      </form>
+                    const qty = this.$refs['product-qty-'+productId] && this.$refs['product-qty-'+productId].value;
+
+                    postParams.data.qty = qty || postParams.data.qty;
+
+                    this.postForm(postParams);
+
+                },
+                addAllItemsToCart() {
+                    var urlParams = <?= /* @noEscape */ $block->getAddAllToCartParams() ?>,
+                        separator = urlParams.action.indexOf('?') >= 0 ? '&' : '?';
+
+                    Array.from(document.querySelectorAll('input[name^=qty]')).map(qty => {
+                        urlParams.action += separator + qty.name + '=' + encodeURIComponent(qty.value);
+                        separator = '&';
+                    });
+                    this.postForm(urlParams);
+                },
+                postForm(postParams) {
+                    const form = document.createElement("form");
+
+                    let data = postParams.data;
+
+                    if (!data.uenc) {
+                        data.uenc = btoa(window.location.href);
+                    }
+                    form.method = "POST";
+                    form.action = postParams.action;
+
+                    Object.keys(postParams.data).map(key => {
+                        const field = document.createElement("input");
+                        field.type = 'hidden'
+                        field.value = postParams.data[key];
+                        field.name = key;
+                        form.appendChild(field);
+                    });
+
+                    const form_key = document.createElement("input");
+                    form_key.type = 'hidden';
+                    form_key.value = document.querySelector('input[name=form_key]').value;
+                    form_key.name="form_key";
+                    form.appendChild(form_key);
+
+                    document.body.appendChild(form);
+
+                    form.submit();
+                }
+            }
+        }
     </script>
-    <div class="toolbar wishlist-toolbar"><br><?= $block->getChildHtml('wishlist_item_pager'); ?></div>
 <?php endif ?>

@@ -1690,6 +1690,11 @@ body {
   background-color: rgba(245, 245, 245, var(--tw-bg-opacity));
 }
 
+.even\:bg-container-darker:nth-child(even) {
+  --tw-bg-opacity: 1;
+  background-color: rgba(245, 245, 245, var(--tw-bg-opacity));
+}
+
 .hover\:bg-gray-100:hover {
   --tw-bg-opacity: 1;
   background-color: rgba(243, 244, 246, var(--tw-bg-opacity));
@@ -1729,6 +1734,11 @@ body {
 .border-gray-300 {
   --tw-border-opacity: 1;
   border-color: rgba(209, 213, 219, var(--tw-border-opacity));
+}
+
+.border-red-500 {
+  --tw-border-opacity: 1;
+  border-color: rgba(239, 68, 68, var(--tw-border-opacity));
 }
 
 .border-green-400 {
@@ -1773,6 +1783,11 @@ body {
 
 .focus\:border-transparent:focus {
   border-color: transparent;
+}
+
+.focus\:border-red-500:focus {
+  --tw-border-opacity: 1;
+  border-color: rgba(239, 68, 68, var(--tw-border-opacity));
 }
 
 .focus\:border-blue-300:focus {
@@ -2063,10 +2078,6 @@ body {
   height: 4rem;
 }
 
-.h-28 {
-  height: 7rem;
-}
-
 .h-48 {
   height: 12rem;
 }
@@ -2129,6 +2140,10 @@ body {
 
 .leading-none {
   line-height: 1;
+}
+
+.leading-tight {
+  line-height: 1.25;
 }
 
 .leading-normal {
@@ -2311,6 +2326,10 @@ body {
   margin-bottom: 2rem;
 }
 
+.mr-10 {
+  margin-right: 2.5rem;
+}
+
 .mb-10 {
   margin-bottom: 2.5rem;
 }
@@ -2337,6 +2356,10 @@ body {
 
 .-mr-2 {
   margin-right: -0.5rem;
+}
+
+.-mt-4 {
+  margin-top: -1rem;
 }
 
 .-mr-4 {
@@ -2756,6 +2779,11 @@ body {
   --tw-ring-shadow: 0 0 #0000;
 }
 
+.focus\:ring-red-500:focus {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgba(239, 68, 68, var(--tw-ring-opacity));
+}
+
 .fill-current {
   fill: currentColor;
 }
@@ -3013,6 +3041,10 @@ body {
   width: 10rem;
 }
 
+.w-64 {
+  width: 16rem;
+}
+
 .w-auto {
   width: auto;
 }
@@ -3203,16 +3235,32 @@ body {
   --tw-translate-x: -0.25rem;
 }
 
+.-translate-x-12 {
+  --tw-translate-x: -3rem;
+}
+
 .translate-x-full {
   --tw-translate-x: 100%;
+}
+
+.-translate-x-1\/3 {
+  --tw-translate-x: -33.333333%;
 }
 
 .-translate-x-full {
   --tw-translate-x: -100%;
 }
 
+.-translate-y-6 {
+  --tw-translate-y: -1.5rem;
+}
+
 .translate-y-1\/2 {
   --tw-translate-y: 50%;
+}
+
+.-translate-y-full {
+  --tw-translate-y: -100%;
 }
 
 .transition-all {

@@ -88,8 +88,16 @@
                             </arguments>
                         </block>
 
-                        <block class="Magento\Catalog\Block\Product\View" name="product.info.quantity"  template="Magento_Catalog::product/view/quantity.phtml"/>
+                        <block class="Magento\Catalog\Block\Product\View"
+                               name="product.info.quantity"
+                               template="Magento_Catalog::product/view/quantity.phtml"
+                        />
+
                         <block name="product.info.addtocart"  template="Magento_Catalog::product/view/addtocart.phtml"/>
+
+                        <block name="product.info.addtowishlist"  template="Magento_Catalog::product/view/addtowishlist.phtml"/>
+
+                        <block name="product.info.addtocompare"  template="Magento_Catalog::product/view/addtocompare.phtml"/>
 
                         <block class="Magento\Catalog\Block\Product\View" name="product.info.price"  template="Magento_Catalog::product/view/price.phtml">
                         </block>

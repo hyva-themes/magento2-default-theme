@@ -1,0 +1,99 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+use Magento\Framework\Escaper;
+use Magento\Wishlist\Block\Customer\Sharing;
+
+// phpcs:disable Generic.Files.LineLength.TooLong
+
+/** @var Escaper $escaper */
+/** @var Sharing $block */
+?>
+<script>
+    function initShareWishlist() {
+        return {
+            isValid: true,
+            validateEmailsRegex: /^([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*@([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*\.(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]){2,})$/i,
+            validateForm() {
+                const emailField = this.$refs['emails'];
+                const emails = emailField.value.split(/[\s\n\,]+/g);
+
+                for (i = 0; i < emails.length; i++) {
+                    if (!this.validateEmailsRegex.test(emails[i].trim())) {
+                        this.isValid = false;
+                        emailField.setCustomValidity("<?= $escaper->escapeJs(__('Please enter valid email addresses, separated by commas. For example, johndoe@domain.com, johnsmith@domain.com.')) ?>");
+                        return false;
+                    }
+                }
+                this.isValid = true;
+                emailField.setCustomValidity("");
+                return true;
+            }
+
+        }
+    }
+
+</script>
+<form class="form wishlist share"
+      x-data="initShareWishlist()"
+      @submit="validateForm()"
+      action="<?= $escaper->escapeUrl($block->getSendUrl()) ?>"
+      id="form-validate"
+      method="post"
+>
+    <fieldset class="fieldset">
+        <?= $block->getBlockHtml('formkey') ?>
+        <legend class="legend">
+            <span>
+                <?= $escaper->escapeHtml(__('Sharing Information')) ?>
+            </span>
+        </legend>
+        <div class="field emails required">
+            <label class="label"
+                   for="email_address">
+                <span>
+                    <?= $escaper->escapeHtml(__('Email addresses, separated by commas')) ?>
+                </span>
+            </label>
+            <div class="control">
+                <textarea name="emails"
+                          :class=" { 'border-red-500 focus:border-red-500 focus:ring-red-500': !isValid }"
+                          cols="60"
+                          rows="5"
+                          id="email_address"
+                          @blur="validateForm()"
+                          @input.debounce="validateForm()"
+                          x-ref="emails"
+                          required="required"
+                ><?= /* @noEscape */ $block->getEnteredData('emails') ?></textarea>
+            </div>
+        </div>
+        <div class="field text">
+            <label class="label" for="message"><span><?= $escaper->escapeHtml(__('Message')) ?></span></label>
+            <div class="control">
+                <textarea id="message" name="message" cols="60" rows="5"><?= /* @noEscape */
+                    $block->getEnteredData('message') ?></textarea>
+            </div>
+        </div>
+    </fieldset>
+    <?= $block->getChildHtml('captcha'); ?>
+    <div class="actions-toolbar">
+        <div class="primary">
+            <button type="submit" title="<?= $escaper->escapeHtmlAttr(__('Share Wish List')) ?>"
+                    class="action submit primary">
+                <span><?= $escaper->escapeHtml(__('Share Wish List')) ?></span>
+            </button>
+        </div>
+        <div class="secondary">
+            <a class="action back"
+               href="<?= $escaper->escapeUrl($block->getBackUrl()) ?>">
+                <span>
+                    <?= $escaper->escapeHtml(__('Back')) ?>
+                </span>
+            </a>
+        </div>
+    </div>
+</form>

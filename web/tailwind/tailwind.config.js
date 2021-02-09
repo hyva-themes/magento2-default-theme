@@ -102,6 +102,7 @@ module.exports = {
             borderWidth: ['last', 'hover', 'focus'],
             margin: ['last'],
             opacity: ['disabled'],
+            backgroundColor: ['even', 'odd']
         }
     },
     plugins: [
