@@ -2162,6 +2162,10 @@ body {
   margin: 0px;
 }
 
+.m-auto {
+  margin: auto;
+}
+
 .-m-2 {
   margin: -0.5rem;
 }

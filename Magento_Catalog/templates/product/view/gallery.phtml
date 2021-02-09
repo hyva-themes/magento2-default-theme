@@ -61,10 +61,19 @@ $mediumHeight = $block->getImageAttribute('product_page_image_medium', 'height',
              x-transition:enter-end="opacity-100"
         >
             <div class="relative mb-6">
+                <?php
+                /**
+                 * The first image is a placeholder that determines the
+                 * aspect ratio for the gallery. It will be hidden as
+                 * soon as JS is loaded, but will keep reserving the
+                 * necessary space in the layout for the other (absolute positioned)
+                 * images. Hence `opacity-0` instead of `x-show` or `hidden`
+                 */
+                ?>
                 <img
                     alt="main product photo"
                     class="object-contain object-center w-full h-auto max-h-75"
-                    :class="{'opacity-0': active!==0, 'cursor-pointer': !fullscreen }"
+                    :class="'opacity-0'"
                     loading="lazy"
                     src="<?= /* @noEscape */ $mainImageData ?>"
                     width="<?= /* @noEscape */ $mediumWidth ?>"
@@ -76,33 +85,32 @@ $mediumHeight = $block->getImageAttribute('product_page_image_medium', 'height',
                         :alt="image.caption"
                         :title="image.caption"
                         @click="fullscreen = true"
-                        class="absolute top-0 left-0 right-0 object-contain object-center w-full h-auto max-h-75"
+                        class="absolute inset-0 object-contain object-center w-full m-auto max-h-75"
                         :class="{ 'cursor-pointer': !fullscreen }"
                         width="<?= /* @noEscape */ $mediumWidth ?>"
                         height="<?= /* @noEscape */ $mediumHeight ?>"
                         loading="lazy"
                         :src="fullscreen ? image.full : image.img"
-                        x-show.transition.opacity.duration.400ms="active===index"
+                        x-show.transition.opacity.duration.500ms="active===index"
                     />
                 </template>
-                <div class="absolute inset-0 hidden object-center w-full h-full bg-white object-fit nonmobile"
+                <div class="absolute inset-0 hidden w-full h-full bg-white nonmobile"
                      :class="{ 'hidden': activeVideoType !== 'youtube' }"
-                     x-show.transition.opacity.duration.400ms="images[active].type === 'video' &&
-                      activeVideoType === 'youtube'"
+                     x-show.transition.opacity.duration.500ms="images[active].type === 'video' && activeVideoType === 'youtube'"
                 >
-                    <div id="youtube-player" class="object-center w-full h-full object-fit"></div>
+                    <div id="youtube-player" class="w-full h-full"></div>
                 </div>
-                <div class="absolute inset-0 hidden object-center w-full h-full bg-white object-fit"
+                <div class="absolute inset-0 hidden w-full h-full bg-white"
                      :class="{ 'hidden': activeVideoType !== 'vimeo' }"
-                     x-show.transition.opacity.duration.400ms="images[active].type === 'video' &&
-                      activeVideoType === 'vimeo'"
+                     x-show.transition.opacity.duration.500ms="images[active].type === 'video' && activeVideoType === 'vimeo'"
                 >
-                    <div id="vimeo-player" class="object-center w-full h-full object-fit"></div>
+                    <div id="vimeo-player" class="w-full h-full"></div>
                 </div>
             </div>
         </div>
         <div id="thumbs" class="flex flex-wrap"
-        :class="{ 'fixed justify-center bottom-0 left-0 right-0 mx-6': fullscreen}" style="min-height: 100px;">
+            :class="{ 'fixed justify-center bottom-0 left-0 right-0 mx-6': fullscreen}"
+            style="min-height: 100px;">
             <template x-for="(image, index) in images" :key="index">
                 <div class="mb-2 mr-2 lg:mr-4 last:mr-0">
                     <a href="#" @click.prevent="setActive(index);"
