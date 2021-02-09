@@ -1,0 +1,26 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Catalog\Block\Product\Image;
+use Magento\Framework\Escaper;
+
+/** @var $block Image */
+/** @var $escaper Escaper */
+?>
+<img class="photo image <?= $escaper->escapeHtmlAttr($block->getClass()) ?>"
+    <?php foreach ($block->getCustomAttributes() as $name => $value): ?>
+        <?= $escaper->escapeHtmlAttr($name) ?>="<?= $escaper->escapeHtmlAttr($value) ?>"
+    <?php endforeach; ?>
+    src="<?= $escaper->escapeUrl($block->getImageUrl()) ?>"
+    loading="lazy"
+    width="<?= $escaper->escapeHtmlAttr($block->getWidth()) ?>"
+    height="<?= $escaper->escapeHtmlAttr($block->getHeight()) ?>"
+    alt="<?= $escaper->escapeHtmlAttr($block->getLabel()) ?>"
+/>

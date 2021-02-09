@@ -28,6 +28,7 @@ use Magento\LayeredNavigation\Block\Navigation;
          x-data="initLayeredNavigation()"
          x-init="checkIsMobileResolution()"
          @resize.window.debounce="checkIsMobileResolution()"
+         @visibilitychange.window.debounce="checkIsMobileResolution()"
     >
         <div class="block-title h-10 flex items-center justify-between" @click="blockOpen = !blockOpen">
             <span class="text-primary text-md md:text-3xl font-medium uppercase"><?= $escaper->escapeHtml(__('Shop By')) ?></span>

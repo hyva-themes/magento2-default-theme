@@ -105,8 +105,9 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
                 },
                 itemId: '<?= (int)$block->getRequest()->getParam('id') ?>',
                 productId: '<?= (int)$product->getId() ?>',
-                onGetCartData: function onGetCartData($dispatch) {
-                    var cart = event.detail.data && event.detail.data.cart;
+                onGetCartData: function onGetCartData(data) {
+                    // pre-select options based on cart data for current (quote) itemId
+                    var cart = data && data.cart;
                     if (cart && cart.items) {
                         $this = this;
                         var cartItem = cart.items.find(function (item) {
@@ -117,10 +118,24 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
                         });
                         if (cartItem && cartItem.options && cartItem.options.length) {
                             cartItem.options.map(option => {
-                                this.changeOption(option.option_id,option.option_value);
+                                this.changeOption(option.option_id, option.option_value);
                             })
                         }
                     }
+
+                    // pre-select option like ?size=167
+                    const urlQueryParams = new URLSearchParams(window.location.search.replace('?',''));
+                    Object.values(this.optionConfig.attributes).map(attribute => {
+                        urlQueryParams.get(attribute.code) &&
+                        this.changeOption(attribute.id, urlQueryParams.get(attribute.code));
+                    });
+
+                    // pre-select option like #144=167
+                    const urlHashParams = new URLSearchParams(window.location.hash.replace('#',''));
+                    Object.values(this.optionConfig.attributes).map(attribute => {
+                        urlHashParams.get(attribute.id) &&
+                        this.changeOption(attribute.id, urlHashParams.get(attribute.id));
+                    });
                 }
             }
         }
@@ -128,7 +143,7 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
     </script>
     <div x-data="initConfigurableOptions()"
          x-init="findAllowedAttributeOptions();"
-         @private-content-loaded.window="onGetCartData($dispatch)"
+         @private-content-loaded.window="onGetCartData($event.detail.data)"
          class="mb-6"
     >
         <h2 class="text-gray-900 text-xl title-font font-medium mb-4">

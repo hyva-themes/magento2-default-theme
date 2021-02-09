@@ -17,6 +17,8 @@ $ratingSteps = 5;
 $starsFilled = is_numeric($rating) ? floor($rating / 100 * $ratingSteps) : 0;
 $starFragment = $rating / 100 * $ratingSteps - $starsFilled;
 $starsEmpty = floor($ratingSteps - $starsFilled - $starFragment);
+$yellowHex = '#f6e05e';
+$greyHex = '#cbd5e0';
 ?>
 <?php if ($block->isReviewEnabled()): ?>
     <div class="rating-summary flex"
@@ -26,7 +28,8 @@ $starsEmpty = floor($ratingSteps - $starsFilled - $starFragment);
         <?php if ($rating): ?>
             <?php $i = 0; ?>
             <?php while ($i < $starsFilled): ?>
-                <svg xmlns="http://www.w3.org/2000/svg" class="fill-current text-yellow-400 w-6 h-6" viewBox="3 0 20 20"
+                <svg xmlns="http://www.w3.org/2000/svg" class="fill-current w-6 h-6" viewBox="3 0 20 20"
+                     style="color: <?= /** @noEscape */ $yellowHex ?>"
                      fill="currentColor">
                     <path
                         d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371
@@ -41,10 +44,10 @@ $starsEmpty = floor($ratingSteps - $starsFilled - $starFragment);
                     <defs>
                         <linearGradient id="partialFill<?= /* @noEscape */
                         $block->getProduct()->getId() ?>">
-                            <stop offset="0%" stop-color="#f6e05e"/>
-                            <stop offset="<?= $starFragment * 100 ?>%" stop-color="#f6e05e"/>
-                            <stop offset="<?= $starFragment * 100 ?>%" stop-color="#cbd5e0"/>
-                            <stop offset="100%" stop-color="#cbd5e0"/>
+                            <stop offset="0%" stop-color="<?= /** @noEscape */ $yellowHex ?>"/>
+                            <stop offset="<?= $starFragment * 100 ?>%" stop-color="<?= /** @noEscape */ $yellowHex ?>"/>
+                            <stop offset="<?= $starFragment * 100 ?>%" stop-color="<?= /** @noEscape */ $greyHex ?>"/>
+                            <stop offset="100%" stop-color="<?= /** @noEscape */ $greyHex ?>"/>
                         </linearGradient>
                     </defs>
                     <g fill="url(#partialFill<?= (int)$block->getProduct()->getId() ?>)">
@@ -59,7 +62,8 @@ $starsEmpty = floor($ratingSteps - $starsFilled - $starFragment);
             <?php $i = 0; ?>
                 <?php while ($i < $starsEmpty): ?>
                 <svg xmlns="http://www.w3.org/2000/svg"
-                     class="fill-current text-gray-400 w-6 h-6"
+                     class="fill-current w-6 h-6"
+                     style="color: <?= /** @noEscape */ $greyHex ?>"
                      viewBox="3 0 20 20"
                      fill="currentColor">
                     <path
