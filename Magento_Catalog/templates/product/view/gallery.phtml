@@ -142,7 +142,10 @@ $mediumHeight = $block->getImageAttribute('product_page_image_medium', 'height',
             "fullscreen": false,
             "initialImages": <?= /* @noEscape */ $block->getGalleryImagesJson() ?>,
             "images": <?= /* @noEscape */ $block->getGalleryImagesJson() ?>,
-            "appendOnReceiveImages": true,
+            "appendOnReceiveImages": <?= $block->getVar(
+                'gallery_switch_strategy',
+                'Magento_ConfigurableProduct'
+            ) === 'append' ? 'true' : 'false' ?>,
             receiveImages: function receiveImages(images) {
                 if (this.appendOnReceiveImages) {
                     this.images = [].concat(this.initialImages, images);

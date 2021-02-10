@@ -191,60 +191,6 @@
         </images>
     </media>
     <vars module="Magento_Catalog">
-
-        <!-- Gallery and magnifier theme settings. Start -->
-        <var name="gallery">
-            <var name="nav">thumbs</var> <!-- Gallery navigation style (false/thumbs/dots) -->
-            <var name="loop">true</var> <!-- Gallery navigation loop (true/false) -->
-            <var name="keyboard">true</var> <!-- Turn on/off keyboard arrows navigation (true/false) -->
-            <var name="arrows">true</var> <!-- Turn on/off arrows on the sides preview (true/false) -->
-            <var name="caption">false</var> <!-- Display alt text as image title (true/false) -->
-            <var name="allowfullscreen">true</var> <!-- Turn on/off fullscreen (true/false) -->
-            <var name="navdir">horizontal</var> <!-- Sliding direction of thumbnails (horizontal/vertical) -->
-            <var name="navarrows">true</var> <!-- Turn on/off on the thumbs navigation sides arrows(true/false) -->
-            <var name="navtype">slides</var> <!-- Sliding type of thumbnails (slides/thumbs) -->
-            <var name="transition">
-                <var name="effect">slide</var> <!-- Sets transition effect for slides changing (slide/crossfade/dissolve) -->
-                <var name="duration">500</var> <!-- Sets transition duration in ms -->
-            </var>
-            <var name="fullscreen">
-                <var name="nav">thumbs</var> <!-- Fullscreen navigation style (false/thumbs/dots) -->
-                <var name="loop">true</var> <!-- Fullscreen navigation loop (true/false/null) -->
-                <var name="arrows">false</var> <!-- Turn on/off arrows on the sides preview in fullscreen (true/false/null) -->
-                <var name="caption">false</var> <!-- Display alt text as image title in fullscreen(true/false) -->
-                <var name="navdir">horizontal</var> <!--Sliding direction of thumbnails in fullscreen(horizontal/vertical)  -->
-                <var name="navtype">slides</var> <!-- Sliding type of thumbnails (slides/thumbs) -->
-                <var name="transition">
-                    <var name="effect">dissolve</var> <!-- Sets transition effect for slides changing (slide/crossfade/dissolve) -->
-                    <var name="duration">500</var> <!-- Sets transition duration in ms -->
-                </var>
-            </var>
-        </var>
-
-        <var name="magnifier">
-            <var name="fullscreenzoom">20</var>  <!-- Zoom for fullscreen (integer)-->
-            <var name="top"></var> <!-- Top position of magnifier -->
-            <var name="left"></var> <!-- Left position of magnifier -->
-            <var name="width"></var> <!-- Width of magnifier block -->
-            <var name="height"></var> <!-- Height of magnifier block -->
-            <var name="eventType">hover</var> <!-- Action that atcivates zoom (hover/click) -->
-            <var name="enabled">false</var> <!-- Turn on/off magnifier (true/false) -->
-        </var>
-
-        <var name="breakpoints">
-            <var name="mobile">
-                <var name="conditions">
-                    <var name="max-width">767px</var>
-                </var>
-                <var name="options">
-                    <var name="options">
-                        <var name="nav">dots</var>
-                    </var>
-                </var>
-            </var>
-        </var>
-        <!-- end. Gallery and magnifier theme settings -->
-
         <var name="product_small_image_sidebar_size">100</var>  <!-- Override for small product image -->
         <var name="product_base_image_size">275</var>           <!-- Override for base product image -->
         <var name="product_base_image_icon_size">48</var>       <!-- Base product image icon size -->
@@ -256,6 +202,9 @@
     </vars>
     <vars module="Magento_Bundle">
         <var name="product_summary_image_size">58</var>         <!-- New Product image size used for summary block-->
+    </vars>
+    <vars module="Magento_ConfigurableProduct">
+        <var name="gallery_switch_strategy">append</var> <!-- 'append' or 'replace' -->
     </vars>
     <vars module="Js_Bundle">
         <var name="bundle_size">1MB</var>
