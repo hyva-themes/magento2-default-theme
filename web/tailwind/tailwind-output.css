@@ -1751,11 +1751,6 @@ body {
   border-color: rgba(29, 78, 216, var(--tw-border-opacity));
 }
 
-.border-background {
-  --tw-border-opacity: 1;
-  border-color: rgba(191, 219, 254, var(--tw-border-opacity));
-}
-
 .border-container-lighter {
   --tw-border-opacity: 1;
   border-color: rgba(245, 245, 245, var(--tw-border-opacity));
@@ -1932,10 +1927,6 @@ body {
 
 .flex-col {
   flex-direction: column;
-}
-
-.flex-col-reverse {
-  flex-direction: column-reverse;
 }
 
 .flex-wrap {
@@ -2465,10 +2456,6 @@ body {
   opacity: 1;
 }
 
-.disabled\:opacity-70:disabled {
-  opacity: 0.7;
-}
-
 .disabled\:opacity-75:disabled {
   opacity: 0.75;
 }
@@ -2686,14 +2673,6 @@ body {
 
 .pb-16 {
   padding-bottom: 4rem;
-}
-
-.pt-px {
-  padding-top: 1px;
-}
-
-.pb-px {
-  padding-bottom: 1px;
 }
 
 .fixed {
@@ -3886,8 +3865,8 @@ form select {
     margin-left: 0px;
   }
 
-  .md\:mr-1 {
-    margin-right: 0.25rem;
+  .md\:mr-4 {
+    margin-right: 1rem;
   }
 
   .md\:mr-5 {
@@ -4203,6 +4182,10 @@ form select {
 
   .lg\:w-full {
     width: 100%;
+  }
+
+  .lg\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .lg\:grid-cols-4 {
