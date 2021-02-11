@@ -68,7 +68,7 @@ $updateParams = $block->getUpdateParams() ?: null;
                 // take the all the input fields that configure this product
                 // includes custom options, configurable options and bundle options
                 Array.from(document.querySelectorAll(
-                    '[name^=options], [name^=super_attribute], [name^=bundle_option]')
+                    '[name^=options], [name^=super_attribute], [name^=bundle_option], [name^=super_group]')
                 ).map(input => {
                     postData += `&${ input.name }=${ input.value }`
                 });
@@ -133,5 +133,5 @@ $updateParams = $block->getUpdateParams() ?: null;
         ) ?>"
         class="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex
                 items-center justify-center text-gray-500 hover:text-red-600 ml-4">
-    <?= $heroicons->heartHtml("w-5 h-5") ?>
+    <?= $heroicons->heartHtml("w-5 h-5", 25, 25) ?>
 </button>
