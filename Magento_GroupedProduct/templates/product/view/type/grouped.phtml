@@ -33,18 +33,21 @@ $hasAssociatedProducts = count($associatedProducts) > 0;
                     document.querySelectorAll('input[name^=super_group]')
                 );
 
+                // at least one of the inputs has to have a qty > 0
                 this.isValid = validateInputs.filter(
                     input => input.value > 0
                 ).length;
 
+                // we set or unset validity for all fields at once
+                // and empty string un-sets invalidity
                 validateInputs.map(input =>
                     input.setCustomValidity(this.isValid ?
                         "" :
                         "<?= $escaper->escapeJs(__('Please specify the quantity of product(s).')) ?>")
                 )
 
-                // at least one input has to be valid
                 if (!this.isValid) {
+                    // this triggers an immediate display of the form errors
                     document.querySelector("#product_addtocart_form").reportValidity();
                     return false;
                 }
@@ -53,7 +56,7 @@ $hasAssociatedProducts = count($associatedProducts) > 0;
             init() {
                 document.querySelector("#product_addtocart_form")
                     .addEventListener("submit", (e) => {
-
+                        // don't submit on errors
                         if(!this.validateForm()){
                             e.preventDefault();
                         }
