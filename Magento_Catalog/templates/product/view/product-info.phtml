@@ -45,21 +45,8 @@ $product = $productViewModel->getProduct();
     <?php } ?>
 
     <div class="flex justify-between my-4">
-        <div class="text-right">
-            <?php if ($product->getIsSalable()): ?>
-                <p class="flex items-center justify-end align-middle available gap-x-2 stock"
-                   title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
-                    <span class="w-3 h-3 bg-green-500 rounded-full"></span>
-                    <span><?= $block->escapeHtml(__('In stock')) ?></span>
-                </p>
-            <?php else: ?>
-                <p class="flex items-center justify-end align-middle gap-x-2 unavailable stock"
-                   title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
-                    <span class="w-3 h-3 bg-red-500 rounded-full"></span>
-                    <span><?= $block->escapeHtml(__('Out of stock')) ?></span>
-                </p>
-            <?php endif; ?>
-        </div>
+
+        <?= $block->getChildHtml("product.info.stockstatus") ?>
 
         <?= $block->getChildHtml("alert.urls") ?>
     </div>
