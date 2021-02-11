@@ -151,6 +151,7 @@ use Magento\Framework\View\Element\Template;
                                     <p><span x-html="item.product_price"></span></p>
                                     <div class="pt-4">
                                         <a :href="item.configure_url"
+                                           x-show="item.product_type !== 'grouped'"
                                            class="inline-flex p-2 mr-2 btn btn-primary">
                                             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                                  size="16" class="w-5 h-5">
