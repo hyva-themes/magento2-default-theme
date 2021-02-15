@@ -63,7 +63,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                class="relative invisible inline-block mx-1 no-underline sm:ml-3 hover:text-black"
                :class="{ 'invisible': !(itemCount > 0) }"
                href="<?= $escaper->escapeUrl($block->getUrl('catalog/product_compare/index')) ?>"
-               title="<?= $escaper->escapeHtml('Compare Products') ?>"
+               title="<?= $escaper->escapeHtml(__('Compare Products')) ?>"
                x-data="initCompareHeader()"
                @private-content-loaded.window="receiveCompareData($event.detail.data)"
             >
@@ -74,7 +74,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 ) ?>
 
                 <span class="sr-only label">
-                   <?= $escaper->escapeHtml('Compare Products') ?>
+                   <?= $escaper->escapeHtml(__('Compare Products')) ?>
                 </span>
 
                 <span class="absolute top-0 right-0 h-5 px-2 py-1 -mt-5 -mr-4 text-xs font-semibold
