@@ -30,7 +30,7 @@ $ratingSteps = 5;
 
 <div id="content"
      x-data="initReviewList()"
-     @private-content-loaded.window="getReviewsList()">
+     @private-content-loaded.window="onPrivateContentLoaded(event.detail.data)">
     <template x-if="pageInfo && pageInfo.page_size && pageInfo.total_pages">
         <div>
             <template x-if="pageInfo.total_pages > 1">
@@ -183,13 +183,18 @@ $ratingSteps = 5;
         <p><?= $escaper->escapeHtml(__('You have submitted no reviews.')) ?></p>
     </template>
 </div>
-<script defer>
-    <?= $block->getChildHtml('js_localstorage_config') ?>
-
-    function initReviewList() {
+<script>
+        function initReviewList() {
         return {
-            getSignInToken: function getSignInToken() {
-                return getConfigFromLocalStorage(activeSource.token);
+            customerToken: false,
+            onPrivateContentLoaded(data) {
+                this.customerToken = data.customer['signin_token'];
+                if (this.customerToken) {
+                    this.getReviewsList();
+                } else {
+                   this.isLoading = false;
+                }
+
             },
             currentPage: 1,
             pageSize: 5,
@@ -216,7 +221,7 @@ $ratingSteps = 5;
                         },
                         credentials: 'include',
                         body: JSON.stringify({
-                            query: ($this.getSignInToken() && $this.getCustomerReviewsQuery())
+                            query: $this.getCustomerReviewsQuery()
                         })
                     }
                 ).then(function (response) {

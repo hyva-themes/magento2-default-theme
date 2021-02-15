@@ -14,11 +14,6 @@
         <referenceContainer name="content">
             <block class="Magento\Review\Block\Customer\ListCustomer" name="review_customer_list"
                    template="Magento_Review::customer/list.phtml" cacheable="false" ifconfig="catalog/review/active">
-                <block name="js_localstorage_config" template="Hyva_Theme::js/localStorageConfig.phtml">
-                    <arguments>
-                        <argument name="render_in_script_tag" xsi:type="boolean">false</argument>
-                    </arguments>
-                </block>
                 <block name="loading" template="Hyva_Theme::ui/loading.phtml"/>
             </block>
         </referenceContainer>
