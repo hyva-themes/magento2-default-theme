@@ -19,6 +19,10 @@ use Magento\Framework\View\Element\Template;
 
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
+
+/** @var Hyva\Theme\ViewModel\StoreConfig $storeConfig */
+$storeConfig = $viewModels->require(Hyva\Theme\ViewModel\StoreConfig::class);
+$showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sidebar::XML_PATH_CHECKOUT_SIDEBAR_DISPLAY)
 ?>
 <script defer>
     function initHeader () {
@@ -113,7 +117,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 
             <!--Cart Icon-->
             <a id="menu-cart-icon"
-               @click.prevent.stop="$dispatch('toggle-cart',{});"
+               <?php if ($showMiniCart): ?>@click.prevent.stop="$dispatch('toggle-cart',{});"<?php endif ?>
                class="relative inline-block ml-1 no-underline sm:ml-3 hover:text-black"
                href="<?= $escaper->escapeUrl($block->getUrl('checkout/cart/index')) ?>"
             >
