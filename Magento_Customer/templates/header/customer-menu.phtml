@@ -2,11 +2,14 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\CustomerRegistration;
 use Magento\Customer\Block\Account\Customer;
 use Magento\Framework\Escaper;
 
 /** @var Customer $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
 ?>
 
 <div x-data="{ open: false }" class="relative inline-block ml-1 sm:ml-3">
@@ -63,11 +66,17 @@ use Magento\Framework\Escaper;
                href="<?= $escaper->escapeUrl($block->getUrl('customer/account/index')) ?>">
                 <?= $escaper->escapeHtml(__('Sign In')); ?>
             </a>
-            <a class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
-               href="<?= $escaper->escapeUrl($block->getUrl('customer/account/create')) ?>"
-            >
-                <?= $escaper->escapeHtml(__('Create an Account')); ?>
-            </a>
+            <?php
+            /** @var CustomerRegistration $customerRegistration */
+            $customerRegistration = $viewModels->require(CustomerRegistration::class);
+            if ($customerRegistration->isAllowed()):
+            ?>
+                <a class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
+                   href="<?= $escaper->escapeUrl($block->getUrl('customer/account/create')) ?>"
+                >
+                    <?= $escaper->escapeHtml(__('Create an Account')); ?>
+                </a>
+            <?php endif; ?>
         <?php endif; ?>
     </nav>
 </div>
