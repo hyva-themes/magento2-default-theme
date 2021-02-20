@@ -16,8 +16,7 @@ use Magento\Framework\View\Element\Template;
 /** @var Escaper $escaper */
 /** @var Template $block */
 
-$image1X = "https://images.unsplash.com/photo-1454111079122-eb76eb2d5754?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjExMzk2fQ&auto=format&fit=crop&w=1000&q=75";
-$image2X = "https://images.unsplash.com/photo-1454111079122-eb76eb2d5754?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjExMzk2fQ&auto=format&fit=crop&w=1024&q=75";
+$image = "https://images.unsplash.com/photo-1533227268428-f9ed0900fb3b?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=60";
 $title = "This is the default Hyvä Theme.";
 $content = "Hyvä themes are built with great technologies like TailwindCSS and AlpineJS.<br/> It's super light-weight and designed to be high performant and highly customizable.";
 $link = "https://hyva.io/";
@@ -26,7 +25,7 @@ $link = "https://hyva.io/";
     <div class="container mx-auto flex px-5 mt-8 lg:-mt-12 md:flex-row flex-col items-center">
         <div class="z-10 lg:max-w-lg lg:w-full md:w-1/2 w-5/6 mb-10 md:mb-0">
             <img class="object-cover object-center rounded"
-                 src="https://images.unsplash.com/photo-1533227268428-f9ed0900fb3b?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=60"
+                 src="<?= (string) $image ?>"
                  alt="hero"
                  width="500"
                  height="432"
