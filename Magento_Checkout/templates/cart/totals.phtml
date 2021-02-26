@@ -81,17 +81,22 @@ $taxLabelAddition = $viewModelTotalsOutput->getTaxLabelAddition();
                 </template>
             </div>
         </template>
-        <template x-if="cartData.shipping_addresses['selected_shipping_method']">
+        <template x-if="Array.isArray(cartData.shipping_addresses) && cartData.shipping_addresses.length">
             <div>
-                <template x-for="item in cartData.prices['applied_taxes']">
+                <template x-for="shipment in cartData.shipping_addresses">
                     <div class="flex md:grid md:grid-cols-3 mx-auto w-10/12 md:w-full">
-                        <div class="w-7/12 md:w-auto text-left md:text-right md:p-2 md:col-span-2">
-                            <?= $escaper->escapeHtml($viewModelTotalsOutput->getShippingLabelAddition()) ?>
-                            <span x-text="cartData.shipping_addresses['selected_shipping_method'].carrier_title"></span>
-                            <span x-text="cartData.shipping_addresses['selected_shipping_method'].method_title"></span>
-                        </div>
+                        <template x-if="shipment['selected_shipping_method']">
+                            <div class="w-7/12 md:w-auto text-left md:text-right md:p-2 md:col-span-2">
+                                <?= $escaper->escapeHtml(__('Shipping')) ?>
+                                <span x-text="`(${shipment['selected_shipping_method'].carrier_title} -
+                                    ${shipment['selected_shipping_method'].method_title})`">
+                            </div>
+                        </template>
                         <div class="w-5/12 md:w-auto text-right md:p-2"
-                             x-text="formatPrice(cartData.shipping_addresses['selected_shipping_method'].amount.value)">
+                             x-text="shipment['selected_shipping_method'] &&
+                                shipment['selected_shipping_method'].amount &&
+                                formatPrice(shipment['selected_shipping_method'].amount.value)"
+                        >
                         </div>
                     </div>
                 </template>
