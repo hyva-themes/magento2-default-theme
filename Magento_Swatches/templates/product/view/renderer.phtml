@@ -1,0 +1,259 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+use Magento\Framework\Escaper;
+use Magento\Swatches\Block\Product\Renderer\Configurable;
+
+/** @var Configurable $block */
+/** @var Escaper $escaper */
+
+$product    = $block->getProduct();
+$attributes = $block->decorateArray($block->getAllowAttributes());
+?>
+​
+<?php if ($product->isSaleable() && count($attributes)): ?>
+    <script>
+        function initConfigurableSwatchOptions() {
+            return {
+                optionConfig: <?= /* @noEscape */ $block->getJsonConfig() ?>,
+                swatchConfig: <?= /* @noEscape */ $block->getJsonSwatchConfig() ?>,
+                allowedAttributeOptions: [],
+                selectedValues: {},
+                findSimpleIndex: function findSimpleIndex () {
+                    var productIndexes = this.optionConfig.index;
+                    var $this = this;
+                    this.productIndex = Object.keys(productIndexes).find(function(productIndex) {
+                        var currentProductIndex = productIndexes[productIndex];
+
+                        for (var productOption in currentProductIndex) {
+                            if (
+                                $this.selectedValues[productOption] &&
+                                $this.selectedValues[productOption] !== currentProductIndex[productOption]
+                            ) {
+                                return false;
+                            }
+                        }
+                        return productIndex;
+                    });
+                },
+                productIndex: 0,
+                findAllowedAttributeOptions: function findAllowedAttributeOptions() {
+                    var allAttributes = this.optionConfig.attributes;
+                    var allAttributesSorted = Object.values(allAttributes).sort(function (a,b) {
+                        return a.position - b.position
+                    });
+                    var previousOption = false;
+                    var productIndexes = this.optionConfig.index;
+                    var availableIndexes = Object.keys(productIndexes);
+
+                    var newAllowedAttributeOptions = [];
+
+                    allAttributesSorted.forEach(attribute => {
+                        if (previousOption && this.selectedValues[previousOption]) {
+                            availableIndexes = availableIndexes.filter(availableIndex => {
+                                return productIndexes[availableIndex][previousOption] ===
+                                    this.selectedValues[previousOption]
+                            })
+                        }
+                        newAllowedAttributeOptions[attribute.id] =
+                            allAttributes[attribute.id].options.filter(option => {
+                                return !!option.products.find(product => {
+                                    return availableIndexes.includes(product);
+                                })
+                            });
+                        previousOption = attribute.id;
+                    });
+
+                    this.allowedAttributeOptions = newAllowedAttributeOptions;
+                },
+                getAllowedAttributeOptions: function getAllowedAttributeOptions(attributeId) {
+                    return this.allowedAttributeOptions[attributeId] || []
+                },
+                changeOption: function changeOption (optionId, value) {
+                    this.selectedValues[optionId] = value;
+                    this.findSimpleIndex();
+                    this.findAllowedAttributeOptions();
+                    this.updatePrices();
+                    this.updateGallery();
+                },
+                updatePrices: function updatePrices () {
+                    var value = this.productIndex ?
+                        this.optionConfig.optionPrices[this.productIndex] :
+                        this.optionConfig.prices;
+                    window.dispatchEvent(
+                        new CustomEvent(
+                            "update-prices-<?= (int)$product->getId() ?>",
+                            { detail: value }
+                        )
+                    );
+                },
+                updateGallery: function updateGallery () {
+                    var value = this.productIndex ?
+                        this.optionConfig.images[this.productIndex] :
+                        Object.values(this.optionConfig.images)[0];
+
+                    value && window.dispatchEvent(
+                        new CustomEvent(
+                            "update-gallery",
+                            { detail: value }
+                        )
+                    );
+                },
+                itemId: '<?= (int)$block->getRequest()->getParam('id') ?>',
+                productId: '<?= (int)$product->getId() ?>',
+                onGetCartData: function onGetCartData(data) {
+                    // pre-select options based on cart data for current (quote) itemId
+                    var cart = data && data.cart;
+                    if (cart && cart.items) {
+                        $this = this;
+                        var cartItem = cart.items.find(function (item) {
+                            return (
+                                item.item_id === $this.itemId
+                                && item.product_id === $this.productId
+                            )
+                        });
+                        if (cartItem && cartItem.options && cartItem.options.length) {
+                            cartItem.options.map(option => {
+                                this.changeOption(option.option_id, option.option_value);
+                            })
+                        }
+                    }
+
+                    // pre-select option like ?size=167
+                    const urlQueryParams = new URLSearchParams(window.location.search.replace('?',''));
+                    Object.values(this.optionConfig.attributes).map(attribute => {
+                        urlQueryParams.get(attribute.code) &&
+                        this.changeOption(attribute.id, urlQueryParams.get(attribute.code));
+                    });
+
+                    // pre-select option like #144=167
+                    const urlHashParams = new URLSearchParams(window.location.hash.replace('#',''));
+                    Object.values(this.optionConfig.attributes).map(attribute => {
+                        urlHashParams.get(attribute.id) &&
+                        this.changeOption(attribute.id, urlHashParams.get(attribute.id));
+                    });
+                },
+                getAttributeSwatchData(attributeId) {
+                    const swatchConfig = this.swatchConfig[attributeId];
+                    swatchConfig['details'] = JSON.parse(swatchConfig['additional_data']);
+
+                    return swatchConfig;
+                },
+                getOptionSwatchType(attributeId) {
+                    const swatchConfig = this.getAttributeSwatchData(attributeId);
+                    if (this.getAttributeSwatchData(attributeId).details['swatch_input_type'] === 'text') {
+                        return 'text';
+                    } else {
+                        if (this.getAttributeSwatchData(attributeId).details['use_product_image_for_swatch']) {
+                            return 'image';
+                        } else {
+                            return 'visual';
+                        }
+                    }
+                },
+                getSwatchBackgroundStyle(attributeId, itemId) {
+                    return 'background-color:' + this.swatchConfig[attributeId][itemId].value;
+                }
+            }
+        }
+
+    </script>
+    <div x-data="initConfigurableSwatchOptions()"
+         x-init="findAllowedAttributeOptions();"
+         @private-content-loaded.window="onGetCartData($event.detail.data)"
+         class="mb-6"
+    >
+        <h2 class="text-gray-900 text-xl title-font font-medium mb-4">
+            <?= $escaper->escapeHtml(__('Product Options:')) ?>
+        </h2>
+        <?php foreach ($attributes as $attribute): ?>
+            <?php $attributeId = $attribute->getAttributeId(); ?>
+            <?php $productAttribute = $attribute->getProductAttribute(); ?>
+        <div class="flex border-t last:border-b  border-gray-300 py-2 w-full items-center swatch-attribute
+                <?= $escaper->escapeHtmlAttr($productAttribute->getAttributeCode()) ?>">
+
+            <label class="label text-gray-700 text-left w-1/2"
+                   for="attribute<?= $escaper->escapeHtmlAttr($productAttribute->getAttributeCode()) ?>"
+            >
+                <span>
+                    <?= $escaper->escapeHtml($productAttribute->getStoreLabel()) ?>
+                </span>
+            </label>
+            <div class="ml-2 text-gray-900 text-left w-1/2">
+                <div
+                     role="radiogroup"
+                     aria-labelledby="radiogroup-label"
+                >
+                    <template x-if="getOptionSwatchType(<?= (int) $attributeId ?>) === 'text'">
+                        <div class="flex space-x-4 -mx-4 items-center swatch-attribute-options">
+                            <template x-for="(item, index) in getAllowedAttributeOptions(<?= (int) $attributeId ?>)"
+                                      :key="item.id"
+                            >
+                                <label
+                                    :for="'attribute-option-'+item.id"
+                                    :class="{'border-container-lighter ring ring-primary ring-opacity-50':
+                                       (selectedValues[<?= (int)$attributeId ?>] === item.id),
+                                         'border-container-darker': (selectedValues[<?= (int)$attributeId ?>] !== item.id) }"
+                                    class="swatch-option border-2 cursor-pointer bg-container-lighter shadow-sm"
+                                >
+                                    <input
+                                        :id="'attribute-option-'+item.id"
+                                        :value="item.id"
+                                        name="super_attribute[<?= (int) $attributeId ?>]"
+                                        type="radio"
+                                        class="border-0 focus:border-0 focus:ring-0 absolute inline-block p-0"
+                                        style="z-index:-1"
+                                        x-on:change="changeOption(<?= (int) $attributeId ?>, event.target.value)"
+                                        :checked="selectedValues[<?= (int) $attributeId ?>] === item.id"
+                                        :required="getAllowedAttributeOptions(<?= (int) $attributeId ?>)
+                                            .filter(attributeOption => selectedValues[attributeOption]).length === 0"
+                                    >
+                                    <div x-text="item.label"></div>
+                            </template>
+                        </div>
+                    </template>
+                    <template x-if="getOptionSwatchType(<?= (int) $attributeId ?>) === 'visual'">
+                        <div class="flex space-x-4 -mx-4 items-center swatch-attribute-options">
+                            <template x-for="(item, index) in getAllowedAttributeOptions(<?= (int) $attributeId ?>)"
+                                      :key="item.id"
+                            >
+                                <label
+                                    :for="'attribute-option-'+item.id"
+                                    :class="{'border-container-lighter ring ring-primary ring-opacity-50':
+                                       (selectedValues[<?= (int)$attributeId ?>] === item.id),
+                                         'border-container-darker': (selectedValues[<?= (int)$attributeId ?>] !== item.id) }"
+                                    class="swatch-option border-2 cursor-pointer bg-container-lighter shadow-sm"
+                                    :style="getSwatchBackgroundStyle('<?= (int) $attributeId ?>',item.id)"
+                                >
+                                    <input
+                                        :id="'attribute-option-'+item.id"
+                                        :value="item.id"
+                                        name="super_attribute[<?= (int) $attributeId ?>]"
+                                        type="radio"
+                                        class="border-0 focus:border-0 focus:ring-0 absolute inline-block p-0"
+                                        style="z-index:-1"
+                                        x-on:change="changeOption(<?= (int) $attributeId ?>, event.target.value)"
+                                        :checked="selectedValues[<?= (int) $attributeId ?>] === item.id"
+                                        :required="getAllowedAttributeOptions(<?= (int) $attributeId ?>).filter(
+                                                attributeOption => selectedValues[attributeOption]
+                                            ).length === 0"
+                                    >
+                                    <div x-text="item.label"
+                                         class="sr-only"
+                                    ></div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+        <?php endforeach; ?>
+        </div>
+
+<?php endif;?>
+
