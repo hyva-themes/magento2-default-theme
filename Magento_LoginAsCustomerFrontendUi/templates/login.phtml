@@ -5,16 +5,20 @@
  * This product is licensed per Magento install
  * See https://hyva.io/license
  */
-/** @var \Magento\Framework\View\Element\Template $block */
-/** @var \Magento\Framework\Escaper $escaper */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
 ?>
 
-<div class="loading-mask">
-    <div class="loader">
+<div class="container">
         <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/loader-1.gif')) ?>"
              alt="<?= $escaper->escapeHtmlAttr(__('Loading...')) ?>"
-             style="position: absolute;">
-    </div>
+        />
 </div>
 
 <script>
