@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="after.body.start">
+            <block name="login-as-customer-notice" template="Magento_LoginAsCustomerFrontendUi::html/notices.phtml">
+                <container name="login-as-customer-notice-links">
+                    <block class="Magento\Customer\Block\Account\AuthorizationLink" name="login-as-customer-logout-link"
+                       template="Magento_LoginAsCustomerFrontendUi::html/notices/logout-link.phtml" />
+                </container>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

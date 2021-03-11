@@ -24,17 +24,17 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
     $recaptchaLegalNotice = $block->getBlockHtml($recaptchaData[ReCaptcha::RECAPTCHA_LEGAL_NOTICE_BLOCK]);
 }
 ?>
-<div class="lg:w-1/4 md:w-1/2 w-full px-4">
+<div class="px-4 lg:w-1/4 md:w-1/2">
     <form class="form subscribe"
           action="<?= $escaper->escapeUrl($block->getFormActionUrl()) ?>"
           method="post"
           x-data="initNewsletterForm()"
           @submit.prevent="submitForm()"
           id="newsletter-validate-detail">
-        <div class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3 uppercase">
+        <div class="mb-3 text-sm font-medium tracking-widest text-gray-900 uppercase title-font">
             <?= $escaper->escapeHtml(__('Newsletter')) ?>
         </div>
-        <div class="flex xl:flex-nowrap md:flex-nowrap lg:flex-wrap flex-wrap justify-center md:justify-start">
+        <div class="flex flex-wrap justify-center gap-2 md:justify-start">
             <label for="newsletter-subscribe" class="sr-only">
                 <?= $escaper->escapeHtml(__('Email Address')) ?>
             </label>
@@ -42,24 +42,24 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                 type="email"
                 required
                 id="newsletter-subscribe"
-                class="input input-light"
+                class="form-input inline-flex w-full"
                 placeholder="<?= $escaper->escapeHtmlAttr(__('Enter your email address')) ?>">
             <?= $block->getBlockHtml('formkey') ?>
-            <button class="lg:mt-2 xl:mt-0 flex-shrink-0 inline-flex btn btn-primary">
+            <button class="inline-flex flex-shrink-0 ml-auto xl:mt-0 btn btn-primary">
                 <?= $escaper->escapeHtmlAttr(__('Subscribe')) ?>
             </button>
-            <?= $recaptchaInputField ?>
+            <?= /** @noEscape */ $recaptchaInputField ?>
         </div>
         <div>
             <template x-if="displayErrorMessage">
-                <p class="text-red flex items-center">
-                                    <span class="inline-block w-8 h-8 mr-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                             stroke="currentColor">
-                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                        </svg>
-                                    </span>
+                <p class="flex items-center text-red">
+                    <span class="inline-block w-8 h-8 mr-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                             stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </span>
                     <template x-for="errorMessage in errorMessages">
                         <span x-html="errorMessage"></span>
                     </template>
@@ -68,7 +68,7 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
         </div>
     </form>
     <div class="w-full">
-    <?= $recaptchaLegalNotice ?>
+    <?= /** @noEscape */ $recaptchaLegalNotice ?>
     </div>
     <script>
         function initNewsletterForm() {

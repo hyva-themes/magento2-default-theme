@@ -9,6 +9,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Currency;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Hyva\Theme\ViewModel\ProductCompare;
 use Hyva\Theme\ViewModel\Store;
@@ -20,7 +21,7 @@ use Magento\Framework\View\Element\Template;
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var $viewModelStore Store */
+/** @var Store $viewModelStore */
 $viewModelStore = $viewModels->require(Store::class);
 
 /** @var Wishlist $wishlistViewModel */
@@ -31,6 +32,10 @@ $compareViewModel = $viewModels->require(ProductCompare::class);
 
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
+
+/** @var Currency $currencyViewModel */
+$currencyViewModel = $viewModels->require(Currency::class);
+$currencySymbol = $currencyViewModel->getCurrentCurrencySymbol();
 
 /** @var Escaper $escaper */
 /** @var Template $block */
@@ -81,6 +86,7 @@ $productAttributes = "
       }
       url_key
       url_suffix
+      visibility
       price_range {
         minimum_price {
           regular_price {
@@ -115,10 +121,6 @@ $graphqlQuery = $query ?: "
     items {
         $items
     }
-  },
-  currency {
-    base_currency_symbol
-    base_currency_code
   }
 }";
 ?>
@@ -155,7 +157,10 @@ $graphqlQuery = $query ?: "
                                 data.data.products &&
                                 data.data.products.items &&
                                 data.data.products.items[0] &&
+                                data.data.products.items[0]['<?= $escaper->escapeHtml($type) ?>_products'] &&
+                                // only use products with visibility set to `Catalog` or `Catalog, Search` (2 or 4)
                                 data.data.products.items[0]['<?= $escaper->escapeHtml($type) ?>_products']
+                                    .filter(product => [2,4].includes(product.visibility))
                             ) || [];
                             <?php else: ?>
                             return this.products = (
@@ -282,7 +287,7 @@ $graphqlQuery = $query ?: "
                     formatter.formatToParts(value).map(({type, value}) => {
                         switch (type) {
                             case 'currency':
-                                return this.currency.base_currency_symbol || value;
+                                return <?= $currencySymbol ? /** @noEscape */ "'$currencySymbol'" : 'value' ?>;
                             case 'minusSign':
                                 return '- ';
                             case 'plusSign':
@@ -342,7 +347,7 @@ $graphqlQuery = $query ?: "
                                         :href="'<?= $escaper->escapeUrl($block->getBaseUrl()) ?>' +
                                             product.url_key + (product.url_suffix || '')"
                                        >
-                                        <span x-text="product.name"></span>
+                                        <span x-html="product.name"></span>
                                     </a>
                                 </p>
                                 <p class="pt-1 text-lg text-center text-gray-900"

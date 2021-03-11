@@ -62,18 +62,6 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
             </div>
         </div>
 
-        <?php /*
-        <div class="field email required">
-            <label class="label" for="company"><span><?= $escaper->escapeHtml(__('Company')) ?></span></label>
-            <div class="control">
-                <input type="text" name="company" id="company"
-                       value="<?= $escaper->escapeHtmlAttr($block->getCustomer()->getCompany()) ?>"
-                       title="<?= $escaper->escapeHtmlAttr(__('Company')) ?>"
-                       class="form-input"/>
-            </div>
-        </div>
-        */ ?>
-
         <div class="field choice">
             <input type="checkbox" name="change_password" id="change-password" value="1"
                    title="<?= $escaper->escapeHtmlAttr(__('Change Password')) ?>"
@@ -85,53 +73,56 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
         </div>
 
         <template x-if="showPasswordFields">
-            <div class="field password current required">
-                <label class="label" for="current-password">
-                    <span><?= $escaper->escapeHtml(__('Current Password')) ?></span>
-                </label>
-                <div class="control">
-                    <input type="password" class="form-input" name="current_password" id="current-password"
-                           data-input="current-password"
-                           autocomplete="off"/>
+            <div>
+                <div class="field password current required">
+                    <label class="label" for="current-password">
+                        <span><?= $escaper->escapeHtml(__('Current Password')) ?></span>
+                    </label>
+                    <div class="control">
+                        <input type="password" class="form-input" name="current_password" id="current-password"
+                               data-input="current-password"
+                               autocomplete="off"/>
+                    </div>
                 </div>
+
+                <div class="field">
+                    <label class="label" for="password"><span><?= $escaper->escapeHtml(
+                        __('New Password')
+                    ) ?></span></label>
+                    <div class="control">
+                        <?php $minimumPasswordLength = $block->getMinimumPasswordLength() ?>
+                        <input type="password" class="form-input" name="password" id="password" required
+                               x-on:change="checkPasswordsMatch()"
+                               minlength="<?= $escaper->escapeHtmlAttr($minimumPasswordLength) ?>" autocomplete="off"/>
+                    </div>
+                    <p class="text-sm text-secondary mt-3"><?= $escaper->escapeHtml(
+                        __(
+                            'Minimum of different classes of characters in password is %1.'
+                                . ' Classes of characters: Lower Case, Upper Case, Digits, Special Characters.',
+                            $block->getRequiredCharacterClassesNumber()
+                        )
+                    ) ?></p>
+                </div>
+
+                <div class="field">
+                    <label class="label" for="password-confirmation">
+                        <span><?= $escaper->escapeHtml(__('Confirm New Password')) ?></span>
+                    </label>
+                    <div class="control">
+                        <input type="password" class="form-input" name="password_confirmation"
+                               id="password-confirmation"
+                               x-on:change="checkPasswordsMatch()"
+                               autocomplete="off"/>
+                    </div>
+                </div>
+
+                <p class="my-4 text-red invisible"
+                   :class="passwordsMatching ? 'invisible' : 'visible'"
+                >
+                    <?= $escaper->escapeHtml(__('Your password confirmation must match your password.')) ?>
+                </p>
             </div>
         </template>
-        <template x-if="showPasswordFields">
-            <div class="field">
-                <label class="label" for="password"><span><?= $escaper->escapeHtml(
-                    __('New Password')
-                ) ?></span></label>
-                <div class="control">
-                    <?php $minimumPasswordLength = $block->getMinimumPasswordLength() ?>
-                    <input type="password" class="form-input" name="password" id="password" required
-                           x-on:change="checkPasswordsMatch()"
-                           minlength="<?= $escaper->escapeHtmlAttr($minimumPasswordLength) ?>" autocomplete="off"/>
-                </div>
-                <p class="text-sm text-secondary mt-3"><?= $escaper->escapeHtml(
-                    __(
-                        'Minimum of different classes of characters in password is %1.'
-                            . ' Classes of characters: Lower Case, Upper Case, Digits, Special Characters.',
-                        $block->getRequiredCharacterClassesNumber()
-                    )
-                ) ?></p>
-            </div>
-        </template>
-        <template x-if="showPasswordFields">
-            <div class="field">
-                <label class="label" for="password-confirmation">
-                    <span><?= $escaper->escapeHtml(__('Confirm New Password')) ?></span>
-                </label>
-                <div class="control">
-                    <input type="password" class="form-input" name="password_confirmation"
-                           id="password-confirmation"
-                           x-on:change="checkPasswordsMatch()"
-                           autocomplete="off"/>
-                </div>
-            </div>
-        </template>
-        <p class="my-4 text-red" :class="passwordsMatching ? 'invisible' : 'visible'">
-            <?= $escaper->escapeHtml(__('Your password confirmation must match your password.')) ?>
-        </p>
     </fieldset>
     <?= $block->getChildHtml('form_additional_info') ?>
     <?= $block->getBlockHtml($recaptchaInputFieldBlock) ?>

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="footer-content">
+            <block name="footer-column-directory"
+                   template="Magento_Theme::html/footer/column.phtml"
+                   after="form.subscribe"
+            >
+                <block name="currency-switcher"
+                       template="Magento_Directory::currency.phtml"
+                />
+            </block>
+        </referenceBlock>
+    </body>
+</page>

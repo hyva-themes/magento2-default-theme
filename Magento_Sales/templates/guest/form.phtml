@@ -38,7 +38,7 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                         </label>
                         <div class="control">
                             <select name="oar_type" id="quick-search-type-id" class="select"
-                                    @change="authenticateBy = event.originalTarget.value">
+                                    @change="authenticateBy = event.target.value">
                                 <option value="email"><?= $escaper->escapeHtml(__('Email')) ?></option>
                                 <option value="zip"><?= $escaper->escapeHtml(__('ZIP Code')) ?></option>
                             </select>

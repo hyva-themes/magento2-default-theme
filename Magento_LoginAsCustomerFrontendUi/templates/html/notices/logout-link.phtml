@@ -1,0 +1,33 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Magento\Customer\Block\Account\AuthorizationLink;
+use Magento\Framework\Escaper;
+
+/**
+ * @var AuthorizationLink $block
+ * @var Escaper $escaper
+ * @var ViewModelRegistry $viewModels
+ */
+
+/** @var HeroiconsOutline $heroiconsOutline */
+$heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
+
+$dataPostParam = '';
+if ($block->isLoggedIn()) {
+    $dataPostParam = sprintf(" @click.prevent='hyva.postForm(%s)'", $block->getPostParams());
+}
+?>
+
+<a class="-mr-1 flex p-2 rounded-md text-white" <?= /* @noEscape */ $block->getLinkAttributes()
+?><?= /* @noEscape */ $dataPostParam ?>>
+    <span class="hidden md:block"><?= $escaper->escapeHtml(__('Close Session')) ?></span>
+    <?= $heroiconsOutline->xHtml('h-6 w-6', 25, 25); ?>
+</a>
