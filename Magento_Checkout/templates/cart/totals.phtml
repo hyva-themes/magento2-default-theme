@@ -91,7 +91,7 @@ $taxLabelAddition = $viewModelTotalsOutput->getTaxLabelAddition();
                             <span x-text="item['selected_shipping_method'].method_title"></span>
                         </div>
                         <div class="w-5/12 md:w-auto text-right md:p-2"
-                             x-text="formatPrice(item['selected_shipping_method'].amount.value)">
+                             x-text="item['selected_shipping_method'].amount && formatPrice(item['selected_shipping_method'].amount.value) || ''">
                         </div>
                     </div>
                 </template>
