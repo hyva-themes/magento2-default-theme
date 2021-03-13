@@ -25,12 +25,14 @@ $product = $block->getProduct();
 <section>
     <?= $block->getChildHtml('product_options_wrapper_bottom') ?>
 </section>
-<section>
-    <?= $block->getChildHtml('description') ?>
-</section>
-<section id="product-additional">
-    <?= $block->getChildHtml('additional') ?>
-</section>
+<div class="container grid lg:grid-cols-2 gap-8">
+    <section id="product-description">
+        <?= $block->getChildHtml('description') ?>
+    </section>
+    <section id="product-additional">
+        <?= $block->getChildHtml('additional') ?>
+    </section>
+</div>
 <section>
     <?= $block->getChildHtml('related') ?>
     <?= $block->getChildHtml('upsell') ?>
