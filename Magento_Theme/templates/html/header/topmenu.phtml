@@ -72,16 +72,16 @@ $menuItems = $viewModelNavigation->getNavigation(4);
                 >
                     <a class="flex items-center w-full px-8 py-4 border-b cursor-pointer
                         bg-container-lighter border-container hover:bg-container-darker hover:underline level-0"
-                       href="<?= (string) $menuItem['url'] ?>"
-                       title="<?= (string) $menuItem['name'] ?>">
-                        <?= (string) $menuItem['name'] ?>
+                       href="<?= $escaper->escapeHtmlAttr($menuItem['url']) ?>"
+                       title="<?= $escaper->escapeHtmlAttr($menuItem['name']) ?>">
+                        <?= $escaper->escapeHtml($menuItem['name']) ?>
                     </a>
                     <?php if (!empty($menuItem['childData'])): ?>
                     <a class="absolute right-0 flex w-8 h-8 mr-8 border rounded cursor-pointer
                         bg-container-lighter border-container hover:bg-container hover:border-container"
                           @click="menu.mobilePanelActiveId =
-                          menu.mobilePanelActiveId === '<?= (string) $index ?>' ?
-                           0 : '<?= (string) $index ?>'"
+                          menu.mobilePanelActiveId === '<?= /* @noEscape */ (string) $index ?>' ?
+                           0 : '<?= /* @noEscape */ (string) $index ?>'"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24" width="24"
                              stroke="currentColor"
@@ -97,8 +97,8 @@ $menuItems = $viewModelNavigation->getNavigation(4);
                         class="absolute top-0 right-0 z-10 w-full h-full transition-transform duration-200 ease-in-out
                             translate-x-full transform bg-container-lighter"
                         :class="{
-                            'translate-x-full' : menu.mobilePanelActiveId !== '<?= (string) $index ?>',
-                            'translate-x-0' : menu.mobilePanelActiveId === '<?= (string) $index ?>',
+                            'translate-x-full' : menu.mobilePanelActiveId !== '<?= /* @noEscape */ (string) $index ?>',
+                            'translate-x-0' : menu.mobilePanelActiveId === '<?= /* @noEscape */ (string) $index ?>',
                         }"
                     >
                         <a class="flex items-center px-8 py-4 border-b cursor-pointer bg-container border-container"
@@ -111,10 +111,10 @@ $menuItems = $viewModelNavigation->getNavigation(4);
                                     d="M15 19l-7-7 7-7"/>
                             </svg>
                             <span class="ml-4">
-                                <?= (string) $menuItem['name'] ?>
+                                <?= $escaper->escapeHtml($menuItem['name']) ?>
                             </span>
                         </a>
-                        <a href="<?= (string) $menuItem['url'] ?>" title="<?= (string) $menuItem['name'] ?>"
+                        <a href="<?= $escaper->escapeHtmlAttr($menuItem['url']) ?>" title="<?= $escaper->escapeHtmlAttr($menuItem['name']) ?>"
                            class="flex items-center w-full px-8 py-4 border-b cursor-pointer
                             bg-container-lighter border-container hover:bg-container-darker hover:underline"
                         >
@@ -124,8 +124,8 @@ $menuItems = $viewModelNavigation->getNavigation(4);
                             <span class="ml-4"><?= $escaper->escapeHtml(__('View All')) ?></span></a>
                         <?php foreach ($menuItem['childData'] as $subMenuItem): ?>
 
-                            <a href="<?= (string) $subMenuItem['url'] ?>"
-                               title="<?= (string) $subMenuItem['name'] ?>"
+                            <a href="<?= $escaper->escapeHtmlAttr($subMenuItem['url']) ?>"
+                               title="<?= $escaper->escapeHtmlAttr($subMenuItem['name']) ?>"
                                class="flex items-center w-full px-8 py-4 border-b cursor-pointer
                                 bg-container-lighter border-container hover:bg-container-darker hover:underline"
                             >
@@ -133,7 +133,7 @@ $menuItems = $viewModelNavigation->getNavigation(4);
                                      viewBox="0 0 24 24" height="24"
                                      width="24"></svg>
                                 <span class="ml-4 text-base text-gray-700 lg:ml-0">
-                                    <?= (string) $subMenuItem['name'] ?>
+                                    <?= $escaper->escapeHtml($subMenuItem['name']) ?>
                                 </span>
                             </a>
                         <?php endforeach; ?>
@@ -154,29 +154,29 @@ $menuItems = $viewModelNavigation->getNavigation(4);
         >
             <?php foreach ($menuItems as $index => $menuItem): ?>
                 <div class="relative mr-2 level-0"
-                     @mouseenter="menu.hoverPanelActiveId = '<?= (string) $index ?>'"
+                     @mouseenter="menu.hoverPanelActiveId = '<?= /* @noEscape */ (string) $index ?>'"
                      @mouseleave="menu.hoverPanelActiveId = 0"
                 >
                     <span class="flex items-center block p-3 text-md bg-opacity-95">
                         <a class="w-full py-3 text-base text-gray-700 hover:underline level-0"
-                           href="<?= (string) $menuItem['url'] ?>"
-                           title="<?= (string) $menuItem['name'] ?>"
+                           href="<?= $escaper->escapeHtmlAttr($menuItem['url']) ?>"
+                           title="<?= $escaper->escapeHtmlAttr($menuItem['name']) ?>"
                         >
-                            <?= (string) $menuItem['name'] ?>
+                            <?= $escaper->escapeHtml($menuItem['name']) ?>
                         </a>
                 </span>
                     <?php if (!empty($menuItem['childData'])): ?>
                         <div
                             class="absolute z-10 hidden px-6 py-4 -ml-6 shadow-lg bg-container-lighter bg-opacity-95"
-                            :class="{ 'hidden' : menu.hoverPanelActiveId !== '<?= (string) $index ?>',
-                                'block' : menu.hoverPanelActiveId === '<?= (string) $index ?>'}">
+                            :class="{ 'hidden' : menu.hoverPanelActiveId !== '<?= /* @noEscape */ (string) $index ?>',
+                                'block' : menu.hoverPanelActiveId === '<?= /* @noEscape */ (string) $index ?>'}">
                             <?php foreach ($menuItem['childData'] as $subMenuItem): ?>
-                                <a href="<?= (string) $subMenuItem['url'] ?>"
-                                   title="<?= (string) $subMenuItem['name'] ?>"
+                                <a href="<?= $escaper->escapeHtmlAttr($subMenuItem['url']) ?>"
+                                   title="<?= $escaper->escapeHtmlAttr($subMenuItem['name']) ?>"
                                    class="block w-full px-3 py-1 my-1 whitespace-nowrap first:mt-0 hover:underline"
                                 >
                                     <span class="text-base text-gray-700">
-                                        <?= (string) $subMenuItem['name'] ?>
+                                        <?= $escaper->escapeHtml($subMenuItem['name']) ?>
                                     </span>
                                 </a>
                             <?php endforeach; ?>
