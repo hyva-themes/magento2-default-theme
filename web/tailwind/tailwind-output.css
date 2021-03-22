@@ -2922,6 +2922,11 @@ body {
   color: rgba(245, 158, 11, var(--tw-text-opacity));
 }
 
+.hover\:text-primary:hover {
+  --tw-text-opacity: 1;
+  color: rgba(39, 39, 42, var(--tw-text-opacity));
+}
+
 .hover\:text-primary-darker:hover {
   --tw-text-opacity: 1;
   color: rgba(24, 24, 27, var(--tw-text-opacity));
@@ -3941,6 +3946,10 @@ form select {
 
   .md\:mr-5 {
     margin-right: 1.25rem;
+  }
+
+  .md\:mt-6 {
+    margin-top: 1.5rem;
   }
 
   .md\:p-2 {

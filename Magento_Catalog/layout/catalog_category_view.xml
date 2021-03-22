@@ -42,6 +42,14 @@
 
         </referenceContainer>
 
+        <referenceContainer name="sidebar.additional">
+            <block
+                name="catalog.compare.sidebar"
+                template="Magento_Catalog::product/compare/sidebar.phtml"
+                ifconfig="catalog/frontend/show_sidebar_in_list"
+            />
+        </referenceContainer>
+
         <referenceBlock name="page.main.title" remove="true" />
     </body>
 </page>

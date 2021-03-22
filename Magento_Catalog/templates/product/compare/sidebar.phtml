@@ -1,0 +1,158 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+?>
+
+<script defer>
+function compareSidebarFetchHandler(postUrl, postHeaders, isSingleItem = true) {
+    const messages = {
+        "success": isSingleItem
+            ? "<?= $escaper->escapeHtml(__("You removed product %1 from the comparison list", __("Product"))) ?>"
+            : "<?= $escaper->escapeHtml(__("You removed all products from the comparison list")) ?>",
+        "warning": isSingleItem
+            ? "<?= $escaper->escapeHtml(__('Could not remove item from compare.')) ?>"
+            : "<?= $escaper->escapeHtml(__('Could not remove all item from compare.')) ?>",
+    }
+
+    return fetch(postUrl, postHeaders).then(function (response) {
+        if (response.redirected) {
+            window.location.href = response.url;
+        } else if (response.ok) {
+            return response.json();
+        } else {
+            typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                [{ type: "warning", text: messages.warning }], 5000
+            );
+        }
+    }).then(function (response) {
+        if (!response) return;
+        typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+            [{
+                type: (response.success) ? "success" : "error",
+                text: (response.success) ? messages.success : response.error_message
+            }], 5000
+        );
+        let reloadCustomerDataEvent = new CustomEvent("reload-customer-section-data");
+        window.dispatchEvent(reloadCustomerDataEvent);
+    }).catch(function (error) {
+        typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+            [{ type: "error", text: error }], 5000
+        );
+    });
+}
+
+function compareSidebarProducts() {
+    return {
+        compareProducts: null,
+        itemCount: 0,
+        compareItems: {},
+        receiveCompareData: function (data) {
+            if (data['compare-products']) {
+                this.compareProducts = data['compare-products'];
+                this.itemCount = this.compareProducts.count;
+                this.compareItems = this.compareProducts.items;
+            }
+        },
+        removeFromCompare: function(productId) {
+            const formKey = document.querySelector('input[name=form_key]').value;
+            const postUrl = BASE_URL + 'catalog/product_compare/remove/';
+            const confirmMessage = "<?= $escaper->escapeHtml(__('Are you sure you want to remove this item from your Compare Products list?')) ?>";
+            if (!window.confirm(confirmMessage)) return;
+            const postHeaders = {
+                "headers": {
+                    "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                },
+                "body": "form_key="+ formKey + "&product="+productId+"&uenc="+btoa(window.location.href),
+                "method": "POST",
+                "mode": "cors",
+                "credentials": "include"
+            };
+
+            compareSidebarFetchHandler(postUrl, postHeaders);
+        }
+    }
+}
+
+function initCompareSidebarClear() {
+    return {
+        clearCompare: function() {
+            const formKey = document.querySelector('input[name=form_key]').value;
+            const postUrl = BASE_URL + 'catalog/product_compare/clear/';
+            const confirmMessage = "<?= $escaper->escapeHtml(__('Are you sure you want to remove all items from your Compare Products list?')) ?>";
+            if (!window.confirm(confirmMessage)) return;
+            const postHeaders = {
+                "headers": {
+                    "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                },
+                "body": "form_key="+ formKey + "&uenc="+btoa(window.location.href),
+                "method": "POST",
+                "mode": "cors",
+                "credentials": "include"
+            };
+
+            compareSidebarFetchHandler(postUrl, postHeaders, isSingleItem = false);
+        }
+    }
+}
+</script>
+
+<div x-data="compareSidebarProducts()"
+     @private-content-loaded.window="receiveCompareData($event.detail.data)"
+     class="compare-widget mt-8 hidden"
+     :class="{ 'hidden': !(itemCount > 0) }">
+    <div class="border-t border-container pt-4">
+        <strong class="block title text-2xl leading-7"><?= $escaper->escapeHtml(__('Compare Products')) ?></strong>
+    </div>
+    <template x-if="itemCount">
+        <ul class="my-4">
+            <template x-for="product in compareItems">
+                <li class="flex items-start mb-4">
+                    <a :href="product.product_url"
+                        class="block mb-3 w-10 h-10 flex-shrink-0 mr-4"
+                        :title="product.name">
+                        <img :src="product.image" :alt="product.name" loading="lazy">
+                    </a>
+                    <strong class="mr-2 text-sm leading-6 font-normal">
+                        <a :href="product.product_url" :title="product.name" x-text="product.name"></a>
+                    </strong>
+                    <button
+                        @click.prevent="removeFromCompare(product.id)"
+                        aria-label="<?= $escaper->escapeHtmlAttr(__('Remove Product')) ?>"
+                        class="p-1 inline-flex flex-shrink-0 items-center justify-center text-gray-500 hover:text-primary ml-auto"
+                        title="<?= $escaper->escapeHtmlAttr(__('Remove Product')) ?>">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </li>
+            </template>
+        </ul>
+    </template>
+    <div class="flex flex-wrap items-center md:mt-6 space-x-4 text-sm">
+        <a href="<?= $escaper->escapeUrl($block->getUrl('catalog/product_compare/index')) ?>"
+            title="<?= $escaper->escapeHtml(__('Compare Products')); ?>"
+            class="btn btn-primary py-3">
+            <span><?= $escaper->escapeHtml(__('Compare')); ?></span>
+        </a>
+        <button x-data="initCompareSidebarClear()"
+            @click.prevent="clearCompare()"
+            aria-label="<?= $escaper->escapeHtmlAttr(__('Remove all Products')) ?>"
+            class="p-1 inline-flex flex-shrink-0 items-center justify-center text-gray-500 hover:text-primary ml-auto">
+            <span><?= $escaper->escapeHtml(__('Clear all')); ?></span>
+        </button>
+    </div>
+</div>
