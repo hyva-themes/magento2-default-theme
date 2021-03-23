@@ -1,0 +1,243 @@
+<?php
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magento\Framework\Escaper;
+use Magento\Swatches\Block\Product\Renderer\Listing\Configurable;
+use Magento\Swatches\ViewModel\Product\Renderer\Configurable as ConfigurableViewModel;
+
+/** @var Configurable $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var ConfigurableViewModel $configurableViewModel */
+$configurableViewModel = $viewModels->require(ConfigurableViewModel::class);
+
+$product = $block->getProduct();
+$productId = $product->getId();
+
+$attributes = $block->decorateArray($block->getAllowAttributes());
+?>
+
+<?php if ($product->isSaleable() && count($attributes)): ?>
+
+    <script>
+        function initConfigurableSwatchOptions_<?= (int) $productId ?>() {
+            const configurableOptionsComponent = initConfigurableOptions(
+                '<?= (int) $productId ?>',
+                <?= /* @noEscape */ $block->getJsonConfig() ?>
+            );
+            const swatchOptionsComponent = initSwatchOptions(<?= /* @noEscape */ $block->getJsonSwatchConfig() ?>);
+
+            return {
+                ...configurableOptionsComponent,
+                ...swatchOptionsComponent,
+                mediaCallback: "<?= $escaper->escapeJs($escaper->escapeUrl($block->getMediaCallback())) ?>",
+                changeOption: function changeOption (optionId, value, skipUpdateGallery) {
+                    this.selectedValues[optionId] = value;
+                    this.findSimpleIndex();
+                    this.findAllowedAttributeOptions();
+                    this.updatePrices();
+                    !skipUpdateGallery && this.updateGallery();
+                },
+                updatePrices: function updatePrices () {
+                    var value = this.productIndex ?
+                        this.optionConfig.optionPrices[this.productIndex] :
+                        this.optionConfig.prices;
+                    window.dispatchEvent(
+                        new CustomEvent(
+                            "update-prices-<?= (int)$product->getId() ?>",
+                            { detail: value }
+                        )
+                    );
+                },
+                updateGallery: function updateGallery () {
+                    if (!this.productIndex) {
+                        return;
+                    }
+
+                    fetch(`${this.mediaCallback}?product_id=${this.productIndex}&isAjax=true`, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        }
+                    ).then(response => {
+                            return response.json()
+                        }
+                    ).then(data=> {
+                        if (data.errors) {
+                            // non critical failure only console logged
+                            console.warn(data.errors);
+                        } else {
+                            const image = data && data.medium;
+
+                            image && window.dispatchEvent(
+                                new CustomEvent(
+                                    "update-gallery-<?= (int) $productId ?>",
+                                    { detail: image }
+                                )
+                            );
+                        }
+                    }).catch(error => { console.warn(error) });
+                },
+                preselectQuerystringItems() {
+                    // pre-select option like ?size=167
+                    const urlQueryParams = new URLSearchParams(window.location.search.replace('?',''));
+                    Object.values(this.optionConfig.attributes).map(attribute => {
+                        // Don't update images on load, since PLPs already set the main image to the selected options
+                        const skipUpdateGallery = true;
+                        urlQueryParams.get(attribute.code) &&
+                        this.changeOption(attribute.id, urlQueryParams.get(attribute.code), skipUpdateGallery);
+                    });
+                },
+                mouseDown: false,
+                startX: 0,
+                maxScroll: 0,
+                scrollLeft: null,
+                slider: null,
+                scrollEvents: {
+                    ['@mousedown'](e){
+                        this.slider = e.target.closest('.snap');
+                        if(!this.slider){
+                            return;
+                        }
+                        this.maxScroll = this.slider.scrollWidth - this.slider.offsetWidth;
+                        this.startX = e.pageX - this.slider.offsetLeft;
+                        this.scrollLeft = this.slider.scrollLeft;
+                        this.mouseDown = true;
+                    },
+                    ['@mouseout.self'](){
+                        this.mouseDown = false;
+                    },
+                    ['@mouseup'](){
+                        this.mouseDown = false;
+                    },
+                    ['@mousemove'](e){
+                        e.preventDefault();
+                        if(!this.mouseDown) { return; }
+                        const x = e.pageX - this.slider.offsetLeft;
+                        const scroll = x - this.startX;
+                        const scrollLeft = this.scrollLeft - scroll;
+
+                        if (scrollLeft > this.maxScroll) {
+                            this.slider.scrollLeft = this.maxScroll;
+                            return
+                        }
+                        this.slider.scrollLeft = this.scrollLeft - scroll;
+                    },
+                    ['@onselectstart'](){
+                        return false;
+                    }
+                },
+                resizeEvent(){
+                    Array.from(this.$el.querySelectorAll('.snap')).forEach(slider => {
+                        slider.scrollLeft = 0;
+                    })
+                }
+            };
+        }
+
+    </script>
+
+<div x-data="initConfigurableSwatchOptions_<?= (int) $productId ?>()"
+     x-init="findAllowedAttributeOptions();"
+     @private-content-loaded.window="onGetCartData($event.detail.data)"
+     @resize.window="resizeEvent()"
+     class="mb-2 relative"
+>
+    <div>
+        <?php foreach ($attributes as $attribute): ?>
+            <?php $attributeId = $attribute->getAttributeId(); ?>
+            <?php $productAttribute = $attribute->getProductAttribute(); ?>
+        <div class="swatch-attribute border-t last:border-b border-container
+            <?= $escaper->escapeHtmlAttr($productAttribute->getAttributeCode()) ?>"
+        >
+            <div class="w-full overflow-x-hidden swatch-attribute-options">
+                <div class="flex flex-nowrap w-full overflow-auto transition-all snap items-center py-1 min-h-14"
+                     role="radiogroup"
+                     aria-labelledby="radiogroup-label"
+                     x-spread="scrollEvents"
+                >
+                    <label class="sr-only"
+                           for="attribute<?= $escaper->escapeHtmlAttr($productAttribute->getAttributeCode()) ?>"
+                    >
+                        <span>
+                            <?= $escaper->escapeHtml($productAttribute->getStoreLabel()) ?>
+                        </span>
+                    </label>
+                    <template x-for="(item, index) in getAllowedAttributeOptions(<?= (int) $attributeId ?>)"
+                              :key="item.id"
+                    >
+                        <div>
+                            <label
+                                :for="'attribute-option-<?= (int) $productId ?>-'+item.id"
+                                class="swatch-option border-2 cursor-pointer bg-container-lighter shadow-sm relative select-none"
+                                :class="{
+                                    'border-container-lighter ring ring-primary ring-opacity-50':
+                                        (selectedValues[<?= (int)$attributeId ?>] === item.id),
+                                    'border-container-darker':
+                                       (selectedValues[<?= (int)$attributeId ?>] !== item.id)
+                                }"
+                                :style="getSwatchBackgroundStyle('<?= (int) $attributeId ?>',item.id)"
+                                <?php if ($configurableViewModel->getShowSwatchTooltip()): ?>
+                                @mouseenter.self="activeTooltipItem = {
+                                        attribute: '<?= (int) $attributeId ?>',
+                                        item: item.id
+                                    }; tooltipPositionElement = $event.target;"
+                                @mouseleave.self="activeTooltipItem = false"
+                                <?php endif; ?>
+                            >
+                                <input
+                                    :id="'attribute-option-<?= (int) $productId ?>-'+item.id"
+                                    :value="item.id"
+                                    name="super_attribute[<?= (int) $attributeId ?>]"
+                                    type="radio"
+                                    class="border-0 focus:border-0 focus:ring-0 absolute inline-block p-0"
+                                    style="z-index:-1"
+                                    x-on:change="changeOption(<?= (int) $attributeId ?>, event.target.value)"
+                                    :checked="selectedValues[<?= (int) $attributeId ?>] === item.id"
+                                    :required="getAllowedAttributeOptions(<?= (int) $attributeId ?>).filter(
+                                            attributeOption => selectedValues[attributeOption]
+                                        ).length === 0"
+                                >
+                                <div x-html="item.label"
+                                     class="whitespace-nowrap"
+                                     :class="{ 'sr-only' : !isTextSwatch(<?= (int) $attributeId ?>) }"
+                                ></div>
+                            </label>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+        <?php endforeach; ?>
+    </div>
+    <?php if ($configurableViewModel->getShowSwatchTooltip()): ?>
+    <template x-if="activeTooltipItem">
+        <div class="absolute"
+             :style="getTooltipPosition()"
+        >
+            <div class="shadow-lg">
+                <div class="absolute top-0 left-0 z-10 min-w-20 p-2 -mt-6 text-sm leading-tight text-black transform
+                -translate-x-1/2 -translate-y-full bg-white rounded-lg shadow-lg text-center">
+                    <template x-if="!isTextSwatch(activeTooltipItem.attribute)">
+                        <div class="inline-block border border-container shadow-sm"
+                             :style="getTooltipImageStyle(activeTooltipItem.attribute, activeTooltipItem.item)"
+                        ></div>
+                    </template>
+                    <span class="subtitle text-lg font-semibold"
+                          x-html="getSwatchConfig(activeTooltipItem.attribute, activeTooltipItem.item).label"
+                    ></span>
+                </div>
+                <svg class="absolute z-10 w-8 h-8 text-white transform -translate-x-1/5
+                -translate-y-8 fill-current stroke-current" width="12" height="12">
+                    <rect x="12" y="-12" width="12" height="12" transform="rotate(45)" class="shadow-xl" />
+                </svg>
+            </div>
+        </div>
+    </template>
+    <?php endif; ?>
+</div>
+<?php endif; ?>
