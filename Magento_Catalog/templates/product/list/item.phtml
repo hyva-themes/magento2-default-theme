@@ -15,13 +15,14 @@ use Hyva\Theme\ViewModel\ProductCompare;
 use Hyva\Theme\ViewModel\ProductPage;
 use Hyva\Theme\ViewModel\Wishlist;
 use Magento\Catalog\Block\Product\AbstractProduct;
+use Magento\Catalog\Block\Product\ListProduct;
 use Magento\Catalog\Helper\Output as CatalogOutputHelper;
 use Magento\Framework\Escaper;
 
 // phpcs:disable Magento2.Templates.ThisInTemplate
 // phpcs:disable Generic.Files.LineLength.TooLong
 
-/** @var AbstractProduct $block */
+/** @var AbstractProduct|ListProduct $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
@@ -49,122 +50,152 @@ $viewMode = $block->getData('view_mode');
 $showDescription = $block->getData('show_description');
 $showAddToWishlist = $wishlistViewModel->isEnabled();
 $showAddToCompare = $compareViewModel->showInProductList();
-$viewIsGrid = $viewMode === 'grid' ? true : false;
+$viewIsGrid = $viewMode === 'grid';
 
 if (!$product) {
     return '';
-} ?>
+}
+$productId = $product->getId();
+?>
 
 <?php if ($product->isSaleable()): ?>
 <form method="post"
     action="<?= $escaper->escapeUrl($productViewModel->getAddToCartUrl($product)) ?>"
-    class="item product product-item product_addtocart_form card card-interactive <?= $viewIsGrid ? 'flex flex-col' : 'flex flex-col md:flex-row' ?>"
+    class="item product product-item product_addtocart_form card card-interactive flex flex-col <?= $viewIsGrid ? '' : 'md:flex-row' ?>"
     <?php if ($product->getOptions()): ?>
     enctype="multipart/form-data"
     <?php endif; ?>
 >
     <?= /** @noEscape */ $block->getBlockHtml('formkey') ?>
-    <input type="hidden" name="product" value="<?= (int)$product->getId() ?>"/>
+    <input type="hidden" name="product" value="<?= (int)$productId ?>"/>
 <?php else: ?>
-<div class="item product product-item card card-interactive <?= $viewIsGrid ? 'flex flex-col' : 'flex flex-col md:flex-row' ?>">
+<div class="item product product-item card card-interactive flex flex-col <?= $viewIsGrid ? '' : 'md:flex-row' ?>">
 <?php endif; ?>
     <?php
     $productImage = $block->getImage($product, $imageDisplayArea);
     ?>
     <?php // Product Image ?>
     <a href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>"
-        class="product photo product-item-photo block <?= $viewIsGrid ? 'mx-auto mb-3' : 'mx-auto mb-3 md:w-2/6 md:mb-0 md:mr-5' ?>"
+        class="product photo product-item-photo block mx-auto mb-3 <?= $viewIsGrid ? '' : 'md:w-2/6 md:mb-0 md:mr-5' ?>"
         tabindex="-1">
         <img class="hover:shadow-sm object-contain"
-            loading="lazy"
-            alt="<?= $escaper->escapeHtmlAttr($productImage->getLabel()) ?>"
-            title="<?= $escaper->escapeHtmlAttr($productImage->getLabel()) ?>"
-            src="<?= $escaper->escapeUrl($productImage->getImageUrl()) ?>"
-            width="<?= $escaper->escapeHtmlAttr($productImage->getWidth()) ?>"
-            height="<?= $escaper->escapeHtmlAttr($productImage->getHeight()) ?>"
+             loading="lazy"
+             x-data=""
+             @update-gallery-<?= (int)$productId ?>.window="$el.src = event.detail"
+             alt="<?= $escaper->escapeHtmlAttr($productImage->getLabel()) ?>"
+             title="<?= $escaper->escapeHtmlAttr($productImage->getLabel()) ?>"
+             src="<?= $escaper->escapeUrl($productImage->getImageUrl()) ?>"
+             width="<?= $escaper->escapeHtmlAttr($productImage->getWidth()) ?>"
+             height="<?= $escaper->escapeHtmlAttr($productImage->getHeight()) ?>"
         />
     </a>
     <div class="product-info flex flex-col flex-grow">
         <?php $productNameStripped = $block->stripTags($product->getName(), null, true); ?>
-        <div class="mt-2 mb-1 items-center justify-center text-primary font-semibold text-lg <?= $viewIsGrid ? 'text-center' : 'text-center md:text-left' ?>">
+        <div class="mt-2 mb-1 items-center justify-center text-primary font-semibold text-lg text-center <?= $viewIsGrid ? '' : 'md:text-left' ?>">
             <a class="product-item-link"
                href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>">
                 <?= /* @noEscape */
                 $catalogOutputHelper->productAttribute($product, $product->getName(), 'name') ?>
             </a>
         </div>
-        <div class="py-1 <?= $viewIsGrid ? 'mx-auto w-6/12' : 'mx-auto w-6/12 md:mx-0 md:w-auto' ?>">
+
+        <div class="py-1 mx-auto w-6/12 <?= $viewIsGrid ? '' : 'md:mx-0 md:w-auto' ?>">
             <?= $block->getReviewsSummaryHtml($product, 'short') ?>
         </div>
-        <p class="pt-1 text-gray-900">
+
+        <?php if ($product->isAvailable()):?>
+            <?= $block->getProductDetailsHtml($product) ?>
+        <?php endif; ?>
+
+        <script>
+            function initPriceBox_<?= (int)$productId ?>()
+            {
+                return {
+                    updatePrice(priceData) {
+                        const regularPriceLabel = this.$el.querySelector('.normal-price .price-label');
+                        const regularPriceElement = this.$el.querySelector('.normal-price .price-wrapper .price');
+                        if (priceData.finalPrice.amount < priceData.oldPrice.amount) {
+                            regularPriceLabel.classList.add('hidden');
+                        } else {
+                            regularPriceLabel.classList.remove('hidden');
+                        }
+                        regularPriceElement.innerText = hyva.formatPrice(priceData.finalPrice.amount);
+                    }
+                }
+            }
+        </script>
+        <div class="pt-1 text-gray-900"
+             x-data="initPriceBox_<?= (int)$productId ?>()"
+             @update-prices-<?= (int)$productId ?>.window="updatePrice(event.detail);">
             <?= /* @noEscape */ $block->getProductPrice($product) ?>
-        </p>
+        </div>
+
         <div class="mt-auto pt-3 flex flex-wrap justify-center items-center">
             <?php if ($product->isSaleable()): ?>
-            <button class="w-auto btn btn-primary justify-center text-sm mr-auto px-4 md:px-2 lg:px-4
+            <button class="w-auto btn btn-primary justify-center text-sm mr-auto px-4 md:px-2 xl:px-4
                         <?= $viewIsGrid ? 'mr-auto' : 'mr-auto md:mr-0' ?>"
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>"
             >
                 <?= $heroiconsOutline->shoppingCartHtml("h-6 w-6 border-current inline", 25, 25) ?>
-                <span class="ml-2 <?= $viewIsGrid ? 'inline md:ml-0 md:hidden lg:ml-2 lg:inline' : 'inline' ?>">
+                <span class="ml-2 inline <?= $viewIsGrid ? 'md:ml-0 md:hidden lg:ml-2 lg:inline' : '' ?>">
                     <?= $escaper->escapeHtml(__('Add to Cart')) ?>
                 </span>
             </button>
             <?php endif; ?>
             <?php if ($showAddToWishlist): ?>
-            <script defer>
-            function initWishlist() {
-                return {
-                    addToWishlist: function addToWishlist(productId){
-                        var formKey = document.querySelector('input[name=form_key]').value;
-                        var postUrl = BASE_URL+"wishlist/index/add/";
-                        fetch(postUrl, {
-                            "headers": {
-                                "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-                            },
-                            "body": "form_key="+ formKey + "&product="+productId+"&uenc="+btoa(window.location.href),
-                            "method": "POST",
-                            "mode": "cors",
-                            "credentials": "include"
-                        }).then(function (response) {
-                            if (response.redirected) {
-                                window.location.href = response.url;
-                            } else if (response.ok) {
-                                return response.json();
-                            } else {
+            <script>
+                function initWishlist() {
+                    return {
+                        addToWishlist: function addToWishlist(productId){
+                            var formKey = document.querySelector('input[name=form_key]').value;
+                            var postUrl = BASE_URL+"wishlist/index/add/";
+                            fetch(postUrl, {
+                                "headers": {
+                                    "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                                },
+                                "body": "form_key="+ formKey + "&product="+productId+"&uenc="+btoa(window.location.href),
+                                "method": "POST",
+                                "mode": "cors",
+                                "credentials": "include"
+                            }).then(function (response) {
+                                if (response.redirected) {
+                                    window.location.href = response.url;
+                                } else if (response.ok) {
+                                    return response.json();
+                                } else {
+                                    typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                                        [{
+                                            type: "warning",
+                                            text: "<?= $escaper->escapeHtml(__('Could not add item to wishlist.')) ?>"
+                                        }], 5000
+                                    );
+                                }
+                            }).then(function (response) {
+                                if(!response) { return }
                                 typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
                                     [{
-                                        type: "warning",
-                                        text: "<?= $escaper->escapeHtml(__('Could not add item to wishlist.')) ?>"
+                                        type: (response.success) ? "success" : "error",
+                                        text: (response.success)
+                                            ? "<?= $escaper->escapeHtml(__("%1 has been added to your Wish List.", __("Product"))) ?>"
+                                            : response.error_message
                                     }], 5000
                                 );
-                            }
-                        }).then(function (response) {
-                            if(!response) { return }
-                            typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
-                                [{
-                                    type: (response.success) ? "success" : "error",
-                                    text: (response.success)
-                                        ? "<?= $escaper->escapeHtml(__("%1 has been added to your Wish List.", __("Product"))) ?>"
-                                        : response.error_message
-                                }], 5000
-                            );
-                            var reloadCustomerDataEvent = new CustomEvent("reload-customer-section-data");
-                            window.dispatchEvent(reloadCustomerDataEvent);
-                        }).catch(function (error) {
-                            typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
-                                [{
-                                    type: "error",
-                                    text: error
-                                }], 5000
-                            );
-                        });
+                                var reloadCustomerDataEvent = new CustomEvent("reload-customer-section-data");
+                                window.dispatchEvent(reloadCustomerDataEvent);
+                            }).catch(function (error) {
+                                typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                                    [{
+                                        type: "error",
+                                        text: error
+                                    }], 5000
+                                );
+                            });
+                        }
                     }
                 }
-            }
             </script>
             <button x-data="initWishlist()"
-                    @click.prevent="addToWishlist(<?= (int)$product->getId() ?>)"
+                    @click.prevent="addToWishlist(<?= (int)$productId ?>)"
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Wish List')) ?>"
                     type="button"
                     class="rounded-full w-9 h-9 bg-gray-200 p-0 border-0 inline-flex flex-shrink-0 items-center justify-center text-gray-500 hover:text-red-600 ml-2">
@@ -172,7 +203,7 @@ if (!$product) {
             </button>
             <?php endif; ?>
             <?php if ($showAddToCompare): ?>
-            <script defer>
+            <script>
             function initCompare() {
                 return {
                     addToCompare: function (productId) {
@@ -204,7 +235,7 @@ if (!$product) {
             }
             </script>
             <button x-data="initCompare()"
-                    @click.prevent="addToCompare(<?= (int)$product->getId() ?>)"
+                    @click.prevent="addToCompare(<?= (int)$productId ?>)"
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Compare')) ?>"
                     type="button"
                     class="rounded-full w-9 h-9 bg-gray-200 p-0 border-0 inline-flex flex-shrink-0 items-center justify-center text-gray-500 hover:text-yellow-500 ml-2">
