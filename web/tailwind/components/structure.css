@@ -1,3 +1,13 @@
+:root {
+    --sidebar-size: 255px;
+    --sidebar-gap: 15px;
+
+    @screen lg {
+        --sidebar-size: 330px;
+        --sidebar-gap: 30px;
+    }
+}
+
 body {
     overflow-y: scroll;
 }
