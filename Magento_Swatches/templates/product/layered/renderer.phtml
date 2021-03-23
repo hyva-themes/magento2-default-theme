@@ -6,121 +6,130 @@
  * See https://hyva.io/license
  */
 
-// phpcs:disable PSR2.ControlStructures.SwitchDeclaration
-// phpcs:disable Generic.WhiteSpace.ScopeIndent
+// phpcs:disable Generic.Files.LineLength.TooLong
+
+use Hyva\Theme\Model\ViewModelRegistry;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Swatches\Block\LayeredNavigation\RenderLayered;
+use Magento\Swatches\ViewModel\Product\Renderer\Configurable as ConfigurableViewModel;
 
 /** @var RenderLayered $block */
 /** @var SecureHtmlRenderer $secureRenderer */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var ConfigurableViewModel $configurableViewModel */
+$configurableViewModel = $viewModels->require(ConfigurableViewModel::class);
+
+$swatchData = $block->getSwatchData();
 ?>
-<?php $swatchData = $block->getSwatchData(); ?>
+<script>
+    function initLayeredSwatch_<?= $escaper->escapeJs($swatchData['attribute_code']) ?>() {
+        return {
+
+            getSwatchBackgroundStyle(type, value, image) {
+                if (type === "0") {
+                    return '';
+                } else {
+                    if (type === "1") {
+                        return 'background-color:' + value;
+                    } else if (type === "2") {
+                        return "background: #ffffff url('" + image + "') no-repeat center";
+                    }
+                    return '';
+                }
+            },
+            activeTooltipItem: false,
+            tooltipPositionElement: false,
+            getTooltipImageStyle() {
+                const type = this.activeTooltipItem.type;
+
+                if (type === "0") {
+                    return '';
+                } else {
+                    if (type === "1") {
+                        return 'background-color:' + this.activeTooltipItem.value + '; width: 110px; height: 90px;';
+                    } else if (type === "2") {
+                        return "background: #ffffff url('" + this.activeTooltipItem.thumb +
+                            "') center center no-repeat; width: 110px; height: 90px;";
+                    }
+                    return '';
+                }
+            },
+            getTooltipPosition() {
+                return this.tooltipPositionElement ?
+                    (
+                        `top: ${this.tooltipPositionElement.offsetTop}px;` +
+                        `left: ${this.tooltipPositionElement.offsetLeft}px;`
+                    ) : ''
+            }
+        }
+    }
+</script>
+
 <div class="swatch-attribute swatch-layered <?= $escaper->escapeHtmlAttr($swatchData['attribute_code']) ?>"
-     data-attribute-code="<?= $escaper->escapeHtmlAttr($swatchData['attribute_code']) ?>"
-     data-attribute-id="<?= $escaper->escapeHtmlAttr($swatchData['attribute_id']) ?>">
+     x-data="initLayeredSwatch_<?= $escaper->escapeJs($swatchData['attribute_code']) ?>()"
+>
     <div class="swatch-attribute-options clearfix">
         <?php foreach ($swatchData['options'] as $option => $label): ?>
             <a href="<?= $escaper->escapeUrl($label['link']) ?>" rel="nofollow"
                aria-label="<?= $escaper->escapeHtmlAttr($label['label']) ?>"
-               class="swatch-option-link-layered">
-                <?php if (isset($swatchData['swatches'][$option]['type'])): ?>
-                    <?php switch ($swatchData['swatches'][$option]['type']) {
-                        case '3':
-                            ?>
-                            <div class="swatch-option <?= $escaper->escapeHtmlAttr($label['custom_style']) ?>"
-                                 tabindex="-1"
-                                 data-option-type="3"
-                                 data-option-id="<?= $escaper->escapeHtmlAttr($option) ?>"
-                                 data-option-label="<?= $escaper->escapeHtmlAttr($label['label']) ?>"
-                                 data-option-tooltip-thumb=""
-                                 data-option-tooltip-value=""
-                                ></div>
-                            <?php break;
-                        case '2':
-                            ?>
-                            <?php $swatchThumbPath = $block->getSwatchPath(
-                                'swatch_thumb',
-                                $swatchData['swatches'][$option]['value']
-                            ); ?>
-                            <?php $swatchImagePath = $block->getSwatchPath(
-                                'swatch_image',
-                                $swatchData['swatches'][$option]['value']
-                            );
-                            $escapedUrl = $escaper->escapeUrl($swatchImagePath);
-                            ?>
-                            <div class="swatch-option image <?= $escaper->escapeHtmlAttr($label['custom_style']) ?>"
-                                 tabindex="-1"
-                                 data-option-type="2"
-                                 data-option-id="<?= $escaper->escapeHtmlAttr($option) ?>"
-                                 data-option-label="<?= $escaper->escapeHtmlAttr($label['label']) ?>"
-                                 data-option-tooltip-thumb="<?= $escaper->escapeUrl($swatchThumbPath) ?>"
-                                 data-option-tooltip-value="">
-                            </div>
-                            <?php
-                            $element = 'swatchImageOption' .$escaper->escapeJs($option);
-                            $script = 'var ' .$element
-                                .' = document.querySelector(\'div[data-option-id="' .$escaper->escapeJs($option)
-                                .'"]\');' .PHP_EOL;
-                            $script .= $element .'.style.background = "url(\''
-                                .$escapedUrl .'\') no-repeat center";' .PHP_EOL;
-                            $script .= $element .'.style.backgroundSize = "initial";';
-                            ?>
-                            <?= /* @noEscape*/ $secureRenderer->renderTag('script', [], $script, false); ?>
-                            <?php break;
-                        case '1':
-                            ?>
-                            <div class="swatch-option color <?= $escaper->escapeHtmlAttr($label['custom_style']) ?>"
-                                 tabindex="-1"
-                                 data-option-type="1"
-                                 data-option-id="<?= $escaper->escapeHtmlAttr($option) ?>"
-                                 data-option-label="<?= $escaper->escapeHtmlAttr($label['label']) ?>"
-                                 data-option-tooltip-thumb=""
-                                 data-option-tooltip-value="<?= $escaper->escapeHtmlAttr(
-                                     $swatchData['swatches'][$option]['value']
-                                 ) ?>">
-                            </div>
-                            <?php
-                            $element = 'swatchImageOption' .$escaper->escapeJs($option);
-                            $backgroundValue = $escaper->escapeJs(
-                                str_replace('\'', '\\\'', $swatchData['swatches'][$option]['value'])
-                            );
-                            $script = 'var ' .$element
-                                .' = document.querySelector(\'div[data-option-id="' .$escaper->escapeJs($option)
-                                .'"]\');' .PHP_EOL;
-                            $script .= $element .'.style.background = "' .$backgroundValue
-                                .' no-repeat center";' .PHP_EOL;
-                            $script .= $element .'.style.backgroundSize = "initial";';
-                            ?>
-                            <?= /* @noEscape*/ $secureRenderer->renderTag('script', [], $script, false); ?>
-                            <?php break;
-                        case '0':
-                        default:
-                            ?>
-                            <div class="swatch-option text <?= $escaper->escapeHtmlAttr($label['custom_style']) ?>"
-                                 tabindex="-1"
-                                 data-option-type="0"
-                                 data-option-id="<?= $escaper->escapeHtmlAttr($option) ?>"
-                                 data-option-label="<?= $escaper->escapeHtmlAttr($label['label']) ?>"
-                                 data-option-tooltip-thumb=""
-                                 data-option-tooltip-value=""
-                                ><?= $escaper->escapeHtml($swatchData['swatches'][$option]['value']) ?></div>
-                        <?php break;
-                    } ?>
+               class="swatch-option-link-layered swatch-option border-2 cursor-pointer bg-container-lighter shadow-sm relative select-none border-container-darker"
+               :style="getSwatchBackgroundStyle(
+                    '<?= (string) $swatchData['swatches'][$option]['type'] ?>',
+                    '<?= (string) $swatchData['swatches'][$option]['value'] ?>',
+                    '<?= $escaper->escapeUrl($block->getSwatchPath(
+                        'swatch_image',
+                        $swatchData['swatches'][$option]['value']
+                    )) ?>'
+                )"
+                <?php if ($configurableViewModel->getShowSwatchTooltip()): ?>
+                    <?php $swatchThumbPath = $block->getSwatchPath(
+                        'swatch_thumb',
+                        $swatchData['swatches'][$option]['value']
+                    ); ?>
+                    @mouseenter.self="activeTooltipItem = {
+                            attribute: '<?= $escaper->escapeHtmlAttr($swatchData['swatches'][$option]['value']) ?>',
+                            type: '<?= $escaper->escapeHtmlAttr($swatchData['swatches'][$option]['type']) ?>',
+                            id: '<?= $escaper->escapeHtmlAttr($option) ?>',
+                            label: '<?= $escaper->escapeHtmlAttr($label['label']) ?>',
+                            thumb: '<?= $escaper->escapeUrl($swatchThumbPath) ?>',
+                            value: '<?= $escaper->escapeHtmlAttr($swatchData['swatches'][$option]['value']) ?>'
+                        }; tooltipPositionElement = $event.target;"
+                    @mouseleave.self="activeTooltipItem = false"
+                <?php endif; ?>
+            >
+                <?php if ($swatchData['swatches'][$option]['type'] === "0"): ?>
+                    <?= $escaper->escapeHtml($swatchData['swatches'][$option]['value']) ?>
                 <?php endif; ?>
             </a>
         <?php endforeach; ?>
     </div>
+    <?php if ($configurableViewModel->getShowSwatchTooltip()): ?>
+        <template x-if="activeTooltipItem">
+            <div class="absolute"
+                 :style="getTooltipPosition()"
+            >
+                <div class="shadow-lg">
+                    <div class="absolute top-0 left-0 z-10 min-w-20 p-2 -mt-6 text-sm leading-tight text-black transform
+                -translate-x-1/2 -translate-y-full bg-white rounded-lg shadow-lg text-center">
+                        <template x-if="activeTooltipItem.type !== '0'">
+                            <div class="inline-block border border-container shadow-sm"
+                                 :style="getTooltipImageStyle(activeTooltipItem)"
+                            ></div>
+                        </template>
+                        <span class="subtitle text-lg font-semibold"
+                              x-html="activeTooltipItem.label"
+                        ></span>
+                    </div>
+                    <svg class="absolute z-10 w-8 h-8 text-white transform -translate-x-1/5
+                -translate-y-8 fill-current stroke-current" width="12" height="12">
+                        <rect x="12" y="-12" width="12" height="12" transform="rotate(45)" class="shadow-xl" />
+                    </svg>
+                </div>
+            </div>
+        </template>
+    <?php endif; ?>
 </div>
-<?php $scriptString = <<<script
 
-    require(["jquery", "Magento_Swatches/js/swatch-renderer"], function ($) {
-        $('.swatch-layered.{$escaper->escapeJs($swatchData['attribute_code'])}')
-            .find('[data-option-type="1"], [data-option-type="2"], [data-option-type="0"], [data-option-type="3"]')
-            .SwatchRendererTooltip();
-    });
-
-script;
-?>
-<?= /* @noEscape */ "" // $secureRenderer->renderTag('script', [], $scriptString, false) ?>
