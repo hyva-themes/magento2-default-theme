@@ -114,7 +114,7 @@ function initCompareSidebarClear() {
      @private-content-loaded.window="receiveCompareData($event.detail.data)"
      class="compare-widget mt-8 hidden"
      :class="{ 'hidden': !(itemCount > 0) }">
-    <div class="border-t border-container md:mb-6 pt-6">
+    <div class="border-t border-container mb-6 pt-5">
         <strong class="block title text-2xl leading-7"><?= $escaper->escapeHtml(__('Compare Products')) ?></strong>
     </div>
     <template x-if="itemCount">
