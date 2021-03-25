@@ -24,7 +24,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 $storeConfig = $viewModels->require(Hyva\Theme\ViewModel\StoreConfig::class);
 $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sidebar::XML_PATH_CHECKOUT_SIDEBAR_DISPLAY)
 ?>
-<script defer>
+<script>
     function initHeader () {
         return {
             searchOpen: false,

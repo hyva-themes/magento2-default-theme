@@ -19,7 +19,7 @@ use Magento\Framework\Escaper;
 $product = $block->getProduct();
 ?>
 
-<script defer>
+<script>
     function initQtyField() {
         return {
             qty: <?= $block->getProductDefaultQty() * 1 ?>,

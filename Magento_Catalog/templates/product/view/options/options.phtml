@@ -24,7 +24,7 @@ $options = $block->decorateArray($block->getOptions());
 
 ?>
 <?php if (count($options)): ?>
-    <script defer>
+    <script>
         function initOptions() {
             return {
                 optionConfig: <?= /* @noEscape */ $block->getJsonConfig() ?>,

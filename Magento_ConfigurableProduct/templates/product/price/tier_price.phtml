@@ -30,7 +30,7 @@ if (!$product) {
 /** @var ProductPage $productViewModel */
 $productViewModel = $viewModels->require(ProductPage::class);
 ?>
-<script defer>
+<script>
     function initTierPrices<?= (int) $product->getId() ?>() {
         return {
             activeProductsPriceData: false,
