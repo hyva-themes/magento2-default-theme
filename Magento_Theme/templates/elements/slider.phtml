@@ -9,6 +9,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Cart\Items;
 use Hyva\Theme\ViewModel\Currency;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Hyva\Theme\ViewModel\ProductCompare;
@@ -58,7 +59,11 @@ $type = $block->getType() ?: "";
 $linkedProduct = (in_array($type, ['related', 'crosssell', 'upsell']));
 
 if ($linkedProduct) {
-    if ($product = $block->getProduct()) {
+    if ($type === 'crosssell') {
+        /** @var Items $cartItemsViewModel */
+        $cartItemsViewModel = $viewModels->require(Items::class);
+        $productSkus = $cartItemsViewModel->getCartItemsSkus();
+    } elseif ($product = $block->getProduct()) {
         $productSkus = $block->getProduct()->getSku();
     } else {
         $productSkus = '';
