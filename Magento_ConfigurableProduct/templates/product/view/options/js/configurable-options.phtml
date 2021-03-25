@@ -76,6 +76,12 @@ use Magento\Framework\View\Element\Template;
                 this.updatePrices();
                 this.updateGallery();
             },
+            calculateIsMinimalPrice(){
+                return (
+                    this.selectedValues.filter(value => !!value).length <
+                        Object.keys(this.optionConfig.attributes).length
+                );
+            },
             updatePrices() {
                 var value = this.productIndex ?
                     this.optionConfig.optionPrices[this.productIndex] :
@@ -83,7 +89,12 @@ use Magento\Framework\View\Element\Template;
                 window.dispatchEvent(
                     new CustomEvent(
                         "update-prices-" + this.productId,
-                        { detail: value }
+                        {
+                            detail: Object.assign(
+                                value,
+                                { isMinimalPrice: this.calculateIsMinimalPrice() }
+                            )
+                        }
                     )
                 );
             },

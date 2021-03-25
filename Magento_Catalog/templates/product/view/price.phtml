@@ -10,29 +10,31 @@ declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\ProductPage;
-use Magento\Catalog\Block\Product\Price;
+use Magento\Catalog\Block\Product\View;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\Framework\Escaper;
 use Magento\Framework\Pricing\Helper\Data as PriceHelper;
 
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
+
 /** @var View $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
+
 /** @var Product $product */
 $product = $block->getProduct();
 
 /** @var ProductPage $productViewModel */
 $productViewModel = $viewModels->require(ProductPage::class);
 
-
-// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
-
 // todo: refactor to use a priceViewModel
 /** @var PriceHelper $priceHelper */
 $priceHelper = $this->helper(PriceHelper::class);
+
+$regularPrice = $product->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE)->getValue();
 ?>
-<script defer>
+<script>
     function initPrice<?= (int) $product->getId() ?>() {
         return {
             activeProductsPriceData: false,
@@ -40,6 +42,7 @@ $priceHelper = $this->helper(PriceHelper::class);
             calculatedFinalPrice: false,
             calculatedFinalPriceWithCustomOptions: false,
             initialTierPrices: <?= /** @noEscape */ json_encode($product->getTierPrice()) ?>,
+            showRegularPriceLabel: <?= ($product->getFinalPrice() < $regularPrice) ? 'true' : 'false' ?>,
             customOptionPrices: [],
             activeCustomOptions: [],
             qty: 1,
@@ -123,6 +126,12 @@ $priceHelper = $this->helper(PriceHelper::class);
                     )
                 );
             },
+            calculatePriceLabelVisibility() {
+                this.showRegularPriceLabel = (
+                    (this.calculatedFinalPrice === this.activeProductsPriceData.oldPrice.amount) &&
+                    this.activeProductsPriceData.isMinimalPrice
+                );
+            },
             calculateFinalPriceWithCustomOptions() {
                 let finalPrice = this.calculatedFinalPrice ||
                     this.initialFinalPrice;
@@ -147,8 +156,10 @@ $priceHelper = $this->helper(PriceHelper::class);
             eventListeners: {
                 ['@update-prices-<?= (int) $product->getId() ?>.window'](event) {
                     this.activeProductsPriceData = event.detail;
+
                     this.calculateFinalPrice();
                     this.calculateFinalPriceWithCustomOptions();
+                    this.calculatePriceLabelVisibility();
                 },
                 ['@update-qty-<?= (int)$product->getId() ?>.window'](event) {
                     this.qty = event.detail;
@@ -171,7 +182,6 @@ $priceHelper = $this->helper(PriceHelper::class);
 >
     <template x-if="!activeProductsPriceData">
         <div class="price-container">
-            <?php $regularPrice = $product->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE)->getValue(); ?>
             <?php if ($product->getFinalPrice() < $regularPrice): ?>
                 <div class="old-price mr-2 flex">
                     <span id="product-price-<?= (int)$product->getId() ?>"
@@ -187,7 +197,7 @@ $priceHelper = $this->helper(PriceHelper::class);
                     <span class="price-label block">
                         <?= ($product->canConfigure() && is_int($product->getPrice())) ?
                             $escaper->escapeHtml(__('As low as')) . ':' :
-                            '' ?>
+                            '&nbsp;' ?>
                     </span>
                 <span id="product-price-<?= (int) $product->getId() ?>"
                       class="price-wrapper title-font font-medium text-2xl text-gray-900">
@@ -212,9 +222,13 @@ $priceHelper = $this->helper(PriceHelper::class);
         </div>
     </template>
     <template x-if="activeProductsPriceData">
-        <div class="final-price flex">
+        <div class="final-price inline-block">
             <?php if ($product->canConfigure() && is_int($product->getPrice())): ?>
-                <span class="price-label block invisible">&nbsp;</span>
+                <span class="price-label block"
+                      :class="{ 'invisible' : !showRegularPriceLabel }"
+                >
+                    <?= $escaper->escapeHtml(__('As low as')) ?>
+                </span>
             <?php endif; ?>
             <span id="product-price-<?= (int)$product->getId() ?>"
                   class="price-wrapper title-font font-medium text-2xl text-gray-900">
