@@ -12,6 +12,7 @@ use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\ProductPage;
 use Magento\Catalog\Block\Product\View;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\Framework\Escaper;
 use Magento\Framework\Pricing\Helper\Data as PriceHelper;
@@ -32,13 +33,16 @@ $productViewModel = $viewModels->require(ProductPage::class);
 /** @var PriceHelper $priceHelper */
 $priceHelper = $this->helper(PriceHelper::class);
 
-$regularPrice = $product->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE)->getValue();
+$priceInfo = $product->getPriceInfo();
+$regularPrice = $priceInfo->getPrice(RegularPrice::PRICE_CODE)->getAmount()->getValue();
+$finalPrice = $priceInfo->getPrice(FinalPrice::PRICE_CODE)->getAmount()->getValue();
+
 ?>
 <script>
     function initPrice<?= (int) $product->getId() ?>() {
         return {
             activeProductsPriceData: false,
-            initialFinalPrice: <?= (float)$product->getFinalPrice()?>,
+            initialFinalPrice: <?= (float)$finalPrice ?>,
             calculatedFinalPrice: false,
             calculatedFinalPriceWithCustomOptions: false,
             initialTierPrices: <?= /** @noEscape */ json_encode($product->getTierPrice()) ?>,
@@ -182,7 +186,7 @@ $regularPrice = $product->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE)->ge
 >
     <template x-if="!activeProductsPriceData">
         <div class="price-container">
-            <?php if ($product->getFinalPrice() < $regularPrice): ?>
+            <?php if ($finalPrice < $regularPrice): ?>
                 <div class="old-price mr-2 flex">
                     <span id="product-price-<?= (int)$product->getId() ?>"
                           class="price-wrapper title-font font-regular text-xl line-through text-gray-900">
@@ -205,7 +209,7 @@ $regularPrice = $product->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE)->ge
                         <?= /** @noEscape */ $product->getFormattedPrice() ?>
                     </span>
                 </span>
-                <meta itemprop="price" content="<?= $escaper->escapeHtmlAttr($product->getFinalPrice()) ?>">
+                <meta itemprop="price" content="<?= $escaper->escapeHtmlAttr($finalPrice) ?>">
                 <meta itemprop="priceCurrency" content="EUR">
             </div>
         </div>
