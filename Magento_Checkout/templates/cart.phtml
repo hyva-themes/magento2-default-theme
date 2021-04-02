@@ -14,8 +14,8 @@ use Magento\Framework\Escaper;
 ?>
 <?= $block->getChildHtml('cart_main_js') ?>
 <div class="container">
-    <section class="relative min-h-50"
-             :class="{ 'min-h-50 sm:min-h-75 lg:min-h-50': cartEmpty }"
+    <section class="relative min-h-screen-50"
+             :class="{ 'min-h-screen-50 sm:min-h-screen-75 lg:min-h-screen-50': cartEmpty }"
              x-data="initCart()"
              x-init="getCartByLocalStorage(); isTouchEnabled();"
              @private-content-loaded.window="getCartByCustomerSectionData($event.detail.data)"

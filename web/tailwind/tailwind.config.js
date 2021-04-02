@@ -88,15 +88,15 @@ module.exports = {
             },
             minHeight: {
                 14: spacing["14"],
-                '25': '25vh',
-                '50': '50vh',
-                '75': '75vh',
+                'screen-25': '25vh',
+                'screen-50': '50vh',
+                'screen-75': '75vh',
             },
             maxHeight: {
                 '0': '0',
-                '25': '25vh',
-                '50': '50vh',
-                '75': '75vh',
+                'screen-25': '25vh',
+                'screen-50': '50vh',
+                'screen-75': '75vh',
             }
         },
     },

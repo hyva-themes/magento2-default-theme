@@ -2480,7 +2480,7 @@ body {
   margin-bottom: 1.5rem;
 }
 
-.max-h-75 {
+.max-h-screen-75 {
   max-height: 75vh;
 }
 
@@ -2508,12 +2508,12 @@ body {
   min-height: 3.5rem;
 }
 
-.min-h-50 {
-  min-height: 50vh;
-}
-
 .min-h-screen {
   min-height: 100vh;
+}
+
+.min-h-screen-50 {
+  min-height: 50vh;
 }
 
 .min-w-20 {
@@ -3859,7 +3859,7 @@ form select {
     margin-right: 2rem;
   }
 
-  .sm\:min-h-75 {
+  .sm\:min-h-screen-75 {
     min-height: 75vh;
   }
 
@@ -4280,7 +4280,7 @@ form select {
     min-height: 0px;
   }
 
-  .lg\:min-h-50 {
+  .lg\:min-h-screen-50 {
     min-height: 50vh;
   }
 
