@@ -92,6 +92,7 @@ $productAttributes = "
       url_key
       url_suffix
       visibility
+      status
       price_range {
         minimum_price {
           regular_price {
@@ -164,8 +165,14 @@ $graphqlQuery = $query ?: "
                                 data.data.products.items[0] &&
                                 data.data.products.items[0]['<?= $escaper->escapeHtml($type) ?>_products'] &&
                                 // only use products with visibility set to `Catalog` or `Catalog, Search` (2 or 4)
+                                // with status set to '1' (enabled)
                                 data.data.products.items[0]['<?= $escaper->escapeHtml($type) ?>_products']
-                                    .filter(product => [2,4].includes(product.visibility))
+                                    .filter(product => {
+                                        return (
+                                            [2,4].includes(product.visibility) &&
+                                            product.status.toString() === '1'
+                                        )
+                                    })
                             ) || [];
                             <?php else: ?>
                             return this.products = (

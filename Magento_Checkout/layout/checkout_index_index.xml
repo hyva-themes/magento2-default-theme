@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="checkout" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Text" name="fallback.module.missing">
+                <arguments>
+                    <argument translate="true" name="text" xsi:type="string">
+                        <![CDATA[
+                        <div class="container">
+                            <p>No Checkout module installed.</p>
+                            <p>Either install the Luma Fallback Checkout, or the React Checkout.</p>
+                            <p>Please refer to the documentation for more information.</p>
+                        </div>
+                        ]]>
+                    </argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

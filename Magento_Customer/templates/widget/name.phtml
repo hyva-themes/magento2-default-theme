@@ -53,7 +53,7 @@ $suffix = $block->showSuffix();
                 <?php if ($block->getPrefixOptions() === false): ?>
                     <input type="text" id="<?= $escaper->escapeHtmlAttr($block->getFieldId('prefix')) ?>"
                            name="<?= $escaper->escapeHtmlAttr($block->getFieldName('prefix')) ?>"
-                           required
+                           <?= $block->isPrefixRequired() ? ' required' : '' ?>
                            value="<?= $escaper->escapeHtmlAttr($block->getObject()->getPrefix()) ?>"
                            title="<?= $escaper->escapeHtmlAttr($block->getStoreLabel('prefix')) ?>"
                            class="form-input
@@ -63,7 +63,7 @@ $suffix = $block->showSuffix();
                 <?php else: ?>
                     <select id="<?= $escaper->escapeHtmlAttr($block->getFieldId('prefix')) ?>"
                             name="<?= $escaper->escapeHtmlAttr($block->getFieldName('prefix')) ?>"
-                            required
+                            <?= $block->isPrefixRequired() ? ' required' : '' ?>
                             title="<?= $escaper->escapeHtmlAttr($block->getStoreLabel('prefix')) ?>"
                             class="<?= $escaper->escapeHtmlAttr($block->getAttributeValidationClass('prefix')) ?>"
                             <?= $block->isPrefixRequired() ? ' required' : '' ?> >

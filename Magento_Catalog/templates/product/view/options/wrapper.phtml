@@ -1,18 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
  */
 
-/** @var Magento\Catalog\Block\Product\View $block */
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
 ?>
-<?php
-$required = '';
-if ($block->hasRequiredOptions()) {
-    $required = ' data-hasrequired="' . $block->escapeHtmlAttr(__('* Required Fields')) . '"';
-}
-?>
-<div class="product-options-wrapper" id="product-options-wrapper"<?= /* @noEscape */ $required ?>>
+<div class="product-options-wrapper" id="product-options-wrapper">
     <div class="fieldset" tabindex="0">
         <?= $block->getChildHtml('', true) ?>
     </div>
