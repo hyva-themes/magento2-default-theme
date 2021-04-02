@@ -9,18 +9,23 @@
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\Customer\ReviewList;
+use Hyva\Theme\ViewModel\Store;
+use Hyva\Theme\ViewModel\StoreConfig;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
-/** @var $block Template */
+/** @var Template $block */
 /** @var Escaper $escaper */
-/** @var $viewModels ViewModelRegistry */
+/** @var ViewModelRegistry $viewModels */
 
 /** @var ReviewList $viewModelCustomerReviews */
 $viewModelCustomerReviews = $viewModels->require(ReviewList::class);
 
-/** @var Hyva\Theme\ViewModel\StoreConfig $viewModelStoreConfig */
-$viewModelStoreConfig = $viewModels->require(\Hyva\Theme\ViewModel\StoreConfig::class);
+/** @var Store $viewModelStore */
+$viewModelStore = $viewModels->require(Store::class);
+
+/** @var StoreConfig $viewModelStoreConfig */
+$viewModelStoreConfig = $viewModels->require(StoreConfig::class);
 
 $productUrlSuffix = $viewModelStoreConfig->getStoreConfig('catalog/seo/product_url_suffix');
 $baseUrl = $block->getBaseUrl();
@@ -214,10 +219,11 @@ $ratingSteps = 5;
             getReviewsList() {
                 var $this = this;
                 $this.isLoading = true;
-                fetch('<?= $escaper->escapeUrl($block->getBaseUrl()) ?>graphql', {
+                return fetch(`${BASE_URL}graphql`, {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'Store': '<?= $escaper->escapeHtmlAttr($viewModelStore->getStoreCode()) ?>'
                         },
                         credentials: 'include',
                         body: JSON.stringify({

@@ -6,12 +6,19 @@
  * This product is licensed per Magento install
  * See https://hyva.io/license
  */
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Store;
 use Magento\Framework\Escaper;
 use Magento\Review\Block\Form;
 use Hyva\Theme\ViewModel\ReCaptcha;
 
 /* @var Escaper $escaper */
 /* @var Form $block */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var Store $viewModelStore */
+$viewModelStore = $viewModels->require(Store::class);
 
 //phpcs:disable Generic.Files.LineLength
 
@@ -372,12 +379,13 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                                     return '{ id: "' + btoa(key) + '", value_id: "' + $this.ratings[key] + '" }'
                                 }).join(','));
 
-
-                            fetch('<?= $escaper->escapeUrl($block->getBaseUrl()) ?>graphql', {
+                            fetch(`${BASE_URL}graphql`, {
                                 method: 'POST',
                                 headers: {
-                                    'Content-Type': 'application/json;charset=utf-8'
+                                    'Content-Type': 'application/json;charset=utf-8',
+                                    'Store': '<?= $escaper->escapeHtmlAttr($viewModelStore->getStoreCode()) ?>'
                                 },
+                                credentials: 'include',
                                 body: JSON.stringify({query: createProductReviewQuery})
                             })
                                 .then(function (response) {
