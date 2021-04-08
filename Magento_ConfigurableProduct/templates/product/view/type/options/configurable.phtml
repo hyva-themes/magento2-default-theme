@@ -20,7 +20,16 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
 
     <?= $block->getChildHtml('options_configurable_js') ?>
 
-    <div x-data="initConfigurableOptions('<?= (int) $productId ?>', <?= /* @noEscape */ $block->getJsonConfig() ?>)"
+    <script>
+        function initConfigurableDropdownOptions_<?= (int) $productId ?>() {
+            return initConfigurableOptions(
+                '<?= (int) $productId ?>',
+                <?= /* @noEscape */ $block->getJsonConfig() ?>
+            );
+        }
+    </script>
+
+    <div x-data="initConfigurableDropdownOptions_<?= (int) $productId ?>()"
          x-init="findAllowedAttributeOptions();"
          @private-content-loaded.window="onGetCartData($event.detail.data)"
          class="mb-6"

@@ -29,6 +29,8 @@ use Magento\Framework\View\Element\Template;
                         return "color"
                     case "2":
                         return "image"
+                    case "3":
+                        return "empty"
                     case "0":
                     default:
                         return "text"
@@ -40,6 +42,13 @@ use Magento\Framework\View\Element\Template;
                 const type = this.getSwatchType(typeId);
 
                 return type === 'text';
+            },
+            isVisualSwatch(attributeId, itemId) {
+                const config = this.getSwatchConfig(attributeId, itemId);
+                const typeId = config.type.toString();
+                const type = this.getSwatchType(typeId);
+
+                return ['image', 'color'].includes(type);
             },
             getSwatchBackgroundStyle(attributeId, itemId) {
                 const config = this.getSwatchConfig(attributeId, itemId);
@@ -55,7 +64,7 @@ use Magento\Framework\View\Element\Template;
                 }
             },
             getSwatchConfig(attributeId, itemId) {
-                return this.swatchConfig[attributeId][itemId];
+                return this.swatchConfig[attributeId] ? this.swatchConfig[attributeId][itemId] : false;
             },
             activeTooltipItem: false,
             tooltipPositionElement: false,

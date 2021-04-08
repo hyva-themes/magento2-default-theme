@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\SwatchRenderer;
 use Magento\Framework\Escaper;
 use Magento\Swatches\Block\Product\Renderer\Listing\Configurable;
 use Magento\Swatches\ViewModel\Product\Renderer\Configurable as ConfigurableViewModel;
@@ -17,6 +18,10 @@ $product = $block->getProduct();
 $productId = $product->getId();
 
 $attributes = $block->decorateArray($block->getAllowAttributes());
+
+/** @var SwatchRenderer $swatchRendererViewModel */
+$swatchRendererViewModel = $viewModels->require(SwatchRenderer::class);
+
 ?>
 
 <?php if ($product->isSaleable() && count($attributes)): ?>
@@ -146,6 +151,9 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
         <?php foreach ($attributes as $attribute): ?>
             <?php $attributeId = $attribute->getAttributeId(); ?>
             <?php $productAttribute = $attribute->getProductAttribute(); ?>
+            <?php if (!$swatchRendererViewModel->isSwatchAttribute($productAttribute)) {
+                continue;
+            } ?>
         <div class="swatch-attribute border-t last:border-b border-container
             <?= $escaper->escapeHtmlAttr($productAttribute->getAttributeCode()) ?>"
         >
