@@ -63,6 +63,10 @@ use Magento\Framework\View\Element\Template;
                     return '';
                 }
             },
+            getSwatchText(attributeId, itemId){
+                const config = this.getSwatchConfig(attributeId, itemId);
+                return config.value || config.label;
+            },
             getSwatchConfig(attributeId, itemId) {
                 return this.swatchConfig[attributeId] ? this.swatchConfig[attributeId][itemId] : false;
             },
@@ -79,7 +83,7 @@ use Magento\Framework\View\Element\Template;
                     return "background: #ffffff url('" + config.thumb +
                         "') center center no-repeat; width: 110px; height: 90px;";
                 } else {
-                    return '';
+                    return 'display:none';
                 }
             },
             getTooltipPosition() {

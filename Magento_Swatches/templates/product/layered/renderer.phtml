@@ -58,7 +58,7 @@ $swatchData = $block->getSwatchData();
                     return "background: #ffffff url('" + this.activeTooltipItem.thumb +
                         "') center center no-repeat; width: 110px; height: 90px;";
                 } else {
-                    return '';
+                    return 'display:none';
                 }
             },
             getTooltipPosition() {
@@ -80,6 +80,7 @@ $swatchData = $block->getSwatchData();
             <a href="<?= $escaper->escapeUrl($label['link']) ?>" rel="nofollow"
                aria-label="<?= $escaper->escapeHtmlAttr($label['label']) ?>"
                class="swatch-option-link-layered swatch-option border-2 cursor-pointer bg-container-lighter shadow-sm relative select-none border-container-darker"
+               :class="{ 'w-6 h-6' : getSwatchType('<?= (string) $swatchData['swatches'][$option]['type'] ?>') !== 'text' }"
                :style="getSwatchBackgroundStyle(
                     '<?= (string) $swatchData['swatches'][$option]['type'] ?>',
                     '<?= (string) $swatchData['swatches'][$option]['value'] ?>',
@@ -104,8 +105,8 @@ $swatchData = $block->getSwatchData();
                     @mouseleave.self="activeTooltipItem = false"
                 <?php endif; ?>
             >
-                <?php if ($swatchData['swatches'][$option]['type'] === "0"): ?>
-                    <?= $escaper->escapeHtml($swatchData['swatches'][$option]['value']) ?>
+                <?php if ((string)$swatchData['swatches'][$option]['type'] === "0"): ?>
+                    <?= $escaper->escapeHtml($swatchData['swatches'][$option]['value'] ?: $label['label']) ?>
                 <?php endif; ?>
             </a>
         <?php endforeach; ?>
@@ -123,7 +124,7 @@ $swatchData = $block->getSwatchData();
                                  :style="getTooltipImageStyle(activeTooltipItem)"
                             ></div>
                         </template>
-                        <span class="subtitle text-lg font-semibold"
+                        <span class="subtitle text-lg font-semibold whitespace-nowrap mx-2"
                               x-html="activeTooltipItem.label"
                         ></span>
                     </div>

@@ -526,6 +526,7 @@ video {
       [type='password'],
       [type='number'],
       [type='date'],
+      [type='month'],
       [type='search'],
       [type='tel'],
       [type='time'],
@@ -548,7 +549,7 @@ video {
   line-height: 1.5rem;
 }
 
-[type='text']:focus, [type='email']:focus, [type='url']:focus, [type='password']:focus, [type='number']:focus, [type='date']:focus, [type='search']:focus, [type='tel']:focus, [type='time']:focus, [multiple]:focus, textarea:focus, select:focus {
+[type='text']:focus, [type='email']:focus, [type='url']:focus, [type='password']:focus, [type='number']:focus, [type='date']:focus, [type='month']:focus, [type='search']:focus, [type='tel']:focus, [type='time']:focus, [multiple]:focus, textarea:focus, select:focus {
   outline: 2px solid transparent;
   outline-offset: 2px;
   --tw-ring-inset: var(--tw-empty,/*!*/ /*!*/);
@@ -1423,11 +1424,6 @@ body {
       min-width: 40px;
     }
 
-.swatch-attribute.color .swatch-option {
-    height: 1.5rem;
-    width: 1.5rem;
-  }
-
 .btn {
   --tw-bg-opacity: 1;
   background-color: rgba(107, 114, 128, var(--tw-bg-opacity));
@@ -1987,8 +1983,16 @@ body {
   display: table;
 }
 
+.table-caption {
+  display: table-caption;
+}
+
 .grid {
   display: grid;
+}
+
+.contents {
+  display: contents;
 }
 
 .hidden {
@@ -2260,6 +2264,11 @@ body {
 .my-2 {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+}
+
+.mx-2 {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
 }
 
 .my-3 {
@@ -2782,6 +2791,10 @@ body {
   padding-bottom: 4rem;
 }
 
+.static {
+  position: static;
+}
+
 .fixed {
   position: fixed;
 }
@@ -2792,6 +2805,11 @@ body {
 
 .relative {
   position: relative;
+}
+
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
 }
 
 .inset-0 {
@@ -2824,6 +2842,10 @@ body {
 
 .top-full {
   top: 100%;
+}
+
+.resize {
+  resize: both;
 }
 
 * {
@@ -3091,6 +3113,12 @@ body {
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+}
+
+.select-all {
+  -webkit-user-select: all;
+     -moz-user-select: all;
+          user-select: all;
 }
 
 .align-top {

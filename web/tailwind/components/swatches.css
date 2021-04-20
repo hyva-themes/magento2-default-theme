@@ -7,8 +7,4 @@
             min-width: 40px;
         }
     }
-
-    &.color .swatch-option {
-        @apply w-6 h-6;
-    }
 }

@@ -182,7 +182,8 @@ $swatchRendererViewModel = $viewModels->require(SwatchRenderer::class);
                                     'border-container-lighter ring ring-primary ring-opacity-50':
                                         (selectedValues[<?= (int)$attributeId ?>] === item.id),
                                     'border-container-darker':
-                                       (selectedValues[<?= (int)$attributeId ?>] !== item.id)
+                                       (selectedValues[<?= (int)$attributeId ?>] !== item.id),
+                                    'w-6 h-6' : !isTextSwatch(<?= (int) $attributeId ?>, item.id)
                                 }"
                                 :style="getSwatchBackgroundStyle('<?= (int) $attributeId ?>',item.id)"
                                 <?php if ($configurableViewModel->getShowSwatchTooltip()): ?>
@@ -206,7 +207,7 @@ $swatchRendererViewModel = $viewModels->require(SwatchRenderer::class);
                                             attributeOption => selectedValues[attributeOption]
                                         ).length === 0"
                                 >
-                                <div x-html="item.label"
+                                <div x-html="getSwatchText(<?= (int) $attributeId ?>, item.id)"
                                      class="whitespace-nowrap"
                                      :class="{ 'sr-only' : !isTextSwatch(<?= (int) $attributeId ?>, item.id) }"
                                 ></div>
@@ -231,7 +232,7 @@ $swatchRendererViewModel = $viewModels->require(SwatchRenderer::class);
                              :style="getTooltipImageStyle(activeTooltipItem.attribute, activeTooltipItem.item)"
                         ></div>
                     </template>
-                    <span class="subtitle text-lg font-semibold"
+                    <span class="subtitle text-lg font-semibold whitespace-nowrap mx-2"
                           x-html="getSwatchConfig(activeTooltipItem.attribute, activeTooltipItem.item).label"
                     ></span>
                 </div>
