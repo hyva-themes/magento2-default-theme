@@ -33,11 +33,6 @@ declare(strict_types=1);
                     }
                 });
             },
-            getData(data) {
-                if (data.messages && data.messages.messages && data.messages.messages.length) {
-                    this.addMessages(data.messages.messages);
-                }
-            },
             setHideTimeOut(messageIndex, hideAfter) {
                 var $this = this;
                 setTimeout(
@@ -47,14 +42,31 @@ declare(strict_types=1);
                     hideAfter,
                     messageIndex
                 );
+            },
+            eventListeners: {
+                ['@messages-loaded.window']() {
+                    this.addMessages(event.detail.messages, event.detail.hideAfter)
+                },
+                ['@private-content-loaded.window'](event) {
+                    const data = event.detail.data;
+                    if (
+                        data.messages &&
+                        data.messages.messages &&
+                        data.messages.messages.length
+                    ) {
+                        this.addMessages(data.messages.messages);
+                    }
+                },
+                ['@clear-messages.window']() {
+                    this.messages = [];
+                }
             }
         }
     }
 </script>
 <section id="messages"
          x-data="initMessages()"
-         @messages-loaded.window="addMessages(event.detail.messages, event.detail.hideAfter)"
-         @private-content-loaded.window="getData(event.detail.data)"
+         x-spread="eventListeners"
 >
     <template x-if="!isEmpty()">
         <div class="w-full">

@@ -159,7 +159,7 @@ $viewModelStore = $viewModels->require(\Hyva\Theme\ViewModel\Store::class);
                 });
             },
             clearErrorMessages() {
-                dispatchMessages([]);
+                window.dispatchEvent(new CustomEvent('clear-messages'));
             },
             initErrorMessages(errors) {
                 var messages = [];
