@@ -71,10 +71,10 @@ $priceHelper = $this->helper(PriceHelper::class);
                     finalPrice = this.tierPrices.reduce((finalValue, tierPrice) => {
                         if (this.qty >= tierPrice.price_qty) {
                             return (
-                                this.activeProductsPriceData.oldPrice / 100 * tierPrice.percentage_value <
+                                this.activeProductsPriceData.oldPrice * (1 + (tierPrice.percentage_value / 100)) <
                                 finalValue
                             ) ?
-                                this.activeProductsPriceData.oldPrice / 100 * tierPrice.percentage_value :
+                                this.activeProductsPriceData.oldPrice * (1 + (tierPrice.percentage_value / 100)) :
                                 finalValue;
                         }
                         return finalValue;
