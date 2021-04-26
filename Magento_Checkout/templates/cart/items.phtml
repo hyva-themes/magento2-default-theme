@@ -109,7 +109,7 @@ $displayPriceExclTax = $viewModelItemOutput->isItemPriceExclTax();
                                                         + <span
                                                             x-text="(selected_option.price.type === 'PERCENT' ?
                                                                 selected_option.price.value + '%' :
-                                                                formatPrice(selected_option.price.value))"></span>
+                                                                hyva.formatPrice(selected_option.price.value))"></span>
                                                     </span>
                                                 </template>
                                             </div>
@@ -157,7 +157,7 @@ $displayPriceExclTax = $viewModelItemOutput->isItemPriceExclTax();
                         <span class="block md:text-right lg:text-center lg:whitespace-nowrap
                                 <?php if (!$displayPriceTaxBoth): ?>p-2 <?php endif; ?>
                                ">
-                            <span x-html="formatPrice(item.prices.price_incl_tax.value)"></span>
+                            <span x-html="hyva.formatPrice(item.prices.price_incl_tax.value)"></span>
                             <?php if ($displayPriceTaxBoth): ?> <span class="text-sm">
                                 (<?= $escaper->escapeHtml(__('incl. VAT')) ?>)
                             </span><?php endif; ?></span>
@@ -173,7 +173,7 @@ $displayPriceExclTax = $viewModelItemOutput->isItemPriceExclTax();
                             <span
                                 class="block text-left md:text-right lg:text-center lg:whitespace-nowrap">
                                 <span class="block text-left md:text-right lg:text-center lg:whitespace-nowrap p-2"
-                                      x-html="formatPrice(item.prices.price.value)">
+                                      x-html="hyva.formatPrice(item.prices.price.value)">
                                 </span>
                                 <?php if ($displayPriceTaxBoth): ?>
                                     <span class="text-sm">
@@ -240,7 +240,7 @@ $displayPriceExclTax = $viewModelItemOutput->isItemPriceExclTax();
                                 <span class="block md:text-right lg:text-center lg:whitespace-nowrap
                                         <?php if (!$displayPriceTaxBoth): ?>p-2 <?php endif; ?>
                                       ">
-                                    <span x-html="formatPrice(item.prices.row_total_incl_tax.value)"></span>
+                                    <span x-html="hyva.formatPrice(item.prices.row_total_incl_tax.value)"></span>
                                     <?php if ($displayPriceTaxBoth): ?>
                                         <span class="text-sm">
                                             (<?= $escaper->escapeHtml(__('incl. VAT')) ?>)
@@ -260,7 +260,7 @@ $displayPriceExclTax = $viewModelItemOutput->isItemPriceExclTax();
                                     class="block text-left md:text-right lg:text-center lg:whitespace-nowrap
                                         <?php if (!$displayPriceTaxBoth): ?>p-2 <?php else: ?>pb-2 <?php endif; ?>
                                     ">
-                                    <span x-html="formatPrice(item.prices.row_total.value)"></span>
+                                    <span x-html="hyva.formatPrice(item.prices.row_total.value)"></span>
                                     <?php if ($displayPriceTaxBoth): ?>
                                         <span class="text-sm">
                                             (<?= $displayPriceTaxBoth ? $escaper->escapeHtml(__('excl. VAT')) : '' ?>)
