@@ -12,6 +12,7 @@ use Hyva\Theme\ViewModel\ProductPage;
 use Magento\Catalog\Block\Product\View;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Framework\Escaper;
 use Magento\Framework\Pricing\Helper\Data as PriceHelper;
 
@@ -29,46 +30,54 @@ $productViewModel = $block->getProductViewModel();
 // todo: refactor to use a priceViewModel
 /** @var PriceHelper $priceHelper */
 $priceHelper = $this->helper(PriceHelper::class);
+
+$priceInfo = $product->getPriceInfo();
+$regularPrice = $priceInfo->getPrice(RegularPrice::PRICE_CODE)->getAmount()->getValue();
+$finalPrice = $priceInfo->getPrice(FinalPrice::PRICE_CODE)->getAmount()->getValue();
 ?>
 <script>
     function initPrice<?= (int) $product->getId() ?>() {
         return {
             activeProductsPriceData: false,
-            initialFinalPrice: 0,
+            initialFinalPrice: <?= (float)$finalPrice ?>,
+            initialTierPrices: <?= /** @noEscape */ json_encode($product->getTierPrice()) ?>,
             calculatedFinalPrice: false,
-            tierPrices: <?= /** @noEscape */ json_encode($product->getTierPrice()) ?>,
+            calculatedFinalPriceWithCustomOptions: false,
+            customOptionPrices: [],
+            activeCustomOptions: [],
             qty: 1,
-            formatPrice(value, showSign) {
-                var formatter = new Intl.NumberFormat(
-                    document.documentElement.lang,
-                    {
-                        style: 'currency',
-                        currency: '<?= $escaper->escapeHtml($productViewModel->getCurrencyData()['code']) ?>',
-                        signDisplay: showSign ? "always" : "auto"
+            updateCustomOptionActive(data) {
+
+                let activeCustomOptions = this.activeCustomOptions;
+                const customOptionId = data.customOptionId;
+
+                if(data.active) {
+                    if (!activeCustomOptions.includes(customOptionId)) {
+                        activeCustomOptions.push(data.customOptionId);
                     }
-                );
-                return (typeof Intl.NumberFormat.prototype.formatToParts) ?
-                    formatter.formatToParts(value).map(({type, value}) => {
-                        switch (type) {
-                            case 'currency':
-                                return '<?= $productViewModel->getCurrencyData()['symbol'] ?: ""; ?>' || value;
-                            case 'minusSign':
-                                return '- ';
-                            case 'plusSign':
-                                return '+ ';
-                            default :
-                                return value;
-                        }
-                    }).reduce((string, part) => string + part) :
-                    formatter.format(value);
+                } else {
+                    if (activeCustomOptions.includes(customOptionId)) {
+                        let index = activeCustomOptions.indexOf(customOptionId);
+                        activeCustomOptions.splice(index, 1);
+                    }
+                }
+                this.calculateFinalPriceWithCustomOptions()
             },
-            getFinalPrice() {
+            updateCustomOptionPrices(prices) {
+
+                if (prices) {
+                    this.customOptionPrices = prices;
+                }
+
+                this.calculateFinalPriceWithCustomOptions();
+            },
+            calculateFinalPrice() {
                 let finalPrice = this.initialFinalPrice;
 
                 if (this.activeProductsPriceData) {
                     finalPrice = this.activeProductsPriceData.finalPrice;
 
-                    finalPrice = this.tierPrices.reduce((finalValue, tierPrice) => {
+                    finalPrice = this.initialTierPrices.reduce((finalValue, tierPrice) => {
                         if (this.qty >= tierPrice.price_qty) {
                             return (
                                 this.activeProductsPriceData.oldPrice * (1 + (tierPrice.percentage_value / 100)) <
@@ -81,14 +90,54 @@ $priceHelper = $this->helper(PriceHelper::class);
                     }, finalPrice);
                 }
 
-                return finalPrice;
+                this.calculatedFinalPrice = finalPrice;
+
+                window.dispatchEvent(
+                    new CustomEvent(
+                        "update-product-final-price",
+                        {detail: this.calculatedFinalPrice}
+                    )
+                );
+            },
+            calculateFinalPriceWithCustomOptions() {
+                let finalPrice = this.calculatedFinalPrice ||
+                    this.initialFinalPrice;
+
+                this.calculatedFinalPriceWithCustomOptions =
+                    this.activeCustomOptions.reduce((priceAccumulator, activeCustomOptionId) => {
+                        const customOptionPrice = this.customOptionPrices[activeCustomOptionId];
+                        if(customOptionPrice) {
+                            return Number.parseFloat(priceAccumulator) + Number.parseFloat(customOptionPrice);
+                        }
+                        return finalPrice;
+                    }, finalPrice);
+
+            },
+            getFormattedFinalPrice() {
+                return hyva.formatPrice(
+                    this.calculatedFinalPriceWithCustomOptions ||
+                    this.calculatedFinalPrice ||
+                    this.initialFinalPrice
+                )
             },
             eventListeners: {
                 ['@update-bundle-option-prices.window'](event) {
                     this.activeProductsPriceData = event.detail;
+
+                    this.calculateFinalPrice();
+                    this.calculateFinalPriceWithCustomOptions();
                 },
                 ['@update-qty-<?= (int)$product->getId() ?>.window'](event) {
                     this.qty = event.detail;
+
+                    this.calculateFinalPrice();
+                    this.calculateFinalPriceWithCustomOptions();
+                },
+                ['@update-custom-option-active.window'](event) {
+                    this.updateCustomOptionActive(event.detail);
+                },
+                ['@update-custom-option-prices.window'](event) {
+                    this.updateCustomOptionPrices(event.detail);
                 }
             }
         }
@@ -99,19 +148,20 @@ $priceHelper = $this->helper(PriceHelper::class);
      class="price-box price-final_price my-4"
 >
     <template x-if="activeProductsPriceData &&
-        getFinalPrice() < activeProductsPriceData.oldPrice
+        activeProductsPriceData.oldPrice &&
+        activeProductsPriceData.finalPrice.amount < activeProductsPriceData.oldPrice.amount
     ">
         <div class="old-price flex mr-2">
             <span id="product-price-<?= (int)$product->getId() ?>"
                   class="price-wrapper title-font font-regular text-xl line-through text-gray-900">
-                <span class="price" x-html="formatPrice(activeProductsPriceData.oldPrice)"></span>
+                <span class="price" x-html="hyva.formatPrice(activeProductsPriceData.oldPrice)"></span>
             </span>
         </div>
     </template>
     <div class="final-price flex">
         <span id="product-price-<?= (int)$product->getId() ?>"
               class="price-wrapper title-font font-medium text-2xl text-gray-900">
-            <span class="price" x-html="formatPrice(getFinalPrice())"></span>
+            <span class="price" x-html="getFormattedFinalPrice()"></span>
         </span>
     </div>
 </div>

@@ -11,6 +11,8 @@ declare(strict_types=1);
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\ProductPage;
 use Magento\Bundle\Block\Catalog\Product\View\Type\Bundle;
+use Magento\Catalog\Pricing\Price\BasePrice;
+use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\Framework\Escaper;
 
 /** @var Bundle $block */
@@ -24,6 +26,9 @@ $options = $block->decorateArray($block->getOptions($stripSelection));
 /** @var ProductPage $productViewModel */
 $productViewModel = $viewModels->require(ProductPage::class);
 
+$priceInfo = $product->getPriceInfo();
+$regularPrice = $priceInfo->getPrice(RegularPrice::PRICE_CODE)->getAmount()->getValue();
+$finalPrice = $priceInfo->getPrice(BasePrice::PRICE_CODE)->getAmount()->getValue();
 ?>
 <?php if ($product->isSaleable()): ?>
 <div class="card flex w-full sm:w-1/2 lg:w-2/3">
@@ -131,8 +136,8 @@ $productViewModel = $viewModels->require(ProductPage::class);
 
                                 },
                                 {
-                                    'oldPrice': <?= $escaper->escapeJs($product->getPrice()); ?>,
-                                    'finalPrice': <?= $escaper->escapeJs($product->getFinalPrice()); ?>
+                                    'oldPrice': <?= $escaper->escapeJs($regularPrice); ?>,
+                                    'finalPrice': <?= $escaper->escapeJs($finalPrice); ?>
                                 }
                             );
 
@@ -203,6 +208,7 @@ $productViewModel = $viewModels->require(ProductPage::class);
                         </div>
                     </div>
                 <?php endforeach; ?>
+                <?= $block->getChildHtml('product_info_bundle_options_bottom') ?>
             </fieldset>
         </div>
     <?php else: ?>

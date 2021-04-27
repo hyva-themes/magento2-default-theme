@@ -15,6 +15,7 @@
                    as="type_bundle_options"
                    template="Magento_Bundle::catalog/product/view/type/bundle/options.phtml"
                    before="-">
+                <container name="product.info.bundle.options.top" as="product_info_bundle_options_top"/>
                 <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Select" name="product.info.bundle.options.select" as="select">
                     <arguments>
                         <argument name="tier_price_renderer" xsi:type="object">\Magento\Bundle\Block\DataProviders\OptionPriceRenderer</argument>
@@ -31,6 +32,7 @@
                         <argument name="tier_price_renderer" xsi:type="object">\Magento\Bundle\Block\DataProviders\OptionPriceRenderer</argument>
                     </arguments>
                 </block>
+                <container name="product.info.bundle.options.bottom" as="product_info_bundle_options_bottom"/>
             </block>
 
             <block class="Magento\Catalog\Block\Product\View" name="bundle.summary" as="form_bottom" template="Magento_Bundle::catalog/product/view/summary.phtml">
@@ -47,15 +49,15 @@
                         <argument name="product_view_model" xsi:type="object">Hyva\Theme\ViewModel\ProductPage</argument>
                     </arguments>
                 </block>
-
             </block>
         </referenceBlock>
 
         <move element="product.info.quantity" destination="bundle.summary"/>
         <move element="product.info.addtocart" destination="bundle.summary"/>
         <move element="product.price.tier" destination="bundle.summary"/>
-        <move element="product.info.form" destination="bundle.summary"/>
         <move element="addtocart.shortcut.buttons" destination="bundle.summary"/>
+
+        <move element="product.info.form" destination="product.info.bundle.options.bottom"/>
 
         <referenceBlock name="product.info">
             <block class="Magento\Catalog\Pricing\Render" name="product.info.price">
