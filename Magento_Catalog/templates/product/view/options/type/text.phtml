@@ -43,6 +43,7 @@ $option = $block->getOption();
                    <?= $option->getIsRequire() ? 'required' : '' ?>
                    data-price-amount="<?= $escaper->escapeHtmlAttr($option->getPrice()) ?>"
                    data-price-type="<?= $escaper->escapeHtmlAttr($option->getPriceType()) ?>"
+                   data-option-id="<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
                    x-ref="option-<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
                    x-on:input="updateCustomOptionValue(
                         $dispatch,
@@ -60,6 +61,7 @@ $option = $block->getOption();
                       cols="25"
                       data-price-amount="<?= $escaper->escapeHtmlAttr($option->getPrice()) ?>"
                       data-price-type="<?= $escaper->escapeHtmlAttr($option->getPriceType()) ?>"
+                      data-option-id="<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
                       x-ref="option-<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
                       x-on:input="updateCustomOptionValue(
                         $dispatch,

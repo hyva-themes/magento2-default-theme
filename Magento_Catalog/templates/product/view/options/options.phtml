@@ -141,6 +141,11 @@ $options = $block->decorateArray($block->getOptions());
                     }
                     $dispatch('update-custom-option-active', { customOptionId, active });
                 },
+                initSelectedOptions($dispatch) {
+                    Array.from(document.querySelectorAll('.product-custom-option')).forEach(customOption => {
+                        this.updateCustomOptionValue($dispatch, customOption.dataset.optionId, customOption);
+                    })
+                },
                 eventListeners: {
                     ['@update-product-final-price.window'](event) {
                         this.productFinalPrice = event.detail;
@@ -156,7 +161,7 @@ $options = $block->decorateArray($block->getOptions());
     <div x-data="initOptions()"
          x-init="
             refs = $refs;
-            $nextTick(() => { calculateOptionPrices() })
+            $nextTick(() => { calculateOptionPrices(); initSelectedOptions($dispatch); })
          "
          x-spread="eventListeners"
          class="mb-6">
