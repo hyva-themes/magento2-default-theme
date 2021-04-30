@@ -10,7 +10,9 @@ declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\ProductPage;
+use Hyva\Theme\ViewModel\ProductPrice;
 use Magento\Bundle\Block\Catalog\Product\View\Type\Bundle;
+use Magento\Bundle\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\Framework\Escaper;
@@ -26,9 +28,14 @@ $options = $block->decorateArray($block->getOptions($stripSelection));
 /** @var ProductPage $productViewModel */
 $productViewModel = $viewModels->require(ProductPage::class);
 
-$priceInfo = $product->getPriceInfo();
-$regularPrice = $priceInfo->getPrice(RegularPrice::PRICE_CODE)->getAmount()->getValue();
-$finalPrice = $priceInfo->getPrice(BasePrice::PRICE_CODE)->getAmount()->getValue();
+/** @var ProductPrice $productPriceViewModel */
+$productPriceViewModel = $viewModels->require(ProductPrice::class);
+$productPriceViewModel->setProduct($product);
+
+$displayTax = $productPriceViewModel->displayPriceIncludingTax();
+
+$regularPrice = $productPriceViewModel->getPriceValue(RegularPrice::PRICE_CODE);
+$finalPrice = $productPriceViewModel->getPriceValue(BasePrice::PRICE_CODE);
 ?>
 <?php if ($product->isSaleable()): ?>
 <div class="card flex w-full md:w-1/2 lg:w-2/3">
@@ -37,6 +44,8 @@ $finalPrice = $priceInfo->getPrice(BasePrice::PRICE_CODE)->getAmount()->getValue
             function initBundleOptions() {
                 return {
                     optionConfig: <?= /* @noEscape */ $block->getJsonConfig() ?>,
+                    regularPriceKey: '<?= /* @noEscape */ $displayTax ? 'oldPrice' : 'baseOldPrice' ?>',
+                    finalPriceKey: '<?= /* @noEscape */ $displayTax ? 'finalPrice' : 'basePrice' ?>',
                     productFinalPrice: false,
                     activeSelectOptions: {},
                     selectedOptions: [],
@@ -108,8 +117,8 @@ $finalPrice = $priceInfo->getPrice(BasePrice::PRICE_CODE)->getAmount()->getValue
                                             lowestPrice = product.data.tierPrice.reduce((finalValue, tierPrice) => {
                                                 if (product.qty >= tierPrice.price_qty) {
                                                     return (
-                                                        tierPrice.prices.finalPrice.amount <
-                                                        lowestPrice.finalPrice.amount
+                                                        tierPrice.prices[this.finalPriceKey].amount <
+                                                        lowestPrice[this.finalPriceKey].amount
                                                     ) ?
                                                     tierPrice.prices :
                                                     finalValue;
@@ -122,7 +131,7 @@ $finalPrice = $priceInfo->getPrice(BasePrice::PRICE_CODE)->getAmount()->getValue
                                                 lowestPrice.oldPrice.amount * product.qty
                                             );
                                             finalPrice = finalPrice + (
-                                                lowestPrice.finalPrice.amount * product.qty
+                                                lowestPrice[this.finalPriceKey].amount * product.qty
                                             );
 
                                             return { oldPrice, finalPrice };

@@ -8,32 +8,33 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\ProductPage;
-use Magento\Catalog\Block\Product\View;
+use Hyva\Theme\ViewModel\ProductPrice;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
-use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Catalog\Pricing\Price\TierPrice;
 use Magento\Framework\Escaper;
-use Magento\Framework\Pricing\Helper\Data as PriceHelper;
 
 /** @var View $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
 /** @var Product $product */
 $product = $block->getProduct();
 
+/** @var ProductPrice $productPriceViewModel */
+$productPriceViewModel = $viewModels->require(ProductPrice::class);
+
+$regularPrice = $productPriceViewModel->getPriceValue(RegularPrice::PRICE_CODE);
+$finalPrice = $productPriceViewModel->getPriceValue(BasePrice::PRICE_CODE);
+$tierPrices = $productPriceViewModel->getTierPrices(TierPrice::PRICE_CODE);
+
 /** @var ProductPage $productViewModel */
-$productViewModel = $block->getProductViewModel();
+$productViewModel = $viewModels->require(ProductPage::class);
 
+$displayTax = $productPriceViewModel->displayPriceIncludingTax();
 
-// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
-
-// todo: refactor to use a priceViewModel
-/** @var PriceHelper $priceHelper */
-$priceHelper = $this->helper(PriceHelper::class);
-
-$priceInfo = $product->getPriceInfo();
-$regularPrice = $priceInfo->getPrice(RegularPrice::PRICE_CODE)->getAmount()->getValue();
-$finalPrice = $priceInfo->getPrice(FinalPrice::PRICE_CODE)->getAmount()->getValue();
 ?>
 <script>
     function initPrice<?= (int) $product->getId() ?>() {
@@ -51,12 +52,12 @@ $finalPrice = $priceInfo->getPrice(FinalPrice::PRICE_CODE)->getAmount()->getValu
                 let activeCustomOptions = this.activeCustomOptions;
                 const customOptionId = data.customOptionId;
 
-                if(data.active) {
+                if (data.active) {
                     if (!activeCustomOptions.includes(customOptionId)) {
                         activeCustomOptions.push(data.customOptionId);
                     }
                 } else {
-                    if (activeCustomOptions.includes(customOptionId)) {
+                    if (customOptionId && activeCustomOptions.includes(customOptionId)) {
                         let index = activeCustomOptions.indexOf(customOptionId);
                         activeCustomOptions.splice(index, 1);
                     }
@@ -106,7 +107,7 @@ $finalPrice = $priceInfo->getPrice(FinalPrice::PRICE_CODE)->getAmount()->getValu
                 this.calculatedFinalPriceWithCustomOptions =
                     this.activeCustomOptions.reduce((priceAccumulator, activeCustomOptionId) => {
                         const customOptionPrice = this.customOptionPrices[activeCustomOptionId];
-                        if(customOptionPrice) {
+                        if (customOptionPrice) {
                             return Number.parseFloat(priceAccumulator) + Number.parseFloat(customOptionPrice);
                         }
                         return finalPrice;
@@ -147,17 +148,6 @@ $finalPrice = $priceInfo->getPrice(FinalPrice::PRICE_CODE)->getAmount()->getValu
      x-spread="eventListeners"
      class="price-box price-final_price my-4"
 >
-    <template x-if="activeProductsPriceData &&
-        activeProductsPriceData.oldPrice &&
-        activeProductsPriceData.finalPrice.amount < activeProductsPriceData.oldPrice.amount
-    ">
-        <div class="old-price flex mr-2">
-            <span id="product-price-<?= (int)$product->getId() ?>"
-                  class="price-wrapper title-font font-regular text-xl line-through text-gray-900">
-                <span class="price" x-html="hyva.formatPrice(activeProductsPriceData.oldPrice)"></span>
-            </span>
-        </div>
-    </template>
     <div class="final-price flex">
         <span id="product-price-<?= (int)$product->getId() ?>"
               class="price-wrapper title-font font-medium text-2xl text-gray-900">

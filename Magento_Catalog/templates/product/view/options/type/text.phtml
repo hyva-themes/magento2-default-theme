@@ -8,17 +8,25 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\ViewModel\ProductPrice;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Block\Product\View\Options\Type\Text;
 use Magento\Catalog\Model\Product\Option;
+use Magento\Catalog\Pricing\Price\CustomOptionPrice;
 use Magento\Framework\Escaper;
 
 /** @var Text $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+$product = $block->getProduct();
+
 /** @var Option $option */
 $option = $block->getOption();
-$isPercentage = $option->getPriceType() === 'percent';
-$optionPrice = $isPercentage ? $option->getPrice() : $block->getPrice($option->getPrice(), true);
+
+/** @var ProductPrice $productPriceViewModel */
+$productPriceViewModel = $viewModels->require(ProductPrice::class);
+$optionPrice = $productPriceViewModel->getCustomOptionPrice($option, CustomOptionPrice::PRICE_CODE);
 ?>
 
 <div class="flex border-t border-gray-300 py-2 last:mb-6 last:border-b w-full items-center">

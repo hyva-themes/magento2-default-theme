@@ -10,53 +10,47 @@ declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\ProductPage;
-use Magento\Catalog\Block\Product\View;
+use Hyva\Theme\ViewModel\ProductPrice;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\Catalog\Pricing\Price\TierPrice;
 use Magento\Framework\Escaper;
-use Magento\Framework\Pricing\Helper\Data as PriceHelper;
+use Magento\Framework\View\Element\Template;
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
 
-/** @var View $block */
+/** @var Template $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
 /** @var Product $product */
 $product = $block->getProduct();
 
+/** @var ProductPrice $productPriceViewModel */
+$productPriceViewModel = $viewModels->require(ProductPrice::class);
+
+$regularPrice = $productPriceViewModel->getPriceValue(RegularPrice::PRICE_CODE);
+$finalPrice = $productPriceViewModel->getPriceValue(FinalPrice::PRICE_CODE);
+$tierPrices = $productPriceViewModel->getTierPrices(TierPrice::PRICE_CODE);
+
 /** @var ProductPage $productViewModel */
 $productViewModel = $viewModels->require(ProductPage::class);
 
-// todo: refactor to use a priceViewModel
-/** @var PriceHelper $priceHelper */
-$priceHelper = $this->helper(PriceHelper::class);
+$displayTax = $productPriceViewModel->displayPriceIncludingTax();
 
-$priceInfo = $product->getPriceInfo();
-$regularPrice = $priceInfo->getPrice(RegularPrice::PRICE_CODE)->getAmount()->getValue();
-$finalPrice = $priceInfo->getPrice(FinalPrice::PRICE_CODE)->getAmount()->getValue();
-$tierPrices = $priceInfo->getPrice(TierPrice::PRICE_CODE)->getTierPriceList();
-$tierPrices =
-    array_map(
-        function ($a, $b) {
-            $b['website_price'] = $b['price']->getValue();
-            return $b;
-        },
-        array_keys($tierPrices),
-        array_values($tierPrices)
-    );
 ?>
 <script>
-    function initPrice<?= (int) $product->getId() ?>() {
+    function initPrice<?= (int)$product->getId() ?>() {
         return {
+            regularPriceKey: '<?= /* @noEscape */ $displayTax ? 'oldPrice' : 'baseOldPrice' ?>',
+            finalPriceKey: '<?= /* @noEscape */ $displayTax ? 'finalPrice' : 'basePrice' ?>',
             activeProductsPriceData: false,
             initialFinalPrice: <?= (float)$finalPrice ?>,
             calculatedFinalPrice: false,
             calculatedFinalPriceWithCustomOptions: false,
             initialTierPrices: <?= /** @noEscape */ json_encode($tierPrices) ?>,
-            showRegularPriceLabel: <?= ($product->getFinalPrice() < $regularPrice) ? 'true' : 'false' ?>,
+            showRegularPriceLabel: <?= ($finalPrice < $regularPrice) ? 'true' : 'false' ?>,
             customOptionPrices: [],
             activeCustomOptions: [],
             qty: 1,
@@ -65,12 +59,12 @@ $tierPrices =
                 let activeCustomOptions = this.activeCustomOptions;
                 const customOptionId = data.customOptionId;
 
-                if(data.active) {
+                if (data.active) {
                     if (!activeCustomOptions.includes(customOptionId)) {
                         activeCustomOptions.push(data.customOptionId);
                     }
                 } else {
-                    if (activeCustomOptions.includes(customOptionId)) {
+                    if (customOptionId && activeCustomOptions.includes(customOptionId)) {
                         let index = activeCustomOptions.indexOf(customOptionId);
                         activeCustomOptions.splice(index, 1);
                     }
@@ -85,30 +79,6 @@ $tierPrices =
 
                 this.calculateFinalPriceWithCustomOptions();
             },
-            formatPrice(value, showSign) {
-                var formatter = new Intl.NumberFormat(
-                    document.documentElement.lang,
-                    {
-                        style: 'currency',
-                        currency: '<?= $escaper->escapeHtml($productViewModel->getCurrencyData()['code']) ?>',
-                        signDisplay: showSign ? "always" : "auto"
-                    }
-                );
-                return (typeof Intl.NumberFormat.prototype.formatToParts) ?
-                    formatter.formatToParts(value).map(({type, value}) => {
-                        switch (type) {
-                            case 'currency':
-                                return '<?= $productViewModel->getCurrencyData()['symbol'] ?: ""; ?>' || value;
-                            case 'minusSign':
-                                return '- ';
-                            case 'plusSign':
-                                return '+ ';
-                            default :
-                                return value;
-                        }
-                    }).reduce((string, part) => string + part) :
-                    formatter.format(value);
-            },
             calculateFinalPrice() {
                 let finalPrice = this.initialFinalPrice;
 
@@ -118,7 +88,7 @@ $tierPrices =
                             return tierPrice.price < finalValue ? tierPrice.price : finalValue;
                         }
                         return finalValue;
-                    }, this.activeProductsPriceData.finalPrice.amount);
+                    }, this.activeProductsPriceData[this.finalPriceKey].amount);
 
                 } else {
                     finalPrice = Object.values(this.initialTierPrices).reduce((finalValue, tierPrice) => {
@@ -142,7 +112,7 @@ $tierPrices =
             },
             calculatePriceLabelVisibility() {
                 this.showRegularPriceLabel = (
-                    (this.calculatedFinalPrice === this.activeProductsPriceData.oldPrice.amount) &&
+                    (this.calculatedFinalPrice === this.activeProductsPriceData[this.regularPriceKey].amount) &&
                     this.activeProductsPriceData.isMinimalPrice
                 );
             },
@@ -153,7 +123,7 @@ $tierPrices =
                 this.calculatedFinalPriceWithCustomOptions =
                     this.activeCustomOptions.reduce((priceAccumulator, activeCustomOptionId) => {
                         const customOptionPrice = this.customOptionPrices[activeCustomOptionId];
-                        if(customOptionPrice) {
+                        if (customOptionPrice) {
                             return Number.parseFloat(priceAccumulator) + Number.parseFloat(customOptionPrice);
                         }
                         return finalPrice;
@@ -161,14 +131,14 @@ $tierPrices =
 
             },
             getFormattedFinalPrice() {
-                return this.formatPrice(
+                return hyva.formatPrice(
                     this.calculatedFinalPriceWithCustomOptions ||
                     this.calculatedFinalPrice ||
                     this.initialFinalPrice
                 )
             },
             eventListeners: {
-                ['@update-prices-<?= (int) $product->getId() ?>.window'](event) {
+                ['@update-prices-<?= (int)$product->getId() ?>.window'](event) {
                     this.activeProductsPriceData = event.detail;
 
                     this.calculateFinalPrice();
@@ -200,8 +170,9 @@ $tierPrices =
                 <div class="old-price mr-2 flex">
                     <span id="product-price-<?= (int)$product->getId() ?>"
                           class="price-wrapper title-font font-regular text-xl line-through text-gray-900">
-                        <span class="price" >
-                            <?= /** @noEscape */ $productViewModel->currency($regularPrice) ?>
+                        <span class="price">
+                            <?= /** @noEscape */
+                            $productViewModel->format($regularPrice) ?>
                         </span>
                     </span>
                 </div>
@@ -213,25 +184,26 @@ $tierPrices =
                             $escaper->escapeHtml(__('As low as')) . ':' :
                             '&nbsp;' ?>
                     </span>
-                <span id="product-price-<?= (int) $product->getId() ?>"
+                <span id="product-price-<?= (int)$product->getId() ?>"
                       class="price-wrapper title-font font-medium text-2xl text-gray-900">
                     <span class="price" x-html="getFormattedFinalPrice()">
-                        <?= /** @noEscape */ $product->getFormattedPrice() ?>
+                        <?= /** @noEscape */
+                        $productViewModel->format($finalPrice) ?>
                     </span>
                 </span>
                 <meta itemprop="price" content="<?= $escaper->escapeHtmlAttr($finalPrice) ?>">
-                <meta itemprop="priceCurrency" content="EUR">
+                <meta itemprop="priceCurrency" content="<?= $productViewModel->getCurrencyData()['code'] ?>">
             </div>
         </div>
     </template>
     <template x-if="activeProductsPriceData &&
         activeProductsPriceData.oldPrice &&
-        activeProductsPriceData.finalPrice.amount < activeProductsPriceData.oldPrice.amount
+        activeProductsPriceData[finalPriceKey].amount < activeProductsPriceData[regularPriceKey].amount
     ">
         <div class="old-price flex mr-2">
             <span id="product-price-<?= (int)$product->getId() ?>"
                   class="price-wrapper title-font font-regular text-xl line-through text-gray-900">
-                <span class="price" x-html="formatPrice(activeProductsPriceData.oldPrice.amount)"></span>
+                <span class="price" x-html="hyva.formatPrice(activeProductsPriceData[regularPriceKey].amount)"></span>
             </span>
         </div>
     </template>

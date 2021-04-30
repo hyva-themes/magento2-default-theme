@@ -8,16 +8,24 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\ProductPrice;
 use Magento\Catalog\Block\Product\View\Options\Type\Select\Checkable;
 use Magento\Catalog\Model\Product\Option;
+use Magento\Catalog\Pricing\Price\CustomOptionPrice;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /**
  * @var Checkable $block
  * @var Escaper $escaper
+ * @var ViewModelRegistry $viewModels
  * @var SecureHtmlRenderer $secureRenderer
  */
+
+/** @var ProductPrice $productPriceViewModel */
+$productPriceViewModel = $viewModels->require(ProductPrice::class);
+
 $option = $block->getOption();
 if ($option): ?>
     <?php
@@ -62,38 +70,45 @@ if ($option): ?>
 
     <?php foreach ($option->getValues() as $value): ?>
         <?php
+            $checked = '';
+            $count++;
+            if ($arraySign) {
+                $checked = is_array($configValue) && in_array($value->getOptionTypeId(), $configValue) ? 'checked' : '';
+            } else {
+                $checked = $configValue == $value->getOptionTypeId() ? 'checked' : '';
+            }
+            $dataSelector = 'options[' . $option->getId() . ']';
+            if ($arraySign) {
+                $dataSelector .= '[' . $value->getOptionTypeId() . ']';
+            }
 
-        $checked = '';
-        $count++;
-        if ($arraySign) {
-            $checked = is_array($configValue) && in_array($value->getOptionTypeId(), $configValue) ? 'checked' : '';
-        } else {
-            $checked = $configValue == $value->getOptionTypeId() ? 'checked' : '';
-        }
-        $dataSelector = 'options[' . $option->getId() . ']';
-        if ($arraySign) {
-            $dataSelector .= '[' . $value->getOptionTypeId() . ']';
-        }
+            $optionId = $option->getId() . '_' . $value->getOptionTypeId();
 
-        $optionId = $option->getId() . '_' . $value->getOptionTypeId();
+            $isPercentage = $value->getPriceType() === 'percent';
+
+            $valuePrice = $productPriceViewModel->getCustomOptionPrice($value, CustomOptionPrice::PRICE_CODE);
         ?>
 
             <option type="<?= $escaper->escapeHtmlAttr($optionType) ?>"
 
                    value="<?= $escaper->escapeHtmlAttr($value->getOptionTypeId()) ?>"
                    <?= $escaper->escapeHtml($checked) ?>
-
-                   data-price-amount="<?= $escaper->escapeHtmlAttr($block->getCurrencyByStore($value)) ?>"
+                   x-ref="option-<?= $escaper->escapeHtmlAttr($option->getId() . '-' . $value->getOptionTypeId()) ?>"
+                   data-price-amount="<?= $escaper->escapeHtmlAttr($valuePrice) ?>"
                    data-price-type="<?= $escaper->escapeHtmlAttr($value->getPriceType()) ?>"
                    data-option-id="<?= $escaper->escapeHtmlAttr($optionId) ?>"
                 <?php if (in_array($value->getOptionTypeId(), $configValue)): ?>
                    selected="selected"
                 <?php endif; ?>
+                x-html="'<?= $escaper->escapeHtml($value->getTitle()) ?>' +
+                    (
+                        getFormattedOptionPrice('<?= $escaper->escapeJs($optionId) ?>') ||
+                        ''
+                    )
+                "
             >
-                <span><?= $escaper->escapeHtml($value->getTitle()) ?></span>
-                <span x-html="getFormattedOptionPrice('<?= $escaper->escapeHtmlAttr($optionId) ?>') || ''">
-                    <?= /* @noEscape */ $block->formatPrice($value) ?>
-                </span>
+                <?= $escaper->escapeHtml($value->getTitle()) ?>
+                <?= /* @noEscape */ $block->formatPrice($value) ?>
             </option>
         </div>
     <?php endforeach; ?>

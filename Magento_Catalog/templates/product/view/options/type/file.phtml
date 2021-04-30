@@ -8,12 +8,16 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\ProductPrice;
+use Magento\Catalog\Pricing\Price\CustomOptionPrice;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Catalog\Block\Product\View\Options\Type\File;
 
 /** @var File $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
 /** @var SecureHtmlRenderer $secureRenderer */
 
 $option = $block->getOption();
@@ -24,9 +28,9 @@ $fieldNameAction = $fileName . '_action';
 $fieldValueAction = $fileExists ? 'save_old' : 'save_new';
 $fileNamed = $fileName . '_name';
 
-$isPercentage = $option->getPriceType() === 'percent';
-$optionPrice = $isPercentage ? $option->getPrice() : $block->getPrice($option->getPrice(), true);
-
+/** @var ProductPrice $productPriceViewModel */
+$productPriceViewModel = $viewModels->require(ProductPrice::class);
+$optionPrice = $productPriceViewModel->getCustomOptionPrice($option, CustomOptionPrice::PRICE_CODE);
 ?>
 <div class="flex border-t border-gray-300 py-2 last:mb-6 last:border-b w-full items-center">
     <label class="label text-gray-700 text-left w-1/2"
@@ -42,7 +46,9 @@ $optionPrice = $isPercentage ? $option->getPrice() : $block->getPrice($option->g
 
     <?php if ($fileExists):?>
     <div class="ml-2 text-gray-900 text-left w-1/2">
-        <span class="<?= /* @noEscape */ $fileNamed ?> inline-block my-2 mr-2"><?= $escaper->escapeHtml($fileInfo->getTitle()) ?></span>
+        <span class="<?= /* @noEscape */ $fileNamed ?> inline-block my-2 mr-2">
+            <?= $escaper->escapeHtml($fileInfo->getTitle()) ?>
+        </span>
         <a href="#"
            class="btn btn-secondary inline-block"
            id="change-<?= /* @noEscape */ $fileName ?>"

@@ -8,17 +8,25 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\ViewModel\ProductPrice;
 use Magento\Catalog\Block\Product\View\Options\Type\Select\Checkable;
 use Magento\Catalog\Model\Product\Option;
+use Magento\Catalog\Pricing\Price\CustomOptionPrice;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /**
  * @var Checkable $block
  * @var Escaper $escaper
+ * @var ViewModelRegistry $viewModels
  * @var SecureHtmlRenderer $secureRenderer
  */
+
+/** @var ProductPrice $productPriceViewModel */
+$productPriceViewModel = $viewModels->require(ProductPrice::class);
+
 $option = $block->getOption();
+
 if ($option): ?>
     <?php
     $configValue = $block->getPreconfiguredValue($option);
@@ -50,20 +58,21 @@ if ($option): ?>
 <?php endif; ?>
     <?php foreach ($option->getValues() as $value): ?>
         <?php
+            $checked = '';
+            $count++;
+            if ($arraySign) {
+                $checked = is_array($configValue) && in_array($value->getOptionTypeId(), $configValue) ? 'checked' : '';
+            } else {
+                $checked = $configValue == $value->getOptionTypeId() ? 'checked' : '';
+            }
+            $dataSelector = 'options[' . $option->getId() . ']';
+            if ($arraySign) {
+                $dataSelector .= '[' . $value->getOptionTypeId() . ']';
+            }
 
-        $checked = '';
-        $count++;
-        if ($arraySign) {
-            $checked = is_array($configValue) && in_array($value->getOptionTypeId(), $configValue) ? 'checked' : '';
-        } else {
-            $checked = $configValue == $value->getOptionTypeId() ? 'checked' : '';
-        }
-        $dataSelector = 'options[' . $option->getId() . ']';
-        if ($arraySign) {
-            $dataSelector .= '[' . $value->getOptionTypeId() . ']';
-        }
+            $optionId = $option->getId() . '_' . $value->getOptionTypeId();
 
-        $optionId = $option->getId() . '_' . $value->getOptionTypeId();
+            $valuePrice = $productPriceViewModel->getCustomOptionPrice($value, CustomOptionPrice::PRICE_CODE);
         ?>
 
         <div class="field choice">
@@ -76,6 +85,7 @@ if ($option): ?>
                    id="options_<?= $escaper->escapeHtmlAttr($optionId) ?>"
                    value="<?= $escaper->escapeHtmlAttr($value->getOptionTypeId()) ?>"
                    <?= $escaper->escapeHtml($checked) ?>
+                   x-ref="option-<?= $escaper->escapeHtmlAttr($option->getId() . '-' . $value->getOptionTypeId()) ?>"
                    <?php if ($option->getIsRequire()): ?>
                        required
                        data-required
@@ -84,7 +94,7 @@ if ($option): ?>
                        data-validation-message="<?= $escaper
                            ->escapeHtmlAttr(__("Please select one of the options.")) ?>"
                     <?php endif; ?>
-                   data-price-amount="<?= $escaper->escapeHtmlAttr($block->getCurrencyByStore($value)) ?>"
+                   data-price-amount="<?= $escaper->escapeHtmlAttr($valuePrice) ?>"
                    data-price-type="<?= $escaper->escapeHtmlAttr($value->getPriceType()) ?>"
                    data-option-id="<?= $escaper->escapeHtmlAttr($optionId) ?>"
                    x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>"

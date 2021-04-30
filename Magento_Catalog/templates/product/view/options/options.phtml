@@ -8,6 +8,7 @@
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\ProductPage;
+use Hyva\Theme\ViewModel\ProductPrice;
 use Magento\Catalog\Block\Product\View\Options;
 use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\Escaper;
@@ -20,6 +21,14 @@ use Magento\Framework\Escaper;
 /** @var ProductPage $productViewModel */
 $productViewModel = $viewModels->require(ProductPage::class);
 
+$product = $block->getProduct();
+
+/** @var ProductPrice $productPriceViewModel */
+$productPriceViewModel = $viewModels->require(ProductPrice::class);
+$productPriceViewModel->setProduct($product);
+
+$displayTax = $productPriceViewModel->displayPriceIncludingTax();
+
 $options = $block->decorateArray($block->getOptions());
 
 ?>
@@ -28,8 +37,10 @@ $options = $block->decorateArray($block->getOptions());
         function initOptions() {
             return {
                 optionConfig: <?= /* @noEscape */ $block->getJsonConfig() ?>,
+                regularPriceKey: '<?= /* @noEscape */ $displayTax ? 'oldPrice' : 'baseOldPrice' ?>',
+                finalPriceKey: '<?= /* @noEscape */ $displayTax ? 'finalPrice' : 'basePrice' ?>',
                 productFinalPrice: false,
-                customOptionPrices: [],
+                customOptionPrices: {},
                 refs: [],
                 formatPrice(value, showSign) {
                     var formatter = new Intl.NumberFormat(
@@ -87,7 +98,7 @@ $options = $block->decorateArray($block->getOptions());
 
                     const optionElement = this.refs && this.refs['option-'+customOptionCode];
 
-                    let price = customOption.prices.finalPrice.amount;
+                    let price = customOption.prices[this.finalPriceKey].amount;
 
                     if (this.productFinalPrice &&
                         optionElement &&
