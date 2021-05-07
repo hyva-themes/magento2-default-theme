@@ -6,7 +6,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.2...master
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.3...master
+
+## [1.1.3] - 2021-05-07
+_Version 1.1.3 of the Hyva_Theme module is required for this update_
+
+### Added
+- none
+
+### Changed
+- **Pass product instance to price view model instead of relying on internal state**
+
+  This improves reusability of templates and allows changing the order in which they are rendered.
+
+### Removed
+- none
+
 
 ## [1.1.2] - 2021-05-03
 _Version 1.1.2 of the Hyva_Theme module is required for this update_

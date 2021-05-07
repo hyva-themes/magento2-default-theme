@@ -25,7 +25,6 @@ $product = $block->getProduct();
 
 /** @var ProductPrice $productPriceViewModel */
 $productPriceViewModel = $viewModels->require(ProductPrice::class);
-$productPriceViewModel->setProduct($product);
 
 $displayTax = $productPriceViewModel->displayPriceIncludingTax();
 

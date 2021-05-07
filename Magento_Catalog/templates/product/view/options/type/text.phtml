@@ -26,7 +26,7 @@ $option = $block->getOption();
 
 /** @var ProductPrice $productPriceViewModel */
 $productPriceViewModel = $viewModels->require(ProductPrice::class);
-$optionPrice = $productPriceViewModel->getCustomOptionPrice($option, CustomOptionPrice::PRICE_CODE);
+$optionPrice = $productPriceViewModel->getCustomOptionPrice($option, CustomOptionPrice::PRICE_CODE, $product);
 ?>
 
 <div class="flex border-t border-gray-300 py-2 last:mb-6 last:border-b w-full items-center">

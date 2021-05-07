@@ -30,12 +30,11 @@ $productViewModel = $viewModels->require(ProductPage::class);
 
 /** @var ProductPrice $productPriceViewModel */
 $productPriceViewModel = $viewModels->require(ProductPrice::class);
-$productPriceViewModel->setProduct($product);
 
 $displayTax = $productPriceViewModel->displayPriceIncludingTax();
 
-$regularPrice = $productPriceViewModel->getPriceValue(RegularPrice::PRICE_CODE);
-$finalPrice = $productPriceViewModel->getPriceValue(BasePrice::PRICE_CODE);
+$regularPrice = $productPriceViewModel->getPriceValue(RegularPrice::PRICE_CODE, $product);
+$finalPrice = $productPriceViewModel->getPriceValue(BasePrice::PRICE_CODE, $product);
 ?>
 <?php if ($product->isSaleable()): ?>
 <div class="card flex w-full md:w-1/2 lg:w-2/3">

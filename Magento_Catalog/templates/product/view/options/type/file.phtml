@@ -20,6 +20,7 @@ use Magento\Catalog\Block\Product\View\Options\Type\File;
 /** @var ViewModelRegistry $viewModels */
 /** @var SecureHtmlRenderer $secureRenderer */
 
+$product = $block->getProduct();
 $option = $block->getOption();
 $fileInfo = $block->getFileInfo();
 $fileExists = $fileInfo->hasData();
@@ -30,7 +31,7 @@ $fileNamed = $fileName . '_name';
 
 /** @var ProductPrice $productPriceViewModel */
 $productPriceViewModel = $viewModels->require(ProductPrice::class);
-$optionPrice = $productPriceViewModel->getCustomOptionPrice($option, CustomOptionPrice::PRICE_CODE);
+$optionPrice = $productPriceViewModel->getCustomOptionPrice($option, CustomOptionPrice::PRICE_CODE, $product);
 ?>
 <div class="flex border-t border-gray-300 py-2 last:mb-6 last:border-b w-full items-center">
     <label class="label text-gray-700 text-left w-1/2"

@@ -30,9 +30,9 @@ $product = $block->getProduct();
 /** @var ProductPrice $productPriceViewModel */
 $productPriceViewModel = $viewModels->require(ProductPrice::class);
 
-$regularPrice = $productPriceViewModel->getPriceValue(RegularPrice::PRICE_CODE);
-$finalPrice = $productPriceViewModel->getPriceValue(FinalPrice::PRICE_CODE);
-$tierPrices = $productPriceViewModel->getTierPrices(TierPrice::PRICE_CODE);
+$regularPrice = $productPriceViewModel->getPriceValue(RegularPrice::PRICE_CODE, $product);
+$finalPrice = $productPriceViewModel->getPriceValue(FinalPrice::PRICE_CODE, $product);
+$tierPrices = $productPriceViewModel->getTierPrices(TierPrice::PRICE_CODE, $product);
 
 /** @var ProductPage $productViewModel */
 $productViewModel = $viewModels->require(ProductPage::class);

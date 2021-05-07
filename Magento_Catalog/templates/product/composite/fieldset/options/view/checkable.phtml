@@ -22,6 +22,8 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
  * @var SecureHtmlRenderer $secureRenderer
  */
 
+$product = $block->getProduct();
+
 /** @var ProductPrice $productPriceViewModel */
 $productPriceViewModel = $viewModels->require(ProductPrice::class);
 
@@ -72,7 +74,7 @@ if ($option): ?>
 
             $optionId = $option->getId() . '_' . $value->getOptionTypeId();
 
-            $valuePrice = $productPriceViewModel->getCustomOptionPrice($value, CustomOptionPrice::PRICE_CODE);
+            $valuePrice = $productPriceViewModel->getCustomOptionPrice($value, CustomOptionPrice::PRICE_CODE, $product);
         ?>
 
         <div class="field choice">

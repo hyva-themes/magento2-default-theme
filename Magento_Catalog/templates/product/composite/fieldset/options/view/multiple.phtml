@@ -23,6 +23,8 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
  * @var SecureHtmlRenderer $secureRenderer
  */
 
+$product = $block->getProduct();
+
 /** @var ProductPrice $productPriceViewModel */
 $productPriceViewModel = $viewModels->require(ProductPrice::class);
 
@@ -86,7 +88,7 @@ if ($option): ?>
 
             $isPercentage = $value->getPriceType() === 'percent';
 
-            $valuePrice = $productPriceViewModel->getCustomOptionPrice($value, CustomOptionPrice::PRICE_CODE);
+            $valuePrice = $productPriceViewModel->getCustomOptionPrice($value, CustomOptionPrice::PRICE_CODE, $product);
         ?>
 
             <option type="<?= $escaper->escapeHtmlAttr($optionType) ?>"
