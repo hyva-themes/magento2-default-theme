@@ -9,10 +9,16 @@
 /** @var Notices $block */
 /** @var Escaper $escaper */
 /** @var Cookie $cookieHelper */
+/** @var ViewModelRegistry $viewModels */
+/** @var StoreViewModel $storeViewModel */
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Store as StoreViewModel;
 use Magento\Cookie\Block\Html\Notices;
 use Magento\Framework\Escaper;
 use Magento\Cookie\Helper\Cookie;
+
+$storeViewModel = $viewModels->require(StoreViewModel::class);
 
 ?>
 <?php
@@ -23,6 +29,7 @@ if ($cookieHelper->isCookieRestrictionModeEnabled()): ?>
 <script>
     function initCookieBanner() {
         const isUserAllowedSaveCookieName = '<?= /* @noEscape */  Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>';
+        const currentWebsiteId = <?= (int) $storeViewModel->getStore()->getWebsiteId() ?>;
 
         const isAllowedSaveCookie = () => {
             const allowedCookies = hyva.getCookie(isUserAllowedSaveCookieName);
@@ -30,8 +37,8 @@ if ($cookieHelper->isCookieRestrictionModeEnabled()): ?>
                 ? JSON.parse(unescape(allowedCookies))
                 : [];
 
-            return allowedCookieWebsites[CURRENT_WEBSITE_ID] !== undefined
-                ? !! allowedCookieWebsites[CURRENT_WEBSITE_ID]
+            return allowedCookieWebsites[currentWebsiteId] !== undefined
+                ? !! allowedCookieWebsites[currentWebsiteId]
                 : false;
         };
 
@@ -46,12 +53,11 @@ if ($cookieHelper->isCookieRestrictionModeEnabled()): ?>
                 this.showCookieBanner = ! isAllowedSaveCookie();
             },
             setAcceptCookies() {
-                let cookieExpires = this.cookieLifetime /  60 / 60 / 24;
+                const cookieExpires = this.cookieLifetime /  60 / 60 / 24;
                 hyva.setCookie(this.cookieName, this.cookieValue, cookieExpires);
                 if (!hyva.getCookie(this.cookieName)) {
                     window.location.href = this.noCookiesUrl;
                 }
-                window.dispatchEvent(new CustomEvent('user-allowed-save-cookie'));
             }
         }
     }
