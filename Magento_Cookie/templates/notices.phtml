@@ -51,6 +51,7 @@ if ($cookieHelper->isCookieRestrictionModeEnabled()): ?>
                 if (!hyva.getCookie(this.cookieName)) {
                     window.location.href = this.noCookiesUrl;
                 }
+                window.dispatchEvent(new CustomEvent('user-allowed-save-cookie'));
             }
         }
     }
