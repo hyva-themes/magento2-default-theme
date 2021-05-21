@@ -65,7 +65,7 @@ use Magento\Framework\View\Element\Template;
             },
             getSwatchText(attributeId, itemId){
                 const config = this.getSwatchConfig(attributeId, itemId);
-                return config.value || config.label;
+                return config.label || config.value;
             },
             getSwatchConfig(attributeId, itemId) {
                 return this.swatchConfig[attributeId] ? this.swatchConfig[attributeId][itemId] : false;
