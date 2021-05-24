@@ -18,56 +18,57 @@ use Magento\Framework\Escaper;
 /** @var Product $product */
 $product = $block->getProduct();
 ?>
-
-<script>
-    function initQtyField() {
-        return {
-            qty: <?= $block->getProductDefaultQty() * 1 ?>,
-            itemId: '<?= (int)$block->getRequest()->getParam('id') ?>',
-            productId: '<?= (int)$product->getId() ?>',
-            onGetCartData: function onGetCartData($dispatch) {
-                var cart = event.detail.data && event.detail.data.cart;
-                if (cart && cart.items) {
-                    $this = this;
-                    var cartItem = cart.items.find(function (item) {
-                        return (
-                            item.item_id === $this.itemId
-                            && item.product_id === $this.productId
-                        )
-                    });
-                    if (cartItem && cartItem.qty) {
-                        qty = cartItem.qty;
-                        $dispatch('update-qty-<?= (int)$product->getId() ?>', qty);
-                    }
-                    if (cartItem && cartItem.options && cartItem.options.length) {
-                        $dispatch('update-options', cartItem.options);
+<?php if ($block->shouldRenderQuantity()) :?>
+    <script>
+        function initQtyField() {
+            return {
+                qty: <?= $block->getProductDefaultQty() * 1 ?>,
+                itemId: '<?= (int)$block->getRequest()->getParam('id') ?>',
+                productId: '<?= (int)$product->getId() ?>',
+                onGetCartData: function onGetCartData($dispatch) {
+                    var cart = event.detail.data && event.detail.data.cart;
+                    if (cart && cart.items) {
+                        $this = this;
+                        var cartItem = cart.items.find(function (item) {
+                            return (
+                                item.item_id === $this.itemId
+                                && item.product_id === $this.productId
+                            )
+                        });
+                        if (cartItem && cartItem.qty) {
+                            qty = cartItem.qty;
+                            $dispatch('update-qty-<?= (int)$product->getId() ?>', qty);
+                        }
+                        if (cartItem && cartItem.options && cartItem.options.length) {
+                            $dispatch('update-options', cartItem.options);
+                        }
                     }
                 }
-            }
-        };
-    }
-</script>
-<div x-data="initQtyField()"
-     class="">
-    <?php if ($product->isSaleable()): ?>
-        <div class="mr-2">
-            <label for="qty[<?= (int)$product->getId() ?>]"
-                   class="sr-only"
-            >
-                <?= $escaper->escapeHtml(__('Quantity')) ?>
-            </label>
-            <input name="qty"
-                   @private-content-loaded.window="onGetCartData($dispatch)"
-                   id="qty[<?= (int)$product->getId() ?>]"
-                   form="product_addtocart_form"
-                   type="number"
-                   pattern-="[0-9]{0,4}"
-                   min="1"
-                   :value="qty"
-                   class="form-input px-2 py-2 w-20 text-center"
-                   x-model.number="qty"
-                   @change="$dispatch('update-qty-<?= (int)$product->getId() ?>', qty)"
-            />
-        </div>
-    <?php endif; ?>
-</div>
+            };
+        }
+    </script>
+    <div x-data="initQtyField()"
+        class="">
+        <?php if ($product->isSaleable()): ?>
+            <div class="mr-2">
+                <label for="qty[<?= (int)$product->getId() ?>]"
+                    class="sr-only"
+                >
+                    <?= $escaper->escapeHtml(__('Quantity')) ?>
+                </label>
+                <input name="qty"
+                    @private-content-loaded.window="onGetCartData($dispatch)"
+                    id="qty[<?= (int)$product->getId() ?>]"
+                    form="product_addtocart_form"
+                    type="number"
+                    pattern-="[0-9]{0,4}"
+                    min="1"
+                    :value="qty"
+                    class="form-input px-2 py-2 w-20 text-center"
+                    x-model.number="qty"
+                    @change="$dispatch('update-qty-<?= (int)$product->getId() ?>', qty)"
+                />
+            </div>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>
