@@ -29,7 +29,7 @@
                 <block class="Magento\Catalog\Block\Category\View" name="category.cms" template="Magento_Catalog::category/cms.phtml"/>
             </container>
         </referenceContainer>
-        <move element="category.view.container" destination="page.main.title" />
+        <move element="page.main.title" destination="category.view.container" />
         <referenceContainer name="content">
 
             <block class="Magento\Catalog\Block\Category\View" name="category.products" template="Magento_Catalog::category/products.phtml">
