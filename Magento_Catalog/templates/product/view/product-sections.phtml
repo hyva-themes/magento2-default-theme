@@ -9,24 +9,33 @@
 /** @var \Magento\Catalog\Block\Product\View\Details $block */
 /** @var \Magento\Framework\Escaper $escaper */
 
-foreach ($block->getGroupSortedChildNames('detailed_info', 'getChildHtml') as $sectionName) {
-    $sectionBlock = $block->getChildBlock($sectionName);
+$titleRenderer = $block->getChildBlock('product.section.title.renderer');
+$defaultTitleTemplate = $titleRenderer->getTemplate();
 
-    if ($sectionBlock->getData('is_raw_section')) {
-        echo $sectionBlock->toHtml();
-    } else { ?>
+?>
+<div class="container grid lg:grid-cols-2 gap-8">
+<?php
+foreach ($block->getGroupSortedChildNames('detailed_info', '') as $sectionName) {
+    $sectionBlock = $block->getLayout()->getBlock($sectionName);
+    $sectionHtml  = $sectionBlock->toHtml();
+    $titleTemplate = $sectionBlock->getData('title_template') ?? $defaultTitleTemplate;
+
+    if (empty($sectionHtml)) {
+        continue;
+    }
+
+    ?>
 
     <section id="<?= $escaper->escapeHtmlAttr($sectionBlock->getNameInLayout()) ?>">
-        <div class="container mx-auto flex pt-6 pb-3 mb-6 md:flex-row border-b-2 border-gray-300">
-            <h2 class="text-gray-900 text-2xl title-font font-base text-center md:text-left w-full">
-                <?= $sectionBlock->getTitle() ? $escaper->escapeHtml($sectionBlock->getTitle()) : '&nbsp;' ?>
-            </h2>
-        </div>
+        <?=
+            $titleRenderer->setTemplate($titleTemplate)
+                          ->assign('sectionBlock', $sectionBlock)
+                          ->toHtml()
+        ?>
         <div class="card w-full">
-            <?= $sectionBlock->toHtml() ?>
+            <?= $sectionHtml ?>
         </div>
     </section>
 
-<?php
-    }
-}
+<?php } ?>
+</div>

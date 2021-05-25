@@ -1,0 +1,22 @@
+<?php declare(strict_types=1);
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Hyva\Theme\Model\ViewModelRegistry $viewModels */
+/** @var \Hyva\Theme\ViewModel\ProductPage $productViewModel */
+
+$productViewModel = $viewModels->require(\Hyva\Theme\ViewModel\ProductPage::class);
+$product = $productViewModel->getProduct();
+
+?>
+<div class="container mx-auto flex pt-6 pb-3 mb-6 md:flex-row border-b-2 border-gray-300">
+    <h2 class="text-gray-900 text-2xl title-font font-base text-center md:text-left w-full">
+        <?= $escaper->escapeHtml(__('Description')) ?> /
+        <span class="font-semibold"><?= $escaper->escapeHtml($product->getName()) ?></span>
+    </h2>
+</div>
