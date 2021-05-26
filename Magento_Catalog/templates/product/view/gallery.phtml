@@ -161,9 +161,12 @@ $productName = $block->getProduct()->getName();
                 }
             },
             initActive() {
-                const active = this.images.findIndex(function(image) {
+                let active = this.images.findIndex(function(image) {
                     return image.isMain === true
                 });
+                if (active === -1) {
+                    active = 0;
+                }
                 this.setActive(active);
             },
             setActive(index){
