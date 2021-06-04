@@ -192,7 +192,8 @@ $displayTax = $productPriceViewModel->displayPriceIncludingTax();
                     </span>
                 </span>
                 <meta itemprop="price" content="<?= $escaper->escapeHtmlAttr($finalPrice) ?>">
-                <meta itemprop="priceCurrency" content="<?= $productViewModel->getCurrencyData()['code'] ?>">
+                <meta itemprop="priceCurrency"
+                      content="<?= $escaper->escapeHtmlAttr($productViewModel->getCurrencyData()['code']) ?>">
             </div>
         </div>
     </template>
