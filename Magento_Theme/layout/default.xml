@@ -25,8 +25,8 @@
             <block name="header-content" template="Magento_Theme::html/header.phtml">
                 <block class="Magento\Theme\Block\Html\Header\Logo" name="logo">
                     <arguments>
-                        <argument name="logo_img_width" xsi:type="number">189</argument>
-                        <argument name="logo_img_height" xsi:type="number">64</argument>
+                        <argument name="logo_width" xsi:type="number">189</argument>
+                        <argument name="logo_height" xsi:type="number">64</argument>
                     </arguments>
                 </block>
                 <block name="header-search" template="Magento_Theme::html/header/search-form.phtml"/>
