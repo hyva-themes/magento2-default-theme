@@ -36,9 +36,10 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
         <form action="<?= $escaper->escapeUrl($block->getSendUrl()) ?>" method="post" id="product-sendtofriend-form"
               class="form send friend"
               x-data="initSendFriendForm()"
-              @submit.prevent="submitForm()">
+              @submit.prevent="submitForm()"
+        >
+            <?= $block->getBlockHtml('formkey') ?>
             <fieldset class="fieldset sender" id="sender_options">
-                <?= $block->getBlockHtml('formkey') ?>
                 <legend class="legend"><span><?= $escaper->escapeHtml(__('Sender')) ?></span></legend>
                 <br>
                 <div class="field sender required">
@@ -80,8 +81,6 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                         <textarea name="sender[message]"
                                   class="input-text mt-2 input input-light w-full h-48"
                                   id="sender-message"
-                                  cols="3"
-                                  rows="3"
                                   required
                         ><?= $escaper->escapeHtml($block->getMessage()) ?></textarea>
                     </div>
@@ -89,8 +88,11 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
             </fieldset>
 
             <fieldset class="fieldset recipients">
-                <?= $block->getBlockHtml('formkey') ?>
-                <legend class="legend"><span><?= $escaper->escapeHtml(__('Invitee')) ?></span></legend>
+                <legend class="legend">
+                    <span>
+                        <?= $escaper->escapeHtml(__('Invitee')) ?>
+                    </span>
+                </legend>
                 <br/>
                 <div id="recipients-options">
                     <fieldset class="fieldset">
@@ -127,14 +129,15 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
             </fieldset>
             <?= $block->getChildHtml('captcha'); ?>
             <div class="w-full grecaptcha-legal">
-                <?= /** @noEscape */
-                $recaptchaLegalNotice ?>
+                <?= /** @noEscape */ $recaptchaLegalNotice ?>
             </div>
             <div class="actions-toolbar">
                 <div class="primary">
                     <button type="submit"
                             class="action submit primary"
-                        <?php if (!$block->canSend()): ?> disabled="disabled"<?php endif ?>
+                        <?php if (!$block->canSend()): ?>
+                            disabled="disabled"
+                        <?php endif ?>
                     >
                         <span>
                             <?= $escaper->escapeHtml(__('Send Email')) ?>

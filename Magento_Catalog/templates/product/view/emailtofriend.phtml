@@ -20,7 +20,9 @@ use Magento\Framework\Escaper;
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
+/** @var CurrentProduct $currentProduct */
 $currentProduct = $viewModels->require(CurrentProduct::class);
+/** @var EmailToFriend $sendFriendViewModel */
 $sendFriendViewModel = $viewModels->require(EmailToFriend::class);
 
 /** @var HeroiconsSolid $heroicons */
