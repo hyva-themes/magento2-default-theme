@@ -161,14 +161,14 @@
 
                     <block class="Magento\Catalog\Block\Product\View\Details"
                            name="product.info.details"
-                           template="Magento_Catalog::product/view/product-sections.phtml">
-                        <block name="product.section.title.renderer" template="Magento_Catalog::product/view/product-section-title.phtml"/>
+                           template="Magento_Catalog::product/view/sections/product-sections.phtml">
+                        <block name="product.section.title.renderer" template="Magento_Catalog::product/view/sections/product-section-title.phtml"/>
 
                         <block name="description"
-                               template="Magento_Catalog::product/view/description.phtml"
+                               template="Magento_Catalog::product/view/sections/description.phtml"
                                group="detailed_info">
                             <arguments>
-                                <argument name="title_template" xsi:type="string">Magento_Catalog::product/view/description-section-title.phtml</argument>
+                                <argument name="title_template" xsi:type="string">Magento_Catalog::product/view/sections/description-section-title.phtml</argument>
                                 <argument name="sort_order" xsi:type="number">-20</argument>
                             </arguments>
                         </block>
