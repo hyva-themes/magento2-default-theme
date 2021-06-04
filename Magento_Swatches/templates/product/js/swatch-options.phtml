@@ -23,6 +23,17 @@ use Magento\Framework\View\Element\Template;
 
                 return swatchConfig;
             },
+            getAllAttributeOptions(attributeId) {
+                return (
+                    this.optionConfig.attributes[attributeId] &&
+                    this.optionConfig.attributes[attributeId].options
+                ) || []
+            },
+            optionIsActive(attributeId, optionId) {
+                return !!this.getAllowedAttributeOptions(attributeId).find(
+                    option => option.id === optionId
+                )
+            },
             getSwatchType(typeNumber) {
                 switch (typeNumber) {
                     case "1":
@@ -72,6 +83,13 @@ use Magento\Framework\View\Element\Template;
             },
             activeTooltipItem: false,
             tooltipPositionElement: false,
+            isTooltipVisible() {
+                return this.activeTooltipItem &&
+                    this.getSwatchConfig(
+                        this.activeTooltipItem.attribute,
+                        this.activeTooltipItem.item
+                    );
+            },
             getTooltipImageStyle(attributeId, itemId) {
                 const config = this.getSwatchConfig(attributeId, itemId);
                 const typeId = config.type.toString();
@@ -96,6 +114,9 @@ use Magento\Framework\View\Element\Template;
                             0
                         )
                     }px;` : ''
+            },
+            getTooltipLabel() {
+                return this.getSwatchConfig(this.activeTooltipItem.attribute, this.activeTooltipItem.item).label
             }
         }
     }

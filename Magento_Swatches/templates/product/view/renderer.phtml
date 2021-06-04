@@ -16,6 +16,8 @@ use Magento\Swatches\ViewModel\Product\Renderer\Configurable as ConfigurableView
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
+// phpcs:disable Generic.Files.LineLength.TooLong
+
 /** @var ConfigurableViewModel $configurableViewModel */
 $configurableViewModel = $viewModels->require(ConfigurableViewModel::class);
 
@@ -26,6 +28,12 @@ $product = $block->getProduct();
 $productId = $product->getId();
 
 $attributes = $block->decorateArray($block->getAllowAttributes());
+
+$layout = $block->getLayout();
+$swatchItemBlock = $layout->getBlock('product.swatch.item');
+$swatchItemBlock->setData('product_id', $productId);
+
+$tooltipBlockHtml = $block->getBlockHtml('product.swatch.tooltip');
 ?>
 <?php if ($product->isSaleable() && count($attributes)): ?>
 
@@ -52,90 +60,53 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
     <div x-data="initConfigurableSwatchOptions_<?= (int) $productId ?>()"
          x-init="findAllowedAttributeOptions();"
          @private-content-loaded.window="onGetCartData($event.detail.data)"
-         class="mb-6 relative"
+         class="relative mb-6"
     >
-        <h2 class="text-gray-900 text-xl title-font font-medium mb-4">
+        <h2 class="mb-4 text-xl font-medium text-gray-900 title-font">
             <?= $escaper->escapeHtml(__('Product Options:')) ?>
         </h2>
         <div>
             <?php foreach ($attributes as $attribute): ?>
                 <?php $attributeId = $attribute->getAttributeId(); ?>
                 <?php $productAttribute = $attribute->getProductAttribute();  ?>
-
                 <?php if ($swatchRendererViewModel->isSwatchAttribute($productAttribute)): ?>
                     <div class="swatch-attribute border-t last:border-b border-container
                             <?= $escaper->escapeHtmlAttr($productAttribute->getAttributeCode()) ?>">
-                        <div class="flex border-gray-300 py-1 min-h-14 w-full items-center">
+                        <div class="flex items-center py-1 w-full border-gray-300 min-h-14">
 
-                            <label class="label text-gray-700 text-left w-1/2"
+                            <label class="w-1/2 text-left text-gray-700 label"
                                    for="attribute<?= $escaper->escapeHtmlAttr($productAttribute->getAttributeCode()) ?>"
                             >
                                 <span>
                                     <?= $escaper->escapeHtml($productAttribute->getStoreLabel()) ?>
                                 </span>
                             </label>
-                            <div class="ml-2 text-gray-900 text-left w-1/2">
+                            <div class="ml-2 w-1/2 text-left text-gray-900">
                                 <div
-                                     class="flex space-x-4 -mx-4 items-center swatch-attribute-options"
+                                     class="flex items-center -mx-4 space-x-4 swatch-attribute-options"
                                      role="radiogroup"
                                      aria-labelledby="radiogroup-label"
                                 >
                                     <template
-                                        x-for="(item, index) in getAllowedAttributeOptions(<?= (int) $attributeId ?>)"
+                                        x-for="(item, index) in optionConfig.attributes[<?= (int) $attributeId ?>].options"
                                         :key="item.id"
                                     >
-                                        <label
-                                            :for="'attribute-option-'+item.id"
-                                            :class="{
-                                                'border-container-lighter ring ring-primary ring-opacity-50':
-                                                    (selectedValues[<?= (int)$attributeId ?>] === item.id),
-                                                'border-container-darker':
-                                                    (selectedValues[<?= (int)$attributeId ?>] !== item.id),
-                                                'w-6 h-6' : !isTextSwatch(<?= (int) $attributeId ?>, item.id)
-                                             }"
-                                            class="swatch-option border-2 cursor-pointer bg-container-lighter shadow-sm select-none"
-                                            :style="getSwatchBackgroundStyle('<?= (int) $attributeId ?>',item.id)"
-                                            <?php if ($configurableViewModel->getShowSwatchTooltip()): ?>
-                                                @mouseenter.self="activeTooltipItem = {
-                                                attribute: '<?= (int) $attributeId ?>',
-                                                item: item.id
-                                            }; tooltipPositionElement = $event.target;"
-                                                @mouseleave.self="activeTooltipItem = false"
-                                            <?php endif; ?>
-                                        >
-                                            <input
-                                                :id="'attribute-option-'+item.id"
-                                                :value="item.id"
-                                                name="super_attribute[<?= (int) $attributeId ?>]"
-                                                type="radio"
-                                                class="border-0 focus:border-0 focus:ring-0 absolute inline-block p-0"
-                                                style="z-index:-1"
-                                                x-on:change="changeOption(<?= (int) $attributeId ?>, event.target.value)"
-                                                :checked="selectedValues[<?= (int) $attributeId ?>] === item.id"
-                                                :required="getAllowedAttributeOptions(<?= (int) $attributeId ?>).filter(
-                                                        attributeOption => selectedValues[attributeOption]
-                                                    ).length === 0"
-                                            >
-                                            <div x-html="getSwatchText(<?= (int) $attributeId ?>, item.id)"
-                                                 class="whitespace-nowrap"
-                                                 :class="{ 'sr-only' : !isTextSwatch(<?= (int) $attributeId ?>, item.id) }"
-                                            ></div>
-                                        </label>
+                                        <?= /* @noEscape */ $swatchItemBlock->setData('attribute_id', $attributeId)->toHtml(); ?>
                                     </template>
                                 </div>
                             </div>
                         </div>
                     </div>
                 <?php else: ?>
-                    <div class="flex border-t last:border-b  border-gray-300 py-2 w-full items-center">
-                        <label class="label text-gray-700 text-left w-1/2"
+                    <div class="flex items-center py-2 w-full border-t border-gray-300 last:border-b">
+                        <label class="w-1/2 text-left text-gray-700 label"
                                for="attribute<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>"
                         >
                             <span>
                                 <?= $escaper->escapeHtml($attribute->getProductAttribute()->getStoreLabel()) ?>
                             </span>
                         </label>
-                        <div class="ml-2 text-gray-900 text-left w-1/2">
+                        <div class="ml-2 w-1/2 text-left text-gray-900">
                             <select name="super_attribute[<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>]"
                                     id="attribute<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>"
                                     class="form-select super-attribute-select"
@@ -161,36 +132,7 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
                 <?php endif; ?>
             <?php endforeach; ?>
         </div>
-
-        <?php if ($swatchRendererViewModel->isSwatchAttribute($productAttribute)): ?>
-            <template x-if="activeTooltipItem && getSwatchConfig(activeTooltipItem.attribute, activeTooltipItem.item)">
-                <div class="absolute"
-                     :style="getTooltipPosition()"
-                >
-                    <div class="shadow-lg">
-                        <div class="absolute top-0 left-0 z-10 min-w-20 p-2 -mt-6 text-sm leading-tight text-black
-                                transform -translate-x-1/2 -translate-y-full bg-white rounded-lg shadow-lg text-center"
-                        >
-                        <template x-if="isVisualSwatch(activeTooltipItem.attribute, activeTooltipItem.item)">
-                            <div class="inline-block border border-container shadow-sm"
-                                 :style="getTooltipImageStyle(activeTooltipItem.attribute, activeTooltipItem.item)"
-                            ></div>
-                        </template>
-                            <span class="subtitle text-lg font-semibold whitespace-nowrap mx-2"
-                                  x-html="getSwatchConfig(activeTooltipItem.attribute, activeTooltipItem.item).label"
-                            ></span>
-                        </div>
-                        <svg class="absolute z-10 w-8 h-8 text-white transform -translate-x-1/5
-                                -translate-y-8 fill-current stroke-current"
-                             width="12"
-                             height="12"
-                        >
-                            <rect x="12" y="-12" width="12" height="12" transform="rotate(45)" class="shadow-xl" />
-                        </svg>
-                    </div>
-                </div>
-            </template>
-        <?php endif; ?>
+        <?= /* @noEscape */ $tooltipBlockHtml ?>
     </div>
 
 <?php endif;?>

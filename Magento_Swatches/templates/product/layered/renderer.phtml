@@ -49,6 +49,9 @@ $swatchData = $block->getSwatchData();
             },
             activeTooltipItem: false,
             tooltipPositionElement: false,
+            isTooltipVisible() {
+                return this.activeTooltipItem
+            },
             getTooltipImageStyle() {
                 const type = this.activeTooltipItem.type;
 
@@ -67,6 +70,12 @@ $swatchData = $block->getSwatchData();
                         `top: ${this.tooltipPositionElement.offsetTop}px;` +
                         `left: ${this.tooltipPositionElement.offsetLeft}px;`
                     ) : ''
+            },
+            getTooltipLabel() {
+                return this.activeTooltipItem.label || ''
+            },
+            isVisualSwatch() {
+                return this.getSwatchType(this.activeTooltipItem.type) !== 'text'
             }
         }
     }
@@ -112,29 +121,7 @@ $swatchData = $block->getSwatchData();
         <?php endforeach; ?>
     </div>
     <?php if ($configurableViewModel->getShowSwatchTooltip()): ?>
-        <template x-if="activeTooltipItem">
-            <div class="absolute"
-                 :style="getTooltipPosition()"
-            >
-                <div class="shadow-lg">
-                    <div class="absolute top-0 left-0 z-10 min-w-20 p-2 -mt-6 text-sm leading-tight text-black transform
-                -translate-x-1/2 -translate-y-full bg-white rounded-lg shadow-lg text-center">
-                        <template x-if="activeTooltipItem.type !== '0'">
-                            <div class="inline-block border border-container shadow-sm"
-                                 :style="getTooltipImageStyle(activeTooltipItem)"
-                            ></div>
-                        </template>
-                        <span class="subtitle text-lg font-semibold whitespace-nowrap mx-2"
-                              x-html="activeTooltipItem.label"
-                        ></span>
-                    </div>
-                    <svg class="absolute z-10 w-8 h-8 text-white transform -translate-x-1/5
-                -translate-y-8 fill-current stroke-current" width="12" height="12">
-                        <rect x="12" y="-12" width="12" height="12" transform="rotate(45)" class="shadow-xl" />
-                    </svg>
-                </div>
-            </div>
-        </template>
+        <?= /* @noEscape */ $block->getBlockHtml('product.swatch.tooltip'); ?>
     <?php endif; ?>
 </div>
 

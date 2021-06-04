@@ -1,0 +1,46 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+?>
+<template x-if="isTooltipVisible()">
+    <div class="absolute"
+         :style="getTooltipPosition()"
+    >
+        <div class="shadow-lg">
+            <div class="absolute top-0 left-0 z-10 min-w-20 p-2 -mt-6 text-sm leading-tight text-black
+                    transform -translate-x-1/2 -translate-y-full bg-white rounded-lg shadow-lg text-center"
+            >
+            <template x-if="isVisualSwatch(activeTooltipItem.attribute, activeTooltipItem.item)">
+                <div class="inline-block border shadow-sm border-container"
+                     :style="getTooltipImageStyle(activeTooltipItem.attribute, activeTooltipItem.item)"
+                ></div>
+            </template>
+                <span class="mx-2 text-lg font-semibold whitespace-nowrap subtitle"
+                      x-html="getTooltipLabel()"
+                ></span>
+            </div>
+            <svg class="absolute z-10 w-8 h-8 text-white transform -translate-x-1/5
+                    -translate-y-8 fill-current stroke-current"
+                 width="12"
+                 height="12"
+            >
+                <rect x="12" y="-12" width="12" height="12" transform="rotate(45)" class="shadow-xl" />
+            </svg>
+        </div>
+    </div>
+</template>

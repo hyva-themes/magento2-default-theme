@@ -9,6 +9,9 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
+        <block name="product.swatch.item" template="Magento_Swatches::product/swatch-item.phtml"/>
+        <block name="product.swatch.tooltip" template="Magento_Swatches::product/tooltip.phtml"/>
+
         <referenceBlock name="product.info.form">
             <referenceBlock name="product.info.options.configurable"
                             class="Magento\Swatches\Block\Product\Renderer\Configurable"

@@ -526,6 +526,7 @@ video {
       [type='password'],
       [type='number'],
       [type='date'],
+      [type='month'],
       [type='search'],
       [type='tel'],
       [type='time'],
@@ -548,7 +549,7 @@ video {
   line-height: 1.5rem;
 }
 
-[type='text']:focus, [type='email']:focus, [type='url']:focus, [type='password']:focus, [type='number']:focus, [type='date']:focus, [type='search']:focus, [type='tel']:focus, [type='time']:focus, [multiple]:focus, textarea:focus, select:focus {
+[type='text']:focus, [type='email']:focus, [type='url']:focus, [type='password']:focus, [type='number']:focus, [type='date']:focus, [type='month']:focus, [type='search']:focus, [type='tel']:focus, [type='time']:focus, [multiple]:focus, textarea:focus, select:focus {
   outline: 2px solid transparent;
   outline-offset: 2px;
   --tw-ring-inset: var(--tw-empty,/*!*/ /*!*/);
@@ -1986,8 +1987,16 @@ body {
   display: table;
 }
 
+.table-caption {
+  display: table-caption;
+}
+
 .grid {
   display: grid;
+}
+
+.contents {
+  display: contents;
 }
 
 .hidden {
@@ -2555,6 +2564,10 @@ body {
   opacity: 0.25;
 }
 
+.opacity-50 {
+  opacity: 0.5;
+}
+
 .opacity-100 {
   opacity: 1;
 }
@@ -2786,6 +2799,10 @@ body {
   padding-bottom: 4rem;
 }
 
+.static {
+  position: static;
+}
+
 .fixed {
   position: fixed;
 }
@@ -2796,6 +2813,11 @@ body {
 
 .relative {
   position: relative;
+}
+
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
 }
 
 .inset-0 {
@@ -2828,6 +2850,10 @@ body {
 
 .top-full {
   top: 100%;
+}
+
+.resize {
+  resize: both;
 }
 
 * {
@@ -2905,6 +2931,10 @@ body {
 
 .stroke-current {
   stroke: currentColor;
+}
+
+.stroke-1 {
+  stroke-width: 1;
 }
 
 .table-auto {
@@ -3028,6 +3058,11 @@ body {
   color: rgba(245, 158, 11, var(--tw-text-opacity));
 }
 
+.hover\:text-blue-600:hover {
+  --tw-text-opacity: 1;
+  color: rgba(37, 99, 235, var(--tw-text-opacity));
+}
+
 .hover\:text-primary:hover {
   --tw-text-opacity: 1;
   color: rgba(39, 39, 42, var(--tw-text-opacity));
@@ -3095,6 +3130,12 @@ body {
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+}
+
+.select-all {
+  -webkit-user-select: all;
+     -moz-user-select: all;
+          user-select: all;
 }
 
 .align-top {
@@ -3841,6 +3882,11 @@ form select {
   .sm\:text-5xl {
     font-size: 3rem;
     line-height: 1;
+  }
+
+  .sm\:mx-0 {
+    margin-left: 0px;
+    margin-right: 0px;
   }
 
   .sm\:mt-0 {
