@@ -136,14 +136,59 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
   }
 }", ['is_linked_product' => $isLinkedProduct, 'type' => $type]);
 
-$mergeAddToMethodsOnComponent = <<<EOJS
-            component.addToWishlist = function(productId) {
-                var postUrl = BASE_URL+"wishlist/index/add/";
+$queryResponseDataCallback = ! $isLinkedProduct
+    ? "
+        (data, component) => {
+            component.currency = (data &&
+                data.data &&
+                data.data.currency);
+            return data &&
+                data.data &&
+                data.data.products &&
+                data.data.products.items;
+        }"
+    : "
+        (data, component) => {
+            component.currency = (data &&
+                data.data &&
+                data.data.currency);
+            return data &&
+                data.data &&
+                data.data.products &&
+                data.data.products.items &&
+                data.data.products.items[0] &&
+                data.data.products.items[0]['{$escaper->escapeJs($type)}_products'] &&
+                // only use products with visibility set to `Catalog` or `Catalog, Search` (2 or 4)
+                // with status set to '1' (enabled)
+                data.data.products.items[0]['{$escaper->escapeJs($type)}_products']
+                    .filter(product => {
+                        return (
+                            [2,4].includes(product.visibility) &&
+                            product.status.toString() === '1'
+                        )
+                    }) || []
+
+        }";
+
+$sliderItemTemplate = 'Magento_Catalog::product/slider-item.phtml';
+?>
+
+<script>
+    'use strict';
+    (function( hyva, undefined ) {
+
+        hyva.slider = hyva.slider || {};
+
+        hyva.slider.addToWishlist = hyva.slider.addToWishlist ||
+            function(productId) {
+                var postUrl = BASE_URL + "wishlist/index/add/";
                 fetch(postUrl, {
                     "headers": {
                         "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
                     },
-                    "body": "form_key="+ hyva.getFormKey() + "&product="+productId+"&uenc="+btoa(window.location.href),
+                    "body": "form_key=" + hyva.getFormKey() +
+                        "&product=" + productId +
+                        "&uenc=" + btoa(window.location.href),
                     "method": "POST",
                     "mode": "cors",
                     "credentials": "include"
@@ -156,17 +201,21 @@ $mergeAddToMethodsOnComponent = <<<EOJS
                         typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
                             [{
                                 type: "warning",
-                                text: "{$escaper->escapeHtml(__('Could not add item to wishlist.'))}"
+                                text: "<?= $escaper->escapeHtml(__('Could not add item to wishlist.')) ?>"
                             }], 5000
                         );
                     }
                 }).then(function (response) {
-                    if(!response) { return }
+                    if (!response) {
+                        return
+                    }
                     typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
                         [{
                             type: (response.success) ? "success" : "error",
                             text: (response.success)
-                                ? "{$escaper->escapeHtml(__("%1 has been added to your Wish List.", __("Product")))}"
+                                ? "<?= $escaper->escapeHtml(
+                                    __("%1 has been added to your Wish List.", __("Product"))
+                                ) ?>"
                                 : response.error_message
                         }], 5000
                     );
@@ -181,13 +230,17 @@ $mergeAddToMethodsOnComponent = <<<EOJS
                     );
                 });
             }
-            component.addToCompare = function(productId) {
+
+        hyva.slider.addToCompare = hyva.slider.addToCompare ||
+            function(productId) {
                 const postUrl = BASE_URL + 'catalog/product_compare/add/';
                 fetch(postUrl, {
                     "headers": {
                         "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
                     },
-                    "body": "form_key="+ hyva.getFormKey() + "&product="+productId+"&uenc="+btoa(window.location.href),
+                    "body": "form_key=" + hyva.getFormKey() +
+                        "&product=" + productId +
+                        "&uenc=" + btoa(window.location.href),
                     "method": "POST",
                     "mode": "cors",
                     "credentials": "include"
@@ -203,48 +256,13 @@ $mergeAddToMethodsOnComponent = <<<EOJS
                         }], 5000
                     );
                 });
-            };
-EOJS;
+            }
 
+    }( window.hyva = window.hyva || {} ));
+</script>
 
-$queryResponseDataCallback = ! $isLinkedProduct
-    ? "
-                            (data, component) => {
-                                component.currency = (data &&
-                                    data.data &&
-                                    data.data.currency);
-                                {$mergeAddToMethodsOnComponent}
-                                return data &&
-                                    data.data &&
-                                    data.data.products &&
-                                    data.data.products.items;
-                            }"
-    : "
-                            (data, component) => {
-                                component.currency = (data &&
-                                    data.data &&
-                                    data.data.currency);
-                                {$mergeAddToMethodsOnComponent}
-                                return data &&
-                                    data.data &&
-                                    data.data.products &&
-                                    data.data.products.items &&
-                                    data.data.products.items[0] &&
-                                    data.data.products.items[0]['{$escaper->escapeJs($type)}_products'] &&
-                                    // only use products with visibility set to `Catalog` or `Catalog, Search` (2 or 4)
-                                    // with status set to '1' (enabled)
-                                    data.data.products.items[0]['{$escaper->escapeJs($type)}_products']
-                                        .filter(product => {
-                                            return (
-                                                [2,4].includes(product.visibility) &&
-                                                product.status.toString() === '1'
-                                            )
-                                        }) || []
-
-                            }";
-
-$sliderItemTemplate = 'Magento_Catalog::product/slider-item.phtml';
-
-echo $sliderViewModel->getSliderForQuery($sliderItemTemplate, $graphqlQuery, $queryResponseDataCallback)
+<?= $sliderViewModel
+    ->getSliderForQuery($sliderItemTemplate, $graphqlQuery, $queryResponseDataCallback)
     ->setTitle($title)
     ->toHtml();
+?>

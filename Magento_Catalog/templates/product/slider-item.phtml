@@ -60,7 +60,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
     </a>
     <span class="inline-flex gap-2">
         <?php if ($compareViewModel->showInProductList()): ?>
-            <button @click.prevent="addToCompare(item.id)"
+            <button @click.prevent="hyva.slider.addToCompare(item.id)"
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Compare')) ?>"
                     class="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex
                     items-center justify-center text-gray-500 hover:text-yellow-500"
@@ -71,7 +71,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         <?php if ($wishlistViewModel->isEnabled()): ?>
             <button
                 aria-label="<?= $escaper->escapeHtml(__('Add to Wish List')) ?>"
-                @click.prevent="addToWishlist(item.id)"
+                @click.prevent="hyva.slider.addToWishlist(item.id)"
                 class="inline-flex items-center justify-center w-10 h-10 p-0 ml-auto
                                             text-gray-500 bg-gray-200 border-0 rounded-full hover:text-red-600"
             >
