@@ -17,7 +17,10 @@ use Magento\Framework\Escaper;
 
 /** @var Navigation $viewModelNavigation */
 $viewModelNavigation = $viewModels->require(Navigation::class);
+
+// Order is important here: 1. build the menu data, 2. then set the cache tags from the view model identities
 $menuItems = $viewModelNavigation->getNavigation(4);
+$block->setData('cache_tags', $viewModelNavigation->getIdentities());
 
 ?>
 <div class="z-20 order-2 sm:order-1 lg:order-2 navigation">
@@ -38,8 +41,7 @@ $menuItems = $viewModelNavigation->getNavigation(4);
                          :class="{ 'hidden' : !menu.open, 'block': menu.open }"
                          xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                          viewBox="0 0 20 20">
-                        <path
-                              fill-rule="evenodd" clip-rule="evenodd"
+                        <path fill-rule="evenodd" clip-rule="evenodd"
                               d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0
                           1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828
                           4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z">

@@ -34,11 +34,13 @@
 <!--
                 <block name="topmenu_static" as="topmenu" template="Magento_Theme::html/header/topmenu_static.phtml"/>
 -->
-                <block class="Magento\Theme\Block\Html\Topmenu"
-                       name="topmenu_generic"
+                <block name="topmenu_generic"
                        as="topmenu"
-                       template="Magento_Theme::html/header/topmenu.phtml" ttl="3600"
-                />
+                       template="Magento_Theme::html/header/topmenu.phtml" ttl="3600">
+                    <arguments>
+                        <argument name="cache_lifetime" xsi:type="string">3600</argument>
+                    </arguments>
+                </block>
             </block>
         </referenceContainer>
 

@@ -6,6 +6,9 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\BlockCache;
+use Hyva\Theme\ViewModel\ProductPage;
 use Magento\Catalog\Block\Product\ListProduct;
 use Magento\Framework\Escaper;
 
@@ -13,6 +16,12 @@ use Magento\Framework\Escaper;
 
 /** @var ListProduct $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+/** @var ProductPage $productViewModel */
+/** @var BlockCache $blockCacheViewModel */
+
+$productViewModel    = $viewModels->require(ProductPage::class);
+$blockCacheViewModel = $viewModels->require(BlockCache::class);
 
 $productCollection = $block->getLoadedProductCollection();
 ?>
@@ -46,7 +55,16 @@ $productCollection = $block->getLoadedProductCollection();
     <div class="products wrapper mode-<?= /* @noEscape */ $viewMode ?> products-<?= /* @noEscape */ $viewMode ?>">
         <div class="mx-auto pt-4 pb-12 grid gap-4 <?= $viewMode === 'grid' ? 'sm:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1' ?>">
             <?php /** @var \Magento\Catalog\Model\Product $product */ ?>
-            <?php foreach ($productCollection as $product):?>
+            <?php foreach ($productCollection as $product):
+            $itemCacheKeyInfo = [
+                $product->getId(),
+                $viewMode,
+                $templateType,
+                $block->getTemplate(),
+                $product->getStoreId(),
+                $productViewModel->getCurrencyData()['code']
+            ];
+            ?>
                 <?= $block->getLayout()->getBlock('product_list_item')
                     ->setData('product', $product)
                     ->setData('view_mode', $viewMode)
@@ -55,6 +73,9 @@ $productCollection = $block->getLoadedProductCollection();
                     ->setData('position', $pos)
                     ->setData('pos', $pos)
                     ->setData('template_type', $templateType)
+                    ->setData('cache_lifetime', 3600)
+                    ->setData('cache_tags', $product->getIdentities())
+                    ->setData('cache_key', $blockCacheViewModel->hashCacheKeyInfo($itemCacheKeyInfo))
                     ->toHtml(); ?>
             <?php endforeach; ?>
         </div>
