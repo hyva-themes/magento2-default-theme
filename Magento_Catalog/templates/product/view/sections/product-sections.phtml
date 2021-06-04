@@ -1,0 +1,41 @@
+<?php declare(strict_types=1);
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+/** @var \Magento\Catalog\Block\Product\View\Details $block */
+/** @var \Magento\Framework\Escaper $escaper */
+
+$titleRenderer = $block->getChildBlock('product.section.title.renderer');
+$defaultTitleTemplate = $titleRenderer->getTemplate();
+
+?>
+<div class="container grid lg:grid-cols-2 gap-8">
+<?php
+foreach ($block->getGroupSortedChildNames('detailed_info', '') as $sectionName) {
+    $sectionBlock = $block->getLayout()->getBlock($sectionName);
+    $sectionHtml  = $sectionBlock->toHtml();
+    $titleTemplate = $sectionBlock->getData('title_template') ?? $defaultTitleTemplate;
+
+    if (empty($sectionHtml)) {
+        continue;
+    }
+
+    ?>
+
+    <section id="<?= $escaper->escapeHtmlAttr($sectionBlock->getNameInLayout()) ?>">
+        <?=
+            $titleRenderer->setTemplate($titleTemplate)
+                          ->assign('sectionBlock', $sectionBlock)
+                          ->toHtml()
+        ?>
+        <div class="card w-full">
+            <?= $sectionHtml ?>
+        </div>
+    </section>
+
+<?php } ?>
+</div>

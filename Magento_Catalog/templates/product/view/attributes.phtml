@@ -11,44 +11,38 @@ declare(strict_types=1);
 use Magento\Framework\Escaper;
 use Magento\Catalog\Helper\Output as CatalogOutputHelper;
 use Magento\Catalog\Block\Product\View\Attributes;
+use Magento\Catalog\Model\Product;
 
 // phpcs:disable Magento2.Templates.ThisInTemplate
 
 /** @var Escaper $escaper */
-/** @var Output $output */
+/** @var CatalogOutputHelper $output */
 /** @var Attributes $block */
 
 
 /** @var CatalogOutputHelper $catalogOutputHelper */
 $catalogOutputHelper = $this->helper(CatalogOutputHelper::class);
 
-/** @var Attributes $product */
+/** @var Product $product */
 $product = $block->getProduct();
 ?>
 
 <?php if ($attributes = $block->getAdditionalData()): ?>
-    <div class="container mx-auto flex pt-6 pb-3 mb-6 md:flex-row border-b-2 border-gray-300">
-        <h2 class="text-gray-900 text-2xl title-font font-base text-center md:text-left w-full">
-            <?= $escaper->escapeHtml(__('More Information')) ?>
-        </h2>
-    </div>
-    <div class="card w-full">
-        <div class="table-wrapper max-w-prose overflow-x-auto">
-            <table class="additional-attributes w-full">
-                <?php foreach ($attributes as $attribute): ?>
-                    <tr class="border-b border-gray-300 last:border-b-0">
-                        <th class="col label w-1/2 py-2 text-left text-gray-700 font-normal"
-                            scope="row"><?= $escaper->escapeHtml($attribute['label']) ?></th>
-                        <td class="col data w-1/2 py-2 pl-2 text-left text-gray-900"
-                            data-th="<?= $escaper->escapeHtmlAttr($attribute['label']) ?>"
-                        ><?= /* @noEscape */ $catalogOutputHelper->productAttribute(
-                            $product,
-                            $attribute['value'],
-                            $attribute['code']
-                        ); ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            </table>
-        </div>
+    <div class="table-wrapper max-w-prose overflow-x-auto">
+        <table class="additional-attributes w-full">
+            <?php foreach ($attributes as $attribute): ?>
+                <tr class="border-b border-gray-300 last:border-b-0">
+                    <th class="col label w-1/2 py-2 text-left text-gray-700 font-normal"
+                        scope="row"><?= $escaper->escapeHtml($attribute['label']) ?></th>
+                    <td class="col data w-1/2 py-2 pl-2 text-left text-gray-900"
+                        data-th="<?= $escaper->escapeHtmlAttr($attribute['label']) ?>"
+                    ><?= /* @noEscape */ $catalogOutputHelper->productAttribute(
+                        $product,
+                        $attribute['value'],
+                        $attribute['code']
+                    ); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
     </div>
 <?php endif;?>
