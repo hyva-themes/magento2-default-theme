@@ -12,7 +12,7 @@
     <body>
         <referenceBlock name="page.main.title">
             <arguments>
-                <argument name="css_class" xsi:type="string">justify-start text-4xl</argument>
+                <argument name="css_class" xsi:type="string">justify-start text-4xl mb-4</argument>
             </arguments>
         </referenceBlock>
         <referenceContainer name="columns.top">
@@ -29,9 +29,8 @@
                 <block class="Magento\Catalog\Block\Category\View" name="category.cms" template="Magento_Catalog::category/cms.phtml"/>
             </container>
         </referenceContainer>
-        <move element="page.main.title" destination="category.view.container" />
-        <referenceContainer name="content">
 
+        <referenceContainer name="content">
             <block class="Magento\Catalog\Block\Category\View" name="category.products" template="Magento_Catalog::category/products.phtml">
                 <block class="Magento\Catalog\Block\Product\ListProduct" name="category.products.list" as="product_list" template="Magento_Catalog::product/list.phtml">
                     <block name="category.products.list.options" as="product_options"

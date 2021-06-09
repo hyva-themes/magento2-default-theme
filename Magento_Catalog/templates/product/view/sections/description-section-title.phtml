@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Hyvä Themes - https://hyva.io
  * Copyright © Hyvä Themes 2020-present. All rights reserved.
@@ -6,11 +6,17 @@
  * See https://hyva.io/license
  */
 
-/** @var \Magento\Framework\Escaper $escaper */
-/** @var \Hyva\Theme\Model\ViewModelRegistry $viewModels */
-/** @var \Hyva\Theme\ViewModel\ProductPage $productViewModel */
+declare(strict_types=1);
 
-$productViewModel = $viewModels->require(\Hyva\Theme\ViewModel\ProductPage::class);
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+/** @var ProductPage $productViewModel */
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\ProductPage;
+use Magento\Framework\Escaper;
+
+$productViewModel = $viewModels->require(ProductPage::class);
 $product = $productViewModel->getProduct();
 
 ?>

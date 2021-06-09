@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Hyvä Themes - https://hyva.io
  * Copyright © Hyvä Themes 2020-present. All rights reserved.
@@ -6,8 +6,13 @@
  * See https://hyva.io/license
  */
 
-/** @var \Magento\Catalog\Block\Product\View\Details $block */
-/** @var \Magento\Framework\Escaper $escaper */
+declare(strict_types=1);
+
+/** @var Details $block */
+/** @var Escaper $escaper */
+
+use Magento\Catalog\Block\Product\View\Details;
+use Magento\Framework\Escaper;
 
 $titleRenderer = $block->getChildBlock('product.section.title.renderer');
 $defaultTitleTemplate = $titleRenderer->getTemplate();
@@ -20,12 +25,10 @@ foreach ($block->getGroupSortedChildNames('detailed_info', '') as $sectionName) 
     $sectionHtml  = $sectionBlock->toHtml();
     $titleTemplate = $sectionBlock->getData('title_template') ?? $defaultTitleTemplate;
 
-    if (empty($sectionHtml)) {
+    if (empty(trim($sectionHtml))) {
         continue;
     }
-
     ?>
-
     <section id="<?= $escaper->escapeHtmlAttr($sectionBlock->getNameInLayout()) ?>">
         <?=
             $titleRenderer->setTemplate($titleTemplate)
@@ -33,9 +36,8 @@ foreach ($block->getGroupSortedChildNames('detailed_info', '') as $sectionName) 
                           ->toHtml()
         ?>
         <div class="card w-full">
-            <?= $sectionHtml ?>
+            <?= /** @noEscape  */ $sectionHtml ?>
         </div>
     </section>
-
 <?php } ?>
 </div>
