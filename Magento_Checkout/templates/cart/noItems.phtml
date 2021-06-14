@@ -20,7 +20,7 @@ use Magento\Framework\Escaper;
         <p><?= $escaper->escapeHtml(
             __(
                 'Click <a href="%1">here</a> to continue shopping.',
-                $escaper->escapeUrl('')
+                $escaper->escapeUrl($block->getUrl())
             ),
             ['a']
         ) ?>
