@@ -27,7 +27,7 @@ $catalogOutputHelper = $this->helper(CatalogOutputHelper::class);
 /** @var Magento\Catalog\Model\Product $product */
 $product = $block->getProduct();
 
-if (!$productId = $product->getId()) {
+if (!$product->getId()) {
     return '';
 }
 ?>
@@ -57,12 +57,11 @@ if (!$productId = $product->getId()) {
         <div class="mt-2 mb-1 items-center justify-center text-primary text-sm font-semibold text-lg text-center">
             <a class="product-item-link"
                href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>">
-                <?= /* @noEscape */
-                $catalogOutputHelper->productAttribute($product, $product->getName(), 'name') ?>
+                <?= $escaper->escapeHtml($product->getName()) ?>
             </a>
         </div>
     </div>
-    <div class="product-sku text-center"><?= /* @noEscape */$product->getSku() ?></div>
-    <div class="product-description "><?= /* @noEscape */$product->getShortDescription() ?></div>
+    <div class="product-sku text-center"><?= $escaper->escapeHtml($product->getSku()) ?></div>
+    <div class="product-description "><?= /* @noEscape */ $product->getShortDescription() ?></div>
 
 </div>
