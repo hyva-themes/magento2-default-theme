@@ -191,7 +191,7 @@ $displayPriceExclTax = $viewModelItemOutput->isItemPriceExclTax();
                         <p class="lg:hidden text-right md:text-left mr-2">
                             <?= $escaper->escapeHtml(__('Qty')) ?>
                         </p>
-                        <div class="block text-left flex items-center">
+                        <label class="block text-left flex items-center">
                             <input type="number"
                                 :name="'qty' + item.id"
                                 x-model.number="item.quantity"
@@ -201,7 +201,7 @@ $displayPriceExclTax = $viewModelItemOutput->isItemPriceExclTax();
                                 min="1"
                                 x-on:input.debounce.1000="mutateItemQty(item.id, $event.target.value);"
                             />
-                        </div>
+                        </label>
                     </div>
                     <div class="lg:text-center">
                         <p class="text-sm underline lg:mt-3 cursor-pointer" x-on:click="mutateItemRemove(item.id)"
