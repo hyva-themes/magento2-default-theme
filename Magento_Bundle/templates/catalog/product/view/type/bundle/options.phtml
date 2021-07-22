@@ -188,40 +188,44 @@ $finalPrice = $productPriceViewModel->getPriceValue(BasePrice::PRICE_CODE, $prod
                                 )
                             );
                         },
-                        getQtyValue(optionId, defaultQty, optionConfig, activeSelectOptions) {
-                            const activeSelectOption = activeSelectOptions[optionId];
-                            if (!activeSelectOption || !activeSelectOption.length) {
-                                return defaultQty;
-                            }
-                            const selectionConfig = optionConfig
-                                .options[optionId]
-                                .selections[activeSelectOption[0]];
+                        getQtyValue(optionId) {
+                            const selectionConfig = this.getSelectionOptionConfig(optionId);
 
                             return selectionConfig ? selectionConfig.qty : "0";
-
                         },
-                        getQtyDisabled(optionId, optionConfig, activeSelectOptions) {
-                            const activeSelectOption = activeSelectOptions[optionId];
-                            if (!activeSelectOption || !activeSelectOption.length) {
+                        getSelectionOptionConfig(optionId) {
+                            const activeSelectOption = this.activeSelectOptions[optionId];
+                            let activeSelectOptionValue = null;
+
+                            if (!activeSelectOption) {
+                                return false;
+                            }
+
+                            if (typeof activeSelectOption == 'object' && activeSelectOption.length) {
+                                activeSelectOptionValue = activeSelectOption[0];
+                            } else {
+                                activeSelectOptionValue = activeSelectOption;
+                            }
+
+                            return this.optionConfig
+                                .options[optionId]
+                                .selections[activeSelectOptionValue];
+                        },
+                        getQtyDisabled(optionId) {
+                            const selectionConfig = this.getSelectionOptionConfig(optionId);
+
+                            if (!selectionConfig) {
                                 return true;
                             }
-                            const selectionConfig = optionConfig
-                                .options[optionId]
-                                .selections[activeSelectOption[0]];
 
                             return !selectionConfig || selectionConfig.customQty === "0";
                         },
-                        setQtyValue(optionId,optionConfig, activeSelectOptions, value) {
-                            const activeSelectOption = activeSelectOptions[optionId];
-                            if (!activeSelectOption || !activeSelectOption.length) {
-                                return;
+                        setQtyValue(optionId, value) {
+                            const selectionConfig = this.getSelectionOptionConfig(optionId);
+                            if(selectionConfig) {
+                                selectionConfig.qty = value;
                             }
-                            const selectionConfig = optionConfig
-                                .options[optionId]
-                                .selections[activeSelectOption[0]];
-
-                            selectionConfig.qty = value;
-                        }
+                        },
                     }
                 }
             </script>

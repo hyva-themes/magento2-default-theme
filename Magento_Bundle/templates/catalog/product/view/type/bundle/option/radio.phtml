@@ -105,12 +105,12 @@ $activeSelectOptions = [];
         type="number"
         min="0"
         value="<?= $escaper->escapeHtmlAttr($defaultQty) ?>"
-        :value="getQtyValue(<?= (int)$optionId ?>, <?= $escaper->escapeHtmlAttr($defaultQty) ?>, optionConfig, activeSelectOptions)"
+            :value="getQtyValue(<?= (int)$optionId ?>)"
         x-on:change="
-            setQtyValue(<?= (int)$optionId ?>,optionConfig, activeSelectOptions, $event.target.value);
+            setQtyValue(<?= (int)$optionId ?>, $event.target.value);
             calculateTotalPrice($dispatch)"
         <?php if (!$canChangeQty): ?> disabled <?php endif; ?>
-            :disabled="getQtyDisabled(<?= (int)$optionId ?>, optionConfig, activeSelectOptions)"
+        :disabled="getQtyDisabled(<?= (int)$optionId ?>)"
     />
 </div>
 
