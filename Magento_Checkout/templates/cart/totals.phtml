@@ -84,15 +84,19 @@ $taxLabelAddition = $viewModelTotalsOutput->getTaxLabelAddition();
         <template x-if="cartData.shipping_addresses">
             <div>
                 <template x-for="item in cartData.shipping_addresses">
-                    <div class="flex md:grid md:grid-cols-3 mx-auto w-10/12 md:w-full">
-                        <div class="w-7/12 md:w-auto text-left md:text-right md:p-2 md:col-span-2">
-                            <?= $escaper->escapeHtml($viewModelTotalsOutput->getShippingLabelAddition()) ?>
-                            <span x-text="item['selected_shipping_method'].carrier_title"></span>
-                            <span x-text="item['selected_shipping_method'].method_title"></span>
-                        </div>
-                        <div class="w-5/12 md:w-auto text-right md:p-2"
-                             x-text="item['selected_shipping_method'].amount && hyva.formatPrice(item['selected_shipping_method'].amount.value) || ''">
-                        </div>
+                    <div>
+                        <template x-if="item['selected_shipping_method']">
+                            <div class="flex md:grid md:grid-cols-3 mx-auto w-10/12 md:w-full">
+                                <div class="w-7/12 md:w-auto text-left md:text-right md:p-2 md:col-span-2">
+                                    <?= $escaper->escapeHtml($viewModelTotalsOutput->getShippingLabelAddition()) ?>
+                                    <span x-text="item['selected_shipping_method'].carrier_title"></span>
+                                    <span x-text="item['selected_shipping_method'].method_title"></span>
+                                </div>
+                                <div class="w-5/12 md:w-auto text-right md:p-2"
+                                    x-text="item['selected_shipping_method'].amount && hyva.formatPrice(item['selected_shipping_method'].amount.value) || ''">
+                                </div>
+                            </div>
+                        </template>
                     </div>
                 </template>
             </div>
