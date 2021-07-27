@@ -23,15 +23,20 @@ $subtotalFieldShowBoth = $viewModelTotalsOutput->getSubtotalFieldDisplayBoth();
 $taxLabelAddition = $viewModelTotalsOutput->getTaxLabelAddition();
 ?>
 <template x-if="cartData.prices && Object.keys(cartData.prices).length">
-    <div class="pt-6">
+    <div class="pt-6 ml-auto w-full xl-w:2/3">
+        <div class="flex pt-6 pb-3 mb-2 border-b-2 border-gray-300 md:flex-row">
+            <h3 class="w-full text-2xl text-center text-gray-900 title-font font-base md:text-left">
+                <?= $escaper->escapeHtml(__('Summary')) ?>
+            </h3>
+        </div>
         <?php if ($subtotalFieldShowBoth): ?>
             <template x-if="cartData.prices['subtotal_excluding_tax']">
-                <div class="flex md:grid md:grid-cols-3 mx-auto w-10/12 md:w-full">
-                    <div class="w-7/12 md:w-auto text-left md:text-right md:p-2 md:col-span-2">
+                <div class="flex flex-col border-b sm:flex-row border-container-darker">
+                    <div class="w-7/12 font-semibold text-left md:w-auto">
                         <?= $escaper->escapeHtml(__('Subtotal')) ?>
                         (<?= $escaper->escapeHtml(__('excl. VAT')) ?>)
                     </div>
-                    <div class="w-5/12 md:w-auto text-right md:p-2"
+                    <div class="w-5/12 text-right md:w-auto"
                          x-text="hyva.formatPrice(
                             cartData.prices['<?= /** @noEscape */ $subtotalFieldShowBoth ?>']['value']
                          )">
@@ -40,41 +45,50 @@ $taxLabelAddition = $viewModelTotalsOutput->getTaxLabelAddition();
             </template>
         <?php endif; ?>
         <template x-if="cartData.prices['subtotal_including_tax']">
-            <div class="flex md:grid md:grid-cols-3 mx-auto w-10/12 md:w-full">
-                <div class="w-7/12 md:w-auto text-left md:text-right md:p-2 md:col-span-2">
+            <div class="flex pb-2 my-2 border-b md:grid md:grid-cols-2 md:w-full border-container">
+                <div class="w-7/12 font-semibold text-left md:w-auto">
                     <?= $escaper->escapeHtml(__('Subtotal')) ?>
                     <?php if ($subtotalFieldShowBoth): ?>
                         (<?= $escaper->escapeHtml(__('incl. VAT')) ?>)
                     <?php endif; ?>
                 </div>
-                <div class="w-5/12 md:w-auto text-right md:p-2"
-                     x-text="hyva.formatPrice(cartData.prices['<?= /** @noEscape */ $subtotalField ?>']['value'])"></div>
+                <div class="w-5/12 text-right md:w-auto"
+                     x-text="hyva.formatPrice(cartData.prices['<?= /** @noEscape */ $subtotalField ?>']['value'])">
+                </div>
             </div>
         </template>
         <template x-if="cartData.prices['discounts']">
             <div>
-            <template x-for="item in cartData.prices['discounts']">
-            <div class="flex md:grid md:grid-cols-3 mx-auto w-10/12 md:w-full">
-                <div class="w-7/12 md:w-auto text-left md:text-right md:p-2 md:col-span-2">
-                    <?= $escaper->escapeHtml(__('Discount')) ?>
+                <div class="flex pb-2 my-2 border-b md:grid md:grid-cols-2 md:w-full border-container">
+                    <div class="w-7/12 font-semibold text-left md:w-auto">
+                        <?= $escaper->escapeHtml(__('Coupons/Discounts')) ?>
+                    </div>
                 </div>
-                <div class="w-5/12 md:w-auto text-right md:p-2">
-                    -<span x-text="hyva.formatPrice(item['amount']['value'])"></span>
-                </div>
-            </div>
-            </template>
-                </div>
-        </template>
-        <template x-if="cartData.prices['applied_taxes']">
-            <div>
-                <template x-for="item in cartData.prices['applied_taxes']">
-                    <div class="flex md:grid md:grid-cols-3 mx-auto w-10/12 md:w-full">
-                        <div class="w-7/12 md:w-auto text-left md:text-right md:p-2 md:col-span-2">
-                            <?= $escaper->escapeHtml($viewModelTotalsOutput->getTaxLabelAddition()) ?>
-                            <?= $escaper->escapeHtml(__('VAT')) ?>
+                <template x-for="item in cartData.prices['discounts']">
+                    <div class="flex pb-2 my-2 border-b md:grid md:grid-cols-2 md:w-full border-container">
+                        <div class="w-7/12 text-left md:w-auto ml-4">
                             <span x-text="item.label"></span>
                         </div>
-                        <div class="w-5/12 md:w-auto text-right md:p-2"
+                        <div class="w-5/12 text-right md:w-auto">
+                            -<span x-text="hyva.formatPrice(item.amount.value)"></span>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </template>
+        <template x-if="cartData.prices['applied_taxes'] && cartData.prices['applied_taxes'].length">
+            <div>
+                <div class="flex pb-2 my-2 border-b md:grid md:grid-cols-2 md:w-full border-container">
+                    <div class="w-7/12 font-semibold text-left md:w-auto">
+                        <?= $escaper->escapeHtml(__('Tax')) ?>
+                    </div>
+                </div>
+                <template x-for="item in cartData.prices['applied_taxes']">
+                    <div class="flex pb-2 my-2 mx-auto border-b md:grid md:grid-cols-2 md:w-full border-container">
+                        <div class="w-7/12 text-left md:w-auto ml-4">
+                            <span x-text="item.label"></span>
+                        </div>
+                        <div class="w-5/12 text-right md:w-auto"
                              x-text="hyva.formatPrice(item.amount.value)">
                         </div>
                     </div>
@@ -85,15 +99,19 @@ $taxLabelAddition = $viewModelTotalsOutput->getTaxLabelAddition();
             <div>
                 <template x-for="item in cartData.shipping_addresses">
                     <div>
+                        <div class="flex pb-2 my-2 mx-auto border-b md:grid md:grid-cols-2 md:w-full border-container">
+                            <div class="w-7/12 font-semibold text-left md:w-auto">
+                                <?= $escaper->escapeHtml(__("Shipping")) ?>
+                            </div>
+                        </div>
                         <template x-if="item['selected_shipping_method']">
-                            <div class="flex md:grid md:grid-cols-3 mx-auto w-10/12 md:w-full">
-                                <div class="w-7/12 md:w-auto text-left md:text-right md:p-2 md:col-span-2">
-                                    <?= $escaper->escapeHtml($viewModelTotalsOutput->getShippingLabelAddition()) ?>
-                                    <span x-text="item['selected_shipping_method'].carrier_title"></span>
-                                    <span x-text="item['selected_shipping_method'].method_title"></span>
+                            <div class="flex pb-2 my-2 border-b md:grid md:grid-cols-2 md:w-full border-container">
+                                <div class="w-7/12 text-left md:w-auto ml-4">
+                                    <span x-text="item['selected_shipping_method'].carrier_title || ''"></span> -
+                                    <span x-text="item['selected_shipping_method'].method_title || ''"></span>
                                 </div>
-                                <div class="w-5/12 md:w-auto text-right md:p-2"
-                                    x-text="item['selected_shipping_method'].amount && hyva.formatPrice(item['selected_shipping_method'].amount.value) || ''">
+                                <div class="w-5/12 text-right md:w-auto"
+                                     x-text="hyva.formatPrice(item['selected_shipping_method'].amount.value) || ''">
                                 </div>
                             </div>
                         </template>
@@ -102,11 +120,11 @@ $taxLabelAddition = $viewModelTotalsOutput->getTaxLabelAddition();
             </div>
         </template>
         <template x-if="cartData.prices['grand_total']">
-            <div class="flex md:grid md:grid-cols-3 mx-auto w-10/12 md:w-full pt-6 mb-12 text-xl">
-                <div class="w-7/12 md:w-auto text-left md:text-right md:p-2 md:col-span-2">
+            <div class="flex py-2 pt-6 my-2 mx-auto mb-12 text-2xl md:grid md:grid-cols-2 md:w-full">
+                <div class="w-7/12 font-semibold text-left md:w-auto">
                     <?= $escaper->escapeHtml(__('Grand Total')) ?>
                 </div>
-                <div class="w-5/12 md:w-auto text-right md:p-2"
+                <div class="w-5/12 text-right md:w-auto"
                      x-text="hyva.formatPrice(cartData.prices['grand_total']['value'])">
                 </div>
             </div>

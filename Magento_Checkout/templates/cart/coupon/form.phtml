@@ -17,11 +17,13 @@ use Magento\Framework\View\Element\Template;
 <template x-if="cartData.items && cartData.items.length">
     <div class="coupon-form pt-6">
         <div class="mx-auto md:mx-0">
-            <div class="text-center md:text-left"><span @click="showCouponForm = !showCouponForm"
-                       class="cursor-pointer text-primary-lighter select-none whitespace-nowrap">
-                    <span class="underline"><?= $escaper->escapeHtml(
-                        __('Apply Coupon Code')
-                    ) ?></span>
+            <div class="text-left">
+                <span @click="showCouponForm = !showCouponForm"
+                      class="cursor-pointer text-primary-lighter select-none whitespace-nowrap"
+                >
+                    <span class="underline">
+                        <?= $escaper->escapeHtml(__('Apply Discount')) ?>
+                    </span>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="w-4 h-4 inline-block ml-2"
                          viewBox="0 0 24 24" stroke="currentColor">
                         <path x-show="!showCouponForm" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -34,14 +36,15 @@ use Magento\Framework\View\Element\Template;
             </div>
             <div>
                 <form id="discount-coupon-form"
-                      class="block mt-4"
+                      class="block my-4 card"
                       x-show="showCouponForm"
                       x-on:submit.prevent="dispatchCouponMutationRequest();"
                       action=""
-                      method="post">
+                      method="post"
+                >
                     <div class="fieldset coupon">
                         <input type="hidden" name="remove" id="remove-coupon" value="0"/>
-                        <div class="flex flex-row gap-x-2 justify-center md:justify-start">
+                        <div class="flex flex-col sm:flex-row gap-2 justify-center md:justify-start">
                             <input type="text"
                                    class="form-input text-center md:text-left border-background-dark"
                                    id="coupon_code"
@@ -49,16 +52,16 @@ use Magento\Framework\View\Element\Template;
                                    value=""
                                    :placeholder="cartData.applied_coupons ?
                                     cartData.applied_coupons[0]['code'] :
-                                    '<?= $escaper->escapeHtmlAttr(__('Coupon Code')) ?>'"
+                                    '<?= $escaper->escapeHtmlAttr(__('Enter discount code')) ?>'"
                                    :disabled="cartData.applied_coupons"
                             />
-                                <button class="btn btn-primary md:text-sm lg:text-base" type="submit"
+                                <button class="btn btn-primary md:text-sm lg:text-base justify-center" type="submit"
                                         value="<?= $escaper->escapeHtmlAttr(__('Apply Coupon Code')) ?>">
                                     <span x-show="!cartData.applied_coupons">
-                                        <?= $escaper->escapeHtml(__('Apply Coupon Code')) ?>
+                                        <?= $escaper->escapeHtml(__('Apply Discount')) ?>
                                     </span>
                                     <span x-show="cartData.applied_coupons">
-                                        <?= $escaper->escapeHtml(__('Remove Coupon Code')) ?>
+                                        <?= $escaper->escapeHtml(__('Cancel Coupon')) ?>
                                     </span>
                                 </button>
                         </div>
