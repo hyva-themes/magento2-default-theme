@@ -16,6 +16,7 @@ use Magento\Framework\Escaper;
 
 // phpcs:disable Magento2.Security.IncludeFile.FoundIncludeFile
 // phpcs:disable PSR2.Methods.FunctionCallSignature.SpaceBeforeOpenBracket
+// phpcs:disable Generic.Files.LineLength.TooLong
 
 $uniqueId = '_' . uniqid();
 $additionalOptions = ['page' => 'p'];
@@ -114,6 +115,7 @@ $additionalOptions = ['page' => 'p'];
             lg:grid-cols-8  grid-flow-row gap-2 items-center">
         <?php if ($block->isExpanded()):?>
             <?php include ($block->getTemplateFile('Magento_Catalog::product/list/toolbar/viewmode.phtml')) ?>
+            <?php include ($block->getTemplateFile('Magento_Catalog::product/list/toolbar/sorter.phtml')) ?>
         <?php endif; ?>
 
         <?php include ($block->getTemplateFile('Magento_Catalog::product/list/toolbar/amount.phtml')) ?>
@@ -122,8 +124,5 @@ $additionalOptions = ['page' => 'p'];
 
         <?php include ($block->getTemplateFile('Magento_Catalog::product/list/toolbar/limiter.phtml')) ?>
 
-        <?php if ($block->isExpanded()): ?>
-            <?php include ($block->getTemplateFile('Magento_Catalog::product/list/toolbar/sorter.phtml')) ?>
-        <?php endif; ?>
     </div>
 <?php endif ?>
