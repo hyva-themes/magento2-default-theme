@@ -38,6 +38,7 @@
                     <action method="setToolbarBlockName">
                         <argument name="name" xsi:type="string">product_list_toolbar</argument>
                     </action>
+                    <container name="category.product.list.additional" as="additional" label="Additional Info" after="product_list_toolbar">
                 </block>
             </block>
 
