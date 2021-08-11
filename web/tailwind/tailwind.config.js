@@ -105,7 +105,8 @@ module.exports = {
             borderWidth: ['last', 'hover', 'focus'],
             margin: ['last'],
             opacity: ['disabled'],
-            backgroundColor: ['even', 'odd']
+            backgroundColor: ['even', 'odd'],
+            ringWidth: ['active']
         }
     },
     plugins: [

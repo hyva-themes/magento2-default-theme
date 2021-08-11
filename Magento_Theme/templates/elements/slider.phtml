@@ -307,7 +307,7 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
                     </h3>
                 </div>
             <?php endif; ?>
-            <div class="relative w-full overflow-x-hidden">
+            <div class="relative w-full overflow-x-hidden focus-within:ring-1 active:ring-0 ring-blue-500 ring-opacity-50">
                 <div class="relative flex flex-nowrap w-full overflow-auto transition-all js_slides snap"
                      @scroll.debounce="calcActive"
                 >
@@ -387,6 +387,7 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
                 <div class="flex items-center justify-center flex-1 p-4" x-cloak>
                     <button
                         aria-label="<?= $escaper->escapeHtml(__('Previous')) ?>"
+                        tabindex="-1"
                         class="w-8 h-8 mx-4 text-black rounded-full outline-none focus:outline-none"
                         :class="{ 'invisible' : active === 0 }"
                         @click="getSlider().scrollLeft =
@@ -395,6 +396,7 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
                     </button>
                     <template x-for="(product, index) in products" :key="index">
                         <span class="flex-shrink-0 block w-3 h-3 mx-1 bg-black bg-opacity-25 rounded-full shadow cursor-pointer"
+                              tabindex="-1"
                               :class="{
                                     'bg-opacity-100': active === index,
                                     'hidden': (pageSize !== 1 && !!(index % pageSize))
@@ -405,6 +407,7 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
                     </template>
                     <button
                         aria-label="<?= $escaper->escapeHtml(__('Next')) ?>"
+                        tabindex="-1"
                         class="w-8 h-8 mx-4 text-black rounded-full outline-none focus:outline-none"
                         :class="{ 'invisible' : active >= products.length-pageSize }"
                         @click="getSlider().scrollLeft =
