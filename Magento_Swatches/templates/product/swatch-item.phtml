@@ -13,6 +13,8 @@ use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 use Magento\Swatches\ViewModel\Product\Renderer\Configurable as ConfigurableViewModel;
 
+// phpcs:disable Generic.Files.LineLength.TooLong
+
 /** @var Template $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
@@ -34,18 +36,19 @@ if (!$productId || !$attributeId) {
             :for="'attribute-option-<?= (int) $productId ?>-'+item.id"
             class="swatch-option relative border-2 shadow-sm cursor-pointer select-none bg-container-lighter"
             :class="{
-                                                        'border-container-lighter ring ring-primary ring-opacity-50':
-                                                            (selectedValues[<?= (int)$attributeId ?>] === item.id),
-                                                        'border-container-darker':
-                                                            (selectedValues[<?= (int)$attributeId ?>] !== item.id),
-                                                        'w-6 h-6' : !isTextSwatch(<?= (int) $attributeId ?>, item.id),
-                                                     }"
+                'border-container-lighter ring ring-primary ring-opacity-50':
+                    (selectedValues[<?= (int)$attributeId ?>] === item.id),
+                'border-container-darker':
+                    (selectedValues[<?= (int)$attributeId ?>] !== item.id),
+                'w-6 h-6' : !isTextSwatch(<?= (int) $attributeId ?>, item.id),
+                'border-container-lighter ring ring-primary ring-opacity-75' : focusedLabel === item.id
+            }"
             :style="getSwatchBackgroundStyle('<?= (int) $attributeId ?>',item.id)"
             <?php if ($configurableViewModel->getShowSwatchTooltip()): ?>
                 @mouseenter.self="activeTooltipItem = {
-                                                        attribute: '<?= (int) $attributeId ?>',
-                                                        item: item.id
-                                                    }; tooltipPositionElement = $event.target;"
+                    attribute: '<?= (int) $attributeId ?>',
+                    item: item.id
+                }; tooltipPositionElement = $event.target;"
                 @mouseleave.self="activeTooltipItem = false"
             <?php endif; ?>
         >
@@ -56,6 +59,8 @@ if (!$productId || !$attributeId) {
                 type="radio"
                 class="inline-block absolute p-0 border-0 focus:border-0 focus:ring-0"
                 style="z-index:-1"
+                x-on:focus="focusLabel(item.id)"
+                x-on:blur="blurLabel()"
                 x-on:change="changeOption(<?= (int) $attributeId ?>, event.target.value)"
                 :checked="selectedValues[<?= (int) $attributeId ?>] === item.id"
                 :required="getAllowedAttributeOptions(<?= (int) $attributeId ?>).filter(

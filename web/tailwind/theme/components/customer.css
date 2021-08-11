@@ -16,13 +16,7 @@
 
 
 .actions-toolbar .primary button {
-    @apply btn;
-
-    @apply bg-primary border border-primary-darker text-white;
-
-    &:hover {
-        @apply bg-primary-darker border border-primary text-white;
-    }
+    @apply btn btn-primary;
 }
 
 .actions-toolbar a.back {

@@ -36,5 +36,12 @@ $helper = $this->helper(SearchHelper::class);
                class="w-full p-2 text-lg leading-normal transition appearance-none text-grey-800
                 focus:outline-none focus:border-transparent lg:text-xl"
         />
+        <button type="submit"
+                title="<?= $escaper->escapeHtml(__('Search')) ?>"
+                class="action search sr-only"
+                aria-label="Search"
+        >
+            <?= $escaper->escapeHtml(__('Search')) ?>
+        </button>
     </form>
 </div>

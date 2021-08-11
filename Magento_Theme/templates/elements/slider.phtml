@@ -341,13 +341,13 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
                                 </p>
                                 <p class="pt-1 text-lg text-center text-gray-900"
                                    x-text="hyva.formatPrice(product.price_range.minimum_price.final_price.value)"></p>
-                                <p class="flex flex-wrap gap-2 inline p-3">
+                                <p class="flex flex-wrap gap-2 inline px-1 pt-3">
                                     <a class="justify-center w-auto mr-auto btn btn-primary"
                                        :href="'<?= $escaper->escapeUrl($block->getBaseUrl()) ?>' +
                                             product.url_key + (product.url_suffix || '')">
                                         <span class="inline"><?= $escaper->escapeHtml(__('View Product')) ?></span>
                                     </a>
-                                    <span class="inline-flex gap-2">
+                                    <span class="inline-flex gap-2 ml-auto">
                                         <?php if ($compareViewModel->showInProductList()): ?>
                                             <button @click.prevent="addToCompare(product.id)"
                                                     aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Compare')) ?>"

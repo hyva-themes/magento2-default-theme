@@ -1158,7 +1158,6 @@ select {
   }
 
 .page.messages {
-  position: -webkit-sticky;
   position: sticky;
   z-index: 10;
   top: 0px;
@@ -1437,8 +1436,8 @@ body {
   font-weight: 500;
   font-size: 1rem;
   line-height: 1.5rem;
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
   padding-left: 1rem;
   padding-right: 1rem;
   --tw-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -1465,11 +1464,7 @@ body {
 .btn {
     font-size: 1rem;
 
-    line-height: 1.5rem;
-
-    padding-top: 0.5rem;
-
-    padding-bottom: 0.5rem
+    line-height: 1.5rem
 }
   }
 
@@ -1486,12 +1481,21 @@ body {
     background-color: rgba(75, 85, 99, var(--tw-bg-opacity));
   }
 
+.btn:focus {
+    border-color: transparent;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+    --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+    box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+    --tw-ring-opacity: 1;
+    --tw-ring-color: rgba(30, 64, 175, var(--tw-ring-opacity));
+    --tw-ring-opacity: 0.5;
+  }
+
 .btn-primary {
   --tw-bg-opacity: 1;
   background-color: rgba(29, 78, 216, var(--tw-bg-opacity));
-  --tw-border-opacity: 1;
-  border-color: rgba(30, 64, 175, var(--tw-border-opacity));
-  border-width: 2px;
   --tw-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   --tw-text-opacity: 1;
@@ -1501,8 +1505,6 @@ body {
 .btn-primary:hover {
     --tw-bg-opacity: 1;
     background-color: rgba(37, 99, 235, var(--tw-bg-opacity));
-    --tw-border-opacity: 1;
-    border-color: rgba(29, 78, 216, var(--tw-border-opacity));
     --tw-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
     --tw-text-opacity: 1;
@@ -1529,6 +1531,29 @@ body {
     --tw-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   }
+
+.btn-secondary:focus {
+    border-color: transparent;
+    border-width: 2px;
+  }
+
+.btn-size-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+}
+
+.btn-size-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
 
 body {
   --tw-bg-opacity: 1;
@@ -2820,7 +2845,6 @@ body {
 }
 
 .sticky {
-  position: -webkit-sticky;
   position: sticky;
 }
 
@@ -2909,10 +2933,27 @@ body {
   box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
 }
 
+.focus-within\:ring-1:focus-within {
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+
 .focus\:ring-0:focus {
   --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
   --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(0px + var(--tw-ring-offset-width)) var(--tw-ring-color);
   box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+
+.active\:ring-0:active {
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(0px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+
+.ring-blue-500 {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgba(59, 130, 246, var(--tw-ring-opacity));
 }
 
 .ring-primary {
@@ -2927,6 +2968,10 @@ body {
 
 .ring-opacity-50 {
   --tw-ring-opacity: 0.5;
+}
+
+.ring-opacity-75 {
+  --tw-ring-opacity: 0.75;
 }
 
 .fill-current {
@@ -3268,10 +3313,6 @@ body {
 
 .w-9\/12 {
   width: 75%;
-}
-
-.w-10\/12 {
-  width: 83.333333%;
 }
 
 .w-full {
@@ -3640,8 +3681,8 @@ body {
   font-weight: 500;
   font-size: 1rem;
   line-height: 1.5rem;
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
   padding-left: 1rem;
   padding-right: 1rem;
   --tw-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -3659,7 +3700,7 @@ body {
 
     padding-left: 1.5rem;
 
-    padding-right: 1.5rem
+    padding-right: 1.5rem;
 }
   }
 
@@ -3669,10 +3710,6 @@ body {
     font-size: 1rem;
 
     line-height: 1.5rem;
-
-    padding-top: 0.5rem;
-
-    padding-bottom: 0.5rem
 }
   }
 
@@ -3689,22 +3726,32 @@ body {
     background-color: rgba(75, 85, 99, var(--tw-bg-opacity));
   }
 
+.actions-toolbar .primary button:focus {
+    border-color: transparent;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+    --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+    box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+    --tw-ring-opacity: 1;
+    --tw-ring-color: rgba(30, 64, 175, var(--tw-ring-opacity));
+    --tw-ring-opacity: 0.5;
+  }
+
 .actions-toolbar .primary button {
   --tw-bg-opacity: 1;
   background-color: rgba(29, 78, 216, var(--tw-bg-opacity));
-  --tw-border-opacity: 1;
-  border-color: rgba(30, 64, 175, var(--tw-border-opacity));
-  border-width: 1px;
+  --tw-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   --tw-text-opacity: 1;
   color: rgba(255, 255, 255, var(--tw-text-opacity));
 }
 
 .actions-toolbar .primary button:hover {
     --tw-bg-opacity: 1;
-    background-color: rgba(30, 64, 175, var(--tw-bg-opacity));
-    --tw-border-opacity: 1;
-    border-color: rgba(29, 78, 216, var(--tw-border-opacity));
-    border-width: 1px;
+    background-color: rgba(37, 99, 235, var(--tw-bg-opacity));
+    --tw-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
     --tw-text-opacity: 1;
     color: rgba(255, 255, 255, var(--tw-text-opacity));
   }
@@ -3800,30 +3847,6 @@ form legend + br {
 
 fieldset ~ fieldset {
   margin-top: 2rem;
-}
-
-form select {
-  --tw-bg-opacity: 1;
-  background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
-  --tw-border-opacity: 1;
-  border-color: rgba(29, 78, 216, var(--tw-border-opacity));
-  border-width: 1px;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-left: 0.75rem;
-  padding-right: 2.5rem;
-  width: 100%;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a0aec0'%3e%3cpath d='M15.3 9.3a1 1 0 0 1 1.4 1.4l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 0 1 1.4-1.4l3.3 3.29 3.3-3.3z'/%3e%3c/svg%3e");
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  -webkit-print-color-adjust: exact;
-          color-adjust: exact;
-  background-repeat: no-repeat;
-  font-size: 1rem;
-  line-height: 1.5;
-  background-position: right .5rem center;
-  background-size: 1.5em 1.5em;
 }
 
 @media (min-width: 640px) {
@@ -4116,10 +4139,6 @@ form select {
     margin-right: 1.25rem;
   }
 
-  .md\:p-2 {
-    padding: 0.5rem;
-  }
-
   .md\:py-0 {
     padding-top: 0px;
     padding-bottom: 0px;
@@ -4128,11 +4147,6 @@ form select {
   .md\:px-0 {
     padding-left: 0px;
     padding-right: 0px;
-  }
-
-  .md\:px-2 {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
   }
 
   .md\:py-6 {
@@ -4220,10 +4234,6 @@ form select {
 
   .md\:col-span-1 {
     grid-column: span 1 / span 1;
-  }
-
-  .md\:col-span-2 {
-    grid-column: span 2 / span 2;
   }
 
   .md\:col-span-3 {
@@ -4450,11 +4460,6 @@ form select {
 @media (min-width: 1280px) {
   .xl\:mt-0 {
     margin-top: 0px;
-  }
-
-  .xl\:px-4 {
-    padding-left: 1rem;
-    padding-right: 1rem;
   }
 
   .xl\:w-1\/3 {

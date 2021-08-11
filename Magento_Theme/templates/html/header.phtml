@@ -48,7 +48,7 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
         }
     }
 </script>
-<nav id="header"
+<div id="header"
      class="z-30 w-full border-b shadow bg-container-lighter border-container-lighter"
      x-data="initHeader()"
      @keydown.window.escape="searchOpen = false;"
@@ -96,10 +96,12 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
             </a>
 
             <!--Search Icon-->
-            <a id="menu-search-icon"
-               class="inline-block ml-1 no-underline sm:ml-3 hover:text-black"
-               href="#"
-               @click.prevent="searchOpen = !searchOpen; $nextTick(function () { document.querySelector('#search').select(); });"
+            <button id="menu-search-icon"
+                    class="inline-block ml-1 no-underline sm:ml-3 hover:text-black"
+                    @click.prevent="
+                        searchOpen = !searchOpen;
+                        $nextTick(function () { document.querySelector('#search').select(); });
+                    "
             >
                 <span class="sr-only label">
                     <?= $escaper->escapeHtml(__('Search')) ?>
@@ -110,7 +112,7 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
                     25,
                     25
                 ) ?>
-            </a>
+            </button>
 
             <!--Customer Icon & Dropdown-->
             <?= $block->getChildHtml('customer') ?>
@@ -158,5 +160,5 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
 
     <!--Authentication Pop-Up-->
     <?= $block->getChildHtml('authentication-popup'); ?>
-</nav>
+</div>
 

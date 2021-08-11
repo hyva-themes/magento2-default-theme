@@ -10,16 +10,21 @@ use Magento\Framework\Escaper;
 /** @var Customer $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
+
+/** @var CustomerRegistration $customerRegistration */
+$customerRegistration = $viewModels->require(CustomerRegistration::class);
 ?>
 
 <div x-data="{ open: false }" class="relative inline-block ml-1 sm:ml-3">
-    <button id="customer-menu"
-            type="button"
-            class="block hover:text-black focus:outline-none"
-            @click="open = true"
-            aria-haspopup="true"
-            aria-expanded="true"
-            aria-label="<?= $escaper->escapeHtmlAttr(__('My Account')) ?>"
+    <a
+        href="<?= $escaper->escapeHtmlAttr($escaper->escapeUrl($block->getUrl('customer/account'))) ?>"
+        id="customer-menu"
+        type="button"
+        class="block hover:text-black"
+        @click.prevent="open = true"
+        aria-haspopup="true"
+        aria-expanded="true"
+        aria-label="<?= $escaper->escapeHtmlAttr(__('My Account')) ?>"
     >
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
             class="w-8 h-8 md:h-6 md:w-6" aria-hidden="true">
@@ -29,8 +34,8 @@ use Magento\Framework\Escaper;
                 0-7 3.141-7 7v1h2v-1c0-2.757 2.243-5 5-5h4c2.757 0 5 2.243 5 5v1H21z">
             </path>
         </svg>
-    </button>
-    <nav class="absolute right-0 z-20 hidden w-40 py-2 mt-2 -mr-4 overflow-auto origin-top-right rounded-sm
+    </a>
+    <nav class="absolute right-0 z-20 hidden w-40 py-2 mt-2 -mr-4 px-1 overflow-auto origin-top-right rounded-sm
         shadow-lg sm:w-48 lg:mt-3 bg-container-lighter"
          :class="{ 'hidden' : !open }"
          @click.away="open = false"
@@ -66,11 +71,7 @@ use Magento\Framework\Escaper;
                href="<?= $escaper->escapeUrl($block->getUrl('customer/account/index')) ?>">
                 <?= $escaper->escapeHtml(__('Sign In')); ?>
             </a>
-            <?php
-            /** @var CustomerRegistration $customerRegistration */
-            $customerRegistration = $viewModels->require(CustomerRegistration::class);
-            if ($customerRegistration->isAllowed()):
-            ?>
+            <?php if ($customerRegistration->isAllowed()): ?>
                 <a class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
                    href="<?= $escaper->escapeUrl($block->getUrl('customer/account/create')) ?>"
                 >

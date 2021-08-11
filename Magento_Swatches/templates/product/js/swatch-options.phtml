@@ -117,6 +117,13 @@ use Magento\Framework\View\Element\Template;
             },
             getTooltipLabel() {
                 return this.getSwatchConfig(this.activeTooltipItem.attribute, this.activeTooltipItem.item).label
+            },
+            focusedLabel: false,
+            focusLabel(optionId) {
+                this.focusedLabel = optionId;
+            },
+            blurLabel() {
+                this.focusedLabel = false;
             }
         }
     }
