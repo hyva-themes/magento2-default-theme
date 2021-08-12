@@ -9,15 +9,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
     <update handle="1column"/>
-
-    <referenceContainer name="main.content">
-        <container name="main.container.wrap.row" htmlTag="div" htmlClass="row">
-            <container name="main.container.wrap.container" htmlTag="div" htmlClass="container">
-                <container name="main.container.wrap.container.row" htmlTag="div" htmlClass="row"/>
-            </container>
-        </container>
-    </referenceContainer>
-
+    
     <referenceContainer name="main"/>
     <referenceContainer name="columns">
         <container name="div.sidebar.main" htmlTag="div" htmlClass="sidebar sidebar-main" before="main">
@@ -28,5 +20,4 @@
         </container>
     </referenceContainer>
 
-    <move element="columns" destination="main.container.wrap.container.row"/>
 </layout>
