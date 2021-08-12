@@ -25,9 +25,9 @@ $taxLabelAddition = $viewModelTotalsOutput->getTaxLabelAddition();
 <template x-if="cartData.prices && Object.keys(cartData.prices).length">
     <div class="pt-6 ml-auto w-full xl-w:2/3">
         <div class="flex pt-6 pb-3 mb-2 border-b-2 border-gray-300 md:flex-row">
-            <h3 class="w-full text-2xl text-center text-gray-900 title-font font-base md:text-left">
+            <h2 class="w-full text-2xl text-center text-gray-900 title-font font-base md:text-left">
                 <?= $escaper->escapeHtml(__('Summary')) ?>
-            </h3>
+            </h2>
         </div>
         <?php if ($subtotalFieldShowBoth): ?>
             <template x-if="cartData.prices['subtotal_excluding_tax']">
@@ -121,9 +121,9 @@ $taxLabelAddition = $viewModelTotalsOutput->getTaxLabelAddition();
         </template>
         <template x-if="cartData.prices['grand_total']">
             <div class="flex py-2 pt-6 my-2 mx-auto mb-12 text-2xl md:grid md:grid-cols-2 md:w-full">
-                <div class="w-7/12 font-semibold text-left md:w-auto">
+                <h3 class="w-7/12 font-semibold text-left md:w-auto">
                     <?= $escaper->escapeHtml(__('Grand Total')) ?>
-                </div>
+                </h3>
                 <div class="w-5/12 text-right md:w-auto"
                      x-text="hyva.formatPrice(cartData.prices['grand_total']['value'])">
                 </div>
