@@ -56,7 +56,7 @@ $suffix = $block->showSuffix();
                         class="<?= $escaper->escapeHtmlAttr($block->getAttributeValidationClass('prefix')) ?>"
                         <?= $block->isPrefixRequired() ? ' required' : '' ?> >
                     <?php foreach ($block->getPrefixOptions() as $_option): ?>
-                        <option value="<?= $escaper->escapeHtmlAttr($_option) ?> "
+                        <option value="<?= $escaper->escapeHtmlAttr($_option) ?>"
                             <?php if ($block->getObject()->getPrefix() == $_option): ?>
                                 selected="selected"
                             <?php endif; ?>>
