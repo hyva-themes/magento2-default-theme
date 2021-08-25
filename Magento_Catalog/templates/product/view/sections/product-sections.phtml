@@ -21,8 +21,8 @@ $defaultTitleTemplate = $titleRenderer->getTemplate();
 <div class="container grid lg:grid-cols-2 gap-8">
 <?php
 foreach ($block->getGroupSortedChildNames('detailed_info', '') as $sectionName) {
-    $sectionBlock = $block->getLayout()->getBlock($sectionName);
-    $sectionHtml  = (string) $sectionBlock->toHtml();
+    $sectionBlock  = $block->getLayout()->getBlock($sectionName);
+    $sectionHtml   = (string) $sectionBlock->toHtml();
     $titleTemplate = $sectionBlock->getData('title_template') ?? $defaultTitleTemplate;
 
     if (empty(trim($sectionHtml))) {
