@@ -9,37 +9,36 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Magento\Catalog\Block\Product\AbstractProduct;
-use Magento\Catalog\Helper\Output as CatalogOutputHelper;
+use Hyva\Theme\ViewModel\ProductPage;
+use Hyva\Theme\ViewModel\SendFriend;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
 
-// phpcs:disable Magento2.Templates.ThisInTemplate
-// phpcs:disable Generic.Files.LineLength.TooLong
-
-/** @var AbstractProduct $block */
+/** @var Template $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
+/** @var SendFriend $sendFriend */
+/** @var ProductPage $productViewModel */
+$sendFriend = $viewModels->require(SendFriend::class);
+$productViewModel = $viewModels->require(ProductPage::class);
 
-
-/** @var CatalogOutputHelper $catalogOutputHelper */
-$catalogOutputHelper = $this->helper(CatalogOutputHelper::class);
-
-/** @var Magento\Catalog\Model\Product $product */
-$product = $block->getProduct();
-
-if (!$product->getId()) {
+$product = $sendFriend->getProduct();
+if (!$product) {
     return '';
 }
+
+$productImage = $sendFriend->getImage($product);
+$description = $product->getData('short_description');
+
 ?>
 
 <div class="item product product-item card card-interactive">
     <div class="block-title">
-        <h2 class="sm:text-2xl text-xl font-medium title-font mb-4 text-gray-900 pb-2 border-b xl:border-none" role="heading"
-            aria-level="2"><?= $escaper->escapeHtml(__('You are sharing')) ?></h2>
+        <h2 class="sm:text-2xl text-xl font-medium title-font mb-4 text-gray-900 pb-2 border-b xl:border-none"
+            role="heading" aria-level="2"
+        ><?= $escaper->escapeHtml(__('You are sharing')) ?></h2>
     </div>
-    <?php
-    $productImage = $block->getImage($product);
-    ?>
     <div class="flex flex-col flex-grow">
         <a href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>"
            class="product photo product-item-photo block mx-auto mb-3"
@@ -62,6 +61,7 @@ if (!$product->getId()) {
         </div>
     </div>
     <div class="product-sku text-center"><?= $escaper->escapeHtml($product->getSku()) ?></div>
-    <div class="product-description "><?= /* @noEscape */ $product->getShortDescription() ?></div>
-
+    <div class="product-description ">
+        <?= /** @noEscape */ $productViewModel->productAttributeHtml($product, $description, 'short_description') ?>
+    </div>
 </div>
