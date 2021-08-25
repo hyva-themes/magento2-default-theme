@@ -164,6 +164,7 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                                     <div class="control">
                                         <input name="username"
                                                x-ref="customer-email"
+                                               @change="errors = 0"
                                                type="email"
                                                required
                                                class="form-input input-text"
@@ -180,6 +181,7 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                                                class="form-input input-text"
                                                required
                                                x-ref="customer-password"
+                                               @change="errors = 0"
                                         >
                                     </div>
                                 </div>
