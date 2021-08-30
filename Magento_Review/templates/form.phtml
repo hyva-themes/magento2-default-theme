@@ -371,12 +371,16 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                                 '
                             ); ?>
 
+                            function escape(s) {
+                                return s.replace(/\\/, '\\\\').replace('"', '\\"');
+                            }
+
                             var createProductReviewQuery = <?= /** @noEscape */ $createProductReviewQuery ?>
-                                .replace('%nickname', $this.nickname)
-                                .replace('%summary', $this.summary)
-                                .replace('%review', $this.review)
+                                .replace('%nickname', escape($this.nickname))
+                                .replace('%summary',  escape($this.summary))
+                                .replace('%review',   escape($this.review))
                                 .replace('%ratings', Object.keys($this.ratings).map(function (key) {
-                                    return '{ id: "' + btoa(key) + '", value_id: "' + $this.ratings[key] + '" }'
+                                    return '{ id: "' + btoa(key) + '", value_id: "' + escape($this.ratings[key]) + '" }'
                                 }).join(','));
 
                             fetch(`${BASE_URL}graphql`, {
