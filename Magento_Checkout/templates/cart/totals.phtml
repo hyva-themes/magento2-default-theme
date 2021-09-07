@@ -31,7 +31,7 @@ $taxLabelAddition = $viewModelTotalsOutput->getTaxLabelAddition();
         </div>
         <?php if ($subtotalFieldShowBoth): ?>
             <template x-if="cartData.prices['subtotal_excluding_tax']">
-                <div class="flex flex-col border-b sm:flex-row border-container-darker">
+                <div class="flex pb-2 my-2 border-b md:grid md:grid-cols-2 md:w-full border-container">
                     <div class="w-7/12 font-semibold text-left md:w-auto">
                         <?= $escaper->escapeHtml(__('Subtotal')) ?>
                         (<?= $escaper->escapeHtml(__('excl. VAT')) ?>)
