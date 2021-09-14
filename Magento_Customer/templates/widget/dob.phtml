@@ -64,6 +64,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
         <div 
             class="bg-white mt-12 rounded-lg shadow p-3 absolute top-full left-0"
             style="width: 21rem"
+            x-cloak=""
             x-show.transition="showDatepicker"
             @click.away="showDatepicker = false"
         >
