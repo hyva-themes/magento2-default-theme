@@ -25,9 +25,8 @@ $heroIcons = $viewModels->require(HeroiconsOutline::class);
 $addressViewModel = $viewModels->require(AddressViewModel::class);
 ?>
 <div class="field date <?= $block->isRequired() ? 'required' : '' ?>"
-     x-data="DatePicker()"
+     x-data="initDatePicker()"
      x-init="[initDate(), recalcDaysGrid()]"
-     x-cloak
 >
     <label for="<?= $escaper->escapeHtmlAttr($block->getHtmlId()) ?>" class="label">
         <span>
@@ -148,7 +147,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
     </div>
 </div>
 <script>
-    function DatePicker() {
+    function initDatePicker() {
         const format = '<?= $escaper->escapeHtml($block->getDateFormat()) ?>';
         const firstDayOfWeek = '<?= $escaper->escapeHtml($block->getFirstDay()) ?>';
         const labelsConfig = <?= /* @noEscape */ $block->getTranslatedCalendarConfigJson() ?>;
