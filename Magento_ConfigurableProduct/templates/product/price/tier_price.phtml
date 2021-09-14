@@ -55,7 +55,7 @@ $productViewModel = $viewModels->require(ProductPage::class);
                         signDisplay: showSign ? "always" : "auto"
                     }
                 );
-                return (typeof Intl.NumberFormat.prototype.formatToParts) ?
+                return (typeof Intl.NumberFormat.prototype.formatToParts === 'function') ?
                     formatter.formatToParts(value).map(({type, value}) => {
                         switch (type) {
                             case 'currency':
