@@ -61,8 +61,8 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
             <?= /** @noEscape */ $heroIcons->calendarHtml('w-6 h-6', 25, 25); ?>
         </div>
 
-        <div 
-            class="bg-white mt-12 rounded-lg shadow p-3 absolute top-full left-0"
+        <div
+            class="absolute left-0 top-full p-3 mt-12 bg-white rounded-lg shadow"
             style="width: 21rem"
             x-cloak=""
             x-show.transition="showDatepicker"
@@ -73,7 +73,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
                 <div>
                     <select name="datepicker_month"
                         x-model="month"
-                        class="border-gray-300 rounded text-sm"
+                        class="text-sm rounded border-gray-300"
                     >
                         <template x-for="(monthName, index) in labels.monthNames">
                             <option :value="index" x-text="monthName"></option>
@@ -81,7 +81,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
                     </select>
                     <select name="datepicker_year"
                         x-model="year"
-                        class="border-gray-300 rounded text-sm"
+                        class="text-sm rounded border-gray-300"
                     >
                         <template x-for="option in yearRange">
                             <option :value="option" x-text="option"></option>
@@ -89,9 +89,9 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
                     </select>
                 </div>
                 <div>
-                    <button 
+                    <button
                         type="button"
-                        class="transition-colors inline-flex cursor-pointer hover:bg-gray-100 p-1 rounded" 
+                        class="inline-flex p-1 rounded transition-colors cursor-pointer hover:bg-gray-100"
                         :class="{'cursor-not-allowed opacity-25': isFirstMonth()}"
                         :disabled="isFirstMonth()"
                         :title="labels.prevText"
@@ -99,9 +99,9 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
                         <?= /** @noEscape */ $heroIcons->chevronLeftHtml('w-6 h-6', 25, 25); ?>
                         <span class="sr-only" x-text="labels.prevText"></span>
                     </button>
-                    <button 
+                    <button
                         type="button"
-                        class="transition-colors inline-flex cursor-pointer hover:bg-gray-100 p-1 rounded"
+                        class="inline-flex p-1 rounded transition-colors cursor-pointer hover:bg-gray-100"
                         :class="{'cursor-not-allowed opacity-25': isLastMonth() }"
                         :disabled="isLastMonth()"
                         :title="labels.nextText"
@@ -115,7 +115,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
             <div class="grid grid-cols-7 -mx-1">
                 <template x-for="(day, index) in labels.dayNamesShort" :key="index">
                     <div class="p-1">
-                        <div x-text="day" 
+                        <div x-text="day"
                              class="text-gray-800 font-medium text-center text-xs h-6 flex items-center
                                 justify-center"
                         ></div>
@@ -129,7 +129,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
                             @click="if (canSelectDate(date)) { setDate(date) }"
                             x-text="date"
                             class="text-center text-sm rounded-full transition-colors
-                                flex items-center justify-center h-8 "
+                                flex items-center justify-center h-8"
                             :class="{
                                 'cursor-pointer hover:bg-gray-100 hover:text-black': canSelectDate(date),
                                 'bg-primary text-white': isToday(date),
@@ -140,7 +140,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
                 </template>
             </div>
 
-            <button class="w-full text-center border border-gray-300 rounded p-2 text-sm hover:bg-gray-100"
+            <button class="p-2 w-full text-sm text-center rounded border border-gray-300 hover:bg-gray-100"
                 x-text="labels.currentText"
                 @click.prevent="goToday()"
             ></button>
@@ -180,7 +180,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
 
                 for (let year = thisYear; year >= minimalYear; year--) {
                     range.unshift(year);
-                };
+                }
 
                 this.yearRange = range;
             },
@@ -202,7 +202,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
                 const today = new Date();
                 const d = new Date(this.year, this.month, date);
 
-                return today.toDateString() === d.toDateString() ? true : false;
+                return today.toDateString() === d.toDateString();
             },
 
             setDate(date) {
@@ -227,7 +227,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
             getDayStyle(day) {
                 const firstDayInWeek = this.correctDayOfWeek(new Date(this.year, this.month).getDay());
 
-                if (day == 1) {
+                if (day.toString() === "1") {
                     return `grid-column-start: ${firstDayInWeek + 1}`;
                 }
 
@@ -262,18 +262,18 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
             isInFuture(date) {
                 const today = new Date();
 
-                return this.year == today.getFullYear() &&
-                    this.month == today.getMonth() &&
+                return this.year === today.getFullYear() &&
+                    this.month === today.getMonth() &&
                     date > today.getDate()
             },
 
             isFirstMonth() {
-                return this.year == this.yearRange[0] && this.month == 0;
+                return this.year === this.yearRange[0] && this.month === 0;
             },
 
             isLastMonth() {
-                return this.year == this.yearRange[this.yearRange.length - 1] &&
-                    this.month == this.today.getMonth()
+                return this.year === this.yearRange[this.yearRange.length - 1] &&
+                    this.month === this.today.getMonth()
             },
 
             canSelectDate(date) {
