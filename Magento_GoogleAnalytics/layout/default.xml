@@ -3,8 +3,8 @@
     <body>
 <!--
 /**
-  * enable head.additional and disable before.body.end if you want GA to be loaded in the head of the page
-  * This does come with a performance penalty
+  * Enable head.additional and disable before.body.end if you want GA to be loaded in the head of the page.
+  * This does come with a performance penalty.
   */
 -->
 <!--

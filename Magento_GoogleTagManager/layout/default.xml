@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="google_analytics" remove="true" />
+<!--
+/**
+  * Enable head.additional and disable before.body.end if you want GA to be loaded in the head of the page.
+  * This does come with a performance penalty.
+  */
+-->
+<!--
+        <referenceContainer name="head.additional">
+            <block class="Magento\GoogleTagManager\Block\Ga" name="google_analyticsuniversal" as="google_analyticsuniversal"
+                   template="Magento_GoogleTagManager::ga.phtml" />
+        </referenceContainer>
+-->
+        <referenceContainer name="head.additional">
+            <block class="Magento\GoogleTagManager\Block\Ga" name="google_analyticsuniversal" as="google_analyticsuniversal"
+                   template="Magento_GoogleTagManager::ga.phtml" />
+        </referenceContainer>
+    </body>
+</page>
