@@ -6,7 +6,81 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.7...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.8...main
+
+## [1.1.8] - 2021-09-24
+
+[1.1.8]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.7...1.1.8
+
+### Added
+
+- **Add estimate shipping form to cart page**
+
+  More details can be found via the [issue #147](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/147).
+
+- **Add customer account update email checkbox**
+
+  The customer account edit form was previously missing this checkbox.
+
+  Thank you to Josh Cairney @ Swarming Technology (@joshcairney) for the contribution.
+
+- **Add container on cart page for custom product type options**
+
+  This container allows rendering additional options for cart line items.  
+  More details can be found in the [commit 029d2b](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/commit/029d2b4ff46675feccf3038790485a2b8d593f2c).
+
+- **Add Date-of-Birth form field template with datepicker**
+
+  Thanks to Alex Galdin @ integer_net (@alexgaldin) for the contribution!
+
+- **Add additional information container to cart page**
+
+  The container is rendered below the coupon form field on the cart page.
+  More details can be found in the [commit 097918](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/commit/097918837faa6f3faeecb744123d1c166e32adcb).
+
+- **Add container to totals on cart page to render custom totals**
+
+  The container is rendered below the existing totals but before the grand total.
+  More details can be found in the [commit 58f447](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/commit/58f4475a4bff85315cd8ef26e8e86fb4e04038e9).
+
+
+### Changed
+
+- **Bugfix: Escape product review gql mutation payload values**
+
+  More information about this backward compatible change can be found in the
+  [commit ff9095](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/commit/ff9095ed535a64c8861de82400a14e000adf102a)
+
+- **Bugfix: Fix issues with old Safari browser**
+
+  Details on backward compatible change can be found in the [merge request #261](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/261)
+
+  Thank you to Guus Portegies @ Cees en Co (@gjportegies) for the contribution!
+
+- **Bugfix: Make Google Analytics compatible with Magento_GoogleTagManager**
+
+  Previously Google Analytics revenue data was not collected on the frontend order success page on Adobe Commerce.
+
+  Thanks to Jesse de Boer @ Elgentos (@jesse) for investigating!
+
+- **Bugfix: Align subtotal excl. tax value on cart page to the right like the other total modals**
+
+- **Split mobile and desktop menu into separate .phtml files**
+
+  Decoupling the two makes customizing one of the views possible without influencing the other menu.  
+  The change is backward compatible.
+
+- **Update TailwindCSS to the latest version**
+
+  The version constraint in the package.json is now set to `2.2.9`.  
+  This is a backward compatible change.
+
+### Removed
+
+- **Removed topmenu_static.phtml template**
+
+  The template is now part of the hyva-ui repository.
+
 
 ## [1.1.7] - 2021-08-25
 
