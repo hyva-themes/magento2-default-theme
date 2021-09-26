@@ -82,6 +82,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   The version constraint in the package.json is now set to `2.2.9`.  
   This is a backward compatible change.
 
+- **Apply Logo Dimensions set in the Adminhtml Theme Configuration**
+
+  Previously the logo height and width set in the admin theme config where not applied.
+  As long as there is no size configured on the theme, the previous dimensions set in layout XML are still used.
+
+  More details can be found in the [issue #221](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/221).
+
 ### Removed
 
 - **Removed topmenu_static.phtml template**
