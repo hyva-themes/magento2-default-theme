@@ -13,7 +13,7 @@
     <referenceBlock name="sales.order.info.links" remove="true"/>
     <referenceBlock name="logo">
         <arguments>
-            <argument name="logoPathResolver" xsi:type="object">Magento\Sales\ViewModel\Header\LogoPathResolver</argument>
+            <argument name="logoPathResolver" xsi:type="object">Hyva\Theme\ViewModel\Logo\SalesLogoPathResolver</argument>
         </arguments>
     </referenceBlock>
 </page>

@@ -39,7 +39,7 @@
             <block name="header-content" template="Magento_Theme::html/header.phtml">
                 <block class="Magento\Theme\Block\Html\Header\Logo" name="logo">
                     <arguments>
-                        <argument name="logoPathResolver" xsi:type="object">Magento\Theme\ViewModel\Block\Html\Header\LogoPathResolver</argument>
+                        <argument name="logoPathResolver" xsi:type="object">Hyva\Theme\ViewModel\Logo\LogoPathResolver</argument>
                         <!-- These values are used if no width or height is set in the adminhtml theme configuration -->
                         <argument name="logo_width" xsi:type="number">189</argument>
                         <argument name="logo_height" xsi:type="number">64</argument>

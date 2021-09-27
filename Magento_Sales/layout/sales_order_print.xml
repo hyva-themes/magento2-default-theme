@@ -11,12 +11,14 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="sales_order_view"/>
     <update handle="print"/>
-    <referenceBlock name="sales.order.buttons" remove="true"/>
-    <referenceBlock name="sales.order.info.links" remove="true"/>
-    <referenceBlock name="logo">
-        <arguments>
-            <argument name="logoPathResolver" xsi:type="object">Magento\Sales\ViewModel\Header\LogoPathResolver</argument>
-        </arguments>
-    </referenceBlock>
-    <referenceBlock name="sales_order_item_pager" remove="true"/>
+    <body>
+        <referenceBlock name="sales.order.buttons" remove="true"/>
+        <referenceBlock name="sales.order.info.links" remove="true"/>
+        <referenceBlock name="logo">
+            <arguments>
+                <argument name="logoPathResolver" xsi:type="object">Hyva\Theme\ViewModel\Logo\SalesLogoPathResolver</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="sales_order_item_pager" remove="true"/>
+    </body>
 </page>
