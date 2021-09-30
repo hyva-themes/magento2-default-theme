@@ -99,10 +99,6 @@
 
                         <block name="product.info.addtocompare"  template="Magento_Catalog::product/view/addtocompare.phtml"/>
 
-                        <block name="product.info.emailtofriend"
-                               template="Magento_Catalog::product/view/emailtofriend.phtml"
-                        />
-
                         <block name="product.info.stockstatus"  template="Magento_Catalog::product/view/stock-status.phtml"/>
 
                         <block class="Magento\Catalog\Block\Product\Price"
