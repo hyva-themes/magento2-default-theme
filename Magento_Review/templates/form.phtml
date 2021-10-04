@@ -372,7 +372,7 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                             ); ?>
 
                             function escape(s) {
-                                return s.replace(/\\/, '\\\\').replace('"', '\\"');
+                                return s.replace(/\\/g, '\\\\').replaceAll('"', '\\"');
                             }
 
                             var createProductReviewQuery = <?= /** @noEscape */ $createProductReviewQuery ?>
