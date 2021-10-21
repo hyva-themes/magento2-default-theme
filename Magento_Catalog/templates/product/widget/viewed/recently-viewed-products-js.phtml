@@ -9,6 +9,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Currency;
 use Hyva\Theme\ViewModel\Store;
 use Hyva\Theme\ViewModel\ProductPage;
 use Magento\Framework\Escaper;
@@ -31,10 +32,13 @@ use Magento\Framework\View\Element\Template;
 
 /** @var ProductPage $viewModelProducts */
 $viewModelProducts = $viewModels->require(ProductPage::class);
-$currentProductSku = $viewModelProducts->getProduct() ? $viewModelProducts->getProduct()->getSku() : 'false';
+$currentProductSku = $viewModelProducts->getProduct() ? $viewModelProducts->getProduct()->getSku() : '';
 
 /** @var Store $viewModelStore */
 $viewModelStore = $viewModels->require(Store::class);
+
+/** @var Currency $viewModelCurrency */
+$viewModelCurrency = $viewModels->require(Currency::class);
 
 $title = $title ?? __('Recently Viewed Products');
 
@@ -50,71 +54,52 @@ $title = $title ?? __('Recently Viewed Products');
         const config = Object.assign({}, defaultOptions, options || {});
 
 
-        const refreshLocalStorageData = function(){
-            /***
-             * Remove expired products in the local storage
-             ***/
-            if(localStorage.getItem('recently_viewed_skus')){
-
-                let updatedLocalStorageData = '';
-                const recentlyViewedSkusArray = localStorage.getItem('recently_viewed_skus').split(",");
-
-                recentlyViewedSkusArray.forEach(function myFunction(skuData,key){
-                    // split each product's sku and expiry data
-                    const tempSplitArray  = skuData.split(" ");
-                    if(tempSplitArray[1] > Date.now()){
-                        updatedLocalStorageData +=  ',' + tempSplitArray[0] + ' ' + tempSplitArray[1];
-                    }
-                });
-                updatedLocalStorageData = updatedLocalStorageData.replace(/[,]/, '');
-                localStorage.removeItem('recently_viewed_skus');
-                localStorage.setItem('recently_viewed_skus', updatedLocalStorageData);
-            }
+        function writeRecentlyViewedToStorage(data) {
+            hyva.getBrowserStorage().setItem('recently_viewed_products', JSON.stringify(data));
         }
-        const putDataInLocalStorage = function(data){
 
-            const localStorageDataToPut = data['current_product_sku'] + ' ' + data['expiry'];
-            if(!localStorage.getItem('recently_viewed_skus')){
-                localStorage.setItem('recently_viewed_skus', localStorageDataToPut);
-            }else{
-                // Remove expired products in the local storage
-                refreshLocalStorageData();
-                // Avoid adding sku already in the storage
-                const recentlyViewedSkusArray = localStorage.getItem('recently_viewed_skus').split(",");
-                let skuAlreadyInList = false;
+        function readRecentlyViewedFromStorage () {
+            const data = hyva.getBrowserStorage().getItem('recently_viewed_products');
+            return data ? JSON.parse(data) : [];
+        }
 
-                recentlyViewedSkusArray.forEach(function myFunction(skuData,key){
-                    // split each product's sku and expiry data
-                    let tempSplitArray  = skuData.split(" ");
-                    if(tempSplitArray[0] == data['current_product_sku']){
-                        skuAlreadyInList = true;
-                    }
-                });
-
-                // Avoid adding sku already in the storage
-                if(!skuAlreadyInList){
-                    // if sku not already in list, append current product's data in the list
-                    localStorage.setItem('recently_viewed_skus', localStorageDataToPut + ',' + localStorage.getItem('recently_viewed_skus'));
+        function removeExpiredProductsInLocalStorage() {
+            const updatedLocalStorageData = [];
+            readRecentlyViewedFromStorage().forEach(productData => {
+                if(productData.expiry > Date.now()){
+                    updatedLocalStorageData.push(productData);
                 }
-            }
-        }
-        const createLocalStorageData = function(){
-            // get current product sku and calculate its expiry from local storage
-            const currentProductData = [];
-            currentProductData['current_product_sku'] = '<?= $escaper->escapeJs($currentProductSku) ?>';
-            let lifeTimeOfProducts = <?= (int) $viewModelProducts->getRecentlyViewedLifeTime() ?>;
-            lifeTimeOfProducts = lifeTimeOfProducts * 1000;
-            currentProductData['expiry'] = Date.now() + lifeTimeOfProducts;
-            return currentProductData;
+            });
+            writeRecentlyViewedToStorage(updatedLocalStorageData);
         }
 
-        const currentProductSku = '<?= $escaper->escapeJs($currentProductSku) ?>';
-        if(currentProductSku !== 'false'){
-            // Recently Viewed Products' data adding into the local storage
-            putDataInLocalStorage(createLocalStorageData());
-        }else{
-            // Remove expired products in the local storage
-            refreshLocalStorageData();
+        function addToRecentlyViewed(productData) {
+            removeExpiredProductsInLocalStorage();
+            const recentlyViewedSkusArray = readRecentlyViewedFromStorage();
+
+            // Avoid adding sku already in the storage
+            let skuAlreadyInList = recentlyViewedSkusArray
+                .filter(product => product.sku === productData.sku)
+                .length > 0;
+
+            if (!skuAlreadyInList) {
+                recentlyViewedSkusArray.push(productData);
+                writeRecentlyViewedToStorage(recentlyViewedSkusArray);
+            }
+        }
+
+        function createRecordForCurrentProduct() {
+            // get current product sku and calculate its expiry from local storage
+            return {
+                sku: '<?= $escaper->escapeJs($currentProductSku) ?>',
+                expiry: Date.now() + <?= (int) $viewModelProducts->getRecentlyViewedLifeTime() ?> * 1000
+            }
+        }
+
+        if ('<?= $escaper->escapeJs($currentProductSku) ?>' !== '') {
+            addToRecentlyViewed(createRecordForCurrentProduct());
+        } else {
+            removeExpiredProductsInLocalStorage();
         }
 
         return {
@@ -130,19 +115,18 @@ $title = $title ?? __('Recently Viewed Products');
             query: '',
             getProducts($nextTick) {
                 let itemsToFetch = [];
-                if(localStorage.getItem('recently_viewed_skus')){
-                    /* Fetching Products from local storage */
-                    const recentlyViewedSkusArray = localStorage.getItem('recently_viewed_skus').split(",");
+                const recentlyViewedSkusArray = readRecentlyViewedFromStorage();
+                if (recentlyViewedSkusArray.length > 0) {
 
-                    /* avoid showing the current product */
+                    /* Avoid showing the current product */
                     itemsToFetch = recentlyViewedSkusArray
-                        .map(skuData => skuData.split(" ")[0])
+                        .map(productData => productData.sku)
                         .filter(sku => sku !== this.currentProductSku);
                 }
 
-                if(!itemsToFetch.length){
+                if (!itemsToFetch.length) {
                     this.noOfProductsToShow = 0;
-                }else{
+                } else {
                     itemsToFetch = itemsToFetch.slice(0, this.noOfProductsToShow);
                 }
 
@@ -184,7 +168,8 @@ $title = $title ?? __('Recently Viewed Products');
                 window.fetch('/graphql?' + new URLSearchParams({query: this.query}), {
                     method: 'GET',
                     headers: {
-                        'Store': '<?= /* @noEscape */ $viewModelStore->getStoreCode() ?>'
+                        'Store': '<?= $escaper->escapeJs($viewModelStore->getStoreCode()) ?>',
+                        'Content-Currency': '<?= $escaper->escapeJs($viewModelCurrency->getCurrentCurrencyCode()) ?>'
                     },
                 })
                     .then((response) =>  response.json())
@@ -211,18 +196,19 @@ $title = $title ?? __('Recently Viewed Products');
                             });
                             return this.products = sortedProducts;
                         }
-                    ).finally(() => {
-                    this.loading = false
-                    if (config.isSlider) {
-                        $nextTick
-                            ? $nextTick(() => this.calcPageSize())
-                            : setTimeout(() => this.calcPageSize(), 1);
-                    }
-                });
-            },
+                    )
+                    .finally(() => {
+                        this.loading = false;
+                        if (config.isSlider) {
+                            $nextTick
+                                ? $nextTick(() => this.calcPageSize())
+                                : setTimeout(() => this.calcPageSize(), 1);
+                        }
+                    });
+            }, // end getProducts()
+
             addToWishlist(productId) {
-                const postUrl = BASE_URL+"wishlist/index/add/";
-                fetch(postUrl, {
+                fetch(BASE_URL + "wishlist/index/add/", {
                     "headers": {
                         "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
                     },
@@ -230,7 +216,7 @@ $title = $title ?? __('Recently Viewed Products');
                     "method": "POST",
                     "mode": "cors",
                     "credentials": "include"
-                }).then(function (response) {
+                }).then(response => {
                     if (response.redirected) {
                         window.location.href = response.url;
                     } else if (response.ok) {
@@ -243,8 +229,8 @@ $title = $title ?? __('Recently Viewed Products');
                             }], 5000
                         );
                     }
-                }).then(function (response) {
-                    if(!response) { return }
+                }).then(response => {
+                    if (!response) { return }
                     typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
                         [{
                             type: (response.success) ? "success" : "error",
@@ -254,8 +240,7 @@ $title = $title ?? __('Recently Viewed Products');
                                 ) ?>" : response.error_message
                         }], 5000
                     );
-                    const reloadCustomerDataEvent = new CustomEvent("reload-customer-section-data");
-                    window.dispatchEvent(reloadCustomerDataEvent);
+                    window.dispatchEvent(new CustomEvent("reload-customer-section-data"));
                 }).catch(function (error) {
                     typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
                         [{
@@ -264,12 +249,10 @@ $title = $title ?? __('Recently Viewed Products');
                         }], 5000
                     );
                 });
-            },
-            addToCompare(productId) {
-                const formKey = hyva.getFormKey();
-                const postUrl = BASE_URL + 'catalog/product_compare/add/';
+            }, // end addToWishlist()
 
-                fetch(postUrl, {
+            addToCompare(productId) {
+                fetch(BASE_URL + 'catalog/product_compare/add/', {
                     "headers": {
                         "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
                     },
@@ -277,11 +260,11 @@ $title = $title ?? __('Recently Viewed Products');
                     "method": "POST",
                     "mode": "cors",
                     "credentials": "include"
-                }).then(function (response) {
+                }).then(response => {
                     if (response.redirected) {
                         window.location.href = response.url;
                     }
-                }).catch(function (error) {
+                }).catch(error => {
                     typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
                         [{
                             type: "error",
@@ -304,7 +287,7 @@ $title = $title ?? __('Recently Viewed Products');
                     ) - this.products.length;
                 }
             },
-            calcActive(event) {
+            calcActive() {
                 const slider = this.getSlider();
                 if (slider) {
                     this.active = Math.ceil(
