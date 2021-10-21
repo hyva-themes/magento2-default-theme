@@ -11,21 +11,13 @@ declare(strict_types=1);
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Hyva\Theme\ViewModel\ProductCompare;
-use Hyva\Theme\ViewModel\Store;
 use Hyva\Theme\ViewModel\Wishlist;
-use Hyva\Theme\ViewModel\ProductPage;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
-
-/** @var ProductPage $viewModelProducts */
-$viewModelProducts = $viewModels->require(ProductPage::class);
-
-/** @var Store $viewModelStore */
-$viewModelStore = $viewModels->require(Store::class);
 
 /** @var Wishlist $wishlistViewModel */
 $wishlistViewModel = $viewModels->require(Wishlist::class);
@@ -37,264 +29,19 @@ $compareViewModel = $viewModels->require(ProductCompare::class);
 $heroicons = $viewModels->require(HeroiconsOutline::class);
 
 $uniqueId = '_' . uniqid();
-$query = $block->getGraphqlQuery();
 $title = __('Recently Viewed Products');
-
 
 $widgetAttributesToShow = explode(',', $block->getData('show_attributes'));
 $widgetButtonsToShow = explode(',', $block->getData('show_buttons'));
-$currentProductSku = $viewModelProducts->getProduct() ? $viewModelProducts->getProduct()->getSku() : 'false';
+
+$jsTemplate = 'Magento_Catalog::product/widget/viewed/recently-viewed-products-js.phtml';
+echo $block->assign(['uniqueId' => $uniqueId, 'title' => $title])
+           ->fetchView($block->getTemplateFile($jsTemplate));
+
 ?>
-    <script>
-
-        function initComponent<?= /** @noEscape */$uniqueId ?>() {
-
-            const refreshLocalStorageData = function(){
-                /***
-                * Remove expired products in the local storage
-                ***/
-                if(localStorage.getItem('recently_viewed_skus')){
-
-                    let updatedlocalStorageData = '';
-                    const recentlyViewedSkusArray = localStorage.getItem('recently_viewed_skus').split(",");
-
-                    recentlyViewedSkusArray.forEach(function myFunction(skuData,key){
-                        // split each product's sku and expiry data
-                        const tempSplitArray  = skuData.split(" ");
-                        if(tempSplitArray[1] > Date.now()){
-                            updatedlocalStorageData +=  ',' + tempSplitArray[0] + ' ' + tempSplitArray[1];
-                        }
-                    });
-                    updatedlocalStorageData = updatedlocalStorageData.replace(/[,]/, '');
-                    localStorage.removeItem('recently_viewed_skus');
-                    localStorage.setItem('recently_viewed_skus', updatedlocalStorageData);
-                }
-            }
-            const putDataInLocalStorage = function(data){
-
-                const localStorageDataToPut = data['current_product_sku'] + ' ' + data['expiry'];
-                if(!localStorage.getItem('recently_viewed_skus')){
-                    localStorage.setItem('recently_viewed_skus', localStorageDataToPut);
-                }else{
-                    // Remove expired products in the local storage
-                    refreshLocalStorageData();
-                    // Avoid adding sku already in the storage
-                    const recentlyViewedSkusArray = localStorage.getItem('recently_viewed_skus').split(",");
-                    let skuAlreadyInList = false;
-
-                    recentlyViewedSkusArray.forEach(function myFunction(skuData,key){
-                        // split each product's sku and expiry data
-                        let tempSplitArray  = skuData.split(" ");
-                        if(tempSplitArray[0] == data['current_product_sku']){
-                            skuAlreadyInList = true;
-                        }
-                    });
-
-                    // Avoid adding sku already in the storage
-                    if(!skuAlreadyInList){
-                        // if sku not already in list, append current product's data in the list
-                        localStorage.setItem('recently_viewed_skus', localStorageDataToPut + ',' + localStorage.getItem('recently_viewed_skus'));
-                    }
-                }
-            }
-            const createLocalStorageData = function(){
-                // get current product sku and calculate its expiry from local storage
-                const currentProductData = [];
-                currentProductData['current_product_sku'] = '<?= $escaper->escapeJs($currentProductSku) ?>';
-                let lifeTimeOfProducts = <?= (int) $viewModelProducts->getRecentlyViewedLifeTime() ?>;
-                lifeTimeOfProducts = lifeTimeOfProducts * 1000;
-                currentProductData['expiry'] = Date.now() + lifeTimeOfProducts;
-                return currentProductData;
-            }
-
-            const currentProductSku = '<?= $escaper->escapeJs($currentProductSku) ?>';
-            if(currentProductSku !== 'false'){
-                // Recently Viewed Products' data adding into the local storage
-                putDataInLocalStorage(createLocalStorageData());
-            }else{
-                // Remove expired products in the local storage
-                refreshLocalStorageData();
-            }
-
-            return {
-                active: 0,
-                products: [],
-                currency: [],
-                currentProductSku: '<?= $escaper->escapeJs($currentProductSku) ?>',
-                noOfProductsToShow: <?= (int) $block->getData('page_size') ?>,
-                loading: true,
-                minHeight() {
-                    return 'min-height: ' + ((this.loading && '491px') || 0);
-                },
-                query: '',
-                getProducts() {
-                    let itemsToFetch = [];
-                    if(localStorage.getItem('recently_viewed_skus')){
-                         /* Fetching Products from local storage */
-                         const recentlyViewedSkusArray = localStorage.getItem('recently_viewed_skus').split(",");
-                        /* avoid showing the current product */
-                        itemsToFetch = recentlyViewedSkusArray
-                            .map(skuData => skuData.split(" ")[0])
-                            .filter(sku => sku !== this.currentProductSku);
-                    }
-
-                    if(!itemsToFetch.length){
-                        this.noOfProductsToShow = 0;
-                    }else{
-                        itemsToFetch = itemsToFetch.slice(0, this.noOfProductsToShow);
-                    }
-
-                    this.query = `{
-                        products(
-                            filter: {
-                                sku: { in: ${JSON.stringify(itemsToFetch)} },
-                            }
-                            pageSize: ${this.noOfProductsToShow},
-                        ) {
-                            items {
-                                sku
-                                id
-                                name
-                                small_image {
-                                    label
-                                    url
-                                }
-                                url_key
-                                url_suffix
-                                visibility
-                                status
-                                price_range {
-                                        minimum_price {
-                                        regular_price {
-                                            value
-                                            currency
-                                        }
-                                        final_price {
-                                            value
-                                            currency
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }`;
-
-                    window.fetch('/graphql?' + new URLSearchParams({query: this.query}), {
-                        method: 'GET',
-                        headers: {
-                            'Store': '<?= /* @noEscape */ $viewModelStore->getStoreCode() ?>'
-                        },
-                    })
-                        .then((response) =>  response.json())
-                        .then((result) => {
-                                this.currency = (result &&
-                                result.data &&
-                                result.data.currency);
-
-                                    const responseProducts = (
-                                        result &&
-                                        result.data &&
-                                        result.data.products &&
-                                        result.data.products.items
-                                    ) || [];
-
-                                    // fix sorting of the response-products according to the sorting of the requested-products
-                                    const sortedProducts = [];
-                                    itemsToFetch.forEach(function myFunction(sku,key){
-                                        responseProducts.forEach(function myFunction(productData,index){
-                                            if(sku === productData.sku){
-                                                sortedProducts[key] = productData;
-                                            }
-                                        });
-                                    });
-
-                                    return this.products = sortedProducts;
-                            }
-                        ).finally(() => {
-                            this.loading = false
-                        });
-                },
-                addToWishlist(productId) {
-                    const formKey = hyva.getFormKey();
-                    const postUrl = BASE_URL+"wishlist/index/add/";
-                    fetch(postUrl, {
-                        "headers": {
-                            "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-                        },
-                        "body": new URLSearchParams({form_key: hyva.getFormKey(), product: productId, uenc: btoa(window.location.href)}),
-                        "method": "POST",
-                        "mode": "cors",
-                        "credentials": "include"
-                    }).then(function (response) {
-                        if (response.redirected) {
-                            window.location.href = response.url;
-                        } else if (response.ok) {
-                            return response.json();
-                        } else {
-                            typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
-                                [{
-                                    type: "warning",
-                                    text: "<?= $escaper->escapeHtml(__('Could not add item to wishlist.')) ?>"
-                                }], 5000
-                            );
-                        }
-                    }).then(function (response) {
-                        if(!response) { return }
-                        typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
-                            [{
-                                type: (response.success) ? "success" : "error",
-                                text: (response.success)
-                                    ? "<?= $escaper->escapeHtml(
-                                        __("%1 has been added to your Wish List.", __("Product"))
-                                    ) ?>" : response.error_message
-                            }], 5000
-                        );
-                        const reloadCustomerDataEvent = new CustomEvent("reload-customer-section-data");
-                        window.dispatchEvent(reloadCustomerDataEvent);
-                    }).catch(function (error) {
-                        typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
-                            [{
-                                type: "error",
-                                text: error
-                            }], 5000
-                        );
-                    });
-                },
-                addToCompare(productId) {
-                    const formKey = hyva.getFormKey();
-                    const postUrl = BASE_URL + 'catalog/product_compare/add/';
-
-                    fetch(postUrl, {
-                        "headers": {
-                            "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-                        },
-                        "body": new URLSearchParams({form_key: hyva.getFormKey(), product: productId, uenc: btoa(window.location.href)}),
-                        "method": "POST",
-                        "mode": "cors",
-                        "credentials": "include"
-                    }).then(function (response) {
-                        if (response.redirected) {
-                            window.location.href = response.url;
-                        }
-                    }).catch(function (error) {
-                        typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
-                            [{
-                                type: "error",
-                                text: error
-                            }], 5000
-                        );
-                    });
-                }
-            }
-        }
-
-    </script>
-
-
-
     <section class="my-12 text-gray-700 body-font"
-            x-data="initComponent<?= /** @noEscape */ $uniqueId?>()"
-            x-init="getProducts();"
+            x-data="initRecentlyViewedProductsComponent<?= /** @noEscape */ $uniqueId?>({isSlider: false})"
+            x-init="getProducts($nextTick);"
             :style="minHeight()"
     >
         <template x-if="products && products.length">
@@ -306,8 +53,7 @@ $currentProductSku = $viewModelProducts->getProduct() ? $viewModelProducts->getP
                         </h3>
                     </div>
                 <div class="relative w-full">
-                    <div class="relative w-full align-baseline transition-all snap"
-                    >
+                    <div class="relative w-full align-baseline transition-all snap">
                         <template x-for="product in products">
                             <div class="flex-none w-full py-4 md:w-1/2 lg:w-1/3 xl:w-1/4">
                                 <div class="mx-1 card card-interactive">
