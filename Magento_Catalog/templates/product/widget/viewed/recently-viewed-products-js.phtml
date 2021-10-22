@@ -49,10 +49,10 @@ $title = $title ?? __('Recently Viewed Products');
     function initRecentlyViewedProductsComponent<?= /** @noEscape */$uniqueId ?>(options) {
 
         const defaultOptions = {
-            isSlider: false
+            isSlider: false,
+            noOfProductsToShow: <?= (int) $block->getData('page_size') ?>
         };
         const config = Object.assign({}, defaultOptions, options || {});
-
 
         function writeRecentlyViewedToStorage(data) {
             hyva.getBrowserStorage().setItem('recently_viewed_products', JSON.stringify(data));
@@ -73,18 +73,13 @@ $title = $title ?? __('Recently Viewed Products');
             writeRecentlyViewedToStorage(updatedLocalStorageData);
         }
 
-        function isProductInRecentlyViewed(productData) {
-            return readRecentlyViewedFromStorage()
-                .filter(record => record.sku === productData.sku)
-                .length > 0;
-        }
-
         function addCurrentProductToRecentlyViewed() {
             const currentProduct = createRecordForCurrentProduct();
 
-            if (currentProduct.sku !== '' && !isProductInRecentlyViewed(currentProduct)) {
-                const recentlyViewedSkusArray = readRecentlyViewedFromStorage();
-                recentlyViewedSkusArray.push(currentProduct);
+            if (currentProduct.sku !== '') {
+                const recentlyViewedSkusArray = readRecentlyViewedFromStorage()
+                    .filter(product => product.sku !== currentProduct.sku);
+                recentlyViewedSkusArray.unshift(currentProduct);
                 writeRecentlyViewedToStorage(recentlyViewedSkusArray);
             }
         }
@@ -104,65 +99,55 @@ $title = $title ?? __('Recently Viewed Products');
             products: [],
             currency: [],
             currentProductSku: '<?= $escaper->escapeJs($currentProductSku) ?>',
-            noOfProductsToShow: <?= (int) $block->getData('page_size') ?>,
+            noOfProductsToShow: config.noOfProductsToShow,
             loading: true,
             minHeight() {
                 return 'min-height: ' + ((this.loading && '491px') || 0);
             },
             query: '',
             getProducts($nextTick) {
-                let itemsToFetch = [];
                 const recentlyViewedProductsArray = readRecentlyViewedFromStorage();
-                if (recentlyViewedProductsArray.length > 0) {
+                let itemsToFetch = recentlyViewedProductsArray.length > 0
+                    ? recentlyViewedProductsArray.slice(1).map(product => product.sku) // Avoid showing the current product
+                    : [];
 
-                    /* Avoid showing the current product */
-                    itemsToFetch = recentlyViewedProductsArray
-                        .map(productData => productData.sku)
-                        .filter(sku => sku !== this.currentProductSku);
-                }
+                itemsToFetch = itemsToFetch.slice(this.noOfProductsToShow * -1);
 
                 if (!itemsToFetch.length) {
                     this.noOfProductsToShow = 0;
-                } else {
-                    itemsToFetch = itemsToFetch.slice(0, this.noOfProductsToShow);
+                    return;
                 }
 
-                this.query = `{
-                        products(
-                            filter: {
-                                sku: { in: ${JSON.stringify(itemsToFetch)} },
-                            }
-                            pageSize: ${this.noOfProductsToShow},
-                        ) {
-                            items {
-                                sku
-                                id
-                                name
-                                small_image {
-                                    label
-                                    url
-                                }
-                                url_key
-                                url_suffix
-                                visibility
-                                status
-                                price_range {
-                                        minimum_price {
-                                        regular_price {
-                                            value
-                                            currency
-                                        }
-                                        final_price {
-                                            value
-                                            currency
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }`;
-
-                window.fetch('/graphql?' + new URLSearchParams({query: this.query}), {
+                const query = `{
+  products(filter: { sku: { in: ${JSON.stringify(itemsToFetch)} } }) {
+    items {
+      sku
+      id
+      name
+      small_image {
+        label
+        url
+      }
+      url_key
+      url_suffix
+      visibility
+      status
+      price_range {
+        minimum_price {
+          regular_price {
+            value
+            currency
+          }
+          final_price {
+            value
+            currency
+          }
+        }
+      }
+    }
+  }
+}`;
+                window.fetch('/graphql?' + new URLSearchParams({query}), {
                     method: 'GET',
                     headers: {
                         'Store': '<?= $escaper->escapeJs($viewModelStore->getStoreCode()) ?>',
@@ -184,10 +169,10 @@ $title = $title ?? __('Recently Viewed Products');
 
                             // fix sorting of the response-products according to the sorting of the requested-products
                             const sortedProducts = [];
-                            itemsToFetch.forEach(function myFunction(sku,key){
-                                responseProducts.forEach(function myFunction(productData,index){
-                                    if(sku === productData.sku){
-                                        sortedProducts[key] = productData;
+                            itemsToFetch.forEach(sku => {
+                                responseProducts.forEach(productData => {
+                                    if (sku === productData.sku){
+                                        sortedProducts.push(productData);
                                     }
                                 });
                             });
@@ -205,14 +190,14 @@ $title = $title ?? __('Recently Viewed Products');
             }, // end getProducts()
 
             addToWishlist(productId) {
-                fetch(BASE_URL + "wishlist/index/add/", {
-                    "headers": {
-                        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                fetch(BASE_URL + 'wishlist/index/add/', {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
                     },
-                    "body": new URLSearchParams({form_key: hyva.getFormKey(), product: productId, uenc: btoa(window.location.href)}),
-                    "method": "POST",
-                    "mode": "cors",
-                    "credentials": "include"
+                    body: new URLSearchParams({form_key: hyva.getFormKey(), product: productId, uenc: btoa(window.location.href)}),
+                    method: 'POST',
+                    mode: 'cors',
+                    credentials: 'include'
                 }).then(response => {
                     if (response.redirected) {
                         window.location.href = response.url;
@@ -250,13 +235,13 @@ $title = $title ?? __('Recently Viewed Products');
 
             addToCompare(productId) {
                 fetch(BASE_URL + 'catalog/product_compare/add/', {
-                    "headers": {
-                        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
                     },
-                    "body": new URLSearchParams({form_key: hyva.getFormKey(), product: productId, uenc: btoa(window.location.href)}),
-                    "method": "POST",
-                    "mode": "cors",
-                    "credentials": "include"
+                    body: new URLSearchParams({form_key: hyva.getFormKey(), product: productId, uenc: btoa(window.location.href)}),
+                    method: 'POST',
+                    mode: 'cors',
+                    credentials: 'include'
                 }).then(response => {
                     if (response.redirected) {
                         window.location.href = response.url;
