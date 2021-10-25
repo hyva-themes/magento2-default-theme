@@ -148,11 +148,15 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
                 const couponQuery = couponCode
                     ? `<?= /** @noEscape */ $viewModelGraphQl->query(
                         'cart_coupon_add_mutation',
-                        'mutation ($cartId: String!, $couponCode: String!) {' . $viewModelCart->getCouponAddQuery() . '}'
+                        'mutation ($cartId: String!, $couponCode: String!) {' .
+                        $viewModelCart->getCouponAddQueryWithQueryVariables() .
+                        '}'
                     ) ?>`
                     : `<?= /** @noEscape */ $viewModelGraphQl->query(
                         'cart_coupon_remove_mutation',
-                        'mutation ($cartId: String!) {' . $viewModelCart->getCouponRemoveQuery() . '}'
+                        'mutation ($cartId: String!) {' .
+                        $viewModelCart->getCouponRemoveQueryWithQueryVariables() .
+                        '}'
                     ) ?>`;
                     const variables = {
                         couponCode: couponCode,
@@ -208,7 +212,7 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
                 const cartItemUpdateQuery = `<?= /** @noEscape */ $viewModelGraphQl->query(
                     'cart_item_update_mutation',
                     'mutation ($cartId: String!, $itemId: Int, $qty: Float) {' .
-                    $viewModelCart->getCartItemUpdateQuery() .
+                    $viewModelCart->getCartItemUpdateQueryWithQueryVariables() .
                     '}'
                 ) ?>`;
                 const variables = {
@@ -251,7 +255,9 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
                 this.isLoading = true;
                 const cartItemRemoveQuery = `<?= /** @noEscape */ $viewModelGraphQl->query(
                     'cart_item_remove_mutation',
-                    'mutation ($cartId: String, $itemId: String!) {' . $viewModelCart->getCartItemRemoveQuery() . '}'
+                    'mutation ($cartId: String, $itemId: String!) {' .
+                    $viewModelCart->getCartItemRemoveQueryWithQueryVariables() .
+                    '}'
                 )?>`;
                 const variables = {
                     cartId: this.cartId,
