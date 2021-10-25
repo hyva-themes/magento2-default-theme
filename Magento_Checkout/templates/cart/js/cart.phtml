@@ -60,20 +60,23 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
             isLoading: true,
             isTouchDevice: false,
             showCouponForm: false,
-            getCartQuery(cartId) {
+            getCartQuery() {
                 return <?= /** @noEscape */ json_encode($viewModelGraphQl->query(
                     'cart_query',
-                    '{cart (cart_id: "%cartId") {' . /* @noEscape */ $viewModelCart->getCartGraphQlQuery() . '}}'
-                )); ?>.replace('%cartId', cartId)
+                    'query ($cartId: String!) {cart (cart_id: $cartId) {' . /* @noEscape */ $viewModelCart->getCartGraphQlQuery() . '}}'
+                )); ?>
             },
             getCustomerCartQuery() {
                 return <?= /** @noEscape */ json_encode($viewModelGraphQl->query(
                     'customer_cart_query',
-                    '{customerCart {' . /* @noEscape */ $viewModelCart->getCartGraphQlQuery() . '}}'
+                    'query {customerCart {' . /* @noEscape */ $viewModelCart->getCartGraphQlQuery() . '}}'
                 )); ?>
             },
             getCart() {
                 this.isLoading = true;
+                const query = (this.customerToken && this.getCustomerCartQuery()) || this.getCartQuery();
+                const variables = this.customerToken ? {} : {cartId: this.cartId}
+
                 fetch('<?= $escaper->escapeUrl($block->getBaseUrl()) ?>graphql', {
                         method: 'POST',
                         headers: {
@@ -81,12 +84,7 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
                             'Store': '<?= /* @noEscape */ $viewModelStore->getStoreCode() ?>'
                         },
                         credentials: 'include',
-                        body: JSON.stringify({
-                            query: (
-                                    this.customerToken &&
-                                    this.getCustomerCartQuery()) ||
-                                this.getCartQuery(this.cartId)
-                        })
+                        body: JSON.stringify({query: query, variables: variables})
                     }
                 ).then((response) => {
                         return response.json()
@@ -146,16 +144,20 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
             mutateCouponCode() {
                 this.isLoading = true;
 
-                var couponCode = document.getElementById('coupon_code').value;
-                var couponQuery = couponCode
+                const couponCode = document.getElementById('coupon_code').value;
+                const couponQuery = couponCode
                     ? `<?= /** @noEscape */ $viewModelGraphQl->query(
                         'cart_coupon_add_mutation',
-                        'mutation {' . $viewModelCart->getCouponAddQuery() . '}'
+                        'mutation ($cartId: String!, $couponCode: String!) {' . $viewModelCart->getCouponAddQuery() . '}'
                     ) ?>`
                     : `<?= /** @noEscape */ $viewModelGraphQl->query(
                         'cart_coupon_remove_mutation',
-                        'mutation {' . $viewModelCart->getCouponRemoveQuery() . '}'
+                        'mutation ($cartId: String!) {' . $viewModelCart->getCouponRemoveQuery() . '}'
                     ) ?>`;
+                    const variables = {
+                        couponCode: couponCode,
+                        cartId: this.cartId
+                    };
 
                 fetch('<?= $escaper->escapeUrl($block->getBaseUrl()) ?>graphql', {
                         method: 'POST',
@@ -163,7 +165,7 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
                             'Content-Type': 'application/json;charset=utf-8',
                             'Store': '<?= /* @noEscape */ $viewModelStore->getStoreCode() ?>'
                         },
-                        body: JSON.stringify({query: couponQuery})
+                        body: JSON.stringify({query: couponQuery, variables: variables})
                     }
                 ).then((response) => {
                         return response.json()
@@ -194,8 +196,8 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
                 window.dispatchEvent(new CustomEvent('clear-messages'));
             },
             initErrorMessages(errors) {
-                var messages = [];
-                for (var error in Object.keys(errors)) {
+                const messages = [];
+                for (let error in Object.keys(errors)) {
                     messages.push({type: 'error', text: errors[error].message});
                 }
                 typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(messages, 10000);
@@ -203,10 +205,17 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
             mutateItemQty(itemId, qty) {
                 this.isLoading = true;
 
-                var cartItemUpdateQuery = `<?= /** @noEscape */ $viewModelGraphQl->query(
+                const cartItemUpdateQuery = `<?= /** @noEscape */ $viewModelGraphQl->query(
                     'cart_item_update_mutation',
-                    'mutation {' . $viewModelCart->getCartItemUpdateQuery() . '}'
+                    'mutation ($cartId: String!, $itemId: Int, $qty: Float) {' .
+                    $viewModelCart->getCartItemUpdateQuery() .
+                    '}'
                 ) ?>`;
+                const variables = {
+                    cartId: this.cartId,
+                    itemId: itemId,
+                    qty: qty
+                };
 
                 fetch('<?= $escaper->escapeUrl($block->getBaseUrl()) ?>graphql', {
                         method: 'POST',
@@ -214,7 +223,7 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
                             'Content-Type': 'application/json;charset=utf-8',
                             'Store': '<?= /* @noEscape */ $viewModelStore->getStoreCode() ?>'
                         },
-                        body: JSON.stringify({query: cartItemUpdateQuery.replace('%cartId', this.cartId)})
+                        body: JSON.stringify({query: cartItemUpdateQuery, variables: variables})
                     }
                 ).then((response) => {
                         return response.json()
@@ -240,10 +249,14 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
             },
             mutateItemRemove(itemId) {
                 this.isLoading = true;
-                var cartItemRemoveQuery = `<?= /** @noEscape */ $viewModelGraphQl->query(
+                const cartItemRemoveQuery = `<?= /** @noEscape */ $viewModelGraphQl->query(
                     'cart_item_remove_mutation',
-                    'mutation {' . $viewModelCart->getCartItemRemoveQuery() . '}'
+                    'mutation ($cartId: String, $itemId: String!) {' . $viewModelCart->getCartItemRemoveQuery() . '}'
                 )?>`;
+                const variables = {
+                    cartId: this.cartId,
+                    itemid: itemId
+                };
 
                 fetch('<?= $escaper->escapeUrl($block->getBaseUrl()) ?>graphql', {
                         method: 'POST',
@@ -251,7 +264,7 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
                             'Content-Type': 'application/json;charset=utf-8',
                             'Store': '<?= /* @noEscape */ $viewModelStore->getStoreCode() ?>'
                         },
-                        body: JSON.stringify({query: cartItemRemoveQuery})
+                        body: JSON.stringify({query: cartItemRemoveQuery, variables})
                     }
                 ).then((response) => {
                         return response.json()
@@ -279,7 +292,7 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
                 });
             },
             reloadCustomerData() {
-                var reloadCustomerDataEvent = new CustomEvent("reload-customer-section-data");
+                const reloadCustomerDataEvent = new CustomEvent("reload-customer-section-data");
                 window.dispatchEvent(reloadCustomerDataEvent);
             },
 
