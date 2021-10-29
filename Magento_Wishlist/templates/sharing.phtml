@@ -28,6 +28,12 @@ use Magento\Wishlist\Block\Customer\Sharing;
                         return false;
                     }
                 }
+
+                if (emails.length > <?= (int) $block->getEmailSharingLimit() ?>) {
+                    emailField.setCustomValidity("<?= $escaper->escapeJs(__('Maximum of %1 emails can be sent.', $block->getEmailSharingLimit())) ?>");
+                    return false;
+                }
+
                 this.isValid = true;
                 emailField.setCustomValidity("");
                 return true;
@@ -74,8 +80,7 @@ use Magento\Wishlist\Block\Customer\Sharing;
         <div class="field text">
             <label class="label" for="message"><span><?= $escaper->escapeHtml(__('Message')) ?></span></label>
             <div class="control">
-                <textarea id="message" name="message" cols="60" rows="5"><?= /* @noEscape */
-                    $block->getEnteredData('message') ?></textarea>
+                <textarea id="message" name="message" cols="60" rows="5" maxlength="<?= (int) $block->getTextSharingLimit() ?>"><?= /* @noEscape */ $block->getEnteredData('message') ?></textarea>
             </div>
         </div>
     </fieldset>
