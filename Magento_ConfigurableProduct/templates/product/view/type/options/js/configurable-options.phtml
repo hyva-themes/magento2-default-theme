@@ -14,10 +14,20 @@ use Magento\Framework\View\Element\Template;
 ?>
 <script>
     function initConfigurableOptions(productId, optionConfig) {
+
+        function findPathParam(key) {
+            const arr = window.location.pathname.split('/').slice(4);
+            for (let i = 0; i < arr.length; i += 2) {
+                if (arr[i] === key && arr.length > i) {
+                    return arr[i + 1];
+                }
+            }
+        }
+
         return {
             optionConfig,
             productId,
-            itemId: '<?= (int)$block->getRequest()->getParam('id') ?>',
+            itemId: (new URLSearchParams(window.location.search)).get('id') || findPathParam('id'),
             allowedAttributeOptions: [],
             selectedValues: [],
             init() {
