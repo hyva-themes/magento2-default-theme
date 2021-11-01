@@ -21,14 +21,14 @@ $availableLimitOptions = $block->getAvailableLimit();
 
 <?php if (count($availableLimitOptions) > 1): ?>
     <div class="field limiter flex items-center order-3 sm:order-2 md:order-3 lg:order-2 col-span-2 justify-end">
-        <label class="text-sm mr-2 label" for="limiter">
-            <span><?= $escaper->escapeHtml((string)__('Show')) ?></span>
-        </label>
         <div class="control">
-            <select id="limiter" data-role="limiter" class="form-select limiter-options"
+            <label class="text-sm mr-2 label">
+                <span><?= $escaper->escapeHtml((string)__('Show')) ?></span>
+
+                <select data-role="limiter" class="form-select limiter-options"
                     @change="changeUrl(
                     'product_list_limit',
-                    event.currentTarget.options[event.currentTarget.selectedIndex].value,
+                    $event.currentTarget.options[$event.currentTarget.selectedIndex].value,
                     options.limitDefault
                 )">
                 <?php foreach ($block->getAvailableLimit() as $_key => $_limit): ?>
@@ -39,7 +39,8 @@ $availableLimitOptions = $block->getAvailableLimit();
                         <?= $escaper->escapeHtml($_limit) ?>
                     </option>
                 <?php endforeach; ?>
-            </select>
+                </select>
+            </label>
         </div>
         <span class="limiter-text text-sm ml-2 sr-only">
         <?= $escaper->escapeHtml(__('per page')) ?>

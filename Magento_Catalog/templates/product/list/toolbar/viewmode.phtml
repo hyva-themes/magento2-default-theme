@@ -20,8 +20,7 @@ use Magento\Framework\Escaper;
     <?php if ($_modes && count($_modes) > 1): ?>
         <div class="modes flex space-x-1 mr-2 items-center px-2 py-2 rounded-md border
     border-gray-300 bg-white text-sm leading-5 w-20 order-1 col-span-1 sm:col-span-2 md:col-span-1 lg:col-span-2">
-            <strong class="modes-label sr-only"
-                    id="modes-label"><?= $escaper->escapeHtml((string)__('View as')) ?></strong>
+            <strong class="modes-label sr-only"><?= $escaper->escapeHtml((string)__('View as')) ?></strong>
             <?php foreach ($block->getModes() as $_code => $_label): ?>
                 <?php if ($block->isModeActive($_code)): ?>
                     <strong title="<?= $escaper->escapeHtmlAttr($_label) ?>"
@@ -39,8 +38,7 @@ use Magento\Framework\Escaper;
                        )"
                        data-role="mode-switcher"
                        data-value="<?= $escaper->escapeHtmlAttr(strtolower($_code)) ?>"
-                       id="mode-<?= $escaper->escapeHtmlAttr(strtolower($_code)) ?>"
-                       aria-labelledby="modes-label mode-<?= $escaper->escapeHtmlAttr(strtolower($_code)) ?>">
+                       aria-label="<?= $escaper->escapeHtmlAttr($_label) ?>">
                         <span><?= $escaper->escapeHtml($_label) ?></span>
                     </a>
                 <?php endif; ?>
