@@ -107,7 +107,12 @@ $displayPriceExclTax = $viewModelItemOutput->isItemPriceExclTax();
                                         </div>
                                         <template x-for="selected_option in option.values">
                                             <div class="text-sm col-span-3 inline-block">
-                                                <span x-text="selected_option.label"></span>
+                                                <template x-if="selected_option.label === ''">
+                                                    <span x-text="selected_option.value"></span>
+                                                </template>
+                                                <template x-if="selected_option.label !== ''">
+                                                    <span x-text="selected_option.label"></span>
+                                                </template>
                                                 <template x-if="selected_option.price.value">
                                                     <span class="text-gray-700">
                                                         + <span

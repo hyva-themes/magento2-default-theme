@@ -48,7 +48,9 @@ $optionPrice = $productPriceViewModel->getCustomOptionPrice($option, CustomOptio
                    class="product-custom-option form-input w-full"
                    name="options[<?= $escaper->escapeHtmlAttr($option->getId()) ?>]"
                    value="<?= $escaper->escapeHtml($block->getDefaultValue()) ?>"
+                   <?php if ($option->getMaxCharacters()): ?>
                    maxlength="<?= (int)$option->getMaxCharacters() ?>"
+                   <?php endif; ?>
                    <?= $option->getIsRequire() ? 'required' : '' ?>
                    data-price-amount="<?= $escaper->escapeHtmlAttr($optionPrice) ?>"
                    data-price-type="<?= $escaper->escapeHtmlAttr($option->getPriceType()) ?>"
@@ -63,7 +65,9 @@ $optionPrice = $productPriceViewModel->getCustomOptionPrice($option, CustomOptio
         <?php elseif ($option->getType() == ProductCustomOptionInterface::OPTION_TYPE_AREA):?>
             <textarea id="options_<?= $escaper->escapeHtmlAttr($option->getId()) ?>_text"
                       class="product-custom-option form-textarea"
+                      <?php if ($option->getMaxCharacters()): ?>
                       maxlength="<?= (int)$option->getMaxCharacters() ?>"
+                      <?php endif; ?>
                       <?= $option->getIsRequire() ? 'required' : '' ?>
                       name="options[<?= $escaper->escapeHtmlAttr($option->getId()) ?>]"
                       rows="5"
