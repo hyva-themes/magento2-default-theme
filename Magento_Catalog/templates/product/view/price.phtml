@@ -126,7 +126,7 @@ $displayTax = $productPriceViewModel->displayPriceIncludingTax();
                         if (customOptionPrice) {
                             return Number.parseFloat(priceAccumulator) + Number.parseFloat(customOptionPrice);
                         }
-                        return finalPrice;
+                        return priceAccumulator;
                     }, finalPrice);
 
             },
