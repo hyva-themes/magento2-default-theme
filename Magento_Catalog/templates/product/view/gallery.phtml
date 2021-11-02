@@ -208,7 +208,7 @@ $productName = $block->getProduct()->getName();
                     type,
                     youtubeRegex,
                     vimeoRegex,
-                    useYoutubeNocookie = false;
+                    useYoutubeNoCookie = false;
 
                 if (videoUrl.match(/youtube\.com|youtu\.be|youtube-nocookie.com/)) {
                     id = videoUrl.replace(/^\/(embed\/|v\/)?/, '').replace(/\/.*/, '');
@@ -219,7 +219,7 @@ $productName = $block->getProduct()->getName();
                     id = videoUrl.match(youtubeRegex)[1];
 
                     if (videoUrl.match(/youtube-nocookie.com/)) {
-                        useYoutubeNocookie = true;
+                        useYoutubeNoCookie = true;
                     }
                 } else if (videoUrl.match(/vimeo\.com/)) {
                     type = 'vimeo';
@@ -230,17 +230,21 @@ $productName = $block->getProduct()->getName();
                 }
 
                 return id ? {
-                    id: id, type: type, useYoutubeNoCookie: useYoutubeNocookie
+                    id: id, type: type, useYoutubeNoCookie: useYoutubeNoCookie
                 } : false;
             },
             initYoutubeAPI(videoData) {
+                if (document.getElementById('loadYoutubeAPI')) {
+                    return;
+                }
                 var params = {};
                 var loadYoutubeAPI = document.createElement('script');
-                loadYoutubeAPI.src = "https://www.youtube.com/player_api";
+                loadYoutubeAPI.src = 'https://www.youtube.com/iframe_api';
+                loadYoutubeAPI.id = 'loadYoutubeAPI';
                 var firstScriptTag = document.getElementsByTagName('script')[0];
                 firstScriptTag.parentNode.insertBefore(loadYoutubeAPI, firstScriptTag);
 
-                var host = (videoData.useYoutubeNocookie) ?
+                var host = (videoData.useYoutubeNoCookie) ?
                     'https://www.youtube-nocookie.com' :
                     'https://www.youtube.com';
 
