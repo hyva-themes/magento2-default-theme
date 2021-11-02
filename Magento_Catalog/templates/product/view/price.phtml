@@ -170,7 +170,7 @@ $displayTax = $productPriceViewModel->displayPriceIncludingTax();
      x-spread="eventListeners"
      class="price-box price-final_price"
 >
-    <template x-if="!activeProductsPriceData && ! isPriceHidden()">
+    <template x-if="!activeProductsPriceData && !isPriceHidden()">
         <div class="price-container">
             <?php if ($finalPrice < $regularPrice): ?>
                 <div class="old-price mr-2 flex">
