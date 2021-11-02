@@ -34,38 +34,47 @@ use Magento\Framework\View\Element\Template;
                     option => option.id === optionId
                 )
             },
-            getSwatchType(typeNumber) {
-                switch (typeNumber) {
-                    case "1":
-                        return "color"
-                    case "2":
-                        return "image"
-                    case "3":
-                        return "empty"
-                    case "0":
-                    default:
-                        return "text"
+            getVisualSwatchType(attributeId) {
+                // All options for an attribute have the same type, use the first one
+                for (const optionId in this.swatchConfig[attributeId]) {
+                    const option = this.swatchConfig[attributeId][optionId];
+                    if (option.type) {
+                        switch (option.type) {
+                            case "1":
+                                return "color"
+                            case "2":
+                                return "image"
+                            case "3":
+                                return "empty"
+                            case "0":
+                            default:
+                                return "text"
+                        }
+                    }
                 }
             },
+            getSwatchType(attributeId, itemId) {
+                // Deserialize the attribute details the first time they are used
+                if (this.swatchConfig[attributeId] && ! this.swatchConfig[attributeId].details) {
+                    this.swatchConfig[attributeId] = this.getAttributeSwatchData(attributeId);
+                }
+                const type =  this.swatchConfig[attributeId] &&
+                    this.swatchConfig[attributeId].details &&
+                    this.swatchConfig[attributeId].details.swatch_input_type ||
+                    "empty";
+                return type === 'visual' ? this.getVisualSwatchType(attributeId) : type;
+            },
             isTextSwatch(attributeId, itemId) {
-                const config = this.getSwatchConfig(attributeId, itemId);
-                const typeId = config.type.toString();
-                const type = this.getSwatchType(typeId);
-
-                return type === 'text';
+                return this.getSwatchType(attributeId, itemId) === 'text';
             },
             isVisualSwatch(attributeId, itemId) {
-                const config = this.getSwatchConfig(attributeId, itemId);
-                const typeId = config.type.toString();
-                const type = this.getSwatchType(typeId);
+                const type = this.getSwatchType(attributeId, itemId);
 
                 return ['image', 'color'].includes(type);
             },
             getSwatchBackgroundStyle(attributeId, itemId) {
                 const config = this.getSwatchConfig(attributeId, itemId);
-                const typeId = config.type.toString();
-                const type = this.getSwatchType(typeId);
-
+                const type = this.getSwatchType(attributeId);
                 if (type === "color") {
                         return 'background-color:' + config.value;
                 } else if (type === "image") {
@@ -76,10 +85,18 @@ use Magento\Framework\View\Element\Template;
             },
             getSwatchText(attributeId, itemId){
                 const config = this.getSwatchConfig(attributeId, itemId);
-                return config.label || config.value;
+                return config.label || config.value || this.getOptionLabelFromOptionConfig(attributeId, itemId);
+            },
+            getOptionLabelFromOptionConfig(attributeId, itemId) {
+                // Fallback if no value is present in swatchConfig data
+                // Reference issue https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/190
+                const option = this.getAllAttributeOptions(attributeId).filter(option => option.id === itemId);
+                return option && option[0] && option[0].label ||'';
             },
             getSwatchConfig(attributeId, itemId) {
-                return this.swatchConfig[attributeId] ? this.swatchConfig[attributeId][itemId] : false;
+                return this.swatchConfig[attributeId] && this.swatchConfig[attributeId][itemId]
+                    ? this.swatchConfig[attributeId][itemId]
+                    : false;
             },
             activeTooltipItem: false,
             tooltipPositionElement: false,
@@ -92,8 +109,7 @@ use Magento\Framework\View\Element\Template;
             },
             getTooltipImageStyle(attributeId, itemId) {
                 const config = this.getSwatchConfig(attributeId, itemId);
-                const typeId = config.type.toString();
-                const type = this.getSwatchType(typeId);
+                const type = this.getSwatchType(attributeId);
 
                 if (type === "color") {
                     return 'background-color:' + config.value + '; width: 110px; height: 90px;';
