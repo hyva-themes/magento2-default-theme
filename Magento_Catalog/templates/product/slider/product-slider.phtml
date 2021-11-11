@@ -13,6 +13,7 @@ use Hyva\Theme\ViewModel\Cart\Items as CartItems;
 use Hyva\Theme\ViewModel\ProductCompare;
 use Hyva\Theme\ViewModel\ProductList;
 use Hyva\Theme\ViewModel\Slider;
+use Hyva\Theme\ViewModel\Store;
 use Hyva\Theme\ViewModel\Wishlist;
 use Magento\Catalog\Model\Product\Visibility as ProductVisibility;
 use Magento\Framework\Escaper;
@@ -25,11 +26,13 @@ use Magento\Framework\View\Element\Template;
 /** @var ProductList $productListViewModel */
 /** @var Wishlist $wishlistViewModel */
 /** @var ProductCompare $compareViewModel */
+/** @var Store $storeViewModel */
 
 $sliderViewModel      = $viewModels->require(Slider::class);
 $productListViewModel = $viewModels->require(ProductList::class);
 $wishlistViewModel    = $viewModels->require(Wishlist::class);
 $compareViewModel     = $viewModels->require(ProductCompare::class);
+$storeViewModel       = $viewModels->require(Store::class);
 
 $categoryIds       = array_filter(explode(',', $block->getData('category_ids') ?: ''));
 $pageSize          = $block->getData('page_size') ?: 8;
@@ -56,6 +59,7 @@ foreach ($additionalFilters as $filter) {
 }
 
 $productListViewModel->setPageSize($pageSize);
+$productListViewModel->addFilter('website_id', $storeViewModel->getWebsiteId());
 $productListViewModel->addFilter('visibility', [
     ProductVisibility::VISIBILITY_IN_CATALOG,
     ProductVisibility::VISIBILITY_IN_SEARCH,
