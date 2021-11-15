@@ -1,0 +1,42 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Catalog\Block\Product\ListProduct;
+use Magento\Catalog\Block\Product\ReviewRendererInterface;
+use Magento\Catalog\Model\Product;
+
+/** @var ListProduct $block */
+?>
+<?php if ($block->getProductCollection() && $block->getProductCollection()->getSize()): ?>
+    <?php
+    $type = 'widget-product-carousel';
+    $mode = 'grid';
+    $image = 'new_products_content_widget_grid';
+    $items = $block->getProductCollection()->getItems();
+    $templateType = ReviewRendererInterface::SHORT_VIEW;
+    $description = false;
+    ?>
+    <div class="glider-contain product-items <?= /* @noEscape */ $type ?>">
+        <div data-role="glider-content"
+             class="mx-auto grid gap-4 sm:grid-cols-2 lg:grid-cols-4 relative overflow-y-hidden overflow-x-scroll">
+            <?php /** @var Product $item */ ?>
+            <?php foreach ($items as $item): ?>
+                <?= /** @noEscape */ $block->getLayout()->getBlock('product_list_item')
+                    ->setData('product', $item)
+                    ->setData('view_mode', $mode)
+                    ->setData('image_display_area', $image)
+                    ->setData('show_description', $description)
+                    ->setData('template_type', $templateType)
+                    ->toHtml() ?>
+            <?php endforeach ?>
+        </div>
+        <?= /** @noEscape */ $block->getBlockHtml('pagebuilder.carousel.nav') ?>
+    </div>
+<?php endif ?>

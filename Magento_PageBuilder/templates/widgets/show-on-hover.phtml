@@ -1,0 +1,59 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+?>
+<script>
+    'use strict';
+
+    (() => {
+        const applyShowOnHover = (element) => {
+            const showOverlayOnHover = (element) => {
+                const overlay = element.querySelector('.pagebuilder-overlay');
+                const color = overlay.dataset.overlayColor;
+
+                element.addEventListener('mouseover', () => {
+                    overlay.style.backgroundColor = color;
+                });
+                element.addEventListener('mouseout', () => {
+                    overlay.style.backgroundColor = 'transparent';
+                });
+            };
+
+            const showButtonOnHover = (element) => {
+                const button = element.querySelector('.pagebuilder-banner-button');
+
+                element.addEventListener('mouseover', () => {
+                    button.style.opacity = '1';
+                    button.style.visibility = 'visible';
+                });
+                element.addEventListener('mouseout', () => {
+                    button.style.opacity = '0';
+                    button.style.visibility = 'hidden';
+                });
+            };
+
+            if (element.dataset.showOverlay === 'hover') {
+                showOverlayOnHover(element);
+            }
+            if (element.dataset.showButton === 'hover') {
+                showButtonOnHover(element);
+            }
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('[data-content-type="banner"],[data-content-type="slider"]').forEach(element => {
+                applyShowOnHover(element);
+            });
+        });
+    })();
+</script>

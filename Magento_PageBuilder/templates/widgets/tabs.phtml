@@ -1,0 +1,39 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+?>
+<script>
+    'use strict';
+
+    (() => {
+        document.querySelectorAll('[data-content-type="tab-item"]').forEach(tabItem => {
+            tabItem.setAttribute('x-show', `tab === '${tabItem.id}'`);
+        });
+
+        document.querySelectorAll('[data-content-type="tabs"]').forEach(tab => {
+            const defaultActiveTab = parseInt(tab.dataset.activeTab) || 0;
+
+            tab.querySelectorAll('.tab-header').forEach((tabHeader, index) => {
+                const tabLink = tabHeader.querySelector('a');
+                const tabId = tabLink.getAttribute('href').replace('#', '');
+
+                tabHeader.setAttribute(':class', `{ 'active': tab === '${tabId}' }`);
+                tabLink.setAttribute('x-on:click.prevent', `tab = '${tabId}'`);
+
+                if (index === defaultActiveTab) {
+                    tab.setAttribute('x-data', `{ tab: '${tabId}' }`);
+                }
+            });
+        });
+    })();
+</script>

@@ -1,0 +1,42 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+?>
+<script>
+    'use strict';
+
+    (() => {
+        const equalizeButtonWidths = (buttons) => {
+            const buttonList = buttons.querySelectorAll('[data-element="link"], [data-element="empty_link"]');
+            let buttonMinWidth = 0;
+
+            buttonList.forEach(button => {
+                const buttonWidth = button.offsetWidth;
+
+                if (buttonWidth > buttonMinWidth) {
+                    buttonMinWidth = buttonWidth;
+                }
+            });
+
+            buttonList.forEach(button => {
+                button.style.minWidth = `${buttonMinWidth}px`;
+            });
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('[data-content-type="buttons"][data-same-width="true"]').forEach(buttons => {
+                equalizeButtonWidths(buttons);
+            });
+        });
+    })();
+</script>

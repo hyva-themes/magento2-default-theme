@@ -1,0 +1,133 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+
+$jarallaxUrl = $block->getViewFileUrl('Magento_PageBuilder::js/jarallax.min.js');
+$jarallaxVideoUrl = $block->getViewFileUrl('Magento_PageBuilder::js/jarallax-video.min.js');
+?>
+<script>
+    'use strict';
+
+    (() => {
+        const initParallaxImage = (element) => {
+            if (!window.jarallax) {
+                return;
+            }
+
+            element.classList.add('jarallax');
+            element.dataset.jarallax = '';
+            const parallaxSpeed = parseFloat(element.dataset.parallaxSpeed) || 0.5;
+            const elementStyle = window.getComputedStyle(element);
+
+            window.jarallax(element, {
+                imgPosition: elementStyle.backgroundPosition || '50% 50%',
+                imgRepeat: elementStyle.backgroundRepeat || 'no-repeat',
+                imgSize: elementStyle.backgroundSize || 'cover',
+                speed: parallaxSpeed,
+            });
+        };
+
+        const initVideoBackground = (element) => {
+            if (!window.jarallax) {
+                return;
+            }
+
+            let slider = null;
+
+            if (element.classList.contains('pagebuilder-slide-wrapper')) {
+                const viewportElement = document.createElement('div');
+                slider = element.closest('[data-content-type=slider]');
+                viewportElement.classList.add('jarallax-viewport-element');
+                element.dataset.elementInViewport = '.jarallax-viewport-element';
+                element.appendChild(viewportElement);
+            }
+
+            element.classList.add('jarallax');
+            element.dataset.jarallax = '';
+            const parallaxSpeed = parseFloat(element.dataset.parallaxSpeed) || 0.5;
+
+            window.jarallax(element, {
+                imgSrc: element.dataset.videoFallbackSrc,
+                speed: parallaxSpeed,
+                videoLoop: element.dataset.videoLoop,
+                videoPlayOnlyVisible: element.dataset.videoPlayOnlyVisible,
+                videoLazyLoading: element.dataset.videoLazyLoad,
+                disableVideo: false,
+                elementInViewport: element.dataset.elementInViewport &&
+                    element.querySelector(element.dataset.elementInViewport),
+            });
+
+            if (slider) {
+                if (slider.dataset.afterChangeIsSet) {
+                    return;
+                }
+
+                slider.addEventListener('glider-loaded', () => {
+                    slider.querySelectorAll('.jarallax').forEach(videoSlide => {
+                        videoSlide.jarallax && videoSlide.jarallax.onScroll();
+                    });
+                });
+
+                slider.addEventListener('glider-animated', () => {
+                    slider.querySelectorAll('.jarallax').forEach(videoSlide => {
+                        videoSlide.jarallax && videoSlide.jarallax.onScroll();
+                    });
+                });
+
+                slider.dataset.afterChangeIsSet = true;
+            }
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const parallaxImageElements = document.querySelectorAll(
+                `[data-content-type="row"][data-background-type="image"][data-enable-parallax="1"],
+                [data-content-type="row"] > [data-background-type="image"][data-enable-parallax="1"]`
+            );
+
+            const videoBackgroundsElements = document.querySelectorAll(
+                `[data-content-type="row"][data-background-type="video"][data-enable-parallax="1"],
+                [data-content-type="row"] > [data-background-type="video"][data-enable-parallax="1"],
+                [data-content-type="banner"] [data-background-type="video"],
+                [data-content-type="slide"] [data-background-type="video"]`
+            );
+
+            if (parallaxImageElements.length > 0 || videoBackgroundsElements.length > 0) {
+                const jarallaxScript = document.createElement('script');
+                jarallaxScript.type = 'text/javascript';
+
+                jarallaxScript.addEventListener('load', () => {
+                    parallaxImageElements.forEach(row => {
+                        initParallaxImage(row);
+                    });
+
+                    const jarallaxVideoScript = document.createElement('script');
+                    jarallaxVideoScript.type = 'text/javascript';
+
+                    jarallaxVideoScript.addEventListener('load', () => {
+                        videoBackgroundsElements.forEach(element => {
+                            initVideoBackground(element);
+                        });
+                    });
+
+                    jarallaxVideoScript.src = '<?= $escaper->escapeJs($escaper->escapeUrl($jarallaxVideoUrl)) ?>';
+                    document.head.appendChild(jarallaxVideoScript);
+                });
+
+                jarallaxScript.src = '<?= $escaper->escapeJs($escaper->escapeUrl($jarallaxUrl)) ?>';
+                document.head.appendChild(jarallaxScript);
+            }
+        });
+    })();
+</script>

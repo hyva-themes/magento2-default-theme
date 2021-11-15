@@ -1,0 +1,155 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\PageBuilder\Block\GoogleMapsApi;
+
+/** @var Escaper $escaper */
+/** @var GoogleMapsApi $block */
+?>
+<script>
+    'use strict';
+
+    (() => {
+        const initMaps = (elements) => {
+            const renderMap = (element) => {
+                const dataLocations = element.dataset.locations;
+
+                // Hide map if no locations set
+                if (!dataLocations || dataLocations === '[]') {
+                    element.classList.add('hidden');
+                    return;
+                }
+
+                const map = new google.maps.Map(
+                    element,
+                    getMapOptions(
+                        element.dataset.showControls !== 'true',
+                        element.dataset.showControls === 'true'
+                    )
+                );
+                const locations = JSON.parse(dataLocations);
+                const latitudeLongitudeBounds = new google.maps.LatLngBounds();
+                const bounds = [];
+
+                locations.forEach(location => {
+                    const position = {
+                        lat: parseFloat(location.position.latitude),
+                        lng: parseFloat(location.position.longitude),
+                    };
+                    bounds.push(position);
+
+                    const infowindow = new google.maps.InfoWindow({
+                        content: getInfoWindowContent(location),
+                    });
+                    const marker = new google.maps.Marker({
+                        position: position,
+                        map,
+                        title: location.location_name,
+                    });
+
+                    marker.addListener('click', () => {
+                        infowindow.open(map, marker);
+                    });
+                });
+
+                // Set bounds if multiple locations
+                if (bounds.length > 1) {
+                    bounds.forEach(function (bound) {
+                        latitudeLongitudeBounds.extend(bound);
+                    });
+                    map.fitBounds(latitudeLongitudeBounds);
+                }
+
+                // Center if single location
+                if (bounds.length === 1) {
+                    map.setCenter(bounds[0]);
+                }
+            };
+
+            const getMapOptions = (disableDefaultUI, mapTypeControl) => {
+                const style = '<?= $escaper->escapeJs($block->getStyle()) ?>';
+                return {
+                    zoom: 8,
+                    scrollwheel: false,
+                    disableDoubleClickZoom: false,
+                    mapTypeControlOptions: {
+                        style: google.maps.MapTypeControlStyle.DEFAULT,
+                    },
+                    styles: style ? JSON.parse(style) : [],
+                    disableDefaultUI: disableDefaultUI,
+                    mapTypeControl: mapTypeControl,
+                };
+            };
+
+            const getInfoWindowContent = (location) => {
+                const title = location.location_name ?
+                    `<h3 class="text-2xl font-medium text-gray-900 title-font">${location.location_name}</h3>` : '';
+                const comment = location.comment ? `<p class="px-1 pt-3 text-primary">${location.comment}</p>` : '';
+                const phone = location.phone ? `<p class="px-1 pt-3 text-primary">Phone: ${location.phone}</p>` : '';
+                const street = location.address ? `${location.address}<br/>` : '';
+                const city = location.city ? `${location.city}<br/>` : '';
+                const state = location.state ? `${location.state}<br/>` : '';
+                const zipCode = location.zipcode ? `${location.zipcode}<br/>` : '';
+                const country = location.country ? location.country : '';
+
+                return `<div>
+                            ${title}
+                            ${comment}
+                            ${phone}
+                            <p class="px-1 pt-3 text-primary">
+                                ${street}
+                                ${city}
+                                ${state}
+                                ${zipCode}
+                                ${country}
+                            </p>
+                        </div>`;
+            };
+
+            const hideAllMaps = () => {
+                document.querySelectorAll('[data-content-type="map"]').forEach(element => {
+                    element.classList.add('hidden');
+                });
+            };
+
+            window.gm_authFailure = () => {
+                hideAllMaps();
+            };
+
+            if (typeof google.maps === 'undefined') {
+                hideAllMaps();
+                return;
+            }
+
+            elements.forEach(element => {
+                if (element.dataset.contentType === 'map') {
+                    renderMap(element);
+                }
+            });
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const mapElements = document.querySelectorAll('[data-content-type="map"]');
+
+            if (mapElements.length > 0) {
+                const script = document.createElement('script');
+                script.type = 'text/javascript';
+
+                script.addEventListener('load', () => {
+                    initMaps(mapElements);
+                });
+
+                script.src = '<?= $escaper->escapeJs($escaper->escapeUrl($block->getLibraryUrl())) ?>';
+                document.head.appendChild(script);
+            }
+        });
+    })();
+</script>

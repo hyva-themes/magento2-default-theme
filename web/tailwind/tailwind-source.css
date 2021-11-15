@@ -16,6 +16,7 @@
 @import url(components/theming.css);
 @import url(components/transitions.css);
 @import url(components/typography.css);
+@import url(components/page-builder.css);
 
 /* purgecss end ignore */
 
