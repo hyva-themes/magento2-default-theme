@@ -7,6 +7,7 @@
  * See https://hyva.io/license
  */
 
+use Hyva\GraphqlViewModel\ViewModel\GraphqlViewModel;
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\Store;
 use Magento\Framework\Escaper;
@@ -23,6 +24,10 @@ $viewModelStore = $viewModels->require(Store::class);
 //phpcs:disable Generic.Files.LineLength
 
 $formId = 'review_form';
+
+/** @var GraphqlViewModel $gqlViewModel */
+$gqlViewModel = $viewModels->require(GraphqlViewModel::class);
+
 
 /** @var ReCaptcha $recaptchaViewModel */
 //Do not replace this with $viewModels->require(ReCaptcha::class); that might break the dependency on
@@ -316,14 +321,14 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                             this.summary = document.getElementById('summary_field').value;
                             this.review = document.getElementById('review_field').value;
 
-                            var ratingValue;
+                            let ratingValue;
                             <?php foreach ($block->getRatings() as $rating): ?>
                             try {
                                 ratingValue =
                                     document
                                         .querySelector('input[name="ratings[<?= (int)$rating->getId() ?>]"]:checked')
                                         .value;
-                                this.ratings[<?= $escaper->escapeJs($rating->getId()) ?>] = btoa(ratingValue);
+                                this.ratings[<?= (int) $rating->getId() ?>] = btoa(ratingValue);
                             } catch (e) {
                                 console.log(e);
                             }
@@ -345,64 +350,60 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                                 this.hasCaptchaToken = 0;
                             }
                         },
-                        placeReview: function (itemId, qty) {
-                            var $this = this;
+                        placeReview: function () {
+                            this.isLoading = true;
+                            this.displayErrorMessage = false;
 
-                            $this.isLoading = true;
-                            $this.displayErrorMessage = false;
-
-                            <?php $createProductReviewQuery = json_encode(
-                                '
-                                    mutation {
-                                        createProductReview(
-                                            input: {
-                                            sku: "' . $escaper->escapeJs($block->getProductInfo()->getSku()) . '",
-                                                nickname: "%nickname",
-                                                summary: "%summary",
-                                                text: "%review",
-                                                ratings: [%ratings]
-                                        }
-                                    ) {
-                                            review {
-                                                nickname
-                                            }
-                                        }
-                                    }
-                                '
-                            ); ?>
-
-                            function escape(s) {
-                                return s.replace(/\\/g, '\\\\').replaceAll('"', '\\"');
-                            }
-
-                            var createProductReviewQuery = <?= /** @noEscape */ $createProductReviewQuery ?>
-                                .replace('%nickname', escape($this.nickname))
-                                .replace('%summary',  escape($this.summary))
-                                .replace('%review',   escape($this.review))
-                                .replace('%ratings', Object.keys($this.ratings).map(function (key) {
-                                    return '{ id: "' + btoa(key) + '", value_id: "' + escape($this.ratings[key]) + '" }'
-                                }).join(','));
+                            const query = `<?= $gqlViewModel->query('create_product_review_mutation', '
+mutation createProductReviewMutation(
+    $sku: String!,
+    $nick: String!,
+    $summary: String!,
+    $review: String!,
+    $ratings: [ProductReviewRatingInput]!
+) {
+    createProductReview(
+        input: {
+            sku: $sku,
+            nickname: $nick,
+            summary: $summary,
+            text: $review,
+            ratings: $ratings
+        }
+    ) {
+        review {
+            nickname
+        }
+    }
+}
+                            ') ?>`;
+                            const variables = {
+                                sku: '<?= $escaper->escapeJs($block->getProductInfo()->getSku()) ?>',
+                                nick: this.nickname,
+                                summary: this.summary,
+                                review: this.review,
+                                ratings: Object.keys(this.ratings).map(key => {
+                                    return {id: btoa(key), value_id: this.ratings[key]}
+                                })
+                            };
 
                             fetch(`${BASE_URL}graphql`, {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json;charset=utf-8',
-                                    'Store': '<?= $escaper->escapeHtmlAttr($viewModelStore->getStoreCode()) ?>'
+                                    'Store': '<?= $escaper->escapeJs($viewModelStore->getStoreCode()) ?>'
                                 },
                                 credentials: 'include',
-                                body: JSON.stringify({query: createProductReviewQuery})
+                                body: JSON.stringify({query: query, variables: variables})
                             })
-                                .then(function (response) {
-                                    return response.json()
-                                })
-                                .then(
-                                    function (data) {
-                                        $this.isLoading = false;
+                                .then(response => response.json())
+                                .then(data => {
+                                        this.isLoading = false;
                                         if (data.errors) {
-                                            $this.setErrorMessages(['<?= $escaper->escapeJs(__('Submitting your review failed, please try again.')) ?>']);
-                                            $this.displayErrorMessage = true;
+                                            this.setErrorMessages(['<?= $escaper->escapeJs(__('Submitting your review failed, please try again.')) ?>']);
+                                            this.displayErrorMessage = true;
                                         } else {
-                                            $this.displaySuccessMessage = true;
+                                            this.displaySuccessMessage = true;
                                         }
                                     }
                                 );
