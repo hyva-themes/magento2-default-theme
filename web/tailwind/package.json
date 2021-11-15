@@ -20,13 +20,13 @@
         "postcss-cli": "^8.3.1"
     },
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
         "build": "npx postcss tailwind-source.css -o tailwind-output.css",
         "minify": "npx csso tailwind-output.css --output ../css/styles.css",
-        "build-dev": "NODE_ENV=development npm run build && cp tailwind-output.css ../css/styles.css && npm run output-success",
-        "build-prod": "NODE_ENV=production npm run build && npm run minify && npm run output-success",
-        "output-success": "echo \"\\033[0;32mDone!\\033[0m\"",
-        "watch": "browser-sync start --config ./browser-sync.config.js"
+        "watch": "NODE_ENV=development TAILWIND_COMPILE_MODE=jit TAILWIND_MODE=watch npx postcss tailwind-source.css -o ../css/styles.css --watch --verbose",
+        "build-dev": "NODE_ENV=development TAILWIND_COMPILE_MODE=aot npm run build && cp tailwind-output.css ../css/styles.css && npm run output-success",
+        "build-prod": "NODE_ENV=production TAILWIND_COMPILE_MODE=jit npm run build && npm run minify && npm run output-success",
+        "browser-sync": "browser-sync start --config ./browser-sync.config.js",
+        "output-success": "echo \"\\033[0;32mDone!\\033[0m\""
     },
     "author": "Willem Wigman",
     "license": "ISC",

@@ -1,5 +1,7 @@
-.text-sans-serif {
-    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+@layer utilities {
+    .text-sans-serif {
+        font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    }
 }
 
 html {

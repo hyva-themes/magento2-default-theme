@@ -15,8 +15,10 @@
 }
 
 
-.actions-toolbar .primary button {
-    @apply btn btn-primary;
+@layer components {
+    .actions-toolbar .primary button {
+        @apply btn btn-primary;
+    }
 }
 
 .actions-toolbar a.back {
