@@ -30,7 +30,7 @@ $currencyViewModel = $viewModels->require(Currency::class);
     <?php $currencies = $currencyViewModel->getCurrencies(); ?>
     <?php $currentCurrencyCode = $currencyViewModel->getCurrentCurrencyCode(); ?>
     <div x-data="{ open: false }"
-         class="w-full sm:w-1/2 md:w-full -mx-2"
+         class="w-full sm:w-1/2 md:w-full pr-4"
     >
         <div class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3 uppercase">
             <?= $escaper->escapeHtml(__('Currency')) ?>

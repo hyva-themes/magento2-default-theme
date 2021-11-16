@@ -1348,8 +1348,8 @@ select {
 
 .modal {
   /*
-   * TODO: add tailwind classes used for the cart and modal styles
-   * Makeing the modal and offcanvs styles theme specific and mor adjustable
+   * TODO: add tailwind classes used for the cart and modal styles.
+   * This will make the modal and off-canvas styles theme specific and more adjustable.
    */
 }
 
@@ -1920,6 +1920,10 @@ body {
 
 .m-0 {
   margin: 0px;
+}
+
+.m-2 {
+  margin: 0.5rem;
 }
 
 .m-auto {
@@ -2766,10 +2770,6 @@ body {
 
 .gap-y-0 {
   row-gap: 0px;
-}
-
-.gap-y-4 {
-  row-gap: 1rem;
 }
 
 .gap-y-16 {
@@ -3973,42 +3973,42 @@ body > div > div.grecaptcha-badge {
   line-height: 1.25rem;
 }
 
-form .field {
-  margin-top: 0.75rem;
-  margin-bottom: 0.75rem;
-}
+form .field, fieldset .field {
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
 
-form label {
-  margin-bottom: 0.5rem;
-  display: block;
-  --tw-text-opacity: 1;
-  color: rgba(39, 39, 42, var(--tw-text-opacity));
-}
+form label, fieldset label {
+    margin-bottom: 0.5rem;
+    display: block;
+    --tw-text-opacity: 1;
+    color: rgba(39, 39, 42, var(--tw-text-opacity));
+  }
 
-form .field.choice {
-  display: flex;
-  align-items: center
-}
+form .field.choice, fieldset .field.choice {
+    display: flex;
+    align-items: center
+  }
 
-form .field.choice input {
-  margin-right: 1rem
-}
+form .field.choice input, fieldset .field.choice input {
+    margin-right: 1rem
+  }
 
-form .field.choice label {
-  margin-bottom: 0px
-}
+form .field.choice label, fieldset .field.choice label {
+    margin-bottom: 0px
+  }
 
-form legend {
-  margin-bottom: 0.75rem;
-  font-size: 1.25rem;
-  line-height: 1.75rem;
-  --tw-text-opacity: 1;
-  color: rgba(39, 39, 42, var(--tw-text-opacity))
-}
+form legend, fieldset legend {
+    margin-bottom: 0.75rem;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    --tw-text-opacity: 1;
+    color: rgba(39, 39, 42, var(--tw-text-opacity))
+  }
 
-form legend + br {
-  display: none
-}
+form legend + br, fieldset legend + br {
+    display: none
+  }
 
 fieldset ~ fieldset {
   margin-top: 2rem;
@@ -4190,9 +4190,19 @@ fieldset ~ fieldset {
     margin-right: 0px;
   }
 
+  .md\:mx-4 {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
   .md\:mx-auto {
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .md\:-mx-4 {
+    margin-left: -1rem;
+    margin-right: -1rem;
   }
 
   .md\:my-0 {
