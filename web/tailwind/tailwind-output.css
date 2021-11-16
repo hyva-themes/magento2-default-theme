@@ -1183,6 +1183,7 @@ select {
   }
 
 .page.messages {
+  position: -webkit-sticky;
   position: sticky;
   z-index: 10;
   top: 0px;
@@ -1348,8 +1349,8 @@ select {
 
 .modal {
   /*
-   * TODO: add tailwind classes used for the cart and modal styles
-   * Makeing the modal and offcanvs styles theme specific and mor adjustable
+   * TODO: add tailwind classes used for the cart and modal styles.
+   * This will make the modal and off-canvas styles theme specific and more adjustable.
    */
 }
 
@@ -1827,6 +1828,7 @@ body {
 }
 
 .sticky {
+  position: -webkit-sticky;
   position: sticky;
 }
 
@@ -2900,6 +2902,10 @@ body {
   border-right-width: 0px;
 }
 
+.border-r {
+  border-right-width: 1px;
+}
+
 .border-b-2 {
   border-bottom-width: 2px;
 }
@@ -3063,6 +3069,11 @@ body {
 .bg-container-darker {
   --tw-bg-opacity: 1;
   background-color: rgba(245, 245, 245, var(--tw-bg-opacity));
+}
+
+.even\:bg-container:nth-child(even) {
+  --tw-bg-opacity: 1;
+  background-color: rgba(250, 250, 250, var(--tw-bg-opacity));
 }
 
 .even\:bg-container-darker:nth-child(even) {
@@ -3973,42 +3984,42 @@ body > div > div.grecaptcha-badge {
   line-height: 1.25rem;
 }
 
-form .field {
-  margin-top: 0.75rem;
-  margin-bottom: 0.75rem;
-}
+form .field, fieldset .field {
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
 
-form label {
-  margin-bottom: 0.5rem;
-  display: block;
-  --tw-text-opacity: 1;
-  color: rgba(39, 39, 42, var(--tw-text-opacity));
-}
+form label, fieldset label {
+    margin-bottom: 0.5rem;
+    display: block;
+    --tw-text-opacity: 1;
+    color: rgba(39, 39, 42, var(--tw-text-opacity));
+  }
 
-form .field.choice {
-  display: flex;
-  align-items: center
-}
+form .field.choice, fieldset .field.choice {
+    display: flex;
+    align-items: center
+  }
 
-form .field.choice input {
-  margin-right: 1rem
-}
+form .field.choice input, fieldset .field.choice input {
+    margin-right: 1rem
+  }
 
-form .field.choice label {
-  margin-bottom: 0px
-}
+form .field.choice label, fieldset .field.choice label {
+    margin-bottom: 0px
+  }
 
-form legend {
-  margin-bottom: 0.75rem;
-  font-size: 1.25rem;
-  line-height: 1.75rem;
-  --tw-text-opacity: 1;
-  color: rgba(39, 39, 42, var(--tw-text-opacity))
-}
+form legend, fieldset legend {
+    margin-bottom: 0.75rem;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    --tw-text-opacity: 1;
+    color: rgba(39, 39, 42, var(--tw-text-opacity))
+  }
 
-form legend + br {
-  display: none
-}
+form legend + br, fieldset legend + br {
+    display: none
+  }
 
 fieldset ~ fieldset {
   margin-top: 2rem;

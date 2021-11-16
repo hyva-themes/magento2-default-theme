@@ -26,11 +26,7 @@ $helper = $this->helper(SearchHelper::class);
     function initMiniSearch() {
         return {
             minSearchLength: 3,
-            suggestions: [
-                {title: "Foo", num_results: 10},
-                {title: "Bar", num_results: 2},
-                {title: "Baz", num_results: 76}
-            ],
+            suggestions: [],
             suggest() {
                 const term = this.$refs.searchInput.value;
                 if (term.length >= this.minSearchLength) {
@@ -54,6 +50,14 @@ $helper = $this->helper(SearchHelper::class);
             search(term) {
                 this.$refs.searchInput.value = term;
                 document.getElementById('search_mini_form').submit();
+            },
+            focusElement(element) {
+                if (element && element.nodeName === "DIV") {
+                    element.focus();
+                    return true;
+                } else {
+                    return false;
+                }
             }
         }
     }
@@ -74,16 +78,20 @@ $helper = $this->helper(SearchHelper::class);
                maxlength="<?= $escaper->escapeHtmlAttr($helper->getMaxQueryLength()) ?>"
                class="w-full p-2 text-lg leading-normal transition appearance-none text-grey-800
                 focus:outline-none focus:border-transparent lg:text-xl"
+               @focus.once="suggest"
                @input.debounce.300="suggest"
+               @keydown.arrow-down.prevent="focusElement($el.querySelector('[tabindex]'))"
         />
          <template x-if="suggestions.length > 0">
-             <div class="w-full leading-normal transition appearance-none text-grey-800
-                flex flex-col focus:outline-none focus:border-transparent divide-y">
+             <div class="w-full leading-normal transition appearance-none text-grey-800 flex flex-col mt-1">
                  <template x-for="suggestion in suggestions">
-                     <div class="flex justify-between p-2 border-l border-r focus:bg-blue-100 hover:bg-blue-100 cursor-pointer"
+                     <div class="flex justify-between p-2 bg-container-lighter even:bg-container mb-1 cursor-pointer border border-container hover:bg-container-darker"
                           tabindex="0"
                           @click="search(suggestion.title)"
-                          @keydown.enter="search(suggestion.title)">
+                          @keydown.enter="search(suggestion.title)"
+                          @keydown.arrow-up.prevent="focusElement(event.target.previousElementSibling) || $refs.searchInput.focus()"
+                          @keydown.arrow-down.prevent="focusElement(event.target.nextElementSibling)"
+                     >
                          <span x-text="suggestion.title"></span>
                          <span x-text="suggestion.num_results"></span>
                      </div>
