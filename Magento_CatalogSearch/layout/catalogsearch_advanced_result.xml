@@ -30,11 +30,17 @@
                     <action method="setToolbarBlockName">
                         <argument name="name" xsi:type="string">product_list_toolbar</argument>
                     </action>
+                    <container name="search.result.list.additional" as="additional" label="Additional Info" />
                 </block>
                 <action method="setListOrders"/>
                 <action method="setListModes"/>
                 <action method="setListCollection"/>
             </block>
+        </referenceContainer>
+
+        <referenceContainer name="search.result.list.additional">
+            <block name="search.result.list.js.compare" template="Magento_Catalog::product/list/js/compare.phtml"/>
+            <block name="search.result.list.js.wishlist" template="Magento_Catalog::product/list/js/wishlist.phtml"/>
         </referenceContainer>
     </body>
 </page>
