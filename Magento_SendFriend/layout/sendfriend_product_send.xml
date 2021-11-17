@@ -18,9 +18,13 @@
             </action>
         </referenceBlock>
         <referenceContainer name="content">
-            <block name="sendfriend.send" cacheable="false" template="Magento_SendFriend::send.phtml">
+            <block class="Magento\SendFriend\Block\Send"
+                   name="sendfriend.send"
+                   cacheable="false"
+                   template="Magento_SendFriend::send.phtml"
+            >
                 <container name="form.additional.info" as="form_additional_info"/>
-                <block class="Hyva\Theme\Block\SendFriend\Product" name="product_item"
+                <block name="product_item"
                        template="Magento_SendFriend::item.phtml">
                 </block>
             </block>
