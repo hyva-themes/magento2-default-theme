@@ -146,7 +146,7 @@ $swatchItemBlock->setData('product_id', $productId);
     </script>
 
 <div x-data="initConfigurableSwatchOptions_<?= (int) $productId ?>()"
-     x-init="findAllowedAttributeOptions();"
+     x-init="findAllowedAttributeOptions(); initShowSwatchesIntersect();"
      @private-content-loaded.window="onGetCartData($event.detail.data)"
      @resize.window="resizeEvent()"
      class="mb-2 relative"
@@ -162,24 +162,26 @@ $swatchItemBlock->setData('product_id', $productId);
         <div class="swatch-attribute border-t last:border-b border-container
             <?= $escaper->escapeHtmlAttr($productAttribute->getAttributeCode()) ?>"
         >
-            <div class="w-full overflow-x-hidden swatch-attribute-options">
-                <div class="flex flex-nowrap w-full overflow-auto transition-all snap items-center py-1 min-h-14"
-                     role="radiogroup"
-                     x-spread="scrollEvents"
-                >
-                    <label class="sr-only"
-                           for="attribute<?= $escaper->escapeHtmlAttr($productAttribute->getAttributeCode()) ?>"
+            <div class="w-full overflow-x-hidden swatch-attribute-options min-h-14">
+                <template x-if="showSwatches">
+                    <div class="flex flex-nowrap w-full overflow-auto transition-all snap items-center py-1"
+                         role="radiogroup"
+                         x-spread="scrollEvents"
                     >
-                        <span>
-                            <?= $escaper->escapeHtml($productAttribute->getStoreLabel()) ?>
-                        </span>
-                    </label>
-                    <template x-for="(item, index) in optionConfig.attributes[<?= (int) $attributeId ?>].options"
-                              :key="item.id"
-                    >
-                        <?= /* @noEscape */ $swatchItemBlock->setData('attribute_id', $attributeId)->toHtml(); ?>
-                    </template>
-                </div>
+                        <label class="sr-only"
+                               for="attribute<?= $escaper->escapeHtmlAttr($productAttribute->getAttributeCode()) ?>"
+                        >
+                            <span>
+                                <?= $escaper->escapeHtml($productAttribute->getStoreLabel()) ?>
+                            </span>
+                        </label>
+                        <template x-for="(item, index) in optionConfig.attributes[<?= (int) $attributeId ?>].options"
+                                  :key="item.id"
+                        >
+                            <?= /* @noEscape */ $swatchItemBlock->setData('attribute_id', $attributeId)->toHtml(); ?>
+                        </template>
+                    </div>
+                </template>
             </div>
         </div>
         <?php endforeach; ?>

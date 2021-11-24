@@ -58,7 +58,7 @@ $tooltipBlockHtml = $block->getBlockHtml('product.swatch.tooltip');
     </script>
 
     <div x-data="initConfigurableSwatchOptions_<?= (int) $productId ?>()"
-         x-init="init();"
+         x-init="init(); initShowSwatchesIntersect();"
          @private-content-loaded.window="onGetCartData($event.detail.data)"
          class="relative mb-6"
     >
@@ -70,31 +70,33 @@ $tooltipBlockHtml = $block->getBlockHtml('product.swatch.tooltip');
                 <?php $attributeId = $attribute->getAttributeId(); ?>
                 <?php $productAttribute = $attribute->getProductAttribute();  ?>
                 <?php if ($swatchRendererViewModel->isSwatchAttribute($productAttribute)): ?>
-                    <div class="swatch-attribute border-t last:border-b border-container
+                    <div class="swatch-attribute border-t last:border-b border-container min-h-14
                             <?= $escaper->escapeHtmlAttr($productAttribute->getAttributeCode()) ?>">
-                        <div class="flex items-center py-1 w-full border-gray-300 min-h-14">
+                        <template x-if="showSwatches">
+                            <div class="flex flex-col sm:flex-row items-center py-4 sm:py-1 w-full border-gray-300">
 
-                            <label class="w-1/2 text-left text-gray-700 label"
-                                   for="attribute<?= $escaper->escapeHtmlAttr($productAttribute->getAttributeCode()) ?>"
-                            >
-                                <span>
-                                    <?= $escaper->escapeHtml($productAttribute->getStoreLabel()) ?>
-                                </span>
-                            </label>
-                            <div class="ml-2 w-1/2 text-left text-gray-900">
-                                <div
-                                     class="flex items-center -mx-4 space-x-4 swatch-attribute-options"
-                                     role="radiogroup"
+                                <label class="w-full sm:w-1/2 text-left text-gray-700 label"
+                                       for="attribute<?= $escaper->escapeHtmlAttr($productAttribute->getAttributeCode()) ?>"
                                 >
-                                    <template
-                                        x-for="(item, index) in optionConfig.attributes[<?= (int) $attributeId ?>].options"
-                                        :key="item.id"
+                                    <span>
+                                        <?= $escaper->escapeHtml($productAttribute->getStoreLabel()) ?>
+                                    </span>
+                                </label>
+                                <div class="w-full sm:ml-2 sm:w-1/2 text-left text-gray-900">
+                                    <div
+                                         class="flex items-center -mx-4 space-x-4 swatch-attribute-options"
+                                         role="radiogroup"
                                     >
-                                        <?= /* @noEscape */ $swatchItemBlock->setData('attribute_id', $attributeId)->toHtml(); ?>
-                                    </template>
+                                        <template
+                                            x-for="(item, index) in optionConfig.attributes[<?= (int) $attributeId ?>].options"
+                                            :key="item.id"
+                                        >
+                                            <?= /* @noEscape */ $swatchItemBlock->setData('attribute_id', $attributeId)->toHtml(); ?>
+                                        </template>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </template>
                     </div>
                 <?php else: ?>
                     <div class="flex items-center py-2 w-full border-t border-gray-300 last:border-b">
