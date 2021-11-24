@@ -104,6 +104,7 @@ $title = $title ?? __('Recently Viewed Products');
 
                 if (!itemsToShow.length) {
                     this.noOfProductsToShow = 0;
+                    this.loading = false;
                     return;
                 }
 
