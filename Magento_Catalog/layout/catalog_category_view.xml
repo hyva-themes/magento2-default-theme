@@ -55,5 +55,23 @@
             </arguments>
         </referenceBlock>
 
+        <referenceContainer name="sidebar.additional">
+            <block
+                name="catalog.compare.sidebar"
+                template="Magento_Catalog::product/compare/sidebar.phtml"
+                ifconfig="catalog/frontend/show_sidebar_in_list"
+            />
+
+            <block class="Magento\Catalog\Block\Widget\RecentlyViewed"
+                   name="recently_viewed_products.default_widget_plp"
+                   ifconfig="catalog/recently_products/show_on_plp"
+                   template="Magento_Catalog::product/widget/viewed/sidebar.phtml">
+                <arguments>
+                    <argument name="page_size" xsi:type="number">3</argument>
+                    <argument name="show_attributes" xsi:type="string">name,image,price,learn_more</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+
     </body>
 </page>

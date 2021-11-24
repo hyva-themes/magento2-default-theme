@@ -1,0 +1,133 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\ProductCompare;
+use Hyva\Theme\ViewModel\Wishlist;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var Wishlist $wishlistViewModel */
+$wishlistViewModel = $viewModels->require(Wishlist::class);
+
+/** @var ProductCompare $compareViewModel */
+$compareViewModel = $viewModels->require(ProductCompare::class);
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
+$uniqueId = '_' . uniqid();
+$title = __('Recently Viewed Products');
+
+$widgetAttributesToShow = explode(',', (string) $block->getData('show_attributes'));
+$widgetButtonsToShow = explode(',', (string) $block->getData('show_buttons'));
+
+$jsTemplate = 'Magento_Catalog::product/widget/viewed/recently-viewed-products-js.phtml';
+echo $block->assign(['uniqueId' => $uniqueId, 'title' => $title])
+           ->fetchView($block->getTemplateFile($jsTemplate));
+
+?>
+<section class="my-12 text-gray-700 body-font"
+         x-data="initRecentlyViewedProductsComponent<?= /** @noEscape */ $uniqueId?>({isSlider: false})"
+         x-init="getProducts();"
+         :style="minHeight()"
+>
+    <template x-if="products && products.length">
+        <div class="container relative px-5">
+            <div class="container flex flex-col items-center pt-6 pb-3 mx-auto mb-6 border-b-2
+                        border-gray-300 md:flex-row">
+                <h3 class="text-center text-2xl font-medium text-gray-900 title-font">
+                    <?= $escaper->escapeHtml($title); ?>
+                </h3>
+            </div>
+            <div class="relative w-full">
+                <div class="flex flex-col flex-wrap md:flex-row">
+                    <template x-for="product in products">
+                        <div class="flex-none w-full py-4 md:w-1/2 lg:w-1/3 xl:w-1/4">
+                            <div class="mx-1 card card-interactive">
+                                <?php if(in_array("image", $widgetAttributesToShow)): ?>
+                                    <a :href="'<?= $escaper->escapeJs($escaper->escapeUrl($block->getBaseUrl())) ?>' +
+                                            product.url_key + (product.url_suffix || '')"
+                                       class="relative flex items-center bg-white product photo product-item-photo"
+                                       style="padding-top:100%"
+                                       tabindex="-1">
+                                            <span class="absolute top-0 left-0 flex flex-wrap content-center w-full h-full p-2
+                                                overflow-hidden align-center hover:shadow-sm">
+                                                <img class="self-center w-full h-auto"
+                                                     :src="product.small_image.url"
+                                                     :alt="product.small_image.label"
+                                                     loading="lazy"
+                                                     width="500"
+                                                     height="500"
+                                                />
+                                            </span>
+                                    </a>
+                                <?php endif; ?>
+                                <?php if(in_array("name", $widgetAttributesToShow)): ?>
+                                    <p class="flex items-center justify-center px-1 pt-3 text-primary">
+                                        <a class="truncate product-item-link"
+                                           :href="'<?= $escaper->escapeJs($escaper->escapeUrl($block->getBaseUrl())) ?>' +
+                                                    product.url_key + (product.url_suffix || '')"
+                                        >
+                                            <span x-html="product.name"></span>
+                                        </a>
+                                    </p>
+                                <?php endif; ?>
+                                <?php if(in_array("price", $widgetAttributesToShow)): ?>
+                                    <p class="pt-1 text-lg text-center text-gray-900"
+                                       x-text="hyva.formatPrice(product.price_range.minimum_price.final_price.value)"></p>
+                                <?php endif; ?>
+                                <p class="flex flex-wrap gap-2 inline p-3">
+                                    <?php if(in_array("learn_more", $widgetAttributesToShow)): ?>
+                                        <a class="justify-center w-auto mr-auto btn btn-primary"
+                                           :href="'<?= $escaper->escapeJs($escaper->escapeUrl($block->getBaseUrl())) ?>' +
+                                                    product.url_key + (product.url_suffix || '')">
+                                            <span class="inline"><?= $escaper->escapeHtml(__('View Product')) ?></span>
+                                        </a>
+                                    <?php endif; ?>
+                                    <span class="inline-flex gap-2">
+                                            <?php if (in_array("add_to_compare", $widgetButtonsToShow)): ?>
+                                                <?php if ($compareViewModel->showInProductList()): ?>
+                                                    <button @click.prevent="addToCompare(product.id)"
+                                                            aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Compare')) ?>"
+                                                            class="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex
+                                                            items-center justify-center text-gray-500 hover:text-yellow-500"
+                                                    >
+                                                    <?= $heroicons->scaleHtml("w-5 h-5") ?>
+                                                </button>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                        <?php if (in_array("add_to_wishlist", $widgetButtonsToShow)): ?>
+                                            <?php if ($wishlistViewModel->isEnabled()): ?>
+                                                <button
+                                                    aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Wish List')) ?>"
+                                                    @click.prevent="addToWishlist(product.id)"
+                                                    class="inline-flex items-center justify-center w-10 h-10 p-0 ml-auto
+                                                    text-gray-500 bg-gray-200 border-0 rounded-full hover:text-red-600"
+                                                >
+                                                    <?= $heroicons->heartHtml("w-5 h-5", 25, 25) ?>
+                                                </button>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
+                                        </span>
+                                </p>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </template>
+</section>

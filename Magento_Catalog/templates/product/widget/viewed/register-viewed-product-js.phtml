@@ -1,0 +1,142 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\ProductPage;
+use Hyva\Theme\ViewModel\Currency;
+use Hyva\Theme\ViewModel\RecentlyViewedProducts;
+use Magento\Catalog\Block\Product\Image;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+/** @var RecentlyViewedProducts $recentlyViewed */
+/** @var ProductPage $productPage */
+/** @var Currency $viewModelCurrency */
+/** @var Image|null $productImage */
+
+$recentlyViewed    = $viewModels->require(RecentlyViewedProducts::class);
+$productPage       = $viewModels->require(ProductPage::class);
+$currentProduct    = $productPage->getProduct();
+$viewModelCurrency = $viewModels->require(Currency::class);
+$currentProductSku = $currentProduct ? $currentProduct->getSku() : '';
+$productImage = $currentProduct
+    ? $productPage->getImage($currentProduct, 'category_page_grid')
+    : null;
+
+if (! $recentlyViewed->isRecentlyViewedProductsEnabled()) {
+    return;
+}
+?>
+
+<script>
+    'use strict';
+    (function () {
+
+        const useGraphQL = <?= /** @noEscape */ $recentlyViewed->isFetchRecentlyViewedEnabled() ? 'true' : 'false' ?>;
+
+        <?php /** This method returns the data structure to store in local storage if GraphQL is NOT queried. */ ?>
+        <?php /** It is declared in global scope to allow overriding should additional attributes be required. */ ?>
+        function getCurrentProductDataForRecentlyViewedList() {
+            <?php if (! $currentProduct): ?>
+            return {};
+            <?php else: ?>
+
+            function findUrlSuffix(url) {
+                let suffix = url.lastIndexOf('.') !== -1
+                    ? url.substr(url.lastIndexOf('.'))
+                    : '';
+                if (suffix.indexOf('?') !== -1) {
+                    suffix = suffix.substring(0, suffix.indexOf('?'))
+                }
+                if (suffix.indexOf('#') !== -1) {
+                    suffix = suffix.substring(0, suffix.indexOf('#'))
+                }
+                return suffix;
+            }
+
+            // Match GraphQL response structure
+            return {
+                id: <?= (int) $currentProduct->getId() ?>,
+                name: '<?= $escaper->escapeJs($currentProduct->getName()) ?>',
+                small_image: {
+                    label: '<?= $escaper->escapeJs($productImage->getLabel()) ?>',
+                    url: '<?= $escaper->escapeJs($escaper->escapeUrl($productImage->getImageUrl())) ?>'
+                },
+                url_key: '<?= $escaper->escapeJs($currentProduct->getUrlKey()) ?>',
+                url_suffix: findUrlSuffix('<?= $escaper->escapeJs($currentProduct->getUrlInStore()) ?>'),
+                visibility: <?= (int) $currentProduct->getVisibility() ?>,
+                status: <?= (int) $currentProduct->getStatus() ?>,
+                price_range: {
+                    minimum_price: {
+                        regular_price: {
+                            value: <?= (float) $currentProduct->getPrice() ?>,
+                            currency: '<?= $escaper->escapeJs($viewModelCurrency->getCurrentCurrencyCode()) ?>'
+                        },
+                        final_price: {
+                            value: <?= (float) $currentProduct->getFinalPrice() ?>,
+                            currency: '<?= $escaper->escapeJs($viewModelCurrency->getCurrentCurrencyCode()) ?>'
+                        }
+                    }
+                }
+            }
+            <?php endif; ?>
+        }
+
+        function writeRecentlyViewedToStorage(data) {
+            hyva.getBrowserStorage().setItem('recently_viewed_products', JSON.stringify(data));
+        }
+
+        function readRecentlyViewedFromStorage () {
+            const data = hyva.getBrowserStorage().getItem('recently_viewed_products');
+            return data ? JSON.parse(data).filter(product => {
+                <?php /** Remove items that are invalid after switching useGraphQL config to false */ ?>
+                return useGraphQL || product.id;
+            }) : [];
+        }
+
+        function removeExpiredProductsInLocalStorage() {
+            const updatedLocalStorageData = [];
+            readRecentlyViewedFromStorage().forEach(productData => {
+                if(productData.expiry > Date.now()){
+                    updatedLocalStorageData.push(productData);
+                }
+            });
+            writeRecentlyViewedToStorage(updatedLocalStorageData);
+        }
+
+        function addCurrentProductToRecentlyViewed() {
+            const currentProduct = createRecordForCurrentProduct();
+            console.log(currentProduct);
+
+            if (currentProduct.sku !== '') {
+                const recentlyViewedSkusArray = readRecentlyViewedFromStorage()
+                    .filter(product => product.sku !== currentProduct.sku);
+                recentlyViewedSkusArray.unshift(currentProduct);
+                writeRecentlyViewedToStorage(recentlyViewedSkusArray);
+            }
+        }
+
+        function createRecordForCurrentProduct() {
+            const currentProduct = {
+                sku: '<?= $escaper->escapeJs($currentProductSku) ?>',
+                expiry: Date.now() + <?= (int) $recentlyViewed->getRecentlyViewedLifeTime() ?> * 1000
+            };
+            return useGraphQL
+                ? currentProduct
+                : Object.assign(currentProduct, getCurrentProductDataForRecentlyViewedList());
+        }
+
+        removeExpiredProductsInLocalStorage();
+        addCurrentProductToRecentlyViewed()
+    })()
+</script>
