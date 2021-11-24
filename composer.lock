@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "34f5956330bb511d209f8d2709fc870b",
+    "content-hash": "a2d2e4f1da947552e2436aec0bd4e64e",
     "packages": [
         {
             "name": "colinmollenhour/credis",
@@ -842,6 +842,39 @@
             ],
             "description": "Adds Customer and Cart tokens to CustomerData sections",
             "time": "2021-03-15T16:38:40+00:00"
+        },
+        {
+            "name": "hyva-themes/magento2-graphql-view-model",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hyva-themes/magento2-graphql-view-model.git",
+                "reference": "5a954cd176eeab78792eea97d91a652866757b8b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hyva-themes/magento2-graphql-view-model/zipball/5a954cd176eeab78792eea97d91a652866757b8b",
+                "reference": "5a954cd176eeab78792eea97d91a652866757b8b",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.3.0"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "src/registration.php"
+                ],
+                "psr-4": {
+                    "Hyva\\GraphqlViewModel\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Provide ability to customize GraphQL queries and mutations for Hyvä themes.",
+            "time": "2021-06-11T08:26:12+00:00"
         },
         {
             "name": "hyva-themes/magento2-reset-theme",
