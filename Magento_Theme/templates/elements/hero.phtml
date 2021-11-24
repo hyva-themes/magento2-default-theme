@@ -8,6 +8,8 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsSolid;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
@@ -15,48 +17,51 @@ use Magento\Framework\View\Element\Template;
 
 /** @var Escaper $escaper */
 /** @var Template $block */
+/** @var ViewModelRegistry $viewModels */
 
-$image1X = "https://images.unsplash.com/photo-1454111079122-eb76eb2d5754?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjExMzk2fQ&auto=format&fit=crop&w=500&q=75";
-$image2X = "https://images.unsplash.com/photo-1454111079122-eb76eb2d5754?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjExMzk2fQ&auto=format&fit=crop&w=1024&q=75";
+/** @var HeroiconsSolid $heroicons */
+$heroicons = $viewModels->require(HeroiconsSolid::class);
+
 $title = "Hyvä Themes";
-$content = "Magento Themes that are good.";
+$content = "ECOMMERCE MADE HAPPY.";
 $link = "https://hyva.io/";
 $cta = "Visit hyva.io";
 ?>
 
-<section class="hero-image text-gray-700 body-font -mt-8">
+<section class="hero-image text-gray-700 body-font -mt-8 -mx-8">
     <div class="relative">
-        <div class="container max-w-screen-2xl mx-auto px-0">
+        <div class="container max-w-screen-2xl mx-auto px-0 shadow-lg">
             <div class="relative shadow-xl sm:overflow-hidden">
                 <div class="absolute inset-0">
                     <picture>
                         <source class="h-full w-full object-cover"
-                             srcset="<?= (string) $image1X ?>"
+                             srcset="<?= $escaper->escapeHtmlAttr($block->getViewFileUrl('images/hero.jpg')) ?>"
                              media="(max-width: 639px)"
                         >
                         <source class="h-full w-full object-cover"
-                             srcset="<?= (string) $image2X ?>"
+                             srcset="<?= $escaper->escapeHtmlAttr($block->getViewFileUrl('images/hero-2x.jpg')) ?>"
                              media="(min-width: 640px)"
                         >
                         <img class="h-full w-full object-cover"
-                             src="<?= (string) $image2X ?>"
+                             src="<?= $escaper->escapeHtmlAttr($block->getViewFileUrl('images/hero.jpg')) ?>"
                              alt="Hyvä Hero Image"
-                             width="1024"
-                             height="576"
-                             loading="lazy"
+                             width="960"
+                             height="540"
                         >
                     </picture>
                 </div>
-                <div class="relative px-4 py-16 sm:px-6 sm:py-24 lg:py-32 lg:px-8">
-                    <h1 class="title-font text-4xl sm:text-5xl mb-2 font-medium text-white" style="text-shadow: 2px 2px 5px black"><?= $escaper->escapeHtml($title) ?></h1>
+                <div class="relative px-4 py-16 sm:px-6 sm:py-24 lg:py-32 px-8 lg:px-16">
+                    <h1 class="title-font text-4xl sm:text-5xl mb-2 font-bold text-blue-900">
+                        <?= $escaper->escapeHtml($title) ?>
+                    </h1>
                     <?php if ($content): ?>
-                        <p class="text-2xl sm:text-3xl mb-4 font-medium text-white" style="text-shadow: 2px 2px 5px black"><?= $escaper->escapeHtml($content) ?></p>
+                        <p class="text-2xl sm:text-3xl mb-4 font-normal text-blue-900">
+                            <?= $escaper->escapeHtml($content) ?>
+                        </p>
                     <?php endif; ?>
                     <a class="btn btn-primary inline-flex" href="<?= $escaper->escapeUrl($link) ?>">
                         <?= $escaper->escapeHtml($cta) ?>
-                        <svg class="w-4 h-4 inline-flex self-center ml-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
+                        <?= $heroicons->chevronDoubleRightHtml('w-4 h-4 inline-flex self-center ml-1', 30, 30) ?>
                     </a>
                 </div>
             </div>

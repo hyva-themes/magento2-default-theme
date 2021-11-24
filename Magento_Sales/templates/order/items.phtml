@@ -8,6 +8,7 @@
 
 // phpcs:disable Magento2.Templates.ThisInTemplate
 
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\Escaper;
 use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
 use Magento\Sales\Block\Order\Items;
@@ -33,11 +34,17 @@ $cols = $block->getData('is_context_shipment') ? 3 : 5;
     <?php $items = $block->getItems(); ?>
     <?php $giftMessage = '' ?>
     <?php foreach ($items as $item): ?>
-        <div class="<?= ($item->getParentItem()) ?
+        <?php
+        $parentItem = $item->getParentItem();
+        if ($parentItem && $parentItem->getData('product_type') === Configurable::TYPE_CODE) {
+            continue;
+        }
+        ?>
+        <div class="<?= ($parentItem) ?
             'child-item ml-2 px-4 mb-2 border-l-4 border-container text-sm' :
             'parent-item mb-2'
         ?>">
-        <?= $block->getItemHtml($item) ?>
+            <?= $block->getItemHtml($item) ?>
         </div>
         <?php if ($helper->isMessagesAllowed('order_item', $item) && $item->getGiftMessageId()): ?>
             <?php $giftMessage = $helper->getGiftMessageForEntity($item); ?>

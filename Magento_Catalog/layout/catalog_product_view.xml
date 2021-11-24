@@ -195,9 +195,42 @@
 
             </referenceContainer>
 
-        </referenceContainer>
+            <block class="Magento\Catalog\Block\Widget\RecentlyViewed"
+                   name="recently_viewed_products.default_widget_pdp"
+                   ifconfig="catalog/recently_products/show_on_pdp"
+                   template="Magento_Catalog::product/widget/viewed/list.phtml">
+                <arguments>
+                    <argument name="page_size" xsi:type="number">4</argument>
+                    <argument name="show_buttons" xsi:type="string">add_to_cart,add_to_compare,add_to_wishlist</argument>
+                    <argument name="show_attributes" xsi:type="string">name,image,price,learn_more</argument>
+                </arguments>
+            </block>
 
+
+        </referenceContainer>
+        <referenceContainer name="content.aside">
+            <block name="related" class="Magento\Catalog\Block\Product\View"
+                template="Magento_Theme::elements/slider.phtml">
+                <arguments>
+                    <argument name="type" xsi:type="string">related</argument>
+                    <argument name="title" xsi:type="string" translate="true">Related Products</argument>
+                </arguments>
+            </block>
+            <block name="upsell" class="Magento\Catalog\Block\Product\View"
+                        template="Magento_Theme::elements/slider.phtml">
+                <arguments>
+                    <argument name="type" xsi:type="string">upsell</argument>
+                    <argument name="title" xsi:type="string" translate="true">We found other products you might like!</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
         <move element="alert.urls" destination="product.info" as="alert.urls"/>
+
+        <referenceContainer name="before.body.end">
+            <block name="recently_viewed_products.register_view"
+                   template="Magento_Catalog::product/widget/viewed/register-viewed-product-js.phtml"
+                   ifconfig="catalog/recently_products/recently_viewed_enabled"/>
+        </referenceContainer>
 
     </body>
 </page>

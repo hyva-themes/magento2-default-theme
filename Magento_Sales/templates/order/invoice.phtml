@@ -6,7 +6,11 @@
  * See https://hyva.io/license
  */
 
-/** @var \Magento\Sales\Block\Order\Invoice $block */
+use Magento\Framework\Escaper;
+use Magento\Sales\Block\Order\Invoice;
+
+/** @var Invoice $block */
+/** @var Escaper $escaper */
 ?>
 <?php $order = $block->getOrder() ?>
 <div class="md:flex md:justify-between items-center mb-3">

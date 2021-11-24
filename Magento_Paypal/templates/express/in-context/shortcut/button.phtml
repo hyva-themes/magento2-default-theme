@@ -167,9 +167,9 @@ $uniqueId = '_' . uniqid();
                         resolve(script);
                     }, false);
 
-                    script.addEventListener('error', function() {
+                    script.addEventListener('error', function(event) {
                         reject(script);
-                        console.log('was rej');
+                        console.log('The PayPal script could not be loaded', event);
                     }, false);
 
                     document.body.appendChild(script);

@@ -6,11 +6,15 @@
  * See https://hyva.io/license
  */
 
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\Escaper;
+use Magento\Sales\Block\Order\Invoice\Items;
 
 /** @var Escaper $escaper */
+/** @var Items $block */
 
-$order = $block->getOrder() ?>
+$order = $block->getOrder();
+?>
 <?php foreach ($order->getInvoiceCollection() as $invoice): ?>
     <div class="order-title text-center md:text-left font-semibold">
         <?= $escaper->escapeHtml(__('Invoice #')) ?><?= $escaper->escapeHtml($invoice->getIncrementId()) ?>
@@ -38,7 +42,14 @@ $order = $block->getOrder() ?>
         </div>
         <?php $items = $invoice->getAllItems(); ?>
         <?php foreach ($items as $item): ?>
-            <div class="<?= ($item->getOrderItem()->getParentItem()) ?
+            <?php
+            $orderItem = $item->getOrderItem();
+            $parentItem = $orderItem->getParentItem();
+            if ($parentItem && $parentItem->getData('product_type') === Configurable::TYPE_CODE) {
+                continue;
+            }
+            ?>
+            <div class="<?= ($parentItem) ?
                 'child-item ml-2 px-4 mb-2 border-l-4 border-container text-sm' :
                 'parent-item mb-2'
             ?>">

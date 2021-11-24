@@ -1,0 +1,282 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\GraphqlViewModel\ViewModel\GraphqlViewModel;
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Currency;
+use Hyva\Theme\ViewModel\RecentlyViewedProducts;
+use Hyva\Theme\ViewModel\Store;
+use Hyva\Theme\ViewModel\ProductPage;
+use Magento\Catalog\Block\Product\Image;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/**
+ * These variables are automatically assigned to any template
+ *
+ * @var Template $block
+ * @var Escaper $escaper
+ * @var ViewModelRegistry $viewModels
+ */
+
+/**
+ * These variables are assigned in the parent templates: grid.phtml, list.phtml and sidebar.phtml
+ *
+ * @var string $uniqueId
+ * @var string $title
+ */
+
+/** @var GraphqlViewModel $gqlViewModel */
+$gqlViewModel = $viewModels->require(GraphqlViewModel::class);
+
+/** @var ProductPage $viewModelProducts */
+$viewModelProducts = $viewModels->require(ProductPage::class);
+
+/** @var RecentlyViewedProducts $recentlyViewed */
+$recentlyViewed = $viewModels->require(RecentlyViewedProducts::class);
+
+$currentProduct    = $viewModelProducts->getProduct();
+$currentProductSku = $currentProduct ? $currentProduct->getSku() : '';
+
+/** @var Image $productImage */
+$productImage = $currentProduct
+    ? $viewModelProducts->getImage($currentProduct, 'category_page_grid')
+    : null;
+
+/** @var Store $viewModelStore */
+$viewModelStore = $viewModels->require(Store::class);
+
+/** @var Currency $viewModelCurrency */
+$viewModelCurrency = $viewModels->require(Currency::class);
+
+$title = $title ?? __('Recently Viewed Products');
+
+
+?>
+<script>
+
+    function initRecentlyViewedProductsComponent<?= /** @noEscape */$uniqueId ?>(options) {
+
+        const defaultOptions = {
+            isSlider: false,
+            useGraphQL: <?= /** @noEscape */ $recentlyViewed->isFetchRecentlyViewedEnabled() ? 'true' : 'false' ?>,
+            noOfProductsToShow: <?= (int) $block->getData('page_size') ?>
+        };
+        const config = Object.assign({}, defaultOptions, options || {});
+
+        function readRecentlyViewedFromStorage () {
+            const data = hyva.getBrowserStorage().getItem('recently_viewed_products');
+            return data ? JSON.parse(data).filter(product => {
+                <?php /** Remove items that are invalid after switching config.useGraphQL to false */ ?>
+                return config.useGraphQL || product.id;
+            }) : [];
+        }
+
+        return {
+            products: [],
+            currency: [],
+            noOfProductsToShow: config.noOfProductsToShow,
+            loading: true,
+            minHeight() {
+                return 'min-height: ' + ((this.loading && '491px') || 0);
+            },
+            getProducts() {
+                const recentlyViewedProductsArray = readRecentlyViewedFromStorage();
+                let itemsToShow = [];
+                if (recentlyViewedProductsArray.length > 0) {
+                    // Avoid showing the current product
+                    const start = '<?= $escaper->escapeJs($currentProductSku) ?>' === '' ? 0 : 1;
+                    itemsToShow = recentlyViewedProductsArray.slice(start)
+                }
+
+                itemsToShow = itemsToShow.slice(0, this.noOfProductsToShow);
+
+                if (!itemsToShow.length) {
+                    this.noOfProductsToShow = 0;
+                    return;
+                }
+
+                config.useGraphQL
+                    ? this.fetchProducts(itemsToShow)
+                    : this.renderRecentlyViewedProducts(itemsToShow)
+            },
+
+            fetchProducts(itemsToShow) {
+                const skusToFetch = itemsToShow.map(product => product.sku);
+                const query = `<?= $gqlViewModel->query("recently_viewed_products_query", 'query ($skus: [String!]!) {
+  products(filter: { sku: { in: $skus } }) {
+    items {
+      sku
+      id
+      name
+      small_image {
+        label
+        url
+      }
+      url_key
+      url_suffix
+      visibility
+      status
+      price_range {
+        minimum_price {
+          regular_price {
+            value
+            currency
+          }
+          final_price {
+            value
+            currency
+          }
+        }
+      }
+    }
+  }
+}') ?>`;
+                const variables = JSON.stringify({skus: skusToFetch});
+                window.fetch('/graphql?' + new URLSearchParams({query, variables}), {
+                    method: 'GET',
+                    headers: {
+                        'Store': '<?= $escaper->escapeJs($viewModelStore->getStoreCode()) ?>',
+                        'Content-Currency': '<?= $escaper->escapeJs($viewModelCurrency->getCurrentCurrencyCode()) ?>'
+                    },
+                })
+                    .then((response) =>  response.json())
+                    .then((result) => {
+                            this.currency = (result &&
+                                result.data &&
+                                result.data.currency);
+
+                            const responseProducts = (
+                                result &&
+                                result.data &&
+                                result.data.products &&
+                                result.data.products.items
+                            ) || [];
+
+                            // fix sorting of the response-products according to the sorting of the requested-products
+                            const sortedProducts = [];
+                            skusToFetch.forEach(sku => {
+                                responseProducts.forEach(productData => {
+                                    if (sku === productData.sku){
+                                        sortedProducts.push(productData);
+                                    }
+                                });
+                            });
+                            this.renderRecentlyViewedProducts(sortedProducts);
+                        }
+                    )
+                    .finally(() => this.loading = false)
+            }, // end fetchProducts()
+
+            renderRecentlyViewedProducts(products) {
+                this.products = products;
+                this.loading = false;
+                if (config.isSlider) {
+                    this.$nextTick(() => this.calcPageSize());
+                }
+            },
+
+            addToWishlist(productId) {
+                fetch(BASE_URL + 'wishlist/index/add/', {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                    },
+                    body: new URLSearchParams({form_key: hyva.getFormKey(), product: productId, uenc: btoa(window.location.href)}),
+                    method: 'POST',
+                    mode: 'cors',
+                    credentials: 'include'
+                }).then(response => {
+                    if (response.redirected) {
+                        window.location.href = response.url;
+                    } else if (response.ok) {
+                        return response.json();
+                    } else {
+                        typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                            [{
+                                type: "warning",
+                                text: "<?= $escaper->escapeHtml(__('Could not add item to wishlist.')) ?>"
+                            }], 5000
+                        );
+                    }
+                }).then(response => {
+                    if (!response) { return }
+                    typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                        [{
+                            type: (response.success) ? "success" : "error",
+                            text: (response.success)
+                                ? "<?= $escaper->escapeHtml(
+                                    __("%1 has been added to your Wish List.", __("Product"))
+                                ) ?>" : response.error_message
+                        }], 5000
+                    );
+                    window.dispatchEvent(new CustomEvent("reload-customer-section-data"));
+                }).catch(function (error) {
+                    typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                        [{
+                            type: "error",
+                            text: error
+                        }], 5000
+                    );
+                });
+            }, // end addToWishlist()
+
+            addToCompare(productId) {
+                fetch(BASE_URL + 'catalog/product_compare/add/', {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                    },
+                    body: new URLSearchParams({form_key: hyva.getFormKey(), product: productId, uenc: btoa(window.location.href)}),
+                    method: 'POST',
+                    mode: 'cors',
+                    credentials: 'include'
+                }).then(response => {
+                    if (response.redirected) {
+                        window.location.href = response.url;
+                    }
+                }).catch(error => {
+                    typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                        [{
+                            type: "error",
+                            text: error
+                        }], 5000
+                    );
+                });
+            },
+
+            // slider properties
+            active: 0,
+            getSlider() {
+                return this.$el.querySelector('.js_slides');
+            },
+            pageSize: 1,
+            pageFillers: 0,
+            calcPageSize() {
+                const slider = this.getSlider();
+                if (slider) {
+                    this.pageSize = Math.round(slider.clientWidth / slider.querySelector('.js_slide').clientWidth);
+                    this.pageFillers = (
+                        this.pageSize * Math.ceil(this.products.length / this.pageSize)
+                    ) - this.products.length;
+                }
+            },
+            calcActive() {
+                const slider = this.getSlider();
+                if (slider) {
+                    this.active = Math.ceil(
+                        Math.round(
+                            slider.scrollLeft / (slider.scrollWidth / (this.products.length + this.pageFillers))
+                        ) / this.pageSize
+                    ) * this.pageSize;
+                }
+            }
+        }
+    }
+
+</script>
