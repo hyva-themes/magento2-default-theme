@@ -69,7 +69,11 @@ $customerRegistration = $viewModels->require(CustomerRegistration::class);
             </a>
         <?php else: ?>
             <a class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
-               onclick="hyva.setCookie && hyva.setCookie('<?= /** @noEscape */ Redirect::LOGIN_REDIRECT_URL ?>', window.location.href, 1)"
+               onclick="hyva.setCookie && hyva.setCookie(
+                   '<?= /** @noEscape */ Redirect::LOGIN_REDIRECT_URL ?>',
+                   window.location.href,
+                   1
+               )"
                href="<?= $escaper->escapeUrl($block->getUrl('customer/account/index')) ?>">
                 <?= $escaper->escapeHtml(__('Sign In')); ?>
             </a>

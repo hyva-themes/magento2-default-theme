@@ -1,12 +1,21 @@
 <?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
 
 use Magento\Framework\Escaper;
 use Magento\Sales\Block\Order\Info\Buttons;
 
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
+
 /** @var Escaper $escaper */
 /** @var Buttons $block */
 
-// phpcs:disable Magento2.Templates.ThisInTemplate
 ?>
 <div class="flex items-center justify-center md:justify-end my-4 md:my-0">
     <?php $order = $block->getOrder() ?>

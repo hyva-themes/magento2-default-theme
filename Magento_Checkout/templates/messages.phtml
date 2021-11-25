@@ -16,15 +16,16 @@ use Magento\Framework\Escaper;
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
-// phpcs:disable Generic.Files.LineLength.TooLong
+if (! $block->getMessageCollection()->getCount()) {
+    return;
+}
 
 $messages = [];
-if ($block->getMessageCollection()->getCount()):
-    foreach ($block->getMessageTypes() as $type) {
-        foreach ($block->getMessagesByType($type) as $message) {
-            $messages[] = ['type' => $type, 'text' => $message->getText()];
-        }
+foreach ($block->getMessageTypes() as $type) {
+    foreach ($block->getMessagesByType($type) as $message) {
+        $messages[] = ['type' => $type, 'text' => $message->getText()];
     }
+}
 ?>
 <script>
     <?php
@@ -86,5 +87,3 @@ if ($block->getMessageCollection()->getCount()):
 
     }( window.hyva = window.hyva || {} ));
 </script>
-
-<?php endif; ?>

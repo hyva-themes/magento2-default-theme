@@ -100,13 +100,17 @@ $productName = $block->getProduct()->getName();
                 </template>
                 <div class="absolute inset-0 hidden w-full h-full bg-white nonmobile"
                      :class="{ 'hidden': activeVideoType !== 'youtube' }"
-                     x-show.transition.opacity.duration.500ms="images[active].type === 'video' && activeVideoType === 'youtube'"
+                     x-show.transition.opacity.duration.500ms="
+                         images[active].type === 'video' && activeVideoType === 'youtube'
+                     "
                 >
                     <div id="youtube-player" class="w-full h-full"></div>
                 </div>
                 <div class="absolute inset-0 hidden w-full h-full bg-white"
                      :class="{ 'hidden': activeVideoType !== 'vimeo' }"
-                     x-show.transition.opacity.duration.500ms="images[active].type === 'video' && activeVideoType === 'vimeo'"
+                     x-show.transition.opacity.duration.500ms="
+                         images[active].type === 'video' && activeVideoType === 'vimeo'
+                     "
                 >
                     <div id="vimeo-player" class="w-full h-full"></div>
                 </div>

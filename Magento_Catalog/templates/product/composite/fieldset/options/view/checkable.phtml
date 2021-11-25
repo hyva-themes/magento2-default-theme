@@ -60,21 +60,21 @@ if ($option): ?>
 <?php endif; ?>
     <?php foreach ($option->getValues() as $value): ?>
         <?php
-            $checked = '';
-            $count++;
-            if ($arraySign) {
-                $checked = is_array($configValue) && in_array($value->getOptionTypeId(), $configValue) ? 'checked' : '';
-            } else {
-                $checked = $configValue == $value->getOptionTypeId() ? 'checked' : '';
-            }
-            $dataSelector = 'options[' . $option->getId() . ']';
-            if ($arraySign) {
-                $dataSelector .= '[' . $value->getOptionTypeId() . ']';
-            }
+        $checked = '';
+        $count++;
+        if ($arraySign) {
+            $checked = is_array($configValue) && in_array($value->getOptionTypeId(), $configValue) ? 'checked' : '';
+        } else {
+            $checked = $configValue == $value->getOptionTypeId() ? 'checked' : '';
+        }
+        $dataSelector = 'options[' . $option->getId() . ']';
+        if ($arraySign) {
+            $dataSelector .= '[' . $value->getOptionTypeId() . ']';
+        }
 
-            $optionId = $option->getId() . '_' . $value->getOptionTypeId();
+        $optionId = $option->getId() . '_' . $value->getOptionTypeId();
 
-            $valuePrice = $productPriceViewModel->getCustomOptionPrice($value, CustomOptionPrice::PRICE_CODE, $product);
+        $valuePrice = $productPriceViewModel->getCustomOptionPrice($value, CustomOptionPrice::PRICE_CODE, $product);
         ?>
 
         <div class="field choice">

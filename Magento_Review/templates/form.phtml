@@ -14,14 +14,14 @@ use Magento\Framework\Escaper;
 use Magento\Review\Block\Form;
 use Hyva\Theme\ViewModel\ReCaptcha;
 
-/* @var Escaper $escaper */
-/* @var Form $block */
+//phpcs:disable Generic.Files.LineLength
+
+/** @var Escaper $escaper */
+/** @var Form $block */
 /** @var ViewModelRegistry $viewModels */
 
 /** @var Store $viewModelStore */
 $viewModelStore = $viewModels->require(Store::class);
-
-//phpcs:disable Generic.Files.LineLength
 
 $formId = 'review_form';
 

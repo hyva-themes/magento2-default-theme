@@ -6,17 +6,20 @@
  * See https://hyva.io/license
  */
 
-/** @var Notices $block */
-/** @var Escaper $escaper */
-/** @var Cookie $cookieHelper */
-/** @var ViewModelRegistry $viewModels */
-/** @var StoreViewModel $storeViewModel */
+
+declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\Store as StoreViewModel;
 use Magento\Cookie\Block\Html\Notices;
 use Magento\Framework\Escaper;
 use Magento\Cookie\Helper\Cookie;
+
+/** @var Notices $block */
+/** @var Escaper $escaper */
+/** @var Cookie $cookieHelper */
+/** @var ViewModelRegistry $viewModels */
+/** @var StoreViewModel $storeViewModel */
 
 $storeViewModel = $viewModels->require(StoreViewModel::class);
 

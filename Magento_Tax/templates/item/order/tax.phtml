@@ -6,19 +6,18 @@
  * See https://hyva.io/license
  */
 
-// phpcs:disable Magento2.Templates.ThisInTemplate
-// phpcs:disable Squiz.PHP.GlobalKeyword.NotAllowed
+use Magento\Framework\Escaper;
+use Magento\Tax\Block\Sales\Order\Tax;
 
-/** @var \Magento\Tax\Block\Sales\Order\Tax $block
- * @var \Magento\Framework\Escaper $escaper
- */
-?>
-<?php
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
+
+/** @var Tax $block */
+/** @var Escaper $escaper */
+
 $order    = $block->getOrder();
 $source   = $block->getSource();
 $fullInfo = $this->helper(\Magento\Tax\Helper\Data::class)->getCalculatedTaxes($source);
-global $taxIter;
-$taxIter++;
+
 ?>
 <?php if ($fullInfo && $block->displayFullSummary()): ?>
     <?php foreach ($fullInfo as $info): ?>

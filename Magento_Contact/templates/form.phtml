@@ -13,10 +13,10 @@ use Magento\Contact\Helper\Data as ContactHelper;
 use Magento\Framework\Escaper;
 use Hyva\Theme\ViewModel\ReCaptcha;
 
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
+
 /** @var ContactForm $block */
 /** @var Escaper $escaper */
-
-// phpcs:disable Magento2.Templates.ThisInTemplate
 
 $formId = 'contact';
 /** @var ContactHelper $contactHelper */
@@ -43,9 +43,9 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
     >
         <fieldset class="">
             <div class="flex flex-col text-center w-full mb-12">
-                <h2 class="sm:text-2xl text-xl font-medium title-font mb-4 text-gray-900"><span><?= $escaper->escapeHtml(
-                    __('Write Us')
-                ) ?></span></h2>
+                <h2 class="sm:text-2xl text-xl font-medium title-font mb-4 text-gray-900">
+                    <span><?= $escaper->escapeHtml(__('Write Us')) ?></span>
+                </h2>
                 <p class="w-full mx-auto leading-relaxed text-base"><?= $escaper->escapeHtml(
                     __('Jot us a note and we’ll get back to you as quickly as possible.')
                 ) ?></p>

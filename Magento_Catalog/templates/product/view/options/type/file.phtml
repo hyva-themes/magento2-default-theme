@@ -78,7 +78,7 @@ $optionPrice = $productPriceViewModel->getCustomOptionPrice($option, CustomOptio
             <?php if ($option->getIsRequire()): ?>
                 required
                 oninvalid="this.setCustomValidity('<?= $escaper
-                    ->escapeHtmlAttr( __("Please select a file.")) ?>')"
+                    ->escapeHtmlAttr(__("Please select a file.")) ?>')"
                 oninput="this.setCustomValidity('')"
             <?php endif; ?>
                data-price-amount="<?= $escaper->escapeHtmlAttr($optionPrice) ?>"

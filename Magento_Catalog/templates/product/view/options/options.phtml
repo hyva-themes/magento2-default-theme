@@ -134,17 +134,18 @@ $options = $block->decorateArray($block->getOptions());
                             return;
                         break;
                         case 'radio':
-                            target.checked && document.querySelectorAll('input[name="'+target.name+'"]').forEach(input => {
-                                // unset sibling radio buttons
-                                input.dataset &&
-                                input.dataset.optionId &&
-                                input !== target && $dispatch('update-custom-option-active',
-                                    {
-                                        customOptionId: input.dataset.optionId,
-                                        active: false
-                                    }
-                                );
-                            })
+                            target.checked && document.querySelectorAll('input[name="'+target.name+'"]')
+                                .forEach(input => {
+                                    // unset sibling radio buttons
+                                    input.dataset &&
+                                    input.dataset.optionId &&
+                                    input !== target && $dispatch('update-custom-option-active',
+                                        {
+                                            customOptionId: input.dataset.optionId,
+                                            active: false
+                                        }
+                                    );
+                                });
                         // DO NOT BREAK
                         // Checkbox case should also run for Radio
                         case 'checkbox':

@@ -15,20 +15,28 @@ declare(strict_types=1);
 <form action="" method="post">
     <?= $block->getLayout()->getBlock('formkey')->toHtml() ?>
     <fieldset class="fieldset">
-        <p class=""><?= $escaper->escapeHtml(__('Please enter your email below and we will send you the confirmation link.')) ?></p>
+        <p class="">
+            <?= $escaper->escapeHtml(__('Please enter your email below and we will send you the confirmation link.')) ?>
+        </p>
         <div class="flex-row md:flex justify-between gap-1.5 mt-2 items-baseline">
             <label for="email_address"
-                   class="mb-3 text-sm font-medium tracking-widest text-gray-900 uppercase title-font"><span><?= $escaper->escapeHtml(__('Email')) ?></span></label>
+                   class="mb-3 text-sm font-medium tracking-widest text-gray-900 uppercase title-font">
+                <span><?= $escaper->escapeHtml(__('Email')) ?></span>
+            </label>
             <input type="email" name="email" id="email_address" class="form-input inline-flex w-full"
                    value="<?= $escaper->escapeHtmlAttr($block->getEmail()) ?>" required/>
         </div>
     </fieldset>
     <div class="actions-toolbar flex-col">
         <div class="primary">
-            <button type="submit" class="action send primary"><span><?= $escaper->escapeHtml(__('Send confirmation link')) ?></span></button>
+            <button type="submit" class="action send primary">
+                <span><?= $escaper->escapeHtml(__('Send confirmation link')) ?></span>
+            </button>
         </div>
         <div class="secondary">
-            <a href="<?= $escaper->escapeUrl($block->getLoginUrl()) ?>" class="action back"><span><?= $escaper->escapeHtml(__('Back to Sign In')) ?></span></a>
+            <a href="<?= $escaper->escapeUrl($block->getLoginUrl()) ?>" class="action back">
+                <span><?= $escaper->escapeHtml(__('Back to Sign In')) ?></span>
+            </a>
         </div>
     </div>
 </form>

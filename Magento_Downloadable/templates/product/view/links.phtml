@@ -79,7 +79,9 @@ $links                    = $block->getLinks();
     }
 </script>
 <?php endif; ?>
-<legend class="text-gray-900 text-xl title-font font-medium mb-4"><span><?= $escaper->escapeHtml($block->getLinksTitle()) ?></span></legend>
+<legend class="text-gray-900 text-xl title-font font-medium mb-4">
+    <span><?= $escaper->escapeHtml($block->getLinksTitle()) ?></span>
+</legend>
 <div class="field downloads"
     <?php if ($linksPurchasedSeparately): ?>
      x-data="initDownloadableLinks(<?= $escaper->escapeHtmlAttr($block->getJsonConfig()) ?>)"
@@ -87,7 +89,7 @@ $links                    = $block->getLinks();
     <?php endif; ?>
 >
     <div class="control" id="downloadable-links-list">
-        <?php foreach ($links as $link) : ?>
+        <?php foreach ($links as $link): ?>
             <div class="flex flow-row justify-between">
                 <div>
                     <?php if ($linksPurchasedSeparately): ?>
@@ -96,28 +98,30 @@ $links                    = $block->getLinks();
                                class="mr-2"
                                name="links[]"
                                id="links_<?= $escaper->escapeHtmlAttr($link->getId()) ?>"
-                               value="<?= $escaper->escapeHtmlAttr($link->getId()) ?>" <?= $escaper->escapeHtml($block->getLinkCheckedValue($link)) ?>
+                               value="<?= $escaper->escapeHtmlAttr($link->getId()) ?>"
+                               <?= $escaper->escapeHtml($block->getLinkCheckedValue($link)) ?>
                                x-model="selectedOptions"
                                @change="linkSelectionChange($event.target)"
                         />
                         <label class="inline-block" for="links_<?= $escaper->escapeHtmlAttr($link->getId()) ?>">
                     <?php endif; ?>
                         <span><?= $escaper->escapeHtml($link->getTitle()) ?></span>
-                    <?php if ($linksPurchasedSeparately) : ?>
+                    <?php if ($linksPurchasedSeparately): ?>
                             <?= /* @noEscape */ $block->getLinkPrice($link) ?>
                         </label>
                     <?php endif; ?>
                 </div>
-                <?php if ($link->getSampleFile() || $link->getSampleUrl()) : ?>
+                <?php if ($link->getSampleFile() || $link->getSampleUrl()): ?>
                     <a class="item-link samples-item-link"
-                       href="<?= $escaper->escapeUrl($block->getLinkSampleUrl($link)) ?>" <?= $block->getIsOpenInNewWindow() ? 'target="_blank"' : '' ?>>
-                        <?= $iconViewModel->documentDownloadHtml('inline-block w-6 h-6 mr-1', 26, 26) ?>
-                        </svg><?= $escaper->escapeHtml(__('sample')) ?>
+                       href="<?= $escaper->escapeUrl($block->getLinkSampleUrl($link)) ?>"
+                       <?= $block->getIsOpenInNewWindow() ? 'target="_blank"' : '' ?>>
+                       <?= $iconViewModel->documentDownloadHtml('inline-block w-6 h-6 mr-1', 26, 26) ?>
+                       <?= $escaper->escapeHtml(__('sample')) ?>
                     </a>
                 <?php endif; ?>
             </div>
         <?php endforeach; ?>
-        <?php if ($linksPurchasedSeparately && count($links) > 1) : ?>
+        <?php if ($linksPurchasedSeparately && count($links) > 1): ?>
             <div class="field choice downloads-all">
                 <button type="button" class="" @click="toggleSelection">
                     <?= $iconViewModel->checkCircleHtml('inline-flex w-6 h-6 mr-1', 26, 26) ?>

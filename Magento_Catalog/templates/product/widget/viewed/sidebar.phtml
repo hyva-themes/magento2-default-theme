@@ -15,6 +15,8 @@ use Hyva\Theme\ViewModel\Wishlist;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
+// phpcs:disable Generic.Files.LineLength.TooLong
+
 /** @var Template $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
@@ -63,7 +65,7 @@ $jsTemplate = 'Magento_Catalog::product/widget/viewed/recently-viewed-products-j
                     <template x-for="product in products">
                         <div class="">
                             <div class="card card-interactive">
-                                <?php if(in_array("image", $widgetAttributesToShow)) : ?>
+                                <?php if (in_array("image", $widgetAttributesToShow)): ?>
                                     <a :href="'<?= $escaper->escapeJs($escaper->escapeUrl($block->getBaseUrl())) ?>' +
                                             product.url_key + (product.url_suffix || '')"
                                        class="relative flex items-center bg-white product photo product-item-photo"
@@ -82,22 +84,22 @@ $jsTemplate = 'Magento_Catalog::product/widget/viewed/recently-viewed-products-j
                                             </span>
                                     </a>
                                 <?php endif; ?>
-                                <?php if(in_array("name", $widgetAttributesToShow)) : ?>
+                                <?php if (in_array("name", $widgetAttributesToShow)): ?>
                                     <p class="flex items-center justify-center px-1 pt-3 text-primary">
                                         <a class="truncate product-item-link"
-                                           :href="'<?= $escaper->escapeJs($escaper->escapeUrl($block->getBaseUrl())) ?>' +
-                                                    product.url_key + (product.url_suffix || '')"
+                                           :href="'<?= $escaper->escapeJs($escaper->escapeUrl($block->getBaseUrl())) ?>'
+                                                  + product.url_key + (product.url_suffix || '')"
                                         >
                                             <span x-html="product.name"></span>
                                         </a>
                                     </p>
                                 <?php endif; ?>
-                                <?php if(in_array("price", $widgetAttributesToShow)) : ?>
+                                <?php if (in_array("price", $widgetAttributesToShow)): ?>
                                     <p class="pt-1 text-lg text-center text-gray-900"
                                        x-text="hyva.formatPrice(product.price_range.minimum_price.final_price.value)"></p>
                                 <?php endif; ?>
                                 <p class="flex flex-wrap gap-2 inline p-3 justify-center">
-                                    <?php if(in_array("learn_more", $widgetAttributesToShow)) : ?>
+                                    <?php if (in_array("learn_more", $widgetAttributesToShow)): ?>
                                         <a class="justify-center w-auto btn btn-primary"
                                            :href="'<?= $escaper->escapeJs($escaper->escapeUrl($block->getBaseUrl())) ?>' +
                                                     product.url_key + (product.url_suffix || '')">
@@ -109,8 +111,9 @@ $jsTemplate = 'Magento_Catalog::product/widget/viewed/recently-viewed-products-j
                                                 <?php if ($compareViewModel->showInProductList()): ?>
                                                     <button @click.prevent="addToCompare(product.id)"
                                                             aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Compare')) ?>"
-                                                            class="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex
-                                                            items-center justify-center text-gray-500 hover:text-yellow-500"
+                                                            class="rounded-full w-10 h-10 bg-gray-200 p-0 border-0
+                                                            inline-flex items-center justify-center text-gray-500
+                                                            hover:text-yellow-500"
                                                     >
                                                     <?= $heroicons->scaleHtml("w-5 h-5") ?>
                                                 </button>

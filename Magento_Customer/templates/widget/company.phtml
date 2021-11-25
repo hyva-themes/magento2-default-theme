@@ -24,8 +24,7 @@ use Magento\Framework\Escaper;
     <div class="control">
             <?php
             $validationClass = $escaper->escapeHtmlAttr(
-                $this->helper(AddressHelper::class)
-                     ->getAttributeValidationClass('company')
+                $this->helper(AddressHelper::class)->getAttributeValidationClass('company')
             );
             ?>
         <input type="text"

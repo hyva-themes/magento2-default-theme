@@ -82,7 +82,7 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
             getCustomerCartQuery() {
                 return <?= /** @noEscape */ json_encode($viewModelGraphQl->query(
                     'customer_cart_query',
-                    'query customerCartQuery{customerCart {' . /* @noEscape */ $viewModelCart->getCartGraphQlQuery() . '}}'
+                    'query customerCartQuery{customerCart {' . $viewModelCart->getCartGraphQlQuery() . '}}'
                 )); ?>
             },
             getCart() {

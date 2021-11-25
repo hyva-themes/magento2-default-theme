@@ -13,7 +13,7 @@ use Magento\Catalog\Helper\Output as CatalogOutputHelper;
 use Magento\Catalog\Block\Product\View\Attributes;
 use Magento\Catalog\Model\Product;
 
-// phpcs:disable Magento2.Templates.ThisInTemplate
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
 
 /** @var Escaper $escaper */
 /** @var CatalogOutputHelper $output */
@@ -36,11 +36,8 @@ $product = $block->getProduct();
                         scope="row"><?= $escaper->escapeHtml($attribute['label']) ?></th>
                     <td class="col data w-1/2 py-2 pl-2 text-left text-gray-900"
                         data-th="<?= $escaper->escapeHtmlAttr($attribute['label']) ?>"
-                    ><?= /* @noEscape */ $catalogOutputHelper->productAttribute(
-                        $product,
-                        $attribute['value'],
-                        $attribute['code']
-                    ); ?></td>
+                    ><?= /* @noEscape */
+                     $catalogOutputHelper->productAttribute($product, $attribute['value'], $attribute['code']) ?></td>
                 </tr>
             <?php endforeach; ?>
         </table>

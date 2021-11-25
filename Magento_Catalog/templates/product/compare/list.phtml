@@ -8,10 +8,6 @@
 
 declare(strict_types=1);
 
-// phpcs:disable Magento2.Templates.ThisInTemplate
-// phpcs:disable PSR2.ControlStructures.SwitchDeclaration
-// phpcs:disable Generic.WhiteSpace.ScopeIndent
-
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\ProductAttributes;
 use Hyva\Theme\ViewModel\Wishlist;
@@ -20,6 +16,10 @@ use Magento\Catalog\Helper\Product\Compare;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Escaper;
 use Magento\Wishlist\Helper\Data as WishlistHelper;
+
+// phpcs:disable PSR2.ControlStructures.SwitchDeclaration
+// phpcs:disable Generic.WhiteSpace.ScopeIndent
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
 
 /** @var ListCompare $block */
 /** @var Escaper $escaper */

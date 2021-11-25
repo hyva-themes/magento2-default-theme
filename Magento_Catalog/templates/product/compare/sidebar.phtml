@@ -117,7 +117,9 @@ function initCompareSidebarClear() {
      class="compare-widget mt-8 hidden"
      :class="{ 'hidden': !(itemCount > 0) }">
     <div class="border-t border-container mb-6 pt-5">
-        <strong class="block title text-primary font-semibold text-lg"><?= $escaper->escapeHtml(__('Compare Products')) ?></strong>
+        <strong class="block title text-primary font-semibold text-lg">
+            <?= $escaper->escapeHtml(__('Compare Products')) ?>
+        </strong>
     </div>
     <template x-if="itemCount">
         <ul class="my-4">
@@ -134,10 +136,14 @@ function initCompareSidebarClear() {
                     <button
                         @click.prevent="removeFromCompare(product.id)"
                         aria-label="<?= $escaper->escapeHtmlAttr(__('Remove Product')) ?>"
-                        class="p-1 inline-flex flex-shrink-0 items-center justify-center text-gray-500 hover:text-primary ml-auto"
+                        class="p-1 inline-flex flex-shrink-0 items-center justify-center text-gray-500
+                               hover:text-primary ml-auto"
                         title="<?= $escaper->escapeHtmlAttr(__('Remove Product')) ?>">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="w-5 h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                             stroke-width="2" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M6 18L18 6M6 6l12 12"
+                            />
                         </svg>
                     </button>
                 </li>

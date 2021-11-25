@@ -119,7 +119,8 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                                 <?= $escaper->escapeHtml($menuItem['name']) ?>
                             </span>
                         </a>
-                        <a href="<?= $escaper->escapeUrl($menuItem['url']) ?>" title="<?= $escaper->escapeHtmlAttr($menuItem['name']) ?>"
+                        <a href="<?= $escaper->escapeUrl($menuItem['url']) ?>"
+                           title="<?= $escaper->escapeHtmlAttr($menuItem['name']) ?>"
                            class="flex items-center w-full px-8 py-4 border-b cursor-pointer
                             bg-container-lighter border-container hover:bg-container-darker hover:underline"
                         >
