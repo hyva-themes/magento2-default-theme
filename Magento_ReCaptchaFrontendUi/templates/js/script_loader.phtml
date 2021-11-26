@@ -27,7 +27,7 @@ $siteKeyV2 = $storeConfig->getStoreConfig('recaptcha_frontend/type_invisible/pri
     'use strict';
     (function() {
 
-        const recaptchaUrl = "https://www.google.com/recaptcha/api.js<?= $siteKey ? '?render=' . $escaper->escapeJs($siteKey) : '' ?>";
+        const recaptchaUrl = "https://www.google.com/recaptcha/api.js<?= $siteKey ? $escaper->escapeJs("?render={$siteKey}") : ''; ?>";
         const loadRecaptchaScript = (event) => {
             if (typeof window.grecaptcha !== 'undefined' || !event.target.form) {
                 return
