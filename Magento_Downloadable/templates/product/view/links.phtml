@@ -29,7 +29,8 @@ $iconViewModel            = $viewModels->require(HeroiconsOutline::class);
 $displayTax               = $productPriceViewModel->displayPriceIncludingTax();
 $linksPurchasedSeparately = $block->getLinksPurchasedSeparately();
 $links                    = $block->getLinks();
-
+$configuredValues         = $block->getProduct()->getPreconfiguredValues();
+$configuredLinks          = $configuredValues->getLinks() ?? [];
 ?>
 <?php if ($linksPurchasedSeparately): ?>
 <script>
@@ -43,7 +44,7 @@ $links                    = $block->getLinks();
         }, {});
 
         return {
-            selectedOptions: [],
+            selectedOptions: [<?= /** noEscape */ join(',', $configuredLinks)?>],
             init() {
                 this.validate();
                 // Dispatch event after a timeout of 150ms so the listener component is initialized.
