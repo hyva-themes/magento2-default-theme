@@ -90,86 +90,88 @@ if (in_array($type, ['related', 'upsell', 'crosssell'], true)) {
 }
 
 ?>
-<div x-data="">
-    <?=
-    $sliderViewModel->getSliderForItems($itemTemplate, $items, $containerTemplate)
-                    ->setData('hide_details', $hideDetails)
-                    ->setData('hide_rating_summary', $hideRatingSummary)
-                    ->setData('title', $title)
-                    ->toHtml();
-    ?>
-</div>
-<script>
-    'use strict';
-    window.addEventListener('DOMContentLoaded', function() {
-        if (! window.productSliderEventHandlerInitialized) {
-            window.productSliderEventHandlerInitialized = true;
+<div class="product-slider">
+    <div>
+        <?=
+        $sliderViewModel->getSliderForItems($itemTemplate, $items, $containerTemplate)
+                        ->setData('hide_details', $hideDetails)
+                        ->setData('hide_rating_summary', $hideRatingSummary)
+                        ->setData('title', $title)
+                        ->toHtml();
+        ?>
+    </div>
+    <script>
+        'use strict';
+        window.addEventListener('DOMContentLoaded', function() {
+            if (! window.productSliderEventHandlerInitialized) {
+                window.productSliderEventHandlerInitialized = true;
 
-            <?php if ($wishlistViewModel->isEnabled()): ?>
-            window.addEventListener('product-add-to-wishlist', (event) => {
-                const productId = event.detail.productId;
-                fetch(BASE_URL + "wishlist/index/add/", {
-                    headers: {
-                        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-                    },
-                    body: new URLSearchParams({
-                            form_key: hyva.getFormKey(),
-                            product: productId,
-                            uenc: btoa(window.location.href)
+                <?php if ($wishlistViewModel->isEnabled()): ?>
+                window.addEventListener('product-add-to-wishlist', (event) => {
+                    const productId = event.detail.productId;
+                    fetch(BASE_URL + "wishlist/index/add/", {
+                        headers: {
+                            "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                        },
+                        body: new URLSearchParams({
+                                form_key: hyva.getFormKey(),
+                                product: productId,
+                                uenc: btoa(window.location.href)
+                            }
+                        ),
+                        method: "POST",
+                        mode: "cors",
+                        credentials: "include"
+                    }).then(function (response) {
+                        if (response.redirected) {
+                            window.location.href = response.url;
+                        } else if (response.ok) {
+                            return response.json();
+                        } else {
+                            typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                                [{
+                                    type: "warning",
+                                    text: "<?= $escaper->escapeHtml(__('Could not add item to wishlist.')) ?>"
+                                }], 5000
+                            );
                         }
-                    ),
-                    method: "POST",
-                    mode: "cors",
-                    credentials: "include"
-                }).then(function (response) {
-                    if (response.redirected) {
-                        window.location.href = response.url;
-                    } else if (response.ok) {
-                        return response.json();
-                    } else {
+                    }).then(function (result) {
+                        if (!result) {
+                            return
+                        }
                         typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
                             [{
-                                type: "warning",
-                                text: "<?= $escaper->escapeHtml(__('Could not add item to wishlist.')) ?>"
+                                type: (result.success) ? "success" : "error",
+                                text: (result.success)
+                                    ? "<?=
+                                        $escaper->escapeHtml(
+                                            __("%1 has been added to your Wish List.", __("Product"))
+                                        )
+                                        ?>" : result.error_message
                             }], 5000
                         );
-                    }
-                }).then(function (result) {
-                    if (!result) {
-                        return
-                    }
-                    typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
-                        [{
-                            type: (result.success) ? "success" : "error",
-                            text: (result.success)
-                                ? "<?=
-                                    $escaper->escapeHtml(
-                                        __("%1 has been added to your Wish List.", __("Product"))
-                                    )
-                                    ?>" : result.error_message
-                        }], 5000
-                    );
-                    window.dispatchEvent(new CustomEvent("reload-customer-section-data"));
-                }).catch(function (error) {
-                    typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
-                        [{
-                            type: "error",
-                            text: error
-                        }], 5000
-                    );
-                });
-            })
-            <?php endif; ?>
-
-            <?php if ($compareViewModel->showInProductList()): ?>
-            window.addEventListener('product-add-to-compare', (event) => {
-                const productId = event.detail.productId;
-                hyva.postForm({
-                    action: BASE_URL + 'catalog/product_compare/add/',
-                    data: {product: productId}
+                        window.dispatchEvent(new CustomEvent("reload-customer-section-data"));
+                    }).catch(function (error) {
+                        typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                            [{
+                                type: "error",
+                                text: error
+                            }], 5000
+                        );
+                    });
                 })
-            })
-            <?php endif; ?>
-        }
-    });
-</script>
+                <?php endif; ?>
+
+                <?php if ($compareViewModel->showInProductList()): ?>
+                window.addEventListener('product-add-to-compare', (event) => {
+                    const productId = event.detail.productId;
+                    hyva.postForm({
+                        action: BASE_URL + 'catalog/product_compare/add/',
+                        data: {product: productId}
+                    })
+                })
+                <?php endif; ?>
+            }
+        });
+    </script>
+</div>
