@@ -79,13 +79,9 @@ $configuredLinks          = $configuredValues->getLinks() ?? [];
             },
             areAllSelected() {
                 /**
-                 * we need to check if all options are included in this.selectedOptions since the way
-                 * x-model works, an option might be included multiple times in selectedOptions.
-                 * So we check that the length of config.links items *not* present in selectOptions is 0
+                 * The way x-model works it can have duplicates, so we create a new set with unique values only.
                  */
-                return Object.keys(config.links)
-                    .filter(link => !this.selectedOptions.includes(link))
-                    .length === 0;
+                return new Set(this.selectedOptions).size === Object.keys(config.links).length
             },
             toggleAll() {
                 const targetValue = !this.areAllSelected();
