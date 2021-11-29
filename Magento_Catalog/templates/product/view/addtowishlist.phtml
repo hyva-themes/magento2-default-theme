@@ -40,9 +40,10 @@ if (!$product->getId() || !$wishlistViewModel->isEnabled()) {
  * In that case we take the form parameters from the existing wishlist item
  */
 $updateParams = $block->getUpdateParams() ?: null;
+$uniqueId = '_' . uniqid();
 ?>
 <script>
-    function initWishlist() {
+    function initWishlist<?= /** @noEscape */ $uniqueId ?>() {
         return {
             addToWishlist: function addToWishlist(productId) {
 
@@ -68,17 +69,19 @@ $updateParams = $block->getUpdateParams() ?: null;
                 // take the all the input fields that configure this product
                 // includes custom, configurable, grouped and bundled options
                 Array.from(document.querySelectorAll(
-                    '[name^=options], [name^=super_attribute], [name^=bundle_option], [name^=super_group]')
+                    '[name^=options], [name^=super_attribute], [name^=bundle_option], [name^=super_group], [name^=links]')
                 ).map(input => {
                     if (input.type === "select-multiple") {
                         Array.from(input.selectedOptions).forEach(option => {
                             postData += `&${input.name}=${option.value}`
                         })
                     } else {
-                        postData += `&${input.name}=${input.value}`
+                        // skip "checkable inputs" that are not checked
+                        if(!(['radio', 'checkbox', 'select'].includes(input.type) && !input.checked)) {
+                            postData += `&${input.name}=${input.value}`
+                        }
                     }
                 });
-
                 fetch(postParams.action, {
                     "headers": {
                         "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -129,7 +132,7 @@ $updateParams = $block->getUpdateParams() ?: null;
     }
 </script>
 
-<button x-data="initWishlist()"
+<button x-data="initWishlist<?= /** @noEscape */ $uniqueId ?>()"
         @click.prevent="addToWishlist(<?= (int)$product->getId() ?>)"
         title="<?= $escaper->escapeHtmlAttr(
             __(($updateParams) ? 'Update Wish List' : 'Add to Wish List')
