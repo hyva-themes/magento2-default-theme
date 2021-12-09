@@ -25,6 +25,7 @@ $product = $block->getProduct();
 
 /** @var ProductStockItem $stockItemViewModel */
 $stockItemViewModel = $viewModels->require(ProductStockItem::class);
+$minSalesQty        = $stockItemViewModel->getMinSaleQty($product);
 $maxSalesQty        = $stockItemViewModel->getMaxSaleQty($product);
 
 $maxSalesQtyLength  = ($maxSalesQty ? strlen((string) $maxSalesQty) : 4)
@@ -93,8 +94,8 @@ $step = $stockItemViewModel->getQtyIncrements($product)
                     type="number"
                     pattern="[0-9]{0,<?= /** @noEscape */ $maxSalesQtyLength ?>}"
                     inputmode="numeric"
-                    min="<?= /** @noEscape */ $stockItemViewModel->getMinSaleQty($product) ?: 1 ?>"
-                    <?php if (null !== $maxSalesQty): ?>max="<?= /** @noEscape */ $maxSalesQty ?>"<?php endif; ?>
+                    <?php if ($minSalesQty): ?>min="<?= /** @noEscape */ $minSalesQty ?>"<?php endif; ?>
+                    <?php if ($maxSalesQty): ?>max="<?= /** @noEscape */ $maxSalesQty ?>"<?php endif; ?>
                     <?php if ($step): ?>step="<?= /** @noEscape */ $step ?>"<?php endif; ?>
                     <?php endif; ?>
                     :value="qty"
