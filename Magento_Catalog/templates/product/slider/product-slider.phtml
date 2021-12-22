@@ -38,7 +38,7 @@ $categoryIds       = array_filter(explode(',', $block->getData('category_ids') ?
 $pageSize          = $block->getData('page_size') ?: 8;
 $priceFrom         = $block->getData('price_from');
 $priceTo           = $block->getData('price_to');
-$sortAttribute     = $block->getData('sort_attribute') ?: 'position';
+$sortAttribute     = $block->getData('sort_attribute') ?: '';
 $sortDirection     = $block->getData('sort_direction') ?: 'ASC';
 $title             = $block->getData('title') ?: '';
 $hideDetails       = $block->getData('hide_details') ?? false;
@@ -75,9 +75,11 @@ $productListViewModel->addFilter('visibility', [
     ProductVisibility::VISIBILITY_IN_SEARCH,
     ProductVisibility::VISIBILITY_BOTH,
 ], 'in');
-$sortDirection === 'ASC'
-    ? $productListViewModel->addAscendingSortOrder($sortAttribute)
-    : $productListViewModel->addDescendingSortOrder($sortAttribute);
+if ($sortAttribute) {
+    $sortDirection === 'ASC'
+        ? $productListViewModel->addAscendingSortOrder($sortAttribute)
+        : $productListViewModel->addDescendingSortOrder($sortAttribute);
+}
 
 if (in_array($type, ['related', 'upsell', 'crosssell'], true)) {
 
