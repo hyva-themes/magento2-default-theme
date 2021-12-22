@@ -28,7 +28,7 @@ $swatchData = $block->getSwatchData();
     function initLayeredSwatch_<?= $escaper->escapeJs($swatchData['attribute_code']) ?>() {
         return {
             getSwatchType(typeNumber) {
-                switch (typeNumber) {
+                switch ("" + typeNumber) {
                     case "1":
                         return "color"
                     case "2":
