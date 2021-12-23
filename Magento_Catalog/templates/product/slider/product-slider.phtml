@@ -44,6 +44,7 @@ $title             = $block->getData('title') ?: '';
 $hideDetails       = $block->getData('hide_details') ?? false;
 $hideRatingSummary = $block->getData('hide_rating_summary') ?? false;
 $type              = $block->getData('type');
+$skusFilter        = $block->getData('product_skus') ? explode(',', $block->getData('product_skus')) : [];
 $additionalFilters = (array) $block->getData('additional_filters');
 $itemTemplate      = $block->getData('item_template') ?? 'Magento_Catalog::product/list/item.phtml';
 $containerTemplate = $block->getData('container_template')
@@ -53,6 +54,7 @@ $containerTemplate = $block->getData('container_template')
 if ($categoryIds) {
     $productListViewModel->addFilter('category_id', $categoryIds, 'in');
 }
+
 if ($priceFrom) {
     $productListViewModel->addFilter('price', $priceFrom, 'gteq');
 }
@@ -62,6 +64,10 @@ if ($priceTo) {
 
 if ($hideRatingSummary) {
     $productListViewModel->excludeReviewSummary();
+}
+
+if ($skusFilter) {
+    $productListViewModel->addFilter('sku', array_map('trim', $skusFilter), 'in');
 }
 
 foreach ($additionalFilters as $filter) {
