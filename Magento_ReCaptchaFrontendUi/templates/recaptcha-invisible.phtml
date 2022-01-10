@@ -20,6 +20,41 @@ use Magento\Framework\View\Element\Template;
 
 $storeConfig = $viewModels->require(StoreConfig::class);
 $siteKeyV2 = $storeConfig->getStoreConfig('recaptcha_frontend/type_invisible/public_key');
+$uniqueId = '_' . uniqid();
 ?>
 
-<h2>hello world invisible</h2>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+<div class="g-recaptcha"
+     data-sitekey="<?= $siteKeyV2 ?>"
+     data-callback="onSubmit<?= $uniqueId ?>"
+     data-size="invisible"
+     id="recaptcha<?= $uniqueId ?>"
+>
+</div>
+
+<script>
+    (function () {
+        'use strict';
+        const captchaElement = document.getElementById('recaptcha<?= $uniqueId ?>');
+        const formElement = captchaElement.closest('form');
+
+        if (formElement) {
+            const submitHandler = function(e) {
+                console.log(e);
+                e.preventDefault();
+                grecaptcha.execute();
+                debugger;
+            };
+
+            window.onSubmit<?= $uniqueId ?> = function () {
+                // formElement.removeEventHandler('submit', submitHandler);
+                alert('hello')
+                formElement.dispatchEvent(new Event('submit'));
+
+            };
+
+            formElement.addEventListener('submit', submitHandler);
+        }
+    })();
+</script>
