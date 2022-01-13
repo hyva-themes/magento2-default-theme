@@ -40,6 +40,7 @@
                     <block class="Magento\Sales\Block\Order\Comments" name="order.comments"
                            template="Magento_Sales::order/comments.phtml"/>
                 </block>
+                <block class="Magento\Sales\Block\Order\Info" name="order.status" template="Magento_Sales::order/order_status.phtml"/>
             </block>
         </referenceContainer>
         <block class="Magento\Framework\View\Element\Template" name="additional.product.info"

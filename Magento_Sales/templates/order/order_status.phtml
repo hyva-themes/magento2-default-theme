@@ -1,0 +1,14 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+use Magento\Sales\Block\Order\Info;
+
+/** @var Info $block */
+?>
+
+<span class="order-status inline-block px-3 py-3 border rounded border-container"><?= $block->escapeHtml($block->getOrder()->getStatusLabel()) ?></span>

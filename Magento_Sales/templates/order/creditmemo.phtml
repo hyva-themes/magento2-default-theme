@@ -15,9 +15,14 @@ use Magento\Sales\Block\Order\Creditmemo;
 $order = $block->getOrder();
 ?>
 <div class="md:flex md:justify-between items-center mb-3">
-    <div class="text-center md:text-left">
-        <div class="text-2xl"><?= $escaper->escapeHtml(__('Order # %1', $order->getRealOrderId())) ?></div>
-        <?= $block->getChildHtml('order.date') ?>
+    <div class="lg:flex items-center text-center md:text-left">
+        <div class="lg:inline-block">
+            <div class="text-2xl"><?= $escaper->escapeHtml(__('Order # %1', $order->getRealOrderId())) ?></div>
+            <?= $block->getChildHtml('order.date') ?>
+        </div>
+        <div class="mt-3 md:mt-0 lg:inline-block lg:ml-5">
+            <?= $block->getChildHtml('order.status') ?>
+        </div>
     </div>
     <?= $block->getChildHtml('sales.creditmemo.buttons') ?>
 </div>
