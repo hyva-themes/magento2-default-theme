@@ -6,7 +6,86 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.9...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.10...main
+
+## [1.1.10] - 2022-01-14
+
+[1.1.10]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.9...1.1.10
+
+### Added
+
+- **Add container extension point to product list item template**
+
+  This allows extensions to add new items to the element containing the add-to-cart, wishlist and compare buttons.
+
+  More information can be found in the [merge request #361](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/361)
+
+- **Add product_sku filter for SSR product sliders**
+
+  This provides feature parity with the GraphQL Hyvä product slider.
+
+  More information can be found in [issue #293](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/293)
+
+- **Add Order Status to Order Detail page in Customer Account**
+
+  More information can be found in [issue #318](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/318)
+  
+- Many thanks to Lucas Vu (JaJuMa) for the contribution!
+
+### Changed
+
+- **Allow installation in PHP 8 environments**
+
+  More information can be found in [issue #297](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/297)
+
+- **Bugfix: Do not render max allowed amount if "falsy" in add-to-cart form**
+
+  More information can be found in [issue #295](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/295)
+
+- **Apply logo_file if set in layout XML and no logo is configured in the admin area**
+
+  This allows setting the logo with a block argument in layout XML as documented in the [devdocs](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/themes/theme-create.html#theme_logo).
+
+  More information can be found in [issue #309](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/309)
+
+- **Bugfix: swatch options type number type mismatch in switch statement**
+
+  More information can be found in [issue #307](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/307)
+
+- **Bugfix: hide swatch options for disabled products**
+
+  More information can be found in [issue #307](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/307)
+
+- **Initialize Send Friend form with one input (instead of zero)**
+
+  More information can be found in [issue #310](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/310)
+
+- **Bugfix: do not apply position sort order in product sliders if flat catalog is enabled**
+
+  More information can be found in [issue #308](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/308)
+
+- **Bugfix: on the cart page, keep discount in totals after estimating shipping and tax**
+
+  More information can be found in [issue #296](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/296)
+
+- **Bugfix: handle multiple tax rates when estimating shipping and tax**
+
+  More information can be found in [issue #280](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/280)
+
+- **Bugfix: Can't remove product from compare list**
+
+  More information can be found in [issue #300](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/300)
+
+- **Bugfix: Fixed class name typo to change the width of totals on large screens**
+
+  More information can be found in [merge requesr #366](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/366)
+
+  Thanks to Guus Portegies (Cees en Co) for the contribution!
+
+### Removed
+
+- Nothing removed
+
 
 ## [1.1.9] - 2021-11-29
 
@@ -239,7 +318,7 @@ If you're upgrading from <1.1.8 please check the documentation page on upgrading
 
   More information can be found in the [issue #190](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/190)
 
-  Thanks to Guus Portegies (Cees en Co) for figurig out the steps to reproduce the issue!
+  Thanks to Guus Portegies (Cees en Co) for figuring out the steps to reproduce the issue!
 
 - **Bugfix: On Cart Page, JavaScript error on invalid country configuration**
 
