@@ -38,6 +38,7 @@
                 <container name="additional.cart.information"/>
                 <block name="totals" template="Magento_Checkout::cart/totals.phtml">
                     <block name="estimate_shipping" template="Magento_Checkout::cart/estimate-shipping.phtml"/>
+                    <container name="additional.cart.totals"/>
                 </block>
                 <block name="empty" template="Magento_Checkout::cart/noItems.phtml"/>
                 <block name="checkout.cart.methods.bottom" class="Magento\Checkout\Block\Cart"
