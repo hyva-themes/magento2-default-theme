@@ -62,7 +62,7 @@ if (!$productId || !$attributeId) {
                 x-on:focus="focusLabel(item.id)"
                 x-on:blur="blurLabel()"
                 x-on:change="changeOption(<?= (int) $attributeId ?>, $event.target.value)"
-                :checked="selectedValues[<?= (int) $attributeId ?>] === item.id"
+                x-model="selectedValues[<?= (int) $attributeId ?>]"
                 :required="getAllowedAttributeOptions(<?= (int) $attributeId ?>).filter(
                                                                     attributeOption => selectedValues[attributeOption]
                                                                 ).length === 0"
