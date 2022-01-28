@@ -127,6 +127,10 @@ module.exports = {
         content: [
             // this theme's phtml files
             '../../**/*.phtml',
+            // hyva theme-module templates (if this is the default theme in vendor/hyva-themes/magento2-default-theme)
+            '../../../magento2-theme-module/src/view/frontend/templates/**/*.phtml',
+            // hyva theme-module templates (if this is a child theme)
+            //'../../../../../../../vendor/hyva-themes/magento2-theme-module/src/view/frontend/templates/**/*.phtml',
             // parent theme in Vendor (if this is a child-theme)
             //'../../../../../../../vendor/hyva-themes/magento2-default-theme/**/*.phtml',
             // app/code phtml files (if need tailwind classes from app/code modules)
