@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+
+    <body>
+
+        <referenceContainer name="content">
+            <referenceBlock name="checkout.cart.totals">
+                <!--
+                    The order of these children is set in Magento Admin:
+                    Stores > Configuration > Sales > Sales > Checkout Totals Sort Order
+                -->
+                <block name="discount" template="Magento_Tax::cart/totals/discount.phtml"/>
+                <block name="grand_total" template="Magento_Tax::cart/totals/grand-total.phtml"/>
+                <block name="shipping" template="Magento_Tax::cart/totals/shipping.phtml"/>
+                <block name="subtotal" template="Magento_Tax::cart/totals/subtotal.phtml"/>
+                <block name="tax" template="Magento_Tax::cart/totals/tax.phtml"/>
+            </referenceBlock>
+        </referenceContainer>
+
+    </body>
+</page>

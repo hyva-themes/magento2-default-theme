@@ -1,0 +1,31 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsSolid;
+use Magento\Framework\Escaper;
+use Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist;
+
+/** @var MoveToWishlist $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsSolid $heroicons */
+$heroicons = $viewModels->require(HeroiconsSolid::class);
+
+?>
+<?php if ($block->isAllowInCart() && $block->isProductVisibleInSiteVisibility()) : ?>
+    <a href="#"
+       class="towishlist hover:text-red-600"
+       x-data="{}"
+       @click.prevent='hyva.postForm(<?= /* @noEscape */ $block->getMoveFromCartParams() ?>)'
+    >
+        <?= $heroicons->heartHtml('w-6 h-6') ?>
+        <span class="sr-only">
+            <?= $block->escapeHtml(__('Move to Wishlist')) ?>
+        </span>
+    </a>
+<?php endif ?>

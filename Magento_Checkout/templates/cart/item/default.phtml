@@ -1,0 +1,127 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+// phpcs:disable Magento2.Files.LineLength.MaxExceeded
+
+use Magento\Checkout\Block\Cart\Item\Renderer;
+use Magento\Framework\Escaper;
+
+/** @var Renderer $block */
+/** @var Escaper $escaper */
+
+$item = $block->getItem();
+$product = $item->getProduct();
+$isVisibleProduct = $product->isVisibleInSiteVisibility();
+
+?>
+<tbody class="cart item bg-white even:bg-container-darker">
+    <tr class="item-info align-top text-left lg:text-right flex flex-wrap lg:table-row">
+        <td data-th="<?= $escaper->escapeHtml(__('Item')) ?>" class="col item pt-6 px-4 flex flex-wrap gap-8 text-left w-full lg:w-auto">
+            <?php if ($block->hasProductUrl()) :?>
+                <a href="<?= $escaper->escapeUrl($block->getProductUrl()) ?>"
+                   title="<?= $escaper->escapeHtml($block->getProductName()) ?>"
+                   tabindex="-1"
+                   class="product-item-photo flex-shrink-0">
+            <?php else :?>
+                <span class="product-item-photo flex-shrink-0">
+            <?php endif;?>
+            <?= $block->getImage($block->getProductForThumbnail(), 'cart_page_product_thumbnail')
+                ->setTemplate('Magento_Catalog::product/image.phtml')
+                ->toHtml() ?>
+            <?php if ($block->hasProductUrl()) :?>
+                </a>
+            <?php else :?>
+                </span>
+            <?php endif; ?>
+            <div class="product-item-details flex-grow">
+                <strong class="product-item-name break-all">
+                    <?php if ($block->hasProductUrl()) :?>
+                        <a href="<?= $escaper->escapeUrl($block->getProductUrl()) ?>"><?= $escaper->escapeHtml($block->getProductName()) ?></a>
+                    <?php else :?>
+                        <?= $escaper->escapeHtml($block->getProductName()) ?>
+                    <?php endif; ?>
+                </strong>
+                <?php if ($_options = $block->getOptionList()) :?>
+                    <dl class="item-options w-full break-all mt-4 pb-2 text-sm clearfix">
+                        <?php foreach ($_options as $_option) :?>
+                            <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
+                            <dt class="font-bold float-left clear-left mr-2 mb-2"><?= $escaper->escapeHtml($_option['label']) ?>:</dt>
+                            <dd class="float-left">
+                                <?php if (isset($_formatedOptionValue['full_view'])) :?>
+                                        <?= $escaper->escapeHtml($_formatedOptionValue['full_view']) ?>
+                                    <?php else :?>
+                                    <?= $escaper->escapeHtml($_formatedOptionValue['value'], ['span', 'a']) ?>
+                                <?php endif; ?>
+                            </dd>
+                        <?php endforeach; ?>
+                    </dl>
+                <?php endif;?>
+                <?php if ($messages = $block->getMessages()) :?>
+                    <?php foreach ($messages as $message) :?>
+                        <div class= "cart item message <?= $escaper->escapeHtmlAttr($message['type']) ?>">
+                            <div><?= $escaper->escapeHtml($message['text']) ?></div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+                <?php $addInfoBlock = $block->getProductAdditionalInformationBlock(); ?>
+                <?php if ($addInfoBlock) :?>
+                    <?= $addInfoBlock->setItem($item)->toHtml() ?>
+                <?php endif;?>
+            </div>
+        </td>
+
+
+        <td class="col price pt-6 px-4 block w-full sm:w-1/3 lg:w-auto lg:table-cell">
+            <span class="lg:hidden font-bold mt-2">
+                <?= $escaper->escapeHtml(__('Price')) ?>
+            </span>
+            <?= $block->getUnitPriceHtml($item) ?>
+        </td>
+
+        <td class="col qty pt-6 lg:pt-2 px-4 block w-full sm:w-1/3 lg:w-auto lg:table-cell">
+            <span class="lg:hidden font-bold">
+                <?= $escaper->escapeHtml(__('Qty')) ?>
+            </span>
+            <div class="field qty">
+                <div class="control qty">
+                    <label for="cart-<?= $escaper->escapeHtmlAttr($item->getId()) ?>-qty">
+                        <span class="label sr-only"><?= $escaper->escapeHtml(__('Qty')) ?></span>
+                        <input id="cart-<?= $escaper->escapeHtmlAttr($item->getId()) ?>-qty"
+                               name="cart[<?= $escaper->escapeHtmlAttr($item->getId()) ?>][qty]"
+                               data-cart-item-id="<?= $escaper->escapeHtmlAttr($item->getSku()) ?>"
+                               value="<?= $escaper->escapeHtmlAttr($block->getQty()) ?>"
+                               type="number"
+                               size="4"
+                               step="any"
+                               title="<?= $escaper->escapeHtmlAttr(__('Qty')) ?>"
+                               class="qty form-input px-2 py-2 w-20 text-center"
+                               required="required"
+                               min="0"
+                               data-role="cart-item-qty"/>
+                    </label>
+                </div>
+            </div>
+        </td>
+
+        <td class="col subtotal pt-6 px-4 block w-full sm:w-1/3 lg:w-auto lg:table-cell">
+            <span class="lg:hidden font-bold">
+                <?= $escaper->escapeHtml(__('Subtotal')) ?>
+            </span>
+            <?= $block->getRowTotalHtml($item) ?>
+        </td>
+    </tr>
+    <tr class="item-actions">
+        <td colspan="4">
+            <div class="flex justify-end gap-4 p-4 pt-2">
+                <?= /* @noEscape */ $block->getActions($item) ?>
+            </div>
+        </td>
+    </tr>
+</tbody>

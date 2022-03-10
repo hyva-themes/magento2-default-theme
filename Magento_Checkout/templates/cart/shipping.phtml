@@ -1,0 +1,326 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Checkout\Block\Cart\Shipping;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+/** @var Escaper $escaper */
+/** @var Shipping $block */
+/** @var SecureHtmlRenderer $secureRenderer */
+
+?>
+
+<script>
+    function initShippingEstimation(){
+        return {
+            showEstimateShipping: false,
+            cart: false,
+            cartIsVirtual: <?= (int) $block->getQuote()->isVirtual() ?>,
+            customer: false,
+            cartData: {
+                address: {
+                    countryId: window.checkoutConfig.defaultCountryId,
+                    regionId: window.checkoutConfig.defaultRegionId,
+                    postcode: window.checkoutConfig.defaultPostcode
+                },
+                cartVersion: Math.floor(Date.now()/1000),
+                rates: [],
+                shippingCarrierCode: null,
+                shippingMethodCode: null,
+            },
+            checkoutData: {
+                shippingAddressFromData: {
+                    country_id: window.checkoutConfig.defaultCountryId,
+                    region: window.checkoutConfig.defaultRegionId,
+                    postcode: window.checkoutConfig.defaultPostcode
+                }
+            },
+            directoryData: false,
+            shippingMethod: window.checkoutConfig.selectedShippingMethod,
+            init(){
+                this.showEstimateShipping = JSON.parse(
+                    hyva.getBrowserStorage().getItem('hyva.showEstimateShipping')
+                );
+
+            },
+            toggleEstimateShipping() {
+                this.showEstimateShipping = !this.showEstimateShipping;
+
+                hyva.getBrowserStorage().setItem('hyva.showEstimateShipping', this.showEstimateShipping);
+            },
+            receiveCustomerData(data) {
+                if (data.cart) {
+                    this.cart = data.cart;
+                }
+                if (data.customer) {
+                    this.customer = data.customer;
+                }
+                if (data['directory-data']) {
+                    this.directoryData = data['directory-data'];
+                }
+                if (data['cart-data']) {
+                    this.cartData = data['cart-data'];
+                }
+                if (data['checkout-data']) {
+                    this.checkoutData = data['checkout-data'];
+                    this.populateCartData();
+                }
+            },
+            setCountry(countryId){
+                this.cartData.address = {
+                    countryId: countryId,
+                    region: "",
+                    postcode: null
+                }
+                this.checkoutData.shippingAddressFromData = {
+                    country_id: countryId,
+                    region: "",
+                    postcode: null
+                }
+
+                if (this.directoryData[countryId].regions) {
+                    this.cartData.address.regionCode = "";
+                    this.cartData.address.regionId = "";
+
+                    this.checkoutData.shippingAddressFromData.region_code = "";
+                    this.checkoutData.shippingAddressFromData.region_id = "";
+                }
+
+                this.saveToCustomerSectionData();
+            },
+            setRegion(value, type){
+                if (type === 'select') {
+                    const countryId = this.cartData.address.countryId;
+                    const regionId = value;
+                    const regionData = this.directoryData[countryId].regions[regionId];
+
+                    this.cartData.address.regionId = regionId
+                    this.cartData.address.regionCode = regionData.code
+                    this.cartData.address.region = regionData.name
+
+                    this.checkoutData.shippingAddressFromData.region_id = regionId;
+                    this.checkoutData.shippingAddressFromData.region_code = regionData.code;
+                    this.checkoutData.shippingAddressFromData.region = regionData.name;
+
+                } else {
+                    this.cartData.address.region = value;
+                    this.checkoutData.shippingAddressFromData.region = value;
+                }
+
+                this.saveToCustomerSectionData();
+            },
+            setPostcode(value){
+                this.cartData.address.postcode = value;
+                this.checkoutData.shippingAddressFromData.postcode = value;
+
+                this.saveToCustomerSectionData();
+            },
+            saveToCustomerSectionData(){
+                const browserStorage = hyva.getBrowserStorage();
+
+                const sectionData = JSON.parse(browserStorage.getItem('mage-cache-storage'));
+
+                if (!sectionData['checkout-data']) {
+                    sectionData['checkout-data'] = {};
+                }
+                if (!sectionData['cart-data']) {
+                    sectionData['cart-data'] = {};
+                }
+
+                sectionData['checkout-data'].shippingAddressFromData = this.checkoutData.shippingAddressFromData;
+                sectionData['cart-data'].address = this.cartData.address;
+
+                browserStorage.setItem('mage-cache-storage', JSON.stringify(sectionData));
+            },
+            populateCartData() {
+                const checkoutAddress = this.checkoutData && this.checkoutData.shippingAddressFromData;
+
+                if (checkoutAddress) {
+
+                    if(
+                        (checkoutAddress['country_id'] !== this.cartData.address.countryId) ||
+                        (checkoutAddress['region'] !== "" || checkoutAddress['region_id'] !== "" || checkoutAddress['postcode'] !== null)
+                    ) {
+                        this.cartData.address.countryId = checkoutAddress['country_id'];
+                        this.cartData.address.region = checkoutAddress['region'];
+                        this.cartData.address.postcode = checkoutAddress['postcode'];
+                    }
+                }
+            },
+            getSortedCountries(){
+                return Object.keys(this.directoryData)
+                    .filter(countryKey => countryKey !== 'data_id')
+                    .sort((a,b) => {
+                        if (this.directoryData[a].name < this.directoryData[b].name) {
+                            return -1
+                        }
+                        if (this.directoryData[a].name > this.directoryData[b].name) {
+                            return 1
+                        }
+                        return 0;
+                    }).map(countryId => {
+                        return {
+                            id: countryId,
+                            name: this.directoryData[countryId].name || countryId
+                        }
+                    });
+            },
+            getAvailableRegions() {
+                const countryId = this.cartData.address.countryId;
+
+                if (
+                    countryId &&
+                    this.directoryData[countryId] &&
+                    this.directoryData[countryId].regions
+                ){
+                    return Object.keys(this.directoryData[countryId].regions).map(regionId =>
+                        { return {
+                            id: regionId,
+                            code: this.directoryData[countryId].regions[regionId].code,
+                            name: this.directoryData[countryId].regions[regionId].name
+                        }}
+                    )
+                }
+                return [];
+            },
+            hasAvailableRegions() {
+                return this.cartData.address.countryId && this.getAvailableRegions().length
+            }
+        }
+    }
+</script>
+<div id="block-shipping"
+     class="flex flex-col pb-2 my-2 border-b-2 border-gray-300 estimate-shipping-form"
+     x-data="initShippingEstimation()"
+     x-init="init()"
+     @private-content-loaded.window="receiveCustomerData($event.detail.data)"
+>
+    <div class="title" data-role="title">
+        <span @click="toggleEstimateShipping"
+              class="flex justify-between w-full font-semibold whitespace-nowrap cursor-pointer select-none text-primary-lighter"
+              id="shipping-estimate-toggle"
+              role="heading" aria-level="2"
+        >
+            <?= $block->getQuote()->isVirtual()
+                ? $escaper->escapeHtml(__('Estimate Tax'))
+                : $escaper->escapeHtml(__('Estimate Shipping and Tax'))
+            ?>
+            <span :class="{ 'rotate-180' : showEstimateShipping}" class="block transform rotate-180">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6" width="25" height="25">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+</svg>
+            </span>
+        </span>
+    </div>
+    <div id="block-summary"
+         data-bind="scope:'block-summary'"
+         class="content my-4 card"
+         data-role="content"
+         aria-labelledby="block-shipping-heading"
+         x-cloak
+         x-show="showEstimateShipping"
+    >
+        <form method="post" id="shipping-zip-form">
+            <fieldset class="fieldset estimate">
+                <legend class="legend sr-only">
+                    <?= $escaper->escapeHtml($block->getQuote()->isVirtual() ?
+                        __('Estimate Tax') :
+                        __('Estimate Shipping and Tax'))
+                    ?>
+                </legend>
+                <p class="field note">
+                    <?= $block->getQuote()->isVirtual() ?
+                        $escaper->escapeHtml(__('Enter your billing address to get a tax estimate.')) :
+                        $escaper->escapeHtml(__('Enter your destination to get a shipping estimate.'))
+                    ?>
+                </p>
+
+                <div class="field" data-bind="visible: visible, attr: {'name': element.dataScope}, css: additionalClasses" name="shippingAddress.country_id">
+
+                    <label class="label">
+                        <span data-bind="i18n: element.label">Country</span>
+                    </label>
+
+                    <div class="control">
+                        <select class="form-select w-full"
+                                name="country_id"
+                                aria-invalid="false"
+                                @change.debounce="setCountry($event.target.value)"
+                        >
+                            <option value=""> </option>
+                            <template x-for="country in getSortedCountries()" :key="country.id">
+                                <option :value="country.id" x-text="country.name" :selected="cartData.address && country.id == cartData.address.countryId"></option>
+                            </template>
+                        </select>
+
+                    </div>
+                </div>
+
+
+                <div class="field" name="shippingAddress.region_id">
+
+                    <template x-if="hasAvailableRegions()">
+
+                        <label class="label">
+                            <?= $escaper->escapeHtml(__('State/Province')) ?>
+
+                            <select class="form-select w-full"
+                                    id="region_id"
+                                    name="region_id"
+                                    @change.debounce="setRegion($event.target.value, 'select')"
+                            >
+                                <option value="">
+                                    <?= $escaper->escapeHtml(__('Please select a region, state or province.')) ?>
+                                </option>
+                                <template x-for="region in getAvailableRegions()" :key="region.id">
+                                    <option :value="region.id" x-text="region.name" :selected="cartData.address && region.id == cartData.address.regionId"></option>
+                                </template>
+                            </select>
+                        </label>
+                    </template>
+
+                    <template x-if="directoryData && !hasAvailableRegions()">
+
+                        <label class="label">
+                            <?= $escaper->escapeHtml(__('State/Province')) ?>
+
+                            <input class="form-input w-full"
+                                   id="region"
+                                   type="text"
+                                   name="region"
+                                   @change.debounce="setRegion($event.target.value)"
+                                   :value="cartData.address && cartData.address.region"
+                            />
+                        </label>
+                    </template>
+                </div>
+
+                <div class="field" name="shippingAddress.postcode">
+
+                    <label class="label" data-bind="attr: { for: element.uid }" for="FFRCTHK">
+                        <span data-bind="i18n: element.label">Zip/Postal Code</span>
+                    </label>
+
+                    <div class="control">
+                        <input class="form-input w-full"
+                               type="text"
+                               name="postcode"
+                               @change.debounce="setPostcode($event.target.value)"
+                               :value="cartData.address && cartData.address.postcode"
+                        >
+
+                    </div>
+                </div>
+
+            </fieldset>
+        </form>
+    </div>
+</div>

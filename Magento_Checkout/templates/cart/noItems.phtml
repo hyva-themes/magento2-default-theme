@@ -6,25 +6,20 @@
  * See https://hyva.io/license
  */
 
-use Magento\Framework\View\Element\Template;
-use Magento\Framework\Escaper;
+declare(strict_types=1);
 
-/** @var Template $block */
-/** @var Escaper $escaper */
-
+/**  @var $block \Magento\Checkout\Block\Cart */
 ?>
-<template x-if="!isLoading && cartEmpty === true">
-    <div>
-        <?= $block->getChildHtml('checkout_cart_empty_widget') ?>
-        <p><?= $escaper->escapeHtml(__('You have no items in your shopping cart.')) ?></p>
-        <p><?= $escaper->escapeHtml(
-            __(
-                'Click <a href="%1">here</a> to continue shopping.',
-                $escaper->escapeUrl($block->getUrl())
-            ),
-            ['a']
-        ) ?>
-        </p>
-        <?= $block->getChildHtml('shopping.cart.table.after') ?>
-    </div>
-</template>
+<div class="cart-empty">
+    <?= $block->getChildHtml('checkout_cart_empty_widget') ?>
+    <p><?= $escaper->escapeHtml(__('You have no items in your shopping cart.')) ?></p>
+    <p><?= $escaper->escapeHtml(
+        __(
+            'Click <a href="%1">here</a> to continue shopping.',
+            $escaper->escapeUrl($block->getContinueShoppingUrl())
+        ),
+        ['a']
+    ) ?>
+    </p>
+    <?= $block->getChildHtml('shopping.cart.table.after') ?>
+</div>

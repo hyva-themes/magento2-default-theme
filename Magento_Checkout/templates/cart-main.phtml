@@ -1,0 +1,165 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Cart\CheckoutConfig;
+use Magento\Checkout\Block\Cart;
+use Magento\Framework\Escaper;
+
+/** @var Cart $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+?>
+
+<?php
+/** @var CheckoutConfig $checkoutConfigViewModel */
+$checkoutConfigViewModel = $viewModels->require(CheckoutConfig::class);
+$serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel->getSerializedCheckoutConfig() : 'false';
+
+?>
+<script>
+    window.checkoutConfig = <?= /* @noEscape  */ $serializedCheckoutConfig ?>;
+    window.customerData = window.checkoutConfig.customerData;
+    window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
+</script>
+
+<script>
+    'use strict';
+    (function( hyva, undefined ) {
+        hyva.postCart = (form) => {
+
+            if (!form.action) {
+                return;
+            }
+            const action = form.action;
+            const formData = new FormData(form);
+
+            if (!formData.uenc) {
+                formData.append('uenc', btoa(window.location.href));
+            }
+
+            formData.append('form_key', hyva.getFormKey());
+
+            window.fetch(action, {
+                method: 'POST',
+                "body": formData
+            }).then((result) => {
+                return result.text()
+
+            }).then((body)=> {
+
+                hyva.replaceElement('#maincontent', body)
+
+            }).catch((error) => {
+                console.error(error);
+                typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                    [{
+                        type: "error",
+                        text: "<?= $escaper->escapeJs(__("Something went wrong. Please try again.")) ?>"
+                    }], 10000
+                );
+            })
+        }
+
+        hyva.replaceElement = (targetSelector, content) => {
+
+            let parser = new DOMParser();
+            const doc = parser.parseFromString( content, 'text/html' );
+
+            const maincontent = doc.querySelector(targetSelector);
+
+            if (!maincontent) {
+                return;
+            }
+
+            var tmpScripts = maincontent.getElementsByTagName('script');
+
+            if (tmpScripts.length > 0) {
+                // push all of the document's script tags into an array
+                // (to prevent dom manipulation while iterating over dom nodes)
+                let scripts = [];
+                for (let i = 0; i < tmpScripts.length; i++) {
+                    scripts.push(tmpScripts[i]);
+                }
+
+                // iterate over all script tags and create a duplicate tags for each
+                for (let i = 0; i < scripts.length; i++) {
+                    let script = document.createElement('script');
+                    script.innerHTML = scripts[i].innerHTML;
+
+                    document.head.appendChild(script);
+
+                    // remove the original (non-executing) node from the page
+                    scripts[i].parentNode.removeChild(scripts[i]);
+                }
+            }
+
+            document.querySelector(targetSelector).replaceWith(maincontent);
+
+            window.dispatchEvent(new CustomEvent("reload-customer-section-data"));
+            hyva.initMessages();
+        }
+    }( window.hyva = window.hyva || {} ));
+</script>
+
+<script>
+
+    function initCartForm(){
+        return {
+            checkCartShouldUpdate(data) {
+                const cart = data.cart;
+
+                if (cart && window.checkoutConfig) {
+                    if (
+                        /* eslint-disable eqeqeq */
+                        cart.cartId == window.checkoutConfig.quoteData.entity_id &&
+                        cart.summary_count == window.checkoutConfig.quoteData.items_qty && //eslint-disable-line eqeqeq
+                        cart.subtotalAmount == window.checkoutConfig.totalsData.total_segments.find((segment) => segment.code === "subtotal").value
+                        /* eslint-enable eqeqeq */
+                    ) {
+                        return;
+                    }
+                }
+                this.reloadCartContent();
+            },
+            reloadCartContent() {
+                window.fetch(window.location.href, {
+                    method: "GET"
+                }).then((result) => {
+                    return result.text()
+
+                }).then((body)=> {
+
+                    hyva.replaceElement('#maincontent', body)
+
+                }).catch((error) => {
+
+                    window.location.reload()
+                })
+            },
+            onStorageChange (event) {
+                if (event.key === 'private_content_version') {
+                    window.dispatchEvent(new CustomEvent("reload-customer-section-data"));
+                }
+            }
+        }
+    }
+</script>
+<div x-data="initCartForm()"
+     class="cart-form clearfix"
+     @private-content-loaded.window="checkCartShouldUpdate($event.detail.data)"
+     @storage.window="onStorageChange($event)"
+>
+    <?php if ($block->getItemsCount()): ?>
+        <?= $block->getChildHtml('with-items') ?>
+    <?php else: ?>
+        <?= $block->getChildHtml('no-items') ?>
+    <?php endif; ?>
+</div>

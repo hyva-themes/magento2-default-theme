@@ -1,0 +1,18 @@
+
+.price-including-tax + .price-excluding-tax
+{
+    @apply text-sm;
+
+    &:before {
+        content: attr(data-label) ': ';
+    }
+}
+
+.price-excluding-tax,
+.price-including-tax {
+    @apply block whitespace-nowrap;
+
+    .price {
+        @apply font-semibold leading-relaxed;
+    }
+}

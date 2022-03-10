@@ -1,0 +1,22 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+/**
+ * Shopping cart additional info
+ * @var $block \Magento\Framework\View\Element\Template
+ */
+?>
+<?php
+$name = $block->getNameInLayout();
+foreach ($block->getChildNames($name) as $childName) {
+    // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
+    echo $block->getChildBlock($childName)->setItem($block->getItem())->toHtml();
+}
+?>

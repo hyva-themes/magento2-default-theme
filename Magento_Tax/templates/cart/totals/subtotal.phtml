@@ -1,0 +1,58 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+/**
+ * The AlpineJS scope of this file is the method `initCartTotals()` in Magento_Checkout::cart/totals.phtml
+ */
+?>
+<!-- display subtotal including and excluding tax -->
+<template x-if="segment.code === 'subtotal' && 'both' === checkoutConfig.reviewTotalsDisplayMode">
+    <div>
+        <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container">
+            <div class="w-7/12 text-left md:w-auto"
+                 x-html="`${segment.title} (${excludingTaxMessage})` "
+            ></div>
+            <div class="w-5/12 text-right md:w-auto"
+                 x-text="hyva.formatPrice(totalsData.subtotal)"
+            ></div>
+        </div>
+
+        <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container">
+            <div class="w-7/12 text-left md:w-auto"
+                 x-html="`${segment.title} (${includingTaxMessage})` "
+            ></div>
+            <div class="w-5/12 text-right md:w-auto"
+                 x-text="hyva.formatPrice(totalsData.subtotal_incl_tax)"
+            ></div>
+        </div>
+    </div>
+</template>
+
+<!-- display subtotal excluding tax -->
+<template x-if="segment.code === 'subtotal' && 'excluding' === checkoutConfig.reviewTotalsDisplayMode">
+    <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container">
+        <div class="w-7/12 text-left md:w-auto"
+             x-html="`${segment.title}` "
+        ></div>
+        <div class="w-5/12 text-right md:w-auto"
+             x-text="hyva.formatPrice(totalsData.subtotal)"
+        ></div>
+    </div>
+</template>
+
+<!-- display subtotal including tax -->
+<template x-if="segment.code === 'subtotal' && 'including' === checkoutConfig.reviewTotalsDisplayMode">
+    <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container">
+        <div class="w-7/12 text-left md:w-auto"
+             x-html="`${segment.title})`"
+        ></div>
+        <div class="w-5/12 text-right md:w-auto"
+             x-text="hyva.formatPrice(totalsData.subtotal_incl_tax)"
+        ></div>
+    </div>
+</template>
