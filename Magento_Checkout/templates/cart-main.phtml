@@ -49,7 +49,7 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
 
             window.fetch(action, {
                 method: 'POST',
-                "body": formData
+                body: formData
             }).then((result) => {
                 return result.text()
 
@@ -70,7 +70,7 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
 
         hyva.replaceElement = (targetSelector, content) => {
 
-            let parser = new DOMParser();
+            const parser = new DOMParser();
             const doc = parser.parseFromString( content, 'text/html' );
 
             const maincontent = doc.querySelector(targetSelector);
@@ -79,12 +79,12 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
                 return;
             }
 
-            var tmpScripts = maincontent.getElementsByTagName('script');
+            const tmpScripts = maincontent.getElementsByTagName('script');
 
             if (tmpScripts.length > 0) {
                 // push all of the document's script tags into an array
                 // (to prevent dom manipulation while iterating over dom nodes)
-                let scripts = [];
+                const scripts = [];
                 for (let i = 0; i < tmpScripts.length; i++) {
                     scripts.push(tmpScripts[i]);
                 }
@@ -105,6 +105,7 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
 
             window.dispatchEvent(new CustomEvent("reload-customer-section-data"));
             hyva.initMessages();
+
         }
     }( window.hyva = window.hyva || {} ));
 </script>
@@ -116,11 +117,32 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
             checkCartShouldUpdate(data) {
                 const cart = data.cart;
 
-                if (cart && window.checkoutConfig) {
+                if(!window.checkoutConfig) {
+                    return
+                }
+                if (cart) {
+
+                    function fingerprintOption(option) {
+                        return [
+                            // option.option_id // the option_id is not set on the checkoutConfig.quoteItemData options
+                            option.value
+                        ]
+                    }
+
+                    function fingerprintItem(item) {
+                        return [
+                            item.item_id,
+                            item.qty,
+                            (item.options || []).map(fingerprintOption)
+                        ]
+                    }
+
+                    const sectionItemsHash = JSON.stringify(cart.items.map(fingerprintItem));
+                    const quoteItemsHash = JSON.stringify(window.checkoutConfig.quoteItemData.map(fingerprintItem));
                     if (
                         /* eslint-disable eqeqeq */
-                        cart.cartId == window.checkoutConfig.quoteData.entity_id &&
-                        cart.summary_count == window.checkoutConfig.quoteData.items_qty && //eslint-disable-line eqeqeq
+                        sectionItemsHash === quoteItemsHash &&
+                        cart.summary_count == window.checkoutConfig.quoteData.items_qty &&
                         cart.subtotalAmount == window.checkoutConfig.totalsData.total_segments.find((segment) => segment.code === "subtotal").value
                         /* eslint-enable eqeqeq */
                     ) {
@@ -137,6 +159,7 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
 
                 }).then((body)=> {
 
+                    hyva.setCookie('mage-cache-sessid', '', -1, true);
                     hyva.replaceElement('#maincontent', body)
 
                 }).catch((error) => {

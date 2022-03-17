@@ -15,7 +15,7 @@ use Magento\Framework\Escaper;
 /** @var Escaper $escaper */
 
 ?>
-<?php if (!$block->hasError()) :?>
+<?php if (!$block->hasError()): ?>
     <?php $methods = $block->getMethods('methods') ?: $block->getMethods('top_methods') ?>
     <ul class="checkout methods items checkout-methods-items">
         <?php foreach ($methods as $method) :?>

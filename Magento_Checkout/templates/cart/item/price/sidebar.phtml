@@ -8,16 +8,21 @@
 
 declare(strict_types=1);
 
-// phpcs:disable Magento2.Templates.ThisInTemplate
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\ProductPrice;
+use Magento\Checkout\Block\Item\Price\Renderer as PriceRenderer;
 
-/** @var $block \Magento\Checkout\Block\Item\Price\Renderer */
+/** @var PriceRenderer $block */
+/** @var ViewModelRegistry $viewModels */
+
+$item = $block->getItem();
+$productPriceViewModel = $viewModels->require(ProductPrice::class);
 ?>
-<?php $_item = $block->getItem() ?>
 <div class="price-container">
     <span class="price-label"><?= $block->escapeHtml(__('Price')) ?></span>
     <span class="price-wrapper">
         <?= $block->escapeHtml(
-            $this->helper(Magento\Checkout\Helper\Data::class)->formatPrice($_item->getCalculationPrice()),
+            $productPriceViewModel->formatPrice($item->getCalculationPrice()),
             ['span']
         ) ?>
     </span>

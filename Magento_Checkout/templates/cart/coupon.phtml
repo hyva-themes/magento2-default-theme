@@ -8,23 +8,21 @@
 
 declare(strict_types=1);
 
+use Magento\Checkout\Block\Cart\Coupon;
 use Magento\Framework\Escaper;
-use Magento\Framework\View\Element\AbstractBlock;
 
-/** @var AbstractBlock $block */
+/** @var Coupon $block */
 /** @var Escaper $escaper */
 
 // We should use strlen function because coupon code could be "0", converted to bool will lead to false
 $hasCouponCode = (bool) strlen($block->getCouponCode() ?: "");
-
-$id = uniqid();
 ?>
 <script>
     function initCouponForm() {
         return {
             showCouponForm: <?= $hasCouponCode ? 1 : 0 ?>,
             formData: {
-                coupon_code: '<?= $escaper->escapeHtmlAttr($block->getCouponCode()) ?>',
+                coupon_code: '<?= $escaper->escapeJs($block->getCouponCode()) ?>',
                 remove: '<?= (int) $hasCouponCode ?>'
             },
             init(){

@@ -68,8 +68,8 @@ $cartItemOutputViewModel = $viewModels->require(ItemOutput::class);
                     </th>
                 </tr>
             </thead>
-            <?php foreach ($block->getItems() as $_item): ?>
-                <?= $block->getItemHtml($_item) ?>
+            <?php foreach ($block->getItems() as $item): ?>
+                <?= $block->getItemHtml($item) ?>
             <?php endforeach ?>
         </table>
         <?php if ($block->getPagerHtml()): ?>
@@ -81,9 +81,13 @@ $cartItemOutputViewModel = $viewModels->require(ItemOutput::class);
     <div class="cart actions flex flex-col sm:flex-row justify-end gap-4 items-center my-4">
         <?php if ($cartViewModel->isClearShoppingCartEnabled()): ?>
             <div x-data="hyva.modal()">
-                <button @click="show" type="button" title="<?= $escaper->escapeHtml(__('Clear Shopping Cart')) ?>"
-                    class="action clear" id="empty_cart_button">
-                    <span><?= $escaper->escapeHtml(__('Clear Shopping Cart')) ?></span>
+                <button @click="show"
+                        type="button"
+                        title="<?= $escaper->escapeHtmlAttr(__('Clear Shopping Cart')) ?>"
+                        class="action clear"
+                        id="empty_cart_button"
+                >
+                    <?= $escaper->escapeHtml(__('Clear Shopping Cart')) ?>
                 </button>
                 <?= /* @noEscape */ $modalViewModel->createModal()->withContent(<<<END_OF_CONTENT
                     <div class="text-lg mb-8">
@@ -117,9 +121,10 @@ $cartItemOutputViewModel = $viewModels->require(ItemOutput::class);
                 name="update_cart_action"
                 data-cart-item-update=""
                 value="update_qty"
-                title="<?= $escaper->escapeHtml(__('Update Shopping Cart')) ?>"
-                class="action update btn btn-secondary">
-            <span><?= $escaper->escapeHtml(__('Update Shopping Cart')) ?></span>
+                title="<?= $escaper->escapeHtmlAttr(__('Update Shopping Cart')) ?>"
+                class="action update btn btn-secondary"
+        >
+            <?= $escaper->escapeHtml(__('Update Shopping Cart')) ?>
         </button>
     </div>
 </form>

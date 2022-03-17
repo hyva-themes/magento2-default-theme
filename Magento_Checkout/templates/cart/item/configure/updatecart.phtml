@@ -13,13 +13,15 @@ use Magento\Framework\Escaper;
 
 /** @var View $block  */
 /** @var Escaper $escaper */
+
+$product = $block->getProduct();
+$buttonTitle = __('Update Cart');
+
 ?>
-<?php $_product = $block->getProduct(); ?>
-<?php $buttonTitle = __('Update Cart'); ?>
-<?php if ($_product->isSaleable()) :?>
+<?php if ($product->isSaleable()): ?>
     <div class="box-tocart update">
         <fieldset class="fieldset">
-            <?php if ($block->shouldRenderQuantity()) :?>
+            <?php if ($block->shouldRenderQuantity()): ?>
             <div class="field qty">
                 <label class="label" for="qty"><span><?= $escaper->escapeHtml(__('Qty')) ?></span></label>
                 <div class="control">
@@ -45,15 +47,4 @@ use Magento\Framework\Escaper;
             </div>
         </fieldset>
     </div>
-    <script type="text/x-magento-init">
-        {
-            "#product_addtocart_form": {
-                "validation": {},
-                "addToCart": {
-                    "cartButtonId": "#product-updatecart-button",
-                    "cartForm": "#product_addtocart_form"
-                }
-            }
-        }
-    </script>
 <?php endif; ?>

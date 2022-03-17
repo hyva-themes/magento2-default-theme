@@ -20,7 +20,7 @@ use Magento\Framework\Escaper;
 /** @var HeroiconsSolid $heroicons */
 $heroicons = $viewModels->require(HeroiconsSolid::class);
 ?>
-<?php if ($block->isProductVisibleInSiteVisibility()) :?>
+<?php if ($block->isProductVisibleInSiteVisibility()): ?>
     <a class="action action-edit"
        href="<?= $escaper->escapeUrl($block->getConfigureUrl()) ?>"
        title="<?= $escaper->escapeHtmlAttr(__('Edit item parameters')) ?>"

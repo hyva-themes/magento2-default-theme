@@ -35,7 +35,7 @@
                                 <container name="checkout.cart.totals.container" as="totals" label="Shopping Cart Totals">
                                     <block class="Magento\Checkout\Block\Cart\Totals" name="checkout.cart.totals" template="Magento_Checkout::cart/totals.phtml">
                                         <!--
-                                            The order of these children is set in Magento Admin:
+                                            The rendering order of these children is set in Magento Admin:
                                             Stores > Configuration > Sales > Sales > Checkout Totals Sort Order
                                         -->
                                         <block name="discount" template="Magento_Checkout::cart/totals/discount.phtml"/>
@@ -54,7 +54,7 @@
 
                             </container>
 
-                            <container name="checkout.cart.form.before" as="form_before" label="Shopping Cart Items Before" htmlTag="div" htmlClass="rewards"/>
+                            <container name="checkout.cart.form.before" as="form_before" label="Shopping Cart Items Before" htmlTag="div" htmlClass="cart-form-before"/>
 
                             <block class="Magento\Checkout\Block\Cart\Grid" name="checkout.cart.form" as="cart-items" template="Magento_Checkout::cart/form.phtml" after="cart.summary">
                                 <block class="Magento\Framework\View\Element\RendererList" name="checkout.cart.item.renderers" as="renderer.list"/>

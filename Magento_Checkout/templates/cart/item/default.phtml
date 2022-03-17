@@ -24,9 +24,9 @@ $isVisibleProduct = $product->isVisibleInSiteVisibility();
 <tbody class="cart item bg-white even:bg-container-darker">
     <tr class="item-info align-top text-left lg:text-right flex flex-wrap lg:table-row">
         <td data-th="<?= $escaper->escapeHtml(__('Item')) ?>" class="col item pt-6 px-4 flex flex-wrap gap-8 text-left w-full lg:w-auto">
-            <?php if ($block->hasProductUrl()) :?>
+            <?php if ($block->hasProductUrl()): ?>
                 <a href="<?= $escaper->escapeUrl($block->getProductUrl()) ?>"
-                   title="<?= $escaper->escapeHtml($block->getProductName()) ?>"
+                   title="<?= $escaper->escapeHtmlAttr($block->getProductName()) ?>"
                    tabindex="-1"
                    class="product-item-photo flex-shrink-0">
             <?php else :?>
@@ -35,35 +35,35 @@ $isVisibleProduct = $product->isVisibleInSiteVisibility();
             <?= $block->getImage($block->getProductForThumbnail(), 'cart_page_product_thumbnail')
                 ->setTemplate('Magento_Catalog::product/image.phtml')
                 ->toHtml() ?>
-            <?php if ($block->hasProductUrl()) :?>
+            <?php if ($block->hasProductUrl()): ?>
                 </a>
             <?php else :?>
                 </span>
             <?php endif; ?>
             <div class="product-item-details flex-grow">
                 <strong class="product-item-name break-all">
-                    <?php if ($block->hasProductUrl()) :?>
+                    <?php if ($block->hasProductUrl()): ?>
                         <a href="<?= $escaper->escapeUrl($block->getProductUrl()) ?>"><?= $escaper->escapeHtml($block->getProductName()) ?></a>
                     <?php else :?>
                         <?= $escaper->escapeHtml($block->getProductName()) ?>
                     <?php endif; ?>
                 </strong>
-                <?php if ($_options = $block->getOptionList()) :?>
+                <?php if ($options = $block->getOptionList()): ?>
                     <dl class="item-options w-full break-all mt-4 pb-2 text-sm clearfix">
-                        <?php foreach ($_options as $_option) :?>
-                            <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
-                            <dt class="font-bold float-left clear-left mr-2 mb-2"><?= $escaper->escapeHtml($_option['label']) ?>:</dt>
+                        <?php foreach ($options as $option) :?>
+                            <?php $formatedOptionValue = $block->getFormatedOptionValue($option) ?>
+                            <dt class="font-bold float-left clear-left mr-2 mb-2"><?= $escaper->escapeHtml($option['label']) ?>:</dt>
                             <dd class="float-left">
-                                <?php if (isset($_formatedOptionValue['full_view'])) :?>
-                                        <?= $escaper->escapeHtml($_formatedOptionValue['full_view']) ?>
+                                <?php if (isset($formatedOptionValue['full_view'])): ?>
+                                        <?= $escaper->escapeHtml($formatedOptionValue['full_view']) ?>
                                     <?php else :?>
-                                    <?= $escaper->escapeHtml($_formatedOptionValue['value'], ['span', 'a']) ?>
+                                    <?= $escaper->escapeHtml($formatedOptionValue['value'], ['span', 'a']) ?>
                                 <?php endif; ?>
                             </dd>
                         <?php endforeach; ?>
                     </dl>
                 <?php endif;?>
-                <?php if ($messages = $block->getMessages()) :?>
+                <?php if ($messages = $block->getMessages()): ?>
                     <?php foreach ($messages as $message) :?>
                         <div class= "cart item message <?= $escaper->escapeHtmlAttr($message['type']) ?>">
                             <div><?= $escaper->escapeHtml($message['text']) ?></div>

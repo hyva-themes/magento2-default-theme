@@ -11,20 +11,16 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
 
     <body>
-
-        <referenceContainer name="content">
-            <referenceBlock name="checkout.cart.totals">
-                <!--
-                    The order of these children is set in Magento Admin:
-                    Stores > Configuration > Sales > Sales > Checkout Totals Sort Order
-                -->
-                <block name="discount" template="Magento_Tax::cart/totals/discount.phtml"/>
-                <block name="grand_total" template="Magento_Tax::cart/totals/grand-total.phtml"/>
-                <block name="shipping" template="Magento_Tax::cart/totals/shipping.phtml"/>
-                <block name="subtotal" template="Magento_Tax::cart/totals/subtotal.phtml"/>
-                <block name="tax" template="Magento_Tax::cart/totals/tax.phtml"/>
-            </referenceBlock>
-        </referenceContainer>
-
+        <referenceBlock name="checkout.cart.totals">
+            <!--
+                The rendering order of these children is set in Magento Admin:
+                Stores > Configuration > Sales > Sales > Checkout Totals Sort Order
+            -->
+            <block name="discount" template="Magento_Tax::cart/totals/discount.phtml"/>
+            <block name="grand_total" template="Magento_Tax::cart/totals/grand-total.phtml"/>
+            <block name="shipping" template="Magento_Tax::cart/totals/shipping.phtml"/>
+            <block name="subtotal" template="Magento_Tax::cart/totals/subtotal.phtml"/>
+            <block name="tax" template="Magento_Tax::cart/totals/tax.phtml"/>
+        </referenceBlock>
     </body>
 </page>

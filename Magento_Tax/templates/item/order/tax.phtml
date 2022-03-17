@@ -19,7 +19,7 @@ $source   = $block->getSource();
 $fullInfo = $this->helper(\Magento\Tax\Helper\Data::class)->getCalculatedTaxes($source);
 
 ?>
-<?php if ($fullInfo && $block->displayFullSummary()) : ?>
+<?php if ($fullInfo && $block->displayFullSummary()): ?>
     <?php foreach ($fullInfo as $info): ?>
         <?php
         $percent = $info['percent'];

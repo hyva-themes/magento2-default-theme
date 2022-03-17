@@ -8,10 +8,9 @@
 
 declare(strict_types=1);
 
-/**
- * Shopping cart additional info
- * @var $block \Magento\Framework\View\Element\Template
- */
+use Magento\Framework\View\Element\Template;
+
+/** @var $block Template */
 ?>
 <?php
 $name = $block->getNameInLayout();
@@ -19,4 +18,3 @@ foreach ($block->getChildNames($name) as $childName) {
     // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
     echo $block->getChildBlock($childName)->setItem($block->getItem())->toHtml();
 }
-?>
