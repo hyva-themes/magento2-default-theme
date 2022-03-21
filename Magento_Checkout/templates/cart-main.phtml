@@ -137,8 +137,14 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
                         ]
                     }
 
-                    const sectionItemsHash = JSON.stringify(cart.items.map(fingerprintItem));
-                    const quoteItemsHash = JSON.stringify(window.checkoutConfig.quoteItemData.map(fingerprintItem));
+                    function hashItems(items) {
+                        const itemsClone = items.map(x => x); // clone items because sort() is in-place
+                        const hashData = itemsClone.sort((a, b) => a.item_id - b.item_id).map(fingerprintItem);
+                        return JSON.stringify(hashData);
+                    }
+
+                    const sectionItemsHash = hashItems(cart.items);
+                    const quoteItemsHash = hashItems(window.checkoutConfig.quoteItemData);
                     if (
                         /* eslint-disable eqeqeq */
                         sectionItemsHash === quoteItemsHash &&
