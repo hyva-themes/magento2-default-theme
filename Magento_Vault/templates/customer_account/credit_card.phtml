@@ -60,7 +60,7 @@ $block->getParentBlock()->setData('cards_row_number', $i);
         <?php $message = $escaper->escapeHtml(__('Are you sure you want to delete this card: %1?', $ccNumberView)) ?>
         <?php $confirmation = $modalViewModel->confirm($message) ?>
         <button type="button"
-                @click="<?= /** @noEscape */ $confirmation->getShowJs() ?>.then(ok => ok &&$refs.form.submit())">
+                @click="<?= /** @noEscape */ $confirmation->getShowJs() ?>.then(ok => ok && $refs.form.submit())">
             <?= $escaper->escapeHtml(__('Delete')) ?>
         </button>
         <?= /** @noEscape */ $confirmation ?>

@@ -50,7 +50,7 @@ $block->getParentBlock()->setData('tokens_row_number', $i);
 <div class="mt-4 text-lg">{$block->getPayerEmail()}</div>
 EOHTML) ?>
         <button type="button"
-                @click="<?= /** @noEscape */ $confirmation->getShowJs() ?>.then(ok => ok &&$refs.form.submit())">
+                @click="<?= /** @noEscape */ $confirmation->getShowJs() ?>.then(ok => ok && $refs.form.submit())">
             <?= $escaper->escapeHtml(__('Delete')) ?>
         </button>
         <?= /** @noEscape */ $confirmation ?>
