@@ -11,6 +11,7 @@ declare(strict_types=1);
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\CurrentProduct;
 use Hyva\Theme\ViewModel\ProductPage;
+use Hyva\Theme\ViewModel\StoreConfig;
 use Magento\Catalog\Block\Product\View;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Escaper;
@@ -29,6 +30,10 @@ if (!$product) {
 
 /** @var ProductPage $productViewModel */
 $productViewModel = $viewModels->require(ProductPage::class);
+
+$storeConfig = $viewModels->require(StoreConfig::class);
+$jsLocale = str_replace('_', '-', $storeConfig->getStoreConfig('general/locale/code'));
+
 ?>
 <script>
     function initTierPrices<?= (int) $product->getId() ?>() {
@@ -48,7 +53,7 @@ $productViewModel = $viewModels->require(ProductPage::class);
             },
             formatPrice(value, showSign) {
                 const formatter = new Intl.NumberFormat(
-                    document.documentElement.lang,
+                    '<?= $escaper->escapeJs($jsLocale) ?>',
                     {
                         style: 'currency',
                         currency: '<?= $escaper->escapeHtml($productViewModel->getCurrencyData()['code']) ?>',

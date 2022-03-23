@@ -9,6 +9,7 @@
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\ProductPage;
 use Hyva\Theme\ViewModel\ProductPrice;
+use Hyva\Theme\ViewModel\StoreConfig;
 use Magento\Catalog\Block\Product\View\Options;
 use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\Escaper;
@@ -25,6 +26,9 @@ $product = $block->getProduct();
 
 /** @var ProductPrice $productPriceViewModel */
 $productPriceViewModel = $viewModels->require(ProductPrice::class);
+
+$storeConfig = $viewModels->require(StoreConfig::class);
+$jsLocale = str_replace('_', '-', $storeConfig->getStoreConfig('general/locale/code'));
 
 $displayTax = $productPriceViewModel->displayPriceIncludingTax();
 
@@ -43,7 +47,7 @@ $options = $block->decorateArray($block->getOptions());
                 refs: [],
                 formatPrice(value, showSign) {
                     const formatter = new Intl.NumberFormat(
-                        document.documentElement.lang,
+                        '<?= $escaper->escapeJs($jsLocale) ?>',
                         {
                             style: 'currency',
                             currency: '<?= /** @noEscape */ $productViewModel->getCurrencyData()['code']; ?>',
