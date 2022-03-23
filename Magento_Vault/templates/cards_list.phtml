@@ -1,0 +1,40 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Vault\Block\Customer\CreditCards;
+
+/** @var CreditCards $block */
+/** @var Escaper $escaper */
+
+$tokens = $block->getPaymentTokens();
+
+?>
+<?php if (count($tokens) > 0): ?>
+    <caption class="table-caption"><?= $escaper->escapeHtml(__('Stored Payment Methods')) ?></caption>
+    <div class="card grid grid-cols-3 lg:grid-cols-4 mb-4">
+        <div class="text-sm text-secondary p-2"><?= $escaper->escapeHtml(__('Card Number')) ?></div>
+        <div class="text-sm text-secondary p-2"><?= $escaper->escapeHtml(__('Expiration Date')) ?></div>
+        <div class="text-sm hidden lg:block text-secondary p-2"><?= $escaper->escapeHtml(__('Type')) ?></div>
+        <div class="text-sm text-secondary p-2 text-center">
+            <span class="sr-only"><?= $escaper->escapeHtml(__('Actions')) ?></span>
+        </div>
+
+        <?php
+        foreach ($tokens as $token) {
+            echo $block->renderTokenHtml($token);
+        }
+        ?>
+    </div>
+<?php elseif (!$block->isExistsCustomerTokens()): ?>
+    <div class="message info empty">
+        <span><?= $escaper->escapeHtml(__('You have no stored payment methods.')) ?></span>
+    </div>
+<?php endif ?>

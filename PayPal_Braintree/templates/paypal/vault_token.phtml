@@ -1,0 +1,59 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Modal;
+use Magento\Framework\Escaper;
+use PayPal\Braintree\Block\Customer\PayPal\VaultTokenRenderer;
+
+/** @var VaultTokenRenderer $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+$modalViewModel = $viewModels->require(Modal::class);
+
+
+$i = $block->getParentBlock()->getData('tokens_row_number') + 1 ?? 0;
+$block->getParentBlock()->setData('tokens_row_number', $i);
+?>
+<div class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+    <div class="text-sm">
+        <img class="hidden lg:block"
+             src="<?= $escaper->escapeHtmlAttr($block->getIconUrl()) ?>"
+             width="<?= $escaper->escapeHtmlAttr($block->getIconWidth()) ?>"
+             height="<?= $escaper->escapeHtmlAttr($block->getIconHeight()) ?>"
+             alt="<?= $escaper->escapeHtmlAttr(__('PayPal Logo')) ?>">
+        <span><?= $escaper->escapeHtml($block->getPayerEmail()) ?></span>
+    </div>
+</div>
+<div class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"  x-data="hyva.modal()">
+    <div class="text-sm">
+        <form class="form"
+              action="<?= $escaper->escapeUrl($block->getUrl('vault/cards/deleteaction')) ?>"
+              method="post"
+              x-ref="form">
+            <?= $block->getBlockHtml('formkey') ?>
+            <input name="public_hash"
+                   value="<?= $escaper->escapeHtmlAttr($block->getToken()->getPublicHash()) ?>"
+                   type="hidden"/>
+
+        <?php $message = $escaper->escapeHtml(__('Are you sure you want to delete this PayPal account?')) ?>
+        <?php $confirmation = $modalViewModel->confirm($message)
+                                             ->withDetails(<<<EOHTML
+<div class="mt-4 text-lg">{$block->getPayerEmail()}</div>
+EOHTML) ?>
+        <button type="button"
+                @click="<?= /** @noEscape */ $confirmation->getShowJs() ?>.then(ok => ok && $refs.form.submit())">
+            <?= $escaper->escapeHtml(__('Delete')) ?>
+        </button>
+        <?= /** @noEscape */ $confirmation ?>
+        </form>
+    </div>
+</div>

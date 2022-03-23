@@ -1,0 +1,30 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+/** @var AccountTokens $block */
+/** @var Escaper $escaper */
+
+use Magento\Framework\Escaper;
+use Magento\Vault\Block\Customer\AccountTokens;
+
+$tokens = $block->getPaymentTokens();
+
+?>
+<?php if (count($tokens) !== 0): ?>
+<div class="card grid grid-cols-2 mb-4">
+    <div class="text-sm text-secondary p-2"><?= $escaper->escapeHtml(__('PayPal Account')) ?></div>
+    <div class="text-sm text-secondary p-2 text-center">
+        <span class="sr-only"></span>
+    </div>
+    <?php foreach ($tokens as $token): ?>
+        <?= /* @noEscape */ $block->renderTokenHtml($token) ?>
+    <?php endforeach; ?>
+</div>
+<?php endif; ?>
