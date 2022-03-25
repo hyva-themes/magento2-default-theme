@@ -107,21 +107,44 @@ use Magento\Framework\View\Element\Template;
             getAllowedAttributeOptions(attributeId) {
                 return this.allowedAttributeOptions[attributeId] || []
             },
-            getAttributeOptionLabel(option) {
-                if (! this.optionConfig.optionPrices[this.productIndex]) {
-                    // no current simple product configuration selected
-                    return option.label;
-                }
+            getProductIdsForOption(option) {
+                const attributeId = this.findAttributeByOptionId(option.id);
+                const opt = (this.optionConfig[attributeId].options || []).find(o => o.id === option.id);
+                return opt && opt.products
+                    ? opt.products
+                    : [];
+            },
+            findCheapestProductForOption(option) {
+                return this.getProductIdsForOption(option).reduce((cheapest, simpleIdx) => {
+                    // first product is always the cheapest
+                    if (! this.optionConfig.optionPrices[cheapest]) return simpleIdx;
+                    const knownCheapestPrice = this.optionConfig.optionPrices[cheapest].finalPrice.amount;
+                    return knownCheapestPrice > this.optionConfig.optionPrices[simpleIdx].finalPrice.amount
+                        ? simpleIdx
+                        : cheapest;
+                }, 0)
+            },
+            findProductIdToUseForOptionPrice(option) {
+                // try to find a product for a complete selection
                 const attributeId = this.findAttributeByOptionId(option.id);
                 const optionSelection = Object.assign({}, this.selectedValues, {[attributeId]: option.id});
                 const simpleIndex = this.calculateSimpleIndex(optionSelection);
-                if (! simpleIndex || simpleIndex === this.productIndex) {
+                // if there is no complete selection, use the cheapest product for the option
+                return simpleIndex || this.findCheapestProductForOption(option);
+            },
+            getAttributeOptionLabel(option) {
+                //debugger;
+                const optionProduct = this.findProductIdToUseForOptionPrice(option);
+                if (! optionProduct || optionProduct === this.productIndex) {
                     return option.label;
                 }
 
-                const currentPrice = this.optionConfig.optionPrices[this.productIndex].finalPrice.amount;
-                if (this.optionConfig.optionPrices[simpleIndex]) {
-                    const optionPrice = this.optionConfig.optionPrices[simpleIndex].finalPrice.amount;
+                const currentPrice = this.optionConfig.optionPrices[this.productIndex]
+                    ? this.optionConfig.optionPrices[this.productIndex].finalPrice.amount
+                    : this.optionConfig.prices.finalPrice.amount; // default price if no current option selection
+
+                if (this.optionConfig.optionPrices[optionProduct]) {
+                    const optionPrice = this.optionConfig.optionPrices[optionProduct].finalPrice.amount;
                     if (optionPrice !== currentPrice){
                         return option.label + ' ' + hyva.formatPrice(optionPrice - currentPrice, true);
                     }
