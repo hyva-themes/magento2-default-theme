@@ -58,6 +58,17 @@ $hideDetails       = (bool) $block->getData('hide_details');
 $sliderItemRenderer->setData('hide_details', $hideDetails);
 $sliderItemRenderer->setData('hide_rating_summary', $hideRatingSummary);
 
+// The slider item renderer block is often a shared instance.
+// If a specific item template is set for this slider, the previously set template must be reset later
+// so the item template is only replaced for the one slider it is specified on.
+$sharedItemRendererTemplate = null;
+$isSharedItemRenderer       = $sliderItemRenderer !== $block->getChildBlock('slider.item.template');
+if ($isSharedItemRenderer && $block->getChildBlock('slider.item.template')) {
+    $sharedItemRendererTemplate = $sliderItemRenderer->getTemplate();
+    $sliderSpecificItemTemplate = $block->getChildBlock('slider.item.template')->getTemplate();
+    $sliderItemRenderer->setTemplate($sliderSpecificItemTemplate);
+}
+
 ?>
 <script>
     'use strict';
@@ -202,3 +213,10 @@ $sliderItemRenderer->setData('hide_rating_summary', $hideRatingSummary);
         </div>
     <?php endif; ?>
 </section>
+<?php
+
+if ($sharedItemRendererTemplate) {
+    $sliderItemRenderer->setTemplate($sharedItemRendererTemplate);
+}
+
+?>
