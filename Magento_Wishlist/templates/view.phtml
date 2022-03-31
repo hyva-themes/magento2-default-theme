@@ -73,8 +73,8 @@ $wishlistHelper = $this->helper(WishlistHelper::class);
 
                 },
                 addAllItemsToCart() {
-                    const urlParams = <?= /* @noEscape */ $block->getAddAllToCartParams() ?>,
-                        separator = urlParams.action.indexOf('?') >= 0 ? '&' : '?';
+                    const urlParams = <?= /* @noEscape */ $block->getAddAllToCartParams() ?>;
+                    let separator = urlParams.action.indexOf('?') >= 0 ? '&' : '?';
 
                     Array.from(document.querySelectorAll('input[name^=qty]')).map(qty => {
                         urlParams.action += separator + qty.name + '=' + encodeURIComponent(qty.value);
