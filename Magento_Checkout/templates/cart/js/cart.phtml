@@ -592,9 +592,7 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
                     })
                 })
                     .then(response => response.json())
-                    .then(result => {
-                        this.initEstimatedShippingRatesFromResult(result);
-                    })
+                    .then(result => this.initEstimatedShippingRatesFromResult(result))
                     .catch(displayError)
                     .finally(() => this.estimatedShippingRatesLoading = false);
             },
