@@ -14,12 +14,14 @@
     @apply box-border;
 
     & > div {
-        @apply p-2.5 mb-2.5;
+        /* @apply p-2.5 mb-2.5*/
     }
 
     &[data-appearance='contained'] {
         @apply container;
-        @apply box-border ml-auto mr-auto;
+        .columns & {
+            padding:0;
+        }
 
         [data-element='inner'] {
             @apply box-border;
@@ -29,13 +31,18 @@
 
     &[data-appearance='full-bleed'] {
         background-attachment: scroll !important;
+        .columns & {
+            @apply w-screen left-1/2 right-1/2 mx-[-50vw] relative;
+        }
     }
 
     &[data-appearance='full-width'] {
         background-attachment: scroll !important;
-
+        .columns & {
+            @apply w-screen left-1/2 right-1/2 mx-[-50vw] relative;
+        }
         > .row-full-width-inner {
-            @apply box-border ml-auto mr-auto max-w-screen-xl w-full;
+            @apply container;
         }
     }
 }
