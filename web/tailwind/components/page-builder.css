@@ -14,7 +14,7 @@
     @apply box-border;
 
     & > div {
-        @apply p-2.5 mb-2.5; /* @todo not sure about these default values */
+        @apply p-2.5 mb-2.5;
     }
 
     &[data-appearance='contained'] {
