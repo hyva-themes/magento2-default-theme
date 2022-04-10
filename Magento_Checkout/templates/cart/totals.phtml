@@ -17,10 +17,11 @@ use Hyva\Theme\ViewModel\Cart\TotalsOutput;
 
 /** @var TotalsOutput $viewModelTotalsOutput */
 
-$viewModelTotalsOutput = $viewModels->require(TotalsOutput::class);
-$subtotalField = $viewModelTotalsOutput->getSubtotalField();
-$subtotalFieldShowBoth = $viewModelTotalsOutput->getSubtotalFieldDisplayBoth();
-$taxLabelAddition = $viewModelTotalsOutput->getTaxLabelAddition();
+$viewModelTotalsOutput    = $viewModels->require(TotalsOutput::class);
+$subtotalField            = $viewModelTotalsOutput->getSubtotalField();
+$subtotalFieldShowBoth    = $viewModelTotalsOutput->getSubtotalFieldDisplayBoth();
+$taxLabelAddition         = $viewModelTotalsOutput->getTaxLabelAddition();
+$displayGrandTotalWithTax = $viewModelTotalsOutput->displayCartTaxWithGrandTotal();
 ?>
 <template x-if="cartData.prices">
     <div class="pt-0 lg:pt-6 ml-auto w-full xl:w-2/3">
@@ -126,9 +127,18 @@ $taxLabelAddition = $viewModelTotalsOutput->getTaxLabelAddition();
                 <h3 class="w-7/12 font-semibold text-left md:w-auto">
                     <?= $escaper->escapeHtml(__('Grand Total')) ?>
                 </h3>
+                <?php if ($displayGrandTotalWithTax): ?>
                 <div class="w-5/12 text-right md:w-auto"
                      x-text="hyva.formatPrice(cartData.prices['grand_total']['value'])">
                 </div>
+                <?php else: ?>
+                <div class="w-5/12 text-right md:w-auto"
+                     x-text="hyva.formatPrice(
+                                cartData.prices['grand_total']['value'] - (cartData.prices['applied_taxes'] || [])
+                                    .reduce((totalTax, appliedTax) => totalTax + appliedTax.amount.value, 0)
+                             )"
+                ></div>
+                <?php endif; ?>
             </div>
         </template>
     </div>
