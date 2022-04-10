@@ -501,29 +501,38 @@ $storeConfigViewModel = $viewModels->require(StoreConfigViewModel::class);
                     this.estimateShippingRequest()
                 }
             },
-            getAvailableShippingRates() {
+            getEstimatedShippingRates() {
                 const address = this.getShippingAddress();
-                return address.available_shipping_methods && address.available_shipping_methods.length > 0
-                    ? address.available_shipping_methods
+                return address.estimated_shipping_methods && address.estimated_shipping_methods.length > 0
+                    ? address.estimated_shipping_methods
                     : [];
             },
-            setAvailableShippingRates(rates) {
+            getAvailableShippingRates() {
+                return this.getEstimatedShippingRates().filter(rate => rate.available);
+            },
+            getUnavailableShippingRates() {
+
+                return this.getEstimatedShippingRates().filter(rate => ! rate.available);
+            },
+            setEstimatedShippingRates(rates) {
                 /*
                  * Array of rate objects.
                  * Rate structure:
                  * {
+                 *   available
                  *   price_excl_tax {value currency}
                  *   price_incl_tax {value currency}
                  *   carrier_title
                  *   carrier_code
                  *   method_title
                  *   method_code
+                 *   error_message
                  * }
                  *
                  * Please note: there is no "amount" on the available shipping rates!
                  * This is distinct from the selected shipping method data structure.
                  */
-                this.getShippingAddress().available_shipping_methods = rates;
+                this.getShippingAddress().estimated_shipping_methods = rates;
             },
             getSelectedShippingMethod() {
                 const address = this.getShippingAddress();
@@ -582,7 +591,7 @@ $storeConfigViewModel = $viewModels->require(StoreConfigViewModel::class);
 
                 this.estimatedShippingRatesLoading = true;
                 this.removeSelectedShippingMethod();
-                this.setAvailableShippingRates([]);
+                this.setEstimatedShippingRates([]);
                 fetch(baseUrl + 'rest/' + CURRENT_STORE_CODE + path + '?form_key=' + hyva.getFormKey(), {
                     method: 'post',
                     headers: {
@@ -599,13 +608,11 @@ $storeConfigViewModel = $viewModels->require(StoreConfigViewModel::class);
                     })
                 })
                     .then(response => response.json())
-                    .then(result => {
-                        this.initAvailableShippingRatesFromResult(result);
-                    })
+                    .then(result => this.initEstimatedShippingRatesFromResult(result))
                     .catch(displayError)
                     .finally(() => this.estimatedShippingRatesLoading = false);
             },
-            initAvailableShippingRatesFromResult(result)
+            initEstimatedShippingRatesFromResult(result)
             {
                 const toMoney = (amount) => {
                     return {
@@ -614,14 +621,13 @@ $storeConfigViewModel = $viewModels->require(StoreConfigViewModel::class);
                     }
                 }
                 const estimatedShippingRates = result
-                    .filter(rate => rate.available)
                     .map(rate => {
                         rate.amount = toMoney(rate.amount);
                         rate.price_excl_tax = toMoney(rate.price_excl_tax);
                         rate.price_incl_tax = toMoney(rate.price_incl_tax);
                         return rate;
                     });
-                this.setAvailableShippingRates(estimatedShippingRates);
+                this.setEstimatedShippingRates(estimatedShippingRates);
 
                 if (estimatedShippingRates.length === 1) {
                     this.selectShippingRate(estimatedShippingRates[0]);
@@ -630,10 +636,13 @@ $storeConfigViewModel = $viewModels->require(StoreConfigViewModel::class);
                 }
             },
             getEstimatedShippingRateCarriers() {
-                return [...new Set(this.getAvailableShippingRates().map(rate => rate.carrier_title))];
+                return [...new Set(this.getEstimatedShippingRates().map(rate => rate.carrier_title))];
             },
             getRatesForCarrier(carrierTitle) {
                 return [...this.getAvailableShippingRates().filter(rate => rate.carrier_title === carrierTitle)];
+            },
+            getUnavailableRatesForCarrier(carrierTitle) {
+                return [...this.getUnavailableShippingRates().filter(rate => rate.carrier_title === carrierTitle)];
             },
             selectShippingRate(rate) {
                 this.setSelectedShippingMethod(rate.carrier_code, rate.method_code, rate.price_excl_tax);

@@ -130,6 +130,13 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                     </div>
                                 </label>
                             </template>
+                            <template x-for="rate in getUnavailableRatesForCarrier(carrier)" :key="rate">
+                                <label class="flex items-center">
+                                    <div class="w-full message">
+                                        <div x-text="rate.error_message"></div>
+                                    </div>
+                                </label>
+                            </template>
                         </div>
                     </template>
                 </div>
