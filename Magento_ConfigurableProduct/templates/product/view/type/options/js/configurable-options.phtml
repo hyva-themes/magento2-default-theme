@@ -43,15 +43,19 @@ use Magento\Framework\View\Element\Template;
                     }
                 });
             },
-            findSimpleIndex () {
+            findSimpleIndex() {
+                // a better method name would be `updateSelectedSimpleIndex` but keeping for bc
+                this.productIndex = this.calculateSimpleIndexForFullSelection(this.selectedValues);
+            },
+            calculateSimpleIndexForFullSelection(selectedValues) {
                 const productIndexes = this.optionConfig.index;
-                this.productIndex = Object.keys(productIndexes).find(productIndex => {
-                    const currentProductIndex = productIndexes[productIndex];
+                return Object.keys(productIndexes).find(productIndex => {
+                    const productCandidateOptions = productIndexes[productIndex];
 
-                    for (const productOption in currentProductIndex) {
+                    for (const productOption in productCandidateOptions) {
                         if (
-                            this.selectedValues[productOption] &&
-                            this.selectedValues[productOption] !== currentProductIndex[productOption]
+                            ! selectedValues[productOption] ||
+                            selectedValues[productOption] !== productCandidateOptions[productOption]
                         ) {
                             return false;
                         }
@@ -61,6 +65,10 @@ use Magento\Framework\View\Element\Template;
             },
             productIndex: 0,
             findAllowedAttributeOptions() {
+                // a better method name would be `updateAllowedAttributeOptions` but keeping for bc
+                this.allowedAttributeOptions = this.calculateAllowedAttributeOptions(this.selectedValues);
+            },
+            calculateAllowedAttributeOptions(selectedValues) {
                 const allAttributes = this.optionConfig.attributes;
                 const allAttributesSorted = Object.values(allAttributes).sort((a,b) => {
                     return a.position - b.position
@@ -72,10 +80,10 @@ use Magento\Framework\View\Element\Template;
                 const newAllowedAttributeOptions = [];
 
                 allAttributesSorted.forEach(attribute => {
-                    if (previousOption && this.selectedValues[previousOption]) {
+                    if (previousOption && selectedValues[previousOption]) {
                         availableIndexes = availableIndexes.filter(availableIndex => {
                             return productIndexes[availableIndex][previousOption] ===
-                                this.selectedValues[previousOption]
+                                selectedValues[previousOption]
                         })
                     }
                     newAllowedAttributeOptions[attribute.id] =
@@ -86,10 +94,79 @@ use Magento\Framework\View\Element\Template;
                         });
                     previousOption = attribute.id;
                 });
-                this.allowedAttributeOptions = newAllowedAttributeOptions;
+                return newAllowedAttributeOptions;
+            },
+            findAttributeByOptionId(optionId) {
+                for (const attributeId in this.optionConfig.attributes) {
+                    const attributeOptions = this.optionConfig.attributes[attributeId].options || [];
+                    if (attributeOptions.find(option => option.id === optionId)) {
+                        return attributeId;
+                    }
+                }
             },
             getAllowedAttributeOptions(attributeId) {
                 return this.allowedAttributeOptions[attributeId] || []
+            },
+            getProductIdsForOption(option) {
+                const attributeId = this.findAttributeByOptionId(option.id);
+                const allOptions = this.optionConfig.attributes[attributeId];
+                const opt = (allOptions && allOptions.options || []).find(o => o.id === option.id);
+                return opt && opt.products
+                    ? opt.products
+                    : [];
+            },
+            findProductIdsForPartialSelection(optionSelection) {
+                const candidateProducts = Object.values(optionSelection).reduce((candidates, optionId) => {
+                    const newCandidates = this.getProductIdsForOption({id: optionId});
+                    return candidates === null
+                        ? newCandidates
+                        : candidates.filter(productId => newCandidates.includes(productId));
+                }, null);
+                return candidateProducts || [];
+            },
+            findCheapestProductForPartialSelection(optionSelection) {
+                const candidateProducts = this.findProductIdsForPartialSelection(optionSelection);
+                return candidateProducts.reduce((cheapest, simpleIdx) => {
+                    // in the first iteration we start with simpleIdx as the currently cheapest product
+                    if (! this.optionConfig.optionPrices[cheapest]) return simpleIdx;
+                    const knownCheapestPrice = this.optionConfig.optionPrices[cheapest].finalPrice.amount;
+                    return knownCheapestPrice > this.optionConfig.optionPrices[simpleIdx].finalPrice.amount
+                        ? simpleIdx
+                        : cheapest;
+                }, 0)
+            },
+            findProductIdToUseForOptionPrice(option) {
+                // try to find a product for a complete selection
+                const attributeId = this.findAttributeByOptionId(option.id);
+                const optionSelection = Object.assign({}, this.selectedValues, {[attributeId]: option.id});
+                const matchingSimpleIndex = this.calculateSimpleIndexForFullSelection(optionSelection);
+                // if there is no complete selection, use the cheapest product for the option
+                return matchingSimpleIndex || this.findCheapestProductForPartialSelection(optionSelection);
+            },
+            getAttributeOptionLabel(option) {
+                const optionProduct = this.findProductIdToUseForOptionPrice(option);
+                if ((! optionProduct) || (optionProduct === this.productIndex)) {
+                    return option.label;
+                }
+
+                const currentPrice = this.getOptionPriceAdjustmentBasePrice();
+
+                if (this.optionConfig.optionPrices[optionProduct]) {
+                    const optionPrice = this.optionConfig.optionPrices[optionProduct].finalPrice.amount;
+                    if (optionPrice !== currentPrice){
+                        return option.label + ' ' + hyva.formatPrice(optionPrice - currentPrice, true);
+                    }
+                }
+                return option.label;
+            },
+            getOptionPriceAdjustmentBasePrice() {
+                if (this.optionConfig.optionPrices[this.productIndex]) {
+                    return this.optionConfig.optionPrices[this.productIndex].finalPrice.amount
+                }
+                const cheapestForSelection = this.findCheapestProductForPartialSelection(this.selectedValues);
+                return this.optionConfig.optionPrices[cheapestForSelection]
+                    ? this.optionConfig.optionPrices[cheapestForSelection].finalPrice.amount
+                    : this.optionConfig.prices.finalPrice.amount; // default price if no option selection
             },
             changeOption(optionId, value) {
                 this.selectedValues[optionId] = value;

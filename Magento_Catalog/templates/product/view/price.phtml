@@ -218,7 +218,7 @@ $displayTax = $productPriceViewModel->displayPriceIncludingTax();
                 <span class="price-label block"
                       :class="{ 'invisible' : !showRegularPriceLabel }"
                 >
-                    <?= $escaper->escapeHtml(__('As low as')) ?>
+                    <?= $escaper->escapeHtml(__('As low as')) ?>:
                 </span>
             <?php endif; ?>
             <span id="product-price-<?= (int)$product->getId() ?>"

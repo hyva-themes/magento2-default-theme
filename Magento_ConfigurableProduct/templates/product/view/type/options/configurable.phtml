@@ -63,7 +63,7 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
                     >
                         <option
                             :value="item.id"
-                            x-html="item.label"
+                            x-html="getAttributeOptionLabel(item)"
                             :selected="selectedValues[<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>] ===
                                 item.id">
                         </option>
