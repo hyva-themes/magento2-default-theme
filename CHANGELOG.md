@@ -7,7 +7,139 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.12...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.13...main
+
+## [1.1.13] - 2022-04-12
+
+[1.1.13]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.12...1.1.13
+
+### Added
+
+- **Support for Magento_Vault**
+
+  The payment vault on the customer account area is now supported.
+  Support during checkout depends on the installed checkout.
+
+- **Show configurable product option price adjustments in attribute dropdowns**
+
+  Previously the price adjustments where not displayed in hyvä (but where shown in Luma).
+
+  More information can be found in the [merge request #401](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/401)
+
+- **Add `id` parameter to reset password form required in 2.4.3-p2 and 2.4.4**
+
+  This backward compatible change is required for Magento 2.4.4.
+
+  More information can be found in the [issue #363](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/363)
+
+### Changed
+
+- **Fix z-index issue on homepage for page messages**
+
+  Both the page messages and the section below the hero image have a z-index of 10, which results in the section covering the page message.
+
+  More information can be found in [issue #342](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/342) 
+
+- **Fix Safari Customer account icon display bug**
+
+  The Customer Account icon button in the top menu previously displayed wrong in Safari.
+
+  More information can be found in [issue #341](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/341)
+
+  Big thanks to Sean van Zuidam (Mooore) for the contribution!
+
+- **Fix priority of x-cloak css so it works in all cases**
+
+  Previously more specific styles prevented elements with the `x-cloak` attribute from being hidden.
+
+  More information can be found in [issue #328](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/328).
+
+  Many thanks to Eduard Chyzhyk (Mageworx) for the contribution!
+
+- **Fix inconsistent currency format**
+
+  So far only the store language was used to determine how to format the currency, but in some cases that is not enough, for example `de_CH` (Switzerland German) vs `de_DE` (Germany German).
+
+  More information can be found in the [issue #345](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/345)
+ 
+- **Fix log "Broken reference: the 'div.sidebar.additional' tries to reorder itself"**
+
+  The error message previously was logged on most requests.
+
+  More information can be found in the [issue #348](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/348).
+
+  Big thanks to Sean van Zuidam (Mooore) for the contribution!
+
+- **Consistently use hyva.formatPrice() reducing code duplication**
+
+  More information can be found in the [merge request #404](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/404)
+
+- **Fix: GraphQL queries in recently viewed product widgets assume top level Magento install**
+
+  Previously the store code was missing from GraphQL queries, so in stores with a subfolder in the path, the GraphQL query was be broken.
+
+  More information can be found in the [issue #336](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/336)
+
+  Many thanks to Salvatore Capritta (Synthetic) for the contribution!
+
+- **Bugfix: Can't Override Product Slider Item Template Using Layout XML**
+
+  More information can be found in the [issue #340](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/340)
+
+- **Bugfix: Add all items to cart from wishlist not working**
+
+  More information can be found in the [issue #358](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/358)
+
+  Many thanks to Krijn van de Kerkhof (X-com) for the contribution!
+
+- **Bugfix: Google Map API SDK link broken**
+
+  More information can be found in the [issue #357](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/357)
+
+- **Centralize product list item rendering to remove code duplication**
+
+  Previously the same logic to render product list items was repeated in multiple templates.  
+  This required keeping changes in sync, especially when a new cache key item needed to be added.  
+  A new method was introduced to the ProductListItem view model in the theme module, that now is used by all the templates.
+
+  More information can be found in the [theme module issue #155](https://gitlab.hyva.io/hyva-themes/magento2-theme-module/-/issues/155)
+
+- **Fix typo in HTML id attribute in checkout discount form toggle**
+
+  More information can be found in the [issue #343](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/343)
+
+- **Apply system configuration setting to show grand total in cart incl. or excl. tax**
+
+  More information can be found in the [issue #334](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/334)
+
+- **Fix: Edit cart item causes default values to be cached for PDP**
+
+  More information can be found in the [issue #283](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/283)
+
+- **Display unavailable shipping rates like in Luma in shipping estimation**
+
+  Depending on the system configuration settings Luma hides or displays unavailable shipping methods during the shipping rate estimation.
+  This change replicates that behavior in Hyvä.
+
+  More information can be found in the [issue #292](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/292)
+
+- **Show image of configurable product in cart if configured**
+
+  Previously the image of the selected simple product was shown.  
+
+  More information can be found in [issue #326](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/326)
+
+  Many thanks to Lucas van Staden (ProxyBlue) for the contribution!
+
+### Removed
+
+- **Remove dependency on Magento_SendFriend**
+
+  Previously, `static-content:deploy` failed if the Magento_SendFriend module was replaced/removed.
+
+  More details can be found in the [merge request #344](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/287)
+
+  Many thanks to Peter Jaap Blaakmeer (Elgentos) for the contribution!
 
 ## [1.1.12] - 2022-02-07
 
