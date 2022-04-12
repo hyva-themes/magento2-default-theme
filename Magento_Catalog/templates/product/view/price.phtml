@@ -119,16 +119,16 @@ $displayTax = $productPriceViewModel->displayPriceIncludingTax();
             calculateFinalPriceWithCustomOptions() {
                 let finalPrice = this.calculatedFinalPrice ||
                     this.initialFinalPrice;
-
-                this.calculatedFinalPriceWithCustomOptions =
-                    this.activeCustomOptions.reduce((priceAccumulator, activeCustomOptionId) => {
-                        const customOptionPrice = this.customOptionPrices[activeCustomOptionId];
-                        if (customOptionPrice) {
-                            return Number.parseFloat(priceAccumulator) + Number.parseFloat(customOptionPrice);
-                        }
-                        return priceAccumulator;
-                    }, finalPrice);
-
+                this.calculatedFinalPriceWithCustomOptions = finalPrice + this.getCustomOptionPrice();
+            },
+            getCustomOptionPrice() {
+                return this.activeCustomOptions.reduce((priceAccumulator, activeCustomOptionId) => {
+                    const customOptionPrice = this.customOptionPrices[activeCustomOptionId];
+                    if (customOptionPrice) {
+                        return Number.parseFloat(priceAccumulator) + Number.parseFloat(customOptionPrice);
+                    }
+                    return priceAccumulator;
+                }, 0);
             },
             getFormattedFinalPrice() {
                 return hyva.formatPrice(
@@ -176,7 +176,7 @@ $displayTax = $productPriceViewModel->displayPriceIncludingTax();
                 <div class="old-price mr-2 flex">
                     <span id="product-price-<?= (int)$product->getId() ?>"
                           class="price-wrapper title-font font-regular text-xl line-through text-gray-900">
-                        <span class="price">
+                        <span class="price" x-html="hyva.formatPrice(<?= (float)$regularPrice ?> + getCustomOptionPrice())">
                             <?= /** @noEscape */ $productViewModel->format($regularPrice) ?>
                         </span>
                     </span>
@@ -208,7 +208,7 @@ $displayTax = $productPriceViewModel->displayPriceIncludingTax();
         <div class="old-price flex mr-2">
             <span id="product-price-<?= (int)$product->getId() ?>"
                   class="price-wrapper title-font font-regular text-xl line-through text-gray-900">
-                <span class="price" x-html="hyva.formatPrice(activeProductsPriceData[regularPriceKey].amount)"></span>
+                <span class="price" x-html="hyva.formatPrice(activeProductsPriceData[regularPriceKey].amount + getCustomOptionPrice())"></span>
             </span>
         </div>
     </template>
