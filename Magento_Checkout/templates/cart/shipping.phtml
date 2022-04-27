@@ -25,6 +25,9 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
             cart: false,
             cartIsVirtual: <?= (int) $block->getQuote()->isVirtual() ?>,
             customer: false,
+            availableShippingMethods: [],
+            dispatch: null,
+            isLoading: false,
             cartData: {
                 address: {
                     countryId: window.checkoutConfig.defaultCountryId,
@@ -44,17 +47,128 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                 }
             },
             directoryData: false,
-            shippingMethod: window.checkoutConfig.selectedShippingMethod,
-            init(){
+            shippingMethod: false,
+            init($dispatch){
+                const selectedShippingMethod = window.checkoutConfig.selectedShippingMethod;
+                if (selectedShippingMethod) {
+                    this.shippingMethod = `${selectedShippingMethod.carrier_code}_${selectedShippingMethod.method_code}`
+                }
+
                 this.showEstimateShipping = JSON.parse(
                     hyva.getBrowserStorage().getItem('hyva.showEstimateShipping')
                 );
 
+                this.dispatch = $dispatch;
             },
             toggleEstimateShipping() {
                 this.showEstimateShipping = !this.showEstimateShipping;
 
                 hyva.getBrowserStorage().setItem('hyva.showEstimateShipping', this.showEstimateShipping);
+
+                if (this.showEstimateShipping) {
+                    this.fetchShippingMethods();
+                }
+            },
+            abortShippingController: null,
+            fetchShippingMethods() {
+
+                if (this.abortShippingController) {
+                    this.abortShippingController.abort();
+                }
+                this.isLoading = true;
+                this.dispatch('update-shipping-method-start', this.shippingMethod);
+
+                const path = this.customer && this.customer.fullname
+                    ? '/V1/carts/mine/estimate-shipping-methods'
+                    : '/V1/guest-carts/' + this.cart.cartId + '/estimate-shipping-methods';
+
+                // ensure a new controller is used for the new request
+                this.abortShippingController = new AbortController();
+
+                fetch(BASE_URL + 'rest/' + CURRENT_STORE_CODE + path + '?form_key=' + hyva.getFormKey(), {
+                    signal: this.abortShippingController.signal,
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        address: this.cartData.address
+                    })
+                })
+                    .then(response => response.json())
+                    .then(result => {
+                        this.availableShippingMethods = result;
+
+                        if(!this.availableShippingMethods.find(method => { return method.carrier_code + '_' + method.method_code === this.shippingMethod})) {
+                            this.dispatch('update-shipping-method', false);
+                            this.shippingMethod = false;
+                        }
+                    })
+                    .catch(this.displayError)
+                    .finally(() => {
+                            this.dispatch('update-shipping-method-end', this.shippingMethod);
+                            this.fetchTotals();
+                            this.isLoading = false;
+                        }
+                    );
+            },
+            getEstimatedShippingRateCarriers() {
+                return Array.from(new Set(this.availableShippingMethods.map(rate => rate.carrier_title)));
+            },
+            getRatesForCarrier(carrierTitle) {
+                return this.availableShippingMethods.filter(rate => rate.carrier_title === carrierTitle);
+            },
+            updateShippingMethod() {
+                this.dispatch('update-shipping-method', this.shippingMethod);
+                this.fetchTotals();
+            },
+            abortTotalsController: null,
+            fetchTotals() {
+                if (this.abortTotalsController) {
+                    this.abortTotalsController.abort();
+                }
+                this.dispatch('update-totals-start', this.shippingMethod);
+
+                let carrierCode = null;
+                let methodCode = null;
+
+                if (this.shippingMethod) {
+                    const splitShippingMethod = this.shippingMethod.split('_');
+                    carrierCode = splitShippingMethod[0];
+                    methodCode = splitShippingMethod[1] || null;
+                }
+                const path = this.customer && this.customer.fullname
+                    ? '/V1/carts/mine/totals-information'
+                    : '/V1/guest-carts/' + this.cart.cartId + '/totals-information';
+
+                // ensure a new controller is used for the new request
+                this.abortTotalsController = new AbortController();
+
+                fetch(BASE_URL + 'rest/' + CURRENT_STORE_CODE + path + '?form_key=' + hyva.getFormKey(), {
+                    signal: this.abortTotalsController.signal,
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        addressInformation: {
+                            shipping_carrier_code: carrierCode,
+                            shipping_method_code: methodCode,
+                            address: this.cartData.address
+                        }
+                    })
+                })
+                    .then(response => response.json())
+                    .then(result => {
+                        this.dispatch('update-totals', result);
+                    })
+                    .catch(this.displayError)
+                    .finally(() => {
+                            this.dispatch('update-totals-end', this.shippingMethod);
+                        }
+                    );
             },
             receiveCustomerData(data) {
                 if (data.cart) {
@@ -73,6 +187,10 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                     this.checkoutData = data['checkout-data'];
                     this.populateCartData();
                 }
+
+                if (this.showEstimateShipping) {
+                  this.fetchShippingMethods();
+                }
             },
             setCountry(countryId){
                 this.cartData.address = {
@@ -88,23 +206,24 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
                 if (this.directoryData[countryId].regions) {
                     this.cartData.address.regionCode = "";
-                    this.cartData.address.regionId = "";
+                    this.cartData.address.regionId = 0;
 
                     this.checkoutData.shippingAddressFromData.region_code = "";
-                    this.checkoutData.shippingAddressFromData.region_id = "";
+                    this.checkoutData.shippingAddressFromData.region_id = 0;
                 }
 
                 this.saveToCustomerSectionData();
             },
             setRegion(value, type){
+
                 if (type === 'select') {
                     const countryId = this.cartData.address.countryId;
-                    const regionId = value;
-                    const regionData = this.directoryData[countryId].regions[regionId];
+                    const regionId = value || 0;
+                    const regionData = this.directoryData[countryId].regions[regionId] || { code: '', name: ''};
 
-                    this.cartData.address.regionId = regionId
-                    this.cartData.address.regionCode = regionData.code
-                    this.cartData.address.region = regionData.name
+                    this.cartData.address.regionId = regionId;
+                    this.cartData.address.regionCode = regionData.code;
+                    this.cartData.address.region = regionData.name;
 
                     this.checkoutData.shippingAddressFromData.region_id = regionId;
                     this.checkoutData.shippingAddressFromData.region_code = regionData.code;
@@ -139,6 +258,8 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                 sectionData['cart-data'].address = this.cartData.address;
 
                 browserStorage.setItem('mage-cache-storage', JSON.stringify(sectionData));
+
+                this.fetchShippingMethods();
             },
             populateCartData() {
                 const checkoutAddress = this.checkoutData && this.checkoutData.shippingAddressFromData;
@@ -193,6 +314,19 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
             },
             hasAvailableRegions() {
                 return this.cartData.address.countryId && this.getAvailableRegions().length
+            },
+            displayError(error) {
+                if (error.name === 'AbortError') {
+                    console.log('Fetch aborted');
+                } else {
+                    console.error(error);
+                    typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                        [{
+                            type: "error",
+                            text: "<?= $escaper->escapeJs(__("Something went wrong. Please try again.")) ?>"
+                        }], 10000
+                    );
+                }
             }
         }
     }
@@ -200,7 +334,7 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
 <div id="block-shipping"
      class="flex flex-col pb-2 my-2 border-b-2 border-gray-300 estimate-shipping-form"
      x-data="initShippingEstimation()"
-     x-init="init()"
+     x-init="init($dispatch)"
      @private-content-loaded.window="receiveCustomerData($event.detail.data)"
 >
     <div class="title" data-role="title">
@@ -215,8 +349,8 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
             ?>
             <span :class="{ 'rotate-180' : showEstimateShipping}" class="block transform rotate-180">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6" width="25" height="25">
-  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-</svg>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
             </span>
         </span>
     </div>
@@ -228,7 +362,7 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
          x-cloak
          x-show="showEstimateShipping"
     >
-        <form method="post" id="shipping-zip-form">
+        <form method="post" id="shipping-zip-form" @submit.prevent="fetchTotals()">
             <fieldset class="fieldset estimate">
                 <legend class="legend sr-only">
                     <?= $escaper->escapeHtml($block->getQuote()->isVirtual() ?
@@ -305,21 +439,43 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
                 <div class="field" name="shippingAddress.postcode">
 
-                    <label class="label" data-bind="attr: { for: element.uid }" for="FFRCTHK">
-                        <span data-bind="i18n: element.label">Zip/Postal Code</span>
-                    </label>
+                    <label class="label">
+                        <?= $escaper->escapeHtml(__('Zip/Postal Code'))?>
 
-                    <div class="control">
                         <input class="form-input w-full"
                                type="text"
                                name="postcode"
-                               @change.debounce="setPostcode($event.target.value)"
+                               @input.debounce.1000ms="setPostcode($event.target.value)"
                                :value="cartData.address && cartData.address.postcode"
-                        >
-
-                    </div>
+                        />
+                    </label>
                 </div>
 
+                <template x-if="getEstimatedShippingRateCarriers().length > 0">
+                    <div class="pt-2 relative">
+
+                        <?= $block->getBlockHtml('block-loader') ?>
+
+                        <template x-for="carrier in getEstimatedShippingRateCarriers()" :key="carrier">
+                            <div>
+                                <div class="font-semibold" x-text="carrier"></div>
+                                <template x-for="(rate, index) in getRatesForCarrier(carrier)" :key="index">
+                                    <label class="flex items-center px-2">
+                                        <input class="mr-2" type="radio"
+                                               :id="'shipping_method_' + rate.method_code"
+                                               :value="rate.carrier_code + '_' + rate.method_code"
+                                               x-model="shippingMethod"
+                                               @change="updateShippingMethod()"/>
+                                        <div class="grid grid-cols-2 w-full">
+                                            <div x-text="rate.method_title"></div>
+                                            <div x-text="hyva.formatPrice(rate.price_excl_tax)"></div>
+                                        </div>
+                                    </label>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </template>
             </fieldset>
         </form>
     </div>

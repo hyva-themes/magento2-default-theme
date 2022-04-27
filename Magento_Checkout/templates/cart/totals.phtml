@@ -30,6 +30,7 @@ $totalsSort = $storeConfigViewModel->getStoreConfig('sales/totals_sort');
             quoteData: window.checkoutConfig.quoteData,
             shippingMethod: window.checkoutConfig.selectedShippingMethod,
             totalsSort: <?= /** @noEscape */ json_encode($totalsSort) ?>,
+            isLoading: false,
             getSortedSegments() {
                 const segments = this.totalsData.total_segments;
 
@@ -47,16 +48,34 @@ $totalsSort = $storeConfigViewModel->getStoreConfig('sales/totals_sort');
             updateTotals(totalsData) {
                 this.totalsData = totalsData
             },
+            updateShippingMethod(shippingMethod) {
+               this.shippingMethod = shippingMethod;
+            },
             excludingTaxMessage: '<?= $escaper->escapeJs(__('Excl. Tax')) ?>',
-            includingTaxMessage: '<?= $escaper->escapeJs(__('Incl. Tax')) ?>'
+            includingTaxMessage: '<?= $escaper->escapeJs(__('Incl. Tax')) ?>',
+            eventListeners: {
+                ['@update-totals.window']($event) {
+                    this.updateTotals($event.detail)
+                },
+                ['@update-shipping-method.window']($event) {
+                    this.updateShippingMethod($event.detail)
+                },
+                ['@update-totals-start.window']() {
+                    this.isLoading = true;
+                },
+                ['@update-totals-end.window']() {
+                    this.isLoading = false;
+                }
+            }
         }
     }
 </script>
 <div id="cart-totals"
-     class="cart-totals"
+     class="cart-totals relative"
      x-data="initCartTotals()"
-     @totals-loaded.window="updateTotals($event.detail.data)"
+     x-spread="eventListeners"
 >
+    <?= $block->getBlockHtml('block-loader') ?>
     <template x-for="(segment, index) in getSortedSegments()" :key="index">
         <div>
             <?= $block->getChildHtml(); ?>

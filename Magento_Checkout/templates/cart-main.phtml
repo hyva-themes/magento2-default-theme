@@ -114,45 +114,44 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
 
     function initCartForm(){
         return {
+            cartIsEmpty: !!window.checkoutConfig,
             checkCartShouldUpdate(data) {
                 const cart = data.cart;
 
-                if(!window.checkoutConfig) {
-                    return
+                if (this.cartIsEmpty !== !!window.checkoutConfig) {
+                    this.cartIsEmpty = !!window.checkoutConfig;
+                    this.reloadCartContent();
+                    return;
                 }
+
                 if (cart) {
-
-                    function fingerprintOption(option) {
-                        return [
-                            // option.option_id // the option_id is not set on the checkoutConfig.quoteItemData options
-                            option.value
-                        ]
-                    }
-
-                    function fingerprintItem(item) {
-                        return [
-                            item.item_id,
-                            item.qty,
-                            (item.options || []).map(fingerprintOption)
-                        ]
-                    }
-
-                    function hashItems(items) {
-                        const itemsClone = items.map(x => x); // clone items because sort() is in-place
-                        const hashData = itemsClone.sort((a, b) => a.item_id - b.item_id).map(fingerprintItem);
-                        return JSON.stringify(hashData);
-                    }
-
-                    const sectionItemsHash = hashItems(cart.items);
-                    const quoteItemsHash = hashItems(window.checkoutConfig.quoteItemData);
-                    if (
-                        /* eslint-disable eqeqeq */
-                        sectionItemsHash === quoteItemsHash &&
-                        cart.summary_count == window.checkoutConfig.quoteData.items_qty &&
-                        cart.subtotalAmount == window.checkoutConfig.totalsData.total_segments.find((segment) => segment.code === "subtotal").value
-                        /* eslint-enable eqeqeq */
-                    ) {
+                    if (!window.checkoutConfig) {
+                        if (cart.items.length) {
+                            this.reloadCartContent();
+                        }
                         return;
+                    }
+
+                    const roundUp = (number) => {
+                        return Math.round(number * 100);
+                    }
+
+                    const decimalNumbersAreEqual = (number1, number2) => {
+                        return roundUp(number1) === roundUp(number2);
+                    }
+
+                    if (window.checkoutConfig && cart) {
+                        if (decimalNumbersAreEqual(
+                            cart.summary_count,
+                                window.checkoutConfig.quoteData.items_qty
+                            ) &&
+                            decimalNumbersAreEqual(
+                                cart.subtotalAmount,
+                                window.checkoutConfig.totalsData.total_segments.find((segment) => segment.code === "subtotal").value
+                            )
+                        ) {
+                            return;
+                        }
                     }
                 }
                 this.reloadCartContent();
@@ -164,8 +163,8 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
                     return result.text()
 
                 }).then((body)=> {
-
                     hyva.setCookie('mage-cache-sessid', '', -1, true);
+                    window.checkoutConfig = null;
                     hyva.replaceElement('#maincontent', body)
 
                 }).catch((error) => {
