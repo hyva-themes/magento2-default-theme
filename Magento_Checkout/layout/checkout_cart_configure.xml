@@ -17,5 +17,10 @@
                 <argument name="is_cart_configure" xsi:type="boolean">true</argument>
             </arguments>
         </referenceBlock>
+        <referenceBlock name="product.info.options.configurable">
+            <arguments>
+                <argument name="cache_lifetime" xsi:type="boolean">false</argument>
+            </arguments>
+        </referenceBlock>
     </body>
 </page>

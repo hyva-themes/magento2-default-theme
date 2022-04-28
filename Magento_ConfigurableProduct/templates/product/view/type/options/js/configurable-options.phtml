@@ -36,8 +36,7 @@ use Magento\Framework\View\Element\Template;
             init() {
                 this.findAllowedAttributeOptions();
                 this.$nextTick(() => {
-                    <?php // Check this.itemId is set to avoid defaultValues being evaluated from cache ?>
-                    if (this.itemId && typeof this.optionConfig.defaultValues === 'object') {
+                    if (typeof this.optionConfig.defaultValues === 'object') {
                         for (const [optionId, value] of Object.entries(this.optionConfig.defaultValues)) {
                             this.changeOption(optionId, value + '');
                         }
