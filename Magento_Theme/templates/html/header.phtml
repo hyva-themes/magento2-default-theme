@@ -22,7 +22,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 
 /** @var Hyva\Theme\ViewModel\StoreConfig $storeConfig */
 $storeConfig = $viewModels->require(Hyva\Theme\ViewModel\StoreConfig::class);
-$showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sidebar::XML_PATH_CHECKOUT_SIDEBAR_DISPLAY)
+$showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sidebar::XML_PATH_CHECKOUT_SIDEBAR_DISPLAY);
 ?>
 <script>
     function initHeader () {
