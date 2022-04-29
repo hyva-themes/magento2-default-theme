@@ -33,8 +33,12 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
 <script>
     'use strict';
     (function( hyva, undefined ) {
+        /**
+         * Takes a form element and submits it through fetch,
+         * then replaces the result into the document without
+         * refreshing the page
+         */
         hyva.postCart = (form) => {
-
             if (!form.action) {
                 return;
             }
@@ -52,10 +56,9 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
                 body: formData
             }).then((result) => {
                 return result.text()
+            }).then((content) => {
 
-            }).then((body)=> {
-
-                hyva.replaceElement('#maincontent', body)
+                hyva.replaceDomElement('#maincontent', content)
 
             }).catch((error) => {
                 console.error(error);
@@ -66,46 +69,6 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
                     }], 10000
                 );
             })
-        }
-
-        hyva.replaceElement = (targetSelector, content) => {
-
-            const parser = new DOMParser();
-            const doc = parser.parseFromString( content, 'text/html' );
-
-            const maincontent = doc.querySelector(targetSelector);
-
-            if (!maincontent) {
-                return;
-            }
-
-            const tmpScripts = maincontent.getElementsByTagName('script');
-
-            if (tmpScripts.length > 0) {
-                // push all of the document's script tags into an array
-                // (to prevent dom manipulation while iterating over dom nodes)
-                const scripts = [];
-                for (let i = 0; i < tmpScripts.length; i++) {
-                    scripts.push(tmpScripts[i]);
-                }
-
-                // iterate over all script tags and create a duplicate tags for each
-                for (let i = 0; i < scripts.length; i++) {
-                    let script = document.createElement('script');
-                    script.innerHTML = scripts[i].innerHTML;
-
-                    document.head.appendChild(script);
-
-                    // remove the original (non-executing) node from the page
-                    scripts[i].parentNode.removeChild(scripts[i]);
-                }
-            }
-
-            document.querySelector(targetSelector).replaceWith(maincontent);
-
-            window.dispatchEvent(new CustomEvent("reload-customer-section-data"));
-            hyva.initMessages();
-
         }
     }( window.hyva = window.hyva || {} ));
 </script>
@@ -168,11 +131,11 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
                     hyva.replaceElement('#maincontent', body)
 
                 }).catch((error) => {
-
+                    console.error(error);
                     window.location.reload()
                 })
             },
-            onStorageChange (event) {
+            onStorageChange(event) {
                 if (event.key === 'private_content_version') {
                     window.dispatchEvent(new CustomEvent("reload-customer-section-data"));
                 }

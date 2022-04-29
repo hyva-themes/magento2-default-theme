@@ -29,7 +29,7 @@ $isVisibleProduct = $product->isVisibleInSiteVisibility();
                    title="<?= $escaper->escapeHtmlAttr($block->getProductName()) ?>"
                    tabindex="-1"
                    class="product-item-photo flex-shrink-0">
-            <?php else :?>
+            <?php else: ?>
                 <span class="product-item-photo flex-shrink-0">
             <?php endif;?>
             <?= $block->getImage($block->getProductForThumbnail(), 'cart_page_product_thumbnail')
@@ -37,26 +37,26 @@ $isVisibleProduct = $product->isVisibleInSiteVisibility();
                 ->toHtml() ?>
             <?php if ($block->hasProductUrl()): ?>
                 </a>
-            <?php else :?>
+            <?php else: ?>
                 </span>
             <?php endif; ?>
             <div class="product-item-details flex-grow">
                 <strong class="product-item-name break-all">
                     <?php if ($block->hasProductUrl()): ?>
                         <a href="<?= $escaper->escapeUrl($block->getProductUrl()) ?>"><?= $escaper->escapeHtml($block->getProductName()) ?></a>
-                    <?php else :?>
+                    <?php else: ?>
                         <?= $escaper->escapeHtml($block->getProductName()) ?>
                     <?php endif; ?>
                 </strong>
                 <?php if ($options = $block->getOptionList()): ?>
                     <dl class="item-options w-full break-all mt-4 pb-2 text-sm clearfix">
-                        <?php foreach ($options as $option) :?>
+                        <?php foreach ($options as $option): ?>
                             <?php $formatedOptionValue = $block->getFormatedOptionValue($option) ?>
                             <dt class="font-bold float-left clear-left mr-2 mb-2"><?= $escaper->escapeHtml($option['label']) ?>:</dt>
                             <dd class="float-left">
                                 <?php if (isset($formatedOptionValue['full_view'])): ?>
                                         <?= $escaper->escapeHtml($formatedOptionValue['full_view']) ?>
-                                    <?php else :?>
+                                    <?php else: ?>
                                     <?= $escaper->escapeHtml($formatedOptionValue['value'], ['span', 'a']) ?>
                                 <?php endif; ?>
                             </dd>
@@ -64,14 +64,14 @@ $isVisibleProduct = $product->isVisibleInSiteVisibility();
                     </dl>
                 <?php endif;?>
                 <?php if ($messages = $block->getMessages()): ?>
-                    <?php foreach ($messages as $message) :?>
+                    <?php foreach ($messages as $message): ?>
                         <div class= "cart item message <?= $escaper->escapeHtmlAttr($message['type']) ?>">
                             <div><?= $escaper->escapeHtml($message['text']) ?></div>
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
                 <?php $addInfoBlock = $block->getProductAdditionalInformationBlock(); ?>
-                <?php if ($addInfoBlock) :?>
+                <?php if ($addInfoBlock): ?>
                     <?= $addInfoBlock->setItem($item)->toHtml() ?>
                 <?php endif;?>
             </div>

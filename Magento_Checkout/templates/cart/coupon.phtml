@@ -92,6 +92,8 @@ $hasCouponCode = (bool) strlen($block->getCouponCode() ?: "");
                                    placeholder="<?= $escaper->escapeHtmlAttr(__('Enter discount code')) ?>"
                                     <?php if ($hasCouponCode): ?>
                                        disabled="disabled"
+                                    <?php else: ?>
+                                        required
                                     <?php endif; ?>
                             />
                         </div>

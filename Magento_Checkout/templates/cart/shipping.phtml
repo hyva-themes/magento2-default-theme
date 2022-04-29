@@ -76,7 +76,7 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                     this.abortShippingController.abort();
                 }
                 this.isLoading = true;
-                this.dispatch('update-shipping-method-start', this.shippingMethod);
+                this.dispatch('update-shipping-method-start', {});
 
                 const path = this.customer && this.customer.fullname
                     ? '/V1/carts/mine/estimate-shipping-methods'
@@ -101,13 +101,13 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                         this.availableShippingMethods = result;
 
                         if(!this.availableShippingMethods.find(method => { return method.carrier_code + '_' + method.method_code === this.shippingMethod})) {
-                            this.dispatch('update-shipping-method', false);
+                            this.dispatch('update-shipping-method', {method: false});
                             this.shippingMethod = false;
                         }
                     })
                     .catch(this.displayError)
                     .finally(() => {
-                            this.dispatch('update-shipping-method-end', this.shippingMethod);
+                            this.dispatch('update-shipping-method-end', {});
                             this.fetchTotals();
                             this.isLoading = false;
                         }
@@ -120,7 +120,7 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                 return this.availableShippingMethods.filter(rate => rate.carrier_title === carrierTitle);
             },
             updateShippingMethod() {
-                this.dispatch('update-shipping-method', this.shippingMethod);
+                this.dispatch('update-shipping-method', {method: this.shippingMethod});
                 this.fetchTotals();
             },
             abortTotalsController: null,
@@ -128,7 +128,7 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                 if (this.abortTotalsController) {
                     this.abortTotalsController.abort();
                 }
-                this.dispatch('update-totals-start', this.shippingMethod);
+                this.dispatch('update-totals-start', {});
 
                 let carrierCode = null;
                 let methodCode = null;
@@ -162,11 +162,11 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                 })
                     .then(response => response.json())
                     .then(result => {
-                        this.dispatch('update-totals', result);
+                        this.dispatch('update-totals', {data: result});
                     })
                     .catch(this.displayError)
                     .finally(() => {
-                            this.dispatch('update-totals-end', this.shippingMethod);
+                            this.dispatch('update-totals-end', {});
                         }
                     );
             },
@@ -189,7 +189,7 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                 }
 
                 if (this.showEstimateShipping) {
-                  this.fetchShippingMethods();
+                    this.fetchShippingMethods();
                 }
             },
             setCountry(countryId){
@@ -213,6 +213,7 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                 }
 
                 this.saveToCustomerSectionData();
+                this.fetchShippingMethods();
             },
             setRegion(value, type){
 
@@ -235,12 +236,14 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                 }
 
                 this.saveToCustomerSectionData();
+                this.fetchShippingMethods();
             },
             setPostcode(value){
                 this.cartData.address.postcode = value;
                 this.checkoutData.shippingAddressFromData.postcode = value;
 
                 this.saveToCustomerSectionData();
+                this.fetchShippingMethods();
             },
             saveToCustomerSectionData(){
                 const browserStorage = hyva.getBrowserStorage();
@@ -258,8 +261,6 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                 sectionData['cart-data'].address = this.cartData.address;
 
                 browserStorage.setItem('mage-cache-storage', JSON.stringify(sectionData));
-
-                this.fetchShippingMethods();
             },
             populateCartData() {
                 const checkoutAddress = this.checkoutData && this.checkoutData.shippingAddressFromData;
@@ -302,13 +303,13 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                     this.directoryData[countryId] &&
                     this.directoryData[countryId].regions
                 ){
-                    return Object.keys(this.directoryData[countryId].regions).map(regionId =>
-                        { return {
+                    return Object.keys(this.directoryData[countryId].regions).map(regionId => {
+                        return {
                             id: regionId,
                             code: this.directoryData[countryId].regions[regionId].code,
                             name: this.directoryData[countryId].regions[regionId].name
-                        }}
-                    )
+                        }
+                    });
                 }
                 return [];
             },
@@ -355,7 +356,6 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
         </span>
     </div>
     <div id="block-summary"
-         data-bind="scope:'block-summary'"
          class="content my-4 card"
          data-role="content"
          aria-labelledby="block-shipping-heading"
@@ -377,13 +377,11 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                     ?>
                 </p>
 
-                <div class="field" data-bind="visible: visible, attr: {'name': element.dataScope}, css: additionalClasses" name="shippingAddress.country_id">
+                <div class="field" name="shippingAddress.country_id">
 
                     <label class="label">
-                        <span data-bind="i18n: element.label">Country</span>
-                    </label>
+                        <?= $escaper->escapeHtml(__('Country')) ?>
 
-                    <div class="control">
                         <select class="form-select w-full"
                                 name="country_id"
                                 aria-invalid="false"
@@ -395,7 +393,7 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                             </template>
                         </select>
 
-                    </div>
+                    </label>
                 </div>
 
 

@@ -80,42 +80,31 @@ $cartItemOutputViewModel = $viewModels->require(ItemOutput::class);
     </div>
     <div class="cart actions flex flex-col sm:flex-row justify-end gap-4 items-center my-4">
         <?php if ($cartViewModel->isClearShoppingCartEnabled()): ?>
-            <div x-data="hyva.modal()">
-                <button @click="show"
-                        type="button"
-                        title="<?= $escaper->escapeHtmlAttr(__('Clear Shopping Cart')) ?>"
-                        class="action clear"
-                        id="empty_cart_button"
-                >
-                    <?= $escaper->escapeHtml(__('Clear Shopping Cart')) ?>
-                </button>
-                <?= /* @noEscape */ $modalViewModel->createModal()->withContent(<<<END_OF_CONTENT
-                    <div class="text-lg mb-8">
-                        <h2>{$escaper->escapeHtml(__('Are you sure you want to remove all items from your shopping cart?'))}</h2>
-                    </div>
-                    <div class="mt-20 flex gap-2">
-                        <button @click="hide" type="button" class="btn btn-secondary">
-                            {$escaper->escapeHtml(__('Cancel'))}
-                        </button>
-                        <button x-focus
-                            type="button"
-                            name="update_cart_action"
-                            class="btn btn-primary"
-                            x-data="{
-                                postData: {
-                                    action: '{$escaper->escapeUrl($block->getUrl('checkout/cart/updatePost'))}',
-                                    data: { update_cart_action: 'empty_cart' }
-                                }
-                            }"
-                            @click.prevent="hyva.postForm(postData);"
-                        >
-                            {$escaper->escapeHtml(__('OK'))}
-                        </button>
-
-                    </div>
-                END_OF_CONTENT
+        <script>
+            function initClearShoppingCartModal() {
+                return Object.assign(
+                    hyva.modal(),
+                    {
+                        postData: {
+                            action: '<?= $escaper->escapeUrl($block->getUrl('checkout/cart/updatePost')) ?>',
+                            data: {update_cart_action: 'empty_cart'}
+                        }
+                    }
+                );
+            }
+        </script>
+            <div x-data="initClearShoppingCartModal()">
+                <?= ($confirmation = $modalViewModel
+                        ->confirm(__('Are you sure?'))
+                        ->withDetails(__('Are you sure you want to remove all items from your shopping cart?'))
                 ) ?>
+                <button @click="<?= $confirmation->getShowJs() ?>.then(result => result && hyva.postForm(postData))"
+                        type="button" title="<?= $escaper->escapeHtmlAttr(__('Clear Shopping Cart')) ?>"
+                        class="action clear" id="empty_cart_button">
+                    <span><?= $escaper->escapeHtml(__('Clear Shopping Cart')) ?></span>
+                </button>
             </div>
+
         <?php endif ?>
         <button type="submit"
                 name="update_cart_action"

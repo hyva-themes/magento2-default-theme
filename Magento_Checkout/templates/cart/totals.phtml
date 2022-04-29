@@ -55,10 +55,10 @@ $totalsSort = $storeConfigViewModel->getStoreConfig('sales/totals_sort');
             includingTaxMessage: '<?= $escaper->escapeJs(__('Incl. Tax')) ?>',
             eventListeners: {
                 ['@update-totals.window']($event) {
-                    this.updateTotals($event.detail)
+                    this.updateTotals($event.detail.data)
                 },
                 ['@update-shipping-method.window']($event) {
-                    this.updateShippingMethod($event.detail)
+                    this.updateShippingMethod($event.detail.method)
                 },
                 ['@update-totals-start.window']() {
                     this.isLoading = true;
