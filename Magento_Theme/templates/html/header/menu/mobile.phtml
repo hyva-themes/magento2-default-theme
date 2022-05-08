@@ -102,9 +102,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                            class="flex items-center w-full px-8 py-4 border-b cursor-pointer
                             bg-container-lighter border-container hover:bg-container-darker hover:underline"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                 viewBox="0 0 24 24" height="24"
-                                 width="24"></svg>
+                            <span class="w-6"></span>
                             <span class="ml-4"><?= $escaper->escapeHtml(__('View All')) ?></span></a>
                         <?php foreach ($menuItem['childData'] as $subMenuItem): ?>
 
@@ -113,9 +111,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                                class="flex items-center w-full px-8 py-4 border-b cursor-pointer
                                 bg-container-lighter border-container hover:bg-container-darker hover:underline"
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                     viewBox="0 0 24 24" height="24"
-                                     width="24"></svg>
+                                <span class="w-6"></span>
                                 <span class="ml-4 text-base text-gray-700 lg:ml-0">
                                     <?= $escaper->escapeHtml($subMenuItem['name']) ?>
                                 </span>
