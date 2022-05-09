@@ -67,15 +67,21 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                     </legend>
                     <?php if ($block->getRatings() && $block->getRatings()->getSize()): ?>
                         <fieldset>
-                            <div class="flex flex-col sm:flex-row items-center mt-4 mb-3">
-                                <div class="text-md"><?= $escaper->escapeHtml(__('Your Rating')) ?>:</div>
-                                <div class="sm:ml-1">
+                            <div class="flex flex-col mt-4 mb-3">
+                                <div class="text-md <?php if($block->getRatings()->getSize() <= 1): ?>hidden<?php endif ?>"><?= $escaper->escapeHtml(__('Your Rating')) ?>:</div>
+                                <div class="mt-4">
                                     <div id="product-review-table">
                                         <?php foreach ($block->getRatings() as $rating): ?>
-                                            <div class="ml-1">
-                                                <label class="sr-only"
+                                            <div class="table-row">
+                                                <label class="table-cell pr-6 align-middle text-left"
                                                     id="<?= $escaper->escapeHtml($rating->getRatingCode()) ?>_rating_label">
-                                                    <span><?= $escaper->escapeHtml($rating->getRatingCode()) ?></span>
+                                                    <span>
+                                                        <?php if($block->getRatings()->getSize() <= 1): ?>
+                                                            <?= $escaper->escapeHtml(__('Your Rating')) ?>:
+                                                        <?php else: ?>
+                                                            <?= $escaper->escapeHtml($rating->getRatingCode()) ?>
+                                                        <?php endif ?>
+                                                    </span>
                                                 </label>
                                                 <div class="flex flex-row flex-grow-0"
                                                      x-data="{ clickedRatingId: 0 }">

@@ -44,6 +44,7 @@ $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
                 <div itemscope itemprop="review" itemtype="http://schema.org/Review"
                     class="border-b pb-4 my-4 border-container last:border-0 last:mb-0">
                     <?php if (count($review->getRatingVotes())): ?>
+                        <div class="table">
                         <?php foreach ($review->getRatingVotes() as $vote): ?>
                             <?php
                                 $rating = $vote->getPercent();
@@ -51,8 +52,8 @@ $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
                                 $starsFilled = is_numeric($rating) ? floor($rating / 100 * $ratingSteps) : 0;
                                 $starsEmpty = floor($ratingSteps - $starsFilled);
                             ?>
-                            <div itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
-                                <div class="hidden">
+                            <div class="table-row" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+                                <div class="table-cell pr-6 align-middle text-left">
                                     <?= $escaper->escapeHtml($vote->getRatingCode()) ?>
                                 </div>
                                 <span class="hidden" itemprop="ratingValue"><?= $starsFilled; ?></span>
@@ -60,9 +61,9 @@ $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
                                     <?php $i = 0; ?>
                                     <?php while ($i < $starsFilled): ?>
                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                             class="fill-current text-yellow-400 w-6 h-6"
-                                             viewBox="0 0 20 20"
-                                             fill="currentColor">
+                                                class="fill-current text-yellow-400 w-6 h-6"
+                                                viewBox="0 0 20 20"
+                                                fill="currentColor">
                                             <path
                                                 d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0
                                                 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 
@@ -76,9 +77,9 @@ $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
                                     <?php $i = 0; ?>
                                     <?php while ($i < $starsEmpty): ?>
                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                             class="fill-current text-gray-400 w-6 h-6"
-                                             viewBox="0 0 20 20"
-                                             fill="currentColor">
+                                                class="fill-current text-gray-400 w-6 h-6"
+                                                viewBox="0 0 20 20"
+                                                fill="currentColor">
                                             <path
                                                 d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 
                                                 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 
@@ -92,6 +93,7 @@ $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
                                 </div>
                             </div>
                         <?php endforeach; ?>
+                        </div>
                     <?php endif; ?>
                     <div class="text-lg my-2" itemprop="name">
                         <?= $escaper->escapeHtml($review->getTitle()) ?>
