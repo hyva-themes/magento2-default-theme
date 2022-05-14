@@ -93,10 +93,11 @@ $pagerItemBtnClass = $pagerItemClass
 
                 <?php if ($block->canShowPreviousJump()): ?>
                     <li class="item -ml-px">
-                        <a class="page previous jump <?= $pagerItemBtnClass ?> text-gray-700 px-4 py-2"
-                           title=""
-                           href="<?= $escaper->escapeUrl($block->getPreviousJumpUrl()) ?>">
-                            <span>...</span>
+                        <a
+                            href="<?= $escaper->escapeUrl($block->getPreviousJumpUrl()) ?>"
+                            class="page previous jump <?= $pagerItemBtnClass ?> text-gray-700 px-4 py-2"
+                        >
+                           <span aria-label="<?= $escaper->escapeHtml(__('Jump backward')) ?>">...</span>
                         </a>
                     </li>
                 <?php endif; ?>
@@ -129,10 +130,11 @@ $pagerItemBtnClass = $pagerItemClass
 
                 <?php if ($block->canShowNextJump()): ?>
                     <li class="item -ml-px">
-                        <a class="page next jump <?= $pagerItemBtnClass ?> px-4 py-2 text-gray-700"
-                            title=""
-                            href="<?= $escaper->escapeUrl($block->getNextJumpUrl()) ?>">
-                            <span>...</span>
+                        <a
+                            href="<?= $escaper->escapeUrl($block->getNextJumpUrl()) ?>"
+                            class="page next jump <?= $pagerItemBtnClass ?> px-4 py-2 text-gray-700"
+                        >
+                            <span aria-label="<?= $escaper->escapeHtml(__('Jump forward')) ?>">...</span>
                         </a>
                     </li>
                 <?php endif; ?>
