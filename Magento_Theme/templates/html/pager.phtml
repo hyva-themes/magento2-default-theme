@@ -50,38 +50,36 @@ $pagerItemBtnClass = $pagerItemClass
     <?php endif ?>
 
     <?php if ($block->getLastPageNum() > 1): ?>
-        <nav class="flex justify-center order-2 col-span-4 pages" aria-label="pagination">
-            <strong class="sr-only label pages-label"><?= $escaper->escapeHtml(__('Page')) ?></strong>
-            <ol class="relative z-0 inline-flex shadow-sm items pages-items">
-                <li class="item pages-item-previous">
-                    <?php $text = $block->getAnchorTextForPrevious() ? $block->getAnchorTextForPrevious() : ''; ?>
-                    <?php if (!$block->isFirstPage()): ?>
-                        <a
-                            href="<?= $escaper->escapeUrl($block->getPreviousPageUrl()) ?>"
-                            class="<?= $escaper->escapeHtmlAttr($text ? 'link ' : 'action ') ?>
-                                <?= $pagerItemBtnClass ?> rounded-l-md px-3 py-2 text-gray-500"
-                        >
-                           <?php if ($text): ?>
-                                <span class="sr-only label"><?= $escaper->escapeHtml(__('Page')) ?></span>
-                                <span><?= $escaper->escapeHtml($text) ?></span>
-                            <?php else: ?>
-                                <span
-                                    aria-label="<?= $escaper->escapeHtml(__('Previous Page')) ?>"
-                                ><?= $heroicons->chevronLeftHtml('', 20, 20); ?></span>
-                            <?php endif; ?>
-                        </a>
-                    <?php else: ?>
-                        <strong
-                            class="previous <?= $pagerItemClass ?> rounded-l-md px-3 py-2 text-gray-400 border-gray-200"
-                            aria-disabled="true"
-                        >
+        <nav class="inline-flex justify-center order-2 col-span-4 pages" aria-label="pagination">
+            <div class="item pages-item-previous">
+                <?php $text = $block->getAnchorTextForPrevious() ? $block->getAnchorTextForPrevious() : ''; ?>
+                <?php if (!$block->isFirstPage()): ?>
+                    <a
+                        href="<?= $escaper->escapeUrl($block->getPreviousPageUrl()) ?>"
+                        class="<?= $escaper->escapeHtmlAttr($text ? 'link ' : 'action ') ?>
+                            <?= $pagerItemBtnClass ?> rounded-l-md px-3 py-2 text-gray-500"
+                    >
+                        <?php if ($text): ?>
+                            <span class="sr-only label"><?= $escaper->escapeHtml(__('Page')) ?></span>
+                            <span><?= $escaper->escapeHtml($text) ?></span>
+                        <?php else: ?>
                             <span
                                 aria-label="<?= $escaper->escapeHtml(__('Previous Page')) ?>"
                             ><?= $heroicons->chevronLeftHtml('', 20, 20); ?></span>
-                        </strong>
-                    <?php endif; ?>
-                </li>
-
+                        <?php endif; ?>
+                    </a>
+                <?php else: ?>
+                    <strong
+                        class="previous <?= $pagerItemClass ?> rounded-l-md px-3 py-2 text-gray-400 border-gray-200"
+                        aria-disabled="true"
+                    >
+                        <span
+                            aria-label="<?= $escaper->escapeHtml(__('Previous Page')) ?>"
+                        ><?= $heroicons->chevronLeftHtml('', 20, 20); ?></span>
+                    </strong>
+                <?php endif; ?>
+            </div>
+            <ol class="relative z-0 inline-flex shadow-sm items pages-items">
                 <?php if ($block->canShowFirst()): ?>
                     <li class="item -ml-px">
                         <a
@@ -156,36 +154,35 @@ $pagerItemBtnClass = $pagerItemClass
                         </a>
                     </li>
                 <?php endif; ?>
-
-                <li class="item pages-item-next -ml-px">
-                    <?php if (!$block->isLastPage()): ?>
-                        <?php $text = $block->getAnchorTextForNext() ? $block->getAnchorTextForNext() : ''; ?>
-                        <a
-                            href="<?= $escaper->escapeUrl($block->getNextPageUrl()) ?>"
-                            class="<?= /* @noEscape */ $text ? 'link ' : 'action ' ?> next
-                                <?= $pagerItemBtnClass ?> rounded-r-md px-3 py-2 text-gray-500"
-                        >
-                            <?php if ($text): ?>
-                                <span class="sr-only label"><?= $escaper->escapeHtml(__('Page')) ?></span>
-                                <span><?= $escaper->escapeHtml($text) ?></span>
-                            <?php else: ?>
-                                <span
-                                    aria-label="<?= $escaper->escapeHtml(__('Next Page')) ?>"
-                                ><?= $heroicons->chevronRightHtml('', 20, 20); ?></span>
-                            <?php endif; ?>
-                        </a>
-                    <?php else: ?>
-                        <strong
-                            class="next <?= $pagerItemClass ?> rounded-r-md px-3 py-2 text-gray-400 border-gray-200"
-                            aria-disabled="true"
-                        >
+            </ol>
+            <div class="item pages-item-next -ml-px">
+                <?php if (!$block->isLastPage()): ?>
+                    <?php $text = $block->getAnchorTextForNext() ? $block->getAnchorTextForNext() : ''; ?>
+                    <a
+                        href="<?= $escaper->escapeUrl($block->getNextPageUrl()) ?>"
+                        class="<?= /* @noEscape */ $text ? 'link ' : 'action ' ?> next
+                            <?= $pagerItemBtnClass ?> rounded-r-md px-3 py-2 text-gray-500"
+                    >
+                        <?php if ($text): ?>
+                            <span class="sr-only label"><?= $escaper->escapeHtml(__('Page')) ?></span>
+                            <span><?= $escaper->escapeHtml($text) ?></span>
+                        <?php else: ?>
                             <span
                                 aria-label="<?= $escaper->escapeHtml(__('Next Page')) ?>"
                             ><?= $heroicons->chevronRightHtml('', 20, 20); ?></span>
-                        </strong>
-                    <?php endif; ?>
-                </li>
-            </ol>
+                        <?php endif; ?>
+                    </a>
+                <?php else: ?>
+                    <strong
+                        class="next <?= $pagerItemClass ?> rounded-r-md px-3 py-2 text-gray-400 border-gray-200"
+                        aria-disabled="true"
+                    >
+                        <span
+                            aria-label="<?= $escaper->escapeHtml(__('Next Page')) ?>"
+                        ><?= $heroicons->chevronRightHtml('', 20, 20); ?></span>
+                    </strong>
+                <?php endif; ?>
+            </div>
         </nav>
     <?php endif; ?>
 
