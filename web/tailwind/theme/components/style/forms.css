@@ -6,18 +6,15 @@ fieldset {
 
     /* Reserve space for single line form validation messages */
     .field.field-reserved {
-        & input, select, textarea {
-            @apply mb-7
-        }
+        @apply mb-7
+    }
+
+    .field.field-reserved ul:last-of-type {
+        @apply -mb-6 pb-1 /* The sum has to match the value set above for field.field-reserved */
     }
 
     .field.field-reserved ul {
-        @apply -mt-6;
-        @apply pb-1 text-sm leading-5 /* The padding + leading have to match the negative margin on the line above */
-    }
-
-    .field.field-reserved textarea {
-        @apply align-top
+        @apply text-sm
     }
 
     label {

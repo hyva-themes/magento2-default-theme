@@ -3871,18 +3871,16 @@ form .field, fieldset .field {
 	margin-top: 0.25rem;
 }
 /* Reserve space for single line form validation messages */
-form .field.field-reserved input, form .field.field-reserved select, form .field.field-reserved textarea, fieldset .field.field-reserved input, fieldset .field.field-reserved select, fieldset .field.field-reserved textarea {
+form .field.field-reserved, fieldset .field.field-reserved {
 	margin-bottom: 1.75rem;
 }
-form .field.field-reserved ul, fieldset .field.field-reserved ul {
-	margin-top: -1.5rem;
+form .field.field-reserved ul:last-of-type, fieldset .field.field-reserved ul:last-of-type {
+	margin-bottom: -1.5rem;
 	padding-bottom: 0.25rem;
+}
+form .field.field-reserved ul, fieldset .field.field-reserved ul {
 	font-size: 0.875rem;
 	line-height: 1.25rem;
-	line-height: 1.25rem;
-}
-form .field.field-reserved textarea, fieldset .field.field-reserved textarea {
-	vertical-align: top;
 }
 form label, fieldset label {
 	margin-bottom: 0.5rem;
