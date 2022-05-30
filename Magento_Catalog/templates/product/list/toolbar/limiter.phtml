@@ -22,7 +22,7 @@ $availableLimitOptions = $block->getAvailableLimit();
 <?php if (count($availableLimitOptions) > 1): ?>
     <div class="field limiter flex items-center order-3 sm:order-2 md:order-3 lg:order-2 col-span-2 justify-end">
         <div class="control">
-            <label class="text-sm mr-2 label">
+            <label class="text-sm label">
                 <span><?= $escaper->escapeHtml((string)__('Show')) ?></span>
 
                 <select data-role="limiter" class="form-select limiter-options"

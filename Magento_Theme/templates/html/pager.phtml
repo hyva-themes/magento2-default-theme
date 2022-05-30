@@ -173,7 +173,7 @@ use Magento\Theme\Block\Html\Pager;
             <label class="mr-2 text-sm label" for="limiter">
                 <span><?= $escaper->escapeHtml(__('Show')) ?></span>
             </label>
-            <select id="limiter" class="mr-2 form-select" onchange="location.href = this.value">
+            <select id="limiter" class="form-select" onchange="location.href = this.value">
                 <?php foreach ($block->getAvailableLimit() as $key => $limit): ?>
                     <option value="<?= $escaper->escapeUrl($block->getLimitUrl($key)) ?>"
                         <?php if ($block->isLimitCurrent($key)): ?>
