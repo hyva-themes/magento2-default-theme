@@ -8,6 +8,9 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\StoreConfig as StoreConfigAlias;
+use Magento\Checkout\Block\Cart\Sidebar as CartSidebarBlock;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
@@ -15,64 +18,67 @@ use Magento\Framework\View\Element\Template;
 /** @var Template $block */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var Hyva\Theme\ViewModel\StoreConfig $storeConfig */
-$storeConfig = $viewModels->require(Hyva\Theme\ViewModel\StoreConfig::class);
-$maxItemsToDisplay = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sidebar::XML_PATH_CHECKOUT_SIDEBAR_COUNT);
+$storeConfig = $viewModels->require(StoreConfigAlias::class);
+$maxItemsToDisplay = $storeConfig->getStoreConfig('checkout/sidebar/max_items_display_count');
+
 ?>
 <script>
     function initCartDrawer() {
         return {
             open: false,
+            isLoading: false,
             cart: {},
-            maxItemsToDisplay: <?= $maxItemsToDisplay ?>,
-            cartLineItemsCount: 0,
+            maxItemsToDisplay: <?= (int) $maxItemsToDisplay ?>,
+            itemsCount: 0,
             totalCartAmount: 0,
             getData(data) {
                 if (data.cart) {
                     this.cart = data.cart;
-                    this.cartLineItemsCount = this.cart.items.length;
+                    this.itemsCount = data.cart.items && data.cart.items.length || 0;
                     this.totalCartAmount = this.cart.summary_count;
                     this.setCartItems();
                 }
+                this.isLoading = false;
             },
-            cartItems: {},
+            cartItems: [],
+            getItemCountTitle() {
+                return hyva.strf('(%0 <?= $escaper->escapeJs(__('of')) ?> %1)', this.maxItemsToDisplay, this.itemsCount)
+            },
             setCartItems() {
-                this.cartItems = this.cart && this.cart.items.sort(function(a,b) { return a.item_id - b.item_id }) || {}
-                this.cartItems = this.cartItems.slice(parseInt(-this.maxItemsToDisplay, 10));
+                this.cartItems = this.cart.items && this.cart.items.sort((a, b) => b.item_id - a.item_id) || [];
+
+                if (this.maxItemsToDisplay > 0) {
+                    this.cartItems = this.cartItems.slice(0, parseInt(this.maxItemsToDisplay, 10));
+                }
             },
             deleteItemFromCart(itemId) {
-                fetch(BASE_URL+"checkout/sidebar/removeItem/", {
-                    "headers": {
-                        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                this.isLoading = true;
+                fetch(`${BASE_URL}checkout/sidebar/removeItem/`, {
+                    headers: {
+                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
                     },
-                    "body": "form_key="+ hyva.getFormKey() + "&item_id="+itemId,
-                    "method": "POST",
-                    "mode": "cors",
-                    "credentials": "include"
-                }).then(function (response) {
-                    if (response.redirected) {
-                        window.location.href = response.url;
-                    } else if (response.ok) {
+                    body: new URLSearchParams({form_key: hyva.getFormKey(), item_id: itemId}),
+                    method: 'POST',
+                    mode: 'cors',
+                    credentials: 'include'
+                }).then(response => {
+                    if (response.ok) {
                         return response.json();
                     } else {
-                        typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
-                            [{
-                                type: "warning",
-                                text: "<?= $escaper->escapeHtml(__('Could not remove item from quote.')) ?>"
-                            }], 5000
-                        );
+                        window.dispatchMessages && window.dispatchMessages([{
+                            type: 'warning',
+                            text: '<?= $escaper->escapeJs(__('Could not remove item from quote.')) ?>'
+                        }]);
+                        this.isLoading = false;
                     }
-                }).then(function (response) {
-                    typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
-                        [{
-                            type: response.success ? "success" : "error",
-                            text: response.success
-                                ? "<?= $escaper->escapeHtml(__('You removed the item.')) ?>"
-                                : response.error_message
-                        }], 5000
-                    );
-                    const reloadCustomerDataEvent = new CustomEvent("reload-customer-section-data");
-                    window.dispatchEvent(reloadCustomerDataEvent);
+                }).then(result => {
+                    window.dispatchMessages && window.dispatchMessages([{
+                        type: result.success ? 'success' : 'error',
+                        text: result.success
+                            ? '<?= $escaper->escapeJs(__('You removed the item.')) ?>'
+                            : result.error_message
+                    }], result.success ? 5000 : 0)
+                    window.dispatchEvent(new CustomEvent('reload-customer-section-data'));
                 });
             }
         }
@@ -80,15 +86,15 @@ $maxItemsToDisplay = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\S
 </script>
 <section id="cart-drawer"
          x-data="initCartDrawer()"
-         @private-content-loaded.window="getData(event.detail.data)"
-         @toggle-cart.window="open=true;"
+         @private-content-loaded.window="getData($event.detail.data)"
+         @toggle-cart.window="open=true"
          @keydown.window.escape="open=false"
 >
     <template x-if="cart && cart.summary_count">
         <div role="dialog"
              aria-labelledby="cart-drawer-title"
              aria-modal="true"
-             @click.away="open = false"
+             @click.away="open=false"
              class="fixed inset-y-0 right-0 z-30 flex max-w-full">
             <div class="backdrop"
                  x-show="open"
@@ -98,7 +104,7 @@ $maxItemsToDisplay = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\S
                  x-transition:leave="ease-in-out duration-500"
                  x-transition:leave-start="opacity-100"
                  x-transition:leave-end="opacity-0"
-                 @click="open = false"
+                 @click="open=false"
                  aria-label="Close panel"></div>
             <div class="relative w-screen max-w-md shadow-2xl"
                  x-show="open"
@@ -117,7 +123,7 @@ $maxItemsToDisplay = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\S
                     x-transition:leave="ease-in-out duration-500"
                     x-transition:leave-start="opacity-100"
                     x-transition:leave-end="opacity-0" class="absolute top-0 right-0 flex p-2 mt-2">
-                    <button @click="open = false;" aria-label="Close panel"
+                    <button @click="open=false" aria-label="Close panel"
                             class="p-2 text-gray-300 transition duration-150 ease-in-out hover:text-black">
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -130,12 +136,9 @@ $maxItemsToDisplay = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\S
                     <header class="px-4 sm:px-6">
                         <h2 id="cart-drawer-title" class="text-lg font-medium leading-7 text-gray-900">
                             <?= $escaper->escapeHtml(__('My Cart')) ?>
-                            <span class="items-total">
-                                <span class="text-xs"><?= $escaper->escapeHtml(__('(')) ?></span>
-                                <span :class="{ 'hidden': (maxItemsToDisplay >= cartLineItemsCount) }" class="count text-xs" x-html="maxItemsToDisplay"></span>
-                                <span :class="{ 'hidden': (maxItemsToDisplay >= cartLineItemsCount) }" class="text-xs"><?= $escaper->escapeHtml(__('of')) ?></span>
-                                <span class="count text-xs" x-html="totalCartAmount"></span>
-                                <span class="text-xs"><?= $escaper->escapeHtml(__(')')) ?></span>
+                            <span class="items-total text-xs"
+                                  x-show="maxItemsToDisplay && maxItemsToDisplay < itemsCount"
+                                  x-text="getItemCountTitle()">
                             </span>
                         </h2>
                     </header>
@@ -219,6 +222,7 @@ $maxItemsToDisplay = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\S
                     </div>
                 </div>
             </div>
+            <?= $block->getChildHtml('loading') ?>
         </div>
     </template>
 </section>
