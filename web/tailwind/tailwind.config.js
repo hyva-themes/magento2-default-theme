@@ -127,8 +127,10 @@ module.exports = hyvaModules.mergeTailwindConfig({
         content: [
             // this theme's phtml files
             '../../**/*.phtml',
+            // The theme-module templates are included automatically in the purge config since Hyvä 1.1.15, but
+            // for themes based on earlier releases, enable the appropriate path to the theme-module below:
             // hyva theme-module templates (if this is the default theme in vendor/hyva-themes/magento2-default-theme)
-            '../../../magento2-theme-module/src/view/frontend/templates/**/*.phtml',
+            //'../../../magento2-theme-module/src/view/frontend/templates/**/*.phtml',
             // hyva theme-module templates (if this is a child theme)
             //'../../../../../../../vendor/hyva-themes/magento2-theme-module/src/view/frontend/templates/**/*.phtml',
             // parent theme in Vendor (if this is a child-theme)
