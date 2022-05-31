@@ -87,22 +87,13 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
                 addToCart: function (json) {
                     const obj = JSON.parse(json);
                     const postUrl = obj.action;
-                    const body = new URLSearchParams({
-                        form_key: hyva.getFormKey(),
-                        item: obj.data.item,
-                        qty: obj.data.qty,
-                        uenc: btoa(window.location.href)
-                    });
+                    const body = "form_key="+ hyva.getFormKey() + "&item="+obj.data.item+"&qty="+obj.data.qty+"&uenc="+btoa(window.location.href);
                     wishlistSidebarFetchHandler(body, postUrl, /* isRemoveAction */ false);
                 },
                 removeFromWishlist: function(json) {
                     const obj = JSON.parse(json);
                     const postUrl = obj.action;
-                    const body = new URLSearchParams({
-                        form_key: hyva.getFormKey(),
-                        item: obj.data.item,
-                        uenc: btoa(window.location.href)
-                    });
+                    const body = "form_key="+ hyva.getFormKey() + "&item="+obj.data.item+"&uenc="+btoa(window.location.href);
                     wishlistSidebarFetchHandler(body, postUrl);
                 }
             }
