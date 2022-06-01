@@ -88,16 +88,11 @@
                     </arguments>
                 </block>
                 <block
-                    name="footer-copyright"
-                    template="Magento_Theme::elements/copyright-hyva.phtml"
-                    as="copyright"
-                />
-                <!-- <block
                     class="Magento\Theme\Block\Html\Footer"
                     name="footer-copyright"
                     template="Magento_Theme::html/footer/copyright.phtml"
                     as="copyright"
-                /> -->
+                />
             </block>
         </referenceContainer>
 
