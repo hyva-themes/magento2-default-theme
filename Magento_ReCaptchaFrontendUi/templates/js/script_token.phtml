@@ -21,6 +21,11 @@ use Magento\Framework\View\Element\Template;
 $storeConfig = $viewModels->require(StoreConfig::class);
 
 $siteKey = $storeConfig->getStoreConfig('recaptcha_frontend/type_recaptcha_v3/public_key');
+
+$parentBlock = $block->getParentBlock();
+$action = is_object($parentBlock) && $parentBlock->getNameInLayout()
+    ? $parentBlock->getNameInLayout()
+    : 'submit';
 ?>
 <?php if ($siteKey): ?>
     <?php if ($block->getData('render_script_tag')): ?>
@@ -36,7 +41,7 @@ $siteKey = $storeConfig->getStoreConfig('recaptcha_frontend/type_recaptcha_v3/pu
                 grecaptcha.ready(() => {
                     grecaptcha.execute(
                         '<?= $escaper->escapeHtml($siteKey) ?>',
-                        {action: 'submit'}
+                        {action: '<?= $escaper->escapeJs($action) ?>'}
                     ).then((token) => {
                         const recaptchaResponseInput = $form.querySelector('input[name="g-recaptcha-response"]');
                         if (recaptchaResponseInput != null) {
