@@ -11,7 +11,6 @@ $widget = $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonDecode(
 $widgetConfig = $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($widget['Magento_Paypal/js/in-context/button']);
 $uniqueId = '_' . uniqid();
 ?>
-
 <div x-data="initPayPalInContextButton<?= $escaper->escapeHtml($uniqueId) ?>()"
      x-init="refs = $refs"
      x-ref="buttonContainer-<?= $escaper->escapeHtml($uniqueId) ?>"
