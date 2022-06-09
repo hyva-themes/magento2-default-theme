@@ -8,6 +8,8 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Magento\Framework\Escaper;
 use Magento\LayeredNavigation\Block\Navigation;
 
@@ -15,7 +17,10 @@ use Magento\LayeredNavigation\Block\Navigation;
 
 /** @var Navigation $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
 
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
 <?php if ($block->canShowBlock()): ?>
     <div class="block border border-container bg-container-darker p-4 md:border-0 md:bg-transparent md:py-0 md:px-0 my-6"
@@ -32,13 +37,12 @@ use Magento\LayeredNavigation\Block\Navigation;
             </span>
             <span class="py-1 px-1 bg-container-lighter rounded border border-container-darker hidden"
                   :class="{ 'block' : isMobile, 'hidden': !isMobile }">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                     xmlns="http://www.w3.org/2000/svg"
-                     class="transition-transform transform duration-300 ease-in-out"
-                     :class="blockOpen ? 'rotate-180' : ''">
-                    <path d="M19 9L12 16L5 9" stroke="#4A5568" stroke-width="2" stroke-linecap="round"
-                          stroke-linejoin="round"/>
-                </svg>
+                <?= $heroicons->chevronDownHtml(
+                    'transition-transform transform duration-300 ease-in-out',
+                    24,
+                    24,
+                    [":class" => "{ 'rotate-180': blockOpen }"]
+                ); ?>
             </span>
         </div>
         <div class="block-content filter-content pt-3 hidden md:block" :class="{ 'hidden' : isMobile && !blockOpen }">
@@ -54,13 +58,12 @@ use Magento\LayeredNavigation\Block\Navigation;
                                 <?= $escaper->escapeHtml(__($filter->getName())) ?>
                                 </span>
                             <span class="py-1 px-1 rounded border border-container">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg"
-                                     class="transition-transform transform duration-300 ease-in-out"
-                                     :class="open ? 'rotate-180' : ''">
-                                    <path d="M19 9L12 16L5 9" stroke="#4A5568" stroke-width="2" stroke-linecap="round"
-                                          stroke-linejoin="round"/>
-                                </svg>
+                                <?= $heroicons->chevronDownHtml(
+                                    'transition-transform transform duration-300 ease-in-out',
+                                    24,
+                                    24,
+                                    [":class" => "{ 'rotate-180': open }"]
+                                ); ?>
                             </span>
                         </div>
                         <template x-if="open">

@@ -6,6 +6,8 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Magento\Downloadable\Block\Customer\Products\ListProducts;
 use Magento\Downloadable\Model\Link\Purchased\Item;
 use Magento\Framework\Escaper;
@@ -17,6 +19,10 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
 /** @var ListProducts $block */
 /** @var Escaper $escaper */
 /** @var SecureHtmlRenderer $secureRenderer */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
 <div class="text-2xl mb-6"><?= $escaper->escapeHtml(__('My Downloadable Products')) ?></div>
 <?php $items = $block->getItems(); ?>
@@ -50,11 +56,7 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                        id="download_<?= /* @noEscape */ $item->getPurchased()->getProductId() ?>"
                        title="<?= $escaper->escapeHtmlAttr(__('Start Download')) ?>"
                        class="action download">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                             stroke="currentColor" width="24" height="24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
+                        <?= $heroicons->documentDownloadHtml(); ?>
                     </a>
                     <?php if ($block->getIsOpenInNewWindow()): ?>
                         <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
@@ -71,7 +73,6 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
             <div class="p-2 items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
                 <?= $escaper->escapeHtml($block->getRemainingDownloads($item)) ?>
             </div>
-
     <?php endforeach; ?>
 </div>
 

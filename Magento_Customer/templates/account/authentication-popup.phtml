@@ -8,12 +8,18 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\ReCaptcha;
 use Magento\Framework\Escaper;
 use Magento\Customer\Block\Account\Customer;
-use Hyva\Theme\ViewModel\ReCaptcha;
 
 /** @var Escaper $escaper */
 /** @var Customer $block */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
 
 /** @var ReCaptcha $recaptchaViewModel */
 //Do not replace this with $viewModels->require(ReCaptcha::class); that might break the dependency on
@@ -138,11 +144,7 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                     x-transition:leave-end="opacity-0" class="absolute top-0 right-0 flex p-2 mt-2">
                     <button @click="open = false;" aria-label="Close panel"
                             class="p-2 text-gray-300 transition duration-150 ease-in-out hover:text-black">
-                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                            </path>
-                        </svg>
+                        <?= $heroicons->xHtml(); ?>
                     </button>
                 </div>
                 <div class="flex flex-col h-full py-6 space-y-6 bg-white shadow-xl overflow-y-auto">

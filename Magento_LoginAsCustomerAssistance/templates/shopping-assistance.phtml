@@ -21,8 +21,8 @@ use \Magento\LoginAsCustomerAssistance\ViewModel\ShoppingAssistanceViewModel;
 /** @var ShoppingAssistanceViewModel $shoppingAssistanceViewModel */
 $shoppingAssistanceViewModel = $viewModels->require(ShoppingAssistanceViewModel::class);
 
-/** @var HeroiconsOutline $heroiconsOutline */
-$heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
 
 if (!$shoppingAssistanceViewModel->isLoginAsCustomerEnabled()) {
     return;
@@ -70,7 +70,7 @@ if (!$shoppingAssistanceViewModel->isLoginAsCustomerEnabled()) {
         <span @mouseover.prevent.stop="showTooltip = true"
               @mouseleave.prevent.stop="showTooltip = false"
         >
-        <?= $heroiconsOutline->questionMarkCircleHtml('w-6 h-6 cursor-hand', 25, 25) ?>
+        <?= $heroicons->questionMarkCircleHtml('cursor-hand') ?>
         </span>
         <div class="relative" x-cloak x-show="showTooltip">
             <div class="shadow-lg">

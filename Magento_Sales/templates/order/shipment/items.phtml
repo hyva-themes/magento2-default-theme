@@ -6,6 +6,8 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Magento\Framework\Escaper;
 use Magento\Sales\Block\Order\Items;
 use Magento\Shipping\Helper\Data as ShippingHelper;
@@ -14,6 +16,10 @@ use Magento\Shipping\Helper\Data as ShippingHelper;
 
 /** @var Items $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
 
 $order = $block->getOrder();
 $shippingHelper = $this->helper(ShippingHelper::class);
@@ -26,26 +32,14 @@ $shippingHelper = $this->helper(ShippingHelper::class);
            class="text-primary inline-block ml-2 pl-2 border-l text-sm font-normal"
            target="_blank"
            rel="noopener">
-            <svg class="inline-block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                 width="20" height="20">
-                <path fill-rule="evenodd"
-                      d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2
-                      0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z"
-                      clip-rule="evenodd"/>
-            </svg>
+            <?= $heroicons->printerHtml('inline-block', 20, 20); ?>
             <span class="inline-block ml-1 underline"><?= $escaper->escapeHtml(__('Print Shipment')) ?></span>
         </a>
         <?php if ($tracks->count()): ?>
             <a href="<?= $escaper->escapeUrl($shippingHelper->getTrackingPopupUrlBySalesModel($shipment)) ?>"
                target="_blank" rel="noopener" title="<?= $escaper->escapeHtml(__('Track Shipment')) ?>"
                class="text-primary inline-block ml-2 pl-2 border-l text-sm font-normal">
-                <svg class="inline-block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                     width="20" height="20">
-                    <path fill-rule="evenodd"
-                          d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414
-                            1.414l-4.816-4.816A6 6 0 012 8z"
-                          clip-rule="evenodd"/>
-                </svg>
+                <?= $heroicons->searchHtml('inline-block', 20, 20); ?>
                 <span class="inline-block ml-1 underline"><?= $escaper->escapeHtml(__('Track Shipment')) ?></span>
             </a>
         <?php endif; ?>

@@ -9,6 +9,9 @@
 
 use Hyva\GraphqlViewModel\ViewModel\GraphqlViewModel;
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\HeroiconsSolid;
+use Hyva\Theme\ViewModel\SvgIcons;
 use Hyva\Theme\ViewModel\Store;
 use Magento\Framework\Escaper;
 use Magento\Review\Block\Form;
@@ -20,6 +23,15 @@ use Hyva\Theme\ViewModel\ReCaptcha;
 /** @var Form $block */
 /** @var ViewModelRegistry $viewModels */
 
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
+/** @var HeroiconsSolid $heroiconsSolid */
+$heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
+
+/** @var SvgIcons $hyvaicons */
+$hyvaicons = $viewModels->require(SvgIcons::class);
+
 /** @var Store $viewModelStore */
 $viewModelStore = $viewModels->require(Store::class);
 
@@ -27,7 +39,6 @@ $formId = 'review_form';
 
 /** @var GraphqlViewModel $gqlViewModel */
 $gqlViewModel = $viewModels->require(GraphqlViewModel::class);
-
 
 /** @var ReCaptcha $recaptchaViewModel */
 //Do not replace this with $viewModels->require(ReCaptcha::class); that might break the dependency on
@@ -105,7 +116,7 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                                                                 value="<?= $escaper
                                                                     ->escapeHtmlAttr($option->getId()) ?>"/>
                                                             <label
-                                                                class="rating-<?= (int)$iterator ?> m-0 cursor-pointer"
+                                                                class="rating-<?= (int)$iterator ?> m-0 cursor-pointer text-gray-400"
                                                                 for="<?= $escaper
                                                                      ->escapeHtmlAttr(
                                                                          $rating->getRatingCode() .
@@ -130,21 +141,10 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                                                                         '_' .
                                                                         $option->getValue()
                                                                     ) ?>_label">
-                                                                <span>
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                         viewBox="0 0 20 20" fill="currentColor"
-                                                                         class="fill-current h-8 w-8"
-                                                                    :class="<?= (int)$iterator ?> <= clickedRatingId ?
-                                                                        'text-yellow-400' :
-                                                                        'text-gray-400'"
-                                                                    >
-                                                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0
-                                                      00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364
-                                                      1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0
-                                                      00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1
-                                                      1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1
-                                                      0 00.951-.69l1.07-3.292z"/>
-                                                                    </svg>
+                                                                <span :class="<?= (int)$iterator ?> <= clickedRatingId
+                                                                    ? 'text-yellow-400'
+                                                                    : 'text-gray-400'">
+                                                                    <?= $heroiconsSolid->starHtml('', 32, 32); ?>
                                                                 </span>
                                                             </label>
                                                         </div>
@@ -210,77 +210,21 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                         </button>
                         <div class="flex flex-row justify-start items-center w-full"
                              x-show="isLoading">
-                            <!-- By Sam Herbert (@sherb), for everyone. More @ http://goo.gl/7AJzbL -->
-                            <svg width="57" height="57" viewBox="0 0 57 57" xmlns="http://www.w3.org/2000/svg"
-                                 stroke="#fff" style="transform: scale(0.6)"
-                                 class="stroke-current text-primary">
-                                <g fill="none" fill-rule="evenodd">
-                                    <g transform="translate(1 1)" stroke-width="2">
-                                        <circle cx="5" cy="50" r="5">
-                                            <animate attributeName="cy"
-                                                     begin="0s" dur="2.2s"
-                                                     values="50;5;50;50"
-                                                     calcMode="linear"
-                                                     repeatCount="indefinite"/>
-                                            <animate attributeName="cx"
-                                                     begin="0s" dur="2.2s"
-                                                     values="5;27;49;5"
-                                                     calcMode="linear"
-                                                     repeatCount="indefinite"/>
-                                        </circle>
-                                        <circle cx="27" cy="5" r="5">
-                                            <animate attributeName="cy"
-                                                     begin="0s" dur="2.2s"
-                                                     from="5" to="5"
-                                                     values="5;50;50;5"
-                                                     calcMode="linear"
-                                                     repeatCount="indefinite"/>
-                                            <animate attributeName="cx"
-                                                     begin="0s" dur="2.2s"
-                                                     from="27" to="27"
-                                                     values="27;49;5;27"
-                                                     calcMode="linear"
-                                                     repeatCount="indefinite"/>
-                                        </circle>
-                                        <circle cx="49" cy="50" r="5">
-                                            <animate attributeName="cy"
-                                                     begin="0s" dur="2.2s"
-                                                     values="50;50;5;50"
-                                                     calcMode="linear"
-                                                     repeatCount="indefinite"/>
-                                            <animate attributeName="cx"
-                                                     from="49" to="49"
-                                                     begin="0s" dur="2.2s"
-                                                     values="49;5;27;49"
-                                                     calcMode="linear"
-                                                     repeatCount="indefinite"/>
-                                        </circle>
-                                    </g>
-                                </g>
-                            </svg>
+                            <?= $hyvaicons->loaderHtml('text-primary', 57, 57); ?>
                             <div class="ml-4 text-primary">
                                 <?= $escaper->escapeHtml(__('Loading...')) ?>
                             </div>
                         </div>
                         <p x-show="displaySuccessMessage" class="text-green flex items-center">
                             <span class="inline-block w-8 h-8 mr-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                     stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                          stroke-width="2"
-                                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
+                                <?= $heroicons->checkCircleHtml(); ?>
                             </span>
                             <?= $escaper->escapeHtml(__('You submitted your review for moderation.')) ?>
                         </p>
                         <template x-if="displayErrorMessage">
                             <p class="text-red flex items-center">
                                 <span class="inline-block w-8 h-8 mr-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                         stroke="currentColor">
-                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                    </svg>
+                                    <?= $heroicons->exclamationCircleHtml(); ?>
                                 </span>
                                 <template x-for="errorMessage in errorMessages">
                                     <span x-html="errorMessage"></span>

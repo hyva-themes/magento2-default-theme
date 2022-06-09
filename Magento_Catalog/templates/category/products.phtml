@@ -1,0 +1,22 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+use Magento\Catalog\Block\Category\View;
+
+/** @var View $block */
+
+/**
+ * Keep the following empty line intact - it resolves a display issue if on categories without products or CMS content.
+ *
+ * @see https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/312
+ */
+?>
+
+<?php if (!$block->isContentMode() || $block->isMixedMode()): ?>
+    <?= $block->getProductListHtml() ?>
+<?php endif; ?>

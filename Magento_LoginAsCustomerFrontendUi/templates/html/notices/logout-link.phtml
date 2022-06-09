@@ -11,14 +11,12 @@ use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Magento\Customer\Block\Account\AuthorizationLink;
 use Magento\Framework\Escaper;
 
-/**
- * @var AuthorizationLink $block
- * @var Escaper $escaper
- * @var ViewModelRegistry $viewModels
- */
+/** @var AuthorizationLink $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsOutline $heroiconsOutline */
-$heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
 
 $dataPostParam = '';
 if ($block->isLoggedIn()) {
@@ -29,5 +27,5 @@ if ($block->isLoggedIn()) {
 <a class="-mr-1 flex p-2 rounded-md text-white" <?= /* @noEscape */ $block->getLinkAttributes()
 ?><?= /* @noEscape */ $dataPostParam ?>>
     <span class="hidden md:block"><?= $escaper->escapeHtml(__('Close Session')) ?></span>
-    <?= $heroiconsOutline->xHtml('h-6 w-6', 25, 25); ?>
+    <?= $heroicons->xHtml(); ?>
 </a>

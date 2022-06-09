@@ -6,12 +6,18 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Magento\Framework\Escaper;
 use Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Edit;
 use Magento\Wishlist\Model\Item;
 
 /** @var Edit $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
 
 /** @var Item $item */
 $item = $block->getItem();
@@ -31,11 +37,7 @@ $editProductUrl = $configureUrl . (count($urlHash) > 1 ? '#' . $urlHash[1] : '')
 <?php if ($product->isVisibleInSiteVisibility()): ?>
     <a class="action edit btn btn-secondary inline-flex mr-2 p-2"
        href="<?= $escaper->escapeUrl($editProductUrl) ?>">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" size="16" class="h-5 w-5">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
-            </path>
-        </svg>
+        <?= $heroicons->pencilHtml('', 20, 20); ?>
         <span class="sr-only"><?= $escaper->escapeHtml(__('Edit')) ?></span>
     </a>
 <?php endif ?>

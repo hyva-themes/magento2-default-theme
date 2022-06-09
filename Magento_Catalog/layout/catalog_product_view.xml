@@ -101,6 +101,8 @@
 
                         <block name="product.info.addtocompare"  template="Magento_Catalog::product/view/addtocompare.phtml"/>
 
+                        <container name="product.info.additional.actions"/>
+
                         <block name="product.info.stockstatus"  template="Magento_Catalog::product/view/stock-status.phtml"/>
 
                         <block class="Magento\Catalog\Block\Product\Price"

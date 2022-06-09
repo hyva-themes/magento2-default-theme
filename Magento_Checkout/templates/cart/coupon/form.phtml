@@ -6,13 +6,17 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
-/**
- * @var Template $block
- * @var Escaper $escaper
- */
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
 <template x-if="cartData.items && cartData.items.length">
     <div class="coupon-form pt-6">
@@ -25,14 +29,10 @@ use Magento\Framework\View\Element\Template;
                     <span class="underline">
                         <?= $escaper->escapeHtml(__('Apply Discount')) ?>
                     </span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="w-4 h-4 inline-block ml-2"
-                         viewBox="0 0 24 24" stroke="currentColor">
-                        <path x-show="!showCouponForm" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M19 9l-7 7-7-7"/>
-                        <path
-                            x-show="showCouponForm" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M5 15l7-7 7 7"/>
-                    </svg>
+                    <span class="inline-block ml-2">
+                        <?= $heroicons->chevronUpHtml('', 16, 16, ['x-show' => 'showCouponForm']); ?>
+                        <?= $heroicons->chevronDownHtml('', 16, 16, ['x-show' => '!showCouponForm']); ?>
+                    </span>
                 </span>
             </div>
             <div>

@@ -8,6 +8,8 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Magento\Framework\Escaper;
 use Magento\Sales\Block\Order\Info\Buttons;
 
@@ -15,7 +17,10 @@ use Magento\Sales\Block\Order\Info\Buttons;
 
 /** @var Escaper $escaper */
 /** @var Buttons $block */
+/** @var ViewModelRegistry $viewModels */
 
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
 <div class="flex items-center justify-center md:justify-end my-4 md:my-0">
     <?php $order = $block->getOrder() ?>
@@ -30,13 +35,7 @@ use Magento\Sales\Block\Order\Info\Buttons;
             <?= $block->getBlockHtml('formkey'); ?>
             <input type="hidden" name="data" value='<?= /** @noEscape */ json_encode($formData['data']) ?>'/>
             <button type="submit" class="btn btn-secondary text-secondary-darker">
-                <svg class="mr-1 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                     stroke="currentColor" width="24" height="24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0
-                            0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                    />
-                </svg>
+                <?= $heroicons->refreshHtml('mr-1 inline-block'); ?>
                 <span><?= $escaper->escapeHtml(__('Reorder')) ?></span>
             </button>
         </form>
@@ -45,14 +44,7 @@ use Magento\Sales\Block\Order\Info\Buttons;
        class="ml-6 btn btn-secondary text-secondary-darker"
        target="_blank"
        rel="noopener">
-        <svg class="mr-1 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none"
-             viewBox="0 0 24 24" stroke="currentColor" width="24" height="24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2
-                  4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0
-                  00-2-2H9a2 2 0 00-2 2v4h10z"
-            />
-        </svg>
+        <?= $heroicons->printerHtml('mr-1 inline-block'); ?>
         <span><?= $escaper->escapeHtml(__('Print Order')) ?></span>
     </a>
     <?= $block->getChildHtml() ?>

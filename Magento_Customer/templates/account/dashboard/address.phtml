@@ -6,8 +6,17 @@
  * See https://hyva.io/license
  */
 
-/** @var \Magento\Customer\Block\Account\Dashboard\Address $block */
-/** @var \Magento\Framework\Escaper $escaper */
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Magento\Customer\Block\Account\Dashboard\Address;
+use Magento\Framework\Escaper;
+
+/** @var Address $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
 <div class="block block-dashboard-addresses">
     <div class="block-title my-6 flex justify-between items-center card">
@@ -35,10 +44,7 @@
                             data-ui-id="default-billing-edit-link"><span><?= $escaper->escapeHtml(
                                 __('Edit Address')
                             ) ?></span>
-                            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                 stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
-                                <path d="M5 12h14M12 5l7 7-7 7"></path>
-                            </svg>
+                            <?= $heroicons->arrowRightHtml('ml-2', 16, 16); ?>
                         </a>
                     </div>
                 </div>
@@ -59,10 +65,7 @@
                             data-ui-id="default-billing-edit-link"><span><?= $escaper->escapeHtml(
                                 __('Edit Address')
                             ) ?></span>
-                            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                 stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
-                                <path d="M5 12h14M12 5l7 7-7 7"></path>
-                            </svg>
+                            <?= $heroicons->arrowRightHtml('ml-2', 16, 16); ?>
                         </a>
                     </div>
                 </div>

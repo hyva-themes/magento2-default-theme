@@ -1,4 +1,12 @@
 <?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
 
 use Magento\Framework\Escaper;
 use Magento\Paypal\Block\Express\InContext\Minicart\SmartButton;
@@ -6,23 +14,22 @@ use Magento\Paypal\Block\Express\InContext\Minicart\SmartButton;
 /** @var SmartButton $block */
 /** @var Escaper $escaper */
 
-/** @var Data $widget */
-$widget = $block->getJsonSerializer()->deserialize($block->getJsInitParams());
-$widgetConfig = $block->getJsonSerializer()->serialize($widget['Magento_Paypal/js/in-context/button']);
-$uniqueId = '_' . uniqid();
+$widgetData = json_decode($block->getJsInitParams());
+$widgetJson = json_encode($widgetData['Magento_Paypal/js/in-context/button']);
+$uniqueId   = '_' . uniqid();
 ?>
-<div x-data="initPayPalInContextButton<?= $escaper->escapeHtml($uniqueId) ?>()"
+<div x-data="initPayPalInContextButton<?= $escaper->escapeHtmlAttr($uniqueId) ?>()"
      x-init="refs = $refs"
-     x-ref="buttonContainer-<?= $escaper->escapeHtml($uniqueId) ?>"
-     @private-content-loaded.window="getSectionData(event.detail.data);"
-     class="paypal checkout paypal-logo <?= $escaper->escapeHtml($block->getContainerId()) ?>-container">
+     x-ref="buttonContainer-<?= $escaper->escapeHtmlAttr($uniqueId) ?>"
+     @private-content-loaded.window="getSectionData($event.detail.data);"
+     class="paypal checkout paypal-logo <?= $escaper->escapeHtmlAttr($block->getContainerId()) ?>-container">
 </div>
 
 <script>
-    function initPayPalInContextButton<?= $escaper->escapeHtml($uniqueId) ?>() {
+    function initPayPalInContextButton<?= $escaper->escapeHtmlAttr($uniqueId) ?>() {
         return {
             refs: false,
-            clientConfig: <?= /** @noEscape */ $widgetConfig ?>.clientConfig || {},
+            clientConfig: <?= /** @noEscape */ $widgetJson ?>.clientConfig || {},
             customerSection: {},
             cartSection: false,
             actions: {},
@@ -39,7 +46,7 @@ $uniqueId = '_' . uniqid();
                 }
             },
             initializeButtons() {
-                const element = this.refs['buttonContainer-<?= $escaper->escapeHtml($uniqueId) ?>'];
+                const element = this.refs['buttonContainer-<?= $escaper->escapeJs($uniqueId) ?>'];
                 const clientConfig = this.clientConfig;
 
                 const loadPayPalScriptPromise = this.createScriptLoadPromise(clientConfig.sdkUrl);

@@ -6,8 +6,17 @@
  * See https://hyva.io/license
  */
 
-/** @var \Magento\Framework\Escaper $escaper */
-/** @var \Magento\Customer\Block\Address\Book $block */
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Magento\Customer\Block\Address\Book;
+use Magento\Framework\Escaper;
+
+/** @var Book $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
 <div class="block block-addresses-default my-6">
     <div class="block-title block-title text-2xl mb-6">
@@ -32,10 +41,7 @@
                         <span>
                             <?= $escaper->escapeHtml(__('Change Billing Address')) ?>
                         </span>
-                        <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                             stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
-                            <path d="M5 12h14M12 5l7 7-7 7"></path>
-                        </svg>
+                        <?= $heroicons->arrowRightHtml('ml-2', 16, 16); ?>
                     </a>
                 </div>
             </div>
@@ -68,10 +74,7 @@
                         hover:text-secondary-darker"
                     >
                         <span><?= $escaper->escapeHtml(__('Change Shipping Address')) ?></span>
-                        <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                             stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
-                            <path d="M5 12h14M12 5l7 7-7 7"></path>
-                        </svg>
+                        <?= $heroicons->arrowRightHtml('ml-2', 16, 16); ?>
                     </a>
                 </div>
             </div>

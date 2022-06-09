@@ -8,37 +8,29 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Escaper;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
 
 <div class="carousel-nav flex items-center justify-center flex-1 p-4">
     <button
         aria-label="<?= $escaper->escapeHtml(__('Previous')) ?>"
         class="glider-prev w-8 h-8 mr-1 text-black rounded-full outline-none focus:outline-none hidden">
-        <svg viewBox="0 0 1024 1024">
-            <path class="path1"
-                  d="M716.8 1024c6.552 0 13.102-2.499 18.101-7.499 9.998-9.997 9.998-26.206
-                  0-36.203l-442.698-442.698 442.698-442.699c9.998-9.997 9.998-26.206
-                  0-36.203s-26.206-9.998-36.203 0l-460.8 460.8c-9.998 9.997-9.998 26.206
-                  0 36.203l460.8 460.8c5 5 11.55 7.499 18.102 7.499z">
-            </path>
-        </svg>
+        <?= $heroicons->chevronLeftHtml(); ?>
     </button>
     <div role="tablist" class="glider-dots select-none flex flex-wrap mx-1 justify-center p-0 focus:outline-none"></div>
     <button
         aria-label="<?= $escaper->escapeHtml(__('Next')) ?>"
         class="glider-next w-8 h-8 ml-1 text-black rounded-full outline-none focus:outline-none hidden">
-        <svg viewBox="0 0 1024 1024">
-            <path class="path1"
-                  d="M256 1024c-6.552 0-13.102-2.499-18.101-7.499-9.998-9.997-9.998-26.206
-                  0-36.203l442.698-442.698-442.698-442.699c-9.998-9.997-9.998-26.206
-                  0-36.203s26.206-9.998 36.203 0l460.8 460.8c9.998 9.997 9.998 26.206 0
-                  36.203l-460.8 460.8c-5 5-11.55 7.499-18.102 7.499z">
-            </path>
-        </svg>
+        <?= $heroicons->chevronRightHtml(); ?>
     </button>
 </div>

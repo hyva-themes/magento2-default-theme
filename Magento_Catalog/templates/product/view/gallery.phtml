@@ -8,12 +8,18 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Magento\Catalog\Block\Product\View\Gallery;
 use Magento\Catalog\Helper\Image;
 use Magento\Framework\Escaper;
 
 /** @var Escaper $escaper */
 /** @var Gallery $block */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
 
 $images = $block->getGalleryImages()->getItems();
 $mainImage = current(array_filter($images, function ($img) use ($block) {
@@ -53,10 +59,7 @@ $productName = $block->getProduct()->getName();
                     :class="{ 'hidden': !fullscreen, 'block': fullscreen }"
                     aria-label="Close"
             >
-                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                </svg>
+                <?= $heroicons->xHtml(); ?>
             </button>
         </div>
         <div class="relative self-center w-full"

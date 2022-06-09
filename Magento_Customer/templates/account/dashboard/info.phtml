@@ -6,8 +6,17 @@
  * See https://hyva.io/license
  */
 
-/** @var \Magento\Customer\Block\Account\Dashboard\Info $block */
-/** @var \Magento\Framework\Escaper $escaper */
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Magento\Customer\Block\Account\Dashboard\Info;
+use Magento\Framework\Escaper;
+
+/** @var Info $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
 <div class="mb-6 text-2xl block-title"><?= $escaper->escapeHtml(__('Account Information')) ?></div>
 <div class="flex flex-wrap justify-between -m-4">
@@ -47,19 +56,13 @@
                     class="inline-flex items-center w-full mt-3 md:text-sm text-secondary hover:text-secondary-darker"
                     href="<?= $escaper->escapeUrl($block->getUrl('customer/account/edit')) ?>">
                     <span><?= $escaper->escapeHtml(__('Edit')) ?></span>
-                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                         stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
-                        <path d="M5 12h14M12 5l7 7-7 7"></path>
-                    </svg>
+                    <?= $heroicons->arrowRightHtml('ml-2', 16, 16); ?>
                 </a>
                 <a
                     class="inline-flex items-center w-full md:text-sm text-secondary hover:text-secondary-darker"
                     href="<?= $escaper->escapeUrl($block->getChangePasswordUrl()) ?>" class="action change-password">
                     <?= $escaper->escapeHtml(__('Change Password')) ?>
-                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                         stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
-                        <path d="M5 12h14M12 5l7 7-7 7"></path>
-                    </svg>
+                    <?= $heroicons->arrowRightHtml('ml-2', 16, 16); ?>
                 </a>
             </div>
         </div>
@@ -98,10 +101,7 @@
                             hover:text-secondary-darker"
                         href="<?= $escaper->escapeUrl($block->getUrl('newsletter/manage')) ?>">
                         <span><?= $escaper->escapeHtml(__('Edit')) ?></span>
-                        <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                             stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
-                            <path d="M5 12h14M12 5l7 7-7 7"></path>
-                        </svg>
+                        <?= $heroicons->arrowRightHtml('ml-2', 16, 16); ?>
                     </a>
                 </div>
             </div>

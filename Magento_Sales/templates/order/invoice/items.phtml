@@ -6,12 +6,18 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\Escaper;
 use Magento\Sales\Block\Order\Invoice\Items;
 
 /** @var Escaper $escaper */
 /** @var Items $block */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
 
 $order = $block->getOrder();
 ?>
@@ -22,13 +28,7 @@ $order = $block->getOrder();
            class="text-primary inline-block ml-2 pl-2 border-l text-sm font-normal"
            target="_blank"
            rel="noopener">
-            <svg class="inline-block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                 width="20" height="20">
-                <path fill-rule="evenodd"
-                      d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0
-                        002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z"
-                      clip-rule="evenodd"/>
-            </svg>
+            <?= $heroicons->printerHtml('inline-block', 20, 20); ?>
             <span class="inline-block ml-1 underline"><?= $escaper->escapeHtml(__('Print Invoice')) ?></span>
         </a>
     </div>

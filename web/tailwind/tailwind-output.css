@@ -1366,6 +1366,28 @@ select {
 	--tw-text-opacity: 1;
 	color: rgba(107, 114, 128, var(--tw-text-opacity));
 }
+.wishlist-widget .price-box .price-label {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border-width: 0;
+}
+.wishlist-widget .price-box .old-price {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border-width: 0;
+}
 .modal {
   /*
    * TODO: add tailwind classes used for the cart and modal styles.
@@ -2668,6 +2690,15 @@ a.pagebuilder-button-secondary:focus, button.pagebuilder-button-secondary:focus,
 .mr-4 {
 	margin-right: 1rem;
 }
+.mt-8 {
+	margin-top: 2rem;
+}
+.mb-6 {
+	margin-bottom: 1.5rem;
+}
+.mr-2 {
+	margin-right: 0.5rem;
+}
 .mr-10 {
 	margin-right: 2.5rem;
 }
@@ -2677,14 +2708,8 @@ a.pagebuilder-button-secondary:focus, button.pagebuilder-button-secondary:focus,
 .mb-8 {
 	margin-bottom: 2rem;
 }
-.mr-2 {
-	margin-right: 0.5rem;
-}
 .ml-3 {
 	margin-left: 0.75rem;
-}
-.mb-6 {
-	margin-bottom: 1.5rem;
 }
 .-mr-4 {
 	margin-right: -1rem;
@@ -2694,9 +2719,6 @@ a.pagebuilder-button-secondary:focus, button.pagebuilder-button-secondary:focus,
 }
 .-ml-px {
 	margin-left: -1px;
-}
-.mt-8 {
-	margin-top: 2rem;
 }
 .mb-10 {
 	margin-bottom: 2.5rem;
@@ -2779,14 +2801,14 @@ a.pagebuilder-button-secondary:focus, button.pagebuilder-button-secondary:focus,
 .h-8 {
 	height: 2rem;
 }
+.h-10 {
+	height: 2.5rem;
+}
 .h-full {
 	height: 100%;
 }
 .h-4 {
 	height: 1rem;
-}
-.h-10 {
-	height: 2.5rem;
 }
 .h-3 {
 	height: 0.75rem;
@@ -2841,6 +2863,9 @@ a.pagebuilder-button-secondary:focus, button.pagebuilder-button-secondary:focus,
 }
 .w-8 {
 	width: 2rem;
+}
+.w-10 {
+	width: 2.5rem;
 }
 .w-3\/12 {
 	width: 25%;
@@ -3375,11 +3400,11 @@ a.pagebuilder-button-secondary:focus, button.pagebuilder-button-secondary:focus,
 .p-0 {
 	padding: 0px;
 }
-.p-3 {
-	padding: 0.75rem;
-}
 .p-1 {
 	padding: 0.25rem;
+}
+.p-3 {
+	padding: 0.75rem;
 }
 .p-8 {
 	padding: 2rem;
@@ -3482,6 +3507,9 @@ a.pagebuilder-button-secondary:focus, button.pagebuilder-button-secondary:focus,
 .pb-6 {
 	padding-bottom: 1.5rem;
 }
+.pt-5 {
+	padding-top: 1.25rem;
+}
 .pt-4 {
 	padding-top: 1rem;
 }
@@ -3517,9 +3545,6 @@ a.pagebuilder-button-secondary:focus, button.pagebuilder-button-secondary:focus,
 }
 .pb-16 {
 	padding-bottom: 4rem;
-}
-.pt-5 {
-	padding-top: 1.25rem;
 }
 .pl-2 {
 	padding-left: 0.5rem;
@@ -3592,6 +3617,9 @@ a.pagebuilder-button-secondary:focus, button.pagebuilder-button-secondary:focus,
 .leading-tight {
 	line-height: 1.25;
 }
+.leading-6 {
+	line-height: 1.5rem;
+}
 .leading-7 {
 	line-height: 1.75rem;
 }
@@ -3600,9 +3628,6 @@ a.pagebuilder-button-secondary:focus, button.pagebuilder-button-secondary:focus,
 }
 .leading-none {
 	line-height: 1;
-}
-.leading-6 {
-	line-height: 1.5rem;
 }
 .leading-normal {
 	line-height: 1.5;
@@ -3648,6 +3673,10 @@ a.pagebuilder-button-secondary:focus, button.pagebuilder-button-secondary:focus,
 	--tw-text-opacity: 1;
 	color: rgba(82, 82, 91, var(--tw-text-opacity));
 }
+.text-gray-500 {
+	--tw-text-opacity: 1;
+	color: rgba(107, 114, 128, var(--tw-text-opacity));
+}
 .text-primary-lighter {
 	--tw-text-opacity: 1;
 	color: rgba(63, 63, 70, var(--tw-text-opacity));
@@ -3663,10 +3692,6 @@ a.pagebuilder-button-secondary:focus, button.pagebuilder-button-secondary:focus,
 .text-gray-800 {
 	--tw-text-opacity: 1;
 	color: rgba(31, 41, 55, var(--tw-text-opacity));
-}
-.text-gray-500 {
-	--tw-text-opacity: 1;
-	color: rgba(107, 114, 128, var(--tw-text-opacity));
 }
 .text-orange-400 {
 	--tw-text-opacity: 1;
@@ -3998,6 +4023,10 @@ fieldset ~ fieldset {
 	--tw-bg-opacity: 1;
 	background-color: rgba(250, 250, 250, var(--tw-bg-opacity));
 }
+.hover\:text-primary:hover {
+	--tw-text-opacity: 1;
+	color: rgba(39, 39, 42, var(--tw-text-opacity));
+}
 .hover\:text-black:hover {
 	--tw-text-opacity: 1;
 	color: rgba(0, 0, 0, var(--tw-text-opacity));
@@ -4025,10 +4054,6 @@ fieldset ~ fieldset {
 .hover\:text-red-600:hover {
 	--tw-text-opacity: 1;
 	color: rgba(220, 38, 38, var(--tw-text-opacity));
-}
-.hover\:text-primary:hover {
-	--tw-text-opacity: 1;
-	color: rgba(39, 39, 42, var(--tw-text-opacity));
 }
 .hover\:text-blue-600:hover {
 	--tw-text-opacity: 1;
@@ -4269,6 +4294,9 @@ fieldset ~ fieldset {
 		margin-left: auto;
 		margin-right: auto;
 	}
+	.md\:mt-5 {
+		margin-top: 1.25rem;
+	}
 	.md\:mr-4 {
 		margin-right: 1rem;
 	}
@@ -4277,9 +4305,6 @@ fieldset ~ fieldset {
 	}
 	.md\:mb-0 {
 		margin-bottom: 0px;
-	}
-	.md\:mt-5 {
-		margin-top: 1.25rem;
 	}
 	.md\:mr-5 {
 		margin-right: 1.25rem;

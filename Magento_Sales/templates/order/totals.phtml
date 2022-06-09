@@ -9,14 +9,13 @@
 /**
  * @var \Magento\Sales\Block\Order\Totals $block
  * @var \Magento\Framework\Escaper $escaper
- * @see \Magento\Sales\Block\Order\Totals
  */
 ?>
 <?php foreach ($block->getTotals() as $code => $total): ?>
     <?php if ($total->getBlockName()): ?>
         <?= $block->getChildHtml($total->getBlockName(), false) ?>
     <?php else:?>
-        <div<?= /* @noEscape */ $block->getLabelProperties() ?> scope="row">
+        <div<?= /* @noEscape */ $block->getLabelProperties() ?>>
             <?php if ($total->getStrong()): ?>
                 <strong><?= $escaper->escapeHtml($total->getLabel()) ?></strong>
             <?php else: ?>

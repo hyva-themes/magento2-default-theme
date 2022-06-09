@@ -8,11 +8,17 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Magento\Catalog\Block\Product\ProductList\Toolbar;
 use Magento\Framework\Escaper;
 
 /** @var Toolbar $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
 <div class="toolbar-sorter sorter flex items-center order-1 col-span-3 sm:col-span-6
         md:col-span-3 lg:col-span-6 justify-end">
@@ -43,14 +49,7 @@ use Magento\Framework\Escaper;
            class="action sorter-action sort-desc"
            @click.prevent="changeUrl('product_list_dir', 'asc', options.directionDefault)"
         >
-            <span>
-                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
-                     viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"
-                    />
-                </svg>
-            </span>
+            <?= $heroicons->sortAscendingHtml(); ?>
         </a>
     <?php else:?>
         <a title="<?= $escaper->escapeHtmlAttr(__('Set Descending Direction')) ?>"
@@ -58,14 +57,7 @@ use Magento\Framework\Escaper;
            class="action sorter-action sort-asc"
            @click.prevent="changeUrl('product_list_dir', 'desc', options.directionDefault)"
         >
-            <span>
-                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
-                     viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"
-                    />
-                </svg>
-            </span>
+            <?= $heroicons->sortDescendingHtml(); ?>
         </a>
     <?php endif; ?>
 </div>
