@@ -79,21 +79,15 @@ $hideRatingSummary = $block->getData('hide_rating_summary') ?: false;
 <?php else: ?>
 <div class="item product product-item card card-interactive flex flex-col w-full <?= $viewIsGrid ? '' : 'md:flex-row' ?>">
 <?php endif; ?>
-    <?php $productImage = $productViewModel->getImage($product, $imageDisplayArea); ?>
     <?php // Product Image ?>
     <a href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>"
         class="product photo product-item-photo block mx-auto mb-3 <?= $viewIsGrid ? '' : 'md:w-2/6 md:mb-0 md:mr-5' ?>"
-        tabindex="-1">
-        <img class="hover:shadow-sm object-contain"
-             loading="lazy"
-             x-data=""
-             @update-gallery-<?= (int)$productId ?>.window="$el.src = $event.detail"
-             alt="<?= $escaper->escapeHtmlAttr($productImage->getLabel()) ?>"
-             title="<?= $escaper->escapeHtmlAttr($productImage->getLabel()) ?>"
-             src="<?= $escaper->escapeUrl($productImage->getImageUrl()) ?>"
-             width="<?= $escaper->escapeHtmlAttr($productImage->getWidth()) ?>"
-             height="<?= $escaper->escapeHtmlAttr($productImage->getHeight()) ?>"
-        />
+        tabindex="-1"
+    >
+        <?= $block->getImage($product, $imageDisplayArea)
+            ->setTemplate('Magento_Catalog::product/list/image.phtml')
+            ->setProductId($productId)
+            ->toHtml(); ?>
     </a>
     <div class="product-info flex flex-col flex-grow">
         <?php $productNameStripped = $block->stripTags($product->getName(), null, true); ?>

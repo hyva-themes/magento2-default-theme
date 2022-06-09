@@ -19,6 +19,14 @@
             />
         </referenceBlock>
 
+        <referenceBlock name="product_list_item">
+            <arguments>
+                <argument name="additional_item_renderer_processors" xsi:type="array">
+                    <item name="swatch_image_cache_key_info" xsi:type="object">Hyva\Theme\ViewModel\SwatchRenderer</item>
+                </argument>
+            </arguments>
+        </referenceBlock>
+
         <referenceContainer name="before.body.end">
             <block name="product.info.options.swatch.js"
                    as="options_swatch_js"
