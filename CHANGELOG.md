@@ -7,7 +7,169 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.14...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.15...main
+
+## [1.1.15] - 2022-04-29
+
+[1.1.15]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.14...1.1.15
+
+### Added
+
+- **Support for reCaptcha v2 "I'm not a robot" and v2 invisible**
+
+  This now provides feature parity with Luma. The implementation was also improved to make it easier to implement custom captcha integrations.
+
+  More details can be found in the [Merge Request #340](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/340) and the  [theme module Merge Request #153](https://gitlab.hyva.io/hyva-themes/magento2-theme-module/-/merge_requests/153).
+
+  Many thanks to Amanda Bradley (Youwe - formerly Fisheye) for the contribution!
+
+- **Add additional actions container to product detail page**
+
+  This allows adding additional actions to the list of add-to-wishlist, add-to-compare and so on.  
+
+  For more information please refer to the [Merge Request #448](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/448).
+
+  Many thanks to Ruud van Zuidam (Siteation) for the contribution!
+
+- **Add recently ordered sidebar**
+
+  Please refer to the [Issue #452](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/452) for more details.
+
+  Many thanks to Nataly Gorupaha (Atwix) for the contribution!
+
+- **Add wishlist sidebar**
+
+  Please refer to the [Issue #384](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/384) for more details.
+
+  Many thanks to Nataly Gorupaha (Atwix) for the contribution!
+
+### Changed
+
+- **Use SVG ViewModel instead of hardcoded SVGs in default theme**
+
+  This includes adding the SVG loader to the theme web folder instead of hardcoding it in the loader template. 
+
+  For more information please refer to the Merge Requests [#431](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/431) and [#432](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/432).
+
+  Many thanks to Ruud van Zuidam (Siteation) for the contribution!  
+
+- **Rely on automatic purge config for theme-module**
+
+  By default, the automatic merging of tailwind.config.js is now used to add the theme module templates to the content path config of any Hyvä theme.
+
+  Please refer to the [Issue #398](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/398) for more details.
+
+- **Support multiple ratings**
+
+  Previously only a single rating was shown.  
+
+  Please refer to the [Issue #374](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/374) for more details.
+
+  Many thanks to Nguyen Miha (JaJuMa) for the contribution!
+
+- **Use a tag on current breadcrumb to improve a11y**
+
+  This improves a11y since the aria-current attribute is only allowed on anchors.
+
+  For more information please refer to the [Merge Request #436](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/436).
+
+  Many thanks to Ruud van Zuidam (Siteation) for the contribution!
+
+- **Fix layout XML parent for Send Friend icon in product info**
+
+  Previously the icon was not rendered.
+
+  For more information please refer to the [Merge Request #437](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/437).
+
+  Many thanks to Ruud van Zuidam (Siteation) for the contribution!
+
+- **Correct spacing beside toolbar pager dropdown**
+
+  For more information please refer to the [Merge Request #438](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/438).
+
+  Many thanks to Ruud van Zuidam (Siteation) for the contribution!
+
+- **Fix rendering of sidebar on desktop for categories with empty content area**
+
+  Please refer to the [Issue #312](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/312) for more details.
+
+  Many thanks to Nataly Gorupaha (Atwix) for the contribution!
+
+- **Move footer copyright into separate template file**
+
+  Also include a comment to make it easier to render the copyright configured in the admin.
+
+  For more information please refer to the [Merge Request #442](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/442).
+
+  Many thanks to Ruud van Zuidam (Siteation) for the contribution!
+
+- **Reserve space for form validation message on validation container, not input field**
+
+  The previous solution requied awkward workarounds for multiple inputs like radio buttons within a container.
+
+  For more information please refer to the [Merge Request #445](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/445).
+
+- **The minicart now shows the configured amount of items**
+
+  Please refer to the [Issue #386](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/386) for more details.  
+
+  Many thanks to Nataly Gorupaha (Atwix) for the contribution!
+
+- **Fix: Selecting country with no regions hides region field but retains label**
+
+  Please refer to the [Issue #391](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/391) for more details.
+
+  Many thanks to Nataly Gorupaha (Atwix) for the contribution!
+
+- **Use better reCaptcha v3 action names for better stats collection**
+
+  For more information please refer to the [Merge Request #422](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/422).
+
+  Many thanks to Lucas can Staden (ProxyBlue) for the contribution!
+
+- **Fix: Render product image for selected attributes**
+
+  This is accomplished by rendering the product image using `$block->getImage()` instead of the view model, so the swatch logic is applied automatically.
+
+  Please refer to the [Issue #402](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/402) for more details.
+
+- **Add required attribute to email and password fields in login form**
+
+  Many thanks to Nataly Gorupaha (Atwix) for the contribution!
+
+- **Fix PayPal in context JSON deserialization issue**
+
+  Please refer to the [Issue #403](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/403) for more details.
+
+  Many thanks to Nataly Gorupaha (Atwix) for the contribution!
+
+- **Improve column width in compare product table**
+
+  For more information please refer to the [Merge Request #439](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/439).
+
+  Many thanks to Ruud van Zuidam (Siteation) for the contribution!
+
+- **Improve pager a11y**
+
+  The improvements consist of a number of changes.
+
+  For more information please refer to the [Merge Request #435](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/435).
+
+  Many thanks to Ruud van Zuidam (Siteation) and Sean van Zuidam (Grimlink) for the contribution!
+
+- **Move sales order totals template to correct folder**
+
+  Previously the Luma template was used accidentally.
+
+  Please refer to the [Issue #405](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/405) for more details.
+
+- **Fix: search field renders quotes as escaped HTML entity**
+
+  Please refer to the [Issue #408](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/408) for more details.
+
+### Removed
+
+- Nothing
 
 ## [1.1.14] - 2022-04-29
 
@@ -186,8 +348,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   Previously full width and full bleed row content elements did not break out of the main content container.
 
   More information can be found in the [issue #361](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/361)
-
-
 
 ### Removed
 
