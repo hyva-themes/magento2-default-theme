@@ -97,16 +97,19 @@ if (in_array($type, ['related', 'upsell', 'crosssell'], true)) {
     $items = $productListViewModel->getItems();
 }
 
+$sliderHtml = $sliderViewModel->getSliderForItems($itemTemplate, $items, $containerTemplate)
+    ->setData('hide_details', $hideDetails)
+    ->setData('hide_rating_summary', $hideRatingSummary)
+    ->setData('title', $title)
+    ->toHtml();
+
+if (empty($sliderHtml)) {
+    return '';
+}
 ?>
 <div class="product-slider">
     <div>
-        <?=
-        $sliderViewModel->getSliderForItems($itemTemplate, $items, $containerTemplate)
-                        ->setData('hide_details', $hideDetails)
-                        ->setData('hide_rating_summary', $hideRatingSummary)
-                        ->setData('title', $title)
-                        ->toHtml();
-        ?>
+        <?= /* @noEscape */ $sliderHtml ?>
     </div>
     <script>
         'use strict';
