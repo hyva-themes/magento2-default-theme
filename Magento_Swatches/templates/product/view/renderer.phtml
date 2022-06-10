@@ -36,10 +36,6 @@ $swatchItemBlock->setData('product_id', $productId);
 $tooltipBlockHtml = $block->getBlockHtml('product.swatch.tooltip');
 ?>
 <?php if ($product->isSaleable() && count($attributes)): ?>
-
-    <?= $block->getChildHtml('options_configurable_js') ?>
-    <?= $block->getChildHtml('options_swatch_js') ?>
-
     <script>
         function initConfigurableSwatchOptions_<?= (int) $productId ?>() {
             const configurableOptionsComponent = initConfigurableOptions(

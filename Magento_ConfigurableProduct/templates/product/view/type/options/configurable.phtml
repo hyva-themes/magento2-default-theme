@@ -18,8 +18,6 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
 ?>
 <?php if ($product->isSaleable() && count($attributes)):?>
 
-    <?= $block->getChildHtml('options_configurable_js') ?>
-
     <script>
         function initConfigurableDropdownOptions_<?= (int) $productId ?>() {
             return initConfigurableOptions(

@@ -32,10 +32,6 @@
                    as="options_swatch_js"
                    template="Magento_Swatches::product/js/swatch-options.phtml"
             />
-            <block name="product.info.options.configurable.js"
-                   as="options_configurable_js"
-                   template="Magento_ConfigurableProduct::product/view/type/options/js/configurable-options.phtml"
-            />
         </referenceContainer>
 
     </body>

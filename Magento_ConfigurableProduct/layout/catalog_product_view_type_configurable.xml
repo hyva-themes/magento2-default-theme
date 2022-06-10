@@ -15,12 +15,13 @@
                    as="options_configurable"
                    before="-"
                    template="Magento_ConfigurableProduct::product/view/type/options/configurable.phtml"
-            >
-                <block name="product.info.options.configurable.js"
-                       as="options_configurable_js"
-                       template="Magento_ConfigurableProduct::product/view/type/options/js/configurable-options.phtml"
-                />
-            </block>
+            />
         </referenceBlock>
+        <referenceContainer name="before.body.end">
+            <block name="product.info.options.configurable.js"
+                   as="options_configurable_js"
+                   template="Magento_ConfigurableProduct::product/view/type/options/js/configurable-options.phtml"
+            />
+        </referenceContainer>
     </body>
 </page>
