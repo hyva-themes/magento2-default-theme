@@ -2852,6 +2852,9 @@ a.pagebuilder-button-secondary:focus, button.pagebuilder-button-secondary:focus,
 .max-h-screen-75 {
 	max-height: 75vh;
 }
+.min-h-screen-50 {
+	min-height: 50vh;
+}
 .min-h-14 {
 	min-height: 3.5rem;
 }
@@ -3139,6 +3142,9 @@ a.pagebuilder-button-secondary:focus, button.pagebuilder-button-secondary:focus,
 .gap-2 {
 	gap: 0.5rem;
 }
+.gap-8 {
+	gap: 2rem;
+}
 .gap-4 {
 	gap: 1rem;
 }
@@ -3147,9 +3153,6 @@ a.pagebuilder-button-secondary:focus, button.pagebuilder-button-secondary:focus,
 }
 .gap-1 {
 	gap: 0.25rem;
-}
-.gap-8 {
-	gap: 2rem;
 }
 .gap-6 {
 	gap: 1.5rem;
@@ -4211,6 +4214,9 @@ fieldset ~ fieldset {
 	.sm\:flex {
 		display: flex;
 	}
+	.sm\:min-h-screen-75 {
+		min-height: 75vh;
+	}
 	.sm\:w-1\/2 {
 		width: 50%;
 	}
@@ -4539,6 +4545,9 @@ fieldset ~ fieldset {
 	.lg\:hidden {
 		display: none;
 	}
+	.lg\:min-h-screen-50 {
+		min-height: 50vh;
+	}
 	.lg\:min-h-0 {
 		min-height: 0px;
 	}
@@ -4560,6 +4569,9 @@ fieldset ~ fieldset {
 	.lg\:w-auto {
 		width: auto;
 	}
+	.lg\:grid-cols-2 {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
 	.lg\:grid-cols-4 {
 		grid-template-columns: repeat(4, minmax(0, 1fr));
 	}
@@ -4568,9 +4580,6 @@ fieldset ~ fieldset {
 	}
 	.lg\:grid-cols-8 {
 		grid-template-columns: repeat(8, minmax(0, 1fr));
-	}
-	.lg\:grid-cols-2 {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 	.lg\:flex-row {
 		flex-direction: row;
