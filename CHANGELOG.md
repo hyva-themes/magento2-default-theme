@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Upgrade guide
 
+**Backward incompatible warning**
+The default cart page has been replaced with a Server-Side-Rendered version using PHP and AlpineJS, if you're upgrading and want to keep the GraphQL cart you need to install the GraphQL cart separately. You should be able to keep using the GraphQL cart without further customizations and we will keep supporting both versions of the cart.
+
 If you're upgrading from <1.1.15 please check the [documentation page on upgrading](https://docs.hyva.io/hyva-themes/upgrading/upgrading-to-1-1-15.html). Any additional information and known bugs/issues to this release will be documented there.
 
 ### Added
