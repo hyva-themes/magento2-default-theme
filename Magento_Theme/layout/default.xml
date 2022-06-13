@@ -48,7 +48,7 @@
                 <block name="header-search" template="Magento_Theme::html/header/search-form.phtml"/>
                 <block name="cart-drawer" template="Magento_Theme::html/cart/cart-drawer.phtml" ifconfig="checkout/sidebar/display">
                     <block name="cart-drawer-loading" as="loading" template="Hyva_Theme::ui/loading.phtml"/>
-                    <block class="Magento\Catalog\Block\ShortcutButtons" name="extra_actions"/>
+                    <block class="Magento\Catalog\Block\ShortcutButtons\InCatalog" name="extra_actions"/>
                 </block>
 
                 <block name="topmenu_generic"
