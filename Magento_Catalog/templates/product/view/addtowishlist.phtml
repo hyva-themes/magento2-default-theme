@@ -59,7 +59,7 @@ $uniqueId = '_' . uniqid();
                 }
                 <?php endif; ?>
 
-                postParams.data['form_key'] = document.querySelector('input[name=form_key]').value;
+                postParams.data['form_key'] = hyva.getFormKey();
                 postParams.data['qty'] = document.getElementById(`qty[${productId}]`)
                     ? document.getElementById(`qty[${productId}]`).value || 1
                     : 1;

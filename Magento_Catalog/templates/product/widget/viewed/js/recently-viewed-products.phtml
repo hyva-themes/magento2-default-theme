@@ -191,19 +191,17 @@ $viewModelCurrency = $viewModels->require(Currency::class);
             },
 
             addToWishlist(productId) {
-                const params = {
-                    form_key: hyva.getFormKey(),
-                    product: productId,
-                    uenc: btoa(window.location.href)
-                };
-                fetch(BASE_URL + 'wishlist/index/add/', {
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                const formKey = hyva.getFormKey();
+                const postUrl = BASE_URL + 'wishlist/index/add/';
+
+                fetch(postUrl, {
+                    "headers": {
+                        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
                     },
-                    body: new URLSearchParams(params),
-                    method: 'POST',
-                    mode: 'cors',
-                    credentials: 'include'
+                    "body": "form_key="+ formKey + "&product="+productId+"&uenc="+btoa(window.location.href),
+                    "method": "POST",
+                    "mode": "cors",
+                    "credentials": "include"
                 }).then(response => {
                     if (response.redirected) {
                         window.location.href = response.url;
@@ -240,19 +238,17 @@ $viewModelCurrency = $viewModels->require(Currency::class);
             }, // end addToWishlist()
 
             addToCompare(productId) {
-                const params = {
-                    form_key: hyva.getFormKey(),
-                    product: productId,
-                    uenc: btoa(window.location.href)
-                };
-                fetch(BASE_URL + 'catalog/product_compare/add/', {
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                const formKey = hyva.getFormKey();
+                const postUrl = BASE_URL + 'catalog/product_compare/add/';
+
+                fetch(postUrl, {
+                    "headers": {
+                        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
                     },
-                    body: new URLSearchParams(params),
-                    method: 'POST',
-                    mode: 'cors',
-                    credentials: 'include'
+                    "body": "form_key="+ formKey + "&product="+productId+"&uenc="+btoa(window.location.href),
+                    "method": "POST",
+                    "mode": "cors",
+                    "credentials": "include"
                 }).then(response => {
                     if (response.redirected) {
                         window.location.href = response.url;

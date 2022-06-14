@@ -118,11 +118,14 @@ function initCompareOnCompareList() {
 function initWishlist() {
     return {
         addToWishlist(productId) {
-            fetch(BASE_URL + "wishlist/index/add/", {
+            const formKey = hyva.getFormKey();
+            const postUrl = BASE_URL + 'wishlist/index/add/';
+
+            fetch(postUrl, {
                 "headers": {
                     "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
                 },
-                "body": "form_key="+ hyva.getFormKey() + "&product="+productId+"&uenc="+btoa(window.location.href),
+                "body": "form_key="+ formKey + "&product="+productId+"&uenc="+btoa(window.location.href),
                 "method": "POST",
                 "mode": "cors",
                 "credentials": "include"

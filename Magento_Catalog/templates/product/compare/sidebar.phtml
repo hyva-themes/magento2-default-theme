@@ -72,7 +72,7 @@ function initCompareOnCompareSidebar() {
             }
         },
         removeFromCompare: function(productId) {
-            const formKey = document.querySelector('input[name=form_key]').value;
+            const formKey = hyva.getFormKey();
             const postUrl = BASE_URL + 'catalog/product_compare/remove/';
             const confirmMessage = "<?= $escaper
                 ->escapeHtml(__('Are you sure you want to remove this item from your Compare Products list?')) ?>";
@@ -95,7 +95,7 @@ function initCompareOnCompareSidebar() {
 function initCompareSidebarClear() {
     return {
         clearCompare: function() {
-            const formKey = document.querySelector('input[name=form_key]').value;
+            const formKey = hyva.getFormKey();
             const postUrl = BASE_URL + 'catalog/product_compare/clear/';
             const confirmMessage = "<?= $escaper
                 ->escapeHtml(__('Are you sure you want to remove all items from your Compare Products list?')) ?>";

@@ -55,14 +55,18 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             },
             deleteItemFromCart(itemId) {
                 this.isLoading = true;
-                fetch(`${BASE_URL}checkout/sidebar/removeItem/`, {
-                    headers: {
-                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+
+                const formKey = hyva.getFormKey();
+                const postUrl = BASE_URL + 'checkout/sidebar/removeItem/';
+
+                fetch(postUrl, {
+                    "headers": {
+                        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
                     },
-                    body: "form_key=" + hyva.getFormKey() + "&item_id=" + itemId,
-                    method: 'POST',
-                    mode: 'cors',
-                    credentials: 'include'
+                    "body": "form_key=" + formKey + "&item_id=" + itemId,
+                    "method": "POST",
+                    "mode": "cors",
+                    "credentials": "include"
                 }).then(response => {
                     if (response.redirected) {
                         window.location.href = response.url;

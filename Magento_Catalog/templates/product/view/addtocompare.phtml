@@ -40,7 +40,7 @@ if (!$product->getId() || !$compareViewModel->showOnProductPage()) {
     function initCompareOnProductView() {
         return {
             addToCompare: function (productId) {
-                const formKey = document.querySelector('input[name=form_key]').value;
+                const formKey = hyva.getFormKey();
                 const postUrl = BASE_URL + 'catalog/product_compare/add/';
 
                 fetch(postUrl, {

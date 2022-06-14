@@ -119,20 +119,18 @@ if (empty($sliderHtml)) {
 
                 <?php if ($wishlistViewModel->isEnabled()): ?>
                 window.addEventListener('product-add-to-wishlist', (event) => {
+                    const formKey = hyva.getFormKey();
+                    const postUrl = BASE_URL + 'wishlist/index/add/';
                     const productId = event.detail.productId;
-                    fetch(BASE_URL + "wishlist/index/add/", {
-                        headers: {
+
+                    fetch(postUrl, {
+                        "headers": {
                             "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
                         },
-                        body: new URLSearchParams({
-                                form_key: hyva.getFormKey(),
-                                product: productId,
-                                uenc: btoa(window.location.href)
-                            }
-                        ),
-                        method: "POST",
-                        mode: "cors",
-                        credentials: "include"
+                        "body": "form_key="+ formKey + "&product="+productId+"&uenc="+btoa(window.location.href),
+                        "method": "POST",
+                        "mode": "cors",
+                        "credentials": "include"
                     }).then(function (response) {
                         if (response.redirected) {
                             window.location.href = response.url;

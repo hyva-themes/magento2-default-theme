@@ -22,7 +22,7 @@ $compareViewModel = $viewModels->require(ProductCompare::class);
     function initCompareOnProductList() {
         return {
             addToCompare(productId) {
-                const formKey = document.querySelector('input[name=form_key]').value;
+                const formKey = hyva.getFormKey();
                 const postUrl = BASE_URL + 'catalog/product_compare/add/';
 
                 fetch(postUrl, {

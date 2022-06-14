@@ -23,7 +23,9 @@ $wishlistViewModel = $viewModels->require(Wishlist::class);
         return {
             addToWishlist(productId) {
                 const formKey = hyva.getFormKey();
-                fetch(BASE_URL + "wishlist/index/add/", {
+                const postUrl = BASE_URL + 'wishlist/index/add/';
+
+                fetch(postUrl, {
                     "headers": {
                         "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
                     },

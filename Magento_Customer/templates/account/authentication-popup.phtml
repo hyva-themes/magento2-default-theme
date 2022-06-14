@@ -68,7 +68,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                 this.isLoading = true;
                 const username = this.$refs['customer-email'].value;
                 const password = this.$refs['customer-password'].value;
-                const formKey = document.querySelector('input[name=form_key]').value;
+                const formKey = hyva.getFormKey();
                 const bodyFields = {
                     'username': username,
                     'password': password,
