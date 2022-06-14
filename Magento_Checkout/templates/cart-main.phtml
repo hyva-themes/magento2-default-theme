@@ -105,7 +105,7 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
 
                     if (window.checkoutConfig && cart) {
                         if (decimalNumbersAreEqual(
-                            cart.summary_count,
+                            cart.items.reduce((totalQty, cartItem) => totalQty + cartItem.qty, 0),
                                 window.checkoutConfig.quoteData.items_qty
                             ) &&
                             decimalNumbersAreEqual(
