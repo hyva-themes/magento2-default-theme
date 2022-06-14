@@ -35,6 +35,7 @@ $viewModel = $block->getViewModel();
 </div>
 <form class="form-address-edit"
       x-data="initCustomerAddressEdit()"
+      x-init="initFormValidationRules()"
       @private-content-loaded.window="onPrivateContentLoaded(event.detail.data)"
       @submit.prevent="checkFieldsBeforeSubmit($event.target)"
       action="<?= $escaper->escapeUrl($block->getSaveUrl()) ?>"
@@ -172,7 +173,7 @@ $viewModel = $block->getViewModel();
                     <select name="country_id"
                             id="country"
                             title="Country"
-                            required="required"
+                            required
                             class="form-select"
                             x-ref="country_id"
                             @change="changeCountry($event.target)"
@@ -286,11 +287,12 @@ function initCustomerAddressEdit() {
         directoryData: {},
         availableRegions: {},
         messageTime: 5000,
+        minTelephoneNumberLength: 3,
         fieldsNames: [],
         selectedRegion: '<?= $escaper->escapeJs($block->getRegion() ?: 0) ?>',
         postCodes: <?= /* @noEscape */ $block->getPostCodeConfig()->getSerializedPostCodes() ?>,
         isPostCodeValid: false,
-        isPhoneValid: false,
+        isTelephoneValid: false,
         isZipRequired: true,
         isRegionRequired: true,
         showOptionalRegion: <?= $displayAll ? 'true': 'false' ?>,
@@ -327,6 +329,46 @@ function initCustomerAddressEdit() {
                 }
             })
         },
+        initFormValidationRules() {
+            const self = this;
+
+            hyva.formValidation.addRule('telephone', function(phoneElement) {
+                const phoneNumber = phoneElement.value.trim().replace(' ', '');
+                if (phoneNumber && phoneNumber.length < self.minTelephoneNumberLength) {
+                    self.invalidTelephoneMessage();
+                    return false;
+                }
+
+                return true;
+            });
+
+            hyva.formValidation.addRule('postcode', function(postCodeElement) {
+                let pattern, regex,
+                    postCode = postCodeElement.value,
+                    countryId = document.getElementById("country").value,
+                    validatedPostCodeExample = [],
+                    patterns = self.postCodes ? self.postCodes[countryId] : '';
+
+                    if (postCode && patterns) {
+                        for (pattern in patterns) {
+                            if (patterns.hasOwnProperty(pattern)) {
+                                validatedPostCodeExample.push(patterns[pattern].example);
+                                regex = new RegExp(patterns[pattern].pattern);
+                                if (regex.test(postCode)) {
+                                    return true;
+                                }
+                            }
+                        }
+                        if (validatedPostCodeExample) {
+                            self.invalidPostcodeMessage(validatedPostCodeExample);
+                        }
+
+                        return false;
+                    }
+
+                    return true;
+            });
+        },
         checkFieldsBeforeSubmit(form) {
             if (!this.fieldsNames.length) {
                 form.submit();
@@ -340,41 +382,6 @@ function initCustomerAddressEdit() {
 
             return false;
         },
-        validatePhone(phoneElement) {
-            const phone = phoneElement.value ? !/[^\d\+\-]/.test(phoneElement.value) : '';
-
-            if (phone) {
-                return true;
-            }
-            this.invalidPhoneMessage();
-
-            return false;
-        },
-        validatePostCode(postCodeElement, countryId) {
-            let pattern, regex,
-                postCode = postCodeElement.value,
-                validatedPostCodeExample = [],
-                patterns = this.postCodes ? this.postCodes[countryId] : '';
-
-            if (postCode && patterns) {
-                for (pattern in patterns) {
-                    if (patterns.hasOwnProperty(pattern)) {
-                        validatedPostCodeExample.push(patterns[pattern].example);
-                        regex = new RegExp(patterns[pattern].pattern);
-                        if (regex.test(postCode)) {
-                            return true;
-                        }
-                    }
-                }
-                if (validatedPostCodeExample) {
-                    this.invalidPostcodeMessage(validatedPostCodeExample);
-                }
-
-                return false;
-            }
-
-            return true;
-        },
         invalidPostcodeMessage(examples) {
             let message = '<?= $escaper->escapeHtml(__('Provided Zip/Postal Code seems to be invalid.')) ?>';
                 message += '<?= $escaper->escapeHtml(__('Example: ')) ?>' + examples.join('; ') + '. ';
@@ -382,11 +389,12 @@ function initCustomerAddressEdit() {
 
             this.initMessages('error', message, this.messageTime);
         },
-        invalidPhoneMessage() {
-            let message = '<?= $escaper->escapeHtml(__('Phone number is not correct.')) ?>';
-                message += '<?= $escaper->escapeHtml(__(' Example: 1234567890')) ?>';
-
-            this.initMessages('error', message, this.messageTime);
+        invalidTelephoneMessage() {
+            this.initMessages(
+                'error',
+                '<?= $escaper->escapeHtml(__('The telephone number is too short.')) ?>',
+                this.messageTime
+            );
         },
         initMessages(type, text, time) {
             typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
@@ -396,18 +404,18 @@ function initCustomerAddressEdit() {
                 }], time
             );
         },
-        changePhone(phoneElement) {
-            this.isPhoneValid = this.validatePhone(phoneElement);
+        changeTelephone(telephoneElement) {
+            this.isTelephoneValid = hyva.formValidation.rules.telephone(telephoneElement);
 
-            if (!this.isPhoneValid && (this.fieldsNames.indexOf(phoneElement.name) < 0)) {
-                this.fieldsNames.push(phoneElement.name);
+            if (!this.isTelephoneValid && (this.fieldsNames.indexOf(telephoneElement.name) < 0)) {
+                this.fieldsNames.push(telephoneElement.name);
             }
-            if (this.isPhoneValid && (this.fieldsNames.indexOf(phoneElement.name) >= 0)) {
-                this.fieldsNames = this.fieldsNames.filter(item => item !== phoneElement.name);
+            if (this.isTelephoneValid && (this.fieldsNames.indexOf(telephoneElement.name) >= 0)) {
+                this.fieldsNames = this.fieldsNames.filter(item => item !== telephoneElement.name);
             }
         },
         changePostcode(postcodeElement) {
-            this.isPostCodeValid = this.validatePostCode(postcodeElement, document.getElementById("country").value);
+            this.isPostCodeValid = hyva.formValidation.rules.postcode(postcodeElement);
 
             if (!this.isPostCodeValid && (this.fieldsNames.indexOf(postcodeElement.name) < 0)) {
                 this.fieldsNames.push(postcodeElement.name);
@@ -431,6 +439,8 @@ function initCustomerAddressEdit() {
             this.isRegionRequired = selectedOption.dataset.isRegionRequired === "1";
 
             this.availableRegions = countryData.regions || {};
+
+            this.changePostcode(document.getElementById("zip"));
         },
         hasAvailableRegions() {
             return Object.keys(this.availableRegions).length > 0;
