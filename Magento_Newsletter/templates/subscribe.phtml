@@ -45,10 +45,10 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                 class="form-input inline-flex w-full"
                 placeholder="<?= $escaper->escapeHtmlAttr(__('Enter your email address')) ?>">
             <?= $block->getBlockHtml('formkey') ?>
+            <?= $recaptcha ? $recaptcha->getInputHtml('newsletter') : '' ?>
             <button class="inline-flex flex-shrink-0 ml-auto xl:mt-0 btn btn-primary">
                 <?= $escaper->escapeHtml(__('Subscribe')) ?>
             </button>
-            <?= $recaptcha ? $recaptcha->getInputHtml('newsletter') : '' ?>
         </div>
         <div>
             <template x-if="displayErrorMessage">

@@ -18,7 +18,7 @@ use Magento\Framework\Escaper;
     <div class="container py-8 mx-auto">
         <div class="flex flex-wrap order-first gap-y-16">
             <?php foreach ($block->getChildNames() as $childName): ?>
-                <?= $childName !== 'copyright' ? $block->getBlockHtml($childName) : '' ?>
+                <?= $childName !== 'footer-copyright' ? $block->getBlockHtml($childName) : '' ?>
             <?php endforeach; ?>
         </div>
     </div>
