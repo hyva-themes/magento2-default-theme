@@ -48,6 +48,7 @@ use Magento\Framework\View\Element\Template;
                 this.productIndex = this.calculateSimpleIndexForPartialSelection(this.selectedValues);
             },
             calculateSimpleIndexForPartialSelection(selectedValues) {
+                if (selectedValues.length === 0) return 0;
                 let productIndexIds = Object.keys(this.optionConfig.index);
                 Object.keys(this.optionConfig.attributes).forEach((attribute) => {
                     <?php
@@ -187,7 +188,17 @@ use Magento\Framework\View\Element\Template;
                     : this.optionConfig.prices.finalPrice.amount; // default price if no option selection
             },
             changeOption(optionId, value) {
-                this.selectedValues[optionId] = value;
+                if (value === '') {
+                    // create new array so the length property is reset if no option is selected (avoiding delete)
+                    this.selectedValues = this.selectedValues.reduce((newSelection, val, opt) => {
+                        if (opt !== optionId) {
+                            newSelection[opt] = val;
+                        }
+                        return newSelection;
+                    }, []);
+                } else {
+                    this.selectedValues[optionId] = value;
+                }
                 this.findSimpleIndex();
                 this.findAllowedAttributeOptions();
                 this.updatePrices();
@@ -230,16 +241,20 @@ use Magento\Framework\View\Element\Template;
                 );
             },
             updateGallery () {
-                const value = this.productIndex ?
-                    this.optionConfig.images[this.productIndex] :
-                    Object.values(this.optionConfig.images)[0];
-
-                value && window.dispatchEvent(
-                    new CustomEvent(
+                if (this.productIndex) {
+                    const images = this.optionConfig.images[this.productIndex];
+                    images && window.dispatchEvent(new CustomEvent(
                         "update-gallery",
-                        { detail: value }
-                    )
-                );
+                        { detail: this.sortImagesByPosition(images) }
+                    ));
+                } else {
+                    window.dispatchEvent(new Event("reset-gallery"));
+                }
+            },
+            sortImagesByPosition(images) {
+                return images.sort((x, y) => {
+                    return x.position === y.position ? 0 : (parseInt(x.position) > parseInt(y.position) ? 1 : -1)
+                });
             },
             onGetCartData(data) {
                 this.preselectCartItems(data);

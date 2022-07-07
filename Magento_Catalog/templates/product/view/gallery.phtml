@@ -168,6 +168,10 @@ $productName = $block->getProduct()->getName();
                     this.setActive(0);
                 }
             },
+            resetGallery() {
+                this.images = this.initialImages;
+                this.setActive(0);
+            },
             initActive() {
                 let active = this.images.findIndex(function(image) {
                     return image.isMain === true
@@ -315,6 +319,9 @@ $productName = $block->getProduct()->getName();
                 },
                 ['@update-gallery.window'](event) {
                     this.receiveImages(event.detail);
+                },
+                ['@reset-gallery.window'](event) {
+                    this.resetGallery();
                 }
             }
         }
