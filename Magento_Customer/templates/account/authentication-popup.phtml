@@ -160,11 +160,12 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                             <?= $recaptcha ? $recaptcha->getInputHtml('customer_login', 'auth-popup') : '' ?>
                             <div class="fieldset login">
                                 <div class="field email required">
-                                    <label class="label" for="customer-email">
+                                    <label class="label" for="form-login-username" form="login-form" >
                                         <span><?= $escaper->escapeHtml(__('Email Address')) ?></span>
                                     </label>
                                     <div class="control">
                                         <input name="username"
+                                               id="form-login-username"
                                                x-ref="customer-email"
                                                @change="errors = 0"
                                                type="email"
@@ -174,11 +175,12 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                                     </div>
                                 </div>
                                 <div class="field password required">
-                                    <label for="pass" class="label">
+                                    <label for="form-login-password" class="label" form="login-form">
                                         <span><?= $escaper->escapeHtml(__('Password')) ?></span>
                                     </label>
                                     <div class="control">
                                         <input name="password"
+                                               id="form-login-password"
                                                type="password"
                                                class="form-input input-text"
                                                required
