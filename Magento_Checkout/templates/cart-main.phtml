@@ -125,10 +125,10 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
                 }).then((result) => {
                     return result.text()
 
-                }).then((body)=> {
+                }).then((body) => {
                     hyva.setCookie('mage-cache-sessid', '', -1, true);
                     window.checkoutConfig = null;
-                    hyva.replaceElement('#maincontent', body)
+                    hyva.replaceDomElement('#maincontent', body)
 
                 }).catch((error) => {
                     console.error(error);
