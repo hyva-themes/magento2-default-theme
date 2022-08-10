@@ -1,0 +1,30 @@
+# Defaults
+variables:
+  SRC_DIR: '.'
+
+include:
+  -  project: 'hyva-themes/base-ci'
+     file: 'lint/php.yml'
+     ref: main
+  -  project: 'hyva-themes/base-ci'
+     file: 'static/phpcs.yml'
+     ref: main
+  -  project: 'hyva-themes/base-ci'
+     file: 'test/integration.yml'
+     ref: main
+  -  project: 'hyva-themes/base-ci'
+     file: 'test/cypress.yml'
+     ref: main
+
+test:integration:
+  variables:
+    MAGEVERSION: '2.4.4'
+  extends: .test:integration
+
+test:cypress:
+  extends: .test:cypress
+  parallel:
+    matrix:
+      #- Note: the cypress tests do not pass on some of the oder versions (cart and account).
+      #- MAGEVERSION: ['2.4.4', '2.4.3-p2', '2.4.2-p2', '2.4.1-p1', '2.4.0-p1', '2.4.0']
+      -   MAGEVERSION: [ '2.4.4' ]
