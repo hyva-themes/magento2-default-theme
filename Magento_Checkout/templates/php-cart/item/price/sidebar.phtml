@@ -11,17 +11,19 @@ declare(strict_types=1);
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\ProductPrice;
 use Magento\Checkout\Block\Item\Price\Renderer as PriceRenderer;
+use Magento\Framework\Escaper;
 
 /** @var PriceRenderer $block */
 /** @var ViewModelRegistry $viewModels */
+/** @var Escaper $escaper */
 
 $item = $block->getItem();
 $productPriceViewModel = $viewModels->require(ProductPrice::class);
 ?>
 <div class="price-container">
-    <span class="price-label"><?= $block->escapeHtml(__('Price')) ?></span>
+    <span class="price-label"><?= $escaper->escapeHtml(__('Price')) ?></span>
     <span class="price-wrapper">
-        <?= $block->escapeHtml(
+        <?= $escaper->escapeHtml(
             $productPriceViewModel->formatPrice($item->getCalculationPrice()),
             ['span']
         ) ?>

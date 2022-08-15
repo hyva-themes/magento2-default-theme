@@ -45,7 +45,7 @@ $optionPrice = $productPriceViewModel->getCustomOptionPrice($option, CustomOptio
         </span>
     </label>
 
-    <?php if ($fileExists):?>
+    <?php if ($fileExists): ?>
     <div class="ml-2 text-gray-900 text-left w-full sm:w-1/2">
         <span class="<?= /* @noEscape */ $fileNamed ?> inline-block my-2 mr-2">
             <?= $escaper->escapeHtml($fileInfo->getTitle()) ?>
@@ -104,19 +104,19 @@ $optionPrice = $productPriceViewModel->getCustomOptionPrice($option, CustomOptio
                     $event.target
                 )"
         />
-        <?php if ($option->getFileExtension()):?>
+        <?php if ($option->getFileExtension()): ?>
             <p class="my-2 text-sm">
                 <?= $escaper->escapeHtml(__('Compatible file extensions to upload')) ?>:
                 <strong><?= $escaper->escapeHtml($option->getFileExtension()) ?></strong>
             </p>
         <?php endif; ?>
-        <?php if ($option->getImageSizeX() > 0):?>
+        <?php if ($option->getImageSizeX() > 0): ?>
             <p class="my-2 text-sm">
                 <?= $escaper->escapeHtml(__('Maximum image width')) ?>: <strong><?= (int)$option->getImageSizeX()
                 ?> <?= $escaper->escapeHtml(__('px.')) ?></strong>
             </p>
         <?php endif; ?>
-        <?php if ($option->getImageSizeY() > 0):?>
+        <?php if ($option->getImageSizeY() > 0): ?>
             <p class="my-2 text-sm">
                 <?= $escaper->escapeHtml(__('Maximum image height')) ?>: <strong><?= (int)$option->getImageSizeY()
                 ?> <?= $escaper->escapeHtml(__('px.')) ?></strong>

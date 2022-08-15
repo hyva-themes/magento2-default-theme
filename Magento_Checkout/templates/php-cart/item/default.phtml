@@ -57,7 +57,7 @@ $isVisibleProduct = $product->isVisibleInSiteVisibility();
                                 <?php if (isset($formatedOptionValue['full_view'])): ?>
                                         <?= $escaper->escapeHtml($formatedOptionValue['full_view']) ?>
                                     <?php else: ?>
-                                    <?= $escaper->escapeHtml($formatedOptionValue['value'], ['span', 'a']) ?>
+                                        <?= $escaper->escapeHtml($formatedOptionValue['value'], ['span', 'a']) ?>
                                 <?php endif; ?>
                             </dd>
                         <?php endforeach; ?>

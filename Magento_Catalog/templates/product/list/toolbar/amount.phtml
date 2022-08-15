@@ -31,7 +31,7 @@ use Magento\Framework\Escaper;
             __('%1 Item', '<span class="toolbar-number">' . $block->getTotalNum() . '</span>'),
             ['span']
         ) ?>
-    <?php else:?>
+    <?php else: ?>
         <?= $escaper->escapeHtml(
             __('%1 Items', '<span class="toolbar-number">' . $block->getTotalNum() . '</span>'),
             ['span']

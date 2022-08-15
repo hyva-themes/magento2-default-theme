@@ -16,7 +16,7 @@ $product = $block->getProduct();
 $productId = $product->getId();
 $attributes = $block->decorateArray($block->getAllowAttributes());
 ?>
-<?php if ($product->isSaleable() && count($attributes)):?>
+<?php if ($product->isSaleable() && count($attributes)): ?>
 
     <script>
         function initConfigurableDropdownOptions_<?= (int) $productId ?>() {

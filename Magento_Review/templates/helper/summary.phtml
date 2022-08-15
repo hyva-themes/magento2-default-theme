@@ -29,7 +29,7 @@ $reviewCount = $block->getReviewsCount();
          itemtype="http://schema.org/AggregateRating"<?php endif; ?>>
         <?php if ($reviewCount): ?>
             <span class="hidden" itemprop="ratingValue"><?= $starsFilled + $starFragment; ?></span>
-            <span class="hidden" itemprop="reviewCount"><?= $reviewCount; ?></span>
+            <span class="hidden" itemprop="reviewCount"><?= (int) $reviewCount; ?></span>
         <?php endif; ?>
         <?php if ($rating): ?>
             <?php $i = 0; ?>

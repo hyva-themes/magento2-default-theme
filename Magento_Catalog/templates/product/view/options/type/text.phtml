@@ -62,7 +62,7 @@ $optionPrice = $productPriceViewModel->getCustomOptionPrice($option, CustomOptio
                         $event.target
                    )"
             />
-        <?php elseif ($option->getType() == ProductCustomOptionInterface::OPTION_TYPE_AREA):?>
+        <?php elseif ($option->getType() == ProductCustomOptionInterface::OPTION_TYPE_AREA): ?>
             <textarea id="options_<?= $escaper->escapeHtmlAttr($option->getId()) ?>_text"
                       class="product-custom-option form-textarea"
                       <?php if ($option->getMaxCharacters()): ?>
@@ -83,7 +83,7 @@ $optionPrice = $productPriceViewModel->getCustomOptionPrice($option, CustomOptio
                    )"
             ><?= $escaper->escapeHtml($block->getDefaultValue()) ?></textarea>
         <?php endif; ?>
-        <?php if ($option->getMaxCharacters()):?>
+        <?php if ($option->getMaxCharacters()): ?>
             <p class="note text-sm">
                 <?= $escaper->escapeHtml(__('Maximum %1 characters', $option->getMaxCharacters())) ?>
             </p>

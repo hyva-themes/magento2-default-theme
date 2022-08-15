@@ -106,7 +106,7 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
          class="wishlist-widget mt-8 hidden"
          :class="{ 'hidden': itemCount === 0 }">
         <div class="border-t border-container mb-6 pt-5">
-            <strong class="title text-primary font-semibold text-lg"><?= $block->escapeHtml($block->getTitle()) ?></strong>
+            <strong class="title text-primary font-semibold text-lg"><?= $escaper->escapeHtml($block->getTitle()) ?></strong>
             <span class="counter text-xs" x-html="wishlistCountLabel"></span>
         </div>
         <template x-if="itemCount">

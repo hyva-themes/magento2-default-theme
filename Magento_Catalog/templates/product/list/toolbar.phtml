@@ -88,7 +88,7 @@ $additionalOptions = ['page' => 'p'];
     <div x-data="initToolbar<?= /** @noEscape */ $uniqueId ?>()"
          class="toolbar toolbar-products grid grid-cols-4 sm:grid-cols-8 md:grid-cols-4
             lg:grid-cols-8  grid-flow-row gap-2 items-center">
-        <?php if ($block->isExpanded()):?>
+        <?php if ($block->isExpanded()): ?>
             <?php include $block->getTemplateFile('Magento_Catalog::product/list/toolbar/viewmode.phtml') ?>
             <?php include $block->getTemplateFile('Magento_Catalog::product/list/toolbar/sorter.phtml') ?>
         <?php endif; ?>

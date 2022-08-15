@@ -14,7 +14,7 @@ use Magento\Framework\Escaper;
 /** @var Success $block */
 /** @var Escaper $escaper */
 ?>
-<?php if ($block->getCanViewOrder() && $block->getCanPrintOrder()):?>
+<?php if ($block->getCanViewOrder() && $block->getCanPrintOrder()): ?>
     <a href="<?= $escaper->escapeUrl($block->getPrintUrl()) ?>"
        class="ml-auto"
        target="_blank"

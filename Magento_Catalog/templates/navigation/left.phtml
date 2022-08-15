@@ -23,7 +23,7 @@ use Magento\Framework\Escaper;
 } ?>
 <?php $categories = $block->getCurrentChildCategories() ?>
 <?php $count = is_array($categories) ? count($categories) : $categories->count(); ?>
-<?php if ($count):?>
+<?php if ($count): ?>
     <div class="card border border-container p-4 mx-6 md:mx-0 mb-8">
         <div class="title">
             <strong><?= $escaper->escapeHtml(__('Shop By')) ?></strong>
@@ -36,10 +36,10 @@ use Magento\Framework\Escaper;
                     <ol class="items">
                         <?php /** @var \Magento\Catalog\Model\Category $category */ ?>
                         <?php foreach ($categories as $category):?>
-                            <?php if ($category->getIsActive()):?>
+                            <?php if ($category->getIsActive()): ?>
                                 <li class="item">
                                     <a href="<?= $escaper->escapeUrl($block->getCategoryUrl($category)) ?>"
-                                        <?php if ($block->isCategoryActive($category)):?>
+                                        <?php if ($block->isCategoryActive($category)): ?>
                                             class="current"
                                         <?php endif; ?>
                                     ><?= $escaper->escapeHtml($category->getName()) ?></a>
