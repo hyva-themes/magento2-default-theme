@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.17...main
 
-## [1.1.17] - 2022-087-11
+## [1.1.17] - 2022-087-16
 
 [1.1.17]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.16...1.1.17
 
@@ -48,6 +48,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   For more information please refer to the [issue #412](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/412).
 
   Many thanks to Nataly Gorupaha (Atwix) for the contribution!
+
+- **Add default red textColor**
+
+  The css class `text-red` was used in several templates, but no default text color was declared for the default theme.
+
+  For more information please refer to the [merge request #497](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/497).
 
 ### Changed
 
