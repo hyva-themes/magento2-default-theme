@@ -128,7 +128,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                     </div>
                 </div>
 
-                <p class="my-4 text-red invisible"
+                <p class="my-4 text-red"
                    :class="passwordsMatching ? 'invisible' : 'visible'"
                 >
                     <?= $escaper->escapeHtml(__('Your password confirmation must match your password.')) ?>
