@@ -68,7 +68,7 @@ $hideRatingSummary = $block->getData('hide_rating_summary') ?: false;
 
 <?php if ($product->isSaleable()): ?>
 <form method="post"
-    action="<?= $escaper->escapeUrl($productViewModel->getAddToCartUrl($product)) ?>"
+    action="<?= $escaper->escapeUrl($productViewModel->getAddToCartUrl($product, ['useUencPlaceholder' => true])) ?>"
     class="item product product-item product_addtocart_form card card-interactive flex flex-col w-full <?= $viewIsGrid ? '' : 'md:flex-row' ?>"
     <?php if ($product->getOptions()): ?>
     enctype="multipart/form-data"
