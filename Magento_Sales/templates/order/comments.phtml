@@ -21,7 +21,7 @@ use Magento\Sales\Block\Order\Comments;
                     class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">
                     <?= /* @noEscape */
                     $block->formatDate($commentItem->getCreatedAt(), \IntlDateFormatter::MEDIUM, false) ?></h2>
-                <p class="leading-relaxed text-gray-600"><?= $escaper->escapeHtml($commentItem->getComment()) ?></p>
+                <p class="leading-relaxed text-gray-600"><?= $escaper->escapeHtml($commentItem->getComment(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?></p>
             </div>
         <?php endforeach; ?>
     </div>
