@@ -137,6 +137,8 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     </button>
                 </div>
                 <div class="flex flex-col h-full py-6 space-y-6 bg-white shadow-xl">
+                    <?= $block->getChildHtml('cart-drawer.top'); ?>
+
                     <header class="px-4 sm:px-6">
                         <h2 id="cart-drawer-title" class="text-lg font-medium leading-7 text-gray-900">
                             <?= $escaper->escapeHtml(__('My Cart')) ?>
@@ -146,6 +148,9 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                             </span>
                         </h2>
                     </header>
+
+                    <?= $block->getChildHtml('cart-drawer.items.before'); ?>
+
                     <div class="relative grid gap-6 px-4 py-6 overflow-y-auto bg-white border-b
                         sm:gap-8 sm:px-6 border-container">
                         <template x-for="item in cartItems">
@@ -180,7 +185,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                             <?= $heroicons->pencilHtml('', 20, 20); ?>
                                         </a>
                                         <button class="inline-flex p-2 btn btn-primary"
-                                            @click="deleteItemFromCart(item.item_id)"
+                                                @click="deleteItemFromCart(item.item_id)"
                                         >
                                             <?= $heroicons->trashHtml('', 20, 20); ?>
                                         </button>
@@ -190,6 +195,9 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                             </div>
                         </template>
                     </div>
+
+                    <?= $block->getChildHtml('cart-drawer.totals.before'); ?>
+
                     <div class="relative grid gap-6 px-4 py-6 bg-white sm:gap-8 sm:px-6">
                         <div class="w-full p-3 -m-3 space-x-4 transition duration-150 ease-in-out rounded-lg
                             hover:bg-gray-100">
@@ -199,8 +207,8 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                             rounded-lg hover:bg-gray-100">
                             <a @click.prevent.stop="$dispatch('toggle-authentication',
                                 {url: '<?= $escaper->escapeUrl($block->getUrl('checkout')) ?>'});"
-                                href="<?= $escaper->escapeUrl($block->getUrl('checkout')) ?>"
-                                class="inline-flex btn btn-primary">
+                               href="<?= $escaper->escapeUrl($block->getUrl('checkout')) ?>"
+                               class="inline-flex btn btn-primary">
                                 <?= $escaper->escapeHtml(__('Checkout')) ?>
                             </a>
                             <span><?= $escaper->escapeHtml(__('or')) ?></span>
@@ -211,6 +219,8 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                         </div>
                         <?= $block->getChildHtml('extra_actions') ?>
                     </div>
+
+                    <?= $block->getChildHtml('cart-drawer.bottom'); ?>
                 </div>
             </div>
             <?= $block->getChildHtml('loading') ?>

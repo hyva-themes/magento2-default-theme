@@ -49,6 +49,10 @@
                 <block name="cart-drawer" template="Magento_Theme::html/cart/cart-drawer.phtml" ifconfig="checkout/sidebar/display">
                     <block name="cart-drawer-loading" as="loading" template="Hyva_Theme::ui/loading.phtml"/>
                     <block class="Magento\Catalog\Block\ShortcutButtons\InCatalog" name="extra_actions"/>
+                    <container name="cart-drawer.top"/>
+                    <container name="cart-drawer.items.before"/>
+                    <container name="cart-drawer.totals.before"/>
+                    <container name="cart-drawer.bottom"/>
                 </block>
 
                 <block name="topmenu_generic"
