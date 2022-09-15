@@ -1,25 +1,15 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="catalog_product_view"/>
     <body>
-        <referenceBlock name="product.detail.page">
-            <block class="Magento\Review\Block\Form\Configure"
-                   name="product.review.form"
-                   as="review_form"
-                   ifconfig="catalog/review/active"
-                   template="Magento_Review::form.phtml"
-            >
-                <container name="product.review.form.fields.before"
-                           as="form_fields_before"
-                           label="Review Form Fields Before"
-                />
-            </block>
-        </referenceBlock>
+        <referenceBlock name="product.review.form" class="Magento\Review\Block\Form\Configure"/>
     </body>
 </page>
