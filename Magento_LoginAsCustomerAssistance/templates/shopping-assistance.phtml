@@ -35,7 +35,7 @@ if (!$shoppingAssistanceViewModel->isLoginAsCustomerEnabled()) {
             showTooltip: false,
             onChange(value) {
                 /**
-                 * assistance_allowed accepts 1 for "allowed" and 2 for "not allowed"
+                 * assistance_allowed accepts 2 for "allowed" and 1 for "not allowed"
                  * if assistance_allowed_checkbox is set to false, we cast it to 0 and add 1 === "1"
                  * if assistance_allowed_checkbox is set to true, we cast it to 1 and add 1 === "2"
                  */
