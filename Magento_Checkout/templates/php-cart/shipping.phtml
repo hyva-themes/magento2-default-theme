@@ -413,7 +413,7 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                                     <?= $escaper->escapeHtml(__('Please select a region, state or province.')) ?>
                                 </option>
                                 <template x-for="region in getAvailableRegions()" :key="region.id">
-                                    <option :value="region.id" x-text="region.name" :selected="cartData.address && region.id == cartData.address.regionId"></option>
+                                    <option :data-code="region.code" :value="region.id" x-text="region.name" :selected="cartData.address && region.id == cartData.address.regionId"></option>
                                 </template>
                             </select>
                         </label>
@@ -478,3 +478,5 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
         </form>
     </div>
 </div>
+
+<?= $this->getChildHtml(); ?>
