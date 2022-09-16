@@ -17,6 +17,7 @@
                 <arguments>
                     <argument name="title" xsi:type="string" translate="true">Watches</argument>
                     <argument name="category_ids" xsi:type="string">6</argument>
+<!--                    <argument name="include_child_category_products" xsi:type="boolean">true</argument>-->
                     <argument name="page_size" xsi:type="string">8</argument>
 <!--                    <argument name="sort_attribute" xsi:type="string">position</argument>-->
 <!--                    <argument name="sort_direction" xsi:type="string">ASC</argument>-->

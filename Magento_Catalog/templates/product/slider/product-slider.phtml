@@ -35,6 +35,7 @@ $compareViewModel     = $viewModels->require(ProductCompare::class);
 $storeViewModel       = $viewModels->require(Store::class);
 
 $categoryIds       = $block->getData('category_ids') ?: '';
+$isAnchorCategory  = $block->getData('include_child_category_products');
 $pageSize          = $block->getData('page_size') ?: 8;
 $priceFrom         = $block->getData('price_from');
 $priceTo           = $block->getData('price_to');
@@ -53,6 +54,11 @@ $containerTemplate = $block->getData('container_template')
 
 if ($categoryIds) {
     $productListViewModel->addFilter('category_id', $categoryIds, 'in');
+}
+
+if ($isAnchorCategory) {
+    // Only has an effect if a single category ID filter is set, and that category is an anchor category
+    $productListViewModel->includeChildCategoryProducts();
 }
 
 if ($priceFrom) {
