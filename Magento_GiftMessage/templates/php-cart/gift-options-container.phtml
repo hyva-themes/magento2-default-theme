@@ -24,11 +24,10 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 
 $slideOutDrawer = (bool) $block->getSlideOutDrawer();
 
-$uniqueId = uniqid();
 ?>
 
 <script>
-    function initGiftOptions<?= /** @noEscape */ $uniqueId ?>() {
+    function initGiftOptions() {
         'use strict';
         return {
             inSlideOut: <?= $slideOutDrawer ? 'true' : 'false' ?>,
@@ -144,7 +143,7 @@ $uniqueId = uniqid();
     function initGiftItemOptions(options) {
         'use strict';
         const itemId = options.itemId;
-        return Object.assign({}, initGiftOptions<?= /** @noEscape */ $uniqueId ?>(), {
+        return Object.assign({}, initGiftOptions(), {
             itemId: itemId,
 
             isGiftMsgEnabled: window.giftOptionsConfig.isItemLevelGiftOptionsEnabled &&
@@ -190,7 +189,7 @@ $uniqueId = uniqid();
 >
     <?= $block->getChildHtml('loading') ?>
 </div>
-<div x-data="initGiftOptions<?= /** @noEscape */ $uniqueId ?>()" x-init="init" class="gift-options-component w-full flex flex-wrap my-6" :data-item-id="itemId" x-cloak>
+<div x-data="initGiftOptions()" x-init="init" class="gift-options-component w-full flex flex-wrap my-6" :data-item-id="itemId" x-cloak>
     <div class="text-left gift-options-title w-full order-first" x-show="isGiftMsgEnabled || hasActiveOptions">
         <span @click="formBlockVisibility = !formBlockVisibility" class="cursor-pointer text-primary-lighter select-none whitespace-nowrap underline">
             <?= $escaper->escapeHtml(__('Gift options')) ?>
