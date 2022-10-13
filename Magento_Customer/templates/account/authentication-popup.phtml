@@ -148,9 +148,9 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                 </div>
                 <div class="flex flex-col h-full py-6 space-y-6 bg-white shadow-xl overflow-y-auto">
                     <div class="block-customer-login bg-container border border-container mx-4 p-4 shadow-sm">
-                        <h2 id="authenticate-customer-login" class="text-lg font-medium leading-7 text-gray-900">
-                            <?= $escaper->escapeHtml(__('Checkout using your account')) ?>
-                        </h2>
+                        <p id="authenticate-customer-login" class="text-lg font-medium leading-7 text-gray-900">
+                            <strong><?= $escaper->escapeHtml(__('Checkout using your account')) ?></strong>
+                        </p>
 
                         <form class="form form-login"
                               method="post"
@@ -211,9 +211,9 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                         <?= $recaptcha ? $recaptcha->getLegalNoticeHtml('customer_login') : '' ?>
                     </div>
                     <div class="block-new-customer bg-container border border-container mx-4 p-4 shadow-sm">
-                        <h2 id="authenticate-new-customer" class="text-lg mb-2 font-medium leading-7 text-gray-900">
-                            <?= $escaper->escapeHtml(__('Checkout as a new customer')) ?>
-                        </h2>
+                        <p id="authenticate-new-customer" class="text-lg mb-2 font-medium leading-7 text-gray-900">
+                            <strong><?= $escaper->escapeHtml(__('Checkout as a new customer')) ?></strong>
+                        </p>
 
                         <div class="block-content">
                             <p class="mb-1">
