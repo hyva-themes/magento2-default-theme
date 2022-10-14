@@ -48,6 +48,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
   For more information please refer to [issue #473](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/473).
 
+- **Added missing customer widget templates**
+
+  Before the Luma version of the templates was used due to missing overrides in Hyvä.
+  The new templates are `Magento_Customer::widget/fax.phtml`, `Magento_Customer::widget/gender.phtml` and `Magento_Customer::widget/taxvat.phtml`.
+
+  For more information please refer to [merge request #543](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/543).
+
 ### Changed
 
 - **Validation of Postcode and Telephone fields in customer address form**
