@@ -6,6 +6,7 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\Model\LocaleFormatter;
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Magento\Framework\Escaper;
@@ -13,6 +14,7 @@ use Magento\Theme\Block\Html\Pager;
 
 /** @var Pager $block */
 /** @var Escaper $escaper */
+/** @var LocaleFormatter $localeFormatter */
 /** @var ViewModelRegistry $viewModels */
 
 /** @var HeroiconsOutline $heroicons */
@@ -38,12 +40,17 @@ $pagerItemBtnClass = $pagerItemClass
             <span class="toolbar-number">
             <?php if ($block->getLastPageNum() > 1): ?>
                 <?= $escaper->escapeHtml(
-                    __('Items %1 to %2 of %3 total', $block->getFirstNum(), $block->getLastNum(), $block->getTotalNum())
+                    __(
+                        'Items %1 to %2 of %3 total',
+                        $localeFormatter->formatNumber($block->getFirstNum()),
+                        $localeFormatter->formatNumber($block->getLastNum()),
+                        $localeFormatter->formatNumber($block->getTotalNum())
+                    )
                 ) ?>
             <?php elseif ($block->getTotalNum() == 1): ?>
-                <?= $escaper->escapeHtml(__('%1 Item', $block->getTotalNum())) ?>
+                <?= $escaper->escapeHtml(__('%1 Item', $localeFormatter->formatNumber($block->getTotalNum()))) ?>
             <?php else: ?>
-                <?= $escaper->escapeHtml(__('%1 Item(s)', $block->getTotalNum())) ?>
+                <?= $escaper->escapeHtml(__('%1 Item(s)', $localeFormatter->formatNumber($block->getTotalNum()))) ?>
             <?php endif; ?>
             </span>
         </p>
@@ -93,7 +100,7 @@ $pagerItemBtnClass = $pagerItemClass
                                 class="page first <?= /* @noEscape */ $pagerItemBtnClass ?> px-4 py-2 text-gray-500"
                             >
                                 <span class="sr-only label"><?= $escaper->escapeHtml(__('Page')) ?></span>
-                                <span>1</span>
+                                <span><?= $escaper->escapeHtml($localeFormatter->formatNumber(1)) ?></span>
                             </a>
                         </li>
                     <?php endif; ?>
@@ -104,6 +111,10 @@ $pagerItemBtnClass = $pagerItemClass
                                 href="<?= $escaper->escapeUrl($block->getPreviousJumpUrl()) . '#customer-review-list' ?>"
                                 class="page previous jump <?= /* @noEscape */ $pagerItemBtnClass ?> text-gray-700 px-4
                                  py-2"
+                                aria-label="<?= $escaper->escapeHtmlAttr(__(
+                                    'Skip to page %1',
+                                    $localeFormatter->formatNumber($block->getPreviousJumpPage())
+                                )) ?>"
                             >
                             <span aria-label="<?= $escaper->escapeHtml(__('Jump backward')) ?>">...</span>
                             </a>
@@ -127,7 +138,7 @@ $pagerItemBtnClass = $pagerItemClass
                                             __('You\'re currently reading page')
                                         ) ?>
                                     </span>
-                                    <span><?= $escaper->escapeHtml($page) ?></span>
+                                    <span><?= $escaper->escapeHtml($localeFormatter->formatNumber($page)) ?></span>
                                 </a>
                             </li>
                         <?php else: ?>
@@ -140,7 +151,7 @@ $pagerItemBtnClass = $pagerItemClass
                                     class="page <?= /* @noEscape */ $pagerItemBtnClass ?> px-4 py-2 text-gray-700"
                                 >
                                     <span class="sr-only label"><?= $escaper->escapeHtml(__('Page')) ?></span>
-                                    <span><?= $escaper->escapeHtml($page) ?></span>
+                                    <span><?= $escaper->escapeHtml($localeFormatter->formatNumber($page)) ?></span>
                                 </a>
                             </li>
                         <?php endif; ?>
@@ -151,6 +162,10 @@ $pagerItemBtnClass = $pagerItemClass
                             <a
                                 href="<?= $escaper->escapeUrl($block->getNextJumpUrl()) . '#customer-review-list'?>"
                                 class="page next jump <?= /* @noEscape */ $pagerItemBtnClass ?> px-4 py-2 text-gray-700"
+                                aria-label="<?= $escaper->escapeHtmlAttr(__(
+                                    'Skip to page %1',
+                                    $localeFormatter->formatNumber($block->getNextJumpPage())
+                                )) ?>"
                             >
                                 <span aria-label="<?= $escaper->escapeHtml(__('Jump forward')) ?>">...</span>
                             </a>
@@ -167,7 +182,7 @@ $pagerItemBtnClass = $pagerItemClass
                                 class="page last <?= /* @noEscape */ $pagerItemBtnClass ?> px-4 py-2"
                             >
                                 <span class="sr-only label"><?= $escaper->escapeHtml(__('Page')) ?></span>
-                                <span><?= $escaper->escapeHtml($block->getLastPageNum()) ?></span>
+                                <span><?= $escaper->escapeHtml($localeFormatter->formatNumber($block->getLastPageNum())) ?></span>
                             </a>
                         </li>
                     <?php endif; ?>
@@ -216,7 +231,7 @@ $pagerItemBtnClass = $pagerItemClass
                     <option value="<?= $escaper->escapeUrl($block->getLimitUrl($key)) ?>"
                         <?php if ($block->isLimitCurrent($key)): ?>
                             selected="selected"<?php endif ?>>
-                        <?= $escaper->escapeHtml($limit) ?>
+                        <?= $escaper->escapeHtml($localeFormatter->formatNumber((int) $limit)) ?>
                     </option>
                 <?php endforeach; ?>
             </select>
