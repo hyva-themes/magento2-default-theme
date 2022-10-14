@@ -27,11 +27,13 @@ use Magento\Framework\Escaper;
                 name="<?= $escaper->escapeHtmlAttr($block->getFieldName('gender')) ?>"
                 title="<?= $escaper->escapeHtmlAttr($block->getStoreLabel('gender')) ?>"
                 class="form-select"
-            <?php if ($block->isRequired()) : ?>required<?php endif; ?>>
+            <?php if ($block->isRequired()): ?>required<?php endif; ?>>
             <?php $options = $block->getGenderOptions(); ?>
             <?php $value = $block->getGender(); ?>
-            <?php foreach ($options as $option) : ?>
-                <option value="<?= $escaper->escapeHtmlAttr($option->getValue()) ?>"<?= ($option->getValue() == $value) ? ' selected="selected"' : '' ?>><?= $escaper->escapeHtml(__($option->getLabel())) ?></option>
+            <?php foreach ($options as $option): ?>
+                <option value="<?= $escaper->escapeHtmlAttr($option->getValue()) ?>"
+                    <?= ($option->getValue() == $value) ? 'selected="selected"' : '' ?>
+                ><?= $escaper->escapeHtml(__($option->getLabel())) ?></option>
             <?php endforeach;?>
         </select>
     </div>
