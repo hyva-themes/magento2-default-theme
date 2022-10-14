@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.18...main
 
-## [1.1.18] - 2022-09-19
+## [1.1.18] - 2022-10-14
 
 [1.1.18]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.17...1.1.18
 
@@ -153,6 +153,28 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
   Many thanks to Kiel Pykett (Youwe - formerly Fisheye) for the contribution!
 
+- **Simplify password confirmation match checking function**
+
+  For more information please refer to [merge request #521](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/521).
+
+  Many thanks to Kiel Pykett (Youwe - formerly Fisheye) for the contribution!
+
+- **Integrate changes from Magento 2.4.5**
+
+  These changes include rendering numbers with a LocalFormatter, and adding new view models to that allow disabling some functionality in Adobe Commerce.  
+  Because Hyvä supports Magento since 2.4.0 wrapper classes are used to provide the same functionality in Magento versions befor 2.4.5.
+
+  For more information please refer to [issue #479](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/479).
+
+  Many thanks to Peter Jaap Blaakmeer (Elgentos) for the contribution!
+
+- **Replace h2 in authentication-popup with strong tag to avoid wrong title tag order**
+
+  This change is a SEO improvement.
+
+  For more information please refer to [issue #486](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/486).
+
+  Many thanks to Sean van Zuidam (Grimlink) for the contribution!
 
 ### Removed
 
