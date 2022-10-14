@@ -1,0 +1,38 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Customer\Block\Widget\Fax;
+use Magento\Customer\Helper\Address as AddressHelper;
+use Magento\Framework\Escaper;
+
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
+
+/** @var Escaper $escaper */
+/** @var Fax $block */
+
+$validationClass = $escaper->escapeHtmlAttr($this->helper(AddressHelper::class)->getAttributeValidationClass('fax'));
+
+?>
+<div class="field field-reserved fax <?= $block->isRequired() ? 'required' : '' ?>">
+    <label for="fax" class="label">
+        <span>
+            <?= $escaper->escapeHtml(__('Fax')) ?>
+        </span>
+    </label>
+    <div class="control">
+        <input type="text"
+               name="fax"
+               id="fax"
+               value="<?= $escaper->escapeHtmlAttr($block->getFax()) ?>"
+               title="<?= $escaper->escapeHtmlAttr(__('Fax')) ?>"
+               class="form-input <?= $validationClass ?: '' ?>"
+        >
+    </div>
+</div>

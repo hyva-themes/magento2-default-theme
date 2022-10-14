@@ -1,0 +1,32 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Customer\Block\Widget\Taxvat;
+use Magento\Customer\Helper\Address as AddressHelper;
+use Magento\Framework\Escaper;
+
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
+
+/** @var Escaper $escaper */
+/** @var Taxvat $block */
+?>
+<div class="field field-reserved taxvat <?= $block->isRequired() ? 'required' : ''; ?>">
+    <label class="label" for="<?= $escaper->escapeHtmlAttr($block->getFieldId('taxvat')) ?>"><span><?= $escaper->escapeHtml($block->getStoreLabel('taxvat')) ?></span></label>
+    <div class="control">
+        <input type="text"
+               id="<?= $escaper->escapeHtmlAttr($block->getFieldId('taxvat')) ?>"
+               name="<?= $escaper->escapeHtmlAttr($block->getFieldName('taxvat')) ?>"
+               value="<?= $escaper->escapeHtmlAttr($block->getTaxvat()) ?>"
+               title="<?= $escaper->escapeHtmlAttr($block->getStoreLabel('taxvat')) ?>"
+               class="form-input <?= $escaper->escapeHtmlAttr($this->helper(AddressHelper::class)->getAttributeValidationClass('taxvat')) ?>"
+            <?= $block->isRequired() ? ' required' : '' ?>
+        >
+    </div>
+</div>
