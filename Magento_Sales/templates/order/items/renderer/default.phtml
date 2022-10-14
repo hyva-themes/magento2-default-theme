@@ -6,11 +6,13 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\Model\LocaleFormatter;
 use Magento\Framework\Escaper;
 use Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer;
 
 /** @var DefaultRenderer $block */
 /** @var Escaper $escaper */
+/** @var LocaleFormatter $localeFormatter */
 
 $item = $block->getItem();
 $cols = $block->getData('is_context_shipment') ? 3 : ($block->getData('is_context_creditmemo') ? 7 : 5);
@@ -76,34 +78,34 @@ $cols = $block->getData('is_context_shipment') ? 3 : ($block->getData('is_contex
         </p>
         <div class="text-right lg:text-left">
             <?php if ($block->getData('is_context_invoice') || $block->getData('is_context_creditmemo')): ?>
-                <span class="content"><?= (float)$block->getItem()->getQty() ?></span>
+                <span class="content"><?= /** @noEscape */ $localeFormatter->formatNumber($block->getItem()->getQty()) ?></span>
             <?php endif; ?>
             <?php if ($block->getData('is_context_shipment')): ?>
-                <span class="content"><?= (float)$block->getItem()->getQty() ?></span>
+                <span class="content"><?= /** @noEscape */ $localeFormatter->formatNumber($block->getItem()->getQty()) ?></span>
             <?php endif; ?>
             <?php if ($block->getData('is_context_order')): ?>
                 <?php if ($block->getItem()->getQtyOrdered() > 0): ?>
                     <p>
                         <span class="title"><?= $escaper->escapeHtml(__('Ordered')) ?>:</span>
-                        <span class="content"><?= (float)$block->getItem()->getQtyOrdered() ?></span>
+                        <span class="content"><?= /** @noEscape */ $localeFormatter->formatNumber($block->getItem()->getQtyOrdered()) ?></span>
                     </p>
                 <?php endif; ?>
                 <?php if ($block->getItem()->getQtyShipped() > 0): ?>
                     <p>
                         <span class="title"><?= $escaper->escapeHtml(__('Shipped')) ?>:</span>
-                        <span class="content"><?= (float)$block->getItem()->getQtyShipped() ?></span>
+                        <span class="content"><?= /** @noEscape */ $localeFormatter->formatNumber($block->getItem()->getQtyShipped()) ?></span>
                     </p>
                 <?php endif; ?>
                 <?php if ($block->getItem()->getQtyCanceled() > 0): ?>
                     <p>
                         <span class="title"><?= $escaper->escapeHtml(__('Canceled')) ?>:</span>
-                        <span class="content"><?= (float)$block->getItem()->getQtyCanceled() ?></span>
+                        <span class="content"><?= /** @noEscape */ $localeFormatter->formatNumber($block->getItem()->getQtyCanceled()) ?></span>
                     </p>
                 <?php endif; ?>
                 <?php if ($block->getItem()->getQtyRefunded() > 0): ?>
                     <p>
                         <span class="title"><?= $escaper->escapeHtml(__('Refunded')) ?>:</span>
-                        <span class="content"><?= (float)$block->getItem()->getQtyRefunded() ?></span>
+                        <span class="content"><?= /** @noEscape */ $localeFormatter->formatNumber($block->getItem()->getQtyRefunded()) ?></span>
                     </p>
                 <?php endif; ?>
             <?php endif; ?>
