@@ -11,9 +11,6 @@ declare(strict_types=1);
 use Magento\Catalog\Block\Product\ProductList\Toolbar;
 use Magento\Framework\Escaper;
 
-// phpcs:disable Magento2.Security.IncludeFile.FoundIncludeFile
-// phpcs:disable Generic.Files.LineLength.TooLong
-
 /** @var Escaper $escaper */
 /** @var Toolbar $block */
 
@@ -88,16 +85,15 @@ $additionalOptions = ['page' => 'p'];
     <div x-data="initToolbar<?= /** @noEscape */ $uniqueId ?>()"
          class="toolbar toolbar-products grid grid-cols-4 sm:grid-cols-8 md:grid-cols-4
             lg:grid-cols-8  grid-flow-row gap-2 items-center">
-        <?php if ($block->isExpanded()): ?>
-            <?php include $block->getTemplateFile('Magento_Catalog::product/list/toolbar/viewmode.phtml') ?>
-            <?php include $block->getTemplateFile('Magento_Catalog::product/list/toolbar/sorter.phtml') ?>
-        <?php endif; ?>
-
-        <?php include $block->getTemplateFile('Magento_Catalog::product/list/toolbar/amount.phtml') ?>
-
-        <?= $block->getPagerHtml() ?>
-
-        <?php include $block->getTemplateFile('Magento_Catalog::product/list/toolbar/limiter.phtml') ?>
-
+        <?php if ($block->getIsBottom()): ?>
+            <?= /** @noEscape */  $block->fetchView($block->getTemplateFile('Magento_Catalog::product/list/toolbar/amount.phtml')) ?>
+            <?= $block->getPagerHtml() ?>
+            <?= /** @noEscape */ $block->fetchView($block->getTemplateFile('Magento_Catalog::product/list/toolbar/limiter.phtml')) ?>
+        <?php else: ?>
+            <?php if ($block->isExpanded()): ?>
+                <?= /** @noEscape */ $block->fetchView($block->getTemplateFile('Magento_Catalog::product/list/toolbar/viewmode.phtml')) ?>
+                <?= /** @noEscape */ $block->fetchView($block->getTemplateFile('Magento_Catalog::product/list/toolbar/sorter.phtml')) ?>
+            <?php endif ?>
+        <?php endif ?>
     </div>
 <?php endif ?>

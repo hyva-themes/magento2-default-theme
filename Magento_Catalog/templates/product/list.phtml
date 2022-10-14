@@ -73,6 +73,6 @@ $productCollection = $block->getLoadedProductCollection();
                 <?php endforeach; ?>
             </div>
         </div>
-        <?= $block->getToolbarHtml() ?>
+        <?= $block->getChildBlock('toolbar')->setIsBottom(true)->toHtml() ?>
     </section>
 <?php endif; ?>
