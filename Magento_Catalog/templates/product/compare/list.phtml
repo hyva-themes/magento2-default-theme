@@ -230,7 +230,7 @@ function initWishlist() {
                                             @click.prevent="addToWishlist(<?= (int)$product->getId() ?>)"
                                             aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Wish List')) ?>"
                                             class="rounded-full w-9 h-9 bg-gray-200 p-0 border-0 inline-flex
-                                            flex-shrink-0 items-center justify-center text-gray-500 hover:text-red-600
+                                            shrink-0 items-center justify-center text-gray-500 hover:text-red-600
                                             ml-2"
                                         >
                                             <?= $heroiconsSolid->heartHtml('', 20, 20); ?>
@@ -240,7 +240,7 @@ function initWishlist() {
                                         @click.prevent="removeFromCompare(<?= (int)$product->getId() ?>, '<?= $escaper
                                             ->escapeJs($product->getName()) ?>')"
                                         aria-label="<?= $escaper->escapeHtmlAttr(__('Remove Product')) ?>"
-                                        class="rounded-full w-9 h-9 bg-gray-200 p-0 border-0 inline-flex flex-shrink-0
+                                        class="rounded-full w-9 h-9 bg-gray-200 p-0 border-0 inline-flex shrink-0
                                         items-center justify-center text-gray-500 hover:text-black ml-2"
                                         title="<?= $escaper->escapeHtmlAttr(__('Remove Product')) ?>">
                                         <?= $heroicons->xHtml('', 20, 20); ?>

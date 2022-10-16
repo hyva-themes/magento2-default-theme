@@ -28,9 +28,9 @@ $isVisibleProduct = $product->isVisibleInSiteVisibility();
                 <a href="<?= $escaper->escapeUrl($block->getProductUrl()) ?>"
                    title="<?= $escaper->escapeHtmlAttr($block->getProductName()) ?>"
                    tabindex="-1"
-                   class="product-item-photo flex-shrink-0">
+                   class="product-item-photo shrink-0">
             <?php else: ?>
-                <span class="product-item-photo flex-shrink-0">
+                <span class="product-item-photo shrink-0">
             <?php endif;?>
             <?= $block->getImage($block->getProductForThumbnail(), 'cart_page_product_thumbnail')
                 ->setTemplate('Magento_Catalog::product/image.phtml')
@@ -40,7 +40,7 @@ $isVisibleProduct = $product->isVisibleInSiteVisibility();
             <?php else: ?>
                 </span>
             <?php endif; ?>
-            <div class="product-item-details flex-grow">
+            <div class="product-item-details grow">
                 <strong class="product-item-name break-all">
                     <?php if ($block->hasProductUrl()): ?>
                         <a href="<?= $escaper->escapeUrl($block->getProductUrl()) ?>"><?= $escaper->escapeHtml($block->getProductName()) ?></a>

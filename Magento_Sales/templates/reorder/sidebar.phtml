@@ -113,7 +113,7 @@ if (! $customer->customerLoggedIn()) {
                     <ol id="cart-sidebar-reorder" class="product-items product-items-names">
                         <template x-for="product in reorderItems">
                             <li class="flex items-start mb-4">
-                                <div class="flex-shrink-0 mr-2">
+                                <div class="shrink-0 mr-2">
                                     <label class="label hidden">
                                         <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
                                     </label>
