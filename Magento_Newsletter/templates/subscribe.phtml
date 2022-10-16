@@ -46,7 +46,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                 placeholder="<?= $escaper->escapeHtmlAttr(__('Enter your email address')) ?>">
             <?= $block->getBlockHtml('formkey') ?>
             <?= $recaptcha ? $recaptcha->getInputHtml(ReCaptcha::RECAPTCHA_FORM_ID_NEWSLETTER) : '' ?>
-            <button class="inline-flex flex-shrink-0 ml-auto xl:mt-0 btn btn-primary">
+            <button class="inline-flex shrink-0 ml-auto xl:mt-0 btn btn-primary">
                 <?= $escaper->escapeHtml(__('Subscribe')) ?>
             </button>
         </div>

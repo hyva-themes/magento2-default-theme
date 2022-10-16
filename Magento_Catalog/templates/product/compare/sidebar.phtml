@@ -130,7 +130,7 @@ function initCompareSidebarClear() {
             <template x-for="product in compareItems">
                 <li class="flex items-start mb-4">
                     <a :href="product.product_url"
-                        class="block mb-3 w-10 h-10 flex-shrink-0 mr-4"
+                        class="block mb-3 w-10 h-10 shrink-0 mr-4"
                         :title="product.name">
                         <img :src="product.image" :alt="product.name" loading="lazy">
                     </a>
@@ -140,7 +140,7 @@ function initCompareSidebarClear() {
                     <button
                         @click.prevent="removeFromCompare(product.id)"
                         aria-label="<?= $escaper->escapeHtmlAttr(__('Remove Product')) ?>"
-                        class="p-1 inline-flex flex-shrink-0 items-center justify-center text-gray-500
+                        class="p-1 inline-flex shrink-0 items-center justify-center text-gray-500
                                hover:text-primary ml-auto"
                         title="<?= $escaper->escapeHtmlAttr(__('Remove Product')) ?>">
                         <?= $heroicons->xHtml('', 20, 20); ?>
@@ -158,7 +158,7 @@ function initCompareSidebarClear() {
         <button x-data="initCompareSidebarClear()"
             @click.prevent="clearCompare()"
             aria-label="<?= $escaper->escapeHtmlAttr(__('Remove all Products')) ?>"
-            class="p-1 inline-flex flex-shrink-0 items-center justify-center text-gray-500 hover:text-primary ml-auto">
+            class="p-1 inline-flex shrink-0 items-center justify-center text-gray-500 hover:text-primary ml-auto">
             <span><?= $escaper->escapeHtml(__('Clear all')); ?></span>
         </button>
     </div>

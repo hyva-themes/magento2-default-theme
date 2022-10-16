@@ -114,7 +114,7 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
                 <template x-for="product in wishlistItems">
                     <li class="flex items-start mb-4">
                         <a :href="product.product_url"
-                           class="block mb-3 w-10 h-10 flex-shrink-0 mr-4"
+                           class="block mb-3 w-10 h-10 shrink-0 mr-4"
                            :title="product.product_name">
                             <img :src="product.image.src" :alt="product.product_name" loading="lazy">
                         </a>
@@ -139,7 +139,7 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
                         <button
                             @click.prevent="removeFromWishlist(product.delete_item_params)"
                             aria-label="<?= $escaper->escapeHtmlAttr(__('Remove Product')) ?>"
-                            class="p-1 inline-flex flex-shrink-0 items-center justify-center text-gray-500
+                            class="p-1 inline-flex shrink-0 items-center justify-center text-gray-500
                                    hover:text-primary ml-auto"
                             title="<?= $escaper->escapeHtmlAttr(__('Remove Product')) ?>">
                             <?= $heroiconsOutline->xHtml('h-6 w-6', 25, 25); ?>

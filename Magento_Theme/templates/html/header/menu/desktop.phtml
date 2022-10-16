@@ -55,7 +55,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                     </span>
                     <?php if (!empty($menuItem['childData'])): ?>
                         <div
-                            class="absolute z-10 hidden px-6 py-4 -ml-6 shadow-lg bg-container-lighter bg-opacity-95"
+                            class="absolute z-10 hidden px-6 py-4 -ml-6 shadow-lg bg-container-lighter/95"
                             :class="{
                                 'hidden' : hoverPanelActiveId !== '<?= /* @noEscape */ (string) $index ?>',
                                 'block' : hoverPanelActiveId === '<?= /* @noEscape */ (string) $index ?>'

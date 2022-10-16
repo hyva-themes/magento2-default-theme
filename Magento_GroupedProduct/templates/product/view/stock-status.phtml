@@ -27,13 +27,13 @@ $hasAssociatedProducts = count($associatedProducts) > 0;
     <?php if ($product->isAvailable() && $hasAssociatedProducts): ?>
         <p class="flex items-center justify-end align-middle available gap-x-2 stock"
            title="<?= $escaper->escapeHtmlAttr(__('Availability')) ?>">
-            <span class="w-3 h-3 bg-green-500 rounded-full flex-shrink-0"></span>
+            <span class="w-3 h-3 bg-green-500 rounded-full shrink-0"></span>
             <span><?= $escaper->escapeHtml(__('In stock')) ?></span>
         </p>
     <?php else: ?>
         <p class="flex items-center justify-end align-middle gap-x-2 unavailable stock"
            title="<?= $escaper->escapeHtmlAttr(__('Availability')) ?>">
-            <span class="w-3 h-3 bg-red-500 rounded-full flex-shrink-0"></span>
+            <span class="w-3 h-3 bg-red-500 rounded-full shrink-0"></span>
             <span><?= $escaper->escapeHtml(__('Out of stock')) ?></span>
         </p>
     <?php endif; ?>

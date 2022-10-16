@@ -36,12 +36,12 @@ if (!$productId || !$attributeId) {
             :for="'attribute-option-<?= (int) $productId ?>-'+item.id"
             class="swatch-option relative border-2 shadow-sm cursor-pointer select-none bg-container-lighter product-option-value-label"
             :class="{
-                'border-container-lighter ring ring-primary ring-opacity-50':
+                'border-container-lighter ring ring-primary/50':
                     (selectedValues[<?= (int)$attributeId ?>] === item.id),
                 'border-container-darker':
                     (selectedValues[<?= (int)$attributeId ?>] !== item.id),
                 'w-6 h-6' : !isTextSwatch(<?= (int) $attributeId ?>, item.id),
-                'border-container-lighter ring ring-primary ring-opacity-75' : focusedLabel === item.id
+                'border-container-lighter ring ring-primary/75' : focusedLabel === item.id
             }"
             :style="getSwatchBackgroundStyle('<?= (int) $attributeId ?>',item.id)"
             <?php if ($configurableViewModel->getShowSwatchTooltip()): ?>
@@ -86,7 +86,7 @@ if (!$productId || !$attributeId) {
                  class="whitespace-nowrap"
                  :class="{ 'sr-only' : !isTextSwatch(<?= (int) $attributeId ?>, item.id) }"
             ></div>
-            <svg class="absolute inset-0 w-full h-full text-gray-500 bg-white bg-opacity-25">
+            <svg class="absolute inset-0 w-full h-full text-gray-500 bg-white/25">
                 <line x1="0" y1="100%" x2="100%" y2="0" class="stroke-current stroke-1"></line>
             </svg>
         </div>
