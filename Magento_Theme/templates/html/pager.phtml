@@ -20,6 +20,10 @@ use Magento\Theme\Block\Html\Pager;
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
 
+$paginationUrlAnchor = $block->hasData('pagination_url_anchor')
+    ? '#' . $escaper->escapeHtmlAttr((string) $block->getData('pagination_url_anchor'))
+    : '';
+
 $pagerItemClass = "relative inline-flex items-center text-sm font-medium leading-5 bg-white border border-gray-300";
 $pagerItemBtnClass = $pagerItemClass
     . " transition duration-150 ease-in-out"
@@ -64,7 +68,7 @@ $pagerItemBtnClass = $pagerItemClass
                         <?php $text = $block->getAnchorTextForPrevious() ? $block->getAnchorTextForPrevious() : ''; ?>
                         <?php if (!$block->isFirstPage()): ?>
                             <a
-                                href="<?= $escaper->escapeUrl($block->getPreviousPageUrl()) . '#customer-review-list' ?>"
+                                href="<?= $escaper->escapeUrl($block->getPreviousPageUrl()) . /* @noEscape */ $paginationUrlAnchor ?>"
                                 class="<?= $escaper->escapeHtmlAttr($text ? 'link ' : 'action ') ?>
                                     <?= /* @noEscape */ $pagerItemBtnClass ?> rounded-l-md px-3 py-2 text-gray-500"
                             >
@@ -96,7 +100,7 @@ $pagerItemBtnClass = $pagerItemClass
                             aria-label="<?= $escaper->escapeHtml(__('Page') . ' 1') ?>"
                         >
                             <a
-                                href="<?= $escaper->escapeUrl($block->getFirstPageUrl()) . '#customer-review-list' ?>"
+                                href="<?= $escaper->escapeUrl($block->getFirstPageUrl()) . /* @noEscape */ $paginationUrlAnchor ?>"
                                 class="page first <?= /* @noEscape */ $pagerItemBtnClass ?> px-4 py-2 text-gray-500"
                             >
                                 <span class="sr-only label"><?= $escaper->escapeHtml(__('Page')) ?></span>
@@ -108,7 +112,7 @@ $pagerItemBtnClass = $pagerItemClass
                     <?php if ($block->canShowPreviousJump()): ?>
                         <li class="item -ml-px">
                             <a
-                                href="<?= $escaper->escapeUrl($block->getPreviousJumpUrl()) . '#customer-review-list' ?>"
+                                href="<?= $escaper->escapeUrl($block->getPreviousJumpUrl()) . /* @noEscape */ $paginationUrlAnchor ?>"
                                 class="page previous jump <?= /* @noEscape */ $pagerItemBtnClass ?> text-gray-700 px-4
                                  py-2"
                                 aria-label="<?= $escaper->escapeHtmlAttr(__(
@@ -128,7 +132,7 @@ $pagerItemBtnClass = $pagerItemClass
                                 aria-label="<?= $escaper->escapeHtml(__('Page') . ' ' . $page) ?>"
                             >
                                 <a
-                                    href="<?= $escaper->escapeUrl($block->getPageUrl($page)) . '#customer-review-list' ?>"
+                                    href="<?= $escaper->escapeUrl($block->getPageUrl($page)) . /* @noEscape */ /* @noEscape *//* @noEscape *//* @noEscape *//* @noEscape */    $paginationUrlAnchor ?>"
                                     class="page <?= /* @noEscape */ $pagerItemBtnClass ?> z-10 px-4 py-2 text-gray-700
                                      bg-gray-100 border-primary"
                                     aria-current="page"
@@ -147,7 +151,7 @@ $pagerItemBtnClass = $pagerItemClass
                                 aria-label="<?= $escaper->escapeHtml(__('Page') . ' ' . $page) ?>"
                             >
                                 <a
-                                    href="<?= $escaper->escapeUrl($block->getPageUrl($page)) . '#customer-review-list' ?>"
+                                    href="<?= $escaper->escapeUrl($block->getPageUrl($page)) . /* @noEscape */ /* @noEscape *//* @noEscape *//* @noEscape */   $paginationUrlAnchor ?>"
                                     class="page <?= /* @noEscape */ $pagerItemBtnClass ?> px-4 py-2 text-gray-700"
                                 >
                                     <span class="sr-only label"><?= $escaper->escapeHtml(__('Page')) ?></span>
@@ -160,7 +164,7 @@ $pagerItemBtnClass = $pagerItemClass
                     <?php if ($block->canShowNextJump()): ?>
                         <li class="item -ml-px">
                             <a
-                                href="<?= $escaper->escapeUrl($block->getNextJumpUrl()) . '#customer-review-list'?>"
+                                href="<?= $escaper->escapeUrl($block->getNextJumpUrl()) . /* @noEscape */ /* @noEscape *//* @noEscape */  $paginationUrlAnchor ?>"
                                 class="page next jump <?= /* @noEscape */ $pagerItemBtnClass ?> px-4 py-2 text-gray-700"
                                 aria-label="<?= $escaper->escapeHtmlAttr(__(
                                     'Skip to page %1',
@@ -178,7 +182,7 @@ $pagerItemBtnClass = $pagerItemClass
                             aria-label="<?= $escaper->escapeHtml(__('Page') . ' ' . $block->getLastPageNum()) ?>"
                         >
                             <a
-                                href="<?= $escaper->escapeUrl($block->getLastPageUrl()) . '#customer-review-list' ?>"
+                                href="<?= $escaper->escapeUrl($block->getLastPageUrl()) . /* @noEscape */ /* @noEscape */ $paginationUrlAnchor ?>"
                                 class="page last <?= /* @noEscape */ $pagerItemBtnClass ?> px-4 py-2"
                             >
                                 <span class="sr-only label"><?= $escaper->escapeHtml(__('Page')) ?></span>
@@ -191,7 +195,7 @@ $pagerItemBtnClass = $pagerItemClass
                         <?php if (!$block->isLastPage()): ?>
                             <?php $text = $block->getAnchorTextForNext() ? $block->getAnchorTextForNext() : ''; ?>
                             <a
-                                href="<?= $escaper->escapeUrl($block->getNextPageUrl()) . '#customer-review-list' ?>"
+                                href="<?= $escaper->escapeUrl($block->getNextPageUrl()) . /* @noEscape */ $paginationUrlAnchor ?>"
                                 class="<?= $text ? 'link ' : 'action ' ?> next
                                     <?= /* @noEscape */ $pagerItemBtnClass ?> rounded-r-md px-3 py-2 text-gray-500"
                             >

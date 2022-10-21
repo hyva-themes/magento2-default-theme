@@ -14,7 +14,11 @@
             <block class="Magento\Review\Block\Product\View" name="review_list"
                    template="Magento_Review::product/view/list.phtml"
                    ifconfig="catalog/review/active">
-                <block class="Magento\Theme\Block\Html\Pager" name="review_list.toolbar" ifconfig="catalog/review/active"/>
+                <block class="Magento\Theme\Block\Html\Pager" name="review_list.toolbar" ifconfig="catalog/review/active">
+                    <arguments>
+                        <argument name="pagination_url_anchor" xsi:type="string">customer-review-list</argument>
+                    </arguments>
+                </block>
             </block>
             <block class="Magento\Review\Block\Form"
                    name="product.review.form"
