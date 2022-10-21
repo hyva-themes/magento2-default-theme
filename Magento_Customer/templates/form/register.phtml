@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\Customer\CreateAccountButton;
+use Hyva\Theme\ViewModel\HeroiconsSolid;
 use Hyva\Theme\ViewModel\ReCaptcha;
 use Magento\Customer\Block\Form\Register;
 use Magento\Customer\Block\Widget\Dob;
@@ -26,12 +27,14 @@ use Magento\Framework\Escaper;
 /** @var ReCaptcha $recaptcha */
 /** @var CreateAccountButton $createAccountButtonViewModel */
 /** @var ViewModelRegistry $viewModels */
+/** @var HeroiconsSolid $heroicons */
 
 $formId = 'accountcreate';
 
 // Do not replace this with $viewModels->require(ReCaptcha::class); that might break the dependency
 // on the Magento_ReCaptchaCustomer module
 $recaptcha = $block->getData('viewModelRecaptcha');
+$heroIcons = $viewModels->require(HeroiconsSolid::class);
 $createAccountButtonViewModel = $viewModels->require(CreateAccountButton::class);
 $region    = $block->getAttributeData()->getFrontendLabel('region');
 $selectRegion = 'Please select a region, state or province.';
@@ -118,15 +121,26 @@ $displayAll = $block->getConfig('general/region/display_all');
                 </div>
                 <div class="field">
                     <label for="password" class="label"><span><?= $escaper->escapeHtml(__('Password')) ?></span></label>
-                    <div class="control">
+                    <div class="control flex items-center">
                         <?php $minimumPasswordLength = $block->getMinimumPasswordLength() ?>
-                        <input type="password" name="password" id="password"
+                        <input :type="showPassword ? 'text' : 'password'" name="password" id="password" name="password" id="password"
                                title="<?= $escaper->escapeHtmlAttr(__('Password')) ?>"
                                minlength="<?= $escaper->escapeHtmlAttr($minimumPasswordLength) ?>"
                                class="form-input"
                                required
                                x-on:change="checkPasswordsMatch()"
                                autocomplete="off">
+                        <div x-on:click="showPassword = !showPassword"
+                             class="cursor-pointer px-4"
+                             :aria-label="showPassword ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
+                        >
+                            <template x-if="!showPassword">
+                                <?= $heroIcons->eyeHtml('w-5 h-5'); ?>
+                            </template>
+                            <template x-if="showPassword">
+                                <?= $heroIcons->eyeOffHtml('w-5 h-5'); ?>
+                            </template>
+                        </div>
                     </div>
                     <p class="text-sm text-secondary mt-3">
                         <?= $escaper->escapeHtml(
@@ -144,8 +158,9 @@ $displayAll = $block->getConfig('general/region/display_all');
                             <?= $escaper->escapeHtml(__('Confirm Password')) ?>
                         </span>
                     </label>
-                    <div class="control">
-                        <input type="password" name="password_confirmation"
+                    <div class="control flex items-center">
+                        <input :type="showPasswordConfirm ? 'text' : 'password'" name="password_confirmation"
+                               name="password_confirmation"
                                title="<?= $escaper->escapeHtmlAttr(__('Confirm Password')) ?>"
                                id="password-confirmation"
                                x-on:change="checkPasswordsMatch()"
@@ -154,6 +169,17 @@ $displayAll = $block->getConfig('general/region/display_all');
                                minlength="<?= $escaper->escapeHtmlAttr($minimumPasswordLength) ?>"
                                class="form-input"
                                autocomplete="off">
+                        <div x-on:click="showPasswordConfirm = !showPasswordConfirm"
+                             class="cursor-pointer px-4"
+                             :aria-label="showPasswordConfirm ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
+                        >
+                            <template x-if="!showPasswordConfirm">
+                                <?= $heroIcons->eyeHtml('w-5 h-5'); ?>
+                            </template>
+                            <template x-if="showPasswordConfirm">
+                                <?= $heroIcons->eyeOffHtml('w-5 h-5'); ?>
+                            </template>
+                        </div>
                     </div>
                 </div>
                 <div class="field">
@@ -373,6 +399,8 @@ $displayAll = $block->getConfig('general/region/display_all');
                 passwordsMatching: true,
                 errors: 0,
                 hasCaptchaToken: 0,
+                showPassword: false,
+                showPasswordConfirm: false,
                 checkPasswordsMatch() {
                     this.passwordsMatching = document.getElementById('password').value === document.getElementById('password-confirmation').value;
 
