@@ -317,7 +317,7 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
                 </div>
             <?php endif; ?>
             <div class="relative w-full overflow-x-hidden focus-within:ring-1 active:ring-0 ring-blue-500/50">
-                <div class="relative flex flex-nowrap w-full overflow-auto transition-all js_slides snap"
+                <div class="relative flex flex-nowrap w-full overflow-auto js_slides snap"
                     <?php if ($title): ?>
                         id="<?= $escaper->escapeHtmlAttr(strtolower(str_replace(' ', '-', trim($title)))) ?>"
                     <?php endif; ?>

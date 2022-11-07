@@ -136,7 +136,7 @@ if ($isSharedItemRenderer && $block->getChildBlock('slider.item.template')) {
                 </div>
             <?php endif; ?>
             <div class="flex-none relative w-full overflow-x-hidden focus-within:ring-2 ring-offset-2 active:ring-0 ring-blue-500/50">
-                <div class="relative flex flex-nowrap w-full overflow-auto transition-all js_slides snap md:px-1 xl:px-2"
+                <div class="relative flex flex-nowrap w-full overflow-auto js_slides snap md:px-1 xl:px-2"
                      @scroll.debounce="calcActive"
                 >
                     <?php foreach ($items as $product): ?>
