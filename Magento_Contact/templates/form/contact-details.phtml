@@ -1,0 +1,49 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\StoreConfig;
+use Magento\Framework\Escaper;
+
+/** @var ViewModelRegistry $viewModels */
+/** @var Escaper $escaper */
+
+$storeConfig = $viewModels->require(StoreConfig::class);
+$heroIcons = $viewModels->require(HeroiconsOutline::class);
+$storePhoneNumber = $storeConfig->getStoreConfig('general/store_information/phone') ?? '';
+$storeEmail = $storeConfig->getStoreConfig('trans_email/ident_general/email') ?? '';
+
+?>
+<h2 class="sm:text-2xl text-xl font-medium title-font mb-4 text-gray-900">
+    <span><?= $escaper->escapeHtml(__('Contact Details')) ?></span>
+</h2>
+<h3 class="title-font font-bold"><?= $escaper->escapeHtml($storeConfig->getStoreConfig('general/store_information/name') ?? ''); ?></h3>
+<address>
+    <?= $escaper->escapeHtml($storeConfig->getStoreConfig('general/store_information/street_line1') ?? ''); ?><br/>
+    <?= $escaper->escapeHtml($storeConfig->getStoreConfig('general/store_information/city') ?? ''); ?><br/>
+    <?= $escaper->escapeHtml($storeConfig->getStoreConfig('general/store_information/postcode') ?? ''); ?><br/>
+</address>
+<ul>
+    <?php if ($storePhoneNumber): ?>
+    <li class="mt-10">
+        <?= $heroIcons->phoneHtml("w-5 h-5 inline mr-1", 25, 25) ?>
+        <a class="inline" href="tel:<?= $escaper->escapeHtmlAttr(preg_replace("/[^0-9+]/", "", $storePhoneNumber)) ?>">
+            <?= $escaper->escapeHtml($storePhoneNumber); ?>
+        </a>
+    </li>
+    <?php endif; ?>
+    <li>
+        <?= $heroIcons->mailHtml("w-5 h-5 inline mr-1", 25, 25) ?>
+        <a href="mailto:<?= $escaper->escapeHtmlAttr($storeEmail); ?>">
+            <?= $escaper->escapeHtml($storeEmail); ?>
+        </a>
+    </li>
+</ul>
