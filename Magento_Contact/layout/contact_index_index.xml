@@ -16,6 +16,7 @@
             <block class="Magento\Contact\Block\ContactForm" name="contactForm" template="Magento_Contact::form.phtml">
                 <container name="form.additional.info" label="Form Additional Info"/>
                 <container name="form.additional.after" label="Form Additional After Container"/>
+                <block name="contactDetails" as="contact.details" template="Magento_Contact::form/contact-details.phtml" />
             </block>
         </referenceContainer>
     </body>
