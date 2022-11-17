@@ -16,7 +16,7 @@ use Magento\Framework\View\Element\Template;
     function initConfigurableOptions(productId, optionConfig) {
 
         function findPathParam(key) {
-            <?php // get all path pairs after BASE_URL/front_name/action_path/action ?>
+            <?php /* get all path pairs after BASE_URL/front_name/action_path/action */ ?>
             const baseUrl = (BASE_URL.substr(0, 2) === '//' ? 'http:' : '') + BASE_URL;
             const baseUrlParts = (new URL(baseUrl)).pathname.replace(/\/$/, '').split('/');
             const pathParts = window.location.pathname.split('/').slice(baseUrlParts.length + 3);
@@ -44,7 +44,7 @@ use Magento\Framework\View\Element\Template;
                 });
             },
             findSimpleIndex() {
-                <?php // a better method name would be `updateSelectedSimpleIndex` but keeping for bc ?>
+                <?php /* a better method name would be `updateSelectedSimpleIndex` but keeping for bc */ ?>
                 this.productIndex = this.calculateSimpleIndexForPartialSelection(this.selectedValues);
             },
             calculateSimpleIndexForPartialSelection(selectedValues) {
@@ -61,7 +61,7 @@ use Magento\Framework\View\Element\Template;
                         })
                         : [];
 
-                    <?php // if we found matches, only keep the ones that match, otherwise, keep all products ?>
+                    <?php /* if we found matches, only keep the ones that match, otherwise, keep all products */ ?>
                     productIndexIds = productsWithAttributeMatch.length ? productsWithAttributeMatch : productIndexIds
                 })
                 return productIndexIds[0];
@@ -84,7 +84,7 @@ use Magento\Framework\View\Element\Template;
             },
             productIndex: 0,
             findAllowedAttributeOptions() {
-                <?php // a better method name would be `updateAllowedAttributeOptions` but keeping for bc ?>
+                <?php /* a better method name would be `updateAllowedAttributeOptions` but keeping for bc */ ?>
                 this.allowedAttributeOptions = this.calculateAllowedAttributeOptions(this.selectedValues);
             },
             calculateAllowedAttributeOptions(selectedValues) {
@@ -92,28 +92,59 @@ use Magento\Framework\View\Element\Template;
                 const allAttributesSorted = Object.values(allAttributes).sort((a,b) => {
                     return a.position - b.position
                 });
-                const productIndexes = this.optionConfig.index;
-                let previousOption = false;
-                let availableIndexes = Object.keys(productIndexes);
+
+                const selectionWithoutAttr = attrId => {
+                    <?php /* return the current selection without the given attribute */ ?>
+                    return Object.keys(selectedValues).reduce((acc, id) => {
+                        if (id !== attrId) acc[id] = selectedValues[id];
+                        return acc;
+                    }, {})
+                }
 
                 const newAllowedAttributeOptions = [];
 
                 allAttributesSorted.forEach(attribute => {
-                    if (previousOption && selectedValues[previousOption]) {
-                        availableIndexes = availableIndexes.filter(availableIndex => {
-                            return productIndexes[availableIndex][previousOption] ===
-                                selectedValues[previousOption]
+                    const availableIndexes = this.calculateAvailableProductIndexes(selectionWithoutAttr(attribute.id));
+                    newAllowedAttributeOptions[attribute.id] = allAttributes[attribute.id].options.filter(option => {
+                        return !!option.products.find(product => {
+                            return availableIndexes.includes(product);
                         })
-                    }
-                    newAllowedAttributeOptions[attribute.id] =
-                        allAttributes[attribute.id].options.filter(option => {
-                            return !!option.products.find(product => {
-                                return availableIndexes.includes(product);
-                            })
-                        });
-                    previousOption = attribute.id;
+                    });
                 });
                 return newAllowedAttributeOptions;
+            },
+            calculateAvailableProductIndexes(selectedOptions) {
+                if (Object.keys(selectedOptions).length === 0) {
+                    <?php /* no selected options mean all products are available for selection */ ?>
+                    return Object.keys(this.optionConfig.index);
+                }
+
+                <?php
+                // when cataloginventory/options/show_out_of_stock is set, this.optionConfig.index contains
+                // out of stock products. Since 2.4.4 this.optionConfig.salable was introduced, which reflects
+                // the actual salable state of a product, but only if the option is set, otherwise it is an empty object.
+                // So if this.optionConfig.salable is available, it should be used.
+                // Otherwise, the code checks which products match the given current selection as it was for older
+                // Magento versions, but then options of out of stock products are shown if the config option is set.
+                ?>
+                const selectedIds = Object.keys(selectedOptions);
+                if (Object.values(this.optionConfig.salable || {}).length) {
+                    <?php /* for Magento >= 2.4.4 when out-of-stock products are shown: */ ?>
+                    const selectedOptionIndexes = selectedIds.map(attrId => {
+                        const optionValue = selectedOptions[attrId];
+                        return this.optionConfig.salable[attrId] && this.optionConfig.salable[attrId][optionValue] || []
+                    })
+                    <?php /* intersection of optionIndexes */ ?>
+                    return selectedOptionIndexes.reduce((acc, optionIndexes) => {
+                        return acc.filter(index => optionIndexes.includes(index));
+                    });
+                } else {
+                    <?php /* for Magento < 2.4.4 or when not out-of-stock-products are hidden: */ ?>
+                    const productIndexes = this.optionConfig.index;
+                    return Object.keys(productIndexes).filter(index => {
+                        return selectedIds.find(attrId => productIndexes[index][attrId] === `${selectedOptions[attrId]}`)
+                    });
+                }
             },
             findAttributeByOptionId(optionId) {
                 for (const attributeId in this.optionConfig.attributes) {
