@@ -23,7 +23,7 @@ use Magento\Framework\Escaper;
         <input type="number"
                name="telephone"
                id="telephone"
-               <?php if (false && $block->isRequired()): ?>required<?php endif; ?>
+               <?php if ($block->isRequired()): ?>required<?php endif; ?>
                data-validate='{"telephone": {"minlength": 3}}'
                value="<?= $escaper->escapeHtmlAttr($block->getTelephone()) ?>"
                title="<?= $escaper->escapeHtmlAttr(__('Phone Number')) ?>"
