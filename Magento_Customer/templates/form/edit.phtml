@@ -9,11 +9,11 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsSolid;
+use Hyva\Theme\ViewModel\ReCaptcha;
 use Magento\Customer\Block\Form\Edit as CustomerEdit;
 use Magento\Customer\Block\Widget\Name;
 use Magento\Framework\Escaper;
-use Hyva\Theme\ViewModel\ReCaptcha;
-use Hyva\Theme\ViewModel\HeroiconsSolid;
 
 // phpcs:disable Generic.Files.LineLength.TooLong
 
@@ -27,13 +27,16 @@ use Hyva\Theme\ViewModel\HeroiconsSolid;
 // on the Magento_ReCaptchaCustomer module
 $recaptcha = $block->getData('viewModelRecaptcha');
 $heroIcons = $viewModels->require(HeroiconsSolid::class);
+$minimumPasswordLength = $block->getMinimumPasswordLength();
+$passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
+
 ?>
 <form class="form form-edit-account"
       action="<?= $escaper->escapeUrl($block->getUrl('customer/account/editPost')) ?>"
       method="post" id="form-validate"
       enctype="multipart/form-data"
-      x-data="initForm()"
-      @submit.prevent="submitForm()"
+      x-data="Object.assign(hyva.formValidation($el), initForm())"
+      @submit.prevent="submitForm"
       autocomplete="off">
     <fieldset class="fieldset info">
         <?= $block->getBlockHtml('formkey') ?>
@@ -75,7 +78,7 @@ $heroIcons = $viewModels->require(HeroiconsSolid::class);
         </div>
 
         <template x-if="showEmailField">
-            <div class="field email required">
+            <div class="field field-reserved email required">
                 <label class="label" for="email"><span><?= $escaper->escapeHtml(__('Email')) ?></span></label>
                 <div class="control">
                     <input type="email" name="email" id="email" autocomplete="email" required
@@ -87,13 +90,15 @@ $heroIcons = $viewModels->require(HeroiconsSolid::class);
         </template>
 
         <template x-if="showEmailField || showPasswordFields">
-            <div class="field password current required">
+            <div class="field field-reserved password current required">
                 <label class="label" for="current-password">
                     <span><?= $escaper->escapeHtml(__('Current Password')) ?></span>
                 </label>
                 <div class="control flex items-center">
-                    <input :type="showPasswordCurrent ? 'text' : 'password'" class="form-input" name="current_password" id="current-password"
+                    <input :type="showPasswordCurrent ? 'text' : 'password'" type="password" class="form-input"
+                           name="current_password" id="current-password"
                            data-input="current-password"
+                           required
                            autocomplete="off"/>
                     <div x-on:click="showPasswordCurrent = !showPasswordCurrent"
                          class="cursor-pointer px-4"
@@ -113,14 +118,14 @@ $heroIcons = $viewModels->require(HeroiconsSolid::class);
 
         <template x-if="showPasswordFields">
             <div>
-                <div class="field">
+                <div class="field field-reserved">
                     <label class="label" for="password"><span>
                             <?= $escaper->escapeHtml(__('New Password')) ?>
                     </span></label>
                     <div class="control flex items-center">
-                        <?php $minimumPasswordLength = $block->getMinimumPasswordLength() ?>
-                        <input :type="showPasswordNew ? 'text' : 'password'" class="form-input" name="password" id="password" required
-                               x-on:change="checkPasswordsMatch()"
+                        <input :type="showPasswordNew ? 'text' : 'password'" type="password" class="form-input" name="password" id="password" required
+                               data-validate='{"password-strength": {"minCharacterSets": <?= (int) $passwordMinCharacterSets ?>}}'
+                               @input="onChange"
                                minlength="<?= $escaper->escapeHtmlAttr($minimumPasswordLength) ?>" autocomplete="off"/>
                         <div x-on:click="showPasswordNew = !showPasswordNew"
                              class="cursor-pointer px-4"
@@ -133,25 +138,26 @@ $heroIcons = $viewModels->require(HeroiconsSolid::class);
                                 <?= $heroIcons->eyeOffHtml('w-5 h-5'); ?>
                             </template>
                         </div>
+                        <div id="password-strength-meter-container" data-role="password-strength-meter" aria-live="polite">
+                            <div id="password-strength-meter" class="password-strength-meter">
+                                <?= $escaper->escapeHtml(__('Password Strength')) ?>:
+                                <span id="password-strength-meter-label" data-role="password-strength-meter-label">
+                                    <?= $escaper->escapeHtml(__('No Password')) ?>
+                                </span>
+                            </div>
+                        </div>
                     </div>
-                    <p class="text-sm text-secondary mt-3">
-                        <?= $escaper->escapeHtml(
-                            __(
-                                'Minimum of different classes of characters in password is %1. Classes of characters: Lower Case, Upper Case, Digits, Special Characters.',
-                                $block->getRequiredCharacterClassesNumber()
-                            )
-                        ) ?>
-                    </p>
                 </div>
 
-                <div class="field">
+                <div class="field field-reserved">
                     <label class="label" for="password-confirmation">
                         <span><?= $escaper->escapeHtml(__('Confirm New Password')) ?></span>
                     </label>
                     <div class="control flex items-center">
-                        <input :type="showPasswordConfirm ? 'text' : 'password'" class="form-input" name="password_confirmation"
-                               id="password-confirmation"
-                               x-on:change="checkPasswordsMatch()"
+                        <input :type="showPasswordConfirm ? 'text' : 'password'" type="password" class="form-input"
+                               name="password_confirmation" id="password-confirmation"
+                               data-validate='{"equalTo": "password"}'
+                               @input="onChange"
                                autocomplete="off"/>
                         <div x-on:click="showPasswordConfirm = !showPasswordConfirm"
                              class="cursor-pointer px-4"
@@ -166,12 +172,6 @@ $heroIcons = $viewModels->require(HeroiconsSolid::class);
                         </div>
                     </div>
                 </div>
-
-                <p class="my-4 text-red"
-                   :class="passwordsMatching ? 'invisible' : 'visible'"
-                >
-                    <?= $escaper->escapeHtml(__('Your password confirmation must match your password.')) ?>
-                </p>
             </div>
         </template>
     </fieldset>
@@ -200,40 +200,31 @@ $heroIcons = $viewModels->require(HeroiconsSolid::class);
             hasCaptchaToken: 0,
             displayErrorMessage: false,
             errorMessages: [],
-            passwordsMatching: true,
             showEmailField: false,
             showPasswordNew: false,
             showPasswordConfirm: false,
             showPasswordCurrent: false,
-            showPasswordFields: <?= $block->getChangePassword()
-                ? $escaper->escapeJs('true')
-                : $escaper->escapeJs(
-                    'false'
-                ) ?>,
-            checkPasswordsMatch() {
-                if (!this.showPasswordFields) {
-                    return true;
-                }
-
-                this.passwordsMatching = document.getElementById('password').value === document.getElementById('password-confirmation').value;
-
-                return this.passwordsMatching;
-            },
+            showPasswordFields: <?= $block->getChangePassword() ? $escaper->escapeJs('true') : $escaper->escapeJs('false') ?>,
             setErrorMessages(messages) {
                 this.errorMessages = [messages]
                 this.displayErrorMessage = this.errorMessages.length
             },
             submitForm() {
-                if (!this.checkPasswordsMatch()) {
-                    return;
-                }
-                // Do not rename $form, the variable is expected to be declared in the recaptcha output
-                const $form = document.querySelector('#form-validate');
-                <?= $recaptcha ? $recaptcha->getValidationJsHtml(ReCaptcha::RECAPTCHA_FORM_ID_CUSTOMER_EDIT) : '' ?>
+                this.validate()
+                    .then(() => {
+                        // Do not rename $form, the variable is expected to be declared in the recaptcha output
+                        const $form = document.querySelector('#form-validate');
+                        <?= $recaptcha ? $recaptcha->getValidationJsHtml(ReCaptcha::RECAPTCHA_FORM_ID_CUSTOMER_EDIT) : '' ?>
 
-                if (this.errors === 0) {
-                    $form.submit();
-                }
+                        if (this.errors === 0) {
+                            $form.submit();
+                        }
+                    })
+                    .catch((invalid) => {
+                        if (invalid.length > 0) {
+                            invalid[0].focus();
+                        }
+                    })
             }
         }
     }
