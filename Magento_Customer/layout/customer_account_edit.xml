@@ -9,6 +9,7 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="customer_account"/>
+    <update handle="hyva_form_validation"/>
     <head>
         <title>Account Information</title>
     </head>
@@ -17,6 +18,9 @@
             <block class="Magento\Customer\Block\Form\Edit" name="customer_edit" template="Magento_Customer::form/edit.phtml" cacheable="false">
                 <container name="form.additional.info" as="form_additional_info"/>
             </block>
+        </referenceContainer>
+        <referenceContainer name="before.body.end">
+            <block name="password.validate.js" template="Magento_Customer::js/password-validation.phtml"/>
         </referenceContainer>
     </body>
 </page>
