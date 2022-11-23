@@ -146,10 +146,7 @@ $pagerItemBtnClass = $pagerItemClass
                                 </a>
                             </li>
                         <?php else: ?>
-                            <li
-                                class="item -ml-px"
-                                aria-label="<?= $escaper->escapeHtml(__('Page') . ' ' . $page) ?>"
-                            >
+                            <li class="item -ml-px">
                                 <a
                                     href="<?= $escaper->escapeUrl($block->getPageUrl($page)) . /* @noEscape */ /* @noEscape *//* @noEscape *//* @noEscape */   $paginationUrlAnchor ?>"
                                     class="page <?= /* @noEscape */ $pagerItemBtnClass ?> px-4 py-2 text-gray-700"
@@ -170,17 +167,12 @@ $pagerItemBtnClass = $pagerItemClass
                                     'Skip to page %1',
                                     $localeFormatter->formatNumber($block->getNextJumpPage())
                                 )) ?>"
-                            >
-                                <span aria-label="<?= $escaper->escapeHtml(__('Jump forward')) ?>">...</span>
-                            </a>
+                            >...</a>
                         </li>
                     <?php endif; ?>
 
                     <?php if ($block->canShowLast()): ?>
-                        <li
-                            class="item -ml-px text-gray-500"
-                            aria-label="<?= $escaper->escapeHtml(__('Page') . ' ' . $block->getLastPageNum()) ?>"
-                        >
+                        <li class="item -ml-px text-gray-500">
                             <a
                                 href="<?= $escaper->escapeUrl($block->getLastPageUrl()) . /* @noEscape */ /* @noEscape */ $paginationUrlAnchor ?>"
                                 class="page last <?= /* @noEscape */ $pagerItemBtnClass ?> px-4 py-2"
@@ -213,11 +205,8 @@ $pagerItemBtnClass = $pagerItemClass
                                 class="next <?= /* @noEscape */ $pagerItemClass ?> rounded-r-md px-3 py-2 text-gray-400
                                  border-gray-200"
                                 aria-disabled="true"
-                            >
-                                <span
-                                    aria-label="<?= $escaper->escapeHtml(__('Next')) ?>"
-                                ><?= $heroicons->chevronRightHtml('', 20, 20); ?></span>
-                            </strong>
+                                aria-label="<?= $escaper->escapeHtml(__('Next')) ?>"
+                            ><?= $heroicons->chevronRightHtml('', 20, 20); ?></strong>
                         <?php endif; ?>
                     </li>
                 </ol>
