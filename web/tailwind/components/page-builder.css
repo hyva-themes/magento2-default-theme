@@ -40,8 +40,8 @@
     }
 }
 
-/* Column Groups */
-[data-content-type='column-group'] {
+/* Column Groups (both needed for pagebuider backwards compatibiliy) */
+[data-content-type='column-group'], [data-content-type='column-line'] {
     @apply flex-wrap md:flex-nowrap;
 }
 
