@@ -17,6 +17,7 @@ use Hyva\Theme\ViewModel\ProductPage;
 use Hyva\Theme\ViewModel\Wishlist;
 use Magento\Catalog\Block\Product\AbstractProduct;
 use Magento\Catalog\Helper\Output as CatalogOutputHelper;
+use Magento\Catalog\ViewModel\Product\OptionsData as ProductOptionsData;
 use Magento\Framework\Escaper;
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
@@ -46,6 +47,8 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 /** @var HeroiconsSolid $heroiconsSolid */
 $heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
 
+$productOptionsViewmodel = $viewModels->require(ProductOptionsData::class);
+
 /** @var Magento\Catalog\Model\Product $product */
 $product = $block->getData('product');
 $imageDisplayArea = $block->getData('image_display_area');
@@ -60,6 +63,7 @@ if (!$product) {
     return '';
 }
 $productId = $product->getId();
+$options   = $productOptionsViewmodel->getOptionsData($product);
 $uniqueId = '_' . uniqid();
 
 $hideDetails       = $block->getData('hide_details') ?: false;
@@ -76,7 +80,12 @@ $hideRatingSummary = $block->getData('hide_rating_summary') ?: false;
 >
     <?= /** @noEscape */ $block->getBlockHtml('formkey') ?>
     <input type="hidden" name="product" value="<?= (int)$productId ?>"/>
-<?php else: ?>
+    <?php foreach ($options as $optionItem): ?>
+    <input type="hidden"
+           name="<?= $escaper->escapeHtml($optionItem['name']) ?>"
+           value="<?= $escaper->escapeHtml($optionItem['value']) ?>">
+    <?php endforeach; ?>
+    <?php else: ?>
 <div class="item product product-item card card-interactive flex flex-col w-full <?= $viewIsGrid ? '' : 'md:flex-row' ?>">
 <?php endif; ?>
     <?php // Product Image ?>
