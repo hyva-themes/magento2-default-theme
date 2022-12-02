@@ -130,8 +130,9 @@ module.exports = hyvaModules.mergeTailwindConfig({
         //     safelist: [/^bg-opacity-/, /^-?[mp][trblxy]?-[4,8]$/, /^text-shadow/],
         // },
         content: [
-            // this theme's phtml files
+            // this theme's phtml and layout xml files
             '../../**/*.phtml',
+            '../../*/layout/*.xml',
             // The theme-module templates are included automatically in the purge config since Hyvä 1.1.15, but
             // for themes based on earlier releases, enable the appropriate path to the theme-module below:
             // hyva theme-module templates (if this is the default theme in vendor/hyva-themes/magento2-default-theme)
