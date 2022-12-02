@@ -21,10 +21,6 @@ use Magento\Framework\Escaper;
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
 
-/** @var ViewModelRegistry $viewModels */
-/** @var HeroiconsOutline $heroicons */
-
-$heroicons = $viewModels->require(HeroiconsOutline::class);
 $images = $block->getGalleryImages()->getItems();
 $mainImage = current(array_filter($images, [$block, 'isMainImage']));
 
