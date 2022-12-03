@@ -275,9 +275,9 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                 browserStorage.setItem('mage-cache-storage', JSON.stringify(sectionData));
             },
             populateCartData() {
-                const checkoutAddress = this.checkoutData && this.checkoutData.shippingAddressFromData;
+                const checkoutAddress = this.checkoutData && this.checkoutData.shippingAddressFromData || {};
 
-                if (checkoutAddress) {
+                if (Object.keys(checkoutAddress).length) {
 
                     if(
                         (checkoutAddress['country_id'] !== this.cartData.address.countryId) ||
