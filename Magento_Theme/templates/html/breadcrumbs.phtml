@@ -13,14 +13,7 @@ use Magento\Framework\Escaper;
 
 /** @var Escaper $escaper */
 /** @var Breadcrumbs $block */
-/** @var array $crumbs */
-
-if ($template = $block->getData('special_template')) {
-    if ($output = $block->fetchView($block->getTemplateFile($template))) {
-        echo /** @noEscape */ $output;
-        return;
-    }
-}
+/** @var array[] $crumbs */
 
 ?>
 <?php if ($crumbs && is_array($crumbs)): ?>

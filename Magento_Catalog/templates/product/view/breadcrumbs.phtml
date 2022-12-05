@@ -20,13 +20,6 @@ use Magento\Framework\Escaper;
 /** @var Escaper $escaper */
 
 $storeConfigViewModel = $viewModels->require(StoreConfig::class);
-
-// If enabled in the store configuration, this template is used to render breadcrumbs with JavaScript
-if (! $storeConfigViewModel->getStoreConfig('catalog/hyva_breadcrumbs/client_side_enable')) {
-    // If disabled, fall back to the default breadcrumbs template
-    return;
-}
-
 $breadcrumbsViewModel = $viewModels->require(Breadcrumbs::class);
 $navigationViewModel = $viewModels->require(Navigation::class);
 $currentProductViewModel = $viewModels->require(CurrentProduct::class);

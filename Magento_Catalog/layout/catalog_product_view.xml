@@ -20,9 +20,6 @@
                 <argument name="add_base_attribute" xsi:type="string">itemprop="name"</argument>
             </arguments>
         </referenceBlock>
-        <referenceContainer name="after.body.start">
-            <block name="product_breadcrumbs" class="Hyva\Theme\Block\Catalog\Breadcrumbs"/>
-        </referenceContainer>
         <referenceBlock name="root">
             <arguments>
                 <argument name="add_attribute" xsi:type="string">itemscope itemtype="http://schema.org/Product"
@@ -214,10 +211,12 @@
                    ifconfig="catalog/recently_products/recently_viewed_enabled"/>
         </referenceContainer>
 
-        <referenceBlock name="breadcrumbs">
-            <arguments>
-                 <argument name="special_template" xsi:type="string">Magento_Catalog::product/view/breadcrumbs.phtml</argument>
-            </arguments>
+        <referenceBlock name="after.body.start">
+            <block name="product_breadcrumbs" class="Hyva\Theme\Block\Catalog\Breadcrumbs">
+                <arguments>
+                    <argument name="client_side_rendered_crumbs_template" xsi:type="string">Magento_Catalog::product/view/breadcrumbs.phtml</argument>
+                </arguments>
+            </block>
         </referenceBlock>
     </body>
 </page>
