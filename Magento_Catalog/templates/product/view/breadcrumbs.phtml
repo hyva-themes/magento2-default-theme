@@ -15,9 +15,11 @@ use Hyva\Theme\ViewModel\StoreConfig;
 use Magento\Catalog\ViewModel\Product\Breadcrumbs;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\Framework\Escaper;
+use Magento\Theme\Block\Html\Breadcrumbs as BreadcrumbsBlock;
 
 /** @var ViewModelRegistry $viewModels */
 /** @var Escaper $escaper */
+/** @var BreadcrumbsBlock $block */
 
 $storeConfigViewModel = $viewModels->require(StoreConfig::class);
 $breadcrumbsViewModel = $viewModels->require(Breadcrumbs::class);
@@ -26,6 +28,9 @@ $currentProductViewModel = $viewModels->require(CurrentProduct::class);
 
 $productUrlSuffix = $storeConfigViewModel->getStoreConfig(ProductUrlPathGenerator::XML_PATH_PRODUCT_URL_SUFFIX);
 $categoryUrlSuffix = $breadcrumbsViewModel->getCategoryUrlSuffix();
+
+// Modules may disable the rendering of application/ld+json BreadcrumbList by setting this flag in layout XML
+$skipLinkedDataJsonSchema = $block->getData('skip_ld_json_schema');
 
 $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() : null;
 
@@ -51,9 +56,9 @@ $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() 
     </div>
 </nav>
 <script>
-    (() => {
+    function initBreadcrumbsProduct() {
+
         const categories = <?= /** @noEscape */ json_encode($navigationViewModel->getCategories()) ?>;
-        const productUrlSuffix = '<?= $escaper->escapeJs($productUrlSuffix) ?>';
 
         const breadcrumbs = [{
             name: 'home',
@@ -64,10 +69,10 @@ $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() 
 
         function getProductCategoryUrl() {
             <?php if ($breadcrumbsViewModel->isCategoryUsedInProductUrl()): ?>
-                const productUrl = window.location.href.split('?')[0];
-                return productUrl.substring(0, productUrl.lastIndexOf('/')) + '<?= $escaper->escapeJs($categoryUrlSuffix) ?>';;
+            const productUrl = window.location.href.split('?')[0];
+            return productUrl.substring(0, productUrl.lastIndexOf('/')) + '<?= $escaper->escapeJs($categoryUrlSuffix) ?>';;
             <?php else: ?>
-                return document.referrer
+            return document.referrer
             <?php endif; ?>
         }
 
@@ -95,11 +100,12 @@ $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() 
             name: 'product',
             label: '<?= $escaper->escapeJs($product->getName()) ?>',
             title: '',
-            link: BASE_URL + '<?= $escaper->escapeJs($product->getUrlKey()) ?>' + productUrlSuffix
+            link: BASE_URL + '<?= $escaper->escapeJs($product->getUrlKey()) ?>' + '<?= $escaper->escapeJs($productUrlSuffix) ?>'
         });
         <?php endif; ?>
 
-        function addJsonBreadcrumbsHead() {
+        <?php if (! $skipLinkedDataJsonSchema): ?>
+        function addJsonBreadcrumbsHead(breadcrumbs) {
             const script = document.createElement('script');
             script.type = 'application/ld+json';
 
@@ -121,10 +127,9 @@ $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() 
             document.head.appendChild(script);
         }
 
-        addJsonBreadcrumbsHead();
+        addJsonBreadcrumbsHead(breadcrumbs);
+        <?php endif; ?>
 
-        window.initBreadcrumbsProduct = () => {
-            return {breadcrumbs};
-        }
-    })()
+        return {breadcrumbs};
+    }
 </script>
