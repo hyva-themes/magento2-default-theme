@@ -45,17 +45,39 @@ $options = $block->decorateArray($block->getOptions());
                 customOptionBasePrices: {},
                 <?php endif; ?>
                 refs: [],
-                getFormattedOptionPrice(optionId, useBasePrice) {
-
-                    const customOptionPrice = (useBasePrice) ?
-                        this.customOptionBasePrices[optionId] :
-                        this.customOptionPrices[optionId];
-
-                    if (customOptionPrice) {
+                getFormattedOptionPrice(optionId, ) {
+                    if (this.customOptionPrices[optionId]) {
                         const showSign = true;
-                        return hyva.formatPrice(customOptionPrice, showSign);
+                        return hyva.formatPrice(this.customOptionPrices[optionId], showSign);
                     }
                     return false;
+                },
+                <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
+                getFormattedOptionBasePrice(optionId) {
+                    if (this.customOptionBasePrices[optionId]) {
+                        const showSign = true;
+                        return hyva.formatPrice(this.customOptionBasePrices[optionId], showSign);
+                    }
+                    return false;
+                },
+                <?php endif; ?>
+                updateOptionPrice(optionId, optionPriceEl) {
+                    const container = document.createElement('div');
+                    container.innerHTML = optionPriceEl.innerHTML;
+
+                    const price = this.customOptionPrices[optionId],
+                        priceEl = container.querySelector('.price-wrapper');
+                    if (priceEl && price) {
+                        priceEl.innerText = hyva.formatPrice(price);
+                    }
+                    <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
+                    const basePrice = this.customOptionBasePrices[optionId],
+                        basePriceEl = container.querySelector('.price-excluding-tax .price');
+                    if (basePriceEl && basePrice) {
+                        basePriceEl.innerText = hyva.formatPrice(basePrice);
+                    }
+                    <?php endif; ?>
+                    return container.innerHTML;
                 },
                 calculateOptionPrices() {
                     for (const [customOptionId, customOption] of Object.entries(this.optionConfig)) {

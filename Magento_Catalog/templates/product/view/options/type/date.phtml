@@ -49,30 +49,24 @@ $htmlInputTypes = [
 ?>
 <div class="flex flex-col sm:flex-row border-t border-gray-300 py-2 last:mb-6 last:border-b w-full items-center">
     <label class="label text-gray-700 text-left w-full sm:w-1/2"
-           for="options_<?= $escaper->escapeHtmlAttr($optionId) ?>">
+           for="options_<?= $escaper->escapeHtmlAttr($optionId) ?>"
+           x-ref="options_<?= $escaper->escapeHtmlAttr($optionId) ?>_price"
+           x-html="updateOptionPrice('<?= $escaper->escapeJs($optionId) ?>', $refs['options_<?= $escaper->escapeJs($optionId) ?>_price'])"
+    >
         <span><?= $escaper->escapeHtml($option->getTitle()) ?></span>
         <?php if ($option->getIsRequire()): ?>
             <span class="sup text-sm">*</span>
         <?php endif; ?>
-        <span x-html="getFormattedOptionPrice(<?= $escaper->escapeHtmlAttr($optionId) ?>) || ''">
-            <?= /* @noEscape */ $block->getFormattedPrice() ?>
-        </span>
-        <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
-            <div class="text-xs">
-                (<?= $escaper->escapeHtml(__('Excl. Tax')) ?>:
-                <span x-html="getFormattedOptionPrice('<?= $escaper->escapeHtmlAttr($optionId) ?>', true) || ''">
-                    <?= /* @noEscape */ $productPriceViewModel->format($basePrice) ?>
-                </span>)
-            </div>
-        <?php endif; ?>
+        <span><?= /* @noEscape */ $block->getFormattedPrice() ?></span>
     </label>
+
     <div class="flex flex-wrap gap-y-2 sm:ml-2 text-gray-900 text-left w-full sm:w-1/2">
         <?php if ($option->getType() == ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME
             || $option->getType() == ProductCustomOptionInterface::OPTION_TYPE_DATE): ?>
-        <?= $customOptionViewModel->getDateDropdownsHtml((int) $optionId, [
-                'day' => ['class="form-select"'],
-                'month' => ['class="form-select"'],
-                'year' => ['class="form-select"'],
+                  <?= $customOptionViewModel->getDateDropdownsHtml((int) $optionId, [
+                    'day' => ['class="form-select"'],
+                    'month' => ['class="form-select"'],
+                    'year' => ['class="form-select"'],
             ]) ?>
         <?php endif; ?>
 

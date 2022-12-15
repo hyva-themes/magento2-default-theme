@@ -109,7 +109,7 @@ if ($option): ?>
                     + (getFormattedOptionPrice('<?= $escaper->escapeJs($optionId) ?>') || '')
                     <?php if ($productPriceViewModel->displayPriceInclAndExclTax() && $valueBasePrice > 0): ?>
                     + ' (<?= $escaper->escapeJs(__('Excl. Tax')) ?>: '
-                    + (getFormattedOptionPrice('<?= $escaper->escapeJs($optionId) ?>', true) || '') + ')'
+                    + (getFormattedOptionBasePrice('<?= $escaper->escapeJs($optionId) ?>') || '') + ')'
                     <?php endif; ?>
                 "
             >
