@@ -113,8 +113,7 @@ if ($option): ?>
             />
             <label class="label text-left"
                    for="options_<?= $escaper->escapeHtmlAttr($optionId) ?>"
-                   x-ref="options_<?= $escaper->escapeHtmlAttr($optionId) ?>_price"
-                   x-html="updateOptionPrice('<?= $escaper->escapeJs($optionId) ?>', $refs['options_<?= $escaper->escapeJs($optionId) ?>_price'])"
+                   x-html="updateOptionPrice('<?= $escaper->escapeJs($optionId) ?>', $el)"
             >
                 <span><?= $escaper->escapeHtml($value->getTitle()) ?></span>
                 <span><?= /* @noEscape */ $block->formatPrice($value) ?></span>
