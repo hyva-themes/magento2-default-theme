@@ -1,8 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
  */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
 
 /**
  * Wrapper for product sections to include title
@@ -10,9 +17,6 @@
  * @var Template $block
  * @var Escaper $escaper
  */
-
-use Magento\Framework\Escaper;
-use Magento\Framework\View\Element\Template;
 
 $childHtml = $block->getChildHtml();
 $sectionId = $block->getSectionId();
