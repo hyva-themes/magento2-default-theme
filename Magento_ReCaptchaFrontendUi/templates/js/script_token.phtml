@@ -30,7 +30,7 @@ if (!$siteKey) {
 
 $parentBlock = $block->getParentBlock();
 $action = is_object($parentBlock) && $parentBlock->getNameInLayout()
-    ? $parentBlock->getNameInLayout()
+    ? preg_replace('/[^A-Za-z0-9\/_]/', '_', $parentBlock->getNameInLayout())
     : 'submit';
 
 $recaptcha  = $viewModels->require(ReCaptcha::class);
