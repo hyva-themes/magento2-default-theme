@@ -32,6 +32,10 @@ body {
         @apply order-3;
     }
 
+    .product-main-full-width & {
+        @apply max-w-none;
+    }
+
     .page-main-full-width & {
         @apply max-w-none px-0;
     }

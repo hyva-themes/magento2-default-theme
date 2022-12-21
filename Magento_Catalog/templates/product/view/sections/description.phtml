@@ -26,7 +26,10 @@ $product = $productViewModel->getProduct();
 if (!$product->getDescription()) {
     return;
 }
+
+$cssClasses = $block->getData('css_classes') ?? 'prose';
+
 ?>
-<div class="prose">
+<div class="<?= $escaper->escapeHtmlAttr($cssClasses) ?>">
     <?= $productViewModel->productAttributeHtml($product, $product->getDescription(), 'description') ?>
 </div>

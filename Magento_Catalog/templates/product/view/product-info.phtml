@@ -51,8 +51,7 @@ $product = $productViewModel->getProduct();
         <?php foreach ($block->getAttributes() as $attributeConfig) {
             $attribute = $attributesViewModel->getAttributeFromLayoutConfig($attributeConfig); ?>
             <?php if ($value = $attribute['value'] ?? null) { ?>
-                <div class="flex border-t border-gray-300 py-2 last:mb-6 last:border-b <?=/* @noEscape */
-                                                                                          $attribute['value'] ?: "" ?>">
+                <div class="flex border-t border-gray-300 py-2 last:mb-6 last:border-b <?=/* @noEscape */ $attribute['value'] ?: "" ?>">
                     <span class="w-1/2 text-left text-gray-700 product-detail-label">
                         <?= $escaper->escapeHtml($attribute['label']) ?>
                     </span>
