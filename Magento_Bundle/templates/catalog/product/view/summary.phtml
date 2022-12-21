@@ -8,9 +8,11 @@
 
 declare(strict_types=1);
 
+use Magento\Catalog\Block\Product\View as ProductView;
 use Magento\Framework\Escaper;
 
 /** @var Escaper $escaper */
+/** @var ProductView $block */
 
 $product = $block->getProduct();
 ?>

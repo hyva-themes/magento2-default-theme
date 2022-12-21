@@ -40,7 +40,7 @@ $activeSelectOptions = [];
     } ?>
 <?php else: ?>
     <?php if (!$option->getRequired()): ?>
-        <div class="field choice">
+        <div class="field choice mt-1 flex items-center gap-x-2">
             <input type="radio"
                    id="bundle-option-<?= (int)$optionId ?>"
                    name="bundle_option[<?= (int)$optionId ?>]"
