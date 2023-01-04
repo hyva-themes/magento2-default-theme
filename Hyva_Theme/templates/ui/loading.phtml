@@ -18,7 +18,7 @@ use Magento\Framework\Escaper;
 /** @var SvgIcons $hyvaicons */
 $hyvaicons = $viewModels->require(SvgIcons::class);
 ?>
-<div class="flex flex-row justify-center items-center w-full h-full fixed select-none"
+<div class="flex flex-row justify-center items-center w-full h-full fixed select-none z-50"
      style="left: 50%;top: 50%;transform: translateX(-50%) translateY(-50%);background: rgba(255,255,255,0.7);"
      x-show="isLoading"
      x-transition:enter="ease-out duration-200"
