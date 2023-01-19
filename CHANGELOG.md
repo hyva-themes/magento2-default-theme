@@ -7,7 +7,70 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.2.0...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.2.1...main
+
+## [1.2.1] - 2023-01-19
+
+[1.2.1]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.2.0...1.2.1
+
+### Added
+
+- **Support system config setting to hide or display stock status on PDP**
+
+  Previously, the stock status was always shown, regardless of the config setting.
+
+  For more information, please refer to the [merge request #652](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/652).
+
+  Many thanks to Kiel Pykett (Youwe) for the contribution!
+
+- **Add autoprefixer**
+
+  Previously the autoprefixer library was removed in Hyvä release 1.2.0 because it no longer was a dependency by Tailwindcss.  
+  However, since then we learned it still is a useful resource to include in the default Hyvä build process.
+
+  For more information please refer to [issue #562](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/562).
+
+### Changed
+
+- **Upgrade Tailwindcss to 3.2.4** 
+
+  This is a backwards compatible upgrade that fixes some issues in tailwind.  
+
+  For more information please refer to [issue #565](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/565).
+
+- **Fix display of original price excl. tax**
+
+  Previously, if catalog prices where configured to be displayed incl. and excl. tax, the price excl. tax was displayed without taking a special price into account.
+
+  For more information, please refer to [merge request #672](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/672).
+
+  Many thanks to Rich Jones (Aware Digital) for the contribution!
+
+- **Fix hardcoded custom option ID in html5 date picker template**
+
+  In the HTML5 version of the datetime custom option template (which is not used by default), the custom option ID was hardcoded.
+
+  For more information, please refer to the [merge request #666](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/666).
+
+  Many thanks to Kiel Pykett (Youwe) for the contribution!
+
+- **Render loader above open modals**
+
+  Previously the loader was displayed behind open modals.
+
+  For more information please refer to [merge request #654](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/654).
+
+  Many thanks to Anil Suthar (Dolphin Web Solution) for the contribution!
+
+- **Change input type for customer telephone number to from "number" to "tel"**
+
+  For more information please refer to [issue #540](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/540).
+
+  Many thanks to Sean van Zuidam (Siteation) for the contribution!
+
+### Removed
+
+- Nothing removed
 
 
 ## [1.2.0] - 2022-12-21
@@ -35,6 +98,57 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **Fix typo in php-cart coupon form html ID**
 
   The attribute `id="discound-form-toggle"` was changed to `id="discount-form-toggle"`
+
+### Removed
+
+- Nothing removed
+
+
+## [1.1.21] - 2023-01-19
+
+[1.1.21]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.20...1.1.21
+
+### Added
+
+- **Support system config setting to hide or display stock status on PDP**
+
+  Previously, the stock status was always shown, regardless of the config setting.
+
+  For more information, please refer to the [merge request #652](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/652).
+
+  Many thanks to Kiel Pykett (Youwe) for the contribution!
+
+### Changed
+
+- **Fix display of original price excl. tax**
+
+  Previously, if catalog prices where configured to be displayed incl. and excl. tax, the price excl. tax was displayed without taking a special price into account.
+
+  For more information, please refer to [merge request #672](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/672).
+
+  Many thanks to Rich Jones (Aware Digital) for the contribution!
+
+- **Fix hardcoded custom option ID in html5 date picker template**
+
+  In the HTML5 version of the datetime custom option template (which is not used by default), the custom option ID was hardcoded.
+
+  For more information, please refer to the [merge request #666](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/666).
+
+  Many thanks to Kiel Pykett (Youwe) for the contribution!
+
+- **Render loader above open modals**
+
+  Previously the loader was displayed behind open modals.
+
+  For more information please refer to [merge request #654](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/654).
+
+  Many thanks to Anil Suthar (Dolphin Web Solution) for the contribution!
+
+- **Change input type for customer telephone number to from "number" to "tel"**
+
+  For more information please refer to [issue #540](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/540).
+
+  Many thanks to Sean van Zuidam (Siteation) for the contribution!
 
 ### Removed
 
@@ -110,13 +224,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
   For more information please refer to [issue #507](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/507).
 
-  Many thanks to Sean van Zuidam (Grimlink) for the contribution!
+  Many thanks to Sean van Zuidam (Siteation) for the contribution!
 
 - **Avoid transition-all in sliders for better CSS layout render performance**
 
   For more information please refer to [issue #509](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/509).
 
-  Many thanks to Sean van Zuidam (Grimlink) for the contribution!
+  Many thanks to Sean van Zuidam (Siteation) for the contribution!
 
 - **Require reset-theme version 1.1.3 for product-main-full-width styling to work**
 
@@ -128,19 +242,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
   For more information please refer to [issue #510](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/510).
 
-  Many thanks to Sean van Zuidam (Grimlink) for the contribution!
+  Many thanks to Sean van Zuidam (Siteation) for the contribution!
 
 - **Correct order of PHPDoc annotation to type var**
 
   For more information please refer to [issue #511](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/511).
 
-  Many thanks to Sean van Zuidam (Grimlink) for the contribution!
+  Many thanks to Sean van Zuidam (Siteation) for the contribution!
 
 - **Clean up aria labels in pager**
 
   For more information please refer to [issue #512](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/512).
 
-  Many thanks to Sean van Zuidam (Grimlink) for the contribution!
+  Many thanks to Sean van Zuidam (Siteation) for the contribution!
 
 - **Enable all recaptcha buttons after recaptcha script load**
 
@@ -247,7 +361,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
   For more information, please refer to [issue #452](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/452) and [merge request #542](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/542)
 
-  Many thanks to Sean van Zuidam (Grimlink) for the contribution!
+  Many thanks to Sean van Zuidam (Siteation) for the contribution!
 
 - **Fix Structured Data for Product Item (Missing Image)**
 
@@ -384,7 +498,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
   For more information please refer to [issue #458](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/458).
 
-  Many thanks to Sean van Zuidam (Grimlink) for the contribution!
+  Many thanks to Sean van Zuidam (Siteation) for the contribution!
 
 - **Fix comment description of the meaning of the `assistance_allowed` value**
 
@@ -451,7 +565,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
   For more information please refer to [issue #486](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/486).
 
-  Many thanks to Sean van Zuidam (Grimlink) for the contribution!
+  Many thanks to Sean van Zuidam (Siteation) for the contribution!
   
 - **Fix broken review summary link and unintentional scroll**
 
@@ -806,7 +920,7 @@ If you're upgrading from <1.1.15 please check the [documentation page on upgradi
 
   For more information please refer to the [Merge Request #435](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/435).
 
-  Many thanks to Ruud van Zuidam (Siteation) and Sean van Zuidam (Grimlink) for the contribution!
+  Many thanks to Ruud van Zuidam and Sean van Zuidam (Siteation) for the contribution!
 
 - **Move sales order totals template to correct folder**
 
