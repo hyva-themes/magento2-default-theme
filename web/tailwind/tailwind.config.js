@@ -123,10 +123,10 @@ module.exports = hyvaModules.mergeTailwindConfig({
   content: [
     // this theme's phtml and layout XML files
     '../../**/*.phtml',
-    '../../*/layout/*.xml'
+    '../../*/layout/*.xml',
     // parent theme in Vendor (if this is a child-theme)
     //'../../../../../../../vendor/hyva-themes/magento2-default-theme/**/*.phtml',
     // app/code phtml files (if need tailwind classes from app/code modules)
-    //'../../../../../../../app/code/**/*.phtml'
+    //'../../../../../../../app/code/**/*.phtml',
   ]
 });
