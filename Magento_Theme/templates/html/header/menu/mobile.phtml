@@ -42,6 +42,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
         <div class="flex items-baseline justify-between menu-icon">
             <div class="flex justify-end w-full">
                 <a @click="$dispatch('toggle-mobile-menu')"
+                       href="#" 
                        class="flex items-center justify-center cursor-pointer"
                        :class="{ 'ml-auto': open }">
                     <?= $heroicons->xHtml('hidden p-4', 64, 64, [":class" => "{ 'hidden' : !open, 'block': open }"]); ?>
@@ -72,6 +73,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                     <?php if (!empty($menuItem['childData'])): ?>
                     <a class="absolute right-0 flex w-8 h-8 mr-8 border rounded cursor-pointer
                         bg-container-lighter border-container"
+                          href="#" 
                           @click="mobilePanelActiveId =
                           mobilePanelActiveId === '<?= /* @noEscape */ (string) $index ?>' ?
                            0 : '<?= /* @noEscape */ (string) $index ?>'"
@@ -90,6 +92,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                         }"
                     >
                         <a class="flex items-center px-8 py-4 border-b cursor-pointer bg-container border-container"
+                              href="#" 
                               @click="mobilePanelActiveId = 0"
                         >
                             <?= $heroicons->chevronLeftHtml(); ?>
