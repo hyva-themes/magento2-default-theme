@@ -96,17 +96,21 @@ if (! $customer->customerLoggedIn()) {
      class="block block-reorder mt-8 hidden"
      :class="{ 'hidden': itemCount === 0 }">
     <div class="border-t border-container mb-6 pt-5">
-        <strong id="block-reorder-heading"
-                class="block title text-primary font-semibold text-lg"
-                role="heading"
-                aria-level="2"
+        <h3
+            id="block-reorder-heading"
+            class="block title text-primary font-semibold text-lg"
         >
             <?= $escaper->escapeHtml(__('Recently Ordered')) ?>
-        </strong>
+        </h3>
     </div>
-    <div class="block-content" aria-labelledby="block-reorder-heading">
-        <form method="post" class="form reorder"
-              action="<?= $escaper->escapeUrl($block->getFormActionUrl()) ?>" id="reorder-validate-detail">
+    <div class="block-content">
+        <form
+            method="post"
+            class="form reorder"
+            action="<?= $escaper->escapeUrl($block->getFormActionUrl()) ?>"
+            id="reorder-validate-detail"
+            aria-labelledby="block-reorder-heading"
+        >
             <strong class="subtitle hidden"><?= $escaper->escapeHtml(__('Last Ordered Items')) ?></strong>
             <template x-if="itemCount">
                 <div>
@@ -114,20 +118,24 @@ if (! $customer->customerLoggedIn()) {
                         <template x-for="product in reorderItems">
                             <li class="flex items-start mb-4">
                                 <div class="shrink-0 mr-2">
-                                    <label class="label hidden">
-                                        <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
-                                    </label>
-                                    <div class="control">
-                                        <input type="checkbox"
-                                               name="order_items[]"
-                                               :id="checkboxId + product.id"
-                                               :value="product.id"
-                                               :title="product.is_saleable
-                                                ? '<?= $escaper->escapeJs(__('Add to Cart')) ?>'
-                                                : '<?= $escaper->escapeJs(__('Product is not salable.')) ?>'"
-                                               :disabled="!product.is_saleable"
+                                    <label class="control">
+                                        <span
+                                            :id="`product-checkbox-label-${checkboxId + product.id}`"
+                                            class="label hidden"
+                                            x-text="product.is_saleable
+                                                ? '<?= $escaper->escapeHtml(__('Add to Cart')) ?>'
+                                                : `<?= $escaper->escapeHtml(__('Product is not salable.')) ?>: ${product.name}`
+                                            "
+                                        ></span>
+                                        <input
+                                            type="checkbox"
+                                            name="order_items[]"
+                                            :id="checkboxId + product.id"
+                                            :value="product.id"
+                                            :aria-labelledby="`product-checkbox-label-${checkboxId + product.id}`"
+                                            :disabled="!product.is_saleable"
                                         />
-                                    </div>
+                                    </label>
                                 </div>
                                 <strong class="text-sm leading-6 font-normal hover:underline">
                                     <a :href="product.url" :title="product.name" x-text="product.name"></a>
@@ -142,13 +150,15 @@ if (! $customer->customerLoggedIn()) {
                                 @click.prevent="addToCart('<?= $escaper->escapeUrl($block->getFormActionUrl()) ?>')"
                                 aria-label="<?= $escaper->escapeHtmlAttr(__('Remove Product')) ?>"
                                 title="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>"
-                                class="action tocart btn btn-primary text-sm">
+                                class="action tocart btn btn-primary text-sm"
+                            >
                                 <?= $escaper->escapeHtml(__('Add to Cart')) ?>
                             </button>
                         </template>
                         <a href="<?= $escaper->escapeUrl($block->getUrl('customer/account')) ?>#my-orders-table"
                            title="<?= $escaper->escapeHtmlAttr(__('View All')); ?>"
-                           class="px-4 text-sm text-gray-500 hover:text-primary">
+                           class="px-4 text-sm text-gray-500 hover:text-primary"
+                        >
                             <span><?= $escaper->escapeHtml(__('View All')); ?></span>
                         </a>
                     </div>
