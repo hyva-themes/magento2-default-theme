@@ -22,6 +22,7 @@
 "Add one or more recipients before sending the message.","Add one or more recipients before sending the message."
 "Are you sure you want to delete this PayPal account?","Are you sure you want to delete this PayPal account?"
 Cart,Cart
+"Cart is empty","Cart is empty"
 Contact,Contact
 "Contact Details","Contact Details"
 "Could not add item to wishlist.","Could not add item to wishlist."
@@ -71,6 +72,7 @@ Watches,Watches
                             ","We found other products you might like!
                             "
 "You are sharing","You are sharing"
+"You have %1 products in your cart.","You have %1 products in your cart."
 "You have signed out","You have signed out"
 "You have signed out and will be redirected to our homepage in 5 seconds.","You have signed out and will be redirected to our homepage in 5 seconds."
 "You might also like:","You might also like:"

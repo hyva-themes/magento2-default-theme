@@ -32,6 +32,7 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
             getData(data) {
                 if (data.cart) { this.cart = data.cart }
             }
+
         }
     }
     function initCompareHeader() {
@@ -138,7 +139,7 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
                :aria-label="
                 cart.summary_count === 0 ?
                     '<?= $escaper->escapeHtml(__('Cart is empty')) ?>' :
-                    `You have ${cart.summary_count} products in your cart.`
+                    $t('You have $1 products in your cart.').replace('$1', cart.summary_count)
                 "
                :aria-disabled="cart.summary_count === 0"
             >
