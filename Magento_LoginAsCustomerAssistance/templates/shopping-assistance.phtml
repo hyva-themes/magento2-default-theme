@@ -45,7 +45,8 @@ if (!$shoppingAssistanceViewModel->isLoginAsCustomerEnabled()) {
     }
 </script>
 <div class="field choice"
-     x-data="initAllowShippingAssistence()">
+     x-data="initAllowShippingAssistence()"
+>
     <input type="checkbox"
            @change="onChange($event.target.checked)"
            name="assistance_allowed_checkbox"
@@ -53,6 +54,7 @@ if (!$shoppingAssistanceViewModel->isLoginAsCustomerEnabled()) {
            value="1"
            title="<?= $escaper->escapeHtmlAttr(__('Allow remote shopping assistance')) ?>"
            class="checkbox"
+           aria-describedby="assistance_allowed_checkbox_tooltip"
         <?php if ($shoppingAssistanceViewModel->isAssistanceAllowed()): ?>
             checked="checked"
         <?php endif; ?>
@@ -67,16 +69,21 @@ if (!$shoppingAssistanceViewModel->isLoginAsCustomerEnabled()) {
     />
 
     <div class="inline-flex px-4">
-        <span @mouseover.prevent.stop="showTooltip = true"
-              @mouseleave.prevent.stop="showTooltip = false"
+        <button
+            @mouseover.prevent.stop="showTooltip = true"
+            @mouseleave.prevent.stop="showTooltip = false"
+            @focus="showTooltip = true"
+            @focusout="showTooltip = false"
+            @keydown.escape="showTooltip = false"
+            aria-labelledby="assistance_allowed_checkbox_tooltip"
         >
-        <?= $heroicons->questionMarkCircleHtml('cursor-hand') ?>
-        </span>
+            <?= $heroicons->questionMarkCircleHtml('cursor-hand') ?>
+        </button>
         <div class="relative" x-cloak x-show="showTooltip">
             <div class="shadow-lg">
                 <div class="absolute top-0 left-0 z-10 w-64 p-2 -mt-6 text-sm leading-tight text-black transform
                     -translate-x-full md:-translate-x-1/3 -translate-y-full bg-white rounded-lg shadow-lg p-4">
-                    <span class="subtitle text-base">
+                    <span class="subtitle text-base" id="assistance_allowed_checkbox_tooltip">
                         <?= $escaper->escapeHtml(__($shoppingAssistanceViewModel->getAssistanceCheckboxTooltip())) ?>
                     </span>
                 </div>
