@@ -41,7 +41,7 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
     </div>
     <?php if ($slideOutDrawer): ?>
         <div role="dialog"
-            aria-labelledby="enquiry-form-drawer-title"
+            aria-labelledby="enquiry-form-drawer-title-<?= $block->getItem()->getId() ?>"
             aria-modal="true"
             @keydown.window.escape="formBlockVisibility=false"
             class="fixed inset-y-0 right-0 z-30 flex max-w-full"
@@ -72,9 +72,9 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
                         <?= $heroicons->xHtml('inline-block', 24, 24) ?>
                     </div>
                 </div>
-                <div class="gift-options-item">
+                <label class="gift-options-item" for="enquiry-form-drawer-title-<?= $block->getItem()->getId() ?>">
                     <span><?= $escaper->escapeHtml($block->getItem()->getName()) ?></span>
-                </div>
+                </label>
                 <?= $block->getChildHtml('gift-options-body') ?>
             </div>
         </div>

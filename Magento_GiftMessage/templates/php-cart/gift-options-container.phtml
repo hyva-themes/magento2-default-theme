@@ -204,10 +204,10 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
     </div>
     <?php if ($slideOutDrawer): ?>
         <div role="dialog"
-            aria-labelledby="enquiry-form-drawer-title"
+            aria-labelledby="enquiry-form-drawer-title-order-gift-options"
             aria-modal="true"
             @keydown.window.escape="formBlockVisibility=false"
-             class="fixed inset-y-0 right-0 z-30 flex max-w-full"
+            class="fixed inset-y-0 right-0 z-30 flex max-w-full"
         >
             <div class="backdrop"
                 x-show="formBlockVisibility"
@@ -230,7 +230,7 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
                 x-transition:leave-end="translate-x-full"
             >
                 <div class="relative">
-                    <h2 class="text-lg font-medium leading-7 text-gray-900 "><?= $escaper->escapeHtml('Order Gift Options') ?></h2>
+                    <label class="text-lg font-medium leading-7 text-gray-900" for="enquiry-form-drawer-title-order-gift-options"><?= $escaper->escapeHtml('Order Gift Options') ?></label>
                         <div class="absolute top-0 right-0 cursor-pointer" @click="formBlockVisibility=false" aria-label="Close panel" tabindex="0" role="button">
                             <?= $heroicons->xHtml('inline-block', 24, 24) ?>
                         </div>
