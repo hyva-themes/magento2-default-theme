@@ -57,21 +57,31 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
         <?php endif ?>
 
         <div class="field choice">
-            <input type="checkbox" name="change_email" id="change-email" value="1"
-                   title="<?= $escaper->escapeHtmlAttr(__('Change Email')) ?>"
-                   x-on:change="showEmailField = !showEmailField"
-                   class="checkbox"/>
+            <input
+                type="checkbox"
+                name="change_email"
+                id="change-email"
+                value="1"
+                title="<?= $escaper->escapeHtmlAttr(__('Change Email')) ?>"
+                x-on:change="showEmailField = !showEmailField"
+                class="checkbox"
+            />
             <label class="label" for="change-email">
                 <span><?= $escaper->escapeHtml(__('Change Email')) ?></span>
             </label>
         </div>
 
         <div class="field choice">
-            <input type="checkbox" name="change_password" id="change-password" value="1"
-                   title="<?= $escaper->escapeHtmlAttr(__('Change Password')) ?>"
-                   x-on:change="showPasswordFields = !showPasswordFields"
+            <input
+                type="checkbox"
+                name="change_password"
+                id="change-password"
+                value="1"
+                title="<?= $escaper->escapeHtmlAttr(__('Change Password')) ?>"
+                x-on:change="showPasswordFields = !showPasswordFields"
                 <?php if ($block->getChangePassword()): ?> checked="checked"<?php endif; ?>
-                   class="checkbox"/>
+                class="checkbox"
+            />
             <label class="label" for="change-password">
                 <span><?= $escaper->escapeHtml(__('Change Password')) ?></span>
             </label>
