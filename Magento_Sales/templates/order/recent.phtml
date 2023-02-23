@@ -29,12 +29,11 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
     $count  = count($orders);
     ?>
     <div class="block-title order my-4 flex justify-between items-center">
-        <span id="recentOrders" class="text-2xl block"><?= $escaper->escapeHtml(__('Recent Orders')) ?></span>
+        <h2 id="recentOrders" class="text-2xl block"><?= $escaper->escapeHtml(__('Recent Orders')) ?></h2>
         <?php if ($count > 0): ?>
             <a
                 class="action view inline-block underline"
                 href="<?= $escaper->escapeUrl($block->getUrl('sales/order/history')) ?>"
-                aria-busy="true"
             >
                 <?= $escaper->escapeHtml(__('View All')) ?>
             </a>
@@ -53,37 +52,37 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 class="grid grid-cols-3 lg:grid-cols-6"
             >
                 <div
-                    role="cell"
+                    role="columnheader"
                     class="text-sm text-secondary p-2"
                 >
                     <?= $escaper->escapeHtml(__('Order #')) ?>
                 </div>
                 <div
-                    role="cell"
+                    role="columnheader"
                     class="text-sm hidden lg:block text-secondary p-2"
                 >
                     <?= $escaper->escapeHtml(__('Date')) ?>
                 </div>
                 <div
-                    role="cell"
+                    role="columnheader"
                     class="text-sm text-secondary p-2"
                 >
                     <?= $escaper->escapeHtml(__('Ship To')) ?>
                 </div>
                 <div
-                    role="cell"
+                    role="columnheader"
                     class="text-sm hidden lg:block text-secondary p-2"
                 >
                     <?= $escaper->escapeHtml(__('Order Total')) ?>
                 </div>
                 <div
-                    role="cell"
+                    role="columnheader"
                     class="text-sm hidden lg:block text-secondary p-2"
                 >
                     <?= $escaper->escapeHtml(__('Status')) ?>
                 </div>
                 <div
-                    role="cell"
+                    role="columnheader"
                     class="text-sm text-secondary p-2 text-center"
                 >
                     <?= $escaper->escapeHtml(__('View')) ?>
@@ -91,18 +90,19 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                         / <?= $escaper->escapeHtml(__('Reorder')) ?>
                     <?php endif; ?>
                 </div>
-
+            </div>
+            <div
+                role="row"
+                class="grid grid-cols-3 lg:grid-cols-6"
+            >
                 <?php $i = 0; ?>
                 <?php foreach ($orders as $order): ?>
                     <?php $i++; ?>
                     <div
                         id="order<?= $escaper->escapeHtml($order->getRealOrderId()) ?>"
-                        role="cell"
+                        role="rowheader"
                         class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
                     >
-                        <span class="sr-only">
-                            <?= $escaper->escapeHtml(__('Order #')) ?>
-                        </span>
                         <?= $escaper->escapeHtml($order->getRealOrderId()) ?>
                         <p class="lg:hidden text-sm">
                             <?= $escaper->escapeHtml($block->formatDate($order->getCreatedAt())) ?>
@@ -110,11 +110,10 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     </div>
                     <div
                         role="cell"
-                        aria-describedby="order<?= $escaper->escapeHtml($order->getRealOrderId()) ?>"
                         class="p-2 hidden lg:flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
                     >
                         <?php $date = new DateTime($order->getCreatedAt()); ?>
-                        <span aria-label="<?= $escaper->escapeHtml(__('Date')) ?> <?= $date->format('Y-m-d') ?>">
+                        <span aria-label="<?= $date->format('Y-m-d') ?>">
                             <?= $escaper->escapeHtml(
                                 $block->formatDate($date)
                             ) ?>
@@ -122,47 +121,39 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     </div>
                     <div
                         role="cell"
-                        aria-describedby="order<?= $escaper->escapeHtml($order->getRealOrderId()) ?>"
                         class="p-2 flex items-center<?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
                     >
                         <?php if ($order->getBillingAddress() && $order->getBillingAddress()->getCompany()): ?>
-                            <span class="sr-only">
-                                <?= $escaper->escapeHtml(__('Ship To')) ?>&nbsp;
-                            </span>
                             <?= $escaper->escapeHtml($order->getBillingAddress()->getCompany()) ?>
                         <?php endif; ?>
                     </div>
                     <div
                         role="cell"
-                        aria-describedby="order<?= $escaper->escapeHtml($order->getRealOrderId()) ?>"
                         class="p-2 hidden lg:flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
                     >
-                        <span class="sr-only">
-                            <?= $escaper->escapeHtml(__('Order Total')) ?>&nbsp;
-                        </span>
                         <?= /* @noEscape */ $order->formatPrice($order->getGrandTotal()) ?>
                     </div>
                     <div
                         role="cell"
-                        aria-describedby="order<?= $escaper->escapeHtml($order->getRealOrderId()) ?>"
                         class="p-2 hidden lg:flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
                     >
-                        <span class="sr-only">
-                            <?= $escaper->escapeHtml(__('Status')) ?>&nbsp;
-                        </span>
                         <?= $escaper->escapeHtml(
                             $order->getStatusLabel()
                         ) ?>
                     </div>
                     <div
                         role="cell"
-                        aria-describedby="order<?= $escaper->escapeHtml($order->getRealOrderId()) ?>"
                         class="p-2 flex items-center justify-evenly<?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
                     >
-                        <a href="<?= $escaper->escapeUrl($block->getViewUrl($order)) ?>"
-                           class="inline-block text-sm underline text-secondary-darker"
-                           title="<?= $escaper->escapeHtmlAttr(__('View Order')) ?>">
-                            <?= $heroicons->eyeHtml() ?>
+                        <a
+                            href="<?= $escaper->escapeUrl($block->getViewUrl($order)) ?>"
+                            class="inline-block text-sm underline text-secondary-darker"
+                            title="<?= $escaper->escapeHtmlAttr(__('View Order')) ?>"
+                            aria-label="View order <?= $escaper->escapeHtml($order->getRealOrderId()) ?>"
+                        >
+                            <span aria-hidden="true">
+                                <?= $heroicons->eyeHtml() ?>
+                            </span>
                         </a>
                         <?php if ($this->helper(Reorder::class)->canReorder($order->getEntityId())): ?>
                             <?php $formData = json_decode(
@@ -177,9 +168,12 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                 <input type="hidden" name="data"
                                        value='<?= /* @noEscape */ json_encode($formData['data']) ?>'
                                 />
-                                <button title="<?= $escaper->escapeHtmlAttr(__('Reorder')) ?>"
-                                        type="submit"
-                                        class="inline-block text-sm text-secondary-darker">
+                                <button
+                                    title="<?= $escaper->escapeHtmlAttr(__('Reorder')) ?>"
+                                    type="submit"
+                                    class="inline-block text-sm text-secondary-darker"
+                                    aria-label="Refresh order <?= $escaper->escapeHtml($order->getRealOrderId()) ?>"
+                                >
                                     <?= $heroicons->refreshHtml() ?>
                                 </button>
                             </form>
