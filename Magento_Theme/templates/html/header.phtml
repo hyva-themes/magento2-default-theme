@@ -130,14 +130,15 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
             <?= $block->getChildHtml('customer') ?>
 
             <!--Cart Icon-->
-            <button
+            <?php if ($showMiniCart): ?>
+                <button
+            <?php else: ?>
+                <a
+            <?php endif ?>
                 id="menu-cart-icon"
-                x-data="initCartButton()"
-                <?php if ($showMiniCart): ?>
-                    @click.prevent.stop="$dispatch('toggle-cart', { isOpen: true })"
-                <?php endif ?>
-                @toggle-cart.window="isCartOpen = $event.detail.isOpen"
                 class="relative inline-block ml-1 no-underline sm:ml-3 hover:text-black"
+                x-data="initCartButton()"
+                role="link"
                 @mouseover.prevent.stop="showTooltip = true"
                 @mouseleave.prevent.stop="showTooltip = false"
                 @focus.prevent.stop="showTooltip = true"
@@ -153,8 +154,14 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
                     )
                 "
                 :aria-disabled="isCartEmpty"
-                :aria-expanded="isCartOpen"
-                aria-haspopup="dialog"
+                <?php if ($showMiniCart): ?>
+                    @click.prevent.stop="$dispatch('toggle-cart', { isOpen: true })"
+                    @toggle-cart.window="isCartOpen = $event.detail.isOpen"
+                    :aria-expanded="isCartOpen"
+                    aria-haspopup="dialog"
+                <?php else: ?>
+                    :href="isCartEmpty ? '#' : '<?= $escaper->escapeUrl($block->getUrl('checkout/cart/index')) ?>'"
+                <?php endif ?>
             >
                 <span class="sr-only label">
                     <?= $escaper->escapeHtml(__('Cart')) ?>
@@ -206,7 +213,11 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
                         translate-y-1/2 rounded-full bg-primary
                     "
                 ></span>
-            </button>
+            <?php if ($showMiniCart): ?>
+                </button>
+            <?php else: ?>
+                </a>
+            <?php endif ?>
 
         </div>
     </div>
