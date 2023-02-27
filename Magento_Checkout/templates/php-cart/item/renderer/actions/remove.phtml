@@ -26,6 +26,7 @@ $productName = $block->getItem()->getName()
     x-data="{}"
     @click.prevent='hyva.postForm(<?= /* @noEscape */ $block->getDeletePostJson() ?>)'
     aria-label="<?= $escaper->escapeHtml(__('Remove %1', $productName)) ?>"
+    type="button"
 >
     <?= $heroicons->trashHtml('w-6 h-6', 24, 24, ['aria-hidden' => 'true']) ?>
 </button>
