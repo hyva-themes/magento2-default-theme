@@ -50,7 +50,10 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
 <div id="header"
      class="relative z-30 w-full border-b shadow bg-container-lighter border-container-lighter"
      x-data="initHeader()"
-     @keydown.window.escape="searchOpen = false;"
+     @keydown.window.escape="
+        searchOpen = false;
+        $refs.searchButton.focus();
+     "
      @private-content-loaded.window="getData(event.detail.data)"
 >
     <div class="container flex flex-wrap items-center justify-between w-full px-6 py-3 mx-auto mt-0">
@@ -105,6 +108,7 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
                 :aria-label="hyva.str('Toggle search form')"
                 aria-haspopup="true"
                 :aria-expanded="searchOpen"
+                x-ref="searchButton"
             >
                 <?= $heroicons->searchHtml(
                     "w-8 h-8 md:h-6 md:w-6 hover:text-black",
