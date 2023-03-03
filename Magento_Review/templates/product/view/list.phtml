@@ -39,9 +39,15 @@ $reviewCollection->load()->addRateVotes();
 
 $items = $reviewCollection->getItems();
 $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
+$productName = $block->getProduct()->getName()
 ?>
 <?php if (count($items)): ?>
-    <div class="mx-auto py-6 items-center" id="customer-review-list">
+    <div
+        class="mx-auto py-6 items-center"
+        id="customer-review-list"
+        aria-label="<?= $escaper->escapeHtmlAttr(__('Customer Reviews')) ?>"
+        tabindex="0"
+    >
         <div class="container mx-auto flex pt-6 pb-3 mb-6 md:flex-row border-b-2 border-gray-300">
             <?php if (!$block->getHideTitle()): ?>
                 <h3 class="text-gray-900 text-2xl title-font font-base text-center md:text-left w-full">
@@ -67,15 +73,18 @@ $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
                                     <?= $escaper->escapeHtml($vote->getRatingCode()) ?>
                                 </div>
                                 <span class="hidden" itemprop="ratingValue"><?= /** @noEscape */ $starsFilled; ?></span>
-                                <div class="flex flex-row">
+                                <div
+                                    class="flex flex-row"
+                                    aria-label="<?= $escaper->escapeHtmlAttr(__('%1 rating. %2 out of %3 stars', $productName, $starsFilled, $ratingSteps))?>"
+                                >
                                     <?php $i = 0; ?>
                                     <?php while ($i < $starsFilled): ?>
-                                        <?= $heroiconsSolid->starHtml('text-yellow-400'); ?>
+                                        <?= $heroiconsSolid->starHtml('text-yellow-400', 24, 24, ["aria-hidden" => "true"]); ?>
                                         <?php $i++; ?>
                                     <?php endwhile; ?>
                                     <?php $i = 0; ?>
                                     <?php while ($i < $starsEmpty): ?>
-                                        <?= $heroiconsSolid->starHtml('text-gray-400'); ?>
+                                        <?= $heroiconsSolid->starHtml('text-gray-400', 24, 24, ["aria-hidden" => "true"]); ?>
                                         <?php $i++; ?>
                                     <?php endwhile; ?>
                                 </div>
