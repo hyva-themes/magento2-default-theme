@@ -79,12 +79,12 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                         <div class="sr-only" aria-live="polite">
                             <template x-if="!showPassword">
                                 <span>
-                                    <?= $escaper->escapeHtml(__('Password field hidden')) ?>
+                                    <?= $escaper->escapeHtml(__('Password hidden')) ?>
                                 </span>
                             </template>
                             <template x-if="showPassword">
                                 <span>
-                                    <?= $escaper->escapeHtml(__('Password field shown')) ?>
+                                    <?= $escaper->escapeHtml(__('Password shown')) ?>
                                 </span>
                             </template>
                         </div>
