@@ -70,6 +70,7 @@ if (!$shoppingAssistanceViewModel->isLoginAsCustomerEnabled()) {
 
     <div class="inline-flex px-4">
         <button
+            type="button"
             @mouseover.prevent.stop="showTooltip = true"
             @mouseleave.prevent.stop="showTooltip = false"
             @focus="showTooltip = true"
