@@ -150,14 +150,14 @@ $productId = $block->getProduct()->getId();
                 addEventListener('scroll', function scrollHandler() {
                     clearTimeout(scrollTimeout);
 
-                    scrollTimeout = setTimeout(function() {
+                    scrollTimeout = setTimeout(() => {
                         if (this.reviewsSection) {
                             this.reviewsSection.focus()
                         }
 
                         window.removeEventListener("scroll", scrollHandler);
                     }, 50);
-                });
+                }.bind(this));
 
                 this.reviewsSection.scrollIntoView({behavior: 'smooth'})
             }
