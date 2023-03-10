@@ -208,7 +208,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                                 class="form-select validate-select region_id"
                                 x-ref="region_id"
                                 x-model="selectedRegion"
-                                @change="$refs.region.value = availableRegions[selectedRegion].name"
+                                @change="$nextTick(() => $refs.region.value = availableRegions[selectedRegion].name)"
                         >
                             <option value=""><?= $escaper->escapeHtml(__('Please select a region, state or province.')) ?></option>
                             <template x-for="regionId in Object.keys(availableRegions)">
