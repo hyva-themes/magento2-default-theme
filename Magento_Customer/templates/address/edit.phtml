@@ -89,7 +89,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                                title="<?= /* @noEscape */ $streetLabel ?>"
                                id="street_1"
                                class="form-input"
-                               @change="onChange"
+                               @input.debounce="onChange"
                         />
                     </div>
                 </div>
@@ -105,7 +105,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                                    title="<?= $escaper->escapeHtmlAttr(__('Street Address %1', $i + 1)) ?>"
                                    id="street_<?= /* @noEscape */ $i + 1 ?>"
                                    class="form-input"
-                                   @change="onChange"
+                                   @input.debounce="onChange"
                             />
                         </div>
                     </div>
@@ -124,7 +124,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                                title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('vat_id') ?>"
                                class="form-input"
                                id="vat_id"
-                               @change="onChange">
+                               @input.debounce="onChange">
                     </div>
                 </div>
             <?php endif; ?>
@@ -142,7 +142,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                            title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('postcode') ?>"
                            id="zip"
                            :required="isZipRequired"
-                           @change="onChange"
+                           @input.debounce="onChange"
                            data-validate='{"postcode": true}'
                            class="form-input">
                 </div>
@@ -160,7 +160,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                            title="<?= $escaper->escapeHtmlAttr(__('City')) ?>"
                            class="form-input"
                            id="city"
-                           @change="onChange">
+                           @input.debounce="onChange">
                 </div>
             </div>
 
@@ -182,7 +182,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                             required
                             class="form-select"
                             x-ref="country_id"
-                            @change="changeCountry($event.target)"
+                            @input.debounce="changeCountry($event.target)"
                     >
                         <?php foreach ($countries as $country): ?>
                             <option name="<?= /** @noEscape */ $country['label'] ?>"
@@ -212,7 +212,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                                 class="form-select validate-select region_id"
                                 x-ref="region_id"
                                 x-model="selectedRegion"
-                                @change="onRegionIdChange"
+                                @input.debounce="onRegionIdChange"
                         >
                             <option value=""><?= $escaper->escapeHtml(__('Please select a region, state or province.')) ?></option>
                             <template x-for="regionId in Object.keys(availableRegions)">
@@ -235,7 +235,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                            title="<?= /* @noEscape */ $regionLabel ?>"
                            class="form-input"
                            :required="isRegionRequired"
-                           @change="onChange"
+                           @input.debounce="onChange"
                     />
                 </div>
             </div>

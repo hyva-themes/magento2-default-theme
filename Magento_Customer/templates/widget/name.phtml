@@ -83,7 +83,7 @@ $suffix = $block->showSuffix();
                    class="form-input <?= $escaper->escapeHtmlAttr(
                        $block->getAttributeValidationClass('firstname')
                    ) ?>"
-                   @change="onChange"
+                   @input.debounce="onChange"
                 <?= ($block->getAttributeValidationClass('firstname') == 'required-entry') ? ' required' : '' ?>
             >
         </div>
@@ -103,7 +103,7 @@ $suffix = $block->showSuffix();
                    title="<?= $escaper->escapeHtmlAttr($block->getStoreLabel('middlename')) ?>"
                    class="form-input
                      <?= $escaper->escapeHtmlAttr($block->getAttributeValidationClass('middlename')) ?>"
-                   @change="onChange"
+                   @input.debounce="onChange"
                    <?= $isMiddlenameRequired ? ' required' : '' ?>
             >
         </div>
@@ -124,7 +124,7 @@ $suffix = $block->showSuffix();
                    class="form-input <?= $escaper->escapeHtmlAttr(
                        $block->getAttributeValidationClass('lastname')
                    ) ?>"
-                   @change="onChange"
+                   @input.debounce="onChange"
                 <?= ($block->getAttributeValidationClass('lastname') == 'required-entry') ? ' required' : '' ?>
             >
         </div>
