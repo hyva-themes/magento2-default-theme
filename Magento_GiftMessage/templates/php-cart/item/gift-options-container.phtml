@@ -27,7 +27,7 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
 
 <div x-data="initGiftItemOptions({itemId: '<?= (int) $block->getItem()->getId() ?>'})" class="gift-options-component w-full flex flex-wrap my-6" :data-item-id="itemId" x-cloak>
     <div class="text-left gift-options-title w-full order-first" x-show="isGiftMsgEnabled || hasActiveOptions">
-        <span @click="formBlockVisibility = !formBlockVisibility" class="cursor-pointer text-primary-lighter select-none whitespace-nowrap underline">
+        <button @click="formBlockVisibility = !formBlockVisibility" class="cursor-pointer text-primary-lighter select-none whitespace-nowrap underline">
             <?= $escaper->escapeHtml(__('Gift options')) ?>
             <?php if (!$slideOutDrawer): ?>
                 <span x-show="!formBlockVisibility">
@@ -37,7 +37,7 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
                     <?= $heroicons->chevronUpHtml('inline-block', 16, 16) ?>
                 </span>
             <?php endif ?>
-        </span>
+        </button>
     </div>
     <?php if ($slideOutDrawer): ?>
         <div role="dialog"
