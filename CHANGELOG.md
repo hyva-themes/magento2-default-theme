@@ -9,6 +9,28 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.22...1.1.x-main
 
+## [1.1.23] - 2023-03-17
+
+[1.1.23]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.22...1.1.23
+
+### Added
+
+- Nothing added
+
+### Changed
+
+- **Make region selection code more robust under Alpine v2**
+
+  In `Magento_Customer/templates/address/edit.phtml` a small change was made to avoid a race condition.
+  Previously, with Alpine v2, it could happen that a change of the region selection was not seen by the form validation.
+
+  For more information, please refer to [merge request #724](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/724)
+
+### Removed
+
+- Nothing removed
+
+
 ## [1.1.22] - 2023-03-06
 
 [1.1.22]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.21...1.1.22
