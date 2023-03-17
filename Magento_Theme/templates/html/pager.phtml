@@ -82,14 +82,15 @@ $pagerItemBtnClass = $pagerItemClass
                                 <?php endif; ?>
                             </a>
                         <?php else: ?>
-                            <strong
+                            <button
+                                disabled
                                 class="previous <?= /* @noEscape */ $pagerItemClass ?> rounded-l-md px-3 py-2 text-gray-400
                                  border-gray-200"
                                 aria-disabled="true"
-                                aria-label="<?= $escaper->escapeHtml(__('Previous')) ?>"
+                                aria-label="<?= $escaper->escapeHtmlAttr(__('Previous')) ?>"
                             >
                                 <?= $heroicons->chevronLeftHtml('', 20, 20, [ 'aria-hidden' => 'true']); ?>
-                            </strong>
+                            </button>
                         <?php endif; ?>
                     </li>
 
@@ -196,14 +197,15 @@ $pagerItemBtnClass = $pagerItemClass
                                 <?php endif; ?>
                             </a>
                         <?php else: ?>
-                            <strong
+                            <button
+                                disabled
                                 class="next <?= /* @noEscape */ $pagerItemClass ?> rounded-r-md px-3 py-2 text-gray-400
                                  border-gray-200"
                                 aria-disabled="true"
-                                aria-label="<?= $escaper->escapeHtml(__('Next')) ?>"
+                                aria-label="<?= $escaper->escapeHtmlAttr(__('Next')) ?>"
                             >
                                 <?= $heroicons->chevronRightHtml('', 20, 20, [ 'aria-hidden' => 'true']); ?>
-                            </strong>
+                            </button>
                         <?php endif; ?>
                     </li>
                 </ol>
