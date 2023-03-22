@@ -12,3 +12,18 @@
         @apply border-primary-lighter ring ring-primary ring-opacity-50;
     }
 }
+
+:is(
+    .required,
+    .field-reserved
+):has(
+    :is(
+        input,
+        select,
+        textarea
+    )[required]
+) label:after {
+    content: '';
+    background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAzMiAzMicgZmlsbD0nI2RjMjYyNic+PHBhdGggZD0nbTAgMTQgMi03IDEyIDUtMS0xMmg3bC0xIDEyIDExLTUgMiA3LTEyIDMgOSA5LTYgNC03LTEwLTYgMTAtNi00IDgtOS0xMi0zJy8+PC9zdmc+") no-repeat;
+    @apply w-1.5 h-1.5 inline-block pl-1.5 relative -top-1.5
+}
