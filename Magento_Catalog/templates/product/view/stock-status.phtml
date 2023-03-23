@@ -14,6 +14,8 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+
 /** @var Template $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
@@ -22,8 +24,8 @@ use Magento\Framework\View\Element\Template;
 $currentProduct = $viewModels->require(CurrentProduct::class);
 
 /** @var Product $product */
-$product = $this->hasData('product')
-    ? $this->getData('product')
+$product = $block->hasData('product')
+    ? $block->getData('product')
     : $currentProduct->get();
 
 if (!$product || !$product->getId()) {
