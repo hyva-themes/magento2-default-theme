@@ -108,16 +108,20 @@ $productName = $block->getProduct()->getName()
                                         $format
                                     )
                                 ); ?>"
-                                aria-label="<?= $escaper->escapeHtmlAttr(
-                                    $block->formatDate(
-                                        $review->getCreatedAt(),
-                                        $formatLong
-                                    )
-                                ) ?>"
                             >
-                                <?= $escaper->escapeHtml(
-                                    $block->formatDate($review->getCreatedAt(), $format)
-                                ) ?>
+                                <span class="sr-only">
+                                    <?= $escaper->escapeHtml(
+                                        $block->formatDate(
+                                            $review->getCreatedAt(),
+                                            $formatLong
+                                        )
+                                    ) ?>
+                                </span>
+                                <span aria-hidden="true">
+                                    <?= $escaper->escapeHtml(
+                                        $block->formatDate($review->getCreatedAt(), $format)
+                                    ) ?>
+                                </span>
                             </time>
                     </div>
                     <div class="mt-2" itemprop="description">
