@@ -93,7 +93,7 @@ $helper = $this->helper(SearchHelper::class);
                @focus.once="suggest"
                @input.debounce.300="suggest"
                @keydown.arrow-down.prevent="focusElement($root.querySelector('[tabindex]'))"
-               @search-open.window.debounce.5="
+               @search-open.window.debounce.10="
                     $el.focus()
                     $el.select()
                "
