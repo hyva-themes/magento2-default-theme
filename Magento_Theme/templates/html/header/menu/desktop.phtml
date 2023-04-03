@@ -56,15 +56,22 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                                 <?= $escaper->escapeHtml($menuItem['name']) ?>
                             </a>
                             <?php if (!empty($menuItem['childData'])): ?>
-                                <button class="sr-only -right-2 h-5 w-5 focus:not-sr-only focus:absolute"
+                                <button class="-right-2 w-5 absolute cursor-default"
                                         aria-haspopup="menu"
-                                        :aria-expanded="hoverPanelActiveId === '<?= /* @noEscape */ (string) $index ?>' ? 'true' : 'false'"
-                                        @click="openMenuOnClick('<?= /* @noEscape */ (string) $index ?>')"
+                                        :aria-expanded="hoverPanelActiveId === '<?= /* @noEscape */ (string) $index ?>'"
+                                        @keyup.enter="openMenuOnClick('<?= /* @noEscape */ (string) $index ?>')"
                                 >
                                     <?= $heroiconsSolid->chevronDownHtml("flex self-center h-5 w-5", 25, 25, ['aria-hidden' => 'true']) ?>
-                                    <span class="sr-only">
-                                        <?= $escaper->escapeHtml(__('Show submenu for %1 category', $menuItem['name'])) ?>
-                                    </span>
+                                    <template x-if="hoverPanelActiveId === '<?= /* @noEscape */ (string) $index ?>'">
+                                        <span class="sr-only">
+                                            <?= $escaper->escapeHtml(__('Close submenu for %1 category', $menuItem['name'])) ?>
+                                        </span>
+                                    </template>
+                                    <template x-if="hoverPanelActiveId != '<?= /* @noEscape */ (string) $index ?>'">
+                                        <span class="sr-only">
+                                            <?= $escaper->escapeHtml(__('Show submenu for %1 category', $menuItem['name'])) ?>
+                                        </span>
+                                    </template>
                                 </button>
                             <?php endif; ?>
                         </span>
