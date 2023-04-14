@@ -23,10 +23,7 @@ $productViewModel         = $viewModels->require(ProductPage::class);
 $productListItemViewModel = $viewModels->require(ProductListItem::class);
 $currentCategoryViewModel = $viewModels->require(CurrentCategory::class);
 
-$hideRatingSummary = (bool) $block->getData('hide_rating_summary');
-$hideDetails = (bool) $block->getData('hideDetails');
 $eagerLoadImagesCount = (int) ($block->getData('eager_load_images_count') ?? 3);
-
 $productCollection = $block->getLoadedProductCollection();
 
 ?>
