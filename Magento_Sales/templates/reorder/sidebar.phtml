@@ -114,18 +114,12 @@ if (! $customer->customerLoggedIn()) {
                         <template x-for="product in reorderItems">
                             <li class="flex items-start mb-4">
                                 <div class="shrink-0 mr-2">
-                                    <label class="label hidden">
-                                        <span x-text="`${hyva.str('Add to Cart')} ${product.name}`">
-                                        </span>
-                                    </label>
+
                                     <div class="control">
                                         <input type="checkbox"
                                                name="order_items[]"
                                                :id="checkboxId + product.id"
                                                :value="product.id"
-                                               :aria-label="product.is_saleable
-                                                ? `${hyva.str('Add to Cart')} ${product.name}`
-                                                : '<?= $escaper->escapeJs(__('Product is not salable.')) ?>'"
                                                :disabled="!product.is_saleable"
                                         />
                                     </div>
