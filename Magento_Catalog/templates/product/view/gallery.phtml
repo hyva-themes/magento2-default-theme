@@ -44,7 +44,6 @@ $productName = $block->getProduct()->getName();
 
 <div id="gallery"
      x-data="initGallery()"
-     x-init="initActive(); $nextTick(() => calcPageSize())"
      x-bind="eventListeners"
      class="order-1 w-full md:w-5/12 lg:w-1/2 md:h-auto"
     >
@@ -61,6 +60,7 @@ $productName = $block->getProduct()->getName();
             </button>
         </div>
         <div class="relative self-center w-full"
+             x-ref="galleryMainImagesWrapper"
              x-transition:enter="ease-out duration-500"
              x-transition:enter-start="opacity-0"
              x-transition:enter-end="opacity-100"
@@ -184,6 +184,21 @@ $productName = $block->getProduct()->getName();
             "itemCount": 0,
             "pageSize": 4,
             "pageFillers": 0,
+            "touchXDown": null,
+            "touchYDown": null,
+            init() {
+                this.initActive();
+                this.$nextTick(() => this.calcPageSize());
+
+                if (this.images.length > 1) {
+                    const galleryMainImagesWrapper = this.$refs.galleryMainImagesWrapper;
+
+                    if (galleryMainImagesWrapper) {
+                        galleryMainImagesWrapper.addEventListener('touchstart', (event) => {this.handleTouchStart(event)});
+                        galleryMainImagesWrapper.addEventListener('touchmove', (event) => {this.handleTouchMove(event)});
+                    }
+                }
+            },
             receiveImages(images) {
                 if (this.appendOnReceiveImages) {
                     const initialUrls = this.initialImages.map(image => image.full);
@@ -388,6 +403,64 @@ $productName = $block->getProduct()->getName();
                 },
                 ['@reset-gallery.window'](event) {
                     this.resetGallery();
+                }
+            },
+            getTouches: function (event) {
+                return event.touches;
+            },
+            handleTouchStart: function (event) {
+                let firstTouch = this.getTouches(event)[0];
+
+                this.touchXDown = firstTouch.clientX;
+                this.touchYDown = firstTouch.clientY;
+            },
+            handleTouchMove: function (event) {
+                if (!this.touchXDown || !this.touchYDown) {
+                    return;
+                }
+
+                let xUp = event.touches[0].clientX;
+                let yUp = event.touches[0].clientY;
+
+                let xDiff = this.touchXDown - xUp;
+                let yDiff = this.touchYDown - yUp;
+
+                if (Math.abs(xDiff) > Math.abs(yDiff)) {
+                    if (xDiff > 0) {
+                        this.showNext();
+                    } else {
+                        this.showPrevious();
+                    }
+                }
+
+                /* reset values */
+                this.touchXDown = null;
+                this.touchYDown = null;
+            },
+            showPrevious() {
+                let activeIndex = --this.active;
+
+                if (activeIndex < 0) {
+                    activeIndex = this.itemCount - 1;
+                }
+
+                this.setActive(activeIndex);
+
+                if (this.isSlider) {
+                    this.scrollTo(activeIndex);
+                }
+            },
+            showNext() {
+                let activeIndex = ++this.active;
+
+                if (activeIndex === this.itemCount) {
+                    activeIndex = 0;
+                }
+
+                this.setActive(activeIndex);
+
+                if (this.isSlider) {
+                    this.scrollTo(activeIndex);
                 }
             }
         }
