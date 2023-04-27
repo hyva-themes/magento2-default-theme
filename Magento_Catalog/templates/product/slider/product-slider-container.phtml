@@ -116,6 +116,12 @@ if ($isSharedItemRenderer && $block->getChildBlock('slider.item.template')) {
                     slider.scrollLeft = Math.floor(slideWidth) * idx;
                     this.active = idx;
                 }
+            },
+            skipCarouselToNavigation(navSelector) {
+                const element = document.getElementById(navSelector)
+
+                element?.scrollIntoView({behavior: 'smooth', block: 'end'});
+                this.$nextTick(() => element?.querySelector('button:not([disabled])')?.focus({preventScroll: true}))
             }
         }
     }
@@ -158,14 +164,14 @@ if ($isSharedItemRenderer && $block->getChildBlock('slider.item.template')) {
             >
                 <?= $escaper->escapeHtml(__('Press to skip carousel')) ?>
             </a>
-            <a
+            <button
                 x-show="itemCount > pageSize"
-                x-cloak
-                :href="`#${$id('slider-nav')}`"
+                type="button"
                 class="action skip sr-only focus:not-sr-only focus:absolute focus:z-30 focus:bg-white"
+                @click.prevent="skipCarouselToNavigation($id('slider-nav'))"
             >
                 <?= $escaper->escapeHtml(__('Press to go to carousel navigation')) ?>
-            </a>
+            </button>
             <div class="flex-none relative w-full overflow-x-hidden focus-within:ring-2 ring-offset-2 active:ring-0 ring-blue-500/50">
                 <div class="relative flex flex-nowrap w-full overflow-auto js_slides snap md:px-1 xl:px-2"
                      @scroll.debounce="calcActive"
