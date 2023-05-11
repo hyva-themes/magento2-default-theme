@@ -101,7 +101,7 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
                     searchOpen = !searchOpen;
                     $dispatch('search-open');
                 "
-                :aria-label="hyva.str('Toggle search form')"
+                :aria-label="<?= $escaper->escapeHtml(__('Toggle search form')) ?>"
                 aria-haspopup="true"
                 :aria-expanded="searchOpen"
                 x-ref="searchButton"
