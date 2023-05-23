@@ -37,7 +37,7 @@ $productCollection = $block->getLoadedProductCollection();
         </div>
     </div>
 <?php else: ?>
-    <section class="py-8">
+    <section class="py-8" id="products-list" aria-label="<?= $escaper->escapeHtmlAttr(__('Products list')) ?>" tabindex="-1">
         <?= $block->getToolbarHtml() ?>
         <?= $block->getAdditionalHtml() ?>
         <?php
@@ -57,13 +57,7 @@ $productCollection = $block->getLoadedProductCollection();
          */
         $pos = $block->getPositioned();
         ?>
-        <section
-            class="products wrapper mode-<?= /* @noEscape */$viewMode ?> products-<?= /* @noEscape */$viewMode ?>"
-            id="products-list"
-            role="region"
-            aria-label="<?= $escaper->escapeHtmlAttr(__('Products list')) ?>"
-            tabindex="-1"
-        >
+        <div class="products wrapper mode-<?= /* @noEscape */$viewMode ?> products-<?= /* @noEscape */$viewMode ?>">
             <div class="mx-auto pt-4 pb-12 grid gap-4 grid-cols-1 <?= /* @noEscape */$viewMode === 'grid'
                 ? 'sm:grid-cols-2 xl:grid-cols-3'
                 : '' ?>">
@@ -83,7 +77,7 @@ $productCollection = $block->getLoadedProductCollection();
                     );
                 } ?>
             </div>
-        </section>
+        </div>
         <?= $block->getChildBlock('toolbar')->setIsBottom(true)->toHtml() ?>
     </section>
 <?php endif; ?>
