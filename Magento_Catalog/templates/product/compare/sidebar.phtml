@@ -119,31 +119,40 @@ function initCompareSidebarClear() {
 <div x-data="initCompareOnCompareSidebar()"
      @private-content-loaded.window="receiveCompareData($event.detail.data)"
      class="compare-widget mt-8 hidden"
-     :class="{ 'hidden': !(itemCount > 0) }">
-    <div class="border-t border-container mb-6 pt-5">
+     :class="{ 'hidden': !itemCount }"
+     :aria-hidden="!itemCount"
+>
+    <h2 class="border-t border-container mb-6 pt-5" id="compare-sidebar">
         <strong class="block title text-primary font-semibold text-lg">
             <?= $escaper->escapeHtml(__('Compare Products')) ?>
         </strong>
-    </div>
+    </h2>
     <template x-if="itemCount">
-        <ul class="my-4">
+        <ul class="my-4" aria-labelledby="compare-sidebar">
             <template x-for="product in compareItems">
                 <li class="flex items-start mb-4">
-                    <a :href="product.product_url"
+                    <a
+                        :href="product.product_url"
                         class="block mb-3 w-10 h-10 shrink-0 mr-4"
-                        :title="product.name">
-                        <img :src="product.image" :alt="product.name" loading="lazy">
+                        aria-hidden="true"
+                        tabindex="-1"
+                    >
+                        <img
+                            :src="product.image"
+                            alt=""
+                            loading="lazy"
+                        >
                     </a>
                     <strong class="mr-2 text-sm leading-6 font-normal">
                         <a :href="product.product_url" :title="product.name" x-html="product.name"></a>
                     </strong>
                     <button
                         @click.prevent="removeFromCompare(product.id)"
-                        aria-label="<?= $escaper->escapeHtmlAttr(__('Remove Product')) ?>"
+                        :aria-label="hyva.strf('<?= $escaper->escapeHtmlAttr(__('Remove product "%0" from the comparison')) ?>', product.name)"
                         class="p-1 inline-flex shrink-0 items-center justify-center text-gray-500
                                hover:text-primary ml-auto"
-                        title="<?= $escaper->escapeHtmlAttr(__('Remove Product')) ?>">
-                        <?= $heroicons->xHtml('', 20, 20); ?>
+                    >
+                        <?= $heroicons->xHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                     </button>
                 </li>
             </template>
