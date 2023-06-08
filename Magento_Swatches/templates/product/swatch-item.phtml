@@ -64,14 +64,16 @@ if (!$productId || !$attributeId) {
                 x-on:change="changeOption(<?= (int) $attributeId ?>, $event.target.value)"
                 x-model="selectedValues[<?= (int) $attributeId ?>]"
                 :required="getAllowedAttributeOptions(<?= (int) $attributeId ?>).filter(
-                                                                    attributeOption => selectedValues[attributeOption]
-                                                                ).length === 0"
-                :aria-label="getSwatchText(<?= (int) $attributeId ?>, item.id)"
+                    attributeOption => selectedValues[attributeOption]
+                ).length === 0"
+                :aria-label="getSwatchText(<?= $escaper->escapeHtmlAttr($attributeId) ?>, item.id)"
+                aria-describedby="attribute-label-<?= $escaper->escapeHtmlAttr($attributeId) ?>"
             >
             <template x-if="isTextSwatch(<?= (int) $attributeId ?>, item.id)">
-                <div x-html="getSwatchText(<?= (int) $attributeId ?>, item.id)"
-                     class="whitespace-nowrap"
-                     aria-hidden="true"
+                <div
+                    x-text="getSwatchText(<?= (int) $attributeId ?>, item.id)"
+                    class="whitespace-nowrap"
+                    aria-hidden="true"
                 ></div>
             </template>
         </label>
