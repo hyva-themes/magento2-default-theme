@@ -129,6 +129,8 @@ $productName = $block->getProduct()->getName();
                 class="flex items-center"
                 :class="{ 'fixed justify-center bottom-0 left-0 right-0 mx-6': fullscreen }"
                 style="min-height: 100px;"
+                x-show="images.length > 1"
+                x-cloak
             >
                 <button
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Previous')) ?>"
@@ -145,8 +147,6 @@ $productName = $block->getProduct()->getName();
                     <template x-for="(image, index) in images" :key="index">
                         <div class="js_thumbs_slide flex shrink-0 mb-2 mr-2 lg:mr-4 last:mr-0">
                             <button
-                                x-show="images.length > 1"
-                                x-cloak
                                 @click.prevent="setActive(index);"
                                 class="block border border-gray-300 hover:border-primary focus:border-primary"
                                 :class="{'border-primary': active === index}"
