@@ -85,10 +85,13 @@ $hasAssociatedProducts = count($associatedProducts) > 0;
         <div class="flex flex-wrap border-t border-gray-300
             py-2 w-full items-center justify-between gap-2"
         >
-            <label class="label text-gray-700 text-left"
-                   for="super_group[<?= $escaper->escapeHtmlAttr($item->getId()) ?>]"
+            <label
+                class="text-gray-700 text-left"
+                for="super_group[<?= $escaper->escapeHtmlAttr($item->getId()) ?>]"
             >
-                <span class="product-item-name font-semibold"><?= $escaper->escapeHtml($item->getName()) ?></span>
+                <span class="product-item-name font-semibold">
+                    <?= $escaper->escapeHtml($item->getName()) ?>
+                </span>
                 <?php if ($block->getCanShowProductPrice($product)): ?>
                     <?php if ($block->getCanShowProductPrice($item)): ?>
                         <?= /* @noEscape */ $block->getProductPrice($item) ?>
@@ -103,6 +106,7 @@ $hasAssociatedProducts = count($associatedProducts) > 0;
                             <input type="number"
                                    min="0"
                                    name="super_group[<?= $escaper->escapeHtmlAttr($item->getId()) ?>]"
+                                   id="super_group[<?= $escaper->escapeHtmlAttr($item->getId()) ?>]"
                                    value="<?= $escaper->escapeHtmlAttr($item->getQty() * 1) ?>"
                                    title="<?= $escaper->escapeHtmlAttr(__('Qty')) ?>"
                                    class="qty form-input px-2 py-2 w-20 text-center"
