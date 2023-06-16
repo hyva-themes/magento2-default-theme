@@ -35,8 +35,8 @@ $uniqueId = $productId . uniqid();
         <?php endif; ?>
         tabindex="0"
         :aria-label="reviewsSection
-            ? '<?= $escaper->escapeHtmlAttr(__('%1 rating. %2 out of %3 stars. Click to go to reviews.', $productName, $starsFilled + $starFragment, $ratingSteps))?>'
-            : '<?= $escaper->escapeHtmlAttr(__('%1 rating. %2 out of %3 stars', $productName, $starsFilled + $starFragment, $ratingSteps))?>'
+            ? '<?= $escaper->escapeJs(__('%1 rating. %2 out of %3 stars. Click to go to reviews.', $productName, $starsFilled + $starFragment, $ratingSteps))?>'
+            : '<?= $escaper->escapeJs(__('%1 rating. %2 out of %3 stars', $productName, $starsFilled + $starFragment, $ratingSteps))?>'
         "
         role="group"
     >
