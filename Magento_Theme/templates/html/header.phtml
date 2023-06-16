@@ -32,7 +32,8 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
             getData(data) {
                 if (data.cart) { this.cart = data.cart }
             },
-            get isCartEmpty () {
+            isCartEmpty() {
+                console.log('iscartempty?',!this.cart.summary_count);
                 return !this.cart.summary_count
             }
         }
@@ -132,7 +133,7 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
                 id="menu-cart-icon"
                 class="relative inline-block ml-1 no-underline sm:ml-3 hover:text-black"
                 x-data="{ isCartOpen: false }"
-                :aria-disabled="isCartEmpty"
+                :aria-disabled="isCartEmpty()"
                 <?php if ($showMiniCart): ?>
                     @click.prevent.stop="() => {
                         $dispatch('toggle-cart', { isOpen: true })
@@ -148,7 +149,7 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
                     class="sr-only label"
                     x-text="`
                         <?= $escaper->escapeHtml(__($showMiniCart ? 'Toggle minicart' : 'View cart')) ?>,
-                        ${isCartEmpty ?
+                        ${isCartEmpty() ?
                         '<?= $escaper->escapeHtml(__('Cart is empty')) ?>' :
                         hyva.str(
                             'You have %1 product%2 in your cart.',
@@ -167,7 +168,7 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
 
                 <span
                     x-text="cart.summary_count"
-                    x-show="!isCartEmpty"
+                    x-show="!isCartEmpty()"
                     x-cloak
                     class="
                         absolute top-0 right-0 h-5 px-2 py-1 -mt-5 -mr-4 text-xs font-semibold
