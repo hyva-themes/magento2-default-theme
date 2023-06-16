@@ -26,6 +26,7 @@ $customerRegistration = $viewModels->require(CustomerRegistration::class);
     @keyup.escape="open = false"
 >
     <button
+        type="button"
         href="<?= $escaper->escapeHtmlAttr($escaper->escapeUrl($block->getUrl('customer/account'))) ?>"
         id="customer-menu"
         class="block hover:text-black"
