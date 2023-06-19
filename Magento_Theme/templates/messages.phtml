@@ -69,10 +69,12 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 <section id="messages"
          x-data="initMessages()"
          x-bind="eventListeners"
+         aria-live="assertive"
+         role="alert"
 >
     <template x-if="!isEmpty()">
         <div class="w-full">
-            <div role="alert" class="messages container mx-auto py-3">
+            <div class="messages container mx-auto py-3">
                 <template x-for="(message, index) in messages" :key="index">
                     <div>
                         <template x-if="message">
@@ -80,10 +82,13 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                  :ui-id="'message-' + message.type"
                             >
                                 <span x-html="message.text"></span>
-                                <a href="#" class="close cursor-pointer" title="close"
-                                   @click.prevent="removeMessage(index)">
+                                <button
+                                    class="close cursor-pointer"
+                                    aria-label="<?= $escaper->escapeHtml(__('close message')) ?>"
+                                    @click.prevent="removeMessage(index)"
+                                >
                                     <?= $heroicons->xHtml('text-white', 18, 18); ?>
-                                </a>
+                                </button>
                             </div>
                         </template>
                     </div>

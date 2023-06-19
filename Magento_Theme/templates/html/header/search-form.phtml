@@ -76,7 +76,7 @@ $helper = $this->helper(SearchHelper::class);
 </script>
 <div class="container py-2 mx-auto text-black" x-data="initMiniSearch()">
      <form class="form minisearch" id="search_mini_form" x-ref="form" @submit.prevent="search()"
-          action="<?= $escaper->escapeUrl($helper->getResultUrl()) ?>" method="get">
+          action="<?= $escaper->escapeUrl($helper->getResultUrl()) ?>" method="get" role="search">
         <label class="hidden" for="search" data-role="minisearch-label">
             <span><?= $escaper->escapeHtml(__('Search')) ?></span>
         </label>
@@ -93,6 +93,10 @@ $helper = $this->helper(SearchHelper::class);
                @focus.once="suggest"
                @input.debounce.300="suggest"
                @keydown.arrow-down.prevent="focusElement($root.querySelector('[tabindex]'))"
+               @search-open.window.debounce.10="
+                    $el.focus()
+                    $el.select()
+               "
         />
          <template x-if="suggestions.length > 0">
              <div class="w-full leading-normal transition appearance-none text-grey-800 flex flex-col mt-1">

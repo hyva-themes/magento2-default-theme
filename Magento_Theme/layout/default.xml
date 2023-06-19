@@ -30,7 +30,7 @@
         </referenceContainer>
 
         <referenceContainer name="header.container">
-            <block class="Magento\Framework\View\Element\Template" name="skip_to_content" template="Magento_Theme::html/skip.phtml">
+            <block class="Magento\Framework\View\Element\Template" name="skip_to_content" template="Magento_Theme::html/skip.phtml" before="-">
                 <arguments>
                     <argument name="target" xsi:type="string">contentarea</argument>
                     <argument name="label" translate="true" xsi:type="string">Skip to Content</argument>

@@ -50,7 +50,6 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
 <div id="header"
      class="relative z-30 w-full border-b shadow bg-container-lighter border-container-lighter"
      x-data="initHeader()"
-     @keydown.window.escape="searchOpen = false;"
      @private-content-loaded.window="getData(event.detail.data)"
 >
     <div class="container flex flex-wrap items-center justify-between w-full px-6 py-3 mx-auto mt-0">
@@ -95,25 +94,25 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
             </a>
 
             <!--Search Icon-->
-            <button id="menu-search-icon"
-                    class="inline-block ml-1 no-underline sm:ml-3 hover:text-black"
-                    @click.prevent="
-                        searchOpen = !searchOpen;
-                        $nextTick(() => {
-                         const searchInput = document.querySelector('#search');
-                         searchInput.focus();
-                         searchInput.select();
-                     });
-                    "
+            <button
+                id="menu-search-icon"
+                class="inline-block ml-1 no-underline sm:ml-3 hover:text-black"
+                @click.prevent="
+                    searchOpen = !searchOpen;
+                    $dispatch('search-open');
+                "
+                :aria-label="<?= $escaper->escapeHtml(__('Toggle search form')) ?>"
+                aria-haspopup="true"
+                :aria-expanded="searchOpen"
+                x-ref="searchButton"
             >
-                <span class="sr-only label">
-                    <?= $escaper->escapeHtml(__('Search')) ?>
-                </span>
-
                 <?= $heroicons->searchHtml(
                     "w-8 h-8 md:h-6 md:w-6 hover:text-black",
                     25,
-                    25
+                    25,
+                    [
+                        "aria-hidden" => "true"
+                    ]
                 ) ?>
             </button>
 
@@ -151,8 +150,12 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
     <!--Search-->
     <div class="absolute z-10 w-full border-t shadow-sm bg-container-lighter border-container-lighter"
          id="search-content"
-         :class="{ 'block': searchOpen}" x-cloak x-show="searchOpen"
+         x-cloak x-show="searchOpen"
          @click.outside="searchOpen = false"
+         @keydown.escape="
+            searchOpen = false;
+            $refs.searchButton.focus();
+         "
     >
         <?= $block->getChildHtml('header-search'); ?>
     </div>

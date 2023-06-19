@@ -9,9 +9,12 @@
 use Magento\Framework\View\Element\Template;
 
 /** @var Template $block */
+$childHtml = $block->getChildHtml('', true);
 ?>
-<div class="product-options-wrapper" id="product-options-wrapper">
-    <div class="fieldset" tabindex="0">
-        <?= $block->getChildHtml('', true) ?>
+<?php if (strlen($childHtml)): ?>
+    <div class="product-options-wrapper" id="product-options-wrapper">
+        <div class="fieldset" tabindex="0">
+            <?= $childHtml ?>
+        </div>
     </div>
-</div>
+<?php endif; ?>

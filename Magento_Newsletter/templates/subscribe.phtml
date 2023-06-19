@@ -25,25 +25,34 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 $recaptcha = $block->getData('viewModelRecaptcha');
 ?>
 <div class="pr-4 lg:w-1/4 md:w-1/2">
-    <form class="form subscribe"
-          action="<?= $escaper->escapeUrl($block->getFormActionUrl()) ?>"
-          method="post"
-          x-data="initNewsletterForm()"
-          @submit.prevent="submitForm()"
-          id="newsletter-validate-detail">
-        <div class="mb-3 text-sm font-medium tracking-widest text-gray-900 uppercase title-font">
+    <form
+        class="form subscribe"
+        action="<?= $escaper->escapeUrl($block->getFormActionUrl()) ?>"
+        method="post"
+        x-data="initNewsletterForm()"
+        @submit.prevent="submitForm()"
+        id="newsletter-validate-detail"
+        aria-label="<?= $escaper->escapeHtmlAttr(__('Subscribe to our newsletter')) ?>"
+    >
+        <h2
+            class="mb-3 text-sm font-medium tracking-widest text-gray-900 uppercase title-font"
+            id="footer-newsletter-heading"
+        >
             <?= $escaper->escapeHtml(__('Newsletter')) ?>
-        </div>
+        </h2>
         <div class="flex flex-wrap justify-center gap-2 md:justify-start">
             <label for="newsletter-subscribe" class="sr-only">
                 <?= $escaper->escapeHtml(__('Email Address')) ?>
             </label>
-            <input name="email"
+            <input
+                name="email"
                 type="email"
                 required
                 id="newsletter-subscribe"
                 class="form-input inline-flex w-full"
-                placeholder="<?= $escaper->escapeHtmlAttr(__('Enter your email address')) ?>">
+                placeholder="<?= $escaper->escapeHtmlAttr(__('Enter your email address')) ?>"
+                aria-describedby="footer-newsletter-heading"
+            >
             <?= $block->getBlockHtml('formkey') ?>
             <?= $recaptcha ? $recaptcha->getInputHtml(ReCaptcha::RECAPTCHA_FORM_ID_NEWSLETTER) : '' ?>
             <button class="inline-flex shrink-0 ml-auto xl:mt-0 btn btn-primary">

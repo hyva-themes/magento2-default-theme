@@ -350,23 +350,34 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
      x-init="init($dispatch)"
      @private-content-loaded.window="receiveCustomerData($event.detail.data)"
 >
-    <div class="title" data-role="title">
-        <span @click="toggleEstimateShipping"
-              class="flex justify-between w-full font-semibold whitespace-nowrap cursor-pointer select-none text-primary-lighter"
-              id="shipping-estimate-toggle"
-              role="heading" aria-level="2"
+    <h3 class="title" id="block-shipping-title">
+        <button
+            @click="toggleEstimateShipping"
+            class="flex justify-between w-full font-semibold whitespace-nowrap cursor-pointer select-none text-primary-lighter"
+            id="shipping-estimate-toggle"
+            type="button"
+            :aria-expanded="showEstimateShipping"
         >
             <?= $block->getQuote()->isVirtual()
                 ? $escaper->escapeHtml(__('Estimate Tax'))
                 : $escaper->escapeHtml(__('Estimate Shipping and Tax'))
             ?>
             <span :class="{ 'rotate-180' : showEstimateShipping}" class="block transform rotate-180">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6" width="25" height="25">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    class="w-6 h-6"
+                    width="25"
+                    height="25"
+                    aria-hidden="true"
+                >
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
             </span>
-        </span>
-    </div>
+        </button>
+    </h3>
     <div id="block-summary"
          class="content my-4 card"
          data-role="content"
@@ -375,12 +386,7 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
          x-show="showEstimateShipping"
     >
         <form method="post" id="shipping-zip-form" @submit.prevent="fetchTotals()">
-            <fieldset class="fieldset estimate">
-                <legend class="legend sr-only">
-                    <?= $escaper->escapeHtml($block->getQuote()->isVirtual() ?
-                        __('Estimate Tax') :
-                        __('Estimate Shipping and Tax')) ?>
-                </legend>
+            <fieldset class="fieldset estimate" aria-labelledby="block-shipping-title">
                 <p class="field note">
                     <?= $block->getQuote()->isVirtual() ?
                         $escaper->escapeHtml(__('Enter your billing address to get a tax estimate.')) :
@@ -461,23 +467,25 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                 </div>
 
                 <template x-if="getEstimatedShippingRateCarriers().length > 0">
-                    <div class="pt-2 relative">
-
+                    <div
+                        class="pt-2 relative"
+                        role="radiogroup"
+                        aria-label="<?= $escaper->escapeHtmlAttr(__('Shipping methods')) ?>"
+                    >
                         <?= $block->getBlockHtml('block-loader') ?>
-
                         <template x-for="carrier in getEstimatedShippingRateCarriers()" :key="carrier">
                             <div>
-                                <div class="font-semibold" x-text="carrier"></div>
+                                <h4 class="font-semibold" x-text="carrier"></h4>
                                 <template x-for="(rate, index) in getRatesForCarrier(carrier)" :key="index">
-                                    <label class="flex items-center px-2">
-                                        <input class="mr-2" type="radio"
+                                    <label class="flex items-center px-2 cursor-pointer">
+                                        <input class="mr-2 cursor-pointer" type="radio"
                                                :id="'shipping_method_' + rate.method_code"
                                                :value="rate.carrier_code + '_' + rate.method_code"
                                                x-model="shippingMethod"
                                                @change="updateShippingMethod()"/>
                                         <div class="grid grid-cols-2 w-full">
-                                            <div x-text="rate.method_title"></div>
-                                            <div x-text="hyva.formatPrice(rate.price_excl_tax)"></div>
+                                            <span x-text="rate.method_title"></span>
+                                            <span x-text="hyva.formatPrice(rate.price_excl_tax)"></span>
                                         </div>
                                     </label>
                                 </template>

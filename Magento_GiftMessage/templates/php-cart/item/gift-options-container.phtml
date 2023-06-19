@@ -27,26 +27,36 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
 
 <div x-data="initGiftItemOptions({itemId: '<?= (int) $block->getItem()->getId() ?>'})" class="gift-options-component w-full flex flex-wrap my-6" :data-item-id="itemId" x-cloak>
     <div class="text-left gift-options-title w-full order-first" x-show="isGiftMsgEnabled || hasActiveOptions">
-        <span @click="formBlockVisibility = !formBlockVisibility" class="cursor-pointer text-primary-lighter select-none whitespace-nowrap underline">
+        <button
+            type="button"
+            x-ref="giftOptionsTrigger"
+            @click="openDialog"
+            class="cursor-pointer text-primary-lighter select-none whitespace-nowrap underline"
+            :aria-expanded="formBlockVisibility"
+            aria-haspopup="dialog"
+        >
             <?= $escaper->escapeHtml(__('Gift options')) ?>
             <?php if (!$slideOutDrawer): ?>
-                <span x-show="!formBlockVisibility">
+                <span x-show="!formBlockVisibility" aria-hidden="true">
                     <?= $heroicons->chevronDownHtml('inline-block', 16, 16) ?>
                 </span>
-                <span x-show="formBlockVisibility">
+                <span x-show="formBlockVisibility" aria-hidden="true">
                     <?= $heroicons->chevronUpHtml('inline-block', 16, 16) ?>
                 </span>
             <?php endif ?>
-        </span>
+        </button>
     </div>
     <?php if ($slideOutDrawer): ?>
         <div role="dialog"
-            aria-labelledby="enquiry-form-drawer-title"
+            aria-labelledby="enquiry-form-drawer-title-<?= (int) $block->getItem()->getId() ?>"
             aria-modal="true"
-            @keydown.window.escape="formBlockVisibility=false"
+            @keydown.window.escape="closeDialog"
             class="fixed inset-y-0 right-0 z-30 flex max-w-full"
+            x-init="trapFocus($refs['giftOptionsDialog'])"
+            :aria-hidden="!formBlockVisibility"
         >
-            <div class="backdrop"
+            <div
+                class="backdrop"
                 x-show="formBlockVisibility"
                 x-transition:enter="ease-in-out duration-500"
                 x-transition:enter-start="opacity-0"
@@ -54,10 +64,11 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
                 x-transition:leave="ease-in-out duration-500"
                 x-transition:leave-start="opacity-100"
                 x-transition:leave-end="opacity-0"
-                @click="formBlockVisibility=false"
-                aria-label="Close panel"
+                @click="closeDialog"
+                aria-hidden="true"
             ></div>
-            <div class="relative w-screen max-w-md shadow-2xl bg-white p-8 flex flex-col overflow-y-auto"
+            <div
+                class="relative w-screen max-w-md shadow-2xl bg-white p-8 flex flex-col overflow-y-auto"
                 x-show="formBlockVisibility"
                 x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700"
                 x-transition:enter-start="translate-x-full"
@@ -65,14 +76,19 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
                 x-transition:leave="transform transition ease-in-out duration-500 sm:duration-700"
                 x-transition:leave-start="translate-x-0"
                 x-transition:leave-end="translate-x-full"
+                x-ref="giftOptionsDialog"
             >
                 <div class="relative">
                     <h2 class="text-lg font-medium leading-7 text-gray-900 "><?= $escaper->escapeHtml('Item Gift Options') ?></h2>
-                    <div class="absolute top-0 right-0 cursor-pointer" @click="formBlockVisibility=false" aria-label="Close panel" tabindex="0" role="button">
-                        <?= $heroicons->xHtml('inline-block', 24, 24) ?>
-                    </div>
+                    <button type="button"
+                            class="absolute top-0 right-0 cursor-pointer"
+                            @click.prevent="closeDialog"
+                            aria-label="<?= $escaper->escapeHtmlAttr('Close panel') ?>"
+                    >
+                        <?= $heroicons->xHtml('inline-block', 24, 24, ["aria-hidden" => "true"]) ?>
+                    </button>
                 </div>
-                <div class="gift-options-item">
+                <div class="gift-options-item" id="enquiry-form-drawer-title-<?= (int) $block->getItem()->getId() ?>">
                     <span><?= $escaper->escapeHtml($block->getItem()->getName()) ?></span>
                 </div>
                 <?= $block->getChildHtml('gift-options-body') ?>

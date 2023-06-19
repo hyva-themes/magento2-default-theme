@@ -30,10 +30,10 @@ if (!$productId || !$attributeId) {
 }
 ?>
 
-<div>
+<div x-id="['attribute-option-<?= (int) $productId ?>-'+item.id]">
     <template x-if="optionIsEnabled(<?= (int) $attributeId ?>, item.id) && optionIsActive(<?= (int) $attributeId ?>, item.id)">
         <label
-            :for="'attribute-option-<?= (int) $productId ?>-'+item.id"
+            :for="$id('attribute-option-<?= (int) $productId ?>-'+item.id)"
             class="swatch-option relative border-2 shadow-sm cursor-pointer select-none bg-container-lighter product-option-value-label"
             :class="{
                 'border-container-lighter ring ring-primary/50':
@@ -53,7 +53,7 @@ if (!$productId || !$attributeId) {
             <?php endif; ?>
         >
             <input
-                :id="'attribute-option-<?= (int) $productId ?>-'+item.id"
+                :id="$id('attribute-option-<?= (int) $productId ?>-'+item.id)"
                 :value="item.id"
                 name="super_attribute[<?= (int) $attributeId ?>]"
                 type="radio"
@@ -64,13 +64,18 @@ if (!$productId || !$attributeId) {
                 x-on:change="changeOption(<?= (int) $attributeId ?>, $event.target.value)"
                 x-model="selectedValues[<?= (int) $attributeId ?>]"
                 :required="getAllowedAttributeOptions(<?= (int) $attributeId ?>).filter(
-                                                                    attributeOption => selectedValues[attributeOption]
-                                                                ).length === 0"
+                    attributeOption => selectedValues[attributeOption]
+                ).length === 0"
+                :aria-label="getSwatchText(<?= $escaper->escapeHtmlAttr($attributeId) ?>, item.id)"
+                aria-describedby="attribute-label-<?= $escaper->escapeHtmlAttr($attributeId) ?>"
             >
-            <div x-html="getSwatchText(<?= (int) $attributeId ?>, item.id)"
-                 class="whitespace-nowrap"
-                 :class="{ 'sr-only' : !isTextSwatch(<?= (int) $attributeId ?>, item.id) }"
-            ></div>
+            <template x-if="isTextSwatch(<?= (int) $attributeId ?>, item.id)">
+                <div
+                    x-html="getSwatchText(<?= (int) $attributeId ?>, item.id)"
+                    class="whitespace-nowrap"
+                    aria-hidden="true"
+                ></div>
+            </template>
         </label>
     </template>
 

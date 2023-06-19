@@ -45,7 +45,8 @@ if (!$shoppingAssistanceViewModel->isLoginAsCustomerEnabled()) {
     }
 </script>
 <div class="field choice"
-     x-data="initAllowShippingAssistence()">
+     x-data="initAllowShippingAssistence()"
+>
     <input type="checkbox"
            @change="onChange($event.target.checked)"
            name="assistance_allowed_checkbox"
@@ -53,6 +54,7 @@ if (!$shoppingAssistanceViewModel->isLoginAsCustomerEnabled()) {
            value="1"
            title="<?= $escaper->escapeHtmlAttr(__('Allow remote shopping assistance')) ?>"
            class="checkbox"
+           aria-describedby="assistance_allowed_checkbox_tooltip"
         <?php if ($shoppingAssistanceViewModel->isAssistanceAllowed()): ?>
             checked="checked"
         <?php endif; ?>
@@ -91,7 +93,7 @@ if (!$shoppingAssistanceViewModel->isLoginAsCustomerEnabled()) {
                     </span>
                 </div>
                 <svg class="absolute z-10 w-8 h-8 text-white transform -translate-x-full
-                    -translate-y-8 fill-current stroke-current" width="12" height="12">
+                    -translate-y-8 fill-current stroke-current" width="12" height="12" aria-hidden="true">
                     <rect x="12" y="-12" width="12" height="12" transform="rotate(45)" class="shadow-xl" />
                 </svg>
             </div>

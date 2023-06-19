@@ -32,9 +32,12 @@ $currencyViewModel = $viewModels->require(Currency::class);
     <div x-data="{ open: false }"
          class="w-full sm:w-1/2 md:w-full pr-4"
     >
-        <div class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3 uppercase">
+        <h2
+            id="currency-heading"
+            class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3 uppercase"
+        >
             <?= $escaper->escapeHtml(__('Currency')) ?>
-        </div>
+        </h2>
         <div class="relative inline-block text-left">
             <div>
                 <button @click.prevent="open = !open"
@@ -58,13 +61,14 @@ $currencyViewModel = $viewModels->require(Currency::class);
                 <div class="my-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                     <?php foreach ($currencies as $code => $name): ?>
                         <?php if ($code != $currentCurrencyCode): ?>
-                            <a
+                            <button
+                               role="link"
                                class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
-                               href="#"
+                               aria-describedby="currency-heading"
                                @click.prevent='hyva.postForm(<?= /* @noEscape */ $currencyViewModel->getSwitchCurrencyPostData($code) ?>)'
                             >
                                 <?= $escaper->escapeHtml($code) ?> - <?= $escaper->escapeHtml($name) ?>
-                            </a>
+                            </button>
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </div>

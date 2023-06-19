@@ -55,7 +55,8 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
           <?php endif; ?>
           id="<?= $escaper->escapeHtmlAttr($formId) ?>"
           @submit.prevent="submitForm()"
-          method="post" id="form-validate" enctype="multipart/form-data" autocomplete="off">
+          method="post" id="form-validate" enctype="multipart/form-data" autocomplete="off"
+    >
         <?= /* @noEscape */ $block->getBlockHtml('formkey'); ?>
         <?= $block->getChildHtml('form_fields_before') ?>
         <?= $recaptcha ? $recaptcha->getInputHtml(ReCaptcha::RECAPTCHA_FORM_ID_CUSTOMER_CREATE) : '' ?>
@@ -116,26 +117,58 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                         </span>
                     </label>
                     <div class="control">
-                        <input type="email" name="email" autocomplete="email" id="email_address" required
-                               value="<?= $escaper->escapeHtmlAttr($block->getFormData()->getEmail()) ?>"
-                               title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>" class="form-input" />
+                        <input
+                            type="email"
+                            name="email"
+                            autocomplete="email"
+                            id="email_address"
+                            required
+                            value="<?= $escaper->escapeHtmlAttr($block->getFormData()->getEmail()) ?>"
+                            title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
+                            class="form-input"
+                            @input.debounce="onChange"
+                        />
                     </div>
                 </div>
                 <div class="field field-reserved">
-                    <label for="password" class="label"><span><?= $escaper->escapeHtml(__('Password')) ?></span></label>
+                    <label for="password" class="label">
+                        <span>
+                            <?= $escaper->escapeHtml(__('Password')) ?>
+                        </span>
+                    </label>
                     <div class="control flex items-center">
                         <?php $minimumPasswordLength = $block->getMinimumPasswordLength() ?>
-                        <input :type="showPassword ? 'text' : 'password'" type="password" id="password" name="password"
-                               title="<?= $escaper->escapeHtmlAttr(__('Password')) ?>"
-                               minlength="<?= $escaper->escapeHtmlAttr($minimumPasswordLength) ?>"
-                               class="form-input"
-                               required
-                               data-validate='{"password-strength": {"minCharacterSets": <?= (int) $passwordMinCharacterSets ?>}}'
-                               @input="onChange"
-                               autocomplete="off">
-                        <div x-on:click="showPassword = !showPassword"
-                             class="cursor-pointer px-4"
-                             :aria-label="showPassword ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
+                        <div class="sr-only" aria-live="polite">
+                            <template x-if="!showPassword">
+                                <span>
+                                    <?= $escaper->escapeHtml(__('Password hidden')) ?>
+                                </span>
+                            </template>
+                            <template x-if="showPassword">
+                                <span>
+                                    <?= $escaper->escapeHtml(__('Password shown')) ?>
+                                </span>
+                            </template>
+                        </div>
+                        <input
+                            :type="showPassword ? 'text' : 'password'"
+                            type="password"
+                            id="password"
+                            name="password"
+                            title="<?= $escaper->escapeHtmlAttr(__('Password')) ?>"
+                            minlength="<?= $escaper->escapeHtmlAttr($minimumPasswordLength) ?>"
+                            class="form-input"
+                            required
+                            data-validate='{"password-strength": {"minCharacterSets": <?= (int) $passwordMinCharacterSets ?>}}'
+                            @input.debounce="onChange"
+                            autocomplete="off"
+                        >
+                        <button
+                            type="button"
+                            :aria-pressed="showPassword ? true : false"
+                            x-on:click="showPassword = !showPassword"
+                            class="px-4 py-3"
+                            :aria-label="showPassword ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
                         >
                             <template x-if="!showPassword">
                                 <?= $heroIcons->eyeHtml('w-5 h-5'); ?>
@@ -143,8 +176,12 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                             <template x-if="showPassword">
                                 <?= $heroIcons->eyeOffHtml('w-5 h-5'); ?>
                             </template>
-                        </div>
-                        <div id="password-strength-meter-container" data-role="password-strength-meter" aria-live="polite">
+                        </button>
+                        <div
+                            id="password-strength-meter-container"
+                            data-role="password-strength-meter"
+                            aria-live="polite"
+                        >
                             <div id="password-strength-meter" class="password-strength-meter">
                                 <?= $escaper->escapeHtml(__('Password Strength')) ?>:
                                 <span id="password-strength-meter-label" data-role="password-strength-meter-label">
@@ -161,18 +198,38 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                         </span>
                     </label>
                     <div class="control flex items-center">
-                        <input :type="showPasswordConfirm ? 'text' : 'password'" type="password"
-                               name="password_confirmation"
-                               title="<?= $escaper->escapeHtmlAttr(__('Confirm Password')) ?>"
-                               id="password-confirmation"
-                               data-validate='{"equalTo": "password"}'
-                               @input="onChange"
-                               required
-                               class="form-input"
-                               autocomplete="off">
-                        <div x-on:click="showPasswordConfirm = !showPasswordConfirm"
-                             class="cursor-pointer px-4"
-                             :aria-label="showPasswordConfirm ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
+                        <div class="sr-only" aria-live="polite">
+                            <template x-if="!showPasswordConfirm">
+                                <span>
+                                    <?= $escaper->escapeHtml(__('Confirm password hidden')) ?>
+                                </span>
+                            </template>
+                            <template x-if="showPasswordConfirm">
+                                <span>
+                                    <?= $escaper->escapeHtml(__('confirm password shown')) ?>
+                                </span>
+                            </template>
+                        </div>
+                        <input
+                            :type="showPasswordConfirm ? 'text' : 'password'"
+                            type="password"
+                            name="password_confirmation"
+                            title="<?= $escaper->escapeHtmlAttr(__('Confirm Password')) ?>"
+                            id="password-confirmation"
+                            data-validate='{"equalTo": "password"}'
+                            @input.debounce="onChange"
+                            required
+                            class="form-input"
+                            autocomplete="off"
+                        >
+                        <button
+                            type="button"
+                            x-on:click="showPasswordConfirm = !showPasswordConfirm"
+                            :aria-pressed="showPasswordConfirm ? true : false"
+                            class="px-4 py-3"
+                            :aria-label="
+                                showPasswordConfirm ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'
+                            "
                         >
                             <template x-if="!showPasswordConfirm">
                                 <?= $heroIcons->eyeHtml('w-5 h-5'); ?>
@@ -180,7 +237,7 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                             <template x-if="showPasswordConfirm">
                                 <?= $heroIcons->eyeOffHtml('w-5 h-5'); ?>
                             </template>
-                        </div>
+                        </button>
                     </div>
                 </div>
                 <?= $block->getChildHtml('form_additional_info') ?>

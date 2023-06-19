@@ -68,10 +68,12 @@ $uniqueId = '_' . uniqid();
 
 $hideDetails       = $block->getData('hide_details') ?: false;
 $hideRatingSummary = $block->getData('hide_rating_summary') ?: false;
+$slideUniqueId = $block->hasData('slide_unique_id') ? '-' . $block->getData('slide_unique_id') : '';
 
 $imageCustomAttributes = $product->getData('image_custom_attributes')
     ?? $block->getData('image_custom_attributes')
     ?? [];
+$productName = $catalogOutputHelper->productAttribute($product, $product->getName(), 'name');
 ?>
 
 <?php if ($product->isSaleable()): ?>
@@ -106,9 +108,12 @@ $imageCustomAttributes = $product->getData('image_custom_attributes')
     <div class="product-info flex flex-col grow">
         <?php $productNameStripped = $block->stripTags($product->getName(), null, true); ?>
         <div class="mt-2 mb-1 items-center justify-center text-primary font-semibold text-lg text-center <?= $viewIsGrid ? '' : 'md:text-left' ?>">
-            <a class="product-item-link"
-               href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>">
-                <?= /* @noEscape */ $catalogOutputHelper->productAttribute($product, $product->getName(), 'name') ?>
+            <a
+                class="product-item-link"
+                href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>"
+                id="slide-desc-<?= $escaper->escapeHtmlAttr($product->getId() . $slideUniqueId) ?>"
+            >
+                <?= /* @noEscape */ $productName ?>
             </a>
         </div>
 
@@ -157,10 +162,10 @@ $imageCustomAttributes = $product->getData('image_custom_attributes')
         <div class="mt-auto pt-3 flex flex-wrap justify-center items-center">
             <?php if ($product->isSaleable()): ?>
             <button class="w-auto btn btn-primary justify-center text-sm
-                        <?= $viewIsGrid ? 'mr-auto' : 'mr-auto md:mr-0' ?>"
-                    aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>"
+                <?= $viewIsGrid ? 'mr-auto' : 'mr-auto md:mr-0' ?>"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Cart') . ' ' . $productName) ?>"
             >
-                <?= $heroicons->shoppingCartHtml("h-6 w-6 border-current inline", 25, 25) ?>
+                <?= $heroicons->shoppingCartHtml("h-6 w-6 border-current inline", 25, 25, ['aria-hidden' => 'true']) ?>
                 <span class="ml-2 inline <?= $viewIsGrid ? 'md:ml-0 md:hidden lg:ml-2 lg:inline' : '' ?>">
                     <?= $escaper->escapeHtml(__('Add to Cart')) ?>
                 </span>
@@ -173,19 +178,19 @@ $imageCustomAttributes = $product->getData('image_custom_attributes')
             <?php if ($showAddToWishlist): ?>
             <button x-data="initWishlist()"
                     @click.prevent="addToWishlist(<?= (int)$productId ?>)"
-                    aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Wish List')) ?>"
+                    aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Wish List') . ' ' . $productName) ?>"
                     type="button"
                     class="rounded-full w-9 h-9 bg-gray-200 p-0 border-0 inline-flex shrink-0 items-center justify-center text-gray-500 hover:text-red-600 ml-2">
-                <?= $heroiconsSolid->heartHtml("w-5 h-5", 25, 25) ?>
+                <?= $heroiconsSolid->heartHtml("w-5 h-5", 25, 25, ['aria-hidden' => 'true']) ?>
             </button>
             <?php endif; ?>
             <?php if ($showAddToCompare): ?>
             <button x-data="initCompareOnProductList()"
                     @click.prevent="addToCompare(<?= (int)$productId ?>)"
-                    aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Compare')) ?>"
+                    aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Compare') . ' ' . $productName) ?>"
                     type="button"
                     class="rounded-full w-9 h-9 bg-gray-200 p-0 border-0 inline-flex shrink-0 items-center justify-center text-gray-500 hover:text-yellow-500 ml-2">
-                <?= $heroicons->scaleHtml("w-5 h-5", 25, 25) ?>
+                <?= $heroicons->scaleHtml("w-5 h-5", 25, 25, ['aria-hidden' => 'true']) ?>
             </button>
             <?php endif; ?>
             <?php if ($addToBlock = $block->getChildBlock('addto')): ?>

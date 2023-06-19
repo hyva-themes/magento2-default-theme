@@ -1,17 +1,17 @@
 "
 
-                        <div class=""container"">
+                        <div class="container">
                             <p>No Checkout module installed.</p>
-                            <p>Either install the Luma Fallback Checkout, or the React Checkout.</p>
-                            <p>Please refer to the documentation for more information.</p>
+                            <p>Either install Hyvä Checkout, the Luma Fallback Checkout, or another alternative checkout.</p>
+                            <p>Please refer to <a href="https://docs.hyva.io/checkout/index.html" target="_blank">the documentation</a> for more information.</p>
                         </div>
 
                     ","
 
-                        <div class=""container"">
+                        <div class="container">
                             <p>No Checkout module installed.</p>
-                            <p>Either install the Luma Fallback Checkout, or the React Checkout.</p>
-                            <p>Please refer to the documentation for more information.</p>
+                            <p>Either install Hyvä Checkout, the Luma Fallback Checkout, or another alternative checkout.</p>
+                            <p>Please refer to <a href="https://docs.hyva.io/checkout/index.html" target="_blank">the documentation</a> for more information.</p>
                         </div>
 
                     "

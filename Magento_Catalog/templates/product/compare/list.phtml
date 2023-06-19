@@ -216,7 +216,7 @@ function initWishlist() {
                                             <?= $block->getBlockHtml('formkey') ?>
                                             <button type="submit"
                                                     class="w-auto mr-auto btn btn-primary justify-center text-sm px-2"
-                                                    aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>"
+                                                    aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?> <?= $escaper->escapeHtmlAttr($product->getName()) ?>"
                                             >
                                                 <?= $heroicons->shoppingCartHtml('border-current inline'); ?>
                                                 <span class="sr-only">
@@ -228,7 +228,7 @@ function initWishlist() {
                                     <?php if ($wishlistViewModel->isEnabled()): ?>
                                         <button x-data="initWishlist()"
                                             @click.prevent="addToWishlist(<?= (int)$product->getId() ?>)"
-                                            aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Wish List')) ?>"
+                                            aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Wish List')) ?> <?= $escaper->escapeHtmlAttr($product->getName()) ?>"
                                             class="rounded-full w-9 h-9 bg-gray-200 p-0 border-0 inline-flex
                                             shrink-0 items-center justify-center text-gray-500 hover:text-red-600
                                             ml-2"
@@ -239,7 +239,7 @@ function initWishlist() {
                                     <button x-data="initCompareOnCompareList()"
                                         @click.prevent="removeFromCompare(<?= (int)$product->getId() ?>, '<?= $escaper
                                             ->escapeJs($product->getName()) ?>')"
-                                        aria-label="<?= $escaper->escapeHtmlAttr(__('Remove Product')) ?>"
+                                        aria-label="<?= $escaper->escapeHtmlAttr(__('Remove Product')) ?> <?= $escaper->escapeHtmlAttr($product->getName()) ?>"
                                         class="rounded-full w-9 h-9 bg-gray-200 p-0 border-0 inline-flex shrink-0
                                         items-center justify-center text-gray-500 hover:text-black ml-2"
                                         title="<?= $escaper->escapeHtmlAttr(__('Remove Product')) ?>">

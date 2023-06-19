@@ -165,16 +165,11 @@ $swatchItemBlock->setData('product_id', $productId);
             <div class="w-full overflow-x-hidden swatch-attribute-options min-h-14">
                 <template x-if="showSwatches">
                     <div class="flex flex-nowrap w-full overflow-auto snap items-center py-1"
-                         role="radiogroup"
-                         x-bind="scrollEvents"
+                        id="swatch-<?= $productId . '-' . $attributeId ?>"
+                        role="radiogroup"
+                        x-bind="scrollEvents"
+                        aria-label="<?= $escaper->escapeHtml($productAttribute->getStoreLabel()) ?>"
                     >
-                        <label class="sr-only"
-                               for="attribute<?= $escaper->escapeHtmlAttr($productAttribute->getAttributeCode()) ?>"
-                        >
-                            <span>
-                                <?= $escaper->escapeHtml($productAttribute->getStoreLabel()) ?>
-                            </span>
-                        </label>
                         <template x-for="(item, index) in optionConfig.attributes[<?= (int) $attributeId ?>].options"
                                   :key="item.id"
                         >

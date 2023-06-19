@@ -14,8 +14,9 @@ use Magento\Framework\View\Element\Template;
 /** @var Escaper $escaper */
 /** @var Template $block */
 
+$uniqueId = '_' . uniqid();
 ?>
-<div id="gift-message" class="gift-message">
+<div class="gift-message">
     <div class="gift-options-title my-4">
         <span>
              <?= $escaper->escapeHtml(__('Gift Message (optional)')) ?>
@@ -24,32 +25,52 @@ use Magento\Framework\View\Element\Template;
     <div class="gift-options-content">
         <fieldset class="fieldset">
             <div class="field field-to">
-                <label class="label">
+                <label
+                    for="gift-options-form-recipient<?= $escaper->escapeHtmlAttr($uniqueId) ?>"
+                    class="label"
+                >
                     <span><?= $escaper->escapeHtml(__('To:')) ?></span>
                 </label>
                 <div class="control">
-                    <input type="text" x-model="formMessage.recipient"
-                           @keydown.enter.prevent="submitGiftOption()"
-                           class="input-text w-full form-input disabled:opacity-75 disabled:bg-gray-100 disabled:pointer-events-none">
+                    <input
+                        id="gift-options-form-recipient<?= $escaper->escapeHtmlAttr($uniqueId) ?>"
+                        type="text"
+                        x-model="formMessage.recipient"
+                        @keydown.enter.prevent="submitGiftOption()"
+                        class="input-text w-full form-input disabled:opacity-75 disabled:bg-gray-100 disabled:pointer-events-none"
+                    >
                 </div>
             </div>
 
             <div class="field field-from">
-                <label class="label">
+                <label
+                    for="gift-options-form-sender<?= $escaper->escapeHtmlAttr($uniqueId) ?>"
+                    class="label"
+                >
                     <span><?= $escaper->escapeHtml(__('From:')) ?></span>
                 </label>
                 <div class="control">
-                    <input type="text" x-model="formMessage.sender"
-                           @keydown.enter.prevent="submitGiftOption()"
-                           class="input-text w-full form-input disabled:opacity-75 disabled:bg-gray-100 disabled:pointer-events-none">
+                    <input
+                        id="gift-options-form-sender<?= $escaper->escapeHtmlAttr($uniqueId) ?>"
+                        type="text"
+                        x-model="formMessage.sender"
+                        @keydown.enter.prevent="submitGiftOption()"
+                        class="input-text w-full form-input disabled:opacity-75 disabled:bg-gray-100 disabled:pointer-events-none"
+                    >
                 </div>
             </div>
             <div class="field text">
-                <label class="label">
+                <label for="gift-options-form-message<?= $escaper->escapeHtmlAttr($uniqueId) ?>" class="label">
                     <span><?= $escaper->escapeHtml(__('Message')) ?></span>
                 </label>
                 <div class="control">
-                    <textarea x-model="formMessage.message" class="input-text w-full form-input disabled:opacity-75 disabled:bg-gray-100 disabled:pointer-events-none" rows="5" cols="10"></textarea>
+                    <textarea
+                        id="gift-options-form-message<?= $escaper->escapeHtmlAttr($uniqueId) ?>"
+                        x-model="formMessage.message"
+                        class="input-text w-full form-input disabled:opacity-75 disabled:bg-gray-100 disabled:pointer-events-none"
+                        rows="5"
+                        cols="10">
+                    </textarea>
                 </div>
             </div>
         </fieldset>
