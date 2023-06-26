@@ -22,7 +22,7 @@ use Magento\Framework\Escaper;
         <span class="price-label"><?= $escaper->escapeHtml($block->getDisplayLabel()) ?></span>
     <?php endif; ?>
     <span <?php if ($block->getPriceId()) :?> :id="$id('<?= $escaper->escapeJs($block->getPriceId()) ?>')"<?php endif; ?>
-        <?= ($block->getPriceDisplayLabel()) ? 'data-label="' . $escaper->escapeHtmlAttr($block->getPriceDisplayLabel()) . '"' : '' ?>
+        <?= ($block->getPriceDisplayLabel()) ? 'data-label="' . $escaper->escapeHtmlAttr($block->getPriceDisplayLabel() . $block->getPriceDisplayInclExclTaxes()) . '"' : '' ?>
         data-price-amount="<?= $escaper->escapeHtmlAttr($block->getDisplayValue()) ?>"
         data-price-type="<?= $escaper->escapeHtmlAttr($block->getPriceType()) ?>"
         class="price-wrapper <?= $escaper->escapeHtmlAttr($block->getPriceWrapperCss()) ?>"
