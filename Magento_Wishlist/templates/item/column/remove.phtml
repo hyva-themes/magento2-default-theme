@@ -31,7 +31,6 @@ $product = $item->getProduct();
    class="btn-remove action delete btn btn-secondary inline-flex p-2">
     <?= $heroicons->trashHtml('', 20, 20); ?>
     <span class="sr-only">
-        <?= $escaper->escapeHtml(__('Remove item')) ?>
-        <?= $escaper->escapeHtml($product->getName()) ?>
+        <?= $escaper->escapeHtml(__('Remove item %1', $product->getName())) ?>
     </span>
 </a>
