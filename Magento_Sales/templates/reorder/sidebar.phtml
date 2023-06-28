@@ -126,8 +126,8 @@ if (! $customer->customerLoggedIn()) {
                                                :id="checkboxId + product.id"
                                                :value="product.id"
                                                :aria-label="product.is_saleable
-                                                   ? hyva.strf('<?= $escaper->escapeHtmlAttr(__('Select product "%0" to reorder')) ?>', product.name)
-                                                   : hyva.strf('<?= $escaper->escapeHtmlAttr(__('Product "%0" is not salable')) ?>', product.name)
+                                                   ? hyva.str('<?= $escaper->escapeJs(__('Select product "%1" to reorder')) ?>', product.name)
+                                                   : hyva.str('<?= $escaper->escapeJs(__('Product "%1" is not salable')) ?>', product.name)
                                                "
                                                :disabled="!product.is_saleable"
                                         />

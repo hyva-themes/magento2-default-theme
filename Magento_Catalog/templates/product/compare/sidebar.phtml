@@ -148,7 +148,7 @@ function initCompareSidebarClear() {
                     </strong>
                     <button
                         @click.prevent="removeFromCompare(product.id)"
-                        :aria-label="hyva.strf('<?= $escaper->escapeHtmlAttr(__('Remove product "%0" from the comparison')) ?>', product.name)"
+                        :aria-label="hyva.str('<?= $escaper->escapeJS(__('Remove product "%1" from the comparison')) ?>', product.name)"
                         class="p-1 inline-flex shrink-0 items-center justify-center text-gray-500
                                hover:text-primary ml-auto"
                     >
@@ -160,7 +160,7 @@ function initCompareSidebarClear() {
     </template>
     <div class="flex flex-wrap items-center md:mt-5 space-x-4 text-sm">
         <a href="<?= $escaper->escapeUrl($block->getUrl('catalog/product_compare/index')) ?>"
-            title="<?= $escaper->escapeHtml(__('Compare Products')); ?>"
+            title="<?= $escaper->escapeHtmlAttr(__('Compare Products')); ?>"
             class="btn btn-secondary px-4 text-sm">
             <span><?= $escaper->escapeHtml(__('Compare')); ?></span>
         </a>

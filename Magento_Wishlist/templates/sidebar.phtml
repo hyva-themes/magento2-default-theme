@@ -138,7 +138,7 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
                                         <button
                                             @click.prevent="addToCart(product.add_to_cart_params)"
                                             class="action tocart primary btn btn-primary text-sm"
-                                            :aria-label="hyva.strf('<?= $escaper->escapeJs(__('Add product "%0" to Cart'))  ?>', product.product_name)"
+                                            :aria-label="hyva.str('<?= $escaper->escapeJs(__('Add product "%1" to Cart'))  ?>', product.product_name)"
                                         >
                                             <?= $escaper->escapeHtml(__('Add to Cart')) ?>
                                         </button>
@@ -148,7 +148,7 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
                         </div>
                         <button
                             @click.prevent="removeFromWishlist(product.delete_item_params)"
-                            :aria-label="hyva.strf('<?= $escaper->escapeJs(__('Remove product "%0" from My Wish List')) ?>', product.product_name)"
+                            :aria-label="hyva.str('<?= $escaper->escapeJs(__('Remove product "%1" from My Wish List')) ?>', product.product_name)"
                             class="
                                 p-1 inline-flex shrink-0 items-center
                                 justify-center text-gray-500 hover:text-primary ml-auto
