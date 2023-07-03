@@ -54,7 +54,11 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
         );?>
     </button>
     <div
-        class="fixed top-0 right-0 w-full h-full p-1 flex flex-col border-t border-container bg-container-lighter"
+        class="
+            fixed top-0 right-0 w-full h-full p-1 flex
+            flex-col border-t border-container bg-container-lighter
+            overflow-y-auto overflow-x-hidden
+        "
         :class="{ 'hidden' : !open }"
         :aria-hidden="open ? 'false' : 'true'"
         role="dialog"
