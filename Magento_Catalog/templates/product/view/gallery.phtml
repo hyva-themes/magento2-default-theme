@@ -194,8 +194,8 @@ $productName = $block->getProduct()->getName();
                     const galleryMainImagesWrapper = this.$refs.galleryMainImagesWrapper;
 
                     if (galleryMainImagesWrapper) {
-                        galleryMainImagesWrapper.addEventListener('touchstart', (event) => {this.handleTouchStart(event)});
-                        galleryMainImagesWrapper.addEventListener('touchmove', (event) => {this.handleTouchMove(event)});
+                        galleryMainImagesWrapper.addEventListener('touchstart', (event) => this.handleTouchStart(event));
+                        galleryMainImagesWrapper.addEventListener('touchmove', (event) => this.handleTouchMove(event));
                     }
                 }
             },
@@ -394,6 +394,12 @@ $productName = $block->getProduct()->getName();
                     this.activeSlide = idx;
                 }
             },
+            setActiveAndScrollTo(index) {
+                this.setActive(index)
+                if (this.isSlider) {
+                    this.scrollTo(index);
+                }
+            },
             eventListeners: {
                 ['@keydown.window.escape']() {
                     this.fullscreen = false
@@ -405,60 +411,31 @@ $productName = $block->getProduct()->getName();
                     this.resetGallery();
                 }
             },
-            handleTouchStart: function (event) {
-                let firstTouch = event.touches[0];
+            handleTouchStart(event) {
+                const firstTouch = event.touches[0];
 
                 touchXDown = firstTouch.clientX;
                 touchYDown = firstTouch.clientY;
             },
-            handleTouchMove: function (event) {
+            handleTouchMove(event) {
                 if (!touchXDown || !touchYDown) {
                     return;
                 }
 
-                let xUp = event.touches[0].clientX;
-                let yUp = event.touches[0].clientY;
-
-                let xDiff = touchXDown - xUp;
-                let yDiff = touchYDown - yUp;
+                const xDiff = touchXDown - event.touches[0].clientX;
+                const yDiff = touchYDown - event.touches[0].clientY;
 
                 if (Math.abs(xDiff) > Math.abs(yDiff)) {
-                    if (xDiff > 0) {
-                        this.showNext();
-                    } else {
-                        this.showPrevious();
-                    }
+                    const newIndex = xDiff > 0 ?  this.getNextIndex() : this.getPreviousIndex();
+                    this.setActiveAndScrollTo(newIndex)
                 }
-
-                /* reset values */
-                touchXDown = null;
-                touchYDown = null;
+                touchXDown = touchYDown = null;
             },
-            showPrevious() {
-                let activeIndex = --this.active;
-
-                if (activeIndex < 0) {
-                    activeIndex = this.itemCount - 1;
-                }
-
-                this.setActive(activeIndex);
-
-                if (this.isSlider) {
-                    this.scrollTo(activeIndex);
-                }
+            getPreviousIndex() {
+                return this.active > 0 ? this.active - 1 : this.itemCount - 1;
             },
-            showNext() {
-                let activeIndex = ++this.active;
-
-                if (activeIndex === this.itemCount) {
-                    activeIndex = 0;
-                }
-
-                this.setActive(activeIndex);
-
-                if (this.isSlider) {
-                    this.scrollTo(activeIndex);
-                }
+            getNextIndex() {
+                return this.active + 1 === this.itemCount ? 0 : this.active + 1;
             }
         }
      }
