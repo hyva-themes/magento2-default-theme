@@ -1,6 +1,5 @@
 .page.messages {
-    @apply sticky z-20;
-    top: 0px;
+    @apply sticky top-0 z-20;
 
     .messages
     section#messages {
@@ -10,9 +9,7 @@
 
 .message {
     @apply flex items-center justify-between w-full p-2 bg-gray-600 shadow rounded text-white mb-2;
-}
 
-.message {
     &.error {
         @apply bg-red-500;
     }
