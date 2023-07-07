@@ -17,7 +17,7 @@ use Magento\Framework\Escaper;
 /** @var ViewModelRegistry $viewModels */
 
 /** @var Navigation $viewModelNavigation */
-$viewModelNavigation = $viewModels->require(Navigation::class);
+$viewModelNavigation = $viewModels->require(Navigation::class, $block);
 
 /** @var HeroiconsSolid $heroiconsSolid */
 $heroiconsSolid = $viewModels->require(HeroiconsSolid::class);

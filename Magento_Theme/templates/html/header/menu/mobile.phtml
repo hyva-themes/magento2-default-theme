@@ -20,7 +20,7 @@ use Magento\Framework\Escaper;
 $heroicons = $viewModels->require(HeroiconsOutline::class);
 
 /** @var Navigation $viewModelNavigation */
-$viewModelNavigation = $viewModels->require(Navigation::class);
+$viewModelNavigation = $viewModels->require(Navigation::class, $block);
 
 $uniqueId = '_' . uniqid();
 
