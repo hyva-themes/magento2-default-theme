@@ -38,7 +38,7 @@ $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() 
 <nav class="breadcrumbs bg-container-lighter shadow-sm" aria-label="Breadcrumb">
     <div class="container">
         <ol x-data="initBreadcrumbsProduct()" class="items list-reset py-4 rounded flex flex-wrap text-grey text-sm">
-            <span>&#8203;</span>
+            <li>&ZeroWidthSpace;</li>
             <template x-for="item in breadcrumbs">
                 <li class="item flex">
                     <template x-if="item.name !== 'home'">
