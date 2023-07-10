@@ -190,14 +190,9 @@ $productName = $block->getProduct()->getName();
                 this.initActive();
                 this.$nextTick(() => this.calcPageSize());
 
-                if (this.images.length > 1) {
-                    const galleryMainImagesWrapper = this.$refs.galleryMainImagesWrapper;
-
-                    if (galleryMainImagesWrapper) {
-                        galleryMainImagesWrapper.addEventListener('touchstart', (event) => this.handleTouchStart(event));
-                        galleryMainImagesWrapper.addEventListener('touchmove', (event) => this.handleTouchMove(event));
-                    }
-                }
+                const galleryMainImagesWrapper = this.$refs.galleryMainImagesWrapper;
+                galleryMainImagesWrapper.addEventListener('touchstart', (event) => this.images.length > 1 && this.handleTouchStart(event));
+                galleryMainImagesWrapper.addEventListener('touchmove', (event) => this.images.length > 1 && this.handleTouchMove(event));
             },
             receiveImages(images) {
                 if (this.appendOnReceiveImages) {
