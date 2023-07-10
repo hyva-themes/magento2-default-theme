@@ -30,7 +30,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
 
 ?>
 <div x-data="initMenuMobile<?= $escaper->escapeHtml($uniqueId) ?>()"
-     class="z-20 order-2 sm:order-1 lg:order-2 navigation lg:hidden"
+     class="z-20 order-2 sm:order-1 lg:order-2 navigation lg:hidden w-12 h-12"
 >
     <!-- mobile -->
     <div @load.window="setActiveMenu($root)"
