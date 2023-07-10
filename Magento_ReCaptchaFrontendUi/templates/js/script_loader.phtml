@@ -22,7 +22,7 @@ use Magento\Framework\View\Element\Template;
 $storeConfig = $viewModels->require(StoreConfig::class);
 $siteKeyV3   = (string) $storeConfig->getStoreConfig('recaptcha_frontend/type_recaptcha_v3/public_key');
 
-if (!$siteKey) {
+if (!$siteKeyV3) {
     // No v3 google API credentials configured
     return;
 }
