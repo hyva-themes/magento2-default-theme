@@ -41,12 +41,12 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
     >
         <div class="flex items-baseline justify-between menu-icon">
             <div class="flex justify-end w-full">
-                <span @click="$dispatch('toggle-mobile-menu')"
+                <a @click="$dispatch('toggle-mobile-menu')"
                        class="flex items-center justify-center cursor-pointer"
                        :class="{ 'ml-auto': open }">
                     <?= $heroicons->xHtml('hidden p-4', 64, 64, [":class" => "{ 'hidden' : !open, 'block': open }"]); ?>
                     <?= $heroicons->menuHtml('p-3', 48, 48, [":class" => "{ 'hidden' : open, 'block': !open }"]); ?>
-                </span>
+                </a>
             </div>
         </div>
 
@@ -70,14 +70,14 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                         <?= $escaper->escapeHtml($menuItem['name']) ?>
                     </a>
                     <?php if (!empty($menuItem['childData'])): ?>
-                    <span class="absolute right-0 flex w-8 h-8 mr-8 border rounded cursor-pointer
+                    <a class="absolute right-0 flex w-8 h-8 mr-8 border rounded cursor-pointer
                         bg-container-lighter border-container"
                           @click="mobilePanelActiveId =
                           mobilePanelActiveId === '<?= /* @noEscape */ (string) $index ?>' ?
                            0 : '<?= /* @noEscape */ (string) $index ?>'"
                     >
                         <?= $heroicons->chevronRightHtml('w-full h-full p-1'); ?>
-                    </span>
+                    </a>
                     <?php endif; ?>
                 </span>
                 <?php if (!empty($menuItem['childData'])): ?>
@@ -89,14 +89,14 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                             'translate-x-0' : mobilePanelActiveId === '<?= /* @noEscape */ (string) $index ?>',
                         }"
                     >
-                        <span class="flex items-center px-8 py-4 border-b cursor-pointer bg-container border-container"
+                        <a class="flex items-center px-8 py-4 border-b cursor-pointer bg-container border-container"
                               @click="mobilePanelActiveId = 0"
                         >
                             <?= $heroicons->chevronLeftHtml(); ?>
                             <span class="ml-4">
                                 <?= $escaper->escapeHtml($menuItem['name']) ?>
                             </span>
-                        </span>
+                        </a>
                         <a href="<?= $escaper->escapeUrl($menuItem['url']) ?>"
                            title="<?= $escaper->escapeHtmlAttr($menuItem['name']) ?>"
                            class="flex items-center w-full px-8 py-4 border-b cursor-pointer
