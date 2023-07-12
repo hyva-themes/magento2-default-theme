@@ -29,11 +29,7 @@ $attributesViewModel = $viewModels->require(ProductAttributes::class);
 $product = $productViewModel->getProduct();
 
 ?>
-<div class="order-2 w-full mb-6 md:w-7/12 md:pl-5 lg:pl-10 md:py-6 lg:w-1/2 md:mb-0">
-    <p class="hidden md:block text-xl mt-4 mb-3 md:text-3xl text-gray-900 title-font">
-        <strong class="font-semibold md:font-bold"><?= $escaper->escapeHtml($product->getName()) ?></strong>
-    </p>
-
+<div class="w-full mb-6">
     <div class="my-2 flex">
         <?= $block->getChildHtml('product.info.review') ?>
     </div>

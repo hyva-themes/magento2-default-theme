@@ -46,7 +46,7 @@ $productName = $block->getProduct()->getName();
      x-data="initGallery()"
      x-init="initActive(); $nextTick(() => calcPageSize())"
      x-bind="eventListeners"
-     class="order-1 w-full md:w-5/12 lg:w-1/2 md:h-auto"
+     class="w-full pt-6 md:pt-0 md:h-auto md:row-start-1 md:row-span-2 md:col-start-1"
     >
     <div
         :class="{'w-full h-full fixed block top-0 left-0 bg-white z-50 flex': fullscreen}"
