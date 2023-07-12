@@ -95,7 +95,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                             >
                                 <span class="title text-md md:text-lg font-semibold">
                                     <?= $escaper->escapeHtml(__($filter->getName())) ?>
-                                    <span class="sr-only"><?= $escaper->escapeHtml(__(' filter')) ?></span>
+                                    <span class="sr-only"> <?= $escaper->escapeHtml(__('filter')) ?></span>
                                 </span>
                                     <span class="py-1 px-1 rounded border border-container">
                                     <?= $heroicons->chevronDownHtml(
