@@ -8,33 +8,41 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\ViewModel\StoreConfig;
 use Magento\Framework\Escaper;
 use Magento\GiftMessage\Block\Cart\GiftOptions;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
 
 /** @var Escaper $escaper */
 /** @var GiftOptions $block */
 /** @var SecureHtmlRenderer $secureRenderer */
 /** @var ViewModelRegistry $viewModels */
-/** @var HeroiconsOutline $heroicons */
+/** @var HeroiconsOutline $heroIcons */
+/** @var StoreConfig $storeConfigViewModel */
 
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+$heroIcons = $viewModels->require(HeroiconsOutline::class);
+$storeConfigViewModel = $viewModels->require(StoreConfig::class);
+
+if (! $storeConfigViewModel->getStoreConfig(GiftMessageHelper::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS)) {
+    return;
+}
 
 $slideOutDrawer = (bool) $block->getSlideOutDrawer();
-?>
 
+?>
 <div x-data="initGiftItemOptions({itemId: '<?= (int) $block->getItem()->getId() ?>'})" class="gift-options-component w-full flex flex-wrap my-6" :data-item-id="itemId" x-cloak>
     <div class="text-left gift-options-title w-full order-first" x-show="isGiftMsgEnabled || hasActiveOptions">
         <span @click="formBlockVisibility = !formBlockVisibility" class="cursor-pointer text-primary-lighter select-none whitespace-nowrap underline">
             <?= $escaper->escapeHtml(__('Gift options')) ?>
             <?php if (!$slideOutDrawer): ?>
                 <span x-show="!formBlockVisibility">
-                    <?= $heroicons->chevronDownHtml('inline-block', 16, 16) ?>
+                    <?= $heroIcons->chevronDownHtml('inline-block', 16, 16) ?>
                 </span>
                 <span x-show="formBlockVisibility">
-                    <?= $heroicons->chevronUpHtml('inline-block', 16, 16) ?>
+                    <?= $heroIcons->chevronUpHtml('inline-block', 16, 16) ?>
                 </span>
             <?php endif ?>
         </span>
@@ -69,7 +77,7 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
                 <div class="relative">
                     <h2 class="text-lg font-medium leading-7 text-gray-900 "><?= $escaper->escapeHtml('Item Gift Options') ?></h2>
                     <div class="absolute top-0 right-0 cursor-pointer" @click="formBlockVisibility=false" aria-label="Close panel" tabindex="0" role="button">
-                        <?= $heroicons->xHtml('inline-block', 24, 24) ?>
+                        <?= $heroIcons->xHtml('inline-block', 24, 24) ?>
                     </div>
                 </div>
                 <div class="gift-options-item">
