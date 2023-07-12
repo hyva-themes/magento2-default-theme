@@ -133,7 +133,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                         href="<?= $escaper->escapeUrl($block->getViewUrl($order)) ?>"
                         class="inline-block text-sm underline text-secondary-darker"
                         title="<?= $escaper->escapeHtmlAttr(__('View Order')) ?>"
-                        aria-label="<?= $escaper->escapeHtmlAttr(__('View order') . ' ' . $order->getRealOrderId()) ?>"
+                        aria-label="<?= $escaper->escapeHtmlAttr(__('View order') . ' ' . ltrim($order->getRealOrderId(), '0')) ?>"
                     >
                         <?= $heroicons->eyeHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
                     </a>
@@ -159,7 +159,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                 title="<?= $escaper->escapeHtmlAttr(__('Reorder')) ?>"
                                 type="submit"
                                 class="inline-block text-sm underline text-secondary-darker"
-                                aria-label="<?= $escaper->escapeHtmlAttr(__('Reorder') . ' ' . $order->getRealOrderId()) ?>"
+                                aria-label="<?= $escaper->escapeHtmlAttr(__('Reorder') . ' ' . ltrim($order->getRealOrderId(), '0')) ?>"
                             >
                                 <?= $heroicons->refreshHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
                             </button>
