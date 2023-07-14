@@ -21,17 +21,27 @@ use Magento\Sales\Block\Order\Recent;
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
-<div class="block block-dashboard-orders card mt-4">
+<div class="block block-dashboard-orders card mt-4"
+     x-data="{ tabIndex: -1 }"
+>
     <?php
     $orders = $block->getOrders();
     $count  = count($orders);
     ?>
     <div class="block-title order my-4 flex justify-between items-center">
-        <span class="text-2xl block"><?= $escaper->escapeHtml(__('Recent Orders')) ?></span>
+        <h2 id="recent-orders-heading"
+            @focus="tabIndex = 0;"
+            @blur="tabIndex = -1"
+            :tabindex="tabIndex"
+        >
+            <span class="text-2xl block"><?= $escaper->escapeHtml(__('Recent Orders')) ?></span>
+        </h2>
         <?php if ($count > 0): ?>
             <a class="action view inline-block underline"
-               href="<?= $escaper->escapeUrl($block->getUrl('sales/order/history')) ?>">
-                <span><?= $escaper->escapeHtml(__('View All')) ?></span>
+               href="<?= $escaper->escapeUrl($block->getUrl('sales/order/history')) ?>"
+               aria-label="<?= $escaper->escapeHtml(__('Go to My Orders page')) ?>"
+            >
+                <?= $escaper->escapeHtml(__('View All')) ?>
             </a>
         <?php endif; ?>
     </div>
