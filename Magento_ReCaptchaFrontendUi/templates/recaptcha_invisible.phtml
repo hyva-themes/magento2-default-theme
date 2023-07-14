@@ -21,6 +21,11 @@ $storeConfig = $viewModels->require(StoreConfig::class);
 $recaptcha   = $viewModels->require(ReCaptcha::class);
 $siteKey     = $storeConfig->getStoreConfig('recaptcha_frontend/type_invisible/public_key');
 
+if (!$siteKey) {
+    // No v2 invisible google API credentials configured
+    return;
+}
+
 $inputElementId        = $block->getData('input_element_id');
 $instanceSuffix        = $recaptcha->calcJsInstanceSuffix($inputElementId ?: $block->getData('form_id') ?: 'x');
 $callback              = "googleRecaptchaCallback$instanceSuffix";

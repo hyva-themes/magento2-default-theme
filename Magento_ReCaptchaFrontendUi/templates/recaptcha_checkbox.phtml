@@ -23,6 +23,11 @@ $storeConfig = $viewModels->require(StoreConfig::class);
 $recaptcha   = $viewModels->require(ReCaptcha::class);
 $siteKey     = $storeConfig->getStoreConfig('recaptcha_frontend/type_recaptcha/public_key');
 
+if (!$siteKey) {
+    // No v2 checkbox google API credentials configured
+    return;
+}
+
 $inputElementId        = $block->getData('input_element_id');
 $instanceSuffix        = $recaptcha->calcJsInstanceSuffix($inputElementId ?: $block->getData('form_id') ?: 'x');
 $grecaptchaContainerId = "grecaptcha-container-$instanceSuffix";
