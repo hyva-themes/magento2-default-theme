@@ -8,15 +8,13 @@
 
 declare(strict_types=1);
 
-use Magento\Framework\Escaper;
-use Magento\GiftMessage\Block\Cart\GiftOptions;
-use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Magento\Framework\Escaper;
+use Magento\GiftMessage\Block\Cart\GiftOptions;
 
 /** @var Escaper $escaper */
 /** @var GiftOptions $block */
-/** @var SecureHtmlRenderer $secureRenderer */
 /** @var ViewModelRegistry $viewModels */
 /** @var HeroiconsOutline $heroicons */
 
@@ -24,9 +22,18 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 
 $slideOutDrawer = (bool) $block->getSlideOutDrawer();
 
-?>
+$giftMessageConfigJson = $block->getGiftOptionsConfigJson();
+$giftMessageConfig = json_decode($giftMessageConfigJson, true);
+$isOrderLevelGiftOptionsEnabled = $giftMessageConfig['isOrderLevelGiftOptionsEnabled'] ?? false;
+$isItemLevelGiftOptionsEnabled = $giftMessageConfig['isItemLevelGiftOptionsEnabled'] ?? false;
 
+if (! $isOrderLevelGiftOptionsEnabled && ! $isItemLevelGiftOptionsEnabled) {
+    return;
+}
+?>
 <script>
+    window.giftOptionsConfig = <?= /* @noEscape */ $giftMessageConfigJson ?>;
+
     function initGiftOptions() {
         'use strict';
         return {
@@ -188,6 +195,13 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
 >
     <?= $block->getChildHtml('loading') ?>
 </div>
+<?php
+
+if (! $isOrderLevelGiftOptionsEnabled) {
+    return;
+}
+// Only render the DOM elements for order level gift messages if they are enabled
+?>
 <div x-data="initGiftOptions()" class="gift-options-component w-full flex flex-wrap my-6" :data-item-id="itemId" x-cloak>
     <div class="text-left gift-options-title w-full order-first" x-show="isGiftMsgEnabled || hasActiveOptions">
         <span @click="formBlockVisibility = !formBlockVisibility" class="cursor-pointer text-primary-lighter select-none whitespace-nowrap underline">
@@ -248,6 +262,3 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
         </div>
     </div>
 </div>
-<script>
-    window.giftOptionsConfig = <?= /* @noEscape */ $block->getGiftOptionsConfigJson() ?>
-</script>
