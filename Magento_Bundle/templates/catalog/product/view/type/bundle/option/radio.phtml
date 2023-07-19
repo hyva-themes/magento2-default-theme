@@ -8,15 +8,17 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\Product\RadioPriceRenderer;
 use Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Radio;
 use Magento\Framework\Escaper;
 
 /** @var Radio $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
 
 /** @var RadioPriceRenderer $radioPriceRenderer */
-$radioPriceRenderer = $block->getData('radio_price_renderer');
+$radioPriceRenderer = $viewModels->require(RadioPriceRenderer::class);
 
 $option = $block->getOption();
 $selections = $option->getSelections();

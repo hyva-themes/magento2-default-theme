@@ -25,7 +25,6 @@
                 <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Radio" name="product.info.bundle.options.radio" as="radio">
                     <arguments>
                         <argument name="tier_price_renderer" xsi:type="object">\Magento\Bundle\Block\DataProviders\OptionPriceRenderer</argument>
-                        <argument name="radio_price_renderer" xsi:type="object">\Hyva\Theme\ViewModel\Product\RadioPriceRenderer</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Checkbox" name="product.info.bundle.options.checkbox" as="checkbox">

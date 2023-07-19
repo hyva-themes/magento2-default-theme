@@ -1,4 +1,17 @@
-<?php /** @var $block \Magento\Framework\Pricing\Render\Amount */ ?>
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Pricing\Render\Amount;
+
+/** @var Amount $block */
+?>
 
 <span
     <?php if ($block->getPriceId()) :?>x-data x-id="['<?= $block->escapeHtmlAttr($block->getPriceId()) ?>']"<?php endif; ?>
