@@ -7,7 +7,79 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.22...1.1.x-main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.24...1.1.x-main
+
+## [1.1.24] - 2023-07-21
+
+[1.1.24]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.23...1.1.24
+
+### Added
+
+- Nothing added
+
+### Changed
+
+- **Fixed: Prevent the contact-us page from being stored in the full-page cache**
+
+  For logged-in customers, the contact form is prepopulated, so if the FPC record happened to be by a logged-in customer, their name would be shown to subsequent visitors.
+
+  For more information, please refer to [issue #687](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/687).
+
+  Special to Aad Mathijssen (Isaac) for alerting us to the issue!
+
+- **Do not apply top-menu ESI block cache tags to the regular page if Varnish is enabled**
+
+  Previously the category cache tags were also added to the regular page FPC record.
+
+  For more information, please refer to [merge request #777](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/777) or the theme-module [issue #256](https://gitlab.hyva.io/hyva-themes/magento2-theme-module/-/issues/256).
+
+- **Reduce contact form CSS**
+
+  Replaced the custom class `flex-columns-wrapper` with native tailwind classes to reduce the CSS size a little bit.
+
+  For more information, please refer to [merge request #659](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/659)
+
+  Many thanks to Sean van Zuidam (Siteation) for their contribution!
+
+- **Remove excessive bracket in shipping totals label**
+
+  Previously a superfluous `)` was rendered after the total.
+
+  For more information, please refer to [issue #588](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/588).
+
+  Many Thanks to Valentyn Kuchak (Perspective) for their contribution!
+
+- **Update @hyva-themes/hyva-modules to dependency**
+
+  The default-theme now depends on release ^1.0.9 of `@hyva-themes/hyva-modules`.  
+  Changes in this version:
+    - Allow excluding module CSS from being merged (see [GitHub PR #6](https://github.com/hyva-themes/hyva-modules-tailwind-js/pull/6)).
+    - Allow tailwind.config.js to be in the project base directory (see this [GitHub PR #8](https://github.com/hyva-themes/hyva-modules-tailwind-js/pull/8)).
+
+  For more information, please refer to [issue #657](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/657).
+
+  Many thanks to Sean van Zuidam (Siteation) and Thijs de Witt (Trinos) for their contribution to `@hyva-themes/hyva-modules`!
+
+- **Show out-of-stock options as disabled in text and color swatches**
+
+  Previously the saleable state for out-of-stock options of configurable products with a single configurable attribute was not correctly disabled.
+
+  For more information, please refer to [issue #564](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/564).
+
+- **Avoid loading external ReCaptcha script if no API keys are configured**
+
+  For more information, please refer to [issue #609](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/609).
+
+  Many Thanks to Rostislav Sulejmanov (Perspective) for their contribution!
+
+- **Update hyva-themes/magento2-reset-theme dependency to 1.1.4**
+
+  In the new version all Layout XML resets are updated, so they are based on the latest 2.4.6 Magento version.  
+  All email related XML instructions for b2b + commerce that were previously added by mistake are now removed, so emails work as expected on Adobe Commerce/B2B instances.
+
+### Removed
+
+- Nothing removed
 
 ## [1.1.23] - 2023-03-17
 
