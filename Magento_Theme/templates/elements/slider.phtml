@@ -412,7 +412,8 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
                               tabindex="-1"
                               :class="{
                                     'bg-opacity-100': active === index,
-                                    'hidden': (pageSize !== 1 && !!(index % pageSize))
+                                    'bg-opacity-25': active !== index,
+                                    'hidden': (pageSize !== 1 && !!(index % pageSize)),
                                     }"
                               @click="getSlider().scrollLeft =
                                     (getSlider().scrollWidth / products.length) * index; active=index;">

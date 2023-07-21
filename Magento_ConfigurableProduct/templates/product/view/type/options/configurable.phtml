@@ -28,7 +28,7 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
     </script>
 
     <div x-data="initConfigurableDropdownOptions_<?= (int) $productId ?>()"
-         x-init="init();"
+         x-init="init()"
          @private-content-loaded.window="onGetCartData($event.detail.data)"
          class="mb-6"
     >

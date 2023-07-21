@@ -8,16 +8,18 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Cart\TotalsOutput;
 use Magento\Checkout\Block\Cart\Shipping;
 use Magento\Framework\Escaper;
-use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /** @var Escaper $escaper */
 /** @var Shipping $block */
-/** @var SecureHtmlRenderer $secureRenderer */
+/** @var ViewModelRegistry $viewModels */
+/** @var TotalsOutput $totalsOutput */
+$totalsOutput = $viewModels->require(TotalsOutput::class);
 
 ?>
-
 <script>
     function initShippingEstimation(){
         return {
@@ -485,7 +487,11 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                                                @change="updateShippingMethod()"/>
                                         <div class="grid grid-cols-2 w-full">
                                             <span x-text="rate.method_title"></span>
+                                            <?php if ($totalsOutput->displayCartShippingExclTax() || $totalsOutput->displayCartShippingBoth()): ?>
                                             <span x-text="hyva.formatPrice(rate.price_excl_tax)"></span>
+                                            <?php elseif ($totalsOutput->displayCartShippingInclTax() || $totalsOutput->displayCartShippingBoth()): ?>
+                                            <span x-text="hyva.formatPrice(rate.price_incl_tax)"></span>
+                                            <?php endif; ?>
                                         </div>
                                     </label>
                                 </template>

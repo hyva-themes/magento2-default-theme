@@ -44,7 +44,6 @@ $productName = $block->getProduct()->getName();
 
 <div id="gallery"
      x-data="initGallery()"
-     x-init="initActive(); $nextTick(() => calcPageSize())"
      x-bind="eventListeners"
      class="w-full pt-6 md:pt-0 md:h-auto md:row-start-1 md:row-span-2 md:col-start-1"
     >
@@ -55,6 +54,8 @@ $productName = $block->getProduct()->getName();
         :aria-label="fullscreen ? '<?= $escaper->escapeJs(__('Gallery modal fullscreen')) ?>' : false"
     >
         <div class="relative self-center w-full"
+             @touchstart="handleTouchStart"
+             @touchmove="handleTouchMove"
              x-transition:enter="ease-out duration-500"
              x-transition:enter-start="opacity-0"
              x-transition:enter-end="opacity-100"
@@ -195,6 +196,8 @@ $productName = $block->getProduct()->getName();
 </div>
 <script>
     function initGallery () {
+        let touchXDown, touchYDown;
+
         return {
             "active": 0,
             "videoData": {},
@@ -215,6 +218,10 @@ $productName = $block->getProduct()->getName();
             "pageSize": 4,
             "pageFillers": 0,
             "focusTrapListener": null,
+            init() {
+                this.initActive();
+                this.$nextTick(() => this.calcPageSize());
+            },
             receiveImages(images) {
                 if (this.appendOnReceiveImages) {
                     const initialUrls = this.initialImages.map(image => image.full);
@@ -410,6 +417,12 @@ $productName = $block->getProduct()->getName();
                     this.activeSlide = idx;
                 }
             },
+            setActiveAndScrollTo(index) {
+                this.setActive(index)
+                if (this.isSlider) {
+                    this.scrollTo(index);
+                }
+            },
             eventListeners: {
                 ['@keydown.window.escape']() {
                     this.closeFullScreen()
@@ -459,6 +472,36 @@ $productName = $block->getProduct()->getName();
                 this.$nextTick(() => this.calcPageSize());
 
                 document.removeEventListener('keydown', this.focusTrapListener);
+            },
+            handleTouchStart(event) {
+                if (this.images.length <= 1) {
+                    return;
+                }
+
+                const firstTouch = event.touches[0];
+
+                touchXDown = firstTouch.clientX;
+                touchYDown = firstTouch.clientY;
+            },
+            handleTouchMove(event) {
+                if (this.images.length <= 1 || !touchXDown || !touchYDown) {
+                    return;
+                }
+
+                const xDiff = touchXDown - event.touches[0].clientX;
+                const yDiff = touchYDown - event.touches[0].clientY;
+
+                if (Math.abs(xDiff) > Math.abs(yDiff)) {
+                    const newIndex = xDiff > 0 ?  this.getNextIndex() : this.getPreviousIndex();
+                    this.setActiveAndScrollTo(newIndex)
+                }
+                touchXDown = touchYDown = null;
+            },
+            getPreviousIndex() {
+                return this.active > 0 ? this.active - 1 : this.itemCount - 1;
+            },
+            getNextIndex() {
+                return this.active + 1 === this.itemCount ? 0 : this.active + 1;
             }
         }
      }

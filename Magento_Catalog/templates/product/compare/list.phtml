@@ -12,11 +12,13 @@ use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Hyva\Theme\ViewModel\HeroiconsSolid;
 use Hyva\Theme\ViewModel\ProductAttributes;
+use Hyva\Theme\ViewModel\StoreConfig;
 use Hyva\Theme\ViewModel\Wishlist;
 use Magento\Catalog\Block\Product\Compare\ListCompare;
 use Magento\Catalog\Helper\Product\Compare;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Escaper;
+use Magento\Review\Model\Review\Config as ReviewConfig;
 use Magento\Wishlist\Helper\Data as WishlistHelper;
 
 // phpcs:disable PSR2.ControlStructures.SwitchDeclaration
@@ -45,6 +47,9 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 
 /** @var HeroiconsSolid $heroiconsSolid */
 $heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
+
+/** @var StoreConfig $storeConfig */
+$storeConfig = $viewModels->require(Hyva\Theme\ViewModel\StoreConfig::class);
 ?>
 <?php $total = $block->getItems()->getSize(); ?>
 <?php if ($total): ?>
@@ -251,6 +256,7 @@ function initWishlist() {
                         </td>
                     <?php endforeach; ?>
                 </tr>
+                <?php if ($storeConfig->getStoreConfig(ReviewConfig::XML_PATH_REVIEW_ACTIVE)): ?>
                 <tr>
                     <?php $index = 0; ?>
                     <?php /** @var Product $product */ ?>
@@ -265,6 +271,7 @@ function initWishlist() {
                         </td>
                     <?php endforeach; ?>
                 </tr>
+                <?php endif; ?>
                 <?php foreach ($block->getAttributes() as $attribute): ?>
                     <?php $index = 0; ?>
                     <?php if ($block->hasAttributeValueForProducts($attribute)): ?>

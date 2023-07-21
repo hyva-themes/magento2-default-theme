@@ -11,7 +11,7 @@
     <referenceContainer name="main.content">
         <referenceBlock name="description">
             <arguments>
-                <!-- Pass in an empty string to avoid the default "prose" class to be used, so PageBuilder styles are applied -->
+                <!-- Pass in an empty string to avoid the default "p r o s e" class to be used, so PageBuilder styles are applied -->
                 <argument name="css_classes" xsi:type="string"></argument>
             </arguments>
         </referenceBlock>

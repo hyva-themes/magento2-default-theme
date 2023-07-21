@@ -8,6 +8,7 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\ViewModel\StoreConfig;
 use Magento\Framework\Escaper;
 use Magento\GiftMessage\Block\Cart\GiftOptions;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
@@ -19,12 +20,18 @@ use Hyva\Theme\ViewModel\HeroiconsOutline;
 /** @var SecureHtmlRenderer $secureRenderer */
 /** @var ViewModelRegistry $viewModels */
 /** @var HeroiconsOutline $heroicons */
+/** @var StoreConfig $storeConfigViewModel */
 
 $heroicons = $viewModels->require(HeroiconsOutline::class);
+$storeConfigViewModel = $viewModels->require(StoreConfig::class);
+
+if (! $storeConfigViewModel->getStoreConfig('sales/gift_options/allow_items')) {
+    return;
+}
 
 $slideOutDrawer = (bool) $block->getSlideOutDrawer();
-?>
 
+?>
 <div x-data="initGiftItemOptions({itemId: '<?= (int) $block->getItem()->getId() ?>'})" class="gift-options-component w-full flex flex-wrap my-6" :data-item-id="itemId" x-cloak>
     <div class="text-left gift-options-title w-full order-first" x-show="isGiftMsgEnabled || hasActiveOptions">
         <button
