@@ -45,20 +45,14 @@ $productName = $block->getProduct()->getName();
 <div id="gallery"
      x-data="initGallery()"
      x-bind="eventListeners"
-     class="order-1 w-full md:w-5/12 lg:w-1/2 md:h-auto"
+     class="w-full pt-6 md:pt-0 md:h-auto md:row-start-1 md:row-span-2 md:col-start-1"
     >
-    <div :class="{'w-full h-full fixed block top-0 left-0 bg-white z-50 flex': fullscreen}">
-        <div class="absolute top-0 right-0 pt-4 pr-4">
-            <button @click="fullscreen = false; $nextTick(() => calcPageSize())"
-                    type="button"
-                    class="hidden text-gray-400 hover:text-gray-500 focus:outline-none focus:text-gray-500
-                        transition ease-in-out duration-150"
-                    :class="{ 'hidden': !fullscreen, 'block': fullscreen }"
-                    aria-label="Close"
-            >
-                <?= $heroicons->xHtml(); ?>
-            </button>
-        </div>
+    <div
+        :class="{'w-full h-full fixed block top-0 left-0 bg-white z-50 flex': fullscreen}"
+        :role="fullscreen ? 'dialog' : false"
+        :aria-modal="fullscreen"
+        :aria-label="fullscreen ? '<?= $escaper->escapeJs(__('Gallery modal fullscreen')) ?>' : false"
+    >
         <div class="relative self-center w-full"
              @touchstart="handleTouchStart"
              @touchmove="handleTouchMove"
@@ -66,32 +60,35 @@ $productName = $block->getProduct()->getName();
              x-transition:enter-start="opacity-0"
              x-transition:enter-end="opacity-100"
         >
-            <div class="relative mb-6">
+            <div class="relative mb-6" aria-live="polite" aria-atomic="true">
+                <span class="invisible" id="main-image-description"><?= $escaper->escapeHtml(__('Main image')) ?></span>
+                <span class="invisible" id="fullscreen-btn-label"><?= $escaper->escapeHtml(__('Click to view image in fullscreen')) ?></span>
                 <?php
                 /**
                  * The first image is a placeholder that determines the
                  * aspect ratio for the gallery. It will be hidden as
                  * soon as JS is loaded, but will keep reserving the
                  * necessary space in the layout for the other (absolute positioned)
-                 * images. Hence, `opacity-0` instead of `x-show` or `hidden`
+                 * images. Hence, `invisible` instead of `x-show` or `hidden`
                  */
                 ?>
                 <img
-                    alt="main product photo"
-                    title="<?= $escaper->escapeHtmlAttr($productName) ?>"
+                    alt="<?= $mainImage ? $escaper->escapeHtmlAttr($mainImage->getData('label')) : '' ?>"
+                    title="<?= $mainImage ? $escaper->escapeHtmlAttr($mainImage->getData('label')) : '' ?>"
                     class="object-contain object-center w-full h-auto max-h-screen-75"
-                    :class="'opacity-0'"
+                    :class="'invisible'"
                     src="<?= /* @noEscape */ $mainImageData ?>"
                     width="<?= /* @noEscape */ $mediumWidth ?>"
                     height="<?= /* @noEscape */ $mediumHeight ?>"
                     itemprop="image"
-                    @click="fullscreen = true; $nextTick(() => calcPageSize())"
+                    @click="openFullscreen($root)"
                 />
                 <template x-for="(image, index) in images" :key="index">
                     <img
+                        x-ref="galleryMainImage"
                         :alt="image.caption || '<?= $escaper->escapeJs($productName) ?>'"
                         :title="image.caption || '<?= $escaper->escapeJs($productName) ?>'"
-                        @click="fullscreen = true; $nextTick(() => calcPageSize())"
+                        @click="openFullscreen($root)"
                         class="absolute inset-0 object-contain object-center w-full m-auto max-h-screen-75"
                         :class="{ 'cursor-pointer': !fullscreen }"
                         width="<?= /* @noEscape */ $mediumWidth ?>"
@@ -99,6 +96,13 @@ $productName = $block->getProduct()->getName();
                         :loading="active!==index ? 'lazy' : 'eager'"
                         :src="fullscreen ? image.full : image.img"
                         x-transition.opacity.duration.500ms x-show="active===index"
+                        @keydown.enter="openFullscreen($root)"
+                        :tabindex="fullscreen ? '-1' : '0'"
+                        :aria-describedby="fullscreen
+                            ? ''
+                            : 'main-image-description fullscreen-btn-label'
+                        "
+                        :role="fullscreen ? 'img' : 'button'"
                     />
                 </template>
                 <div class="absolute inset-0 hidden w-full h-full bg-white nonmobile"
@@ -119,18 +123,23 @@ $productName = $block->getProduct()->getName();
                 </div>
             </div>
         </div>
+
         <div @resize.window.debounce="calcPageSize(); $nextTick(() => calcActive())">
             <div
                 id="thumbs"
                 class="flex items-center"
                 :class="{ 'fixed justify-center bottom-0 left-0 right-0 mx-6': fullscreen }"
                 style="min-height: 100px;"
+                x-show="images.length > 1"
+                x-cloak
             >
                 <button
-                    aria-label="<?= $escaper->escapeHtml(__('Previous')) ?>"
+                    type="button"
+                    aria-label="<?= $escaper->escapeHtmlAttr(__('Previous')) ?>"
                     tabindex="-1"
                     class="mr-4 text-black rounded-full outline-none focus:outline-none flex-none"
                     :class="{ 'opacity-25 pointer-events-none' : activeSlide === 0, 'hidden' : !isSlider }"
+                    aria-hidden="true"
                     @click="scrollPrevious"
                 ><?= $heroicons->chevronLeftHtml() ?></button>
                 <div class="js_thumbs_slides thumbs-wrapper relative flex flex-nowrap w-full overflow-auto js_slides snap md:px-1 xl:px-2"
@@ -139,28 +148,49 @@ $productName = $block->getProduct()->getName();
                 >
                     <template x-for="(image, index) in images" :key="index">
                         <div class="js_thumbs_slide flex shrink-0 mb-2 mr-2 lg:mr-4 last:mr-0">
-                            <a href="#" @click.prevent="setActive(index);"
-                               class="block border border-gray-300 hover:border-primary focus:border-primary"
-                               :class="{'border-primary': active === index}"
+                            <button
+                                type="button"
+                                @click.prevent="setActive(index);"
+                                class="block border border-gray-300 hover:border-primary focus:border-primary"
+                                :class="{'border-primary': active === index}"
                             >
-                                <img :src="image.thumb"
-                                     :alt="image.caption || '<?= $escaper->escapeJs($productName) ?>'"
-                                     :title="image.caption || '<?= $escaper->escapeJs($productName) ?>'"
-                                     width="<?= /* @noEscape */ $smallWidth ?>"
-                                     height="<?= /* @noEscape */ $smallHeight ?>"
+                                <span class="sr-only">
+                                    <?= $escaper->escapeHtml('View larger image') ?>
+                                </span>
+                                <img
+                                    :src="image.thumb"
+                                    :alt="hyva.str('%1 thumbnail', image.caption) || '<?= $escaper->escapeJs("%1 thumbnail", $productName) ?>'"
+                                    :title="hyva.str('%1 thumbnail', image.caption) || '<?= $escaper->escapeJs("%1 thumbnail", $productName) ?>'"
+                                    width="<?= /* @noEscape */ $smallWidth ?>"
+                                    height="<?= /* @noEscape */ $smallHeight ?>"
                                 />
-                            </a>
+                            </button>
                         </div>
                     </template>
                 </div>
                 <button
-                    aria-label="<?= $escaper->escapeHtml(__('Next')) ?>"
+                    type="button"
+                    x-show="images.length > 1"
+                    x-cloak
+                    aria-label="<?= $escaper->escapeHtmlAttr(__('Next')) ?>"
                     tabindex="-1"
                     class="ml-4 text-black rounded-full outline-none focus:outline-none flex-none"
                     :class="{ 'opacity-25 pointer-events-none' : activeSlide >= itemCount-pageSize, 'hidden' : !isSlider }"
+                    aria-hidden="true"
                     @click="scrollNext"
                 ><?= $heroicons->chevronRightHtml() ?></button>
             </div>
+        </div>
+        <div class="absolute top-0 right-0 pt-4 pr-4">
+            <button @click="closeFullScreen()"
+                    type="button"
+                    class="hidden text-gray-500 p-3 hover:text-gray-600 focus:text-gray-600
+                        transition ease-in-out duration-150"
+                    :class="{ 'hidden': !fullscreen, 'block': fullscreen }"
+                    aria-label="<?= $escaper->escapeHtmlAttr(__('Close fullscreen')) ?>"
+            >
+                <?= $heroicons->xHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
+            </button>
         </div>
     </div>
 </div>
@@ -187,6 +217,7 @@ $productName = $block->getProduct()->getName();
             "itemCount": 0,
             "pageSize": 4,
             "pageFillers": 0,
+            "focusTrapListener": null,
             init() {
                 this.initActive();
                 this.$nextTick(() => this.calcPageSize());
@@ -394,7 +425,7 @@ $productName = $block->getProduct()->getName();
             },
             eventListeners: {
                 ['@keydown.window.escape']() {
-                    this.fullscreen = false
+                    this.closeFullScreen()
                 },
                 ['@update-gallery.window'](event) {
                     this.receiveImages(event.detail);
@@ -402,6 +433,45 @@ $productName = $block->getProduct()->getName();
                 ['@reset-gallery.window'](event) {
                     this.resetGallery();
                 }
+            },
+            focusTrapHandler: function(firstFocusableElement, lastFocusableElement, e) {
+                const isTabPressed = e.key === 'Tab' || e.keyCode === 9;
+
+                if (!isTabPressed) {
+                    return;
+                }
+
+                e.shiftKey
+                    ? document.activeElement === firstFocusableElement && (lastFocusableElement.focus(), e.preventDefault())
+                    : document.activeElement === lastFocusableElement && (firstFocusableElement.focus(), e.preventDefault());
+            },
+            openFullscreen(node) {
+                this.fullscreen = true;
+                this.$nextTick(() => this.calcPageSize());
+
+                const focusableElements = 'button, [href], input, select, textarea';
+                const focusableContent = Array.from(node.querySelectorAll(focusableElements))
+                    .filter(el => (el.attributes.tabindex >= 0 || !el.attributes.tabindex) && el.style.display !== 'none');
+
+                const firstFocusableElement = focusableContent.length > 0
+                    ? focusableContent[0]
+                    : null;
+                const lastFocusableElement = focusableContent.length > 0
+                    ? focusableContent[focusableContent.length - 1]
+                    : null;
+
+                this.focusTrapListener = this.focusTrapHandler.bind(this, firstFocusableElement, lastFocusableElement);
+
+                document.addEventListener('keydown', this.focusTrapListener);
+            },
+            closeFullScreen() {
+                if (this.fullscreen) {
+                    this.$refs.galleryMainImage.focus();
+                }
+                this.fullscreen = false;
+                this.$nextTick(() => this.calcPageSize());
+
+                document.removeEventListener('keydown', this.focusTrapListener);
             },
             handleTouchStart(event) {
                 if (this.images.length <= 1) {

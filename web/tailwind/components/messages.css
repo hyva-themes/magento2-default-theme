@@ -8,20 +8,23 @@
 }
 
 .message {
-    @apply flex items-center justify-between w-full p-2 bg-gray-600 shadow rounded text-white mb-2;
+    @apply flex items-center justify-between w-full p-2 pl-5 bg-gray-600 shadow rounded text-black font-semibold mb-2;
 
     &.error {
-        @apply bg-red-500;
+        @apply border-2 border-red-500 bg-red-50;
     }
 
     &.success {
-        @apply bg-green-500;
+        @apply border-2 border-green-500 bg-green-50;
     }
 
     &.info,
-    &.warning,
     &.notice {
-        @apply bg-yellow-500;
+        @apply border-2 border-blue-500 bg-blue-50;
+    }
+
+    &.warning {
+        @apply border-2 border-yellow-500 bg-yellow-50;
     }
 
     a {

@@ -46,7 +46,7 @@ $gqlViewModel = $viewModels->require(GraphqlViewModel::class);
 $recaptcha = $block->getData('viewModelRecaptcha');
 
 ?>
-<div class="mx-auto py-6 items-center" id="review-form">
+<div class="mx-auto py-6 items-center" id="review-form" tabindex="0">
     <div class="card w-full px-6 py-3">
         <div class="text-xl my-3">
             <?= $escaper->escapeHtml(__('Write Your Own Review')) ?>
@@ -72,15 +72,19 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                         </span>
                     </legend>
                     <?php if ($block->getRatings() && $block->getRatings()->getSize()): ?>
-                        <fieldset>
+                        <fieldset name="rating-group">
                             <div class="flex flex-col mt-4 mb-3">
-                                <div class="text-md <?php if ($block->getRatings()->getSize() <= 1): ?>hidden<?php endif ?>"><?= $escaper->escapeHtml(__('Your Rating')) ?>:</div>
+                                <div class="text-md <?php if ($block->getRatings()->getSize() <= 1): ?>hidden<?php endif ?>">
+                                    <?= $escaper->escapeHtml(__('Your Rating')) ?>:
+                                </div>
                                 <div class="mt-4">
                                     <div id="product-review-table">
                                         <?php foreach ($block->getRatings() as $rating): ?>
                                             <div class="table-row">
-                                                <label class="table-cell pr-6 align-middle text-left"
-                                                    id="<?= $escaper->escapeHtml($rating->getRatingCode()) ?>_rating_label">
+                                                <label
+                                                    class="table-cell pr-6 align-middle text-left"
+                                                    id="<?= $escaper->escapeHtml($rating->getRatingCode()) ?>_rating_label"
+                                                >
                                                     <span>
                                                         <?php if ($block->getRatings()->getSize() <= 1): ?>
                                                             <?= $escaper->escapeHtml(__('Your Rating')) ?>:
@@ -89,45 +93,50 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                                                         <?php endif ?>
                                                     </span>
                                                 </label>
-                                                <div class="flex flex-row grow-0"
-                                                     x-data="{ clickedRatingId: 0 }">
+                                                <div
+                                                    class="flex flex-row grow-0 focus-within:ring-4 ring-primary ring-opacity-50"
+                                                    x-data="{ clickedRatingId: 0 }"
+                                                >
                                                     <?php $options = $rating->getOptions(); ?>
                                                     <?php $iterator = 1;
                                                     foreach ($options as $option): ?>
-                                                        <div class="relative"
-                                                             @click="clickedRatingId = <?= (int)$iterator ?> || 0">
-                                                            <input
-                                                                class="absolute opacity-0 bottom-0 left-0 cursor-pointer"
-                                                                type="radio"
-                                                                <?php if ($iterator === 1): ?>required<?php endif; ?>
-                                                                name="ratings[<?= $escaper
-                                                                    ->escapeHtmlAttr($rating->getId()) ?>]"
-                                                                id="<?= $escaper
-                                                                    ->escapeHtmlAttr(
-                                                                        $rating->getRatingCode() . '_' . $option->getValue()
-                                                                    ) ?>"
-                                                                value="<?= $escaper
-                                                                    ->escapeHtmlAttr($option->getId()) ?>"/>
+                                                        <div
+                                                            class="relative"
+                                                            @click="clickedRatingId = <?= (int)$iterator ?> || 0"
+                                                        >
                                                             <label
                                                                 class="rating-<?= (int)$iterator ?> m-0 cursor-pointer text-gray-400"
                                                                 for="<?= $escaper
                                                                      ->escapeHtmlAttr(
                                                                          $rating->getRatingCode() . '_' . $option->getValue()
                                                                      ) ?>"
-                                                                title="<?= $escaper
-                                                                       ->escapeHtmlAttr(
-                                                                           __('%1 %2', $iterator, $iterator > 1 ? __('stars') : __('star'))
-                                                                       ) ?>"
                                                                 id="<?= $escaper
                                                                     ->escapeHtmlAttr(
                                                                         $rating->getRatingCode() . '_' . $option->getValue()
-                                                                    ) ?>_label">
+                                                                    ) ?>_label"
+                                                            >
                                                                 <span :class="<?= (int)$iterator ?> <= clickedRatingId
                                                                     ? 'text-yellow-400'
-                                                                    : 'text-gray-400'">
-                                                                    <?= $heroiconsSolid->starHtml('', 32, 32); ?>
+                                                                    : 'text-gray-400'"
+                                                                >
+                                                                    <?= $heroiconsSolid->starHtml('', 32, 32, ["aria-hidden" => "true"]); ?>
                                                                 </span>
+                                                                <input
+                                                                    class="absolute opacity-0 bottom-0 left-0 cursor-pointer"
+                                                                    type="radio"
+                                                                    <?php if ($iterator === 1): ?>required<?php endif; ?>
+                                                                    name="ratings[<?= $escaper->escapeHtmlAttr($rating->getId()) ?>]"
+                                                                    id="<?= $escaper->escapeHtmlAttr(
+                                                                            $rating->getRatingCode() . '_' . $option->getValue()
+                                                                        ) ?>"
+                                                                    value="<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
+                                                                    aria-label="<?= $escaper->escapeHtmlAttr(
+                                                                            __('%1 %2', $iterator, $iterator > 1 ? __('stars') : __('star'))
+                                                                        )
+                                                                    ?>"
+                                                                />
                                                             </label>
+
                                                         </div>
                                                         <?php $iterator++; ?>
                                                     <?php endforeach; ?>
@@ -148,7 +157,6 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                             <div>
                                 <input class="form-input mt-3 block w-full text-sm"
                                        required
-                                       title="<?= $escaper->escapeHtmlAttr(__('Nickname')) ?>"
                                        placeholder="<?= $escaper->escapeHtmlAttr(__('Nickname') . '*') ?>" type="text"
                                        name="nickname" id="nickname_field"/>
                             </div>
@@ -160,7 +168,6 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                             <div>
                                 <input class="form-input mt-3 block w-full text-sm"
                                        required
-                                       title="<?= $escaper->escapeHtml(__('Summary')) ?>"
                                        placeholder="<?= $escaper->escapeHtml(__('Summary') . '*') ?>" type="text"
                                        name="title"
                                        id="summary_field"/>
@@ -173,7 +180,6 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                             <div>
                             <textarea class="form-input mt-3 block w-full text-sm"
                                       required
-                                      title="<?= $escaper->escapeHtml(__('Review')) ?>"
                                       placeholder="<?= $escaper->escapeHtml(__('Review') . '*') ?>" name="detail"
                                       id="review_field" cols="5"
                                       rows="3"></textarea>

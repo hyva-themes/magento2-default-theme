@@ -34,7 +34,7 @@ fieldset {
     }
 
     .field.field-error .messages {
-        @apply text-red-500;
+        @apply text-red-600;
         max-width: fit-content;
     }
 

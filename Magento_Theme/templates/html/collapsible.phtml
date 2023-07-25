@@ -10,23 +10,27 @@ declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
-use Magento\Framework\View\Element\Template;
 use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
-
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
 
 <div class="block <?= $escaper->escapeHtmlAttr($block->getBlockCss()) ?> card filter-option py-4 px-8 mb-6"
      x-data="{ open: true }">
-    <div class="title <?= $escaper->escapeHtmlAttr($block->getBlockCss()) ?>-title flex justify-between
-        items-center cursor-pointer hover:text-secondary-darker border-container border-b pb-4"
-         @click="open = !open"
-         :class="{ 'border-b pb-4': open, 'border-0 pb-0': !open }"
+    <button
+        type="button"
+        class="
+            title <?= $escaper->escapeHtmlAttr($block->getBlockCss()) ?>-title
+            flex justify-between
+            items-center cursor-pointer hover:text-secondary-darker w-full
+        "
+        @click="open = !open"
+        :aria-expanded="open"
     >
         <span class="text-lg title">
             <?= $escaper->escapeHtml(__($block->getData('block_title'))) ?>
@@ -36,13 +40,15 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 'transition-transform duration-300 ease-in-out transform rotate-180',
                 24,
                 24,
-                [":class" => "{ 'rotate-180': open, 'rotate-0': !open }"]
+                [":class" => "{ 'rotate-180': open, 'rotate-0': !open }", 'aria-hidden' => 'true']
             ); ?>
         </span>
-    </div>
-    <div class="content <?= $escaper->escapeHtmlAttr($block->getBlockCss()) ?>-content pt-3 block"
+    </button>
+    <span x-show="open" class="delimiter block border-b border-container w-full mt-4 mb-3"></span>
+    <div class="content <?= $escaper->escapeHtmlAttr($block->getBlockCss()) ?>-content block"
          :class="{ 'hidden': !open , 'block': open }"
-         id="<?= $escaper->escapeHtmlAttr($block->getBlockCss()) ?>">
+         id="<?= $escaper->escapeHtmlAttr($block->getBlockCss()) ?>"
+    >
         <?= $block->getChildHtml() ?>
     </div>
 </div>

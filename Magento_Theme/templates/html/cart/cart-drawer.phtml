@@ -44,7 +44,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             },
             cartItems: [],
             getItemCountTitle() {
-                return hyva.strf('(%0 <?= $escaper->escapeJs(__('of')) ?> %1)', this.maxItemsToDisplay, this.itemsCount)
+                return hyva.strf('<?= $escaper->escapeJs(__('%0 of %1 products in cart displayed')) ?>', this.maxItemsToDisplay, this.totalCartAmount)
             },
             setCartItems() {
                 this.cartItems = this.cart.items && this.cart.items.sort((a, b) => b.item_id - a.item_id) || [];
@@ -52,6 +52,31 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 if (this.maxItemsToDisplay > 0) {
                     this.cartItems = this.cartItems.slice(0, parseInt(this.maxItemsToDisplay, 10));
                 }
+            },
+            trapFocus(rootElement) {
+                if (!rootElement) return;
+
+                const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+                const focusableContentWithoutTrigger = Array.from(rootElement.querySelectorAll(focusableElements))
+
+                const firstFocusableElement = focusableContentWithoutTrigger.length > 0
+                    ? focusableContentWithoutTrigger[0]
+                    : null;
+                const lastFocusableElement = focusableContentWithoutTrigger.length > 0
+                    ? focusableContentWithoutTrigger[focusableContentWithoutTrigger.length - 1]
+                    : null;
+
+                rootElement.addEventListener('keydown', function(e) {
+                    const isTabPressed = e.key === 'Tab' || e.keyCode === 9;
+
+                    if (!isTabPressed) {
+                        return;
+                    }
+
+                    e.shiftKey
+                        ? document.activeElement === firstFocusableElement && (lastFocusableElement.focus(), e.preventDefault())
+                        : document.activeElement === lastFocusableElement && (firstFocusableElement.focus(), e.preventDefault());
+                });
             },
             deleteItemFromCart(itemId) {
                 this.isLoading = true;
@@ -88,142 +113,195 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     }], result.success ? 5000 : 0)
                     window.dispatchEvent(new CustomEvent('reload-customer-section-data'));
                 });
+            },
+            toggleCartDrawer(event) {
+                if (event.detail && typeof event.detail.isOpen !== 'undefined') {
+                    event.detail.isOpen ? this.openCartDrawer() : this.open = false
+                } else {
+                    <?php
+                    /*
+                     * The toggle-cart event was previously dispatched without parameter to open the drawer (not toggle).
+                     * Keeping this in here for backwards compatibility.
+                     */
+                    ?>
+                    this.openCartDrawer()
+                }
+            },
+            openCartDrawer() {
+                this.open = true;
+                this.$nextTick(() => {
+                    if (this.$refs && this.$refs.cartDialogContent) {
+                        this.$refs.cartDialogContent.focus()
+                        this.trapFocus(this.$refs.cartDialogContent)
+                    }
+                })
+            },
+            closeCartDrawer() {
+                this.$dispatch('toggle-cart', { isOpen: false })
             }
         }
     }
 </script>
-<section id="cart-drawer"
+<section x-cloak
+         x-show="cart"
+         id="cart-drawer"
          x-data="initCartDrawer()"
          @private-content-loaded.window="getData($event.detail.data)"
-         @toggle-cart.window="open=true"
-         @keydown.window.escape="open=false"
+         @toggle-cart.window="toggleCartDrawer($event)"
+         @keydown.window.escape="closeCartDrawer"
 >
-    <template x-if="cart && cart.summary_count">
-        <div role="dialog"
-             aria-labelledby="cart-drawer-title"
-             aria-modal="true"
-             @click.outside="open=false"
-             class="fixed inset-y-0 right-0 z-30 flex max-w-full">
-            <div class="backdrop"
-                 x-show="open"
-                 x-transition:enter="ease-in-out duration-500"
-                 x-transition:enter-start="opacity-0"
-                 x-transition:enter-end="opacity-100"
-                 x-transition:leave="ease-in-out duration-500"
-                 x-transition:leave-start="opacity-100"
-                 x-transition:leave-end="opacity-0"
-                 @click="open=false"
-                 aria-label="Close panel"></div>
-            <div class="relative w-screen max-w-md shadow-2xl"
-                 x-show="open"
-                 x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700"
-                 x-transition:enter-start="translate-x-full"
-                 x-transition:enter-end="translate-x-0"
-                 x-transition:leave="transform transition ease-in-out duration-500 sm:duration-700"
-                 x-transition:leave-start="translate-x-0"
-                 x-transition:leave-end="translate-x-full"
-            >
-                <div
-                    x-show="open"
-                    x-transition:enter="ease-in-out duration-500"
-                    x-transition:enter-start="opacity-0"
-                    x-transition:enter-end="opacity-100"
-                    x-transition:leave="ease-in-out duration-500"
-                    x-transition:leave-start="opacity-100"
-                    x-transition:leave-end="opacity-0" class="absolute top-0 right-0 flex p-2 mt-2">
-                    <button @click="open=false" aria-label="Close panel"
-                            class="p-2 text-gray-300 transition duration-150 ease-in-out hover:text-black">
-                        <?= $heroicons->xHtml(); ?>
-                    </button>
-                </div>
-                <div class="flex flex-col h-full py-6 space-y-6 bg-white shadow-xl">
-                    <?= $block->getChildHtml('cart-drawer.top'); ?>
-
-                    <header class="px-4 sm:px-6">
-                        <h2 id="cart-drawer-title" class="text-lg font-medium leading-7 text-gray-900">
-                            <?= $escaper->escapeHtml(__('My Cart')) ?>
-                            <span class="items-total text-xs"
-                                  x-show="maxItemsToDisplay && maxItemsToDisplay < itemsCount"
-                                  x-text="getItemCountTitle()">
-                            </span>
-                        </h2>
-                    </header>
-
-                    <?= $block->getChildHtml('cart-drawer.items.before'); ?>
-
-                    <div class="relative grid gap-6 px-4 py-6 overflow-y-auto bg-white border-b
-                        sm:gap-8 sm:px-6 border-container">
-                        <template x-for="item in cartItems">
-                            <div class="flex items-start p-3 -m-3 space-x-4 transition duration-150
-                                ease-in-out rounded-lg hover:bg-gray-100">
-                                <a :href="item.product_url" class="w-1/4">
-                                    <img
-                                        :src="item.product_image.src"
-                                        :width="item.product_image.width"
-                                        :height="item.product_image.height"
-                                        loading="lazy"
-                                    />
-                                </a>
-                                <div class="w-3/4 space-y-2">
-                                    <div>
-                                        <p class="text-xl">
-                                            <span x-html="item.qty"></span> x <span x-html="item.product_name"></span>
-                                        </p>
-                                        <p class="text-sm"><span x-html="item.product_sku"></span></p>
-                                    </div>
-                                    <template x-for="option in item.options">
-                                        <div class="pt-2">
-                                            <p class="font-semibold" x-text="option.label + ':'"></p>
-                                            <p class="text-secondary" x-html="option.value"></p>
-                                        </div>
-                                    </template>
-                                    <p><span x-html="item.product_price"></span></p>
-                                    <div class="pt-4">
-                                        <a :href="item.configure_url"
-                                           x-show="item.product_type !== 'grouped'"
-                                           class="inline-flex p-2 mr-2 btn btn-primary">
-                                            <?= $heroicons->pencilHtml('', 20, 20); ?>
-                                        </a>
-                                        <button class="inline-flex p-2 btn btn-primary"
-                                                @click="deleteItemFromCart(item.item_id)"
-                                        >
-                                            <?= $heroicons->trashHtml('', 20, 20); ?>
-                                        </button>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </template>
-                    </div>
-
-                    <?= $block->getChildHtml('cart-drawer.totals.before'); ?>
-
-                    <div class="relative grid gap-6 px-4 py-6 bg-white sm:gap-8 sm:px-6">
-                        <div class="w-full p-3 -m-3 space-x-4 transition duration-150 ease-in-out rounded-lg
-                            hover:bg-gray-100">
-                            <p><?= $escaper->escapeHtml(__('Subtotal')) ?>: <span x-html="cart.subtotal"></span></p>
-                        </div>
-                        <div class="w-full p-3 -m-3 space-x-4 transition duration-150 ease-in-out
-                            rounded-lg hover:bg-gray-100">
-                            <a @click.prevent.stop="$dispatch('toggle-authentication',
-                                {url: '<?= $escaper->escapeUrl($block->getUrl('checkout')) ?>'});"
-                               href="<?= $escaper->escapeUrl($block->getUrl('checkout')) ?>"
-                               class="inline-flex btn btn-primary">
-                                <?= $escaper->escapeHtml(__('Checkout')) ?>
-                            </a>
-                            <span><?= $escaper->escapeHtml(__('or')) ?></span>
-                            <a href="<?= $escaper->escapeUrl($block->getUrl('checkout/cart')) ?>"
-                               class="underline">
-                                <?= $escaper->escapeHtml(__('View and Edit Cart')) ?>
-                            </a>
-                        </div>
-                        <?= $block->getChildHtml('extra_actions') ?>
-                    </div>
-
-                    <?= $block->getChildHtml('cart-drawer.bottom'); ?>
-                </div>
+    <div role="dialog"
+         aria-labelledby="cart-drawer-title"
+         :aria-modal="open"
+         :aria-hidden="!open"
+         @click.outside="closeCartDrawer"
+         class="fixed inset-y-0 right-0 z-30 flex max-w-full">
+        <div class="backdrop"
+             x-show="open"
+             x-transition:enter="ease-in-out duration-500"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="ease-in-out duration-500"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             @click="closeCartDrawer"
+             aria-label="<?= $escaper->escapeHtmlAttr(__('Close minicart')) ?>"></div>
+        <div class="relative w-screen max-w-md shadow-2xl"
+             x-show="open"
+             x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700"
+             x-transition:enter-start="translate-x-full"
+             x-transition:enter-end="translate-x-0"
+             x-transition:leave="transform transition ease-in-out duration-500 sm:duration-700"
+             x-transition:leave-start="translate-x-0"
+             x-transition:leave-end="translate-x-full"
+        >
+            <div
+                x-show="open"
+                x-transition:enter="ease-in-out duration-500"
+                x-transition:enter-start="opacity-0"
+                x-transition:enter-end="opacity-100"
+                x-transition:leave="ease-in-out duration-500"
+                x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0" class="absolute top-0 right-0 flex p-2 mt-2">
+                <button
+                    @click="closeCartDrawer"
+                    aria-label="<?= $escaper->escapeHtmlAttr(__('Close minicart')) ?>"
+                    class="p-2 text-gray-300 transition duration-150 ease-in-out hover:text-black"
+                >
+                    <?= $heroicons->xHtml(); ?>
+                </button>
             </div>
-            <?= $block->getChildHtml('loading') ?>
+            <div class="flex flex-col h-full py-6 space-y-6 bg-white shadow-xl">
+                <?= $block->getChildHtml('cart-drawer.top'); ?>
+
+                <header class="px-4 sm:px-6">
+                    <h2 id="cart-drawer-title" class="text-lg font-medium leading-7 text-gray-900">
+                        <?= $escaper->escapeHtml(__('My Cart')) ?>
+                        <span class="items-total text-xs"
+                              x-show="maxItemsToDisplay && maxItemsToDisplay < itemsCount"
+                              x-text="getItemCountTitle()">
+                        </span>
+                    </h2>
+                </header>
+
+                <?= $block->getChildHtml('cart-drawer.items.before'); ?>
+
+                <template x-if="!itemsCount">
+                    <div class="relative px-4 py-6 bg-white border-bs sm:px-6 border-container">
+                        <?= $escaper->escapeHtml(__('There are no items in your cart.')) ?>
+                    </div>
+                </template>
+
+                <template x-if="itemsCount">
+                    <div>
+                        <div class="relative grid gap-6 px-4 py-6 overflow-y-auto bg-white border-b
+                                    sm:gap-8 sm:px-6 border-container"
+                        >
+                            <template x-for="item in cartItems">
+                                <div class="flex items-start p-3 -m-3 space-x-4 transition duration-150
+                            ease-in-out rounded-lg hover:bg-gray-100">
+                                    <a :href="item.product_url"
+                                       class="w-1/4"
+                                       :aria-label="hyva.strf('<?= $escaper->escapeJs(__('Product "%0"')) ?>', item.product_name)"
+                                    >
+                                        <img
+                                            :src="item.product_image.src"
+                                            :width="item.product_image.width"
+                                            :height="item.product_image.height"
+                                            loading="lazy"
+                                            alt=""
+                                        />
+                                    </a>
+                                    <div class="w-3/4 space-y-2">
+                                        <div>
+                                            <p class="text-xl">
+                                                <span x-html="item.qty"></span> x <span x-html="item.product_name"></span>
+                                            </p>
+                                            <p class="text-sm"><span x-html="item.product_sku"></span></p>
+                                        </div>
+                                        <template x-for="option in item.options">
+                                            <div class="pt-2">
+                                                <p class="font-semibold" x-text="option.label + ':'"></p>
+                                                <p class="text-secondary" x-html="option.value"></p>
+                                            </div>
+                                        </template>
+                                        <p><span x-html="item.product_price"></span></p>
+                                        <div class="pt-4">
+                                            <a :href="item.configure_url"
+                                               x-show="item.product_type !== 'grouped'"
+                                               class="inline-flex p-2 mr-2 btn btn-primary"
+                                               :aria-label="hyva.strf('<?= $escaper->escapeJs(__('Edit product "%0"')) ?>', item.product_name)"
+                                            >
+                                                <?= $heroicons->pencilHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
+                                            </a>
+                                            <button type="button"
+                                                    class="inline-flex p-2 btn btn-primary"
+                                                    @click="deleteItemFromCart(item.item_id)"
+                                                    :aria-label="hyva.strf('<?= $escaper->escapeJs(__('Remove product "%0" from cart')) ?>', item.product_name)"
+                                            >
+                                                <?= $heroicons->trashHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+
+                        <?= $block->getChildHtml('cart-drawer.totals.before'); ?>
+
+                        <div class="relative grid gap-6 px-4 py-6 bg-white sm:gap-8 sm:px-6">
+                            <div class="w-full p-3 -m-3 space-x-4 transition duration-150 ease-in-out rounded-lg
+                                        hover:bg-gray-100"
+                            >
+                                <p><?= $escaper->escapeHtml(__('Subtotal')) ?>: <span x-html="cart.subtotal"></span></p>
+                            </div>
+                            <div class="w-full p-3 -m-3 space-x-4 transition duration-150 ease-in-out rounded-lg
+                                        hover:bg-gray-100"
+                            >
+                                <a @click.prevent.stop="$dispatch('toggle-authentication',
+                                    {url: '<?= $escaper->escapeUrl($block->getUrl('checkout')) ?>'});"
+                                   href="<?= $escaper->escapeUrl($block->getUrl('checkout')) ?>"
+                                   class="inline-flex btn btn-primary"
+                                >
+                                    <?= $escaper->escapeHtml(__('Checkout')) ?>
+                                </a>
+                                <span><?= $escaper->escapeHtml(__('or')) ?></span>
+                                <a href="<?= $escaper->escapeUrl($block->getUrl('checkout/cart')) ?>"
+                                   class="underline"
+                                >
+                                    <?= $escaper->escapeHtml(__('View and Edit Cart')) ?>
+                                </a>
+                            </div>
+                            <?= $block->getChildHtml('extra_actions') ?>
+                        </div>
+                    </div>
+                </template>
+
+                <?= $block->getChildHtml('cart-drawer.bottom'); ?>
+            </div>
         </div>
-    </template>
+        <?= $block->getChildHtml('loading') ?>
+    </div>
+
 </section>

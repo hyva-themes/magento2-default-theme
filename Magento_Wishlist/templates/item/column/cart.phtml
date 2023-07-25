@@ -57,7 +57,7 @@ $allowedQty = $viewModel->setItem($item)->getMinMaxQty();
                     @click.prevent='addToCart("<?= $escaper->escapeHtmlAttr($item->getId()) ?>",
                         <?= /* @noEscape */ $block->getItemAddToCartParams($item) ?>)'
                     title="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>"
-                    class="action tocart primary btn btn-primary">
+                    class="action tocart primary btn btn-primary mt-2">
                 <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
             </button>
         </div>

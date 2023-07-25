@@ -19,14 +19,21 @@ use Magento\Framework\Escaper;
 
 /** @var HeroiconsSolid $heroicons */
 $heroicons = $viewModels->require(HeroiconsSolid::class);
+$item = $block->getItem();
 
+if ($item->getProductType() === 'configurable') {
+    $productOptions = $item->getProduct()->getTypeInstance(true)->getOrderOptions($item->getProduct());
+    $productName = $productOptions["simple_name"];
+} else {
+    $productName = $item->getName();
+}
 ?>
-<a href="#"
-   title="<?= $escaper->escapeHtml(__('Remove item')) ?>"
-   class="action action-delete"
-   x-data="{}"
-   @click.prevent='hyva.postForm(<?= /* @noEscape */ $block->getDeletePostJson() ?>)'
+<button
+    class="flex action action-delete"
+    x-data="{}"
+    @click.prevent='hyva.postForm(<?= /* @noEscape */ $block->getDeletePostJson() ?>)'
+    aria-label="<?= $escaper->escapeHtmlAttr(__('Remove %1', $productName)) ?>"
+    type="button"
 >
-    <?= $heroicons->trashHtml('w-6 h-6') ?>
-    <span class="sr-only"><?= $escaper->escapeHtml(__('Remove item')) ?></span>
-</a>
+    <?= $heroicons->trashHtml('w-6 h-6', 24, 24, ['aria-hidden' => 'true']) ?>
+</button>

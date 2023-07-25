@@ -22,69 +22,151 @@ use Magento\Sales\Block\Order\History;
 $heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
 <?php $orders = $block->getOrders(); ?>
-<div class="text-2xl mb-6"><?= $escaper->escapeHtml(__('My Orders')) ?></div>
+<h2 id="my-orders-title" class="text-2xl mb-6"><?= $escaper->escapeHtml(__('My Orders')) ?></h2>
 <?= $block->getChildHtml('info') ?>
 <?php if ($orders && count($orders)): ?>
-    <div class="card grid grid-cols-3 lg:grid-cols-6 mb-4">
-        <div class="text-sm text-secondary p-2"><?= $escaper->escapeHtml(__('Order #')) ?></div>
-        <div class="text-sm hidden lg:block text-secondary p-2"><?= $escaper->escapeHtml(__('Date')) ?></div>
-        <div class="text-sm text-secondary p-2"><?= $escaper->escapeHtml(__('Ship To')) ?></div>
-        <div class="text-sm hidden lg:block text-secondary p-2"><?= $escaper->escapeHtml(__('Order Total')) ?></div>
-        <div class="text-sm hidden lg:block text-secondary p-2"><?= $escaper->escapeHtml(__('Status')) ?></div>
-        <div class="text-sm text-secondary p-2 text-center"><?= $escaper->escapeHtml(__('View')) ?>
-            <?php if ($this->helper(\Magento\Sales\Helper\Reorder::class)->isAllow()): ?>
-                /<?= $escaper->escapeHtml(__('Reorder')) ?>
-            <?php endif; ?>
+    <div
+        role="table"
+        class="card mb-4"
+        aria-labelledby="my-orders-title"
+    >
+        <div
+            role="row"
+            id="my-orders-table"
+            class="grid grid-cols-3 lg:grid-cols-6"
+        >
+            <div
+                role="columnheader"
+                class="text-sm text-secondary p-2"
+            >
+                <?= $escaper->escapeHtml(__('Order #')) ?>
+            </div>
+            <div
+                role="columnheader"
+                class="text-sm hidden lg:block text-secondary p-2"
+            >
+                <?= $escaper->escapeHtml(__('Date')) ?>
+            </div>
+            <div
+                role="columnheader"
+                class="text-sm text-secondary p-2"
+            >
+                <?= $escaper->escapeHtml(__('Ship To')) ?>
+            </div>
+            <div
+                role="columnheader"
+                class="text-sm hidden lg:block text-secondary p-2"
+            >
+                <?= $escaper->escapeHtml(__('Order Total')) ?>
+            </div>
+            <div
+                role="columnheader"
+                class="text-sm hidden lg:block text-secondary p-2"
+            >
+                <?= $escaper->escapeHtml(__('Status')) ?>
+            </div>
+            <div
+                role="columnheader"
+                class="text-sm text-secondary p-2 text-center"
+            >
+                <?= $escaper->escapeHtml(__('View')) ?>
+                <?php if ($this->helper(\Magento\Sales\Helper\Reorder::class)->isAllow()): ?>
+                    / <?= $escaper->escapeHtml(__('Reorder')) ?>
+                <?php endif; ?>
+            </div>
         </div>
         <?php $i = 0; ?>
         <?php foreach ($orders as $order): ?>
             <?php $i++; ?>
-            <div class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
-                <?= $escaper->escapeHtml($order->getRealOrderId()) ?>
-                <p class="lg:hidden text-sm"><?= $escaper->escapeHtml($block->formatDate($order->getCreatedAt())) ?></p>
-            </div>
-            <div class="p-2 hidden lg:flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
-                <?= $escaper->escapeHtml($block->formatDate($order->getCreatedAt())) ?>
-            </div>
-            <div class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
-                <?= $order->getBillingAddress()
-                    ? $escaper->escapeHtml($order->getBillingAddress()->getCompany())
-                    : "&nbsp;"
+            <div
+                role="row"
+                class="grid grid-cols-3 lg:grid-cols-6"
+            >
+                <div
+                    role="rowheader"
+                    class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
+                >
+                    <?= $escaper->escapeHtml($order->getRealOrderId()) ?>
+                    <p class="lg:hidden text-sm"><?= $escaper->escapeHtml($block->formatDate($order->getCreatedAt())) ?></p>
+                </div>
+                <?php
+                    $date = $order->getCreatedAt();
+                    $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
+                    $formatLong = $block->getDateFormat() ?: \IntlDateFormatter::LONG;
                 ?>
-            </div>
-            <div class="p-2 hidden lg:flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
-                <?= /* @noEscape */$order->formatPrice($order->getGrandTotal()) ?>
-            </div>
-            <div class="p-2 hidden lg:flex items-center <?= $i % 2 === 0 ? ''
-                : ' bg-container-darker' ?>">
-                <?= $escaper->escapeHtml($order->getStatusLabel()) ?>
-            </div>
-            <div class="p-2 flex items-center justify-evenly<?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
-                <a href="<?= $escaper->escapeUrl($block->getViewUrl($order)) ?>"
-                   class="inline-block text-sm underline text-secondary-darker"
-                   title="<?= $escaper->escapeHtmlAttr(__('View Order')) ?>">
-                    <?= $heroicons->eyeHtml() ?>
-                </a>
-                <?php if ($this->helper(\Magento\Sales\Helper\Reorder::class)->canReorder($order->getEntityId())): ?>
-                    <?php $formData = json_decode(
-                        $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)->getPostData(
-                            $block->getReorderUrl($order)
-                        ),
-                        true
-                    ) ?>
-                    <form action="<?= /* @noEscape */ $formData['action'] ?>" method="post"
-                          class="inline-flex items-center">
-                        <?= $block->getBlockHtml('formkey'); ?>
-                        <input type="hidden" name="data"
-                               value="<?= $escaper->escapeHtmlAttr(json_encode($formData['data'])) ?>"
-                        />
-                        <button title="<?= $escaper->escapeHtmlAttr(__('Reorder')) ?>"
+                <div
+                    role="cell"
+                    class="p-2 hidden lg:flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
+                >
+                    <time datetime="<?= $escaper->escapeHtmlAttr($block->formatDate($date, $format)); ?>">
+                        <span aria-hidden="true"><?= $escaper->escapeHtml($block->formatDate($date, $format)); ?></span>
+                        <span class="sr-only">
+                            <?= $escaper->escapeHtml($block->formatDate($date, $formatLong)); ?>
+                        </span>
+                    </time>
+                </div>
+                <div
+                    role="cell"
+                    class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
+                >
+                    <?= $order->getBillingAddress()
+                        ? $escaper->escapeHtml($order->getBillingAddress()->getCompany())
+                        : "&nbsp;"
+                    ?>
+                </div>
+                <div
+                    role="cell"
+                    class="p-2 hidden lg:flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
+                >
+                    <?= /* @noEscape */$order->formatPrice($order->getGrandTotal()) ?>
+                </div>
+                <div
+                    role="cell"
+                    class="p-2 hidden lg:flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
+                >
+                    <?= $escaper->escapeHtml($order->getStatusLabel()) ?>
+                </div>
+                <div
+                    role="cell"
+                    class="p-2 flex items-center justify-evenly<?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
+                >
+                    <a
+                        href="<?= $escaper->escapeUrl($block->getViewUrl($order)) ?>"
+                        class="inline-block text-sm underline text-secondary-darker"
+                        title="<?= $escaper->escapeHtmlAttr(__('View Order')) ?>"
+                        aria-label="<?= $escaper->escapeHtmlAttr(__('View order') . ' ' . ltrim($order->getRealOrderId(), '0')) ?>"
+                    >
+                        <?= $heroicons->eyeHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
+                    </a>
+                    <?php if ($this->helper(\Magento\Sales\Helper\Reorder::class)->canReorder($order->getEntityId())): ?>
+                        <?php $formData = json_decode(
+                            $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)->getPostData(
+                                $block->getReorderUrl($order)
+                            ),
+                            true
+                        ) ?>
+                        <form
+                            action="<?= /* @noEscape */ $formData['action'] ?>"
+                            method="post"
+                            class="inline-flex items-center"
+                        >
+                            <?= $block->getBlockHtml('formkey'); ?>
+                            <input
+                                type="hidden"
+                                name="data"
+                                value="<?= $escaper->escapeHtmlAttr(json_encode($formData['data'])) ?>"
+                            />
+                            <button
+                                title="<?= $escaper->escapeHtmlAttr(__('Reorder')) ?>"
                                 type="submit"
-                                class="inline-block text-sm underline text-secondary-darker">
-                            <?= $heroicons->refreshHtml() ?>
-                        </button>
-                    </form>
-                <?php endif ?>
+                                class="inline-block text-sm underline text-secondary-darker"
+                                aria-label="<?= $escaper->escapeHtmlAttr(__('Reorder') . ' ' . ltrim($order->getRealOrderId(), '0')) ?>"
+                            >
+                                <?= $heroicons->refreshHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
+                            </button>
+                        </form>
+                    <?php endif ?>
+                </div>
             </div>
         <?php endforeach; ?>
     </div>

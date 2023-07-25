@@ -19,23 +19,36 @@ $starFragment = $rating / 100 * $ratingSteps - $starsFilled;
 $starsEmpty = floor($ratingSteps - $starsFilled - $starFragment);
 $yellowHex = '#f6e05e';
 $greyHex = '#cbd5e0';
+$productName = $block->getProduct()->getName();
+$productId = $block->getProduct()->getId();
+$uniqueId = $productId . uniqid();
 ?>
 <?php if ($block->isReviewEnabled()): ?>
-    <div class="rating-summary flex cursor-pointer"
-         onclick="(
-              document.getElementById('customer-review-list') ||
-              document.getElementById('customer-reviews') ||
-              document.getElementById('review-form')).scrollIntoView({behavior: 'smooth'}
-              )"
+    <div
+        x-data="initRating<?= $uniqueId ?>()"
+        @keyup.enter="scrollToRatings()"
+        @click="scrollToRatings()"
+        class="rating-summary flex"
+        :class="{'cursor-pointer' : reviewsSection}"
         <?php if (!$rating): ?>
-         title="<?= $escaper->escapeHtmlAttr(__('Be the first to review this product')) ?>"
-        <?php endif; ?>>
+            title="<?= $escaper->escapeHtmlAttr(__('Be the first to review this product')) ?>"
+        <?php endif; ?>
+        tabindex="0"
+        :aria-label="reviewsSection
+            ? '<?= $escaper->escapeJs(__('%1 rating. %2 out of %3 stars. Click to go to reviews.', $productName, $starsFilled + $starFragment, $ratingSteps))?>'
+            : '<?= $escaper->escapeJs(__('%1 rating. %2 out of %3 stars', $productName, $starsFilled + $starFragment, $ratingSteps))?>'
+        "
+        role="group"
+    >
         <?php if ($rating): ?>
             <?php $i = 0; ?>
             <?php while ($i < $starsFilled): ?>
-                <svg xmlns="http://www.w3.org/2000/svg" class="fill-current w-6 h-6" viewBox="3 0 20 20"
-                     style="color: <?= /** @noEscape */ $yellowHex ?>"
-                     fill="currentColor">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg" class="fill-current w-6 h-6" viewBox="3 0 20 20"
+                    style="color: <?= /** @noEscape */ $yellowHex ?>"
+                    fill="currentColor"
+                    aria-hidden="true"
+                >
                     <path
                         d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371
                         1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54
@@ -45,7 +58,13 @@ $greyHex = '#cbd5e0';
                 <?php $i++; ?>
             <?php endwhile; ?>
             <?php if ($starFragment): ?>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="3 0 20 20" fill="currentColor" class="w-6 h-6">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="3 0 20 20"
+                    fill="currentColor"
+                    class="w-6 h-6"
+                    aria-hidden="true"
+                >
                     <defs>
                         <linearGradient id="partialFill<?= /* @noEscape */ $block->getProduct()->getId() ?>">
                             <stop offset="0%" stop-color="<?= /** @noEscape */ $yellowHex ?>"/>
@@ -65,11 +84,14 @@ $greyHex = '#cbd5e0';
             <?php endif; ?>
             <?php $i = 0; ?>
                 <?php while ($i < $starsEmpty): ?>
-                <svg xmlns="http://www.w3.org/2000/svg"
-                     class="fill-current w-6 h-6"
-                     style="color: <?= /** @noEscape */ $greyHex ?>"
-                     viewBox="3 0 20 20"
-                     fill="currentColor">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="fill-current w-6 h-6"
+                    style="color: <?= /** @noEscape */ $greyHex ?>"
+                    viewBox="3 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                >
                     <path
                         d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0
                         1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54
@@ -82,10 +104,13 @@ $greyHex = '#cbd5e0';
         <?php else: ?>
             <?php $i = 0; ?>
             <?php while ($i < $ratingSteps): ?>
-                <svg xmlns="http://www.w3.org/2000/svg"
-                     class="fill-current text-gray-200 w-6 h-6"
-                     viewBox="3 0 20 20"
-                     fill="currentColor">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="fill-current text-gray-200 w-6 h-6"
+                    viewBox="3 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                >
                     <path
                         d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371
                         1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54
@@ -98,3 +123,34 @@ $greyHex = '#cbd5e0';
         <?php endif; ?>
     </div>
 <?php endif; ?>
+
+<script>
+    'use strict';
+
+    function initRating<?= $uniqueId ?>() {
+        return {
+            reviewsSection: document.getElementById('customer-review-list')
+                || document.getElementById('customer-reviews')
+                || document.getElementById('review-form'),
+            scrollToRatings() {
+                let scrollTimeout = null
+
+                if (!this.reviewsSection) {
+                    return
+                }
+
+                addEventListener('scroll', () => {
+                    clearTimeout(scrollTimeout);
+
+                    scrollTimeout = setTimeout(() => {
+                        if (this.reviewsSection) {
+                            this.reviewsSection.focus()
+                        }
+                    }, 50);
+                }, { once: true });
+
+                this.reviewsSection.scrollIntoView({behavior: 'smooth'})
+            }
+        }
+    }
+</script>

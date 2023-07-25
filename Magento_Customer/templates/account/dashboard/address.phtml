@@ -19,32 +19,33 @@ use Magento\Framework\Escaper;
 $heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
 <div class="block block-dashboard-addresses">
-    <div class="block-title my-6 flex justify-between items-center card">
+    <h2 class="block-title my-6 flex justify-between items-center card">
         <span class="text-2xl block"><?= $escaper->escapeHtml(__('Address Book')) ?></span>
         <a class="action edit inline-block underline"
-           href="<?= $escaper->escapeUrl($block->getAddressBookUrl()) ?>"><span><?= $escaper->escapeHtml(
-               __('Manage Addresses')
-           ) ?></span></a>
-    </div>
+           href="<?= $escaper->escapeUrl($block->getAddressBookUrl()) ?>"
+        >
+            <span><?= $escaper->escapeHtml(__('Manage Addresses')) ?></span>
+        </a>
+    </h2>
     <div class="block-content">
         <div class="flex flex-wrap justify-between -m-4">
             <div class="lg:w-1/2 w-full p-4">
                 <div class="flex p-8 sm:flex-row flex-col h-full card">
                     <div class="grow">
-                        <h2 class="text-gray-900 text-lg title-font font-medium mb-3">
+                        <h3 class="text-gray-900 text-lg title-font font-medium mb-3">
                             <span><?= $escaper->escapeHtml(__('Default Billing Address')) ?></span>
-                        </h2>
+                        </h3>
                         <address>
                             <?= $block->getPrimaryBillingAddressHtml() ?>
                         </address>
                         <a
-                            class="mt-3 w-full inline-flex items-center md:text-sm
-                                text-secondary hover:text-secondary-darker"
+                            class="mt-3 w-full inline-flex items-center md:text-sm text-secondary hover:text-secondary-darker"
                             href="<?= $escaper->escapeUrl($block->getPrimaryBillingAddressEditUrl()) ?>"
-                            data-ui-id="default-billing-edit-link"><span><?= $escaper->escapeHtml(
-                                __('Edit Address')
-                            ) ?></span>
-                            <?= $heroicons->arrowRightHtml('ml-2', 16, 16); ?>
+                            data-ui-id="default-billing-edit-link"
+                            aria-label="<?= $escaper->escapeHtml(__('Edit default billing address')) ?>"
+                        >
+                            <span><?= $escaper->escapeHtml(__('Edit Address')) ?></span>
+                            <?= $heroicons->arrowRightHtml('ml-2', 16, 16, ['aria-hidden' => 'true']); ?>
                         </a>
                     </div>
                 </div>
@@ -52,20 +53,20 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             <div class="lg:w-1/2 w-full p-4">
                 <div class="flex p-8 sm:flex-row flex-col h-full card">
                     <div class="grow">
-                        <h2 class="text-gray-900 text-lg title-font font-medium mb-3">
+                        <h3 class="text-gray-900 text-lg title-font font-medium mb-3">
                             <span><?= $escaper->escapeHtml(__('Default Shipping Address')) ?></span>
-                        </h2>
+                        </h3>
                         <address>
                             <?= $block->getPrimaryShippingAddressHtml() ?>
                         </address>
                         <a
-                            class="mt-3 w-full inline-flex items-center md:text-sm
-                                text-secondary hover:text-secondary-darker"
+                            class="mt-3 w-full inline-flex items-center md:text-sm text-secondary hover:text-secondary-darker"
                             href="<?= $escaper->escapeUrl($block->getPrimaryShippingAddressEditUrl()) ?>"
-                            data-ui-id="default-billing-edit-link"><span><?= $escaper->escapeHtml(
-                                __('Edit Address')
-                            ) ?></span>
-                            <?= $heroicons->arrowRightHtml('ml-2', 16, 16); ?>
+                            data-ui-id="default-billing-edit-link"
+                            aria-label="<?= $escaper->escapeHtml(__('Edit default shipping address')) ?>"
+                        >
+                            <span><?= $escaper->escapeHtml(__('Edit Address')) ?></span>
+                            <?= $heroicons->arrowRightHtml('ml-2', 16, 16, ['aria-hidden' => 'true']); ?>
                         </a>
                     </div>
                 </div>

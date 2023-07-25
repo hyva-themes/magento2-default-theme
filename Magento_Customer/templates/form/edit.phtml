@@ -57,28 +57,45 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
         <?php endif ?>
 
         <div class="field choice">
-            <input type="checkbox" name="change_email" id="change-email" value="1"
-                   title="<?= $escaper->escapeHtmlAttr(__('Change Email')) ?>"
-                   x-on:change="showEmailField = !showEmailField"
-                   class="checkbox"/>
+            <input
+                type="checkbox"
+                name="change_email"
+                id="change-email"
+                value="1"
+                title="<?= $escaper->escapeHtmlAttr(__('Change Email')) ?>"
+                @change="handleCheckboxChange('email-fields')"
+                class="checkbox"
+                :aria-expanded="showEmailField"
+                aria-controls="email-fields"
+            />
             <label class="label" for="change-email">
                 <span><?= $escaper->escapeHtml(__('Change Email')) ?></span>
             </label>
         </div>
 
         <div class="field choice">
-            <input type="checkbox" name="change_password" id="change-password" value="1"
-                   title="<?= $escaper->escapeHtmlAttr(__('Change Password')) ?>"
-                   x-on:change="showPasswordFields = !showPasswordFields"
+            <input
+                type="checkbox"
+                name="change_password"
+                id="change-password"
+                value="1"
+                title="<?= $escaper->escapeHtmlAttr(__('Change Password')) ?>"
+                @change="handleCheckboxChange('password-fields')"
                 <?php if ($block->getChangePassword()): ?> checked="checked"<?php endif; ?>
-                   class="checkbox"/>
+                class="checkbox"
+                :aria-expanded="showPasswordFields"
+                aria-controls="password-fields"
+            />
             <label class="label" for="change-password">
                 <span><?= $escaper->escapeHtml(__('Change Password')) ?></span>
             </label>
         </div>
 
         <template x-if="showEmailField">
-            <div class="field field-reserved email required">
+            <div
+                class="field field-reserved email required"
+                id="email-fields"
+            >
                 <label class="label" for="email"><span><?= $escaper->escapeHtml(__('Email')) ?></span></label>
                 <div class="control">
                     <input type="email" name="email" id="email" autocomplete="email" required
@@ -90,7 +107,10 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
         </template>
 
         <template x-if="showEmailField || showPasswordFields">
-            <div class="field field-reserved password current required">
+            <div
+                class="field field-reserved password current required"
+                id="password-fields"
+            >
                 <label class="label" for="current-password">
                     <span><?= $escaper->escapeHtml(__('Current Password')) ?></span>
                 </label>
@@ -99,10 +119,14 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                            name="current_password" id="current-password"
                            data-input="current-password"
                            required
-                           autocomplete="off"/>
-                    <div x-on:click="showPasswordCurrent = !showPasswordCurrent"
-                         class="cursor-pointer px-4"
-                         :aria-label="showPasswordCurrent ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
+                           autocomplete="off"
+                           aria-describedby="password-strength-meter"
+                    />
+                    <button
+                        type="button"
+                        @click="showPasswordCurrent = !showPasswordCurrent"
+                        class="px-4 self-stretch"
+                        :aria-label="showPasswordCurrent ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
                     >
                         <template x-if="!showPasswordCurrent">
                             <?= $heroIcons->eyeHtml('w-5 h-5'); ?>
@@ -111,7 +135,7 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                         <template x-if="showPasswordCurrent">
                             <?= $heroIcons->eyeOffHtml('w-5 h-5'); ?>
                         </template>
-                    </div>
+                    </button>
                 </div>
             </div>
         </template>
@@ -126,10 +150,14 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                         <input :type="showPasswordNew ? 'text' : 'password'" type="password" class="form-input" name="password" id="password" required
                                data-validate='{"password-strength": {"minCharacterSets": <?= (int) $passwordMinCharacterSets ?>}}'
                                @input="onChange"
-                               minlength="<?= $escaper->escapeHtmlAttr($minimumPasswordLength) ?>" autocomplete="off"/>
-                        <div x-on:click="showPasswordNew = !showPasswordNew"
-                             class="cursor-pointer px-4"
-                             :aria-label="showPasswordNew ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
+                               minlength="<?= $escaper->escapeHtmlAttr($minimumPasswordLength) ?>" autocomplete="off"
+                               aria-describedby="password-strength-meter"
+                        />
+                        <button
+                            type="button"
+                            @click="showPasswordNew = !showPasswordNew"
+                            class="px-4 self-stretch"
+                            :aria-label="showPasswordNew ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
                         >
                             <template x-if="!showPasswordNew">
                                 <?= $heroIcons->eyeHtml('w-5 h-5'); ?>
@@ -137,7 +165,7 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                             <template x-if="showPasswordNew">
                                 <?= $heroIcons->eyeOffHtml('w-5 h-5'); ?>
                             </template>
-                        </div>
+                        </button>
                         <div id="password-strength-meter-container" data-role="password-strength-meter" aria-live="polite">
                             <div id="password-strength-meter" class="password-strength-meter">
                                 <?= $escaper->escapeHtml(__('Password Strength')) ?>:
@@ -158,10 +186,14 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                                name="password_confirmation" id="password-confirmation"
                                data-validate='{"equalTo": "password"}'
                                @input="onChange"
-                               autocomplete="off"/>
-                        <div x-on:click="showPasswordConfirm = !showPasswordConfirm"
-                             class="cursor-pointer px-4"
-                             :aria-label="showPasswordConfirm ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
+                               autocomplete="off"
+                               aria-describedby="password-strength-meter"
+                        />
+                        <button
+                            type="button"
+                            @click="showPasswordConfirm = !showPasswordConfirm"
+                            class="px-4 self-stretch"
+                            :aria-label="showPasswordConfirm ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
                         >
                             <template x-if="!showPasswordConfirm">
                                 <?= $heroIcons->eyeHtml('w-5 h-5'); ?>
@@ -169,7 +201,7 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                             <template x-if="showPasswordConfirm">
                                 <?= $heroIcons->eyeOffHtml('w-5 h-5'); ?>
                             </template>
-                        </div>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -225,6 +257,24 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                             invalid[0].focus();
                         }
                     })
+            },
+            handleCheckboxChange(checkboxId) {
+                if(checkboxId === 'email-fields') {
+                    this.showEmailField = !this.showEmailField
+                }
+                if(checkboxId ==='password-fields') {
+                    this.showPasswordFields = !this.showPasswordFields
+                }
+
+                this.$nextTick(() => {
+                    const firstFocusableElement = document.querySelector(`
+                        #${checkboxId} input,
+                        #${checkboxId} textarea,
+                        #${checkboxId} select
+                    `)
+
+                    firstFocusableElement && firstFocusableElement.focus()
+                })
             }
         }
     }

@@ -18,14 +18,21 @@ use Magento\Framework\Escaper;
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
-<div class="mb-6 text-2xl block-title"><?= $escaper->escapeHtml(__('Account Information')) ?></div>
+<h2 class="mb-6 text-2xl block-title">
+    <?= $escaper->escapeHtml(__('Account Information')) ?>
+</h2>
 <div class="flex flex-wrap justify-between -m-4">
     <div class="w-full p-4 lg:w-1/2">
         <div class="flex flex-col h-full p-8 sm:flex-row card">
             <div
                 class="inline-flex items-center justify-center shrink-0 w-16 h-16 mb-4
                     rounded-full sm:mr-8 sm:mb-0 bg-container-darker text-secondary">
-                <svg class="w-8 h-8 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+                <svg
+                    class="w-8 h-8 fill-current"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 1024 1024"
+                    aria-hidden="true"
+                >
                     <path class="path1"
                           d="M486.4 563.2c-155.275 0-281.6-126.325-281.6-281.6s126.325-281.6 281.6-281.6
                           281.6 126.325 281.6 281.6-126.325 281.6-281.6 281.6zM486.4 51.2c-127.043 0-230.4
@@ -44,8 +51,10 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     "></path>
                 </svg>
             </div>
-            <div class="grow"><h2 class="mb-3 text-lg font-medium text-gray-900 title-font">
-                    <span><?= $escaper->escapeHtml(__('Contact Information')) ?></span></h2>
+            <div class="grow">
+                <h3 class="mb-3 text-lg font-medium text-gray-900 title-font">
+                    <span><?= $escaper->escapeHtml(__('Contact Information')) ?></span>
+                </h3>
                 <p>
                     <?= $escaper->escapeHtml($block->getName()) ?><br>
                     <?= ''//$escaper->escapeHtml($block->getCustomer()->getCompany()) ?><br>
@@ -54,15 +63,18 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 <?= $block->getChildHtml('customer.account.dashboard.info.extra'); ?>
                 <a
                     class="inline-flex items-center w-full mt-3 md:text-sm text-secondary hover:text-secondary-darker"
-                    href="<?= $escaper->escapeUrl($block->getUrl('customer/account/edit')) ?>">
+                    href="<?= $escaper->escapeUrl($block->getUrl('customer/account/edit')) ?>"
+                    aria-label="<?= $escaper->escapeHtml(__('Edit contact information')) ?>"
+                >
                     <span><?= $escaper->escapeHtml(__('Edit')) ?></span>
-                    <?= $heroicons->arrowRightHtml('ml-2', 16, 16); ?>
+                    <?= $heroicons->arrowRightHtml('ml-2', 16, 16, ['aria-hidden' => 'true']); ?>
                 </a>
                 <a
                     class="inline-flex items-center w-full md:text-sm text-secondary hover:text-secondary-darker"
-                    href="<?= $escaper->escapeUrl($block->getChangePasswordUrl()) ?>" class="action change-password">
+                    href="<?= $escaper->escapeUrl($block->getChangePasswordUrl()) ?>" class="action change-password"
+                >
                     <?= $escaper->escapeHtml(__('Change Password')) ?>
-                    <?= $heroicons->arrowRightHtml('ml-2', 16, 16); ?>
+                    <?= $heroicons->arrowRightHtml('ml-2', 16, 16, ['aria-hidden' => 'true']); ?>
                 </a>
             </div>
         </div>
@@ -73,7 +85,12 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 <div
                     class="inline-flex items-center justify-center shrink-0 w-16 h-16 mb-4
                         rounded-full sm:mr-8 sm:mb-0 bg-container-darker text-secondary">
-                    <svg class="w-8 h-8 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+                    <svg
+                        class="w-8 h-8 fill-current"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 1024 1024"
+                        aria-hidden="true"
+                    >
                         <path class="path1"
                               d="M896 307.2h-819.2c-42.347 0-76.8 34.453-76.8 76.8v460.8c0 42.349 34.453
                               76.8 76.8 76.8h819.2c42.349 0 76.8-34.451
@@ -87,8 +104,10 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                         </path>
                     </svg>
                 </div>
-                <div class="grow"><h2 class="mb-3 text-lg font-medium text-gray-900 title-font">
-                        <span><?= $escaper->escapeHtml(__('Newsletters')) ?></span></h2>
+                <div class="grow">
+                    <h3 class="mb-3 text-lg font-medium text-gray-900 title-font">
+                        <?= $escaper->escapeHtml(__('Newsletters')) ?>
+                    </h3>
                     <p>
                         <?php if ($block->getIsSubscribed()): ?>
                             <?= $escaper->escapeHtml(__('You are subscribed to "General Subscription".')) ?>
@@ -97,11 +116,12 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                         <?php endif; ?>
                     </p>
                     <a
-                        class="mt-3 w-full inline-flex items-center md:text-sm text-secondary
-                            hover:text-secondary-darker"
-                        href="<?= $escaper->escapeUrl($block->getUrl('newsletter/manage')) ?>">
+                        class="mt-3 w-full inline-flex items-center md:text-sm text-secondary hover:text-secondary-darker"
+                        href="<?= $escaper->escapeUrl($block->getUrl('newsletter/manage')) ?>"
+                        aria-label="<?= $escaper->escapeHtml(__('Edit newsletters')) ?>"
+                    >
                         <span><?= $escaper->escapeHtml(__('Edit')) ?></span>
-                        <?= $heroicons->arrowRightHtml('ml-2', 16, 16); ?>
+                        <?= $heroicons->arrowRightHtml('ml-2', 16, 16, ['aria-hidden' => 'true']); ?>
                     </a>
                 </div>
             </div>

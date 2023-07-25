@@ -13,9 +13,9 @@ use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Hyva\Theme\ViewModel\StoreConfig;
 
 /** @var ViewModelRegistry $viewModels */
-/** @var HeroiconsOutline $heroIcons */
+/** @var HeroiconsOutline $heroicons */
 /** @var StoreConfig $storeConfig */
-$heroIcons = $viewModels->require(HeroiconsOutline::class);
+$heroicons = $viewModels->require(HeroiconsOutline::class);
 $storeConfig = $viewModels->require(StoreConfig::class);
 
 $defaultSuccessMessageTimeout = $storeConfig->getStoreConfig('hyva_theme_general/messages/success_message_timeout');
@@ -79,10 +79,12 @@ $defaultSuccessMessageTimeout = $storeConfig->getStoreConfig('hyva_theme_general
 <section id="messages"
          x-data="initMessages()"
          x-bind="eventListeners"
+         aria-live="assertive"
+         role="alert"
 >
     <template x-if="!isEmpty()">
         <div class="w-full">
-            <div role="alert" class="messages container mx-auto py-3">
+            <div class="messages container mx-auto py-3">
                 <template x-for="(message, index) in messages" :key="index">
                     <div>
                         <template x-if="message">
@@ -90,10 +92,14 @@ $defaultSuccessMessageTimeout = $storeConfig->getStoreConfig('hyva_theme_general
                                  :ui-id="'message-' + message.type"
                             >
                                 <span x-html="message.text"></span>
-                                <a href="#" class="close cursor-pointer" title="close"
-                                   @click.prevent="removeMessage(index)">
-                                    <?= $heroIcons->xHtml('text-white', 18, 18); ?>
-                                </a>
+                                <button
+                                    type="button"
+                                    class="text-gray-600 hover:text-black"
+                                    aria-label="<?= $escaper->escapeHtml(__('Close message')) ?>"
+                                    @click.prevent="removeMessage(index)"
+                                >
+                                    <?= $heroicons->xHtml('stroke-current', 18, 18, ['aria-hidden' => 'true']); ?>
+                                </button>
                             </div>
                         </template>
                     </div>
