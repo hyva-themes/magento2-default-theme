@@ -8,7 +8,7 @@
 }
 
 .message {
-    @apply flex items-center justify-between w-full p-2 pl-5 bg-gray-600 shadow rounded text-white font-semibold mb-2;
+    @apply flex items-center justify-between w-full p-2 pl-5 bg-gray-600 shadow rounded text-black font-semibold mb-2;
 
     &.error {
         @apply border-2 border-red-500 bg-red-50;
