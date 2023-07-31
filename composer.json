@@ -9,7 +9,7 @@
         "php": ">=7.3.0",
         "magento/framework": ">=102.0.0",
         "hyva-themes/magento2-reset-theme":  ">=1.1.4",
-        "hyva-themes/magento2-theme-module": ">=1.2.4",
+        "hyva-themes/magento2-theme-module": ">=1.2.5",
         "hyva-themes/magento2-email-module": "*",
         "hyva-themes/magento2-graphql-tokens": "*",
         "hyva-themes/magento2-graphql-view-model": ">=1.0.1",
