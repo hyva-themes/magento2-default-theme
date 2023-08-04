@@ -65,12 +65,14 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                 title="<?= $escaper->escapeHtmlAttr(__('Change Email')) ?>"
                 @change="handleCheckboxChange('email-fields')"
                 class="checkbox"
-                :aria-expanded="showEmailField"
-                aria-controls="email-fields"
+                aria-describedby="change_email_description"
             />
             <label class="label" for="change-email">
-                <span><?= $escaper->escapeHtml(__('Change Email')) ?></span>
+                <span>
+                    <?= $escaper->escapeHtml(__('Change Email')) ?>
+                </span>
             </label>
+            <span class="sr-only" id="change_email_description"><?= $escaper->escapeHtml(__('form appears when field is selected')) ?></span>
         </div>
 
         <div class="field choice">
@@ -83,12 +85,14 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                 @change="handleCheckboxChange('password-fields')"
                 <?php if ($block->getChangePassword()): ?> checked="checked"<?php endif; ?>
                 class="checkbox"
-                :aria-expanded="showPasswordFields"
-                aria-controls="password-fields"
+                aria-describedby="change_password_description"
             />
             <label class="label" for="change-password">
-                <span><?= $escaper->escapeHtml(__('Change Password')) ?></span>
+                <span>
+                    <?= $escaper->escapeHtml(__('Change Password')) ?>
+                </span>
             </label>
+            <span class="sr-only" id="change_password_description"><?= $escaper->escapeHtml(__('form appears when field is selected')) ?></span>
         </div>
 
         <template x-if="showEmailField">

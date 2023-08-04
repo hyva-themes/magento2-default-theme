@@ -62,12 +62,12 @@ $cols = $block->getData('is_context_shipment') ? 3 : ($block->getData('is_contex
     </div>
     <?php if (!$block->getData('is_context_shipment')): ?>
         <div class="p-2 flex justify-between lg:block">
-            <p class="lg:hidden font-medium"><?= $escaper->escapeHtml(__('Price')) ?></p>
+            <p class="lg:sr-only font-medium"><?= $escaper->escapeHtml(__('Price')) ?></p>
             <?= $block->getItemPriceHtml() ?>
         </div>
     <?php endif; ?>
     <div class="p-2 flex justify-between lg:block">
-        <p class="lg:hidden font-medium">
+        <p class="lg:sr-only font-medium">
             <?php if ($block->getData('is_context_invoice')): ?>
                 <?= $escaper->escapeHtml(__('Qty Invoiced')) ?>
             <?php elseif ($block->getData('is_context_shipment')): ?>
@@ -113,17 +113,17 @@ $cols = $block->getData('is_context_shipment') ? 3 : ($block->getData('is_contex
     </div>
     <?php if (!$block->getData('is_context_shipment')): ?>
         <div class="p-2 text-right flex justify-between lg:block">
-            <p class="lg:hidden font-medium"><?= $escaper->escapeHtml(__('Subtotal')) ?></p>
+            <p class="lg:sr-only font-medium"><?= $escaper->escapeHtml(__('Subtotal')) ?></p>
             <?= $block->getItemRowTotalHtml() ?>
         </div>
     <?php endif; ?>
     <?php if ($block->getData('is_context_creditmemo')): ?>
         <div class="p-2 text-right flex justify-between lg:block">
-            <p class="lg:hidden font-medium"><?= $escaper->escapeHtml(__('Discount Amount')) ?></p>
+            <p class="lg:sr-only font-medium"><?= $escaper->escapeHtml(__('Discount Amount')) ?></p>
             <?= /* @noEscape */ $block->getOrder()->formatPrice($item->getDiscountAmount()) ?>
         </div>
         <div class="p-2 text-right flex justify-between lg:block">
-            <p class="lg:hidden font-medium"><?= $escaper->escapeHtml(__('Row Total')) ?></p>
+            <p class="lg:sr-only font-medium"><?= $escaper->escapeHtml(__('Row Total')) ?></p>
             <?= $block->getItemRowTotalAfterDiscountHtml() ?>
         </div>
     <?php endif; ?>

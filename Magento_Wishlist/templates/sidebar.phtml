@@ -139,7 +139,7 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
                                             type="button"
                                             @click.prevent="addToCart(product.add_to_cart_params)"
                                             class="action tocart primary btn btn-primary text-sm"
-                                            :aria-label="hyva.str('<?= $escaper->escapeJs(__('Add product "%1" to cart'))  ?>', product.product_name)"
+                                            :aria-label="hyva.str('<?= $escaper->escapeJs(__('Add to cart product "%1"'))  ?>', product.product_name)"
                                         >
                                             <?= $escaper->escapeHtml(__('Add to Cart')) ?>
                                         </button>
