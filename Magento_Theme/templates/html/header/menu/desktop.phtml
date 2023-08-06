@@ -58,7 +58,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                             <?php if (!empty($menuItem['childData'])): ?>
                                 <button
                                     type="button"
-                                    data-sr-button-id="<?= $escaper->escapeHtmLAttr($index) ?>"
+                                    data-sr-button-id="<?= $escaper->escapeHtmlAttr($index) ?>"
                                     :aria-expanded="hoverPanelActiveId === '<?= /* @noEscape */ (string) $index ?>' ? 'true' : 'false'"
                                     @click="openMenuOnClick('<?= /* @noEscape */ (string) $index ?>')"
                                 >
@@ -82,7 +82,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                                         <a href="<?= $escaper->escapeUrl($subMenuItem['url']) ?>"
                                            title="<?= $escaper->escapeHtmlAttr($subMenuItem['name']) ?>"
                                            class="block w-full px-3 py-1 my-1 whitespace-nowrap first:mt-0 hover:underline"
-                                           @keyup.escape="this.nextTick(() => document.querySelector('[data-sr-button-id=<?= $escaper->escapeJs($index) ?>]').focus())"
+                                           @keyup.escape="$nextTick(() => document.querySelector('[data-sr-button-id=<?= $escaper->escapeJs($index) ?>]').focus())"
                                         >
                                             <span class="text-base text-gray-700">
                                                 <?= $escaper->escapeHtml($subMenuItem['name']) ?>
