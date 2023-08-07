@@ -139,7 +139,7 @@ if ($isSharedItemRenderer && $block->getChildBlock('slider.item.template')) {
     x-id="['slider-nav', 'slider-end', 'slider-desc']"
     @resize.window.debounce="calcPageSize(); $nextTick( function() { calcActive() })"
     role="group"
-    aria-roledescription="carousel"
+    aria-roledescription="<?= $escaper->escapeHtmlAttr(__('Carousel')) ?>"
     aria-label="<?= $escaper->escapeHtmlAttr(__('Carousel %1', $title)) ?>"
     :aria-describedby="$id('slider-desc')"
 >
