@@ -54,6 +54,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
         );?>
     </button>
     <div
+        x-ref="mobileMenuNavLinks"
         class="
             fixed top-0 right-0 w-full h-full p-1 flex
             flex-col border-t border-container bg-container-lighter
@@ -65,7 +66,6 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
         aria-modal="true"
     >
         <ul
-            x-ref="mobileMenuNavLinks"
             class="border-t flex flex-col gap-y-1 mt-16"
             aria-label="<?= $escaper->escapeHtmlAttr(__('Site navigation links')) ?>"
         >
@@ -111,7 +111,6 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                     <?php if (!empty($menuItem['childData'])): ?>
                         <div
                             data-child-id="<?= $escaper->escapeHtmLAttr($index) ?>"
-                            x-init="trapFocus($el)"
                             class="absolute top-0 right-0 z-10 flex flex-col gap-1 w-full h-full p-1 bg-container-lighter"
                             :class="{
                                 'hidden': mobilePanelActiveId !== '<?= /* @noEscape */ (string) $index ?>'
@@ -210,39 +209,10 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                     item.closest('li.level-0') &&
                     item.closest('li.level-0').querySelector('a.level-0').classList.add('underline');
                 });
-
-                this.trapFocus(menuNode)
-            },
-            trapFocus(menuNode) {
-                const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-                const focusableContentWithoutTrigger = Array.from(menuNode.querySelectorAll(focusableElements))
-                    .filter(el => el.getAttribute('aria-haspopup') !== 'menu')
-
-                const firstFocusableElement = focusableContentWithoutTrigger.length > 0
-                    ? focusableContentWithoutTrigger[0]
-                    : null;
-                const lastFocusableElement = focusableContentWithoutTrigger.length > 0
-                    ? focusableContentWithoutTrigger[focusableContentWithoutTrigger.length - 1]
-                    : null;
-
-                document.addEventListener('keydown', function(e) {
-                    const isTabPressed = e.key === 'Tab' || e.keyCode === 9;
-
-                    if (!isTabPressed) {
-                        return;
-                    }
-
-                    e.shiftKey
-                        ? document.activeElement === firstFocusableElement && (lastFocusableElement.focus(), e.preventDefault())
-                        : document.activeElement === lastFocusableElement && (firstFocusableElement.focus(), e.preventDefault());
-                });
             },
             openMenu() {
                 this.open = true
-                this.$nextTick(() => this.$refs['mobileMenuNavLinks']
-                    .firstElementChild.querySelector('a')
-                    .focus()
-                );
+                this.$nextTick(() => hyva.trapFocus(this.$refs['mobileMenuNavLinks']));
                 // Prevent from body scrolling while mobile menu opened
                 document.body.style.position = 'fixed';
             },
@@ -250,7 +220,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                 document.body.style.position = '';
 
                 if (this.open) {
-                    this.$nextTick(() => this.$refs['mobileMenuTrigger'].focus());
+                    this.$nextTick(() => this.$refs['mobileMenuTrigger'].focus() && hyva.releaseFocus());
                 }
 
                 this.open = false
@@ -259,12 +229,15 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
             openSubcategory(index) {
                 const menuNodeRef = document.querySelector('[data-child-id=' + index + ']')
                 this.mobilePanelActiveId = this.mobilePanelActiveId === index ? 0 : index
-                this.$nextTick(() => menuNodeRef.firstElementChild.querySelector('button').focus())
+                this.$nextTick(() => hyva.trapFocus(menuNodeRef))
             },
             backToMainCategories(index) {
                 const menuNodeRef = document.querySelector('[data-child-id=' + index + ']')
                 this.mobilePanelActiveId = 0
-                this.$nextTick(() => menuNodeRef.querySelector('a').focus())
+                this.$nextTick(() => {
+                    hyva.trapFocus(this.$refs['mobileMenuNavLinks'])
+                    menuNodeRef.querySelector('a').focus()
+                })
             }
         }
     }
