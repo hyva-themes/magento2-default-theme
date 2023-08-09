@@ -25,7 +25,7 @@ $uniqueId = $productId . uniqid();
 ?>
 <?php if ($block->isReviewEnabled()): ?>
     <div
-        x-data="initRating<?= $uniqueId ?>()"
+        x-data="initRating<?= /* @noEscape */ $uniqueId ?>()"
         @keyup.enter="scrollToRatings()"
         @click="scrollToRatings()"
         class="rating-summary flex"
@@ -127,7 +127,7 @@ $uniqueId = $productId . uniqid();
 <script>
     'use strict';
 
-    function initRating<?= $uniqueId ?>() {
+    function initRating<?= /* @noEscape */ $uniqueId ?>() {
         return {
             reviewsSection: document.getElementById('customer-review-list')
                 || document.getElementById('customer-reviews')
