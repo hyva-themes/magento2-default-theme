@@ -240,7 +240,7 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
                         } ?>
                         <div class="my-2 pt-4 pb-2 w-full border-t border-container">
                             <label
-                                id="option-label-<?= $option->getId() ?>"
+                                id="option-label-<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
                                 class="label text-lg font-semibold"
                             >
                                 <?= $escaper->escapeHtml($option->getTitle()) ?>

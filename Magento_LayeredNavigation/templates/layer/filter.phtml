@@ -32,11 +32,11 @@ $catalogHelper = $this->helper(Data::class);
             <a
                 href="<?= $escaper->escapeUrl($filterItem->getUrl()) ?>"
                 class="flex justify-between py-1 hover:text-black"
-                aria-label="<?= /* @noEscape */ $escaper->escapeHtmlAttr(
-                    ((int)$filterItem->getCount() == 1)
-                        ? __('Filter: %1, 1 available product', $filterItem->getLabel() )
-                        : __('Filter: %1, %2 available products', $filterItem->getLabel(), $filterItem->getCount() )
-                ) ?>"
+                <?php if ((int) $filterItem->getCount() === 1): ?>
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Filter: %1, 1 available product', $filterItem->getLabel())) ?>"
+                <?php else: ?>
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Filter: %1, %2 available products', $filterItem->getLabel(), $filterItem->getCount())) ?>"
+                <?php endif; ?>
             >
                 <span><?= /* @noEscape */ $filterItem->getLabel() ?></span>
                 <?php if ($catalogHelper->shouldDisplayProductCountOnLayer()): ?>

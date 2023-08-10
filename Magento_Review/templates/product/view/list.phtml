@@ -53,9 +53,9 @@ $productName = $block->getProduct()->getName();
     >
         <div class="container mx-auto flex pt-6 pb-3 mb-6 md:flex-row border-b-2 border-gray-300">
             <?php if (!$block->getHideTitle()): ?>
-                <<?= $headingTag ?> class="text-gray-900 text-2xl title-font font-base text-center md:text-left w-full">
+                <<?= /* @noEscape */ $headingTag ?> class="text-gray-900 text-2xl title-font font-base text-center md:text-left w-full">
                     <?= $escaper->escapeHtml(__('Customer Reviews')) ?>
-                </<?= $headingTag ?>>
+                </<?= /* @noEscape */ $headingTag ?>>
             <?php endif ?>
         </div>
         <div class="card w-full px-6 py-3">
@@ -105,12 +105,7 @@ $productName = $block->getProduct()->getName();
                             <time
                                 class="text-gray-700 inline-block ml-2"
                                 itemprop="datePublished"
-                                datetime="<?= $escaper->escapeHtmlAttr(
-                                    $block->formatDate(
-                                        $review->getCreatedAt(),
-                                        $format
-                                    )
-                                ); ?>"
+                                datetime="<?= $escaper->escapeHtmlAttr($block->formatDate($review->getCreatedAt(), $format)); ?>"
                             >
                                 <span class="sr-only">
                                     <?= $escaper->escapeHtml(
