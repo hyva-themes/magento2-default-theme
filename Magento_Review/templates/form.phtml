@@ -126,14 +126,13 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                                                                     type="radio"
                                                                     <?php if ($iterator === 1): ?>required<?php endif; ?>
                                                                     name="ratings[<?= $escaper->escapeHtmlAttr($rating->getId()) ?>]"
-                                                                    id="<?= $escaper->escapeHtmlAttr(
-                                                                            $rating->getRatingCode() . '_' . $option->getValue()
-                                                                        ) ?>"
+                                                                    id="<?= $escaper->escapeHtmlAttr($rating->getRatingCode() . '_' . $option->getValue()) ?>"
                                                                     value="<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
-                                                                    aria-label="<?= $escaper->escapeHtmlAttr(
-                                                                            __('%1 %2', $iterator, $iterator > 1 ? __('stars') : __('star'))
-                                                                        )
-                                                                    ?>"
+                                                                    <?php if ($iterator === 1): ?>
+                                                                    aria-label="<?= $escaper->escapeHtmlAttr(__('1 star')) ?>"
+                                                                    <?php else: ?>
+                                                                    aria-label="<?= $escaper->escapeHtmlAttr(__('%1 stars', $iterator)) ?>"
+                                                                    <?php endif; ?>
                                                                 />
                                                             </label>
 

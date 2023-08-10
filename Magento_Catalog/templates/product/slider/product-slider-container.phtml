@@ -139,7 +139,7 @@ if ($isSharedItemRenderer && $block->getChildBlock('slider.item.template')) {
     x-id="['slider-nav', 'slider-end', 'slider-desc']"
     @resize.window.debounce="calcPageSize(); $nextTick( function() { calcActive() })"
     role="group"
-    aria-roledescription="carousel"
+    aria-roledescription="<?= $escaper->escapeHtmlAttr(__('Carousel')) ?>"
     aria-label="<?= $escaper->escapeHtmlAttr(__('Carousel %1', $title)) ?>"
     :aria-describedby="$id('slider-desc')"
 >
@@ -148,9 +148,9 @@ if ($isSharedItemRenderer && $block->getChildBlock('slider.item.template')) {
             <?php if ($title): ?>
                 <div class="container flex flex-col items-center pt-6 pb-3 mx-auto mb-6 border-b-2
                     border-gray-300 md:flex-row">
-                    <<?= $headingTag ?> class="text-2xl font-medium text-gray-900 title-font">
+                    <<?= /* @noEscape */ $headingTag ?> class="text-2xl font-medium text-gray-900 title-font">
                         <?= $escaper->escapeHtml($title); ?>
-                    </<?= $headingTag ?>>
+                    </<?= /* @noEscape */ $headingTag ?>>
                 </div>
             <?php endif; ?>
             <span

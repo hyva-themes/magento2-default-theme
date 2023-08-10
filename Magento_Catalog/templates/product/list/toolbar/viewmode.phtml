@@ -19,7 +19,8 @@ use Magento\Framework\Escaper;
     <?php $modes = $block->getModes(); ?>
     <?php if ($modes && count($modes) > 1): ?>
         <div
-            class="modes flex justify-center space-x-1 mr-2 items-center px-2 py-2 rounded-md border border-gray-300 bg-white text-sm leading-5 w-20 order-1 col-span-1 sm:col-span-2 md:col-span-1 lg:col-span-2"
+            class="modes flex justify-center space-x-1 mr-2 items-center px-2 py-2 rounded-md border border-gray-300 bg-white text-sm leading-5
+             w-20 order-1 col-span-1 sm:col-span-2 md:col-span-1 lg:col-span-2"
             aria-label="<?= $escaper->escapeHtmlAttr(__('Products view mode')) ?>"
         >
             <?php foreach ($block->getModes() as $code => $label): ?>

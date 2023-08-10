@@ -14,7 +14,6 @@ use Magento\Framework\View\Element\Template;
 /** @var Escaper $escaper */
 /** @var Template $block */
 
-$uniqueId = '_' . uniqid();
 ?>
 <div class="gift-message">
     <div class="gift-options-title my-4">
@@ -24,16 +23,16 @@ $uniqueId = '_' . uniqid();
     </div>
     <div class="gift-options-content">
         <fieldset class="fieldset">
-            <div class="field field-to">
+            <div class="field field-to" x-id="['recipient']">
                 <label
-                    for="gift-options-form-recipient<?= $escaper->escapeHtmlAttr($uniqueId) ?>"
+                    :for="$id('recipient')"
                     class="label"
                 >
                     <span><?= $escaper->escapeHtml(__('To:')) ?></span>
                 </label>
                 <div class="control">
                     <input
-                        id="gift-options-form-recipient<?= $escaper->escapeHtmlAttr($uniqueId) ?>"
+                        :id="$id('recipient')"
                         type="text"
                         x-model="formMessage.recipient"
                         @keydown.enter.prevent="submitGiftOption()"
@@ -42,16 +41,16 @@ $uniqueId = '_' . uniqid();
                 </div>
             </div>
 
-            <div class="field field-from">
+            <div class="field field-from" x-id="['sender']">
                 <label
-                    for="gift-options-form-sender<?= $escaper->escapeHtmlAttr($uniqueId) ?>"
+                    :for="$id('sender')"
                     class="label"
                 >
                     <span><?= $escaper->escapeHtml(__('From:')) ?></span>
                 </label>
                 <div class="control">
                     <input
-                        id="gift-options-form-sender<?= $escaper->escapeHtmlAttr($uniqueId) ?>"
+                        :id="$id('sender')"
                         type="text"
                         x-model="formMessage.sender"
                         @keydown.enter.prevent="submitGiftOption()"
@@ -59,13 +58,13 @@ $uniqueId = '_' . uniqid();
                     >
                 </div>
             </div>
-            <div class="field text">
-                <label for="gift-options-form-message<?= $escaper->escapeHtmlAttr($uniqueId) ?>" class="label">
+            <div class="field text" x-id="['message']">
+                <label :for="$id('message')" class="label">
                     <span><?= $escaper->escapeHtml(__('Message')) ?></span>
                 </label>
                 <div class="control">
                     <textarea
-                        id="gift-options-form-message<?= $escaper->escapeHtmlAttr($uniqueId) ?>"
+                        :id="$id('message')"
                         x-model="formMessage.message"
                         class="input-text w-full form-input disabled:opacity-75 disabled:bg-gray-100 disabled:pointer-events-none"
                         rows="5"

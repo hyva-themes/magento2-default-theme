@@ -14,7 +14,7 @@ $childHtml = $block->getChildHtml('', true);
 <?php if (strlen($childHtml)): ?>
     <div class="product-options-wrapper" id="product-options-wrapper">
         <div class="fieldset" tabindex="0">
-            <?= $childHtml ?>
+            <?= /* @noEscape */ $childHtml ?>
         </div>
     </div>
 <?php endif; ?>
