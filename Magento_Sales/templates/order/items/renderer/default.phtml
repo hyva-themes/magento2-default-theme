@@ -22,7 +22,7 @@ $cols = $block->getData('is_context_shipment') ? 3 : ($block->getData('is_contex
         <span class="font-semibold"><?= $escaper->escapeHtml($item->getName()) ?></span>
         <div class="item-options mt-2">
             <div class="text-sm flex">
-                <span><?= $escaper->escapeHtml(__('Sku')) ?>:</span>
+                <span><?= $escaper->escapeHtml(__('SKU')) ?>:</span>
                 <span class="text-sm ml-1"><?= /* @noEscape */ $block->prepareSku($block->getSku()) ?></span>
             </div>
             <?php if ($options = $block->getItemOptions()): ?>

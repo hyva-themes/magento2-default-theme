@@ -164,7 +164,7 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
                 <span
                     class="sr-only label"
                     x-text="`
-                        <?= $escaper->escapeHtml(__($showMiniCart ? 'Toggle minicart' : 'View cart')) ?>,
+                        <?= $escaper->escapeHtml($showMiniCart ? __('Toggle minicart') : __('View cart')) ?>,
                         ${isCartEmpty() ?
                         '<?= $escaper->escapeHtml(__('Cart is empty')) ?>' :
                         hyva.str(

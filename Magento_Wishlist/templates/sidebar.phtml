@@ -31,10 +31,10 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
             function wishlistSidebarFetchHandler(body, postUrl, isRemoveAction = true) {
                 const messages = {
                     "success": isRemoveAction
-                        ? "<?= $escaper->escapeJs(__("%1 has been removed from your Wish List")) ?>"
+                        ? "<?= $escaper->escapeJs(__("%1 has been removed from your Wish List.")) ?>"
                         : "<?= $escaper->escapeJs(__("%1 has been added to your Wish List.")) ?>",
                     "warning": isRemoveAction
-                        ? "<?= $escaper->escapeJs(__("Could not remove item from your Wish List")) ?>"
+                        ? "<?= $escaper->escapeJs(__("Could not remove item from your Wish List.")) ?>"
                         : "<?= $escaper->escapeJs(__('Could not add item to your Wish List.')) ?>",
                 }
 
