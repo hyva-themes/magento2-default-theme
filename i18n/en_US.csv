@@ -1,21 +1,23 @@
 "
-
-                        <div class="container">
+                        
+                        <div class=""container"">
                             <p>No Checkout module installed.</p>
                             <p>Either install Hyvä Checkout, the Luma Fallback Checkout, or another alternative checkout.</p>
-                            <p>Please refer to <a href="https://docs.hyva.io/checkout/index.html" target="_blank">the documentation</a> for more information.</p>
+                            <p>Please refer to <a href=""https://docs.hyva.io/checkout/index.html"" target=""_blank"">the documentation</a> for more information.</p>
                         </div>
-
+                        
                     ","
-
-                        <div class="container">
+                        
+                        <div class=""container"">
                             <p>No Checkout module installed.</p>
                             <p>Either install Hyvä Checkout, the Luma Fallback Checkout, or another alternative checkout.</p>
-                            <p>Please refer to <a href="https://docs.hyva.io/checkout/index.html" target="_blank">the documentation</a> for more information.</p>
+                            <p>Please refer to <a href=""https://docs.hyva.io/checkout/index.html"" target=""_blank"">the documentation</a> for more information.</p>
                         </div>
-
+                        
                     "
-"+ Add Invitee","+ Add Invitee"
+"(These settings can also be found in Catalog > Catalog > Recently Viewed/Compared Products)","(These settings can also be found in Catalog > Catalog > Recently Viewed/Compared Products)"
+"(These settings can also be found in Catalog > Catalog > Storefront)","(These settings can also be found in Catalog > Catalog > Storefront)"
+"(These settings can also be found in Sales > Google API > Google GTag)","(These settings can also be found in Sales > Google API > Google GTag)"
 "<div class=""container"">You currently need the Luma Fallback module to render the Paypal Express Review Page.</div>","<div class=""container"">You currently need the Luma Fallback module to render the Paypal Express Review Page.</div>"
 "<strong>%1 item</strong> was found using the following search criteria","<strong>%1 item</strong> was found using the following search criteria"
 "Active filtering","Active filtering"
@@ -25,19 +27,26 @@ Cart,Cart
 Contact,Contact
 "Contact Details","Contact Details"
 "Could not add item to wishlist.","Could not add item to wishlist."
+"Could not add item to your Wish List.","Could not add item to your Wish List."
 "Could not remove all item from compare.","Could not remove all item from compare."
 "Could not remove item from compare.","Could not remove item from compare."
 "Could not remove item from quote.","Could not remove item from quote."
+"Could not remove item from your Wish List.","Could not remove item from your Wish List."
 "Created at","Created at"
 "Customer Address","Customer Address"
 "Email Address:","Email Address:"
 "Enable Recently Viewed Products","Enable Recently Viewed Products"
-"Estimate shipping","Estimate shipping"
-"Estimate tax","Estimate tax"
+"Enable on Product Detail Pages","Enable on Product Detail Pages"
+"Enabling client side breadcrumb rendering can impact frontend performance for large category trees.","Enabling client side breadcrumb rendering can impact frontend performance for large category trees."
+"Google Tag Manager","Google Tag Manager"
+"Hide Password","Hide Password"
+"Hyva Themes","Hyva Themes"
+"Hyvä Client-Side Breadcrumbs Rendering","Hyvä Client-Side Breadcrumbs Rendering"
 Invitees,Invitees
 "Jump backward","Jump backward"
-"Jump forward","Jump forward"
-"Loading rates...","Loading rates..."
+"Lazyload Tag Manager","Lazyload Tag Manager"
+"Luma Fallback module expected","Luma Fallback module expected"
+"Message Display","Message Display"
 "Not supported on Hyvä Themes storefronts for compatibility and performance reasons.","Not supported on Hyvä Themes storefronts for compatibility and performance reasons."
 "Only registered users can write reviews. Please <a href=""%1"" class=""underline"">Sign in</a> or <a href=""%2"" class=""underline"">create an account</a>","Only registered users can write reviews. Please <a href=""%1"" class=""underline"">Sign in</a> or <a href=""%2"" class=""underline"">create an account</a>"
 "PayPal Logo","PayPal Logo"
@@ -45,11 +54,20 @@ Invitees,Invitees
 "Please enter a valid date range.","Please enter a valid date range."
 "Please enter a valid number range.","Please enter a valid number range."
 "Please enter a valid range.","Please enter a valid range."
+"Please enter a valid value. The two nearest valid values are ""%0"" and ""%1"".","Please enter a valid value. The two nearest valid values are ""%0"" and ""%1""."
+"Please enter a value greater than or equal to ""%0"".","Please enter a value greater than or equal to ""%0""."
+"Please enter a value less than or equal to ""%0"".","Please enter a value less than or equal to ""%0""."
+"Please enter at least %0 characters.","Please enter at least %0 characters."
+"Please enter at least 1 character.","Please enter at least 1 character."
+"Please enter no more than %0 characters.","Please enter no more than %0 characters."
+"Please enter no more than 1 character.","Please enter no more than 1 character."
+"Please match the requested format.","Please match the requested format."
+"Please match the requested format: %0.","Please match the requested format: %0."
+"Please provide at least one upper case, one lower case, one digit and one special character (#?!@$%^&*-)","Please provide at least one upper case, one lower case, one digit and one special character (#?!@$%^&*-)"
 "Please verify you've entered all required information","Please verify you've entered all required information"
 "Popular Products","Popular Products"
 "Product Options:","Product Options:"
 "Read our policy","Read our policy"
-Region,Region
 "Remove all Products","Remove all Products"
 "Review score","Review score"
 "Show Add To Compare In Product List","Show Add To Compare In Product List"
@@ -59,12 +77,15 @@ Region,Region
 "Show Recently Viewed on Product Listing Pages","Show Recently Viewed on Product Listing Pages"
 Sku,Sku
 "Submitting your review failed, please try again.","Submitting your review failed, please try again."
+"Success Message Default Timeout","Success Message Default Timeout"
 "Thank you for your visit, we're looking forward to see you again soon.","Thank you for your visit, we're looking forward to see you again soon."
+"The number of milliseconds, after which success messages disappear by default. Leave empty to disable automatic hiding.","The number of milliseconds, after which success messages disappear by default. Leave empty to disable automatic hiding."
+"The password must include at least %1 or more of: uppercase (A-Z), lowercase (a-z), number and symbol.","The password must include at least %1 or more of: uppercase (A-Z), lowercase (a-z), number and symbol."
+"The telephone number is too short.","The telephone number is too short."
+"This field value must be the same as ""%0"".","This field value must be the same as ""%0""."
 "This form is protected by reCAPTCHA - the <a class=""underline"" href=""%1"" target=""_blank"" rel=""noopener"">Google Privacy Policy</a> and <a class=""underline"" href=""%2"" target=""_blank"" rel=""noopener"">Terms of Service</a> apply.","This form is protected by reCAPTCHA - the <a class=""underline"" href=""%1"" target=""_blank"" rel=""noopener"">Google Privacy Policy</a> and <a class=""underline"" href=""%2"" target=""_blank"" rel=""noopener"">Terms of Service</a> apply."
 "Track Shipment","Track Shipment"
 "Unable to find the SVG icon ""%1","Unable to find the SVG icon ""%1"
-"Update Wish List',"Update Wish List"
-"Add to Wish List","Add to Wish List"
 "Update item","Update item"
 Watches,Watches
 "We found other products you might like!
@@ -77,16 +98,5 @@ Watches,Watches
 "You removed all products from the comparison list","You removed all products from the comparison list"
 "You removed product %1 from the comparison list","You removed product %1 from the comparison list"
 "You removed the item.","You removed the item."
-"Your form does not have the required fields for recaptcha to work.","Your form does not have the required fields for recaptcha to work."
 excl.,excl.
-"excl. VAT","excl. VAT"
 incl.,incl.
-"incl. VAT","incl. VAT"
-"Please enter a valid value. The two nearest valid values are ""%0"" and ""%1"".","Please enter a valid value. The two nearest valid values are ""%0"" and ""%1""."
-"Please enter a value greater than or equal to ""%0"".","Please enter a value greater than or equal to ""%0""."
-"Please enter a value less than or equal to ""%0"".","Please enter a value less than or equal to ""%0""."
-"Please enter at least ""%0"" characters.","Please enter at least ""%0"" characters."
-"Please enter no more than ""%0"" characters.","Please enter no more than ""%0"" characters."
-"Please provide at least one upper case, one lower case, one digit and one special character (#?!@$%^&*-)","Please provide at least one upper case, one lower case, one digit and one special character (#?!@$%^&*-)"
-"This field is required.","This field is required."
-"This field value must be the same as ""%0"".","This field value must be the same as ""%0""."
