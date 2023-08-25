@@ -155,10 +155,14 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
                         return acc.filter(index => optionIndexes.includes(index));
                     });
                 } else {
-                    <?php /* for Magento < 2.4.4 or when not out-of-stock-products are hidden: */ ?>
+                    <?php /* for Magento < 2.4.4 or when out-of-stock-products are hidden: */ ?>
                     const productIndexes = this.optionConfig.index;
                     return Object.keys(productIndexes).filter(index => {
-                        return selectedIds.find(attrId => productIndexes[index][attrId] === `${selectedOptions[attrId]}`)
+                        <?php /* selectedIds.every() doesn't have enough browser support at the time of writing according to https://caniuse.com/mdn-javascript_builtins_array_every */ ?>
+                        for (const attrId of selectedIds) {
+                            if (productIndexes[index][attrId] !== `${selectedOptions[attrId]}`) return false
+                        }
+                        return true
                     });
                 }
             },
