@@ -142,7 +142,7 @@ $imageCustomAttributes = $product->getData('image_custom_attributes')
                         } else {
                             regularPriceLabel.classList.remove('hidden');
                         }
-                        regularPriceElement.innerText = hyva.formatPrice(priceData.finalPrice.amount);
+                        regularPriceElement && (regularPriceElement.innerText = hyva.formatPrice(priceData.finalPrice.amount));
                         basePriceElement && (basePriceElement.innerText = hyva.formatPrice(priceData.basePrice.amount));
                     }
                 }
