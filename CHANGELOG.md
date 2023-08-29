@@ -7,7 +7,105 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.2.4...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.2.6...main
+
+## [1.2.6] - 2023-08-28
+
+[1.2.6]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.2.5...1.2.6
+
+### Added
+
+- Nothing added
+
+### Changed
+
+- **Update i18n/en_US.csv to match phrases used in theme**
+
+  The default localization file was not updated with all changes. This release now brings it up to date.  
+  More specifically:
+
+    - Previously a phrase in the CSV file contained improperly escaped quotes - this is now fixed.
+    - 4 phrases were changed to match core Magento and thus were removed from the hyva-default-theme 18n/en_US.csv file.
+    - 11 phrases were removed from the en_US.csv file in Hyvä because they are part of the core Magento set of phrases.
+    - 22 phrases were added that were previously missing from the hyva-default-theme 18n/en_US.csv file.
+
+  Some of these changes are backward incompatible if a store does not include all core Magento phrases.  
+  Be sure to update your localizations accordingly after the upgrade.  
+
+  Please refer to the [1.2.6 upgrade documentation](http://docs.hyva.io/hyva-themes/upgrading/upgrading-to-1-2-6.html) for details, or to [merge request #838](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/838).
+
+- **Properly enable and disable swatches for configurable products with 3+ variant attributes**
+
+  For more information, please refer to [issue 735](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/735).
+
+- **Allow unselecting previously selected swatches**
+
+  For more information, please refer to [issue 738](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/738).
+
+- **Fix HTML class name**
+
+  Previously the CSS `display:none` was used inside a `class` attribute in `Magento_Catalog/templates/product/view/options/type/file.phtml`, which of course has no effect.  
+  This was changed to use the class name `hidden` instead.  
+
+  For more information, please refer to [issue 672](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/672).
+
+  Many thanks to Andrzej Wiaderny (Hatimeria) for the contribution!
+
+- **Fix quantity regex on input field of PDP**
+
+  Previously, Chrome reported an error for the regex in the attribute `pattern="[0-9](\.[0-9])?{0,<?= /** @noEscape */ $maxSalesQtyLength ?>}'"` of the quantity input field on product detail pages.  
+
+  For more information, please refer to [issue 733](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/733).
+
+  Many thanks to Ruud van Zuidam (Siteation) for the contribution!
+
+- **Use a consistent variable name for the heroicons view model**
+
+  Previously, sometimes `$heroIcons` and sometimes `$heroicons` was used.  
+  Now it always is `$heroicons` consistently.
+
+  For more information, please refer to [issue 707](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/707).
+
+  Many thanks to Andrzej Wiaderny (Hatimeria) for the contribution!
+
+- **Guard against finalPrice selector not matching any elements**
+
+  For more information, please refer to [issue 737](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/737).
+
+- **Fix broken client-side rendered breadcrumbs when the referrer contains a query string**
+
+  For more information, please refer to [merge request #824](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/824).
+
+  Many thanks to Jeroen Noten (IO Digital) for the contribution!
+
+- **Avoid JS error when clicking on product review summary on compare products page**
+
+  For more information, please refer to [merge request #844](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/844).
+
+### Removed
+
+- Nothing removed
+
+## [1.2.5] - 2023-07-31
+
+[1.2.5]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.2.4...1.2.5
+
+### Added
+
+- Nothing added
+
+### Changed
+
+- **Improve product option value check before setting**
+
+  Under some conditions it previously was possible to set invalid product option values, for example when configuring an unconfigured product from the wishlist, which in turn led to option dropdowns being empty.
+
+  For more information please refer to [issue 714](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/714).
+
+### Removed
+
+- Nothing removed
+
 
 ## [1.2.4] - 2023-07-21
 

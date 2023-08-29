@@ -26,7 +26,7 @@ use Magento\Framework\Escaper;
 // Do not replace this with $viewModels->require(ReCaptcha::class); that might break the dependency
 // on the Magento_ReCaptchaCustomer module
 $recaptcha = $block->getData('viewModelRecaptcha');
-$heroIcons = $viewModels->require(HeroiconsSolid::class);
+$heroicons = $viewModels->require(HeroiconsSolid::class);
 $minimumPasswordLength = $block->getMinimumPasswordLength();
 $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
 
@@ -133,11 +133,11 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                         :aria-label="showPasswordCurrent ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
                     >
                         <template x-if="!showPasswordCurrent">
-                            <?= $heroIcons->eyeHtml('w-5 h-5'); ?>
+                            <?= $heroicons->eyeHtml('w-5 h-5'); ?>
                         </template>
 
                         <template x-if="showPasswordCurrent">
-                            <?= $heroIcons->eyeOffHtml('w-5 h-5'); ?>
+                            <?= $heroicons->eyeOffHtml('w-5 h-5'); ?>
                         </template>
                     </button>
                 </div>
@@ -164,10 +164,10 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                             :aria-label="showPasswordNew ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
                         >
                             <template x-if="!showPasswordNew">
-                                <?= $heroIcons->eyeHtml('w-5 h-5'); ?>
+                                <?= $heroicons->eyeHtml('w-5 h-5'); ?>
                             </template>
                             <template x-if="showPasswordNew">
-                                <?= $heroIcons->eyeOffHtml('w-5 h-5'); ?>
+                                <?= $heroicons->eyeOffHtml('w-5 h-5'); ?>
                             </template>
                         </button>
                         <div id="password-strength-meter-container" data-role="password-strength-meter" aria-live="polite">
@@ -200,10 +200,10 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                             :aria-label="showPasswordConfirm ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
                         >
                             <template x-if="!showPasswordConfirm">
-                                <?= $heroIcons->eyeHtml('w-5 h-5'); ?>
+                                <?= $heroicons->eyeHtml('w-5 h-5'); ?>
                             </template>
                             <template x-if="showPasswordConfirm">
-                                <?= $heroIcons->eyeOffHtml('w-5 h-5'); ?>
+                                <?= $heroicons->eyeOffHtml('w-5 h-5'); ?>
                             </template>
                         </button>
                     </div>

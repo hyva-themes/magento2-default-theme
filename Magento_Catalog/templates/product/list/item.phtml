@@ -147,7 +147,7 @@ $productName = $catalogOutputHelper->productAttribute($product, $product->getNam
                         } else {
                             regularPriceLabel.classList.remove('hidden');
                         }
-                        regularPriceElement.innerText = hyva.formatPrice(priceData.finalPrice.amount);
+                        regularPriceElement && (regularPriceElement.innerText = hyva.formatPrice(priceData.finalPrice.amount));
                         basePriceElement && (basePriceElement.innerText = hyva.formatPrice(priceData.basePrice.amount));
                     }
                 }

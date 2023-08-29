@@ -36,7 +36,7 @@ $formId = 'accountcreate';
 // Do not replace this with $viewModels->require(ReCaptcha::class); that might break the dependency
 // on the Magento_ReCaptchaCustomer module
 $recaptcha = $block->getData('viewModelRecaptcha');
-$heroIcons = $viewModels->require(HeroiconsSolid::class);
+$heroicons = $viewModels->require(HeroiconsSolid::class);
 $createAccountButtonViewModel = $viewModels->require(CreateAccountButton::class);
 $region = $block->getAttributeData()->getFrontendLabel('region');
 $selectRegion = 'Please select a region, state or province.';
@@ -172,10 +172,10 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                             :aria-label="showPassword ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
                         >
                             <template x-if="!showPassword">
-                                <?= $heroIcons->eyeHtml('w-5 h-5'); ?>
+                                <?= $heroicons->eyeHtml('w-5 h-5'); ?>
                             </template>
                             <template x-if="showPassword">
-                                <?= $heroIcons->eyeOffHtml('w-5 h-5'); ?>
+                                <?= $heroicons->eyeOffHtml('w-5 h-5'); ?>
                             </template>
                         </button>
                         <div
@@ -233,10 +233,10 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                             "
                         >
                             <template x-if="!showPasswordConfirm">
-                                <?= $heroIcons->eyeHtml('w-5 h-5'); ?>
+                                <?= $heroicons->eyeHtml('w-5 h-5'); ?>
                             </template>
                             <template x-if="showPasswordConfirm">
-                                <?= $heroIcons->eyeOffHtml('w-5 h-5'); ?>
+                                <?= $heroicons->eyeOffHtml('w-5 h-5'); ?>
                             </template>
                         </button>
                     </div>
