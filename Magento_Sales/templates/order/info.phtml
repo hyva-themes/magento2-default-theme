@@ -12,13 +12,12 @@ use Magento\Framework\Escaper;
 use Magento\Sales\Block\Order\Info;
 
 /** @var Info $block */
-/** @var PaymentInfo $paymentResolver */
+/** @var PaymentInfo $paymentInfo */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
 
 $order = $block->getOrder();
-$paymentResolver = $block->getData('paymentResolver');
 $paymentInfo = $viewModels->require(PaymentInfo::class);
 ?>
 <div class="mb-4 pb-4 border-b border-container">
