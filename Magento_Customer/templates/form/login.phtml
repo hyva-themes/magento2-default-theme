@@ -28,6 +28,9 @@ $heroiconsoutline = $viewModels->require(HeroiconsOutline::class);
 $heroiconssolid = $viewModels->require(HeroiconsSolid::class);
 $loginButtonViewModel = $viewModels->require(LoginButton::class);
 
+// Disabling autocomplete on form fields is not recommended,
+// Enable it in Stores->Configuration->Customers configuration->Password Options
+
 // Do not replace this with $viewModels->require(ReCaptcha::class); that might break the dependency
 // on the Magento_ReCaptchaCustomer module
 $recaptcha = $block->getData('viewModelRecaptcha');
@@ -59,29 +62,46 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                                class="form-input"
                                required
                                value="<?= $escaper->escapeHtmlAttr($block->getUsername()) ?>"
-                            <?php if ($block->isAutocompleteDisabled()): ?>
-                                autocomplete="off"
-                            <?php endif; ?>
+                               autocomplete="<?= $block->isAutocompleteDisabled() ? 'off' : 'email' ?>"
                                id="email"
                                type="email"
-                               title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"/>
+                               title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
+                        />
                     </div>
                 </div>
                 <div class="field password required">
-                    <label for="pass" class="label"><span><?= $escaper->escapeHtml(__('Password')) ?></span></label>
+                    <label for="pass" class="label">
+                        <span>
+                            <?= $escaper->escapeHtml(__('Password')) ?>
+                        </span>
+                    </label>
                     <div class="control flex items-center">
+                        <div class="sr-only" aria-live="polite">
+                            <template x-if="!showPassword">
+                                <span>
+                                    <?= $escaper->escapeHtml(__('Password hidden')) ?>
+                                </span>
+                            </template>
+                            <template x-if="showPassword">
+                                <span>
+                                    <?= $escaper->escapeHtml(__('Password shown')) ?>
+                                </span>
+                            </template>
+                        </div>
                         <input name="login[password]"
-                               class="form-input"
-                               required
-                               :type="showPassword ? 'text' : 'password'"
-                            <?php if ($block->isAutocompleteDisabled()): ?>
-                                autocomplete="off"
-                            <?php endif; ?>
-                               id="pass"
-                               title="<?= $escaper->escapeHtmlAttr(__('Password')) ?>"/>
-                        <div x-on:click="showPassword = !showPassword"
-                             class="cursor-pointer px-4"
-                             :aria-label="showPassword ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
+                            class="form-input"
+                            required
+                            :type="showPassword ? 'text' : 'password'"
+                            autocomplete="<?= $block->isAutocompleteDisabled() ? 'off' : 'current-password' ?>"
+                            id="pass"
+                            title="<?= $escaper->escapeHtmlAttr(__('Password')) ?>"
+                        />
+                        <button
+                            type="button"
+                            x-on:click="showPassword = !showPassword"
+                            :aria-pressed="showPassword ? 'true' : 'false'"
+                            class="px-4 py-3"
+                            :aria-label="showPassword ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
                         >
                             <template x-if="!showPassword">
                                 <?= $heroiconssolid->eyeHtml('w-5 h-5'); ?>
@@ -89,7 +109,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                             <template x-if="showPassword">
                                 <?= $heroiconssolid->eyeOffHtml('w-5 h-5'); ?>
                             </template>
-                        </div>
+                        </button>
                     </div>
                 </div>
 

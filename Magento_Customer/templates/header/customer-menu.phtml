@@ -20,22 +20,33 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 $customerRegistration = $viewModels->require(CustomerRegistration::class);
 ?>
 
-<div x-data="{ open: false }" class="relative inline-block ml-1 sm:ml-3">
-    <a
+<div
+    class="relative inline-block ml-1 sm:ml-3"
+    x-data="{ open: false }"
+    @keyup.escape="open = false"
+>
+    <button
+        type="button"
         href="<?= $escaper->escapeHtmlAttr($escaper->escapeUrl($block->getUrl('customer/account'))) ?>"
         id="customer-menu"
         class="block hover:text-black"
-        @click.prevent="open = true"
+        @click="open = !open"
+        @click.outside="open = false"
         :aria-expanded="open ? 'true' : 'false'"
         aria-label="<?= $escaper->escapeHtmlAttr(__('My Account')) ?>"
+        aria-haspopup="true"
     >
         <?= $heroicons->userHtml('md:h-6 md:w-6', 32, 32, ['aria-hidden' => 'true']); ?>
-    </a>
-    <nav class="absolute right-0 z-20 w-40 py-2 mt-2 -mr-4 px-1 overflow-auto origin-top-right rounded-sm
-        shadow-lg sm:w-48 lg:mt-3 bg-container-lighter"
-         x-cloak x-show="open"
-         @click.outside="open = false"
-         aria-labelledby="customer-menu"
+    </button>
+    <nav
+        class="
+            absolute right-0 z-20 w-40 py-2 mt-2 -mr-4 px-1 overflow-auto origin-top-right rounded-sm
+            shadow-lg sm:w-48 lg:mt-3 bg-container-lighter
+        "
+        x-cloak
+        x-show="open"
+        aria-labelledby="customer-menu"
+        @click.outside="open = false"
     >
         <?php if ($block->customerLoggedIn()): ?>
             <a class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
@@ -68,7 +79,7 @@ $customerRegistration = $viewModels->require(CustomerRegistration::class);
                    '<?= /** @noEscape */ Redirect::LOGIN_REDIRECT_URL ?>',
                    window.location.href,
                    1
-               )"
+                   )"
                href="<?= $escaper->escapeUrl($block->getUrl('customer/account/index')) ?>">
                 <?= $escaper->escapeHtml(__('Sign In')); ?>
             </a>

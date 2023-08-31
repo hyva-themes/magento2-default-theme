@@ -228,9 +228,9 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
 
                 <fieldset class="fieldset fieldset-bundle-options min-w-48 mb-8" form="product_addtocart_form">
                     <legend id="customizeTitle" class="legend">
-                        <h3 class="text-gray-900 text-2xl title-font font-base text-center md:text-left w-full">
+                        <h2 class="text-gray-900 text-2xl title-font font-base text-center md:text-left w-full">
                             <?= $escaper->escapeHtml(__('Customize %1', $product->getName())) ?>
-                        </h3>
+                        </h2>
                     </legend>
                     <?= $block->getChildHtml('product_info_bundle_options_top') ?>
                     <?php foreach ($options as $option): ?>
@@ -239,8 +239,11 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
                             continue;
                         } ?>
                         <div class="my-2 pt-4 pb-2 w-full border-t border-container">
-                            <label class="label text-lg font-semibold">
-                                <span><?= $escaper->escapeHtml($option->getTitle()) ?></span>
+                            <label
+                                id="option-label-<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
+                                class="label text-lg font-semibold"
+                            >
+                                <?= $escaper->escapeHtml($option->getTitle()) ?>
                             </label>
                             <div class="control mt-2">
                                 <div class="nested options-list">

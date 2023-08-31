@@ -10,6 +10,7 @@ use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Remove;
 use Magento\Framework\Escaper;
+use Magento\Wishlist\Model\Item;
 
 /** @var Remove $block */
 /** @var Escaper $escaper */
@@ -17,6 +18,10 @@ use Magento\Framework\Escaper;
 
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
+
+/** @var Item $item */
+$item = $block->getItem();
+$product = $item->getProduct();
 ?>
 
 <a href="#"
@@ -25,5 +30,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
    title="<?= $escaper->escapeHtmlAttr(__('Remove Item')) ?>"
    class="btn-remove action delete btn btn-secondary inline-flex p-2">
     <?= $heroicons->trashHtml('', 20, 20); ?>
-    <span class="sr-only"><?= $escaper->escapeHtml(__('Remove item')) ?></span>
+    <span class="sr-only">
+        <?= $escaper->escapeHtml(__('Remove item %1', $product->getName())) ?>
+    </span>
 </a>

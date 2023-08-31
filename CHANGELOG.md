@@ -7,7 +7,190 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.2.6...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.0...main
+
+## [1.3.0] - 2023-08-31
+
+[1.3.0]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.2.6...1.3.0
+
+Acronyms:  
+
+* AT refers to Assistive Technology (keyboard navigation, screen readers, voice-over, and voice control).
+* SR refers to Screen Readers
+
+### Added
+
+- Nothing added
+
+### Changed
+
+- **Show skip navigation link on focus**
+
+- **Make top-menu sub-menus expanded on hover also available using keyboard navigation**
+
+- **Make mobile menu usable for AT users**
+
+- **Announce header search input focus on all browsers**
+
+- **Improve header search toggle button label and role**
+
+- **Restore focus after closing search form with ESC key**
+
+- **Use button element with proper area attributes for customer menu toggle**
+
+- **ESC key closes customer menu**
+
+- **Fix shopping cart link when shopping cart is empty, link is focusable but disabled**
+
+- **Logo label does not explain where it links**
+
+- **Wrong order of header in footer**
+
+- **Properly describe link to Twitter in the default footer**
+
+- **Improve color contrast of success and warning messages**
+
+- **Announce flash messages when they are displayed for AT**
+
+- **Do not force visitor to go through all items in slider before being able to continue**
+
+- **Fix possible duplicate element IDs in product slider**
+
+- **Add alt text to mini cart product images**
+
+- **Add missing labels for mini cart action buttons and hide image from SR**
+
+- **Trap focus for keyboard navigation when mini cart is open, and move initial focus to mini cart when opened**
+
+- **Hide default homepage hero image for SR**
+
+- **Add product name to rating summary labels**
+
+- **Make product rating summary focusable**
+
+- **Announce product rating dates as date for AT on rating listing page**
+
+- **Make product rating form radio buttons accessible**
+
+- **Remove duplicate label on review list select**
+
+- **Remove duplicate label from pagination toolbar select**
+
+- **Fix toolbar: aria-label attribute is not allowed on span elements**
+
+- **Make label on product swatches accessible**
+
+- **Fix duplicate option label announcement on product swatches**
+
+- **Fix form label on product swatch items does not refer to existing form on PLP**
+
+- **Announce color change for AT when swatch is selected**
+
+- **Add product names to Add to cart / Add to wishlist button arial labels on product grid**
+
+- **Mark items already added to cart of wishlist on product grid**
+
+- **Add unique landmark to sidebar, hide for SR if empty**
+
+- **Change sidebar Shop By title to be h2 heading**
+
+- **Make expanded category and search results page filters accessible for AT**
+
+- **Announce active category and search results page filters for AT**
+
+- **Announce active grid/list mode on PLP**
+
+- **Fix color contrast on list/grid mode selection in PLP toolbar**
+
+- **Add product name to actions on product comparison table**
+
+- **Fix duplicate image on PDP for AT, and add information that image can be magnified by clicking on it**
+
+- **Fix product gallery images being announced as links for AT, and announce image gallery changes**
+
+- **Fix focus when clicking on image with SR**
+
+- **Properly label qty inputs for grouped products**
+
+- **Hide fieldset for grouped products from keyboard navigation if it is empty**
+
+- **Fix header order for bundled products**
+
+- **Announce price changes for AT when bundled product options are selected**
+
+- **Fix duplicate announcement of bundled product radio option labels for AT**
+
+- **Move Add to Cart button below the summary for bundled products**
+
+- **Mark Estimate Shipping section as expandable for AT on cart page**
+
+- **Mark Apply Discount section as expandable for AT on cart page**
+
+- **Hide icon in expanded label from SR on cart page**
+
+- **Fix duplicate label for radio buttons in Estimate Shipping section on cart page**
+
+- **Add product name to add, remove, and edit cart item action labels on cart page**
+
+- **Use legend instead of aria-label on div element for Estimate Shipping section on cart page**
+
+- **Add valid arial-label to gift options drawer on cart page**
+
+- **Add unique ID for sidebar landmark on customer dashboard**
+
+- **Hide sidebar on customer dashboard from SR if empty**
+
+- **Add information to edit action label for what each action applies to on customer dashboard**
+
+- **Hide images/icons in customer dashboard from SR**
+
+- **Fix heading order on customer dashboard**
+
+- **Use aria-label including product name for reorder item checkbox in customer dashboard recent orders list**
+
+- **Use proper semantic markup for recent orders table on customer dashboard**
+
+- **Add descriptive label for AT to Change email and Change password checkboxes on edit account page**
+
+- **Move focus to input after checking Change email or Change password checkboxes on edit account page**
+
+- **Make tooltip on edit account page accessible and focusable**
+
+- **Make Show password button on edit account page usable with every AT by using proper semantic element**
+
+- **Make password requirement information on edit account page more accessible by binding it to input with aria-describedby**
+
+- **Hide validation message when field is filled correctly on edit address page**
+
+- **Mark required fields by adding an asterisk to the label on edit address page**
+
+- **Add validation to telefon field in customer account address book** 
+
+- **Use semantic markup for tables table in customer account pages**
+
+    This applies to order history, downloadable product list, and recent orders.
+
+- **Bind order item labels to checkbox on order history page in customer account**
+
+- **Use legend instead of aria-label on div for reorder action**
+
+- **Make tooltip accessible and focusable on wishlist page in customer account**
+
+- **Add product name to Edit and Remove action links on wishlist page in customer account**
+
+- **Improve order status label to indicate what it refers to on order details page in customer account**
+
+- **Ensure correct structure of definition list dl and st elements on order details in customer account**
+
+- **Make "Allow remote shopping assistance" tooltip accessible and focusable on login/registration page**
+
+- **Make password requirement information on create account page more accessible by binding it to input with aria-describedby**
+
+- **Make Show password button on login/registration page usable with every AT by using proper semantic element**
+
+### Removed
+
+- Nothing removed
 
 ## [1.2.6] - 2023-08-28
 

@@ -16,7 +16,7 @@
         <attribute name="itemscope" value="itemscope"/>
         <referenceBlock name="page.main.title">
             <arguments>
-                <argument name="css_class" xsi:type="string">product md:sr-only text-3xl font-semibold text-center</argument>
+                <argument name="css_class" xsi:type="string">mt-0 product text-3xl font-semibold text-center md:px-0 md:mt-10 md:mb-3</argument>
                 <argument name="add_base_attribute" xsi:type="string">itemprop="name"</argument>
             </arguments>
         </referenceBlock>
@@ -149,6 +149,7 @@
                             <argument name="title" xsi:type="string"
                                       translate="true">We found other products you might like!
                             </argument>
+                            <argument name="heading_tag" xsi:type="string">h2</argument>
                         </arguments>
                     </block>
 
@@ -157,6 +158,7 @@
                         <arguments>
                             <argument name="type" xsi:type="string">related</argument>
                             <argument name="title" xsi:type="string" translate="true">Related Products</argument>
+                            <argument name="heading_tag" xsi:type="string">h2</argument>
                         </arguments>
                     </block>
 
@@ -204,6 +206,7 @@
         </referenceContainer>
 
         <move element="alert.urls" destination="product.info" as="alert.urls"/>
+        <move element="page.main.title" destination="product.detail.page" as="product.title" />
 
         <referenceContainer name="before.body.end">
             <block name="recently_viewed_products.register_view"
