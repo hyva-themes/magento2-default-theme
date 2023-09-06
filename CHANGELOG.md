@@ -7,7 +7,50 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.0...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.1...main
+
+## [1.3.1] - 2023-09-06
+
+[1.3.1]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.0...1.3.1
+
+### Added
+
+- **Allow configuring a width and height for main category images**
+
+    If a width and height for `category_page_category_image` is configured in `etc/view.xml`, those attributes will be
+    rendered on the category `img` tag. The intended purpose of this is to reduce the CLS value.
+
+    For more information, please refer to [issue #743](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/726) 
+    and the associated [merge request #858](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/858).
+
+### Changed
+
+- **Fix mini-cart exceeding screen height no longer scrollable**
+
+    This fixes a regression introduced in release 1.3.0.
+
+    For more information, please refer to [merge request #859](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/859).
+
+- **Fix duplicate DOM element IDs in sliders due to caching**
+
+    For more information, please refer to [issue #748](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/748).
+
+- **Improve styling for subcategories of non-anchor category**
+
+    For more information, please refer to [issue #743](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/743) 
+    and the associated [merge request #856](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/856).
+
+- **Only render review summary JS if reviews are enabled**
+
+    For more information, please refer to [issue #747](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/747).
+
+- **Excude products only visible in a search from product sliders**
+
+    For more information, please refer to [issue #734](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/734).
+
+### Removed
+
+- Nothing removed
 
 ## [1.3.0] - 2023-08-31
 
