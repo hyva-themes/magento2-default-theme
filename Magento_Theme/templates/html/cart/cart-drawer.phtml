@@ -157,10 +157,10 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
              aria-label="<?= $escaper->escapeHtmlAttr(__('My Cart')) ?>"
 
         >
-            <div class="flex flex-col h-full py-6 space-y-6 bg-white shadow-xl">
+            <div class="flex flex-col h-full max-h-screen bg-white shadow-xl">
                 <?= $block->getChildHtml('cart-drawer.top'); ?>
 
-                <header class="px-4 sm:px-6">
+                <header class="relative px-4 py-6 sm:px-6">
                     <h2 id="cart-drawer-title" class="text-lg font-medium leading-7 text-gray-900">
                         <?= $escaper->escapeHtml(__('My Cart')) ?>
                         <span class="items-total text-xs"
@@ -179,61 +179,63 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 </template>
 
                 <template x-if="itemsCount">
-                    <div>
-                        <div class="relative grid gap-6 px-4 py-6 overflow-y-auto bg-white border-b
-                                    sm:gap-8 sm:px-6 border-container"
-                        >
-                            <template x-for="item in cartItems">
-                                <div class="flex items-start p-3 -m-3 space-x-4 transition duration-150
-                            ease-in-out rounded-lg hover:bg-gray-100">
-                                    <a :href="item.product_url"
-                                       class="w-1/4"
-                                       :aria-label="hyva.strf('<?= $escaper->escapeJs(__('Product "%0"')) ?>', item.product_name)"
-                                    >
-                                        <img
-                                            :src="item.product_image.src"
-                                            :width="item.product_image.width"
-                                            :height="item.product_image.height"
-                                            loading="lazy"
-                                            alt=""
-                                        />
-                                    </a>
-                                    <div class="w-3/4 space-y-2">
-                                        <div>
-                                            <p class="text-xl">
-                                                <span x-html="item.qty"></span> x <span x-html="item.product_name"></span>
-                                            </p>
-                                            <p class="text-sm"><span x-html="item.product_sku"></span></p>
-                                        </div>
-                                        <template x-for="option in item.options">
-                                            <div class="pt-2">
-                                                <p class="font-semibold" x-text="option.label + ':'"></p>
-                                                <p class="text-secondary" x-html="option.value"></p>
-                                            </div>
-                                        </template>
-                                        <p><span x-html="item.product_price"></span></p>
-                                        <div class="pt-4">
-                                            <a :href="item.configure_url"
-                                               x-show="item.product_type !== 'grouped'"
-                                               class="inline-flex p-2 mr-2 btn btn-primary"
-                                               :aria-label="hyva.strf('<?= $escaper->escapeJs(__('Edit product "%0"')) ?>', item.product_name)"
-                                            >
-                                                <?= $heroicons->pencilHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
-                                            </a>
-                                            <button type="button"
-                                                    class="inline-flex p-2 btn btn-primary"
-                                                    @click="deleteItemFromCart(item.item_id)"
-                                                    :aria-label="hyva.strf('<?= $escaper->escapeJs(__('Remove product "%0" from cart')) ?>', item.product_name)"
-                                            >
-                                                <?= $heroicons->trashHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
-                                            </button>
-                                        </div>
-
+                    <div class="grow relative grid gap-6 px-4 py-6 overflow-y-auto overscroll-y-contain bg-white border-b
+                                sm:gap-8 sm:px-6 border-container"
+                    >
+                        <template x-for="item in cartItems">
+                            <div class="flex items-start p-3 -m-3 space-x-4 transition duration-150
+                        ease-in-out rounded-lg hover:bg-gray-100">
+                                <a :href="item.product_url"
+                                    class="w-1/4"
+                                    :aria-label="hyva.strf('<?= $escaper->escapeJs(__('Product "%0"')) ?>', item.product_name)"
+                                >
+                                    <img
+                                        :src="item.product_image.src"
+                                        :width="item.product_image.width"
+                                        :height="item.product_image.height"
+                                        loading="lazy"
+                                        alt=""
+                                    />
+                                </a>
+                                <div class="w-3/4 space-y-2">
+                                    <div>
+                                        <p class="text-xl">
+                                            <span x-html="item.qty"></span> x <span x-html="item.product_name"></span>
+                                        </p>
+                                        <p class="text-sm"><span x-html="item.product_sku"></span></p>
                                     </div>
-                                </div>
-                            </template>
-                        </div>
+                                    <template x-for="option in item.options">
+                                        <div class="pt-2">
+                                            <p class="font-semibold" x-text="option.label + ':'"></p>
+                                            <p class="text-secondary" x-html="option.value"></p>
+                                        </div>
+                                    </template>
+                                    <p><span x-html="item.product_price"></span></p>
+                                    <div class="pt-4">
+                                        <a :href="item.configure_url"
+                                            x-show="item.product_type !== 'grouped'"
+                                            class="inline-flex p-2 mr-2 btn btn-primary"
+                                            :aria-label="hyva.strf('<?= $escaper->escapeJs(__('Edit product "%0"')) ?>', item.product_name)"
+                                        >
+                                            <?= $heroicons->pencilHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
+                                        </a>
+                                        <button type="button"
+                                                class="inline-flex p-2 btn btn-primary"
+                                                @click="deleteItemFromCart(item.item_id)"
+                                                :aria-label="hyva.strf('<?= $escaper->escapeJs(__('Remove product "%0" from cart')) ?>', item.product_name)"
+                                        >
+                                            <?= $heroicons->trashHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
+                                        </button>
+                                    </div>
 
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+
+                <template x-if="itemsCount">
+                    <div>
                         <?= $block->getChildHtml('cart-drawer.totals.before'); ?>
 
                         <div class="relative grid gap-6 px-4 py-6 bg-white sm:gap-8 sm:px-6">
@@ -247,14 +249,14 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                             >
                                 <a @click.prevent.stop="$dispatch('toggle-authentication',
                                     {url: '<?= $escaper->escapeUrl($block->getUrl('checkout')) ?>'});"
-                                   href="<?= $escaper->escapeUrl($block->getUrl('checkout')) ?>"
-                                   class="inline-flex btn btn-primary"
+                                    href="<?= $escaper->escapeUrl($block->getUrl('checkout')) ?>"
+                                    class="inline-flex btn btn-primary"
                                 >
                                     <?= $escaper->escapeHtml(__('Checkout')) ?>
                                 </a>
                                 <span><?= $escaper->escapeHtml(__('or')) ?></span>
                                 <a href="<?= $escaper->escapeUrl($block->getUrl('checkout/cart')) ?>"
-                                   class="underline"
+                                    class="underline"
                                 >
                                     <?= $escaper->escapeHtml(__('View and Edit Cart')) ?>
                                 </a>
