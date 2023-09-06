@@ -132,35 +132,35 @@ $uniqueId = $productId . uniqid();
             <?php endwhile; ?>
         <?php endif; ?>
     </div>
-<?php endif; ?>
 
-<script>
-    'use strict';
+    <script>
+        'use strict';
 
-    function initRating<?= /* @noEscape */ $uniqueId ?>() {
-        return {
-            reviewsSection: document.getElementById('customer-review-list')
-                || document.getElementById('customer-reviews')
-                || document.getElementById('review-form'),
-            scrollToRatings() {
-                let scrollTimeout = null
+        function initRating<?= /* @noEscape */ $uniqueId ?>() {
+            return {
+                reviewsSection: document.getElementById('customer-review-list')
+                    || document.getElementById('customer-reviews')
+                    || document.getElementById('review-form'),
+                scrollToRatings() {
+                    let scrollTimeout = null
 
-                if (!this.reviewsSection) {
-                    return
+                    if (!this.reviewsSection) {
+                        return
+                    }
+
+                    addEventListener('scroll', () => {
+                        clearTimeout(scrollTimeout);
+
+                        scrollTimeout = setTimeout(() => {
+                            if (this.reviewsSection) {
+                                this.reviewsSection.focus()
+                            }
+                        }, 50);
+                    }, { once: true });
+
+                    this.reviewsSection.scrollIntoView({behavior: 'smooth'})
                 }
-
-                addEventListener('scroll', () => {
-                    clearTimeout(scrollTimeout);
-
-                    scrollTimeout = setTimeout(() => {
-                        if (this.reviewsSection) {
-                            this.reviewsSection.focus()
-                        }
-                    }, 50);
-                }, { once: true });
-
-                this.reviewsSection.scrollIntoView({behavior: 'smooth'})
             }
         }
-    }
-</script>
+    </script>
+<?php endif; ?>
