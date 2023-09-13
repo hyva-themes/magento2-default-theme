@@ -227,8 +227,7 @@ $productName = $block->getProduct()->getName();
                     const initialUrls = this.initialImages.map(image => image.full);
                     const newImages = images.filter(image => ! initialUrls.includes(image.full));
                     this.images = [].concat(this.initialImages, newImages);
-                    const newActive = newImages.length ? this.initialImages.length : 0;
-                    this.setActive(newActive);
+                    this.setActive(newImages.length ? this.initialImages.length : 0);
                 } else {
                     this.images = images;
                     this.setActive(0);
