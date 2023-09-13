@@ -229,16 +229,19 @@ $productName = $block->getProduct()->getName();
                     this.images = [].concat(this.initialImages, newImages);
                     const newActive = newImages.length ? this.initialImages.length : 0;
                     this.setActive(newActive);
-                    this.scrollTo(newActive);
                 } else {
                     this.images = images;
                     this.setActive(0);
-                    this.scrollTo(0);
                 }
+
+                this.$nextTick(() => {
+                    this.scrollTo(this.active);
+                });
             },
             resetGallery() {
                 this.images = this.initialImages;
                 this.setActive(0);
+                this.scrollTo(0);
             },
             initActive() {
                 let active = this.images.findIndex(function(image) {
