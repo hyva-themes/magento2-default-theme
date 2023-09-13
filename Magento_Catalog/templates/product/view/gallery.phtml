@@ -138,7 +138,7 @@ $productName = $block->getProduct()->getName();
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Previous')) ?>"
                     tabindex="-1"
                     class="mr-4 text-black rounded-full outline-none focus:outline-none flex-none"
-                    :class="{ 'opacity-25 pointer-events-none' : activeSlide === 0, 'hidden' : !isSlider }"
+                    :class="{ 'opacity-25 pointer-events-none' : isSliderStart, 'hidden' : !isSlider }"
                     aria-hidden="true"
                     @click="scrollPrevious"
                 ><?= $heroicons->chevronLeftHtml() ?></button>
@@ -175,7 +175,7 @@ $productName = $block->getProduct()->getName();
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Next')) ?>"
                     tabindex="-1"
                     class="ml-4 text-black rounded-full outline-none focus:outline-none flex-none"
-                    :class="{ 'opacity-25 pointer-events-none' : activeSlide >= itemCount-pageSize, 'hidden' : !isSlider }"
+                    :class="{ 'opacity-25 pointer-events-none' : isSliderEnd, 'hidden' : !isSlider }"
                     aria-hidden="true"
                     @click="scrollNext"
                 ><?= $heroicons->chevronRightHtml() ?></button>
@@ -214,6 +214,8 @@ $productName = $block->getProduct()->getName();
                 $block->getVar('gallery_switch_strategy', 'Magento_ConfigurableProduct') === 'append' ? 'true' : 'false'
             ?>,
             "activeSlide": 0,
+            "isSliderStart": true,
+            "isSliderEnd": false,
             "itemCount": 0,
             "pageSize": 4,
             "pageFillers": 0,
