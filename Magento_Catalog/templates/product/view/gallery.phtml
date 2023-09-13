@@ -144,7 +144,7 @@ $productName = $block->getProduct()->getName();
                 ><?= $heroicons->chevronLeftHtml() ?></button>
                 <div class="js_thumbs_slides thumbs-wrapper relative flex flex-nowrap w-full overflow-auto js_slides snap"
                      x-ref="jsThumbSlides"
-                     @scroll.debounce="calcPageSize(); calcActive()"
+                     @scroll.debounce="calcPageSize(); calcActive(); calcScrollStartEnd()"
                 >
                     <template x-for="(image, index) in images" :key="index">
                         <div class="js_thumbs_slide flex shrink-0 mb-2 mr-2 lg:mr-4 last:mr-0">
@@ -395,6 +395,13 @@ $productName = $block->getProduct()->getName();
                     ) - this.itemCount;
 
                     this.isSlider = ((slider.clientWidth - (this.itemCount * (slideEl.clientWidth + marginRight))) < 0);
+                }
+            },
+            calcScrollStartEnd() {
+                const slider = this.getSlider();
+                if (slider) {
+                    this.isSliderStart = slider.scrollLeft === 0;
+                    this.isSliderEnd = (slider.scrollLeft + slider.offsetWidth) === slider.scrollWidth;
                 }
             },
             calcActive() {
