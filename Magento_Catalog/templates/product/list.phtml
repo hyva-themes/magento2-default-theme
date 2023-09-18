@@ -67,7 +67,7 @@ $productCollection = $block->getLoadedProductCollection();
                     if ($i < $eagerLoadImagesCount) {
                         $product->setData('image_custom_attributes', ['loading' => 'eager', 'fetchpriority' => 'high']);
                     }
-                ?>
+                    ?>
                     <li>
                         <?= $productListItemViewModel->getItemHtml(
                             $product,
