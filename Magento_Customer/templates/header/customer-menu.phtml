@@ -1,12 +1,16 @@
 <?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
 
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
-use Hyva\Theme\ViewModel\CustomerRegistration;
 use Magento\Customer\Block\Account\Customer;
-use Magento\Customer\Model\Account\Redirect;
 use Magento\Framework\Escaper;
 
 /** @var Customer $block */
@@ -15,9 +19,6 @@ use Magento\Framework\Escaper;
 
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
-
-/** @var CustomerRegistration $customerRegistration */
-$customerRegistration = $viewModels->require(CustomerRegistration::class);
 ?>
 
 <div
@@ -48,47 +49,9 @@ $customerRegistration = $viewModels->require(CustomerRegistration::class);
         @click.outside="open = false"
     >
         <?php if ($block->customerLoggedIn()): ?>
-            <a class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
-               href="<?= $escaper->escapeUrl($block->getUrl('customer/account')) ?>"
-            >
-                <?= $escaper->escapeHtml(__('My Account')); ?>
-            </a>
-            <a class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
-               href="<?= $escaper->escapeUrl($block->getUrl('wishlist')) ?>"
-            >
-                <?= $escaper->escapeHtml(__('My Wish List')); ?>
-            </a>
-            <a class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
-               href="<?= $escaper->escapeUrl($block->getUrl('sales/order/history')) ?>"
-            >
-                <?= $escaper->escapeHtml(__('My Orders')); ?>
-            </a>
-            <a class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
-               href="<?= $escaper->escapeUrl($block->getUrl('customer/address')) ?>"
-            >
-                <?= $escaper->escapeHtml(__('Address Book')); ?></a>
-            <a class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
-               href="<?= $escaper->escapeUrl($block->getUrl('customer/account/logout')) ?>"
-            >
-                <?= $escaper->escapeHtml(__('Sign Out')); ?>
-            </a>
+            <?= $block->getChildHtml('header.customer.logged.in.links') ?>
         <?php else: ?>
-            <a class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
-               onclick="hyva.setCookie && hyva.setCookie(
-                   '<?= /** @noEscape */ Redirect::LOGIN_REDIRECT_URL ?>',
-                   window.location.href,
-                   1
-                   )"
-               href="<?= $escaper->escapeUrl($block->getUrl('customer/account/index')) ?>">
-                <?= $escaper->escapeHtml(__('Sign In')); ?>
-            </a>
-            <?php if ($customerRegistration->isAllowed()): ?>
-                <a class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
-                   href="<?= $escaper->escapeUrl($block->getUrl('customer/account/create')) ?>"
-                >
-                    <?= $escaper->escapeHtml(__('Create an Account')); ?>
-                </a>
-            <?php endif; ?>
+            <?= $block->getChildHtml('header.customer.logged.out.links') ?>
         <?php endif; ?>
     </nav>
 </div>
