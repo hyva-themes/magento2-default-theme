@@ -53,11 +53,11 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
     <div
         x-ref="mobileMenuNavLinks"
         class="
-            fixed top-0 right-0 w-full h-full p-1 flex
+            fixed top-0 right-0 w-full h-full p-1 hidden
             flex-col border-t border-container bg-container-lighter
             overflow-y-auto overflow-x-hidden
         "
-        :class="{ 'hidden' : !open }"
+        :class="{ 'flex': open, 'hidden': !open }"
         :aria-hidden="open ? 'false' : 'true'"
         role="dialog"
         aria-modal="true"
