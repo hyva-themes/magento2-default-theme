@@ -11,7 +11,7 @@
     <body>
         <referenceBlock name="header.customer.logged.in.links">
             <block name="customer.header.orders.link"
-                   class="Hyva\Theme\Block\SortableLinkInterface">
+                   class="Hyva\Theme\Block\SortableItemInterface">
                 <arguments>
                     <argument name="label" xsi:type="string" translate="true">My Orders</argument>
                     <argument name="path" xsi:type="string">sales/order/history</argument>

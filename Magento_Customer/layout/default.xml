@@ -16,9 +16,9 @@
                    class="Magento\Customer\Block\Account\Customer"
                    template="Magento_Customer::header/customer-menu-itemized.phtml">
                 <block name="header.customer.logged.in.links"
-                       class="Hyva\Theme\Block\SortableLinks">
+                       class="Hyva\Theme\Block\SortableItems">
                     <block name="customer.header.dashboard.link"
-                           class="Hyva\Theme\Block\SortableLinkInterface">
+                           class="Hyva\Theme\Block\SortableItemInterface">
                         <arguments>
                             <argument name="label" xsi:type="string" translate="true">My Account</argument>
                             <argument name="path" xsi:type="string">customer/account</argument>
@@ -26,7 +26,7 @@
                         </arguments>
                     </block>
                     <block name="customer.header.address.book.link"
-                           class="Hyva\Theme\Block\SortableLinkInterface">
+                           class="Hyva\Theme\Block\SortableItemInterface">
                         <arguments>
                             <argument name="label" xsi:type="string" translate="true">Address Book</argument>
                             <argument name="path" xsi:type="string">customer/address</argument>
@@ -34,14 +34,14 @@
                         </arguments>
                     </block>
                     <block name="customer.header.sign.out.delimiter"
-                           class="Hyva\Theme\Block\SortableLinkInterface"
-                           template="Hyva_Theme::sortable-link/delimiter.phtml">
+                           class="Hyva\Theme\Block\SortableItemInterface"
+                           template="Hyva_Theme::sortable-item/delimiter.phtml">
                         <arguments>
                             <argument name="sort_order" xsi:type="number">1990</argument>
                         </arguments>
                     </block>
                     <block name="customer.header.sign.out.link"
-                           class="Hyva\Theme\Block\SortableLinkInterface">
+                           class="Hyva\Theme\Block\SortableItemInterface">
                         <arguments>
                             <argument name="label" xsi:type="string" translate="true">Sign Out</argument>
                             <argument name="path" xsi:type="string">customer/account/logout</argument>
@@ -50,16 +50,16 @@
                     </block>
                 </block>
                 <block name="header.customer.logged.out.links"
-                       class="Hyva\Theme\Block\SortableLinks">
+                       class="Hyva\Theme\Block\SortableItems">
                     <block name="customer.header.sign.in.link"
-                           class="Hyva\Theme\Block\SortableLinkInterface"
+                           class="Hyva\Theme\Block\SortableItemInterface"
                            template="Magento_Customer::header/link/sign-in.phtml">
                         <arguments>
                             <argument name="sort_order" xsi:type="number">10</argument>
                         </arguments>
                     </block>
                     <block name="customer.header.register.link"
-                           class="Hyva\Theme\Block\SortableLinkInterface"
+                           class="Hyva\Theme\Block\SortableItemInterface"
                            template="Magento_Customer::header/link/register.phtml">
                         <arguments>
                             <argument name="sort_order" xsi:type="number">20</argument>
