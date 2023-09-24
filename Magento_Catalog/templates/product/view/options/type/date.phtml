@@ -63,10 +63,10 @@ $htmlInputTypes = [
           x-data="validateDate_<?= (int)$optionId ?>()" x-init="validateDays_<?= (int)$optionId ?>()">
         <?php if ($option->getType() == ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME
             || $option->getType() == ProductCustomOptionInterface::OPTION_TYPE_DATE): ?>
-                  <?= $customOptionViewModel->getDateDropdownsHtml((int) $optionId, [
-                    'day' => ['class="form-select"'],
-                    'month' => ['class="form-select"'],
-                    'year' => ['class="form-select"'],
+            <?= $customOptionViewModel->getDateDropdownsHtml((int) $optionId, [
+                'day' => ['class="form-select"'],
+                'month' => ['class="form-select"'],
+                'year' => ['class="form-select"'],
             ]) ?>
         <?php endif; ?>
 
@@ -79,7 +79,7 @@ $htmlInputTypes = [
             ]) ?>
         <?php endif; ?>
         <script>
-        	function validateDate_<?= (int)$optionId ?>() {
+            function validateDate_<?= (int)$optionId ?>() {
                return {
                     maxDays: 31,
                     validateDays_<?= (int)$optionId ?>() {
