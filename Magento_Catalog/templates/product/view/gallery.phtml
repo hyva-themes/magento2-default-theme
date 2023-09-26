@@ -81,28 +81,19 @@ $productName = $block->getProduct()->getName();
                     width="<?= /* @noEscape */ $mediumWidth ?>"
                     height="<?= /* @noEscape */ $mediumHeight ?>"
                     itemprop="image"
-                    @click="openFullscreen($root)"
                 />
                 <template x-for="(image, index) in images" :key="index">
                     <img
                         x-ref="galleryMainImage"
                         :alt="image.caption || '<?= $escaper->escapeJs($productName) ?>'"
                         :title="image.caption || '<?= $escaper->escapeJs($productName) ?>'"
-                        @click="openFullscreen($root)"
                         class="absolute inset-0 object-contain object-center w-full m-auto max-h-screen-75"
-                        :class="{ 'cursor-pointer': !fullscreen }"
                         width="<?= /* @noEscape */ $mediumWidth ?>"
                         height="<?= /* @noEscape */ $mediumHeight ?>"
                         :loading="active!==index ? 'lazy' : 'eager'"
                         :src="fullscreen ? image.full : image.img"
-                        x-transition.opacity.duration.500ms x-show="active===index"
-                        @keydown.enter="openFullscreen($root)"
-                        :tabindex="fullscreen ? '-1' : '0'"
-                        :aria-describedby="fullscreen
-                            ? ''
-                            : 'main-image-description fullscreen-btn-label'
-                        "
-                        :role="fullscreen ? 'img' : 'button'"
+                        x-transition.opacity.duration.500ms
+                        x-show="active === index"
                     />
                 </template>
                 <div class="absolute inset-0 hidden w-full h-full bg-white nonmobile"
@@ -121,6 +112,15 @@ $productName = $block->getProduct()->getName();
                 >
                     <div id="vimeo-player" class="w-full h-full"></div>
                 </div>
+                <button
+                    class="absolute inset-0 w-full -outline-offset-2"
+                    title="<?= $escaper->escapeHtml(__('Click to view image in fullscreen')) ?>"
+                    aria-label="<?= $escaper->escapeHtml(__('Click to view image in fullscreen')) ?>"
+                    x-cloak
+                    x-show="!fullscreen"
+                    @click="openFullscreen()"
+                    @keydown.enter="openFullscreen()"
+                ></button>
             </div>
         </div>
 
