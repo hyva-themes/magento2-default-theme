@@ -71,7 +71,7 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
         </a>
     </div>
     <?php endif; ?>
-    <div class="sm:ml-2 text-gray-900 text-left w-full sm:w-1/2 <?= $fileExists ? 'display:none' : ''?>"
+    <div class="sm:ml-2 text-gray-900 text-left w-full sm:w-1/2 <?= $fileExists ? 'hidden' : ''?>"
          id="input-box-<?= /* @noEscape */ $fileName ?>"
     >
         <input type="file"

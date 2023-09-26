@@ -44,7 +44,11 @@ $swatchItemBlock->setData('product_id', $productId);
                 {
                     mediaCallback: "<?= $escaper->escapeJs($escaper->escapeUrl($block->getMediaCallback())) ?>",
                     changeOption(optionId, value, skipUpdateGallery) {
-                        this.selectedValues[optionId] = value;
+                        if (value === '') {
+                            this.selectedValues = this.removeAttrFromSelection(this.selectedValues, optionId)
+                        } else {
+                            this.selectedValues[optionId] = value;
+                        }
                         this.findSimpleIndex();
                         this.findAllowedAttributeOptions();
                         this.updatePrices();
@@ -175,16 +179,11 @@ $swatchItemBlock->setData('product_id', $productId);
             <div class="w-full overflow-x-hidden swatch-attribute-options min-h-14">
                 <template x-if="showSwatches">
                     <div class="flex flex-nowrap w-full overflow-auto snap items-center py-1"
-                         role="radiogroup"
-                         x-bind="scrollEvents"
+                        id="attribute-label-<?= $escaper->escapeHtmlAttr($productId . '-' . $attributeId) ?>"
+                        role="radiogroup"
+                        x-bind="scrollEvents"
+                        aria-label="<?= $escaper->escapeHtml($productAttribute->getStoreLabel()) ?>"
                     >
-                        <label class="sr-only"
-                               for="attribute<?= $escaper->escapeHtmlAttr($productAttribute->getAttributeCode()) ?>"
-                        >
-                            <span>
-                                <?= $escaper->escapeHtml($productAttribute->getStoreLabel()) ?>
-                            </span>
-                        </label>
                         <template x-for="(item, index) in optionConfig.attributes[<?= (int) $attributeId ?>].options"
                                   :key="item.id"
                         >

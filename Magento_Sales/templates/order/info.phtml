@@ -6,11 +6,20 @@
  * See https://hyva.io/license
  */
 
-/**
- * @var \Magento\Sales\Block\Order\Info $block
- * @var \Magento\Framework\Escaper $escaper
- */ ?>
-<?php $order = $block->getOrder() ?>
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Sales\PaymentInfo;
+use Magento\Framework\Escaper;
+use Magento\Sales\Block\Order\Info;
+
+/** @var Info $block */
+/** @var PaymentInfo $paymentInfo */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+
+$order = $block->getOrder();
+$paymentInfo = $viewModels->require(PaymentInfo::class);
+?>
 <div class="mb-4 pb-4 border-b border-container">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
         <div class="w-full py-4">
@@ -40,7 +49,7 @@
         <div class="w-full py-4">
             <p class="font-semibold mb-2"><?= $escaper->escapeHtml(__('Payment Method')) ?></p>
             <div class="box-content">
-                <?= $block->getPaymentInfoHtml() ?>
+                <?= $escaper->escapeHtml($paymentInfo->getPaymentTitle($order)) ?>
             </div>
         </div>
     </div>

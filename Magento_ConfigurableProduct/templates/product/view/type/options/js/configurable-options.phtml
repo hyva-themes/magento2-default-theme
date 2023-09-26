@@ -99,18 +99,11 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
                     return a.position - b.position
                 });
 
-                const selectionWithoutAttr = attrId => {
-                    <?php /* return the current selection without the given attribute as an object (not array) */ ?>
-                    return Object.keys(selectedValues).reduce((acc, id) => {
-                        if (id !== attrId) acc[id] = selectedValues[id];
-                        return acc;
-                    }, {})
-                }
-
                 const newAllowedAttributeOptions = [];
 
                 allAttributesSorted.forEach(attribute => {
-                    const availableIndexes = this.calculateAvailableProductIndexes(selectionWithoutAttr(attribute.id));
+                    const selectionWithoutAttr = Object.assign({}, this.removeAttrFromSelection(selectedValues, attribute.id));
+                    const availableIndexes = this.calculateAvailableProductIndexes(selectionWithoutAttr);
                     newAllowedAttributeOptions[attribute.id] = allAttributes[attribute.id].options.filter(option => {
                         return !!option.products.find(product => {
                             return availableIndexes.includes(product);
@@ -155,10 +148,14 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
                         return acc.filter(index => optionIndexes.includes(index));
                     });
                 } else {
-                    <?php /* for Magento < 2.4.4 or when not out-of-stock-products are hidden: */ ?>
+                    <?php /* for Magento < 2.4.4 or when out-of-stock-products are hidden: */ ?>
                     const productIndexes = this.optionConfig.index;
                     return Object.keys(productIndexes).filter(index => {
-                        return selectedIds.find(attrId => productIndexes[index][attrId] === `${selectedOptions[attrId]}`)
+                        <?php /* selectedIds.every() doesn't have enough browser support at the time of writing according to https://caniuse.com/mdn-javascript_builtins_array_every */ ?>
+                        for (const attrId of selectedIds) {
+                            if (productIndexes[index][attrId] !== `${selectedOptions[attrId]}`) return false
+                        }
+                        return true
                     });
                 }
             },
@@ -234,15 +231,25 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
                     ? this.optionConfig.optionPrices[cheapestForSelection].finalPrice.amount
                     : this.optionConfig.prices.finalPrice.amount; // default price if no option selection
             },
+            clearOptionIfActive(optionId, value) {
+                if (this.selectedValues[optionId] === value) {
+                    this.blurLabel()
+                    this.changeOption(optionId, '')
+                }
+            },
+            removeAttrFromSelection(selectedValues, attributeId) {
+                <?php /* create new array so the length property is reset if no option is selected (avoiding delete) */ ?>
+                attributeId = parseInt(attributeId);
+                return selectedValues.reduce((newSelection, val, attr) => {
+                    if (attr !== attributeId) {
+                        newSelection[attr] = val;
+                    }
+                    return newSelection;
+                }, []);
+            },
             changeOption(attributeId, value) {
                 if (value === '') {
-                    <?php /* create new array so the length property is reset if no option is selected (avoiding delete) */ ?>
-                    this.selectedValues = this.selectedValues.reduce((newSelection, val, attr) => {
-                        if (attr !== attributeId) {
-                            newSelection[attr] = val;
-                        }
-                        return newSelection;
-                    }, []);
+                    this.selectedValues = this.removeAttrFromSelection(this.selectedValues, attributeId)
                 } else if (value && this.getAllowedAttributeOptions(attributeId).find(option => option.id === value)) {
                     <?php /* Only set as selected value if it is valid */ ?>
                     this.selectedValues[attributeId] = value;

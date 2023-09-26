@@ -42,11 +42,18 @@ $cta = "Visit hyva.io";
                              srcset="<?= $escaper->escapeHtmlAttr($block->getViewFileUrl('images/hero-2x.jpg')) ?>"
                              media="(min-width: 640px)"
                         >
+                        <?php
+                        /* This image is hidden from assistive technology, if you want to make it visible and accessible
+                           set understandable alternative text in alt attribute and remove aria-hidden="true".
+                           Check alt decision tree: https://www.w3.org/WAI/tutorials/images/decision-tree/ for more
+                           information about alternative text. */
+                        ?>
                         <img class="h-full w-full object-cover"
                              src="<?= $escaper->escapeHtmlAttr($block->getViewFileUrl('images/hero.jpg')) ?>"
-                             alt="Hyvä Hero Image"
+                             alt=""
                              width="960"
                              height="540"
+                             aria-hidden="true"
                         >
                     </picture>
                 </div>

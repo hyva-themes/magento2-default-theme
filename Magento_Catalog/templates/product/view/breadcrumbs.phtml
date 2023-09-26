@@ -72,7 +72,7 @@ $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() 
             const productUrl = window.location.href.split('?')[0];
             return productUrl.substring(0, productUrl.lastIndexOf('/')) + '<?= $escaper->escapeJs($categoryUrlSuffix) ?>';;
             <?php else: ?>
-            return document.referrer
+            return document.referrer.split('?')[0]
             <?php endif; ?>
         }
 

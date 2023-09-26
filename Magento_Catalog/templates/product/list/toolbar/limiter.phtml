@@ -24,14 +24,18 @@ $availableLimitOptions = $block->getAvailableLimit();
     <div class="field limiter flex items-center order-3 sm:order-2 md:order-3 lg:order-2 col-span-2 justify-end">
         <div class="control">
             <label class="text-sm label">
-                <span><?= $escaper->escapeHtml((string)__('Show')) ?></span>
+                <span aria-hidden="true"><?= $escaper->escapeHtml((string)__('Show')) ?></span>
 
-                <select data-role="limiter" class="form-select limiter-options"
+                <select
+                    data-role="limiter"
+                    class="form-select limiter-options"
                     @change="changeUrl(
-                    'product_list_limit',
-                    $event.currentTarget.options[$event.currentTarget.selectedIndex].value,
-                    options.limitDefault
-                )">
+                        'product_list_limit',
+                        $event.currentTarget.options[$event.currentTarget.selectedIndex].value,
+                        options.limitDefault
+                    )"
+                    aria-label="<?= $escaper->escapeHtmlAttr(__('Show items per page')) ?>"
+                >
                 <?php foreach ($block->getAvailableLimit() as $key => $limit): ?>
                     <option value="<?= $escaper->escapeHtmlAttr($key) ?>"
                         <?php if ($block->isLimitCurrent($key)): ?>
@@ -43,9 +47,6 @@ $availableLimitOptions = $block->getAvailableLimit();
                 </select>
             </label>
         </div>
-        <span class="limiter-text text-sm ml-2 sr-only">
-        <?= $escaper->escapeHtml(__('per page')) ?>
-    </span>
     </div>
 <?php else: ?>
     <div class="field limiter flex order-3 sm:order-2 md:order-3 lg:order-2 col-span-2 justify-end">

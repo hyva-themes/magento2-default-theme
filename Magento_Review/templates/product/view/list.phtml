@@ -39,14 +39,23 @@ $reviewCollection->load()->addRateVotes();
 
 $items = $reviewCollection->getItems();
 $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
+$formatLong = $block->getDateFormat() ?: \IntlDateFormatter::LONG;
+$headingTag = $block->getData('heading_tag') ?: 'h3';
+$productName = $block->getProduct()->getName();
+
 ?>
 <?php if (count($items)): ?>
-    <div class="mx-auto py-6 items-center" id="customer-review-list">
+    <div
+        class="mx-auto py-6 items-center"
+        id="customer-review-list"
+        aria-label="<?= $escaper->escapeHtmlAttr(__('Customer Reviews')) ?>"
+        tabindex="0"
+    >
         <div class="container mx-auto flex pt-6 pb-3 mb-6 md:flex-row border-b-2 border-gray-300">
             <?php if (!$block->getHideTitle()): ?>
-                <h3 class="text-gray-900 text-2xl title-font font-base text-center md:text-left w-full">
+                <<?= /* @noEscape */ $headingTag ?> class="text-gray-900 text-2xl title-font font-base text-center md:text-left w-full">
                     <?= $escaper->escapeHtml(__('Customer Reviews')) ?>
-                </h3>
+                </<?= /* @noEscape */ $headingTag ?>>
             <?php endif ?>
         </div>
         <div class="card w-full px-6 py-3">
@@ -67,15 +76,19 @@ $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
                                     <?= $escaper->escapeHtml($vote->getRatingCode()) ?>
                                 </div>
                                 <span class="hidden" itemprop="ratingValue"><?= /** @noEscape */ $starsFilled; ?></span>
-                                <div class="flex flex-row">
+                                <div
+                                    class="flex flex-row"
+                                    role="img"
+                                    aria-label="<?= $escaper->escapeHtmlAttr(__('%1 rating. %2 out of %3 stars', $productName, $starsFilled, $ratingSteps))?>"
+                                >
                                     <?php $i = 0; ?>
                                     <?php while ($i < $starsFilled): ?>
-                                        <?= $heroiconsSolid->starHtml('text-yellow-400'); ?>
+                                        <?= $heroiconsSolid->starHtml('text-yellow-400', 24, 24, ["aria-hidden" => "true"]); ?>
                                         <?php $i++; ?>
                                     <?php endwhile; ?>
                                     <?php $i = 0; ?>
                                     <?php while ($i < $starsEmpty): ?>
-                                        <?= $heroiconsSolid->starHtml('text-gray-400'); ?>
+                                        <?= $heroiconsSolid->starHtml('text-gray-400', 24, 24, ["aria-hidden" => "true"]); ?>
                                         <?php $i++; ?>
                                     <?php endwhile; ?>
                                 </div>
@@ -89,21 +102,25 @@ $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
                     <div>
                         <span><?= $escaper->escapeHtml(__('Review by')) ?></span>
                         <strong itemprop="author"><?= $escaper->escapeHtml($review->getNickname()) ?></strong>
-                        <span class="text-gray-700 inline-block ml-2">
                             <time
+                                class="text-gray-700 inline-block ml-2"
                                 itemprop="datePublished"
-                                datetime="
-                                <?= $escaper->escapeHtmlAttr(
-                                    $block->formatDate(
-                                        $review->getCreatedAt(),
-                                        $format
-                                    )
-                                ); ?>">
-                                <?= $escaper->escapeHtml(
-                                    $block->formatDate($review->getCreatedAt(), $format)
-                                ) ?>
+                                datetime="<?= $escaper->escapeHtmlAttr($block->formatDate($review->getCreatedAt(), $format)); ?>"
+                            >
+                                <span class="sr-only">
+                                    <?= $escaper->escapeHtml(
+                                        $block->formatDate(
+                                            $review->getCreatedAt(),
+                                            $formatLong
+                                        )
+                                    ) ?>
+                                </span>
+                                <span aria-hidden="true">
+                                    <?= $escaper->escapeHtml(
+                                        $block->formatDate($review->getCreatedAt(), $format)
+                                    ) ?>
+                                </span>
                             </time>
-                        </span>
                     </div>
                     <div class="mt-2" itemprop="description">
                         <?= /* @noEscape */ nl2br($escaper->escapeHtml($review->getDetail())) ?>
