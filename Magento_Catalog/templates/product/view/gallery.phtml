@@ -449,12 +449,6 @@ $productName = $block->getProduct()->getName();
                     this.resetGallery();
                 }
             },
-            openFullscreen() {
-                this.fullscreen = true;
-            },
-            closeFullScreen() {
-                this.fullscreen = false;
-            },
             scrollLock(use = true) {
                 document.body.style.overflow = use ? "hidden" : "";
             },
@@ -488,6 +482,12 @@ $productName = $block->getProduct()->getName();
                 };
 
                 document.addEventListener('keydown', this.focusTrapListener);
+            },
+            openFullscreen() {
+                this.fullscreen = true;
+            },
+            closeFullScreen() {
+                this.fullscreen = false;
             },
             handleTouchStart(event) {
                 if (this.images.length <= 1) {
