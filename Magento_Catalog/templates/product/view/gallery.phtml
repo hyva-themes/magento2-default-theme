@@ -116,7 +116,7 @@ $productName = $block->getProduct()->getName();
                     title="<?= $escaper->escapeHtml(__('Click to view image in fullscreen')) ?>"
                     aria-label="<?= $escaper->escapeHtml(__('Click to view image in fullscreen')) ?>"
                     x-cloak
-                    x-show="!fullscreen"
+                    x-show="!fullscreen && images[active].type !== 'video'"
                     @click="openFullscreen()"
                     @keydown.enter="openFullscreen()"
                 ></button>
