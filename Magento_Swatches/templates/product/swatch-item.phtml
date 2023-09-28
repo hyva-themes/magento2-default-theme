@@ -40,8 +40,7 @@ if (!$productId || !$attributeId) {
                     (selectedValues[<?= (int)$attributeId ?>] === item.id),
                 'border-container-darker':
                     (selectedValues[<?= (int)$attributeId ?>] !== item.id),
-                'w-6 h-6' : !isTextSwatch(<?= (int) $attributeId ?>, item.id),
-                'border-container-lighter ring ring-primary/75' : focusedLabel === item.id
+                'w-6 h-6' : !isTextSwatch(<?= (int) $attributeId ?>, item.id)
             }"
             :style="getSwatchBackgroundStyle('<?= (int) $attributeId ?>',item.id)"
             <?php if ($configurableViewModel->getShowSwatchTooltip()): ?>
