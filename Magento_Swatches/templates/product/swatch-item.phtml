@@ -34,7 +34,8 @@ if (!$productId || !$attributeId) {
     <template x-if="optionIsEnabled(<?= (int) $attributeId ?>, item.id) && optionIsActive(<?= (int) $attributeId ?>, item.id)">
         <label
             :for="$id('attribute-option-<?= (int) $productId ?>-'+item.id)"
-            class="swatch-option relative border-2 shadow-sm cursor-pointer bg-container-lighter product-option-value-label focus-within:border-container-lighter focus-within:ring focus-within:ring-primary/75"
+            class="swatch-option relative border-2 shadow-sm cursor-pointer bg-container-lighter product-option-value-label
+                focus-within:border-container-lighter focus-within:ring focus-within:ring-primary/75"
             :class="{
                 'border-container-lighter ring ring-primary/50':
                     (selectedValues[<?= (int)$attributeId ?>] === item.id),
