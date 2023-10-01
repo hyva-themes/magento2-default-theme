@@ -25,6 +25,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
     For more information please refer to the 1.3.2 upgrade notes or [issue #730](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/730).
 
+- **Update version constraint for hyva-themes/magento2-reset-theme to 1.1.5**
+
+     The updated reset theme contains the resets for the Adobe Sensei related modules.
+
+     For more information please refer to [merge request #893](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/893).
+
 - **Fix missing translation function for product gallery thumbnail alt text**
 
     For more information please refer to [issue #777](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/777).
