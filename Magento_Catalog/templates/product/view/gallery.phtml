@@ -222,7 +222,10 @@ $productName = $block->getProduct()->getName();
             "focusTrapListener": null,
             init() {
                 this.initActive();
-                this.$nextTick(() => this.calcPageSize());
+                this.$nextTick(() => {
+                    this.calcPageSize();
+                    this.calcScrollStartEnd();
+                });
             },
             receiveImages(images) {
                 if (this.appendOnReceiveImages) {
