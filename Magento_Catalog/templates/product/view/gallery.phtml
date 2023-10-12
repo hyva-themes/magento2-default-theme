@@ -56,6 +56,8 @@ $productName = $block->getProduct()->getName();
         <div class="relative self-center w-full"
              @touchstart="handleTouchStart"
              @touchmove="handleTouchMove"
+             @keyup.arrow-right="nextItem"
+             @keyup.arrow-left="previousItem"
              x-transition:enter="ease-out duration-500"
              x-transition:enter-start="opacity-0"
              x-transition:enter-end="opacity-100"
@@ -450,12 +452,6 @@ $productName = $block->getProduct()->getName();
                 ['@reset-gallery.window'](event) {
                     this.resetGallery();
                 },
-                ['@keyup.arrow-right']() {
-                    this.nextItem();
-                },
-                ['@keyup.arrow-left']() {
-                    this.previousItem();
-                }
             },
             scrollLock(use = true) {
                 document.body.style.overflow = use ? "hidden" : "";
