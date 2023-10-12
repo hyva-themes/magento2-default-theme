@@ -60,7 +60,7 @@ $productName = $block->getProduct()->getName();
              x-transition:enter-start="opacity-0"
              x-transition:enter-end="opacity-100"
         >
-            <div class="relative mb-6" aria-live="polite" aria-atomic="true">
+            <div x-ref="galleryBody" class="relative mb-6" aria-live="polite" aria-atomic="true">
                 <span class="invisible" id="main-image-description"><?= $escaper->escapeHtml(__('Main image')) ?></span>
                 <span class="invisible" id="fullscreen-btn-label"><?= $escaper->escapeHtml(__('Click to view image in fullscreen')) ?></span>
                 <?php
@@ -256,6 +256,8 @@ $productName = $block->getProduct()->getName();
                 this.setActive(active);
             },
             setActive(index) {
+                const currentFocus = document.activeElement;
+
                 this.active = index;
                 if (window.youtubePlayer) {
                     window.youtubePlayer.stopVideo();
@@ -266,6 +268,12 @@ $productName = $block->getProduct()->getName();
                 if (this.images[index].type === 'video') {
                     this.activateVideo();
                 }
+
+                this.$nextTick(() => {
+                    if (currentFocus.hasAttribute('x-ref') && currentFocus.getAttribute('x-ref') === "galleryMainImage") {
+                        this.$refs.galleryBody.document.querySelector('[tabindex="0"]').focus();
+                    }
+                })
             },
             activateVideo() {
                 const videoData = this.getVideoData();
