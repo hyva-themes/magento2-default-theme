@@ -54,7 +54,3 @@ fieldset ~ fieldset {
 .field.required > label {
     @apply after:relative after:-top-1 after:text-red-600 after:icon-asterisk;
 }
-
-.form-required-label {
-    @apply text-red-600 text-end text-sm before:relative before:-top-1 before:icon-asterisk;
-}
