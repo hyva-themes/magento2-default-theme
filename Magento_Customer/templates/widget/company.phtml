@@ -21,9 +21,7 @@ $validationClass = $this->helper(AddressHelper::class)->getAttributeValidationCl
 ?>
 <div class="field field-reserved company <?= $block->isRequired() ? 'required' : '' ?>">
     <label for="company" class="label">
-        <span>
-            <?= $escaper->escapeHtml(__('Company')) ?>
-        </span>
+        <span><?= $escaper->escapeHtml(__('Company')) ?></span>
     </label>
     <div class="control">
         <input type="text"

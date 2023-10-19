@@ -23,9 +23,7 @@ $validationClass = $escaper->escapeHtmlAttr($this->helper(AddressHelper::class)-
 ?>
 <div class="field field-reserved fax <?= $block->isRequired() ? 'required' : '' ?>">
     <label for="fax" class="label">
-        <span>
-            <?= $escaper->escapeHtml(__('Fax')) ?>
-        </span>
+        <span><?= $escaper->escapeHtml(__('Fax')) ?></span>
     </label>
     <div class="control">
         <input type="text"
