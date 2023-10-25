@@ -232,9 +232,11 @@ $productName = $block->getProduct()->getName();
                     this.images = images;
                     this.setActive(0);
                 }
+                this.itemCount = this.images.length;
             },
             resetGallery() {
                 this.images = this.initialImages;
+                this.itemCount = this.images.length;
                 this.setActive(0);
             },
             initActive() {
