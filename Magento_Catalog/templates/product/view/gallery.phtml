@@ -61,8 +61,8 @@ $productName = $block->getProduct()->getName();
              x-transition:enter-end="opacity-100"
         >
             <div class="relative mb-6" aria-live="polite" aria-atomic="true">
-                <span class="invisible" id="main-image-description"><?= $escaper->escapeHtml(__('Main image')) ?></span>
-                <span class="invisible" id="fullscreen-btn-label"><?= $escaper->escapeHtml(__('Click to view image in fullscreen')) ?></span>
+                <span class="sr-only" id="main-image-description"><?= $escaper->escapeHtml(__('Main image')) ?></span>
+                <span class="sr-only" id="fullscreen-btn-label"><?= $escaper->escapeHtml(__('Click to view image in fullscreen')) ?></span>
                 <?php
                 /**
                  * The first image is a placeholder that determines the
