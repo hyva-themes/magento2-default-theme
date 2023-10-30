@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\StoreConfig;
 use Magento\Framework\Escaper;
 use Magento\GiftMessage\Block\Cart\GiftOptions;
 
@@ -17,22 +18,27 @@ use Magento\GiftMessage\Block\Cart\GiftOptions;
 /** @var GiftOptions $block */
 /** @var ViewModelRegistry $viewModels */
 /** @var HeroiconsOutline $heroicons */
+/** @var StoreConfig $storeConfigViewModel */
+
+$storeConfigViewModel = $viewModels->require(StoreConfig::class);
+
+$isOrderLevelGiftOptionsEnabled = $storeConfigViewModel->getStoreConfig('sales/gift_options/allow_order');
+$isItemLevelGiftOptionsEnabled = $storeConfigViewModel->getStoreConfig('sales/gift_options/allow_items');
+// Gift Wrapping is a feature for Adobe Commerce Only. On Magento Open Source these config values will always return null.
+$isOrderLevelGiftWrappingEnabled = $storeConfigViewModel->getStoreConfig('sales/gift_options/wrapping_allow_order');
+$isItemLevelGiftWrappingEnabled = $storeConfigViewModel->getStoreConfig('sales/gift_options/wrapping_allow_items');
+
+if (! $isOrderLevelGiftOptionsEnabled && ! $isItemLevelGiftOptionsEnabled &&
+    ! $isOrderLevelGiftWrappingEnabled && ! $isItemLevelGiftWrappingEnabled) {
+    return;
+}
 
 $heroicons = $viewModels->require(HeroiconsOutline::class);
 
 $slideOutDrawer = (bool) $block->getSlideOutDrawer();
-
-$giftMessageConfigJson = $block->getGiftOptionsConfigJson();
-$giftMessageConfig = json_decode($giftMessageConfigJson, true);
-$isOrderLevelGiftOptionsEnabled = $giftMessageConfig['isOrderLevelGiftOptionsEnabled'] ?? false;
-$isItemLevelGiftOptionsEnabled = $giftMessageConfig['isItemLevelGiftOptionsEnabled'] ?? false;
-
-if (! $isOrderLevelGiftOptionsEnabled && ! $isItemLevelGiftOptionsEnabled) {
-    return;
-}
 ?>
 <script>
-    window.giftOptionsConfig = <?= /* @noEscape */ $giftMessageConfigJson ?>;
+    window.giftOptionsConfig = <?= /* @noEscape */ $block->getGiftOptionsConfigJson() ?>;
 
     function initGiftOptions() {
         'use strict';
@@ -43,6 +49,9 @@ if (! $isOrderLevelGiftOptionsEnabled && ! $isItemLevelGiftOptionsEnabled) {
             hasActiveOptions: false,
             itemId: 'orderLevel',
             isGiftMsgEnabled: window.giftOptionsConfig.isOrderLevelGiftOptionsEnabled,
+            <?php // Gift Wrapping is a feature for Adobe Commerce Only.
+                  // On Magento Open Source this condition will always return false. ?>
+            isGiftWrapEnabled: window.giftOptionsConfig.giftWrapping && window.giftOptionsConfig.giftWrapping.allowForOrder,
             formMessage: {
                 recipient: null,
                 sender: null,
@@ -170,6 +179,11 @@ if (! $isOrderLevelGiftOptionsEnabled && ! $isItemLevelGiftOptionsEnabled) {
             isGiftMsgEnabled: window.giftOptionsConfig.isItemLevelGiftOptionsEnabled &&
                 window.giftOptionsConfig.giftMessage.itemLevel[`${itemId}`].is_available !== false,
 
+            <?php // Gift Wrapping is a feature for Adobe Commerce Only.
+                  // On Magento Open Source this condition will always return false. ?>
+            isGiftWrapEnabled: window.giftOptionsConfig.giftWrapping && window.giftOptionsConfig.giftWrapping.allowForItems &&
+                window.giftOptionsConfig.giftWrapping.itemsInfo[`${itemId}`].is_available !== false,
+
             getMessage() {
                 return window.giftOptionsConfig.giftMessage.hasOwnProperty('itemLevel') &&
                 window.giftOptionsConfig.giftMessage.itemLevel.hasOwnProperty(itemId)
@@ -212,13 +226,13 @@ if (! $isOrderLevelGiftOptionsEnabled && ! $isItemLevelGiftOptionsEnabled) {
 </div>
 <?php
 
-if (! $isOrderLevelGiftOptionsEnabled) {
+if (! $isOrderLevelGiftOptionsEnabled && ! $isOrderLevelGiftWrappingEnabled) {
     return;
 }
-// Only render the DOM elements for order level gift messages if they are enabled
+// Only render the DOM elements for order level gift options if either or both gift messages or gift wrapping are enabled
 ?>
 <div x-data="initGiftOptions()" class="gift-options-component w-full flex flex-wrap my-6" :data-item-id="itemId" x-cloak>
-    <div class="text-left gift-options-title w-full order-first" x-show="isGiftMsgEnabled || hasActiveOptions">
+    <div class="text-left gift-options-title w-full order-first" x-show="isGiftMsgEnabled || isGiftWrapEnabled || hasActiveOptions">
         <button
             type="button"
             x-ref="giftOptionsTrigger"
