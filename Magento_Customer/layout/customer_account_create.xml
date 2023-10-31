@@ -22,6 +22,7 @@
                         <argument name="post_code_config" xsi:type="object">Magento\Customer\Block\DataProviders\PostCodesPatternsAttributeData</argument>
                     </arguments>
                     <container name="form.additional.info" as="form_additional_info"/>
+                    <container name="fieldset.create.info.additional" as="fieldset_create_info_additional"/>
                     <container name="customer.form.register.fields.before" as="form_fields_before" label="Form Fields Before" htmlTag="div" htmlClass="customer-form-before"/>
                 </block>
             </container>
