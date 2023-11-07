@@ -100,7 +100,7 @@ $swatchData = $block->getSwatchData();
                 <?php if($isVisualSwatch): ?>
                     style="background: <?= $swatchType === '2'
                         ? $escaper->escapeUrl($block->getSwatchPath('swatch_image', $swatchValue))
-                        : ($swatchType === '1' ? $swatchValue : '#fff0') ?> center/cover no-repeat;"
+                        : (/* @noEscape */ $swatchType === '1' ? $swatchValue : '#fff0') ?> center/cover no-repeat;"
                 <?php endif; ?>
                 <?php if ($configurableViewModel->getShowSwatchTooltip()): ?>
                     <?php $swatchThumbPath = $block->getSwatchPath('swatch_thumb', $swatchValue); ?>
