@@ -127,12 +127,13 @@ $count  = count($orders);
                                             ),
                                             true
                                         ) ?>
-                                        <form action="<?= $escaper->escapeUrl($formData['action']) ?>"
-                                            method="post" class="inline-flex items-center">
+                                        <form
+                                            action="<?= $escaper->escapeUrl($formData['action']) ?>"
+                                            method="post"
+                                            class="inline-flex items-center"
+                                        >
                                             <?= $block->getBlockHtml('formkey'); ?>
-                                            <input type="hidden" name="data"
-                                                value='<?= /* @noEscape */ json_encode($formData['data']) ?>'
-                                            />
+                                            <input type="hidden" name="data" value='<?= /* @noEscape */ json_encode($formData['data']) ?>'>
                                             <button
                                                 title="<?= $escaper->escapeHtmlAttr(__('Reorder')) ?>"
                                                 type="submit"
