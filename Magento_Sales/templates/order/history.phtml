@@ -109,10 +109,16 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     role="cell"
                     class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
                 >
-                    <?= $order->getBillingAddress()
-                        ? $escaper->escapeHtml($order->getBillingAddress()->getCompany())
-                        : "&nbsp;"
-                    ?>
+                    <?php if ($order->getShippingAddress() && $order->getShippingAddress()->getCompany()): ?>
+                        <?php $shipToName = $order->getShippingAddress()->getCompany() ?>
+                    <?php elseif ($order->getBillingAddress() && $order->getBillingAddress()->getCompany()): ?>
+                        <?php $shipToName = $order->getBillingAddress()->getCompany() ?>
+                    <?php elseif ($order->getShippingAddress() && $order->getShippingAddress()->getLastName()): ?>
+                        <?php $shipToName = $order->getShippingAddress()->getFirstname() . ' ' . $order->getShippingAddress()->getMiddlename() . ' ' . $order->getShippingAddress()->getLastName()  ?>
+                    <?php else: ?>
+                        <?php $shipToName = '&nbsp;'; ?>
+                    <?php endif; ?>
+                    <?= $escaper->escapeHtml($shipToName) ?>
                 </div>
                 <div
                     role="cell"
