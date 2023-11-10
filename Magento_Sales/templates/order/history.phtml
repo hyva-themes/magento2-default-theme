@@ -132,7 +132,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 >
                 <?php // 'received' is an order status added in Magento_AsyncOrder in Adobe Commerce ?>
                 <?php // The condition will always return 'true' in Magento Open Source ?>
-                <?php if ($order->getStatus() != 'received'): ?>
+                <?php if ($order->getStatus() !== 'received'): ?>
                     <a
                         href="<?= $escaper->escapeUrl($block->getViewUrl($order)) ?>"
                         class="inline-block text-sm underline text-secondary-darker"
