@@ -132,7 +132,7 @@ $productName = $block->getProduct()->getName();
         <div @resize.window.debounce="calcPageSize(); $nextTick(() => calcActive())">
             <div
                 id="thumbs"
-                class="flex items-center"
+                class="flex items-center gap-4"
                 :class="{ 'fixed justify-center bottom-0 left-0 right-0 mx-6': fullscreen }"
                 style="min-height: 100px;"
                 x-show="images.length > 1"
@@ -142,7 +142,7 @@ $productName = $block->getProduct()->getName();
                     type="button"
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Previous')) ?>"
                     tabindex="-1"
-                    class="mr-4 text-black rounded-full outline-none focus:outline-none flex-none"
+                    class="p-2.5 flex items-center justify-center self-stretch text-black outline-none focus:outline-none flex-none"
                     :class="{ 'opacity-25 pointer-events-none' : isSliderStart, 'hidden' : !isSlider }"
                     aria-hidden="true"
                     @click="scrollPrevious"
@@ -179,7 +179,7 @@ $productName = $block->getProduct()->getName();
                     x-cloak
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Next')) ?>"
                     tabindex="-1"
-                    class="ml-4 text-black rounded-full outline-none focus:outline-none flex-none"
+                    class="p-2.5 flex items-center justify-center self-stretch text-black outline-none focus:outline-none flex-none"
                     :class="{ 'opacity-25 pointer-events-none' : isSliderEnd, 'hidden' : !isSlider }"
                     aria-hidden="true"
                     @click="scrollNext"
