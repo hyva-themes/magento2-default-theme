@@ -109,7 +109,7 @@ $count  = count($orders);
                     <div
                         id="order<?= $escaper->escapeHtmlAttr($order->getRealOrderId()) ?>"
                         role="rowheader"
-                        class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
+                        class="p-2 block <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
                     >
                         <?= $escaper->escapeHtml($order->getRealOrderId()) ?>
                         <p class="lg:hidden text-sm">

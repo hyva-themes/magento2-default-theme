@@ -88,7 +88,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         >
             <div
                 role="rowheader"
-                class="p-2 items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
+                class="p-2 block <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
                 aria-label="<?= $escaper->escapeHtmlAttr($item->getPurchased()->getOrderIncrementId()) ?>"
             >
                 <a
@@ -107,7 +107,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             ?>
             <div
                 role="cell"
-                class="p-2 items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
+                class="p-2 block <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
             >
                 <time datetime="<?= $escaper->escapeHtmlAttr($block->formatDate($date, $format)); ?>">
                     <span aria-hidden="true"><?= $escaper->escapeHtml($block->formatDate($date, $format)); ?></span>

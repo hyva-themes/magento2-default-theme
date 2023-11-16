@@ -84,7 +84,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             >
                 <div
                     role="rowheader"
-                    class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
+                    class="p-2 block <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
                 >
                     <?= $escaper->escapeHtml($order->getRealOrderId()) ?>
                     <p class="lg:hidden text-sm"><?= $escaper->escapeHtml($block->formatDate($order->getCreatedAt())) ?></p>
