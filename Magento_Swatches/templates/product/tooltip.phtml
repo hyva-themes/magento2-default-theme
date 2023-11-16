@@ -18,7 +18,7 @@ use Magento\Framework\View\Element\Template;
 
 ?>
 <template x-if="isTooltipVisible()">
-    <div class="absolute"
+    <div class="absolute pointer-events-none select-none"
          :style="getTooltipPosition()"
     >
         <div class="shadow-lg">
