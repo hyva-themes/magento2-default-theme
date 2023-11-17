@@ -7,7 +7,68 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.2.6...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.2.6...1.2.x-main
+
+## [1.2.7] - 2023-11-17
+
+[1.2.7]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.2.6...1.2.7
+
+### Added
+
+- **Added new containers for Customer Custom Attributes**
+
+  Containers were added to the customer_account_create, customer_account_edit, customer_address_form, and layout XML instructions to facilitate rendering custom customer attributes with Hyvä Enterprise.
+
+  Note: while these changes reference features in Adobe Commerce, no Commerce code is depended upon.
+
+  For more information, please refer to [issue #812](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/812).
+
+### Changed
+
+- **Fix: Mobile Safari iOS double click required to start swatch selection**
+
+  For more information, please refer to [merge request #942](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/942).
+
+- **Allow adding additional links to header customer menu**
+
+  Previously, it was not possible to add additional links to the customer-menu.phtml template without overriding the template.
+
+  For more information please refer to the 1.2.7 upgrade notes or [issue #730](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/730).
+
+- **Facilitate Gift Wrapping support (for Hyvä Enterprise)**
+
+  These changes allow gift-wrapping support in the cart page for Hyvä Enterprise to function as expected.
+
+  Note: while these changes reference features in Adobe Commerce, no Commerce code is depended upon.  
+  All checks are based on configuration values which always return null or false in Magento Open Source
+
+  For more information, please refer to [issue #807](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/807).
+
+- **Hide view/reorder links for received async orders**
+
+  This change renders orders as expected if asynchronous order processing in Adobe Commerce is enabled.
+
+  For more information, please refer to [merge request #947](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/947).
+
+- **Render customer.account.dashboard.info.blocks container on customer dashboard**
+
+  Additional blocks can now be rendered by assigning them as children of the  `customer.account.dashboard.info.blocks` container.
+
+  For more information, please refer to [issue #812](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/812).
+
+- **Render SVG icons on customer dashboard with view model**
+
+  Previously the SVG icons were declared as inline markup in the template without using the SVG icons view model.
+
+  For more information, please refer to [issue #812](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/812).
+
+- **Update version constraint for hyva-themes/magento2-reset-theme to 1.1.5**
+
+  The updated reset theme contains the resets for the Adobe Sensei related modules.
+
+  For more information please refer to [merge request #894](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/894).
+
+### Removed
 
 ## [1.2.6] - 2023-08-28
 
