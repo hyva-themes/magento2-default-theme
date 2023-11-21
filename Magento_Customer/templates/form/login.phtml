@@ -35,7 +35,7 @@ $loginButtonViewModel = $viewModels->require(LoginButton::class);
 // on the Magento_ReCaptchaCustomer module
 $recaptcha = $block->getData('viewModelRecaptcha');
 ?>
-<div class="w-full md:w-1/2 card mr-4">
+<div class="card">
     <div aria-labelledby="block-customer-login-heading">
         <form class="form form-login"
               action="<?= $escaper->escapeUrl($block->getPostActionUrl()) ?>"
