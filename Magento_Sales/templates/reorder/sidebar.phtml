@@ -93,7 +93,7 @@ if (! $customer->customerLoggedIn()) {
 
 <div x-data="initReorderSidebar()"
      @private-content-loaded.window="receiveReorderData($event.detail.data)"
-     class="block block-reorder mt-8 hidden"
+     class="block-reorder mt-8 hidden"
      :class="{ 'hidden': !itemCount }"
      :aria-hidden="!itemCount"
 >
