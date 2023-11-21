@@ -22,98 +22,98 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
 
 <script>
-    function compareSidebarFetchHandler(postUrl, postHeaders, isSingleItem = true) {
-        const messages = {
-            "success": isSingleItem
-                ? "<?= $escaper->escapeHtml(__("You removed product %1 from the comparison list", __("Product"))) ?>"
-                : "<?= $escaper->escapeHtml(__("You removed all products from the comparison list")) ?>",
-            "warning": isSingleItem
-                ? "<?= $escaper->escapeHtml(__('Could not remove item from compare.')) ?>"
-                : "<?= $escaper->escapeHtml(__('Could not remove all item from compare.')) ?>",
-        }
+function compareSidebarFetchHandler(postUrl, postHeaders, isSingleItem = true) {
+    const messages = {
+        "success": isSingleItem
+            ? "<?= $escaper->escapeHtml(__("You removed product %1 from the comparison list", __("Product"))) ?>"
+            : "<?= $escaper->escapeHtml(__("You removed all products from the comparison list")) ?>",
+        "warning": isSingleItem
+            ? "<?= $escaper->escapeHtml(__('Could not remove item from compare.')) ?>"
+            : "<?= $escaper->escapeHtml(__('Could not remove all item from compare.')) ?>",
+    }
 
-        return fetch(postUrl, postHeaders).then(function (response) {
-            if (response.redirected) {
-                window.location.href = response.url;
-            } else if (response.ok) {
-                return response.json();
-            } else {
-                typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
-                    [{ type: "warning", text: messages.warning }], 5000
-                );
-            }
-        }).then(function (response) {
-            if (!response) return;
+    return fetch(postUrl, postHeaders).then(function (response) {
+        if (response.redirected) {
+            window.location.href = response.url;
+        } else if (response.ok) {
+            return response.json();
+        } else {
             typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
-                [{
-                    type: (response.success) ? "success" : "error",
-                    text: (response.success) ? messages.success : response.error_message
-                }], 5000
+                [{ type: "warning", text: messages.warning }], 5000
             );
-            let reloadCustomerDataEvent = new CustomEvent("reload-customer-section-data");
-            window.dispatchEvent(reloadCustomerDataEvent);
-        }).catch(function (error) {
-            typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
-                [{ type: "error", text: error }], 5000
-            );
-        });
-    }
+        }
+    }).then(function (response) {
+        if (!response) return;
+        typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+            [{
+                type: (response.success) ? "success" : "error",
+                text: (response.success) ? messages.success : response.error_message
+            }], 5000
+        );
+        let reloadCustomerDataEvent = new CustomEvent("reload-customer-section-data");
+        window.dispatchEvent(reloadCustomerDataEvent);
+    }).catch(function (error) {
+        typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+            [{ type: "error", text: error }], 5000
+        );
+    });
+}
 
-    function initCompareOnCompareSidebar() {
-        return {
-            compareProducts: null,
-            itemCount: 0,
-            compareItems: {},
-            receiveCompareData: function (data) {
-                if (data['compare-products']) {
-                    this.compareProducts = data['compare-products'];
-                    this.itemCount = this.compareProducts.count;
-                    this.compareItems = this.compareProducts.items;
-                }
-            },
-            removeFromCompare: function(productId) {
-                const formKey = hyva.getFormKey();
-                const postUrl = BASE_URL + 'catalog/product_compare/remove/';
-                const confirmMessage = "<?= $escaper
-                    ->escapeHtml(__('Are you sure you want to remove this item from your Compare Products list?')) ?>";
-                if (!window.confirm(confirmMessage)) return;
-                const postHeaders = {
-                    "headers": {
-                        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-                    },
-                    "body": "form_key=" + formKey + "&product=" + productId + "&uenc=" + hyva.getUenc(),
-                    "method": "POST",
-                    "mode": "cors",
-                    "credentials": "include"
-                };
-
-                compareSidebarFetchHandler(postUrl, postHeaders);
+function initCompareOnCompareSidebar() {
+    return {
+        compareProducts: null,
+        itemCount: 0,
+        compareItems: {},
+        receiveCompareData: function (data) {
+            if (data['compare-products']) {
+                this.compareProducts = data['compare-products'];
+                this.itemCount = this.compareProducts.count;
+                this.compareItems = this.compareProducts.items;
             }
+        },
+        removeFromCompare: function(productId) {
+            const formKey = hyva.getFormKey();
+            const postUrl = BASE_URL + 'catalog/product_compare/remove/';
+            const confirmMessage = "<?= $escaper
+                ->escapeHtml(__('Are you sure you want to remove this item from your Compare Products list?')) ?>";
+            if (!window.confirm(confirmMessage)) return;
+            const postHeaders = {
+                "headers": {
+                    "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                },
+                "body": "form_key=" + formKey + "&product=" + productId + "&uenc=" + hyva.getUenc(),
+                "method": "POST",
+                "mode": "cors",
+                "credentials": "include"
+            };
+
+            compareSidebarFetchHandler(postUrl, postHeaders);
         }
     }
+}
 
-    function initCompareSidebarClear() {
-        return {
-            clearCompare: function() {
-                const formKey = hyva.getFormKey();
-                const postUrl = BASE_URL + 'catalog/product_compare/clear/';
-                const confirmMessage = "<?= $escaper
-                    ->escapeHtml(__('Are you sure you want to remove all items from your Compare Products list?')) ?>";
-                if (!window.confirm(confirmMessage)) return;
-                const postHeaders = {
-                    "headers": {
-                        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-                    },
-                    "body": "form_key=" + formKey + "&uenc=" + hyva.getUenc(),
-                    "method": "POST",
-                    "mode": "cors",
-                    "credentials": "include"
-                };
+function initCompareSidebarClear() {
+    return {
+        clearCompare: function() {
+            const formKey = hyva.getFormKey();
+            const postUrl = BASE_URL + 'catalog/product_compare/clear/';
+            const confirmMessage = "<?= $escaper
+                ->escapeHtml(__('Are you sure you want to remove all items from your Compare Products list?')) ?>";
+            if (!window.confirm(confirmMessage)) return;
+            const postHeaders = {
+                "headers": {
+                    "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                },
+                "body": "form_key=" + formKey + "&uenc=" + hyva.getUenc(),
+                "method": "POST",
+                "mode": "cors",
+                "credentials": "include"
+            };
 
-                compareSidebarFetchHandler(postUrl, postHeaders, isSingleItem = false);
-            }
+            compareSidebarFetchHandler(postUrl, postHeaders, isSingleItem = false);
         }
     }
+}
 </script>
 
 <div
