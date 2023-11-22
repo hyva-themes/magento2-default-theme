@@ -7,7 +7,40 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.2.6...1.2.x-main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.2.8...1.2.x-main
+
+## [1.2.8] - 2023-11-22
+
+[1.2.8]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.2.7...1.2.8
+
+### Added
+
+- Nothing added
+
+### Changed
+
+- **Accommodate additional blocks on customer login page without breaking layout**
+
+  Previously, when adding another widget to the login container, the layout did not automatically wrap the widget to the next line, leading to a broken layout.
+  BC Note: the `web/tailwind/components/customer.css` styles need to be manually removed from existing themes after the upgrade for a theme to profit from this change.
+
+  For more information, please refer to [issue #775](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/775).
+
+- **Update Tailwindcss from 3.2.4 to 3.2.7**
+
+  This change is backward compatible. The newer tailwind version fixes some issues.
+
+  For a list of changes in Tailwindcss, please refer to [issue #820](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/820).
+
+- **Fix: layered navigation on 1column page layouts hidden**
+
+  For more information, please refer to [issue #678](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/678).
+
+  Many thanks to Ivan Matsii (Perspective Magento Team) for the contribution!
+
+### Removed
+
+- Nothing removed
 
 ## [1.2.7] - 2023-11-17
 
