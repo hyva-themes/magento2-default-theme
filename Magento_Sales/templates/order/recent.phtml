@@ -101,11 +101,15 @@ $count  = count($orders);
             </div>
             <?php $i = 0; ?>
             <?php foreach ($orders as $order): ?>
+                <?php $i++; ?>
+                <?php $shippingAddress = $order->getShippingAddress(); ?>
+                <?php $billingAddress = $order->getBillingAddress(); ?>
+                <?php $shipToName = ''; ?>
+
                 <div
                     role="row"
                     class="grid grid-cols-3 lg:grid-cols-6"
                 >
-                    <?php $i++; ?>
                     <div
                         id="order<?= $escaper->escapeHtmlAttr($order->getRealOrderId()) ?>"
                         role="rowheader"
@@ -136,12 +140,12 @@ $count  = count($orders);
                         role="cell"
                         class="p-2 flex items-center<?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
                     >
-                        <?php if ($order->getShippingAddress() && $order->getShippingAddress()->getCompany()): ?>
-                            <?php $shipToName = $order->getShippingAddress()->getCompany() ?>
-                        <?php elseif ($order->getBillingAddress() && $order->getBillingAddress()->getCompany()): ?>
-                            <?php $shipToName = $order->getBillingAddress()->getCompany() ?>
-                        <?php elseif ($order->getShippingAddress() && $order->getShippingAddress()->getLastName()): ?>
-                            <?php $shipToName = $order->getShippingAddress()->getFirstname() . ' ' . $order->getShippingAddress()->getMiddlename() . ' ' . $order->getShippingAddress()->getLastName()  ?>
+                        <?php if ($shippingAddress && $shippingAddress->getCompany()): ?>
+                            <?php $shipToName = $shippingAddress->getCompany() ?>
+                        <?php elseif ($billingAddress && $billingAddress->getCompany()): ?>
+                            <?php $shipToName = $billingAddress->getCompany() ?>
+                        <?php elseif ($shippingAddress && $shippingAddress->getLastName()): ?>
+                            <?php $shipToName = $shippingAddress->getFirstname() . ' ' . $shippingAddress->getMiddlename() . ' ' . $shippingAddress->getLastName()  ?>
                         <?php else: ?>
                             <?php $shipToName = '&nbsp;'; ?>
                         <?php endif; ?>
