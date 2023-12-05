@@ -81,30 +81,30 @@ $productName = $block->getProduct()->getName();
                     width="<?= /* @noEscape */ $mediumWidth ?>"
                     height="<?= /* @noEscape */ $mediumHeight ?>"
                     itemprop="image"
-                    @click="openFullscreen($root)"
                 />
                 <template x-for="(image, index) in images" :key="index">
                     <img
-                        x-ref="galleryMainImage"
                         :alt="image.caption || '<?= $escaper->escapeJs($productName) ?>'"
                         :title="image.caption || '<?= $escaper->escapeJs($productName) ?>'"
-                        @click="openFullscreen($root)"
                         class="absolute inset-0 object-contain object-center w-full m-auto max-h-screen-75"
-                        :class="{ 'cursor-pointer': !fullscreen }"
                         width="<?= /* @noEscape */ $mediumWidth ?>"
                         height="<?= /* @noEscape */ $mediumHeight ?>"
-                        :loading="active!==index ? 'lazy' : 'eager'"
+                        :loading="active !== index ? 'lazy' : 'eager'"
                         :src="fullscreen ? image.full : image.img"
-                        x-transition.opacity.duration.500ms x-show="active===index"
-                        @keydown.enter="openFullscreen($root)"
-                        :tabindex="fullscreen ? '-1' : '0'"
-                        :aria-describedby="fullscreen
-                            ? ''
-                            : 'main-image-description fullscreen-btn-label'
-                        "
-                        :role="fullscreen ? 'img' : 'button'"
-                    />
+                        x-transition.opacity.duration.500ms
+                        x-show="active === index"
+                    >
                 </template>
+                <button
+                    type="button"
+                    class="absolute inset-0 outline-offset-2"
+                    aria-describedby="main-image-description fullscreen-btn-label"
+                    x-ref="galleryFullscreenBtn"
+                    x-show="!fullscreen"
+                    x-cloak
+                    @click="openFullscreen()"
+                    @keydown.enter="openFullscreen()"
+                ></button>
                 <div class="absolute inset-0 hidden w-full h-full bg-white nonmobile"
                      :class="{ 'hidden': activeVideoType !== 'youtube' }"
                      x-transition.opacity.duration.500ms x-show="
@@ -232,9 +232,11 @@ $productName = $block->getProduct()->getName();
                     this.images = images;
                     this.setActive(0);
                 }
+                this.itemCount = this.images.length;
             },
             resetGallery() {
                 this.images = this.initialImages;
+                this.itemCount = this.images.length;
                 this.setActive(0);
             },
             initActive() {
@@ -425,6 +427,7 @@ $productName = $block->getProduct()->getName();
             },
             eventListeners: {
                 ['@keydown.window.escape']() {
+                    if (!this.fullscreen) return;
                     this.closeFullScreen()
                 },
                 ['@update-gallery.window'](event) {
@@ -434,44 +437,19 @@ $productName = $block->getProduct()->getName();
                     this.resetGallery();
                 }
             },
-            focusTrapHandler: function(firstFocusableElement, lastFocusableElement, e) {
-                const isTabPressed = e.key === 'Tab' || e.keyCode === 9;
-
-                if (!isTabPressed) {
-                    return;
-                }
-
-                e.shiftKey
-                    ? document.activeElement === firstFocusableElement && (lastFocusableElement.focus(), e.preventDefault())
-                    : document.activeElement === lastFocusableElement && (firstFocusableElement.focus(), e.preventDefault());
-            },
-            openFullscreen(node) {
+            openFullscreen() {
                 this.fullscreen = true;
                 this.$nextTick(() => this.calcPageSize());
 
-                const focusableElements = 'button, [href], input, select, textarea';
-                const focusableContent = Array.from(node.querySelectorAll(focusableElements))
-                    .filter(el => (el.attributes.tabindex >= 0 || !el.attributes.tabindex) && el.style.display !== 'none');
-
-                const firstFocusableElement = focusableContent.length > 0
-                    ? focusableContent[0]
-                    : null;
-                const lastFocusableElement = focusableContent.length > 0
-                    ? focusableContent[focusableContent.length - 1]
-                    : null;
-
-                this.focusTrapListener = this.focusTrapHandler.bind(this, firstFocusableElement, lastFocusableElement);
-
-                document.addEventListener('keydown', this.focusTrapListener);
+                hyva.trapFocus(this.$root);
             },
-            closeFullScreen() {
-                if (this.fullscreen) {
-                    this.$refs.galleryMainImage.focus();
-                }
+            closeFullScreen(setFocusTo = this.$refs.galleryFullscreenBtn) {
                 this.fullscreen = false;
-                this.$nextTick(() => this.calcPageSize());
-
-                document.removeEventListener('keydown', this.focusTrapListener);
+                hyva.releaseFocus(this.$root);
+                this.$nextTick(() => {
+                    this.calcPageSize();
+                    setFocusTo && setFocusTo.focus()
+                });
             },
             handleTouchStart(event) {
                 if (this.images.length <= 1) {

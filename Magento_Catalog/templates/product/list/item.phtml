@@ -96,7 +96,7 @@ $productName = $catalogOutputHelper->productAttribute($product, $product->getNam
 <?php endif; ?>
     <?php /* Product Image */ ?>
     <a href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>"
-        class="product photo product-item-photo block mx-auto mb-3 <?= $viewIsGrid ? '' : 'md:w-2/6 md:mb-0 md:mr-5' ?>"
+        class="product photo product-item-photo block mx-auto mb-3 <?= $viewIsGrid ? '' : 'md:w-2/6 md:mb-0 md:mr-5 md:shrink-0' ?>"
         tabindex="-1"
     >
         <?= $block->getImage($product, $imageDisplayArea)

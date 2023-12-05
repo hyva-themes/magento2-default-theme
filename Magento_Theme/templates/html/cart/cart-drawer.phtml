@@ -125,7 +125,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
          x-data="initCartDrawer()"
          @private-content-loaded.window="getData($event.detail.data)"
          @toggle-cart.window="toggleCartDrawer($event)"
-         @keydown.window.escape="closeCartDrawer"
+         @keydown.escape="closeCartDrawer"
 >
     <div role="dialog"
          aria-labelledby="cart-drawer-title"

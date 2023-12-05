@@ -243,6 +243,8 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
             </div>
         </div>
 
+        <?= $block->getChildHtml('fieldset_address_info_additional') ?>
+
         <?php $isDefaultMessages = array_filter([
             $block->isDefaultBilling() ? __("It's a default billing address.") : null,
             $block->isDefaultShipping() ? __("It's a default shipping address.") : null,

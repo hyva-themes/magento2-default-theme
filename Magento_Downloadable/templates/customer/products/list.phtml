@@ -24,149 +24,104 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
-<h2
-    id="downloadableProducts"
-    class="text-2xl mb-6"
->
-    <?= $escaper->escapeHtml(__('My Downloadable Products')) ?>
-</h2>
+<h2 id="downloadableProducts" class="text-2xl mb-6"><?= $escaper->escapeHtml(__('My Downloadable Products')) ?></h2>
 <?php $items = $block->getItems(); ?>
 <?php if (count($items)): ?>
-<div
-    class="downloadable-products card mb-4"
-    aria-labelledby="downloadableProducts"
-    role="table"
->
-    <div
-        role="row"
-        id="my-orders-table"
-        class="grid grid-cols-3 lg:grid-cols-6"
-    >
-        <div
-            role="columnheader"
-            class="text-sm text-secondary p-2"
+    <div class="overflow-x-auto card mb-4">
+        <table
+            id="my-orders-table"
+            class="downloadable-products w-full sm:table-fixed lg:table-auto"
+            aria-labelledby="downloadableProducts"
         >
-            <?= $escaper->escapeHtml(__('Order #')) ?>
-        </div>
-        <div
-            role="columnheader"
-            class="text-sm lg:block text-secondary p-2"
-        >
-            <?= $escaper->escapeHtml(__('Date')) ?>
-        </div>
-        <div
-            role="columnheader"
-            class="text-sm lg:block text-secondary p-2"
-        >
-            <?= $escaper->escapeHtml(__('Title')) ?>
-        </div>
-        <div
-            role="columnheader"
-            class="text-sm lg:block text-secondary p-2 "
-        >
-            <?= $escaper->escapeHtml(__('Download')) ?>
-        </div>
-        <div
-            role="columnheader"
-            class="text-sm lg:block text-secondary p-2"
-        >
-            <?= $escaper->escapeHtml(__('Status')) ?>
-        </div>
-        <div
-            role="columnheader"
-            class="text-sm text-secondary p-2"
-        >
-            <?= $escaper->escapeHtml(__('Remaining Downloads')) ?>
-        </div>
+            <thead class="text-sm text-secondary">
+                <tr>
+                    <th class="p-2 text-start">
+                        <?= $escaper->escapeHtml(__('Order #')) ?>
+                    </th>
+                    <th class="p-2 text-start hidden lg:table-cell">
+                        <?= $escaper->escapeHtml(__('Date')) ?>
+                    </th>
+                    <th class="p-2 text-start hidden lg:table-cell">
+                        <?= $escaper->escapeHtml(__('Title')) ?>
+                    </th>
+                    <th class="p-2 text-start hidden lg:table-cell">
+                        <?= $escaper->escapeHtml(__('Download')) ?>
+                    </th>
+                    <th class="p-2 text-start hidden lg:table-cell">
+                        <?= $escaper->escapeHtml(__('Status')) ?>
+                    </th>
+                    <th class="p-2 text-start">
+                        <?= $escaper->escapeHtml(__('Remaining Downloads')) ?>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($items as $item): ?>
+                    <tr class="align-top even:bg-container-darker">
+                        <th
+                            class="p-2 text-start font-normal"
+                            aria-label="<?= $escaper->escapeHtmlAttr($item->getPurchased()->getOrderIncrementId()) ?>"
+                        >
+                            <a
+                                id="downloadableProduct<?= $escaper->escapeHtmlAttr($item->getPurchased()->getOrderId()) ?>"
+                                href="<?= $escaper->escapeUrl($block->getOrderViewUrl($item->getPurchased()->getOrderId()))?>"
+                                title="<?= $escaper->escapeHtml(__('View Order')) ?>"
+                                aria-label="<?= $escaper->escapeHtmlAttr(__('View order') . ' ' . $item->getPurchased()->getOrderIncrementId()) ?>"
+                            ><?= $escaper->escapeHtml($item->getPurchased()->getOrderIncrementId()) ?></a>
+                        </th>
+                        <td class="p-2 hidden lg:table-cell">
+                            <?php
+                                $date = $item->getPurchased()->getCreatedAt();
+                                $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
+                                $formatLong = $block->getDateFormat() ?: \IntlDateFormatter::LONG;
+                            ?>
+                            <time datetime="<?= $escaper->escapeHtmlAttr($block->formatDate($date, $format)); ?>">
+                                <span aria-hidden="true"><?= $escaper->escapeHtml($block->formatDate($date, $format)); ?></span>
+                                <span class="sr-only">
+                                    <?= $escaper->escapeHtml($block->formatDate($date, $formatLong)); ?>
+                                </span>
+                            </time>
+                        </td>
+                        <td class="p-2 hidden lg:table-cell">
+                            <?= $escaper->escapeHtml($item->getPurchased()->getProductName()) ?>
+                        </td>
+                        <td class="p-2 hidden lg:table-cell">
+                            <?php if ($item->getStatus() == Item::LINK_STATUS_AVAILABLE): ?>
+                                <a
+                                    href="<?= $escaper->escapeUrl($block->getDownloadUrl($item)) ?>"
+                                    class="inline-block text-sm underline text-secondary-darker"
+                                    id="download_<?= /* @noEscape */ $item->getPurchased()->getProductId() ?>"
+                                    title="<?= $escaper->escapeHtmlAttr(__('Start Download')) ?>"
+                                    aria-label="<?= $escaper->escapeHtmlAttr(__('Start Download')) ?>"
+                                    class="action download"
+                                >
+                                    <?= $heroicons->documentDownloadHtml(); ?>
+                                </a>
+                                <?php if ($block->getIsOpenInNewWindow()): ?>
+                                    <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                                        'onclick',
+                                        "this.target='_blank'",
+                                        'a#download_' . $item->getPurchased()->getProductId()
+                                    ) ?>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        </td>
+                        <td class="p-2 hidden lg:table-cell">
+                            <?= $escaper->escapeHtml(__(ucfirst($item->getStatus()))) ?>
+                        </td>
+                        <td class="p-2">
+                            <?= $escaper->escapeHtml($block->getRemainingDownloads($item)) ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
     </div>
-    <?php $i = 0; ?>
-    <?php foreach ($items as $item): ?>
-        <?php $i++; ?>
-        <div
-            role="row"
-            class="grid grid-cols-3 lg:grid-cols-6"
-        >
-            <div
-                role="rowheader"
-                class="p-2 items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
-                aria-label="<?= $escaper->escapeHtmlAttr($item->getPurchased()->getOrderIncrementId()) ?>"
-            >
-                <a
-                    id="downloadableProduct<?= $escaper->escapeHtmlAttr($item->getPurchased()->getOrderId()) ?>"
-                    href="<?= $escaper->escapeUrl($block->getOrderViewUrl($item->getPurchased()->getOrderId()))?>"
-                    title="<?= $escaper->escapeHtml(__('View Order')) ?>"
-                    aria-label="<?= $escaper->escapeHtmlAttr(__('View order') . ' ' . $item->getPurchased()->getOrderIncrementId()) ?>"
-                >
-                    <?= $escaper->escapeHtml($item->getPurchased()->getOrderIncrementId()) ?>
-                </a>
-            </div>
-            <?php
-                $date = $item->getPurchased()->getCreatedAt();
-                $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
-                $formatLong = $block->getDateFormat() ?: \IntlDateFormatter::LONG;
-            ?>
-            <div
-                role="cell"
-                class="p-2 items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
-            >
-                <time datetime="<?= $escaper->escapeHtmlAttr($block->formatDate($date, $format)); ?>">
-                    <span aria-hidden="true"><?= $escaper->escapeHtml($block->formatDate($date, $format)); ?></span>
-                    <span class="sr-only">
-                        <?= $escaper->escapeHtml($block->formatDate($date, $formatLong)); ?>
-                    </span>
-                </time>
-            </div>
-            <div
-                role="cell"
-                class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
-            >
-                <?= $escaper->escapeHtml($item->getPurchased()->getProductName()) ?>
-            </div>
-            <div
-                role="cell"
-                class="p-2 items-center text-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
-            >
-                <?php if ($item->getStatus() == Item::LINK_STATUS_AVAILABLE): ?>
-                    <a
-                        href="<?= $escaper->escapeUrl($block->getDownloadUrl($item)) ?>"
-                        class="inline-block text-sm underline text-secondary-darker"
-                        id="download_<?= /* @noEscape */ $item->getPurchased()->getProductId() ?>"
-                        title="<?= $escaper->escapeHtmlAttr(__('Start Download')) ?>"
-                        aria-label="<?= $escaper->escapeHtmlAttr(__('Start Download')) ?>"
-                        class="action download"
-                    >
-                        <?= $heroicons->documentDownloadHtml(); ?>
-                    </a>
-                    <?php if ($block->getIsOpenInNewWindow()): ?>
-                        <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-                            'onclick',
-                            "this.target='_blank'",
-                            'a#download_' . $item->getPurchased()->getProductId()
-                        ) ?>
-                    <?php endif; ?>
-                <?php endif; ?>
-            </div>
-            <div
-                role="cell"
-                class="p-2 items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
-            >
-                <?= $escaper->escapeHtml(__(ucfirst($item->getStatus()))) ?>
-            </div>
-            <div
-                role="cell"
-                class="p-2 items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
-            >
-                <?= $escaper->escapeHtml($block->getRemainingDownloads($item)) ?>
-            </div>
+    <?php if ($block->getChildHtml('pager')): ?>
+        <div class="toolbar downloadable-products-toolbar bottom">
+            <?= $block->getChildHtml('pager') ?>
         </div>
-    <?php endforeach; ?>
-</div>
-
-<?php if ($block->getChildHtml('pager')): ?>
-    <div class="toolbar downloadable-products-toolbar bottom">
-        <?= $block->getChildHtml('pager') ?>
-    </div>
-<?php endif; ?>
+    <?php endif; ?>
 <?php else: ?>
     <div class="message info empty">
         <span><?= $escaper->escapeHtml(__('You have not purchased any downloadable products yet.')) ?></span>

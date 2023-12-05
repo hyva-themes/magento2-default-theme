@@ -55,7 +55,7 @@ $cols = $block->getData('is_context_shipment') ? 3 : ($block->getData('is_contex
             <?php endif; ?>
             <?php $addtInfoBlock = $block->getProductAdditionalInformationBlock(); ?>
             <?php if ($addtInfoBlock): ?>
-                <?= $addtInfoBlock->setItem($item)->toHtml() ?>
+                <?= $addtInfoBlock->setItem($block->getOrderItem())->toHtml() ?>
             <?php endif; ?>
             <?= $escaper->escapeHtml($item->getDescription()) ?>
         </div>

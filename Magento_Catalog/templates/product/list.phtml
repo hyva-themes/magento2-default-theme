@@ -55,25 +55,31 @@ $productCollection = $block->getLoadedProductCollection();
         $pos = $block->getPositioned();
         ?>
         <div class="products wrapper mode-<?= /* @noEscape */$viewMode ?> products-<?= /* @noEscape */$viewMode ?>">
-            <div class="mx-auto pt-4 pb-12 grid gap-4 grid-cols-1 <?= /* @noEscape */$viewMode === 'grid'
-                ? 'sm:grid-cols-2 xl:grid-cols-3'
-                : '' ?>">
+            <ul
+                role="list"
+                class="mx-auto pt-4 pb-12 grid gap-4 grid-cols-1 <?= /* @noEscape */$viewMode === 'grid'
+                    ? 'sm:grid-cols-2 xl:grid-cols-3'
+                    : '' ?>"
+            >
                 <?php
                 /** @var \Magento\Catalog\Model\Product $product */
-                foreach (array_values($productCollection->getItems()) as $i => $product) {
+                foreach (array_values($productCollection->getItems()) as $i => $product):
                     if ($i < $eagerLoadImagesCount) {
                         $product->setData('image_custom_attributes', ['loading' => 'eager', 'fetchpriority' => 'high']);
                     }
-                    echo $productListItemViewModel->getItemHtml(
-                        $product,
-                        $block,
-                        $viewMode,
-                        $templateType,
-                        $imageDisplayArea,
-                        $showDescription
-                    );
-                } ?>
-            </div>
+                    ?>
+                    <li>
+                        <?= $productListItemViewModel->getItemHtml(
+                            $product,
+                            $block,
+                            $viewMode,
+                            $templateType,
+                            $imageDisplayArea,
+                            $showDescription
+                        ); ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
         </div>
         <?= $block->getChildBlock('toolbar')->setIsBottom(true)->toHtml() ?>
     </section>

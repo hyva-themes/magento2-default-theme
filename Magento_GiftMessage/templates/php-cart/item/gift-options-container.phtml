@@ -22,18 +22,22 @@ use Hyva\Theme\ViewModel\HeroiconsOutline;
 /** @var HeroiconsOutline $heroicons */
 /** @var StoreConfig $storeConfigViewModel */
 
-$heroicons = $viewModels->require(HeroiconsOutline::class);
 $storeConfigViewModel = $viewModels->require(StoreConfig::class);
 
-if (! $storeConfigViewModel->getStoreConfig('sales/gift_options/allow_items')) {
+$isItemLevelGiftOptionsEnabled = $storeConfigViewModel->getStoreConfig('sales/gift_options/allow_items');
+// Gift Wrapping is a feature for Adobe Commerce Only. On Magento Open Source this config value will always return null.
+$isItemLevelGiftWrappingEnabled = $storeConfigViewModel->getStoreConfig('sales/gift_options/wrapping_allow_items');
+
+if (! $isItemLevelGiftOptionsEnabled && ! $isItemLevelGiftWrappingEnabled) {
     return;
 }
 
-$slideOutDrawer = (bool) $block->getSlideOutDrawer();
+$heroicons = $viewModels->require(HeroiconsOutline::class);
 
+$slideOutDrawer = (bool) $block->getSlideOutDrawer();
 ?>
 <div x-data="initGiftItemOptions({itemId: '<?= (int) $block->getItem()->getId() ?>'})" class="gift-options-component w-full flex flex-wrap my-6" :data-item-id="itemId" x-cloak>
-    <div class="text-left gift-options-title w-full order-first" x-show="isGiftMsgEnabled || hasActiveOptions">
+    <div class="text-left gift-options-title w-full order-first" x-show="isGiftMsgEnabled || isGiftWrapEnabled || hasActiveOptions">
         <button
             type="button"
             x-ref="giftOptionsTrigger"

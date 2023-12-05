@@ -44,6 +44,8 @@ if (!$productId || !$attributeId) {
                 'border-container-lighter ring ring-primary/75' : focusedLabel === item.id
             }"
             :style="getSwatchBackgroundStyle('<?= (int) $attributeId ?>',item.id)"
+            <?php /* The dummy touchstart event listener prevents mobile safari from requiring a double tap to select swatches */ ?>
+            @touchstart=""
             <?php if ($configurableViewModel->getShowSwatchTooltip()): ?>
                 @mouseenter.self="activeTooltipItem = {
                     attribute: '<?= (int) $attributeId ?>',
@@ -74,7 +76,7 @@ if (!$productId || !$attributeId) {
             <template x-if="isTextSwatch(<?= (int) $attributeId ?>, item.id)">
                 <div
                     x-html="getSwatchText(<?= (int) $attributeId ?>, item.id)"
-                    class="whitespace-nowrap"
+                    class="pointer-events-none select-none whitespace-nowrap"
                     aria-hidden="true"
                 ></div>
             </template>

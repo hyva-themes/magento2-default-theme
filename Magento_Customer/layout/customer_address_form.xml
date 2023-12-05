@@ -20,6 +20,7 @@
                     <argument name="post_code_config" xsi:type="object">Magento\Customer\Block\DataProviders\PostCodesPatternsAttributeData</argument>
                     <argument name="view_model" xsi:type="object">Magento\Customer\ViewModel\Address</argument>
                 </arguments>
+                <container name="fieldset.address.info.additional" as="fieldset_address_info_additional"/>
             </block>
         </referenceContainer>
     </body>

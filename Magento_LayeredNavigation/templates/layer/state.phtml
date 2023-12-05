@@ -30,7 +30,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         <button
             type="button"
             @click="open = !open"
-            class="w-full filter-options-title flex justify-between items-center cursor-pointer"
+            class="w-full filter-options-title flex justify-between items-center text-start cursor-pointer"
             aria-controls="active-filtering-content"
             :aria-expanded="open"
             x-init="$nextTick(() => $el.focus())"
