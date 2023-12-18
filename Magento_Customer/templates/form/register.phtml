@@ -478,7 +478,8 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                 <?php if ($block->getShowAddressFields()): ?>
                 directoryData: {},
                 availableRegions: {},
-                selectedRegion: <?= $escaper->escapeJs($block->getRegion() ?: 0) ?>,
+                <?php /* $block->getRegion() returns an ID or a region name. The selectedRegion is used only for selects, so it must be an int. String names result in 0 when cast to int. */ ?>
+                selectedRegion: <?= (int) $block->getRegion() ?>,
                 isZipRequired: true,
                 isRegionRequired: true,
                 showOptionalRegions: <?= $showOptionalRegions ? 'true' : 'false' ?>,
@@ -486,7 +487,7 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                     this.directoryData = data['directory-data'] || {};
 
                     <?php if ($block->getCountryId()): ?>
-                    this.setCountry(this.$refs['country_id'], '<?= $escaper->escapeJs($block->getRegion()) ?>');
+                    this.setCountry(this.$refs['country_id'], '<?= $escaper->escapeJs($block->getCountryId()) ?>');
                     <?php endif; ?>
 
                 },
