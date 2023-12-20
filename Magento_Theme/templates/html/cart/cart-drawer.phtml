@@ -161,13 +161,13 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 <?= $block->getChildHtml('cart-drawer.top'); ?>
 
                 <header class="relative px-4 py-6 sm:px-6">
-                    <h2 id="cart-drawer-title" class="text-lg font-medium leading-7 text-gray-900">
-                        <?= $escaper->escapeHtml(__('My Cart')) ?>
+                    <p id="cart-drawer-title" class="text-lg font-medium leading-7 text-gray-900">
+                        <strong><?= $escaper->escapeHtml(__('My Cart')) ?></strong>
                         <span class="items-total text-xs"
                               x-show="maxItemsToDisplay && maxItemsToDisplay < itemsCount"
                               x-text="getItemCountTitle()">
                         </span>
-                    </h2>
+                    </p>
                 </header>
 
                 <?= $block->getChildHtml('cart-drawer.items.before'); ?>
