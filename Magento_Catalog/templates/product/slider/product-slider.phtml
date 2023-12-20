@@ -52,6 +52,8 @@ $itemTemplate      = $block->getData('item_template') ?? 'Magento_Catalog::produ
 $containerTemplate = $block->getData('container_template')
     ?? 'Magento_Catalog::product/slider/product-slider-container.phtml';
 
+// In case $type is not set on the block, it will default the block class name, which is not what we need in this template.
+$type = is_string($type) && strpos($type, '\\') === false  ? $type : 'generic';
 
 if ($categoryIds) {
     $productListViewModel->addFilter('category_id', $categoryIds, 'in');
@@ -115,7 +117,7 @@ if (empty($sliderHtml)) {
     return '';
 }
 ?>
-<div class="product-slider">
+<div class="product-slider <?= $escaper->escapeHtmlAttr($type) ?>-product-slider">
     <div>
         <?= /* @noEscape */ $sliderHtml ?>
     </div>
