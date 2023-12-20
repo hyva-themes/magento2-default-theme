@@ -16,7 +16,7 @@
             <container name="customer.login.container"
                        htmlTag="div"
                        htmlId="customer-login-container"
-                       htmlClass="login-container grid gap-x-4 gap-y-8 grid-cols-1 py-8 md:grid-cols-2">
+                       htmlClass="login-container">
                 <block class="Magento\Customer\Block\Form\Login" name="customer_form_login"
                        template="Magento_Customer::form/login.phtml">
                     <container name="form.additional.info" as="form_additional_info"/>
