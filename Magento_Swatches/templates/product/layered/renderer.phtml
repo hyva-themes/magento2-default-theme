@@ -98,7 +98,7 @@ $swatchData = $block->getSwatchData();
             endif; ?>
             <a href="<?= $escaper->escapeUrl($label['link']) ?>" rel="nofollow"
                aria-label="<?= $escaper->escapeHtmlAttr(__('Filter %1 %2', $swatchData['attribute_label'], $label['label'])) ?>"
-               class="swatch-option-link-layered swatch-option border-2 cursor-pointer bg-container-lighter shadow-sm relative select-none border-container-darker"
+               class="swatch-option-link-layered swatch-option cursor-pointer bg-container-lighter shadow-sm relative select-none border-container-darker"
                :class="{ 'w-6 h-6' : getSwatchType('<?= (string) $swatchData['swatches'][$option]['type'] ?>') !== 'text' }"
                :style="getSwatchBackgroundStyle(
                     '<?= (string) $swatchData['swatches'][$option]['type'] ?>',
