@@ -7,7 +7,39 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.2.8...1.2.x-main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.2.9...1.2.x-main
+
+## [1.2.9] - 2023-12-21
+
+[1.2.9]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.2.8...1.2.9
+
+### Added
+
+- Nothing added
+
+### Changed
+
+- **Fix typo in CSS class 'ointer' to 'pointer'**
+
+  The previous release 1.2.8 introduced a typo in the class name in `Magento_Swatches/templates/product/swatch-item.phtml` that is fixed now.
+
+  For more information, please refer to [merge request #983](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/983).
+
+  Many thanks to Lars de Weert (Made by Mouses) for their contribution!
+
+- **Fix layout XML schema violation regression**
+
+  This change fixes a regression introduced in release 1.2.8. The tailwind class `md:grid-cols-2` is not compatible with
+  the native Magento layout container `htmlClass` attribute regular expression, resulting in a broken customer login page.  
+  The error made it into production because test instances used a patched XSD as described as a [workaround in the docs](https://docs.hyva.io/hyva-themes/building-your-theme/styling-layout-containers.html#workaround-1-patch-the-schema-pattern).
+
+  The offending class was moved into the `web/tailwind/components/customer.css` file as part of the `customer-login-container` class.
+
+  For more details, please refer to [merge request #998](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/998).
+
+### Removed
+
+- Nothing removed
 
 ## [1.2.8] - 2023-11-22
 
