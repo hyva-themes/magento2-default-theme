@@ -35,6 +35,8 @@ if (!$itemCount = count($items)) {
     return '';
 }
 $sliderItemRenderer = $block->getChildBlock('slider.item.template');
+$sectionClasses = $block->getData('maybe_purged_tailwind_section_classes');
+$slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes');
 
 ?>
 <script>
@@ -84,10 +86,7 @@ $sliderItemRenderer = $block->getChildBlock('slider.item.template');
         }
     }
 </script>
-<section class="<?=
-    $escaper->escapeHtmlAttr($block->getData('maybe_purged_tailwind_section_classes'))
-    ?: 'my-12 text-gray-700 body-font';
-?>"
+<section class="<?= $escaper->escapeHtmlAttr($sectionClasses) ?: 'my-12 text-gray-700 body-font' ?>"
          x-data="initSliderComponent()"
          x-init="calcPageSize();"
          @resize.window.debounce="calcPageSize(); $nextTick( function() { calcActive() })"
@@ -107,7 +106,9 @@ $sliderItemRenderer = $block->getChildBlock('slider.item.template');
                      @scroll.debounce="calcActive"
                 >
                     <?php foreach ($items as $item): ?>
-                        <div class="flex shrink-0 w-full py-1 js_slide md:w-1/2 lg:w-1/3 xl:w-1/4">
+                        <div class="js_slide <?= $escaper->escapeHtmlAttr($slideItemClasses) ?:
+                            'flex shrink-0 py-1 w-full md:w-1/2 lg:w-1/3 xl:w-1/4' ?>"
+                        >
                             <div class="mx-1 card card-interactive">
                                  <?= $sliderItemRenderer->setItem($item)->toHtml() ?>
                             </div>
