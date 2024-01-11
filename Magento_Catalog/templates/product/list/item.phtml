@@ -159,7 +159,7 @@ $productName = $catalogOutputHelper->productAttribute($product, $product->getNam
             <?= /* @noEscape */ $productListItemViewModel->getProductPriceHtml($product) ?>
         </div>
 
-        <div class="mt-auto pt-3 flex flex-wrap justify-center items-center">
+            <?= $viewIsGrid ? '' : 'md:justify-center' ?>">
             <?php if ($product->isSaleable()): ?>
             <button class="w-auto btn btn-primary justify-center text-sm
                 <?= $viewIsGrid ? 'mr-auto' : 'mr-auto md:mr-0' ?>"
