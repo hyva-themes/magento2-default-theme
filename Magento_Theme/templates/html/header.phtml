@@ -148,7 +148,6 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
                 class="relative inline-block ml-1 no-underline sm:ml-3 hover:text-black"
                 x-ref="cartButton"
                 :aria-disabled="isCartEmpty()"
-                title="<?= $escaper->escapeHtmlAttr(__('Cart')) ?>"
                 :aria-label="`
                     <?= $escaper->escapeHtml($showMiniCart ? __('Toggle minicart') : __('View cart')) ?>,
                     ${isCartEmpty()
@@ -169,9 +168,9 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
                     aria-haspopup="dialog"
                 <?php else: ?>
                     href="<?= $escaper->escapeUrl($block->getUrl('checkout/cart/index')) ?>"
+                    title="<?= $escaper->escapeHtmlAttr(__('View cart')) ?>"
                 <?php endif ?>
             >
-
                 <?= $heroicons->shoppingCartHtml("md:h-6 md:w-6", 32, 32, ["aria-hidden" => "true"]) ?>
                 <span
                     x-text="cart.summary_count"
