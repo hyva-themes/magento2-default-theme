@@ -120,8 +120,9 @@ $recaptcha = $block->getData('viewModelRecaptcha');
         <div role="dialog"
              aria-modal="true"
              @click.outside="open = false"
-             class="inset-y-0 right-0 z-30 flex max-w-full"
-             :class="{'fixed': open }" x-cloak x-show="open"
+             class="inset-y-0 right-0 z-30 flex max-w-full fixed"
+             x-cloak
+             x-show="open"
         >
             <div class="relative w-screen max-w-md pt-16 bg-container-lighter"
                  x-show="open"
