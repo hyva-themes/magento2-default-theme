@@ -30,7 +30,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
     <button
         type="button"
         id="customer-menu"
-        class="block hover:text-black"
+        class="relative inline-block rounded hover:text-gray-500 outline-offset-2 align-middle"
         @click="open = !open"
         :aria-expanded="open ? 'true' : 'false'"
         aria-label="<?= $escaper->escapeHtmlAttr(__('My Account')) ?>"
