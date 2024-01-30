@@ -44,6 +44,7 @@ $mediumWidth = $block->getImageAttribute('product_page_image_medium', 'width', 7
 $mediumHeight = $block->getImageAttribute('product_page_image_medium', 'height', 700);
 
 $galleryOptionShowRelated = $storeConfig->getStoreConfig('catalog/product_video/show_related') ?? false;
+$galleryOptionVideoLoop = $storeConfig->getStoreConfig('catalog/product_video/video_auto_restart') ?? false;
 
 $productName = $block->getProduct()->getName();
 ?>
@@ -214,7 +215,7 @@ $productName = $block->getProduct()->getName();
             "videoData": {},
             "activeVideoType": false,
             "autoplayVideo": false,
-            "loopVideo": true,
+            "loopVideo": <?= /* @noEscape */ $galleryOptionVideoLoop ? 'true' : 'false' ?>,
             "relatedVideos": <?= /* @noEscape */ $galleryOptionShowRelated ? 'true' : 'false' ?>,
             "vimeoPlayer": null,
             "fullscreen": false,
