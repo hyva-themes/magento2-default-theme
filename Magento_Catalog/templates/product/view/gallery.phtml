@@ -252,7 +252,7 @@ $productName = $block->getProduct()->getName();
             resetGallery() {
                 this.images = this.initialImages;
                 this.itemCount = this.images.length;
-                this.setActive(0);
+                this.initActive();
             },
             initActive() {
                 let active = this.images.findIndex(function(image) {
