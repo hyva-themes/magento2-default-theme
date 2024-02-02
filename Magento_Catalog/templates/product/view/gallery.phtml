@@ -93,13 +93,6 @@ $productName = $block->getProduct()->getName();
                         :src="fullscreen ? image.full : image.img"
                         x-transition.opacity.duration.500ms
                         x-show="active === index"
-                        @keydown.enter="openFullscreen($root)"
-                        :tabindex="fullscreen ? '-1' : '0'"
-                        :aria-describedby="fullscreen
-                            ? ''
-                            : 'main-image-description fullscreen-btn-label'
-                        "
-                        :role="fullscreen ? 'img' : 'button'"
                     />
                 </template>
                 <button
