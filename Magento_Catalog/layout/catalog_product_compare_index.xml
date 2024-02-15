@@ -9,6 +9,10 @@
 -->
 <page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+
+    <!-- Make wishlist JS available -->
+    <update handle="catalog_list_item"/>
+
     <body>
         <referenceBlock name="page.main.title">
             <action method="setPageTitle">
@@ -20,6 +24,11 @@
                    name="catalog.compare.list"
                    template="Magento_Catalog::product/compare/list.phtml"
                 cacheable="false">
+                <arguments>
+                    <argument name="hyva_js_block_dependencies" xsi:type="array">
+                        <item name="category.products.list.js.wishlist" xsi:type="boolean">true</item>
+                    </argument>
+                </arguments>
             </block>
         </referenceContainer>
     </body>
