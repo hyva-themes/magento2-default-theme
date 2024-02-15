@@ -32,19 +32,17 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             cart: {},
             maxItemsToDisplay: <?= (int) $maxItemsToDisplay ?>,
             itemsCount: 0,
-            totalCartAmount: 0,
             getData(data) {
                 if (data.cart) {
                     this.cart = data.cart;
                     this.itemsCount = data.cart.items && data.cart.items.length || 0;
-                    this.totalCartAmount = this.cart.summary_count;
                     this.setCartItems();
                 }
                 this.isLoading = false;
             },
             cartItems: [],
             getItemCountTitle() {
-                return hyva.strf('<?= $escaper->escapeJs(__('%0 of %1 products in cart displayed')) ?>', this.maxItemsToDisplay, this.totalCartAmount)
+                return hyva.strf('<?= $escaper->escapeJs(__('%0 of %1 products in cart displayed')) ?>', this.maxItemsToDisplay, this.itemsCount)
             },
             setCartItems() {
                 this.cartItems = this.cart.items && this.cart.items.sort((a, b) => b.item_id - a.item_id) || [];
