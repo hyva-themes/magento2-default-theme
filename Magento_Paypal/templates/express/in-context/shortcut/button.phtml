@@ -19,11 +19,7 @@ use Magento\Paypal\Block\Express\InContext\Minicart\SmartButton;
  * For the mini-cart, the html is part of the cart.extra_actions private section data, and is injected via JS.
  */
 
-for (
-    $candidate = $block, $isCartPage = false;
-    $candidate && ! $isCartPage;
-    $candidate = $candidate->getParentBlock()
-) {
+for ($candidate = $block, $isCartPage = false; $candidate && ! $isCartPage; $candidate = $candidate->getParentBlock()) {
     $isCartPage = $candidate->getNameInLayout() === 'checkout.cart.shortcut.buttons';
 }
 $isMinicart = ! $isCartPage;
@@ -39,10 +35,10 @@ $renderTargetElementId = sprintf('paypalInContextRenderTarget%d', $isMinicart)
         <?= $escaper->escapeHtmlAttr($clientConfig) ?>
       )"
      id="<?= $escaper->escapeHtmlAttr($renderTargetElementId) ?>"
-     <?php if ($isMinicart): ?>
+    <?php if ($isMinicart): ?>
      x-init="cartSection = cart"
      @toggle-cart.window="checkAndInitializeButtons()"
-     <?php endif; ?>
+    <?php endif; ?>
      class="paypal checkout paypal-logo min-h-a11y cart-extra-actions-container isolate"
     <?php if ($isCartPage): ?>
      @private-content-loaded.window="getData($event.detail.data); checkAndInitializeButtons()"
