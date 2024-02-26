@@ -24,7 +24,8 @@ $clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/product-ex
 
 ?>
 <div x-data="initPayPalInContext('paypalInContextPDP', <?= $escaper->escapeHtmlAttr($clientConfig) ?>)"
-     @private-content-loaded.window="getData($event.detail.data) && checkAndInitializeButtons()"
+     x-intersect="checkAndInitializeButtons()"
+     @private-content-loaded.window="getData($event.detail.data)"
      class="min-h-a11y"
 >
     <div id="paypalInContextPDP" class="paypal checkout paypal-logo product-shortcuts-container">
@@ -175,8 +176,8 @@ $clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/product-ex
                         }
                     }).render(document.getElementById(renderTargetId));
                 } catch (error) {
-                    console.error('<?= $escaper->escapeJs(__('Error loading PayPal SDK')) ?>');
-                    console.error(error);
+                    document.getElementById(renderTargetId).innerHTML = '';
+                    console.error('Error loading PayPal SDK', error);
                 }
             },
             checkAndInitializeButtons() {
@@ -188,7 +189,7 @@ $clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/product-ex
                     this.alreadyLoaded = true;
                     this.initializeButtons();
                 }
-            },
+            }
         }
     }
 </script>

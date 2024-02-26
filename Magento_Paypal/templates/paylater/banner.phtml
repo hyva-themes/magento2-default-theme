@@ -91,8 +91,8 @@ $widgetConfigJson = json_encode($widgetData['components']['payLater']['config'])
                         }).render(this.$refs.ppMessage);
 
                     } catch (error) {
-                        console.error('<?= $escaper->escapeJs('PayPal SDK could not be loaded') ?>');
-                        console.error(error);
+                        this.$refs.ppMessage.innerHTML = '';
+                        console.error('Error loading PayPal SDK', error);
                     }
                 },
                 checkAndInitializeButtons() {
@@ -106,7 +106,7 @@ $widgetConfigJson = json_encode($widgetData['components']['payLater']['config'])
                         this.initializeButtons();
                     }
                 }
-            };
+            }
         }
     </script>
 <?php endif; ?>

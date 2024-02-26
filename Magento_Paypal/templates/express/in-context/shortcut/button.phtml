@@ -154,7 +154,8 @@ $renderTargetElementId = sprintf('paypalInContextRenderTarget%d', $isMinicart)
                         }
                     }).render(document.getElementById(renderTargetId));
                 } catch (error) {
-                    console.error('Error loading PayPal SDK: ', error);
+                    document.getElementById(renderTargetId).innerHTML = '';
+                    console.error('Error loading PayPal SDK', error);
                 }
             },
             checkAndInitializeButtons() {
@@ -162,7 +163,7 @@ $renderTargetElementId = sprintf('paypalInContextRenderTarget%d', $isMinicart)
                     this.alreadyLoaded = true;
                     this.initializeButtons();
                 }
-            },
+            }
         }
     }
 </script>
