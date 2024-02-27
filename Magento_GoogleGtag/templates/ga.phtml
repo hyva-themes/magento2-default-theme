@@ -1,0 +1,104 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magento\Framework\Escaper;
+use Hyva\Theme\ViewModel\StoreConfig;
+use Magento\GoogleGtag\Block\Ga;
+
+/** @var Ga $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var $storeConfig StoreConfig */
+$storeConfig = $viewModels->require(StoreConfig::class);
+
+$measurementId = $storeConfig->getStoreConfig('google/gtag/analytics4/measurement_id');
+// phpcs:disable Generic.ControlStructures.InlineControlStructure.NotAllowed
+if (empty($measurementId)) return;
+
+$anonymize = (bool)$storeConfig->getStoreConfig('google/gtag/anonymize');
+
+/**
+ * We skip over lazy-loading if cookieRestriction is enabled, because the scripts are not executed
+ * before cookies are accepted anyway. The script is executed when cookies are accepted by the visitor.
+ *
+ * Additionally, on subsequent requests the scripts can render on pageload (if cookies are accepted),
+ * without a performance penalty because the scripts are cached in the browser.
+ */
+$lazyLoadScript = $storeConfig->getStoreConfig('google/gtag/lazyload')
+    && !$block->isCookieRestrictionModeEnabled();
+
+$analyticsData = $block->getAnalyticsData();
+?>
+
+<?php if ($analyticsData): ?>
+    <!-- BEGIN GOOGLE ANALYTICS 4 CODE -->
+    <script>
+        (function initGoogleGA(){
+            const config = <?= /* @noEscape */ $analyticsData ?>;
+            const anonymize_ip = <?= $anonymize ? 'true' : 'false' ?>;
+
+            let allowServices = false,
+                allowedCookies,
+                allowedWebsites,
+                measurementId;
+
+            if (typeof hyva === 'undefined' || (!hyva.getBrowserStorage || !hyva.getCookie || !hyva.setCookie)) {
+                console.warn("Hyvä helpers are not loaded yet. Make sure they are included before this script");
+            }
+            if (config.isCookieRestrictionModeEnabled && typeof hyva !== 'undefined') {
+                allowedCookies = hyva.getCookie(config.cookieName);
+
+                if (allowedCookies !== null) {
+                    allowedWebsites = JSON.parse(unescape(allowedCookies));
+
+                    if (allowedWebsites[config.currentWebsite] === 1) {
+                        allowServices = true;
+                    }
+                } else {
+                    window.addEventListener('user-allowed-save-cookie', initGoogleGA, { once: true, passive: true });
+                }
+            } else {
+                allowServices = true;
+            }
+
+            if (allowServices) {
+                measurementId = config.pageTrackingData.measurementId;
+                if (!window.gtag) {
+                    <?php if ($lazyLoadScript): ?>
+                    window.addEventListener('init-external-scripts', () => {
+                    <?php endif; ?>
+                        const gtagScript = document.createElement('script');
+                        gtagScript.type = 'text/javascript';
+                        gtagScript.async = true;
+                        gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=' + measurementId;
+                        document.head.insertBefore(gtagScript, document.head.children[0]);
+                    <?php if ($lazyLoadScript): ?>
+                    });
+                    <?php endif; ?>
+
+                    window.dataLayer = window.dataLayer || [];
+                    window.gtag = function(){dataLayer.push(arguments)};
+                    gtag('js', new Date());
+                    gtag('set', 'developer_id.dYjhlMD', true);
+                }
+
+                gtag('config', measurementId, { 'anonymize_ip': anonymize_ip });
+                // Purchase Event
+                if (config.ordersTrackingData.hasOwnProperty('currency')) {
+                    let purchaseObject = config.ordersTrackingData.orders[0];
+                    purchaseObject['items'] = config.ordersTrackingData.products;
+                    gtag('event', 'purchase', purchaseObject);
+                }
+            }
+        }())
+    </script>
+    <!-- END GOOGLE ANALYTICS 4 CODE -->
+<?php endif; ?>

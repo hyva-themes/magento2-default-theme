@@ -12,8 +12,11 @@ use Magento\GoogleAnalytics\Block\Ga;
 use Magento\GoogleAnalytics\Helper\Data;
 
 /** @var $block Ga */
+
+$accountId = $block->getConfig(Data::XML_PATH_ACCOUNT);
+// phpcs:disable Generic.ControlStructures.InlineControlStructure.NotAllowed
+if (empty($accountId)) return;
 ?>
-<?php $accountId = $block->getConfig(Data::XML_PATH_ACCOUNT) ?>
 
 <script>
     'use strict';

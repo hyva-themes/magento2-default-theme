@@ -9,6 +9,9 @@
 -->
 <page layout="3columns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
+        <!-- The dummy touchstart event listener prevents mobile safari from requiring a double tap to select swatches, buttons and links -->
+        <attribute name="ontouchstart" value="() => {}"/>
+
         <referenceContainer name="after.body.start">
             <block class="Magento\Framework\View\Element\FormKey" name="formkey" />
         </referenceContainer>
@@ -30,7 +33,7 @@
         </referenceContainer>
 
         <referenceContainer name="header.container">
-            <block class="Magento\Framework\View\Element\Template" name="skip_to_content" template="Magento_Theme::html/skip.phtml">
+            <block class="Magento\Framework\View\Element\Template" name="skip_to_content" template="Magento_Theme::html/skip.phtml" before="-">
                 <arguments>
                     <argument name="target" xsi:type="string">contentarea</argument>
                     <argument name="label" translate="true" xsi:type="string">Skip to Content</argument>

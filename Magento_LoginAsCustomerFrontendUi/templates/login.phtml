@@ -8,17 +8,21 @@
 
 declare(strict_types=1);
 
-use Magento\Framework\Escaper;
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\SvgIcons;
 use Magento\Framework\View\Element\Template;
+use Magento\Framework\Escaper;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var SvgIcons $hyvaicons */
+$hyvaicons = $viewModels->require(SvgIcons::class);
 ?>
 
 <div class="container">
-        <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/loader-1.gif')) ?>"
-             alt="<?= $escaper->escapeHtmlAttr(__('Loading...')) ?>"
-        />
+    <?= $hyvaicons->loaderHtml('', 64, 64, ['title' => $escaper->escapeHtml(__('Loading...'))]); ?>
 </div>
 
 <script>

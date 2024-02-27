@@ -42,6 +42,7 @@ $priceTo           = $block->getData('price_to');
 $sortAttribute     = $block->getData('sort_attribute') ?: '';
 $sortDirection     = $block->getData('sort_direction') ?: 'ASC';
 $title             = $block->getData('title') ?: '';
+$headingTag        = $block->getData('heading_tag') ?: 'h3';
 $hideDetails       = $block->getData('hide_details') ?? false;
 $hideRatingSummary = $block->getData('hide_rating_summary') ?? false;
 $type              = $block->getData('type');
@@ -51,6 +52,8 @@ $itemTemplate      = $block->getData('item_template') ?? 'Magento_Catalog::produ
 $containerTemplate = $block->getData('container_template')
     ?? 'Magento_Catalog::product/slider/product-slider-container.phtml';
 
+// In case $type is not set on the block, it will default the block class name, which is not what we need in this template.
+$type = is_string($type) && strpos($type, '\\') === false  ? $type : 'generic';
 
 if ($categoryIds) {
     $productListViewModel->addFilter('category_id', $categoryIds, 'in');
@@ -84,7 +87,6 @@ $productListViewModel->setPageSize($pageSize);
 $productListViewModel->addFilter('website_id', $storeViewModel->getWebsiteId());
 $productListViewModel->addFilter('visibility', [
     ProductVisibility::VISIBILITY_IN_CATALOG,
-    ProductVisibility::VISIBILITY_IN_SEARCH,
     ProductVisibility::VISIBILITY_BOTH,
 ], 'in');
 if ($sortAttribute) {
@@ -108,13 +110,14 @@ $sliderHtml = $sliderViewModel->getSliderForItems($itemTemplate, $items, $contai
     ->setData('hide_rating_summary', $hideRatingSummary)
     ->setData('title', $title)
     ->setData('item_relation_type', $type)
+    ->setData('heading_tag', $headingTag)
     ->toHtml();
 
 if (empty($sliderHtml)) {
     return '';
 }
 ?>
-<div class="product-slider">
+<div class="product-slider <?= $escaper->escapeHtmlAttr($type) ?>-product-slider">
     <div>
         <?= /* @noEscape */ $sliderHtml ?>
     </div>

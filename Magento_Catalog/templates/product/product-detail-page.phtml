@@ -15,8 +15,9 @@ use Magento\Catalog\Block\Product\View;
 $product = $block->getProduct();
 ?>
 <section class="text-gray-700 body-font">
-    <div class="flex py-6 lg:flex-row flex-col items-center">
-        <div class="flex flex-wrap order-first w-full">
+    <div class="flex pb-6 md:py-6 lg:flex-row flex-col items-center">
+        <div class="grid grid-rows-auto grid-cols-1 md:gap-x-5 md:grid-cols-[42%_minmax(0,_1fr)] md:grid-rows-[min-content_minmax(0,_1fr)] lg:gap-x-10 lg:grid-cols-2 w-full">
+            <?= $block->getChildHtml('product.title') ?>
             <?= $block->getChildHtml('product.media') ?>
             <?= $block->getChildHtml('product.info') ?>
         </div>

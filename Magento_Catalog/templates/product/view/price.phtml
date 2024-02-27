@@ -72,7 +72,7 @@ $displayTax = $productPriceViewModel->displayPriceIncludingTax();
             showRegularPriceLabel: <?= ($finalPrice < $regularPrice) ? 'true' : 'false' ?>,
             customOptionPrices: [],
             <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
-            initialBasePrice: <?= (float)$regularPriceExclTax ?>,
+            initialBasePrice: <?= (float)$finalPriceExclTax ?>,
             calculatedBasePrice: false,
             customOptionBasePrices: [],
             calculatedBasePriceWithCustomOptions: false,

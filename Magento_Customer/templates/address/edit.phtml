@@ -89,6 +89,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                                title="<?= /* @noEscape */ $streetLabel ?>"
                                id="street_1"
                                class="form-input"
+                               @input.debounce="onChange"
                         />
                     </div>
                 </div>
@@ -104,6 +105,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                                    title="<?= $escaper->escapeHtmlAttr(__('Street Address %1', $i + 1)) ?>"
                                    id="street_<?= /* @noEscape */ $i + 1 ?>"
                                    class="form-input"
+                                   @input.debounce="onChange"
                             />
                         </div>
                     </div>
@@ -121,7 +123,8 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                                value="<?= $escaper->escapeHtmlAttr($block->getAddress()->getVatId()) ?>"
                                title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('vat_id') ?>"
                                class="form-input"
-                               id="vat_id">
+                               id="vat_id"
+                               @input.debounce="onChange">
                     </div>
                 </div>
             <?php endif; ?>
@@ -139,7 +142,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                            title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('postcode') ?>"
                            id="zip"
                            :required="isZipRequired"
-                           @change="onChange"
+                           @input.debounce="onChange"
                            data-validate='{"postcode": true}'
                            class="form-input">
                 </div>
@@ -156,7 +159,8 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                            value="<?= $escaper->escapeHtmlAttr($block->getAddress()->getCity()) ?>"
                            title="<?= $escaper->escapeHtmlAttr(__('City')) ?>"
                            class="form-input"
-                           id="city">
+                           id="city"
+                           @input.debounce="onChange">
                 </div>
             </div>
 
@@ -178,7 +182,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                             required
                             class="form-select"
                             x-ref="country_id"
-                            @change="changeCountry($event.target)"
+                            @input.debounce="changeCountry"
                     >
                         <?php foreach ($countries as $country): ?>
                             <option name="<?= /** @noEscape */ $country['label'] ?>"
@@ -208,7 +212,8 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                                 class="form-select validate-select region_id"
                                 x-ref="region_id"
                                 x-model="selectedRegion"
-                                @change="$refs.region.value = availableRegions[selectedRegion].name"
+                                :required="isRegionRequired"
+                                @input.debounce="onRegionIdChange"
                         >
                             <option value=""><?= $escaper->escapeHtml(__('Please select a region, state or province.')) ?></option>
                             <template x-for="regionId in Object.keys(availableRegions)">
@@ -230,11 +235,15 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                            value="<?= $escaper->escapeHtmlAttr($block->getRegion()) ?>"
                            title="<?= /* @noEscape */ $regionLabel ?>"
                            class="form-input"
-                           :required="isRegionRequired"
+                           aria-label="<?= /* @noEscape */ $regionLabel ?>"
+                           :required="!hasAvailableRegions() && !showOptionalRegions ? isRegionRequired : false"
+                           @input.debounce="onChange"
                     />
                 </div>
             </div>
         </div>
+
+        <?= $block->getChildHtml('fieldset_address_info_additional') ?>
 
         <?php $isDefaultMessages = array_filter([
             $block->isDefaultBilling() ? __("It's a default billing address.") : null,
@@ -331,10 +340,10 @@ function initCustomerAddressEdit() {
             this.setRegionInputValue(initialRegionId && this.availableRegions[initialRegionId].name || '');
 
         },
-        changeCountry(countrySelectElement, initialRegion) {
-            this.setCountry(countrySelectElement, initialRegion);
-
+        changeCountry(event, initialRegion) {
+            this.setCountry(event.target, initialRegion);
             this.validateCountryDependentFields();
+            this.onChange(event);
         },
         validateCountryDependentFields() {
             this.$nextTick(() => {
@@ -347,13 +356,22 @@ function initCustomerAddressEdit() {
                 this.setupField(this.$refs['country_id']);
                 this.setupField(this.$refs['postcode']);
                 this.setupField(this.$refs['region']);
+                this.setupField(this.$refs['region_id']);
 
                 this.fields['postcode'] && this.validateField(this.fields['postcode']);
                 this.fields['region'] && this.validateField(this.fields['region']);
+                this.fields['region_id'] && this.validateField(this.fields['region_id']);
             })
         },
         hasAvailableRegions() {
             return Object.keys(this.availableRegions).length > 0;
+        },
+        onRegionIdChange(event) {
+            this.$refs.region.value = this.selectedRegion.length > 0 ?
+                this.availableRegions[this.selectedRegion].name :
+                ''
+            this.onChange(event)
+            this.validateField(this.fields['region'])
         }
     }
 }
@@ -386,7 +404,7 @@ window.addEventListener('DOMContentLoaded', () => {
         if (validatedPostCodeExamples) {
             context.addMessages(field, 'postcode-warning', [
                 '<?= $escaper->escapeJs(__('Provided Zip/Postal Code seems to be invalid.')) ?>',
-                '<?= $escaper->escapeJs(__('Example: ')) ?>' + validatedPostCodeExamples.join('; ') + '. ',
+                '<?= $escaper->escapeJs(__(' Example: ')) ?>' + validatedPostCodeExamples.join('; ') + '. ',
                 '<?= $escaper->escapeJs(__('If you believe it is the right one you can ignore this notice.')) ?>'
             ]);
         }

@@ -1,0 +1,28 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\StoreConfig;
+use Magento\Framework\View\Element\Template;
+use Magento\GoogleTagManager\Helper\Data;
+
+/** @var Template $block */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var StoreConfig $storeConfig */
+$storeConfig = $viewModels->require(StoreConfig::class);
+$accountType = $storeConfig->getStoreConfig(Data::XML_PATH_TYPE);
+
+switch ($accountType) {
+    case Data::TYPE_TAG_MANAGER:
+            echo $block->getChildHtml('google_tagmanager_analytics');
+        break;
+    case Data::TYPE_UNIVERSAL:
+            echo $block->getChildHtml('google_analytics');
+        break;
+}

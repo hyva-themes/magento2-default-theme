@@ -67,7 +67,7 @@ $additionalOptions = ['page' => 'p'];
                 paramData[paramName] = paramValue;
 
                 if (this.options.post) {
-                    hyva.postForm({action: baseUrl, data: paramData});
+                    hyva.postForm({action: baseUrl, data: paramData, skipUenc: true});
                 } else {
                     if (paramValue === defaultValue.toString()) {
                         delete paramData[paramName];

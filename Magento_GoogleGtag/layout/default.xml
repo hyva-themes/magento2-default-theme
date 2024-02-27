@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+ -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="head.additional">
+            <block class="Magento\GoogleGtag\Block\Ga"
+                   name="google_gtag_analytics"
+                   as="google_gtag_analytics"
+                   template="Magento_GoogleGtag::ga.phtml"
+                   ifconfig="google/gtag/analytics4/active"
+                   after="head.hyva-scripts"/>
+            <block name="gtag_google_adwords"
+                   as="gtag_google_adwords"
+                   template="Magento_GoogleGtag::ads.phtml"
+                   ifconfig="google/gtag/adwords/active"
+                   after="head.hyva-scripts">
+                <arguments>
+                    <argument name="use_conversion_label" xsi:type="boolean">false</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

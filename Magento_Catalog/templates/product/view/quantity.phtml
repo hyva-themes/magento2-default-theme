@@ -43,7 +43,7 @@ $step = $stockItemViewModel->getQtyIncrements($product)
 
             function findPathParam(key) {
                 // get all path pairs after BASE_URL/front_name/action_path/action
-                const baseUrl = (BASE_URL.substr(0, 2) === '//' ? 'http:' : '') + BASE_URL;
+                const baseUrl = (BASE_URL.substring(0, 2) === '//' ? 'http:' : '') + BASE_URL;
                 const baseUrlParts = (new URL(baseUrl)).pathname.replace(/\/$/, '').split('/');
                 const pathParts = window.location.pathname.split('/').slice(baseUrlParts.length + 3);
                 for (let i = 0; i < pathParts.length; i += 2) {
@@ -57,7 +57,7 @@ $step = $stockItemViewModel->getQtyIncrements($product)
                 qty: <?= $block->getProductDefaultQty() * 1 ?>,
                 itemId: (new URLSearchParams(window.location.search)).get('id') || findPathParam('id'),
                 productId: '<?= (int)$product->getId() ?>',
-                <?php // populate the qty when editing a product from the cart ?>
+                <?php /* populate the qty when editing a product from the cart */ ?>
                 onGetCartData: function onGetCartData(data, $dispatch) {
                     const cart = data && data.data && data.data.cart;
                     if (this.itemId && cart && cart.items) {
@@ -88,7 +88,7 @@ $step = $stockItemViewModel->getQtyIncrements($product)
                     form="product_addtocart_form"
                     <?php if ($stockItemViewModel->isQtyDecimal($product)): ?>
                     type="text"
-                    pattern="[0-9](\.[0-9])?{0,<?= /** @noEscape */ $maxSalesQtyLength ?>}'"
+                    pattern="[0-9]+(\.[0-9]{1,<?= /** @noEscape */ $maxSalesQtyLength ?>})?"
                     inputmode="decimal"
                     <?php else: ?>
                     type="number"

@@ -49,7 +49,7 @@ if ($option): ?>
         class="<?= $optionType === Option::OPTION_TYPE_MULTIPLE
                        ? 'form-multiselect'
                        : 'form-select' ?>
-                       product-custom-option"
+                       product-custom-option max-w-full"
         <?php if ($optionType === Option::OPTION_TYPE_MULTIPLE): ?>
             multiple="multiple"
         <?php endif; ?>
@@ -119,8 +119,7 @@ if ($option): ?>
                 (<?= $escaper->escapeHtml(__('Excl. Tax')) ?>: <?= /* @noEscape */ $productPriceViewModel->format($valueBasePrice) ?>)
                 <?php endif; ?>
             </option>
-        </div>
     <?php endforeach; ?>
     </select>
-    </div>
+</div>
 <?php endif; ?>

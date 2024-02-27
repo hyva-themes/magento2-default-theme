@@ -1,0 +1,29 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\StoreConfig;
+use Magento\Framework\View\Element\Template;
+use Magento\GoogleTagManager\Model\Config\TagManagerConfig;
+
+/** @var Template $block */
+/** @var TagManagerConfig $gtmConfig */
+/** @var ViewModelRegistry  $viewModels */
+
+/** @var StoreConfig $storeConfig */
+$storeConfig = $viewModels->require(StoreConfig::class);
+$accountType = $storeConfig->getStoreConfig('google/gtag/analytics4/type');
+
+switch ($accountType) {
+    case TagManagerConfig::TYPE_TAG_MANAGER:
+            echo $block->getChildHtml('google_tagmanager_analytics');
+        break;
+    case TagManagerConfig::TYPE_ANALYTICS4:
+            echo $block->getChildHtml('google_gtag_analytics');
+        break;
+}

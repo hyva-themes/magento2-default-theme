@@ -1,0 +1,127 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Store as StoreViewModel;
+use Hyva\Theme\ViewModel\StoreConfig;
+use Magento\Cookie\Helper\Cookie;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Magento\GoogleGtag\ViewModel\Adwords;
+
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+/** @var Adwords $adsViewModel */
+
+/** @var $storeConfig StoreConfig */
+$adsViewModel = $viewModels->require(Adwords::class);
+$storeConfig = $viewModels->require(StoreConfig::class);
+$storeViewModel = $viewModels->require(StoreViewModel::class);
+
+$useConversionLabel = $block->getUseConversionLabel();
+$anonymize = (bool)$storeConfig->getStoreConfig('google/gtag/anonymize');
+
+$cookieHelper = $this->helper(Cookie::class);
+$cookieRestriction = (bool)$cookieHelper->isCookieRestrictionModeEnabled();
+
+/**
+ * We skip over lazy-loading if cookieRestriction is enabled, because the scripts are not executed
+ * before cookies are accepted anyway. The script is executed when cookies are accepted by the visitor.
+ *
+ * Additionally, on subsequent requests the scripts can render on pageload (if cookies are accepted),
+ * without a performance penalty because the scripts are cached in the browser.
+ */
+$lazyLoadScript = $storeConfig->getStoreConfig('google/gtag/lazyload')
+    && !$cookieRestriction;
+?>
+
+<?php if ($adsViewModel->isGoogleAdwordsConfigurable() && $adsViewModel->isGoogleAdwordsActive()): ?>
+    <?php $conversionId = $adsViewModel->getConversionId(); ?>
+    <?php $gtagSiteSrc = $adsViewModel->getConversionGtagGlobalSiteTagSrc(); ?>
+    <?php $conversionLabel = $useConversionLabel ? $adsViewModel->getConversionLabel() : ''; ?>
+
+    <!-- BEGIN GOOGLE ADWORDS CODE -->
+    <script>
+        {
+            (function initGoogleAdwords(){
+                const config = {
+                    conversionId: "<?= $escaper->escapeJs($conversionId);  ?>",
+                    gtagSiteSrc: "<?= $escaper->escapeJs($gtagSiteSrc);  ?>",
+                    conversionLabel: "<?= $escaper->escapeJs($conversionLabel);  ?>",
+                    isCookieRestrictionModeEnabled: "<?= $escaper->escapeJs($cookieRestriction);  ?>",
+                    cookieName: '<?= /* @noEscape */ Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>',
+                    currentWebsite: '<?= /* @noEscape */ $storeViewModel->getWebsiteId(); ?>'
+                };
+                const anonymize_ip = <?= $anonymize ? 'true' : 'false' ?>;
+
+                let allowServices = false,
+                    allowedCookies,
+                    allowedWebsites;
+
+                if (typeof hyva === 'undefined' || (!hyva.getBrowserStorage || !hyva.getCookie || !hyva.setCookie)) {
+                    console.warn("Hyvä helpers are not loaded yet. Make sure they are included before this script");
+                }
+
+                if (config.isCookieRestrictionModeEnabled && typeof hyva !== 'undefined') {
+                    allowedCookies = hyva.getCookie(config.cookieName);
+
+                    if (allowedCookies !== null) {
+                        allowedWebsites = JSON.parse(unescape(allowedCookies));
+
+                        if (allowedWebsites[config.currentWebsite] === 1) {
+                            allowServices = true;
+                        }
+                    }
+                } else {
+                    allowServices = true;
+                }
+
+                if (allowServices) {
+                    if (!window.gtag) {
+                        <?php if ($lazyLoadScript): ?>
+                        window.addEventListener('init-external-scripts', () => {
+                            <?php endif; ?>
+                            const gtagScript = document.createElement('script');
+                            gtagScript.type = 'text/javascript';
+                            gtagScript.async = true;
+                            gtagScript.src = config.gtagSiteSrc;
+                            document.head.insertBefore(gtagScript, document.head.children[0]);
+                            <?php if ($lazyLoadScript): ?>
+                        });
+                        <?php endif; ?>
+
+                        window.dataLayer = window.dataLayer || [];
+                        window.gtag = function () {
+                            dataLayer.push(arguments)
+                        };
+
+                        gtag('js', new Date());
+                        gtag('set', 'developer_id.dYjhlMD', true);
+                    }
+
+                    gtag('config', config.conversionId, {'anonymize_ip': anonymize_ip});
+                    if (config.conversionLabel) {
+                        gtag(
+                            'event',
+                            'conversion',
+                            {
+                                'send_to': config.conversionId + '/'
+                                    + config.conversionLabel
+                            }
+                        );
+                    }
+                }
+            }())
+        }
+    </script>
+    <!-- END GOOGLE ADWORDS CODE -->
+<?php endif ?>

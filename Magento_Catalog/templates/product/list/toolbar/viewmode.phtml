@@ -18,29 +18,41 @@ use Magento\Framework\Escaper;
 
     <?php $modes = $block->getModes(); ?>
     <?php if ($modes && count($modes) > 1): ?>
-        <div class="modes flex space-x-1 mr-2 items-center px-2 py-2 rounded-md border
-    border-gray-300 bg-white text-sm leading-5 w-20 order-1 col-span-1 sm:col-span-2 md:col-span-1 lg:col-span-2">
-            <strong class="modes-label sr-only"><?= $escaper->escapeHtml((string)__('View as')) ?></strong>
+        <div
+            class="modes flex justify-center space-x-1 mr-2 items-center px-2 py-2 rounded-md border border-gray-300 bg-white text-sm leading-5
+             w-20 order-1 col-span-1 sm:col-span-2 md:col-span-1 lg:col-span-2"
+            aria-label="<?= $escaper->escapeHtmlAttr(__('Products view mode')) ?>"
+        >
             <?php foreach ($block->getModes() as $code => $label): ?>
                 <?php if ($block->isModeActive($code)): ?>
-                    <strong title="<?= $escaper->escapeHtmlAttr($label) ?>"
-                            class="modes-mode active mode-<?= $escaper->escapeHtmlAttr(strtolower($code)) ?>"
-                            data-value="<?= $escaper->escapeHtmlAttr(strtolower($code)) ?>">
+                    <strong
+                        title="<?= $escaper->escapeHtmlAttr($label) ?>"
+                        class="modes-mode active mode-<?= $escaper->escapeHtmlAttr(strtolower($code)) ?>"
+                        role="checkbox"
+                        aria-checked="true"
+                        data-value="<?= $escaper->escapeHtmlAttr(strtolower($code)) ?>"
+                        aria-label="<?= $escaper->escapeHtmlAttr(__('Products view mode - %1', $label)) ?>"
+                    >
                         <span><?= $escaper->escapeHtml($label) ?></span>
                     </strong>
                 <?php else: ?>
-                    <a class="modes-mode mode-<?= $escaper->escapeHtmlAttr(strtolower($code)) ?>
-                        opacity-25 hover:opacity-100"
-                       title="<?= $escaper->escapeHtmlAttr($label) ?>"
-                       href="#"
-                       @click.prevent="changeUrl(
-                        'product_list_mode', '<?= $escaper->escapeHtmlAttr(strtolower($code)) ?>', options.modeDefault
-                       )"
-                       data-role="mode-switcher"
-                       data-value="<?= $escaper->escapeHtmlAttr(strtolower($code)) ?>"
-                       aria-label="<?= $escaper->escapeHtmlAttr($label) ?>">
+                    <button
+                        class="modes-mode mode-<?= $escaper->escapeHtmlAttr(strtolower($code)) ?> opacity-50 hover:opacity-100"
+                        title="<?= $escaper->escapeHtmlAttr($label) ?>"
+                        href="#"
+                        @click.prevent="changeUrl(
+                            'product_list_mode',
+                            '<?= $escaper->escapeHtmlAttr(strtolower($code)) ?>',
+                            options.modeDefault
+                        )"
+                        data-role="mode-switcher"
+                        data-value="<?= $escaper->escapeHtmlAttr(strtolower($code)) ?>"
+                        role="checkbox"
+                        aria-checked="false"
+                        aria-label="<?= $escaper->escapeHtmlAttr(__('Products view mode - %1', $label)) ?>"
+                    >
                         <span><?= $escaper->escapeHtml($label) ?></span>
-                    </a>
+                    </button>
                 <?php endif; ?>
             <?php endforeach; ?>
         </div>
