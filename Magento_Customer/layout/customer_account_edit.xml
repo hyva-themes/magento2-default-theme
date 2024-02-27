@@ -17,6 +17,7 @@
         <referenceContainer name="content">
             <block class="Magento\Customer\Block\Form\Edit" name="customer_edit" template="Magento_Customer::form/edit.phtml" cacheable="false">
                 <container name="form.additional.info" as="form_additional_info"/>
+                <container name="fieldset.edit.info.additional" as="fieldset_edit_info_additional"/>
             </block>
         </referenceContainer>
         <referenceContainer name="before.body.end">

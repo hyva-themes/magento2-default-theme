@@ -13,6 +13,7 @@ use Magento\Contact\Helper\Data as ContactHelper;
 use Magento\Framework\Escaper;
 use Hyva\Theme\ViewModel\ReCaptcha;
 
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
 
 /** @var ContactForm $block */
@@ -27,7 +28,7 @@ $contactHelper = $this->helper(ContactHelper::class);
 // on the Magento_ReCaptchaContact module
 $recaptcha = $block->getData('viewModelRecaptcha');
 ?>
-<div class="flex-columns-wrapper justify-between py-8 gap-4">
+<div class="flex flex-col md:flex-row justify-between py-8 gap-4">
     <form class="form contact card lg:w-1/2 md:w-2/3"
           action="<?= $escaper->escapeUrl($block->getFormAction()) ?>"
           id="<?= $escaper->escapeHtmlAttr($formId) ?>"

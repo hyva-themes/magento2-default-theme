@@ -22,9 +22,6 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
 <div class="toolbar-sorter sorter flex items-center order-1 col-span-3 sm:col-span-6
         md:col-span-3 lg:col-span-6 justify-end">
-    <span class="sr-only sorter-label">
-        <?= $escaper->escapeHtml(__('Sort By')) ?>
-    </span>
     <select data-role="sorter"
             class="form-select sorter-options mr-3"
             aria-label="<?= $escaper->escapeHtml(__('Sort By')) ?>"

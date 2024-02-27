@@ -8,14 +8,20 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Escaper\EscapeHtmlAllowingAnchorAttributes;
 use Magento\Framework\Escaper;
 
 // phpcs:disable Generic.Files.LineLength.TooLong
 
+/** @var ViewModelRegistry $viewModels */
 /** @var Escaper $escaper */
+/** @var EscapeHtmlAllowingAnchorAttributes $specialEscaper */
+
+$specialEscaper = $viewModels->require(EscapeHtmlAllowingAnchorAttributes::class)
 ?>
 <p class="my-4 text-sm text-gray-900">
-<?= $escaper->escapeHtml(
+<?= $specialEscaper->escapeHtml(
     __(
         'This form is protected by reCAPTCHA - the <a class="underline" href="%1" target="_blank" rel="noopener">Google Privacy Policy</a> and <a class="underline" href="%2" target="_blank" rel="noopener">Terms of Service</a> apply.',
         'https://policies.google.com/privacy',

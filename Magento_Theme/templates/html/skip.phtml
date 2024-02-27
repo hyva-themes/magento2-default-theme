@@ -17,7 +17,8 @@ use Magento\Framework\View\Element\Template;
 $target = $block->getTarget();
 $label = $block->getLabel();
 ?>
-<a class="action skip sr-only <?= $escaper->escapeHtmlAttr($target) ?>"
+<a class="action skip sr-only focus:not-sr-only focus:absolute focus:z-40 focus:bg-white
+   <?= $escaper->escapeHtmlAttr($target) ?>"
    href="#<?= $escaper->escapeHtmlAttr($target) ?>">
     <span>
         <?= $escaper->escapeHtml($label) ?>

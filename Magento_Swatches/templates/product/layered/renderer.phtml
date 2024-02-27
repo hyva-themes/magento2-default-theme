@@ -52,6 +52,12 @@ $swatchData = $block->getSwatchData();
             isTooltipVisible() {
                 return this.activeTooltipItem
             },
+            isFirstItemCol() {
+                const left = this.tooltipPositionElement.offsetLeft;
+                const leftParent = this.tooltipPositionElement.parentNode.offsetLeft;
+                const width = this.tooltipPositionElement.offsetWidth;
+                return left - leftParent < width;
+            },
             getTooltipImageStyle() {
                 const type = this.activeTooltipItem.type;
 
@@ -91,8 +97,8 @@ $swatchData = $block->getSwatchData();
                 continue;
             endif; ?>
             <a href="<?= $escaper->escapeUrl($label['link']) ?>" rel="nofollow"
-               aria-label="<?= $escaper->escapeHtmlAttr($label['label']) ?>"
-               class="swatch-option-link-layered swatch-option border-2 cursor-pointer bg-container-lighter shadow-sm relative select-none border-container-darker"
+               aria-label="<?= $escaper->escapeHtmlAttr(__('Filter %1 %2', $swatchData['attribute_label'], $label['label'])) ?>"
+               class="swatch-option-link-layered swatch-option cursor-pointer bg-container-lighter shadow-sm relative select-none border-container-darker"
                :class="{ 'w-6 h-6' : getSwatchType('<?= (string) $swatchData['swatches'][$option]['type'] ?>') !== 'text' }"
                :style="getSwatchBackgroundStyle(
                     '<?= (string) $swatchData['swatches'][$option]['type'] ?>',

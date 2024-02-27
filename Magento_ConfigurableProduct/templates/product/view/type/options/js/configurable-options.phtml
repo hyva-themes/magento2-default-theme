@@ -6,18 +6,24 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\CurrentProduct;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+/** @var CurrentProduct $currentProduct */
+$currentProduct = $viewModels->require(CurrentProduct::class);
+
 ?>
 <script>
     function initConfigurableOptions(productId, optionConfig) {
 
         function findPathParam(key) {
             <?php /* get all path pairs after BASE_URL/front_name/action_path/action */ ?>
-            const baseUrl = (BASE_URL.substr(0, 2) === '//' ? 'http:' : '') + BASE_URL;
+            const baseUrl = (BASE_URL.substring(0, 2) === '//' ? 'http:' : '') + BASE_URL;
             const baseUrlParts = (new URL(baseUrl)).pathname.replace(/\/$/, '').split('/');
             const pathParts = window.location.pathname.split('/').slice(baseUrlParts.length + 3);
             for (let i = 0; i < pathParts.length; i += 2) {
@@ -37,8 +43,8 @@ use Magento\Framework\View\Element\Template;
                 this.findAllowedAttributeOptions();
                 this.$nextTick(() => {
                     if (typeof this.optionConfig.defaultValues === 'object') {
-                        for (const [optionId, value] of Object.entries(this.optionConfig.defaultValues)) {
-                            this.changeOption(optionId, value + '');
+                        for (const [attributeId, value] of Object.entries(this.optionConfig.defaultValues)) {
+                            this.changeOption(attributeId, value + '');
                         }
                     }
                 });
@@ -93,18 +99,11 @@ use Magento\Framework\View\Element\Template;
                     return a.position - b.position
                 });
 
-                const selectionWithoutAttr = attrId => {
-                    <?php /* return the current selection without the given attribute */ ?>
-                    return Object.keys(selectedValues).reduce((acc, id) => {
-                        if (id !== attrId) acc[id] = selectedValues[id];
-                        return acc;
-                    }, {})
-                }
-
                 const newAllowedAttributeOptions = [];
 
                 allAttributesSorted.forEach(attribute => {
-                    const availableIndexes = this.calculateAvailableProductIndexes(selectionWithoutAttr(attribute.id));
+                    const selectionWithoutAttr = Object.assign({}, this.removeAttrFromSelection(selectedValues, attribute.id));
+                    const availableIndexes = this.calculateAvailableProductIndexes(selectionWithoutAttr);
                     newAllowedAttributeOptions[attribute.id] = allAttributes[attribute.id].options.filter(option => {
                         return !!option.products.find(product => {
                             return availableIndexes.includes(product);
@@ -115,6 +114,16 @@ use Magento\Framework\View\Element\Template;
             },
             calculateAvailableProductIndexes(selectedOptions) {
                 if (Object.keys(selectedOptions).length === 0) {
+                    <?php /* for Magento >= 2.4.4 when out-of-stock products are shown */ ?>
+                    if (Object.values(this.optionConfig.salable || {}).length) {
+                        <?php
+                        // The object this.optionConfig.salable is a map {attrId: {optionId: [productIndexes]}}
+                        // This turns the objects into arrays and flattens them, and removes duplicates
+                        // avoiding Array.flat and Set because they don't quite make our coverage requirement on caniuse.com.
+                        // This ends up returning an array of salable product indexes.
+                        ?>
+                        return [].concat.apply([], [].concat.apply([], Object.values(this.optionConfig.salable).map(Object.values))).filter((x, i, a) => a.indexOf(x) === i)
+                    }
                     <?php /* no selected options mean all products are available for selection */ ?>
                     return Object.keys(this.optionConfig.index);
                 }
@@ -139,10 +148,14 @@ use Magento\Framework\View\Element\Template;
                         return acc.filter(index => optionIndexes.includes(index));
                     });
                 } else {
-                    <?php /* for Magento < 2.4.4 or when not out-of-stock-products are hidden: */ ?>
+                    <?php /* for Magento < 2.4.4 or when out-of-stock-products are hidden: */ ?>
                     const productIndexes = this.optionConfig.index;
                     return Object.keys(productIndexes).filter(index => {
-                        return selectedIds.find(attrId => productIndexes[index][attrId] === `${selectedOptions[attrId]}`)
+                        <?php /* selectedIds.every() doesn't have enough browser support at the time of writing according to https://caniuse.com/mdn-javascript_builtins_array_every */ ?>
+                        for (const attrId of selectedIds) {
+                            if (productIndexes[index][attrId] !== `${selectedOptions[attrId]}`) return false
+                        }
+                        return true
                     });
                 }
             },
@@ -218,17 +231,28 @@ use Magento\Framework\View\Element\Template;
                     ? this.optionConfig.optionPrices[cheapestForSelection].finalPrice.amount
                     : this.optionConfig.prices.finalPrice.amount; // default price if no option selection
             },
-            changeOption(optionId, value) {
+            clearOptionIfActive(optionId, value) {
+                if (this.selectedValues[optionId] === value) {
+                    this.blurLabel()
+                    this.changeOption(optionId, '')
+                }
+            },
+            removeAttrFromSelection(selectedValues, attributeId) {
+                <?php /* create new array so the length property is reset if no option is selected (avoiding delete) */ ?>
+                attributeId = parseInt(attributeId);
+                return selectedValues.reduce((newSelection, val, attr) => {
+                    if (attr !== attributeId) {
+                        newSelection[attr] = val;
+                    }
+                    return newSelection;
+                }, []);
+            },
+            changeOption(attributeId, value) {
                 if (value === '') {
-                    // create new array so the length property is reset if no option is selected (avoiding delete)
-                    this.selectedValues = this.selectedValues.reduce((newSelection, val, opt) => {
-                        if (opt !== optionId) {
-                            newSelection[opt] = val;
-                        }
-                        return newSelection;
-                    }, []);
-                } else {
-                    this.selectedValues[optionId] = value;
+                    this.selectedValues = this.removeAttrFromSelection(this.selectedValues, attributeId)
+                } else if (value && this.getAllowedAttributeOptions(attributeId).find(option => option.id === value)) {
+                    <?php /* Only set as selected value if it is valid */ ?>
+                    this.selectedValues[attributeId] = value;
                 }
                 this.findSimpleIndex();
                 this.findAllowedAttributeOptions();
@@ -240,7 +264,7 @@ use Magento\Framework\View\Element\Template;
                         {
                             detail: {
                                 productId: this.productId,
-                                optionId: optionId,
+                                optionId: attributeId,
                                 value: value,
                                 productIndex: this.productIndex,
                                 selectedValues: this.selectedValues,
@@ -289,9 +313,13 @@ use Magento\Framework\View\Element\Template;
                 });
             },
             onGetCartData(data) {
-                this.preselectCartItems(data);
-                this.preselectQuerystringItems();
-                this.preselectLocationHashItems();
+                <?php if ($currentProduct->exists()): /* Only preconfigure the main product on product detail pages */ ?>
+                if (this.productId === '<?= (int) $currentProduct->get()->getEntityId() ?>') {
+                    this.preselectCartItems(data);
+                    this.preselectQuerystringItems();
+                    this.preselectLocationHashItems();
+                }
+                <?php endif; ?>
             },
             preselectCartItems(data) {
                 // pre-select options based on cart data for current (quote) itemId
@@ -313,17 +341,16 @@ use Magento\Framework\View\Element\Template;
             preselectQuerystringItems() {
                 // pre-select option like ?size=167
                 const urlQueryParams = new URLSearchParams(window.location.search.replace('?',''));
-                Object.values(this.optionConfig.attributes).map(attribute => {
-                    urlQueryParams.get(attribute.code) &&
-                    this.changeOption(attribute.id, urlQueryParams.get(attribute.code));
-                });
+                this.preselectItemsBasedOnLocation(attribute => urlQueryParams.get(attribute.code));
             },
             preselectLocationHashItems() {
                 // pre-select option like #144=167
                 const urlHashParams = new URLSearchParams(window.location.hash.replace('#',''));
+                this.preselectItemsBasedOnLocation(attribute => urlHashParams.get(attribute.id));
+            },
+            preselectItemsBasedOnLocation(getLocationValue) {
                 Object.values(this.optionConfig.attributes).map(attribute => {
-                    urlHashParams.get(attribute.id) &&
-                    this.changeOption(attribute.id, urlHashParams.get(attribute.id));
+                    this.changeOption(attribute.id, getLocationValue(attribute))
                 });
             }
         }

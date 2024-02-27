@@ -38,6 +38,8 @@ $editProductUrl = $configureUrl . (count($urlHash) > 1 ? '#' . $urlHash[1] : '')
     <a class="action edit btn btn-secondary inline-flex mr-2 p-2"
        href="<?= $escaper->escapeUrl($editProductUrl) ?>">
         <?= $heroicons->pencilHtml('', 20, 20); ?>
-        <span class="sr-only"><?= $escaper->escapeHtml(__('Edit')) ?></span>
+        <span class="sr-only">
+            <?= $escaper->escapeHtml(__('Edit %1', $product->getName())) ?>
+        </span>
     </a>
 <?php endif ?>

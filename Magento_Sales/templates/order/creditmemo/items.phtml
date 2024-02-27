@@ -9,14 +9,17 @@
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Magento\Framework\Escaper;
+use Magento\Sales\Block\Order\Creditmemo\Items;
 
 /** @var Escaper $escaper */
+/** @var Items $block */
 /** @var ViewModelRegistry $viewModels */
 
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
 
-$order = $block->getOrder() ?>
+$order = $block->getOrder();
+?>
 <?php foreach ($order->getCreditmemosCollection() as $creditmemo): ?>
     <div class="order-title text-center md:text-left font-semibold">
         <?= $escaper->escapeHtml(__('Refund #')) ?>

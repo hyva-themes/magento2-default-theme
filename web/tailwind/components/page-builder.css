@@ -253,7 +253,7 @@ div {
         }
 
         .pagebuilder-banner-button {
-            @apply transition-opacity duration-500 ease-in-out max-w-full break-words m-0 mt-5;
+            @apply transition-opacity duration-500 ease-in-out max-w-full break-words m-0 mt-5 inline-block;
             text-align: inherit;
         }
 

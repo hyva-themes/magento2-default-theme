@@ -8,50 +8,61 @@
 
 declare(strict_types=1);
 
+use Magento\Catalog\Block\Navigation;
 use Magento\Framework\Escaper;
+use Magento\Catalog\Model\Category;
 
 /** @var Escaper $escaper */
+/** @var Category $category */
+/** @var Navigation $block */
 
-/**
- * Category left navigation
- *
- * @var \Magento\Catalog\Block\Navigation $block
- */
+if (!$block->getCategory()) {
+    return '';
+}
+
+$categories = $block->getCurrentChildCategories();
+$count = is_array($categories) ? count($categories) : $categories->count();
+
+if (!$count) {
+    return '';
+}
 ?>
-<?php if (!$block->getCategory()) {
-    return;
-} ?>
-<?php $categories = $block->getCurrentChildCategories() ?>
-<?php $count = is_array($categories) ? count($categories) : $categories->count(); ?>
-<?php if ($count): ?>
-    <div class="card border border-container p-4 mx-6 md:mx-0 mb-8">
-        <div class="title">
-            <strong><?= $escaper->escapeHtml(__('Shop By')) ?></strong>
-        </div>
-        <div class="content">
-            <strong class="subtitle"><?= $escaper->escapeHtml(__('Shopping Options')) ?></strong>
-            <dl class="options" id="narrow-by-list2">
-                <dt><?= $escaper->escapeHtml(__('Category')) ?></dt>
-                <dd>
-                    <ol class="items">
-                        <?php /** @var \Magento\Catalog\Model\Category $category */ ?>
-                        <?php foreach ($categories as $category):?>
-                            <?php if ($category->getIsActive()): ?>
-                                <li class="item">
-                                    <a href="<?= $escaper->escapeUrl($block->getCategoryUrl($category)) ?>"
-                                        <?php if ($block->isCategoryActive($category)): ?>
-                                            class="current"
-                                        <?php endif; ?>
-                                    ><?= $escaper->escapeHtml($category->getName()) ?></a>
-                                    <span class="count">
-                                        <?= $escaper->escapeHtml($category->getProductCount()) ?>
-                                    </span>
-                                </li>
-                            <?php endif; ?>
-                        <?php endforeach ?>
-                    </ol>
-                </dd>
-            </dl>
-        </div>
+
+<div class="block my-6">
+    <h2 class="block-title text-primary text-md md:text-3xl font-medium uppercase">
+        <?= $escaper->escapeHtml(__('Shop By')) ?>
+    </h2>
+    <div class="block-content pt-4">
+        <dl id="narrow-by-list2" class="card my-4">
+            <dt class="border-b border-container pb-4">
+                <span class="title text-md md:text-lg font-semibold"><?= $escaper->escapeHtml(__('Category')) ?></span>
+            </dt>
+            <dd class="pt-3">
+                <ol class="items">
+                    <?php  ?>
+                    <?php foreach ($categories as $category):?>
+                        <?php if ($category->getIsActive()): ?>
+                            <li>
+                                <a
+                                    href="<?= $escaper->escapeUrl($block->getCategoryUrl($category)) ?>"
+                                    class="flex justify-between py-1 hover:text-black"
+                                    <?php if ($block->isCategoryActive($category)): ?>
+                                    aria-current="page"
+                                    <?php endif; ?>
+                                    <?php if ((int) $category->getProductCount() === 1): ?>
+                                    aria-label="<?= $escaper->escapeHtmlAttr(__('%1 filter, 1 available product', $category->getName())) ?>"
+                                    <?php else: ?>
+                                    aria-label="<?= $escaper->escapeHtmlAttr(__('%1 filter, %2 available products', $category->getName(), $category->getProductCount())) ?>"
+                                    <?php endif; ?>
+                                >
+                                    <span><?= $escaper->escapeHtml($category->getName()) ?></span>
+                                    <span class="count text-primary">(<?= $escaper->escapeHtml($category->getProductCount()) ?>)</span>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+                    <?php endforeach ?>
+                </ol>
+            </dd>
+        </dl>
     </div>
-<?php endif; ?>
+</div>

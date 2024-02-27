@@ -13,17 +13,21 @@
     </head>
     <body>
         <referenceContainer name="content">
-            <container name="customer.login.container"
-                       htmlTag="div"
-                       htmlId="customer-login-container"
-                       htmlClass="login-container">
-                <block class="Magento\Customer\Block\Form\Login" name="customer_form_login"
-                       template="Magento_Customer::form/login.phtml">
+            <container
+                name="customer.login.container"
+                htmlTag="div"
+                htmlId="customer-login-container"
+                htmlClass="login-container"
+            >
+                <block
+                    class="Magento\Customer\Block\Form\Login"
+                    name="customer_form_login"
+                    template="Magento_Customer::form/login.phtml"
+                >
                     <container name="form.additional.info" as="form_additional_info"/>
                 </block>
                 <block class="Magento\Customer\Block\Form\Login\Info" name="customer.new" template="Magento_Customer::newcustomer.phtml"/>
             </container>
         </referenceContainer>
-
     </body>
 </page>

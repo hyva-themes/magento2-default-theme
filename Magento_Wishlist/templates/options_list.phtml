@@ -15,39 +15,59 @@ use Magento\Wishlist\Block\Customer\Wishlist\Item\Options;
 
 <?php $options = $block->getOptionList(); ?>
 <?php if ($options): ?>
-<div class="items-center justify-start flex tooltip my-2">
-    <div x-data="{ showTooltip: false }" class="relative z-30 inline-flex">
-        <span @mouseover="showTooltip = true"
-              @mouseleave="showTooltip = false"
-              class="action details tooltip toggle cursor-pointer underline">
-            <?= $escaper->escapeHtml(__('See Details')) ?>
-        </span>
-        <div class="relative" x-cloak x-transition.origin.top x-show="showTooltip">
-            <div class="shadow-lg">
-            <div class="absolute top-0 left-0 z-10 w-64 p-2 -mt-4 text-sm leading-tight text-black transform
-                -translate-x-1/3 -translate-y-full bg-white rounded-lg shadow-lg">
-                <span class="subtitle text-lg font-semibold">
-                    <?= $escaper->escapeHtml(__('Options Details')) ?>
-                </span>
-                <dl class="my-2">
-                    <?php foreach ($options as $option): ?>
-                    <dt class="label mb-2 font-semibold"><?= $escaper->escapeHtml($option['label']) ?></dt>
-                    <dd class="values mb-2">
-                        <?php if (is_array($option['value'])): ?>
-                            <?= /* @noEscape */ nl2br(implode("\n", $option['value'])) ?>
-                        <?php else: ?>
-                            <?= /* @noEscape */ $option['value'] ?>
-                        <?php endif; ?>
-                    </dd>
-                    <?php endforeach; ?>
-                </dl>
+    <div class="items-center justify-start flex tooltip my-2">
+        <div
+            x-data="{
+                showTooltip: false,
+                tooltipId: $id('product-details-tooltip')
+            }"
+            class="relative z-30 inline-flex"
+        >
+            <button
+                type="button"
+                @mouseover.prevent.stop="showTooltip = true"
+                @mouseleave.prevent.stop="showTooltip = false"
+                @focus="showTooltip = true"
+                @focusout="showTooltip = false"
+                @keydown.escape="showTooltip = false"
+                :aria-labelledby="tooltipId"
+            >
+                <?= $escaper->escapeHtml(__('See Details')) ?>
+            </button>
+            <div class="relative" x-cloak x-show="showTooltip">
+                <div class="shadow-lg">
+                    <div
+                        :id="tooltipId"
+                        class="
+                            absolute top-0 left-0 z-10 w-64 p-2 -mt-6 text-sm leading-tight text-black transform
+                            -translate-x-full md:-translate-x-1/3 -translate-y-full bg-white rounded-lg shadow-lg p-4
+                        "
+                    >
+                        <span class="subtitle text-lg font-semibold">
+                            <?= $escaper->escapeHtml(__('Options Details')) ?>
+                        </span>
+                        <dl class="my-2">
+                            <?php foreach ($options as $option): ?>
+                                <dt class="label mb-2 font-semibold"><?= $escaper->escapeHtml($option['label']) ?></dt>
+                                <dd class="values mb-2">
+                                    <?php if (is_array($option['value'])): ?>
+                                        <?= /* @noEscape */ nl2br(implode("\n", $option['value'])) ?>
+                                    <?php else: ?>
+                                        <?= /* @noEscape */ $option['value'] ?>
+                                    <?php endif; ?>
+                                </dd>
+                            <?php endforeach; ?>
+                        </dl>
+                    </div>
+                    <svg class="absolute z-10 w-8 h-8 text-white transform -translate-x-full -translate-y-8
+                                fill-current stroke-current"
+                         width="12"
+                         height="12"
+                    >
+                        <rect x="12" y="-12" width="12" height="12" transform="rotate(45)" class="shadow-xl" />
+                    </svg>
+                </div>
             </div>
-            <svg class="absolute z-10 w-8 h-8 text-white transform -translate-x-12
-                -translate-y-6 fill-current stroke-current" width="12" height="12">
-                <rect x="12" y="-12" width="12" height="12" transform="rotate(45)" class="shadow-xl" />
-            </svg>
-        </div>
         </div>
     </div>
-</div>
 <?php endif ?>

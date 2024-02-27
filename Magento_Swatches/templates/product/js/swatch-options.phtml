@@ -132,6 +132,9 @@ use Magento\Framework\View\Element\Template;
                         this.activeTooltipItem.item
                     );
             },
+            isFirstItemCol() {
+                return this.activeTooltipItem.index === 0;
+            },
             getTooltipImageStyle(attributeId, optionId) {
                 const config = this.getSwatchConfig(attributeId, optionId);
                 const type = this.getSwatchType(attributeId, optionId);

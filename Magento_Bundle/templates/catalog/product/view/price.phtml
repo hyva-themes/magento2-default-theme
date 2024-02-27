@@ -184,8 +184,17 @@ $displayTax = $productPriceViewModel->displayPriceIncludingTax();
 >
     <div class="final-price flex">
         <span id="product-price-<?= (int)$product->getId() ?>"
-              class="price-wrapper title-font font-medium text-2xl text-gray-900">
-            <span class="price" x-html="getFormattedFinalPrice()"></span>
+              class="price-wrapper title-font font-medium text-2xl text-gray-900"
+              aria-live="assertive"
+              aria-atomic="true"
+        >
+            <span class="sr-only">
+                <?= $escaper->escapeHtml(__('Final product price ')) ?>
+            </span>
+            <span
+                class="price"
+                x-html="getFormattedFinalPrice()"
+            ></span>
         </span>
     </div>
     <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>

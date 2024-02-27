@@ -9,6 +9,16 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
+        <referenceBlock name="header.customer.logged.in.links">
+            <block name="customer.header.orders.link"
+                   class="Hyva\Theme\Block\SortableItemInterface">
+                <arguments>
+                    <argument name="label" xsi:type="string" translate="true">My Orders</argument>
+                    <argument name="path" xsi:type="string">sales/order/history</argument>
+                    <argument name="sort_order" xsi:type="number">30</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
         <referenceContainer name="sidebar.additional">
             <block class="Magento\Sales\Block\Reorder\Sidebar" name="sale.reorder.sidebar" as="reorder" template="Magento_Sales::reorder/sidebar.phtml"/>
         </referenceContainer>

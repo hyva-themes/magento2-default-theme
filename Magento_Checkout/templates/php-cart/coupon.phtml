@@ -43,22 +43,32 @@ $hasCouponCode = (bool) strlen($block->getCouponCode() ?: "");
 >
     <div class="mx-auto md:mx-0">
         <div class="text-left">
-                <span @click="toggleShowCoupon()"
-                      class="cursor-pointer text-primary-lighter select-none whitespace-nowrap"
-                      id="discount-form-toggle"
-                >
-                    <span class="underline">
-                        <?= $escaper->escapeHtml(__('Apply Discount Code')) ?>
-                    </span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="w-4 h-4 inline-block ml-2"
-                         viewBox="0 0 24 24" stroke="currentColor">
-                        <path x-show="!showCouponForm" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M19 9l-7 7-7-7"/>
-                        <path
-                            x-show="showCouponForm" x-cloak stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M5 15l7-7 7 7"/>
-                    </svg>
+            <button
+                @click="toggleShowCoupon()"
+                class="inline-block cursor-pointer text-primary-lighter select-none whitespace-nowrap"
+                id="discount-form-toggle"
+                :aria-expanded="showCouponForm"
+                type="button"
+            >
+                <span class="underline">
+                    <?= $escaper->escapeHtml(__('Apply Discount Code')) ?>
                 </span>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    class="w-4 h-4 inline-block ml-2"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    role="presentation"
+                    focusable="false"
+                >
+                    <path x-show="!showCouponForm" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 9l-7 7-7-7"/>
+                    <path
+                        x-show="showCouponForm" x-cloak stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M5 15l7-7 7 7"/>
+                </svg>
+            </button>
         </div>
         <div>
             <form id="discount-coupon-form"
