@@ -31,18 +31,48 @@ body {
     .page-main-full-width & {
         @apply max-w-none px-0;
     }
+}
 
-    .account & {
+.account,
+.page-with-filter {
+    .columns {
         .sidebar-main {
             @apply order-1;
         }
     }
 }
 
-.page-with-filter {
-    .columns {
-        .sidebar-main {
-            @apply order-1;
+@screen sm {
+    .page-layout-2columns-left,
+    .page-layout-2columns-right,
+    .page-layout-3columns {
+        .columns {
+            @apply grid-cols-2;
+
+            .main {
+                @apply col-span-2;
+            }
+
+            .sidebar {
+                @apply order-3;
+            }
+        }
+    }
+
+    .account,
+    .page-with-filter {
+        .columns {
+            .sidebar-main {
+                @apply order-1 col-span-2;
+            }
+        }
+    }
+
+    .account {
+        .columns {
+            .sidebar-additional {
+                @apply col-span-2;
+            }
         }
     }
 }
@@ -55,7 +85,7 @@ body {
             @apply grid-cols-3;
 
             .main {
-                @apply row-span-2 col-span-2;
+                @apply row-span-2;
             }
 
             .sidebar {
