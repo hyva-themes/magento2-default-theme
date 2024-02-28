@@ -164,6 +164,7 @@ $productName = $catalogOutputHelper->productAttribute($product, $product->getNam
             <button class="w-auto btn btn-primary justify-center text-sm
                 <?= $viewIsGrid ? 'mr-auto' : 'mr-auto md:mr-0' ?>"
                 aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Cart') . ' ' . $productName) ?>"
+                data-addto="cart"
             >
                 <?= $heroicons->shoppingCartHtml("h-6 w-6 border-current inline", 25, 25, ['aria-hidden' => 'true']) ?>
                 <span class="ml-2 inline <?= $viewIsGrid ? 'md:ml-0 md:hidden lg:ml-2 lg:inline' : '' ?>">
@@ -180,7 +181,9 @@ $productName = $catalogOutputHelper->productAttribute($product, $product->getNam
                     @click.prevent="addToWishlist(<?= (int)$productId ?>)"
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Wish List') . ' ' . $productName) ?>"
                     type="button"
-                    class="rounded-full w-9 h-9 bg-gray-200 p-0 border-0 inline-flex shrink-0 items-center justify-center text-gray-500 hover:text-red-600 ml-2">
+                    class="rounded-full w-9 h-9 bg-gray-200 p-0 border-0 inline-flex shrink-0 items-center justify-center text-gray-500 hover:text-red-600 ml-2"
+                    data-addto="wishlist"
+            >
                 <?= $heroiconsSolid->heartHtml("w-5 h-5", 25, 25, ['aria-hidden' => 'true']) ?>
             </button>
             <?php endif; ?>
@@ -189,7 +192,9 @@ $productName = $catalogOutputHelper->productAttribute($product, $product->getNam
                     @click.prevent="addToCompare(<?= (int)$productId ?>)"
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Compare') . ' ' . $productName) ?>"
                     type="button"
-                    class="rounded-full w-9 h-9 bg-gray-200 p-0 border-0 inline-flex shrink-0 items-center justify-center text-gray-500 hover:text-yellow-500 ml-2">
+                    class="rounded-full w-9 h-9 bg-gray-200 p-0 border-0 inline-flex shrink-0 items-center justify-center text-gray-500 hover:text-yellow-500 ml-2"
+                    data-addto="compare"
+            >
                 <?= $heroicons->scaleHtml("w-5 h-5", 25, 25, ['aria-hidden' => 'true']) ?>
             </button>
             <?php endif; ?>
