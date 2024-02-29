@@ -43,7 +43,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 <?php if ($block->displayNoLocalStorageNotice()): ?>
     <section
         x-data
-        x-show="typeof(Storage) === undefined"
+        x-show="typeof(Storage) === 'undefined'"
         x-cloak
         class="message global local_storage border-b-2 border-blue-500 bg-blue-50 shadow-none m-0 px-0 rounded-none font-normal"
     >
