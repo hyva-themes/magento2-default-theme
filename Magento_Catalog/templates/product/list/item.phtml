@@ -170,7 +170,7 @@ $productName = $catalogOutputHelper->productAttribute($product, $product->getNam
             <?php if ($product->isSaleable()): ?>
                 <?php if ($isProductGroupedOrBundle): ?>
                 <a href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>">
-                    <?= $escaper->escapeHtml(__('Go to the product page to choose options', $productName)) ?>
+                    <?= $escaper->escapeHtml(__('Configure product options on the product page')) ?>
                 </a>
                 <?php else: ?>
                 <button class="w-auto btn btn-primary justify-center text-sm
