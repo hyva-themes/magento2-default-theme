@@ -137,9 +137,9 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
                 x-ref="cartButton"
                 :aria-disabled="isCartEmpty()"
                 :aria-label="`
-                    <?= $escaper->escapeHtml($showMiniCart ? __('Toggle minicart') : __('View cart')) ?>,
+                    <?= $escaper->escapeHtmlAttr($showMiniCart ? __('Toggle minicart') : __('View cart')) ?>,
                     ${isCartEmpty()
-                        ? '<?= $escaper->escapeHtml(__('Cart is empty')) ?>'
+                        ? '<?= $escaper->escapeHtmlAttr(__('Cart is empty')) ?>'
                         : hyva.str(
                             'You have %1 product%2 in your cart.',
                             cart.summary_count,
