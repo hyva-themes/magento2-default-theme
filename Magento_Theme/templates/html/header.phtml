@@ -87,19 +87,15 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
                class="relative inline-block rounded p-1 hover:bg-primary/10 outline-offset-2 invisible"
                :class="{ 'invisible': !(itemCount > 0) }"
                href="<?= $escaper->escapeUrl($block->getUrl('catalog/product_compare/index')) ?>"
-               title="<?= $escaper->escapeHtml(__('View Compare')) ?>"
+               title="<?= $escaper->escapeHtml(__('Compare Products')) ?>"
                x-data="initCompareHeader()"
                @private-content-loaded.window="receiveCompareData($event.detail.data)"
                :aria-label="`
-                    <?= $escaper->escapeHtml(__('View Compare')) ?>,
-                    ${itemCount === 0
-                        ? '<?= $escaper->escapeHtml(__('Compare is empty')) ?>'
-                        : hyva.str(
-                            'You have %1 item%2 in the Compare.',
-                            itemCount,
-                            itemCount === 1 ? '' : 's'
-                        )
-                    }
+                    <?= $escaper->escapeHtmlAttr(__('Compare Products')) ?>,
+                    hyva.str(itemCount > 1
+                        ? '<?= $escaper->escapeHtmlAttr(__('%1 items')) ?>', itemCount
+                        : '<?= $escaper->escapeHtmlAttr(__('%1 item')) ?>', itemCount
+                    )
                 `"
             >
                 <?= $heroicons->scaleHtml("md:h-6 md:w-6", 28, 28, ["aria-hidden" => "true"]) ?>
