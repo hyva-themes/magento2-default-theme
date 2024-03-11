@@ -95,8 +95,7 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
                     ${itemCount > 1
                         ? hyva.str('<?= $escaper->escapeHtmlAttr(__('%1 items')) ?>', itemCount)
                         : hyva.str('<?= $escaper->escapeHtmlAttr(__('%1 item')) ?>', itemCount)
-                    }
-                `"
+                    }`"
             >
                 <?= $heroicons->scaleHtml("md:h-6 md:w-6", 28, 28, ["aria-hidden" => "true"]) ?>
                 <span
@@ -143,8 +142,7 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
                         : cart.summary_count > 1
                             ? hyva.str('<?= $escaper->escapeHtmlAttr(__('%1 items')) ?>', cart.summary_count)
                             : hyva.str('<?= $escaper->escapeHtmlAttr(__('%1 item')) ?>', cart.summary_count)
-                    }
-                `"
+                    }`"
                 <?php if ($showMiniCart): ?>
                     @click.prevent.stop="() => {
                         $dispatch('toggle-cart', { isOpen: true })
