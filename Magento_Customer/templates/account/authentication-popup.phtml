@@ -145,6 +145,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                     <button @click="open = false;" aria-label="Close panel"
                             class="p-2 text-gray-300 transition duration-150 ease-in-out hover:text-black">
                         <?= $heroicons->xHtml(); ?>
+                        <?= $heroicons->xHtml('', 24, 24, ['title' => __('Close panel')]); ?>
                     </button>
                 </div>
                 <div class="flex flex-col h-full py-6 space-y-6 bg-white shadow-xl overflow-y-auto">
