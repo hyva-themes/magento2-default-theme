@@ -110,12 +110,25 @@ $displayTax = $productPriceViewModel->displayPriceIncludingTax();
             },
             calculateFinalPrice() {
 
+                <?php /* Magento\ConfigurableProduct\Block\Product\View\Type\Configurable::getTierPricesByProduct option prices */ ?>
+                <?php /* only sets the basePrice key if display "display incl + excl" is set. Other product types always set it. */ ?>
+                <?php /* If display is set to excl tax, we need to fall back to 'price' for configurable products. */ ?>
+                const getOptionTierPrice = (tierPrice, withTax) => {
+                    <?php if ($product->getTypeId() === 'configurable'): ?>
+                    return withTax
+                        ? tierPrice['price']
+                        : (undefined !== tierPrice['basePrice'] ? tierPrice['basePrice'] : tierPrice['price']);
+                    <?php else: ?>
+                    return tierPrice[withTax ? 'price' : 'basePrice'];
+                    <?php endif; ?>
+                }
+
                 const findApplicableTierPrice = (initialPrice, withTax) => {
                     if (this.activeProductsPriceData && this.activeProductsPriceData.tierPrices) {
-                        const key = withTax ? 'price' : 'basePrice'
                         return this.activeProductsPriceData.tierPrices.reduce((acc, tierPrice) => {
-                            if (this.qty >= tierPrice.qty && tierPrice[key] < acc) {
-                                return tierPrice[key];
+                            const tierPriceCandidate = getOptionTierPrice(tierPrice, withTax);
+                            if (this.qty >= tierPrice.qty && tierPriceCandidate < acc) {
+                                return tierPriceCandidate;
                             }
                             return acc;
                         }, this.activeProductsPriceData[withTax ? finalPriceInclTaxKey : finalPriceExclTaxKey].amount);
