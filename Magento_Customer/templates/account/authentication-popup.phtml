@@ -143,6 +143,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                     x-transition:leave-start="opacity-100"
                     x-transition:leave-end="opacity-0" class="absolute top-0 right-0 flex p-2 mt-2">
                     <button
+                        type="button"
                         @click="open = false;"
                         aria-label="<?= $escaper->escapeHtmlAttr('Close panel') ?>"
                         class="p-2 text-gray-300 transition duration-150 ease-in-out hover:text-black"
