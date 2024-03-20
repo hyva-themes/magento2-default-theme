@@ -25,12 +25,8 @@ $urlPath = $block->getData('path') ?? 'wishlist';
    x-data="{itemCount: 0}"
    @private-content-loaded.window="itemCount = parseInt($event.detail.data.wishlist.counter)"
 >
-    <span class="flex items-center">
-        <?= $escaper->escapeHtml($label) ?>
-        <template x-if="itemCount">
-            <span class="h-5 px-2 py-1 ml-2 -mt-0.5 text-xs font-semibold leading-none text-center text-white uppercase bg-yellow-500 rounded-full">
-                <span x-text="itemCount"></span>
-            </span>
-        </template>
-    </span>
+    <?= $escaper->escapeHtml($label) ?>
+    <template x-if="itemCount">
+        <span x-text="`(${itemCount})`"></span>
+    </template>
 </a>
