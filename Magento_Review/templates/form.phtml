@@ -70,7 +70,7 @@ mutation createProductReviewMutation(
 ';
 
 ?>
-<div class="mx-auto py-6 items-center" id="review-form" tabindex="0">
+<div class="mx-auto py-6 items-center" id="review-form" tabindex="-1">
     <div class="card w-full px-6 py-3">
         <div class="text-xl my-3">
             <?= $escaper->escapeHtml(__('Write Your Own Review')) ?>
@@ -363,7 +363,10 @@ mutation createProductReviewMutation(
                 }
             </script>
         <?php else: ?>
-            <div id="review-form">
+            <div
+                id="review-form"
+                tabindex="-1"
+            >
                 <div class="pb-6">
                     <?= $escaper->escapeHtml(
                         __(
