@@ -234,7 +234,7 @@ if ($msrpPrice = iterator_to_array($product->getPriceInfo()->getPrices())[MsrpPr
      x-bind="eventListeners"
      class="price-box price-final_price"
 >
-    <template x-if="!activeProductsPriceData && !isPriceHidden()">
+    <div x-show="!activeProductsPriceData && !isPriceHidden()">
         <div class="price-container">
             <?php if ($finalPrice < $regularPrice): ?>
                 <div class="old-price mr-2 flex">
@@ -284,7 +284,7 @@ if ($msrpPrice = iterator_to_array($product->getPriceInfo()->getPrices())[MsrpPr
                 </div>
             <?php endif; ?>
         </div>
-    </template>
+    </div>
     <template x-if="activeProductsPriceData &&
         activeProductsPriceData.oldPrice &&
         activeProductsPriceData[finalPriceKey].amount < activeProductsPriceData[regularPriceKey].amount
