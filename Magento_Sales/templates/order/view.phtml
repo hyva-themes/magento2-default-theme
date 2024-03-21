@@ -17,8 +17,9 @@ use Magento\Sales\Block\Order\View;
 /** @var Escaper $escaper */
 
 $giftMessageHelper = $this->helper(Message::class);
+
+$order = $block->getOrder();
 ?>
-<?php $order = $block->getOrder() ?>
 <div class="md:flex md:justify-between items-center mb-3">
     <div class="lg:flex items-center text-center md:text-left">
         <div class="lg:inline-block">

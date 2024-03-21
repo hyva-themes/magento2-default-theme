@@ -20,8 +20,9 @@ use Magento\Sales\Block\Order\History;
 
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
+
+$orders = $block->getOrders();
 ?>
-<?php $orders = $block->getOrders(); ?>
 <h2 id="my-orders-title" class="text-2xl mb-6"><?= $escaper->escapeHtml(__('My Orders')) ?></h2>
 <?= $block->getChildHtml('info') ?>
 <?php if ($orders && count($orders)): ?>
