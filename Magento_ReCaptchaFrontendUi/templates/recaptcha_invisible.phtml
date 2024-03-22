@@ -20,6 +20,7 @@ use Magento\Framework\View\Element\Template;
 $storeConfig = $viewModels->require(StoreConfig::class);
 $recaptcha   = $viewModels->require(ReCaptcha::class);
 $siteKey     = $storeConfig->getStoreConfig('recaptcha_frontend/type_invisible/public_key');
+$position    = $storeConfig->getStoreConfig('recaptcha_frontend/type_invisible/position') ?: 'inline';
 
 if (!$siteKey) {
     // No v2 invisible google API credentials configured
@@ -47,7 +48,8 @@ $grecaptchaInstanceId  = "grecaptchaInstance$instanceSuffix";
                 window.<?= /** @noEscape */ $grecaptchaInstanceId ?> = window.grecaptcha.render(containerId, {
                     sitekey: '<?= $escaper->escapeJs($siteKey) ?>',
                     callback: '<?= $escaper->escapeJs($callback) ?>',
-                    size: 'invisible'
+                    size: 'invisible',
+                    badge: '<?= $escaper->escapeJs($position) ?>',
                 });
             });
         };
