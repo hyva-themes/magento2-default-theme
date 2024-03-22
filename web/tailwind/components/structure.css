@@ -1,3 +1,7 @@
+:where(html) {
+    scrollbar-gutter: stable;
+}
+
 body {
     overflow-y: scroll;
 }
