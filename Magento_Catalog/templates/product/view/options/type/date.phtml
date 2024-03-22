@@ -59,13 +59,14 @@ $htmlInputTypes = [
         <span><?= /* @noEscape */ $block->getFormattedPrice() ?></span>
     </label>
 
-    <div class="flex flex-wrap gap-y-2 sm:ml-2 text-gray-900 text-left w-full sm:w-1/2">
+    <div class="flex flex-wrap gap-y-2 sm:ml-2 text-gray-900 text-left w-full sm:w-1/2"
+          x-data="initValidateDate(<?= (int) $optionId ?>)">
         <?php if ($option->getType() == ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME
             || $option->getType() == ProductCustomOptionInterface::OPTION_TYPE_DATE): ?>
-                  <?= $customOptionViewModel->getDateDropdownsHtml((int) $optionId, [
-                    'day' => ['class="form-select"'],
-                    'month' => ['class="form-select"'],
-                    'year' => ['class="form-select"'],
+            <?= $customOptionViewModel->getDateDropdownsHtml((int) $optionId, [
+                'day' => ['class="form-select"'],
+                'month' => ['class="form-select"'],
+                'year' => ['class="form-select"'],
             ]) ?>
         <?php endif; ?>
 
@@ -78,29 +79,60 @@ $htmlInputTypes = [
             ]) ?>
         <?php endif; ?>
         <script>
-            function updatePriceForDateOption_<?= (int) $optionId ?>(next) {
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.id = 'options_<?= (int) $optionId ?>';
-                input.name = '<?= $escaper->escapeJs($fieldName) ?>';
-                input.value = ['month', 'day', 'year', 'hour', 'minute'].map(part => {
-                    const input = document.getElementById(`options_<?= (int) $optionId ?>_${part}`);
-                        return input ? input.value : '';
-                    }).join('');
-                next('<?= $escaper->escapeJs($optionId) ?>', input)
+            function initValidateDate(optionId) {
+               return {
+                   async validateDays() {
+                       const dayField = document.getElementById(`options_${optionId}_day`);
+                       const monthField = document.getElementById(`options_${optionId}_month`);
+                       const yearField = document.getElementById(`options_${optionId}_year`);
+                       if (! dayField || ! dayField.value ||
+                           ! monthField ||! monthField.value ||
+                           ! yearField || ! yearField.value
+                       ) {
+                           return;
+                       }
+                       const day = parseInt(dayField.value);
+                       const month = parseInt(monthField.value);
+                       const year = parseInt(yearField.value);
+                       const potentialDate = new Date(year, month - 1, day);
+                       if (potentialDate.getDate() !== day ||
+                           potentialDate.getMonth() !== month - 1 ||
+                           potentialDate.getFullYear() !== year
+                       ) {
+                           const maxDays = new Date(year, month, 0).getDate();
+                           if (dayField.value > maxDays) {
+                               dayField.value = maxDays;
+                           }
+                       }
+                   },
+                   init() {
+                       const parts = ['month', 'day', 'year', 'hour', 'minute', 'day_part'];
+                       const baseId = `options_${optionId}`;
+                       parts.forEach(part => {
+                           const select = document.getElementById(`${baseId}_${part}`);
+                           if (select) {
+                               select.setAttribute('x-on:change', `onChange`)
+                           }
+                       })
+                   },
+                   onChange() {
+                       this.validateDays()
+                           .then(() => this.collectDateValueAndUpdatePrice())
+                           .then(transport => this.updateCustomOptionValue(this.$dispatch, optionId, transport))
+                   },
+                   async collectDateValueAndUpdatePrice() {
+                       const input = document.createElement('input');
+                       input.type = 'text';
+                       input.id = `options_${optionId}`;
+                       input.name = 'transport';
+                       input.value = ['month', 'day', 'year', 'hour', 'minute'].map(part => {
+                           const input = document.getElementById(`options_${optionId}_${part}`);
+                           return input ? input.value : '';
+                       }).join('');
+                       return input
+                   }
+               }
             }
-            (() => {
-                const parts = ['month', 'day', 'year', 'hour', 'minute', 'day_part'];
-                const baseId = `options_<?= (int) $optionId ?>`;
-                parts.forEach(part => {
-                    const select = document.getElementById(`${baseId}_${part}`);
-                    if (select) {
-                        select.setAttribute('x-on:change', `updatePriceForDateOption_<?= (int) $optionId ?>((optionId, input) => {
-                            updateCustomOptionValue($dispatch, optionId, input)
-                        })`)
-                    }
-                })
-            })()
         </script>
     </div>
 </div>

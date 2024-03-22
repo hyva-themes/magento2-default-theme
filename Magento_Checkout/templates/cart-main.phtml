@@ -33,6 +33,9 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
 <script>
     'use strict';
     (function( hyva, undefined ) {
+
+        let controller = new AbortController();
+
         /**
          * Takes a form element and submits it through fetch,
          * then replaces the result into the document without
@@ -42,6 +45,9 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
             if (!form.action) {
                 return;
             }
+            controller.abort();
+            controller = new AbortController();
+
             const action = form.action;
             const formData = new FormData(form);
 
@@ -53,7 +59,8 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
 
             window.fetch(action, {
                 method: 'POST',
-                body: formData
+                body: formData,
+                signal: controller.signal
             }).then((result) => {
                 return result.text()
             }).then((content) => {
@@ -61,13 +68,15 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
                 hyva.replaceDomElement('#maincontent', content)
 
             }).catch((error) => {
-                console.error(error);
-                typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
-                    [{
-                        type: "error",
-                        text: "<?= $escaper->escapeJs(__("Something went wrong. Please try again.")) ?>"
-                    }], 10000
-                );
+                if (error.name !== 'AbortError') {
+                    console.error(error);
+                    typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                        [{
+                            type: "error",
+                            text: "<?= $escaper->escapeJs(__("Something went wrong. Please try again.")) ?>"
+                        }], 10000
+                    );
+                }
             })
         }
     }( window.hyva = window.hyva || {} ));

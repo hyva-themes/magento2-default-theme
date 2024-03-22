@@ -1,0 +1,67 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Magento\Theme\Block\Html\Notices;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var Notices $block */
+/** @var ViewModelRegistry $viewModels */
+/** @var SecureHtmlRenderer $secureRenderer */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+?>
+
+<?php if ($block->displayNoscriptNotice()): ?>
+    <noscript>
+        <section class="message global noscript border-b-2 border-blue-500 bg-blue-50 shadow-none m-0 px-0 rounded-none font-normal">
+            <div class="container text-center">
+                <p>
+                    <strong><?= $escaper->escapeHtml(__('JavaScript seems to be disabled in your browser.')) ?></strong>
+                    <span>
+                        <?= $escaper->escapeHtml(
+                            __('For the best experience on our site, be sure to turn on Javascript in your browser.')
+                        ) ?>
+                    </span>
+                </p>
+            </div>
+        </section>
+    </noscript>
+<?php endif; ?>
+
+<?php if ($block->displayNoLocalStorageNotice()): ?>
+    <section
+        x-data
+        x-show="typeof(Storage) === 'undefined'"
+        x-cloak
+        class="message global local_storage border-b-2 border-blue-500 bg-blue-50 shadow-none m-0 px-0 rounded-none font-normal"
+    >
+        <div class="container text-center">
+            <p>
+                <strong><?= $escaper->escapeHtml(__('Local Storage seems to be disabled in your browser.')) ?></strong>
+                <?= $escaper->escapeHtml(
+                    __('For the best experience on our site, be sure to turn on Local Storage in your browser.')
+                ) ?>
+            </p>
+        </div>
+    </section>
+<?php endif; ?>
+
+<?php if ($block->displayDemoNotice()): ?>
+    <section class="message global demo border-b-2 border-red-500 bg-red-50 shadow-none m-0 px-0 rounded-none font-normal">
+        <div class="container text-center font-bold">
+            <p><?= $escaper->escapeHtml(__('This is a demo store. No orders will be fulfilled.')) ?></p>
+        </div>
+    </section>
+<?php endif; ?>

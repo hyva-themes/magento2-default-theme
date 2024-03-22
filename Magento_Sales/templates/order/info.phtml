@@ -12,10 +12,10 @@ use Magento\Framework\Escaper;
 use Magento\Sales\Block\Order\Info;
 
 /** @var Info $block */
+/** @var Escaper $escaper */
 /** @var PaymentInfo $paymentInfo */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
-
 
 $order = $block->getOrder();
 $paymentInfo = $viewModels->require(PaymentInfo::class);

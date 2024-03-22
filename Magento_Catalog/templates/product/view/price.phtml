@@ -17,6 +17,8 @@ use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\Catalog\Pricing\Price\TierPrice;
 use Magento\Framework\Escaper;
+use Magento\Framework\Pricing\Render;
+use Magento\Msrp\Pricing\Price\MsrpPrice;
 
 /** @var AbstractProduct $block */
 /** @var Escaper $escaper */
@@ -41,6 +43,23 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
 
 $displayTax = $productPriceViewModel->displayPriceIncludingTax();
 
+// We expect to refactor MSRP Support on the product detail page, which is why we put this code here
+// and not in a view model. Once it is a method on a view model, it is part of the public API and
+// removing it is a backward compatibility-breaking change.
+// So we won't do that. Removing it from the template, however, is backward compatible, so here it is.
+if ($msrpPrice = iterator_to_array($product->getPriceInfo()->getPrices())[MsrpPrice::PRICE_CODE] ?? null) {
+    if ($msrpPrice->canApplyMsrp($product)) {
+        if (! ($priceRender = $block->getLayout()->getBlock('product.price.render.default'))) {
+            $priceRender = $block->getLayout()->createBlock(
+                Render::class,
+                'product.price.render.default',
+                ['data' => ['price_render_handle' => 'catalog_product_prices']]
+            );
+        }
+        echo $priceRender->render(FinalPrice::PRICE_CODE, $product);
+        return;
+    }
+}
 ?>
 <script>
     function initPrice<?= (int)$product->getId() ?>() {
@@ -215,7 +234,7 @@ $displayTax = $productPriceViewModel->displayPriceIncludingTax();
      x-bind="eventListeners"
      class="price-box price-final_price"
 >
-    <template x-if="!activeProductsPriceData && !isPriceHidden()">
+    <div x-show="!activeProductsPriceData && !isPriceHidden()">
         <div class="price-container">
             <?php if ($finalPrice < $regularPrice): ?>
                 <div class="old-price mr-2 flex">
@@ -265,7 +284,7 @@ $displayTax = $productPriceViewModel->displayPriceIncludingTax();
                 </div>
             <?php endif; ?>
         </div>
-    </template>
+    </div>
     <template x-if="activeProductsPriceData &&
         activeProductsPriceData.oldPrice &&
         activeProductsPriceData[finalPriceKey].amount < activeProductsPriceData[regularPriceKey].amount

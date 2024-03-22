@@ -23,7 +23,7 @@ use Magento\Sales\Block\Order\Info\Buttons;
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
-<div class="flex items-center justify-center md:justify-end my-4 md:my-0">
+<div class="flex items-center justify-center md:justify-start flex-wrap gap-4 md:gap-x-6 my-4 md:my-0">
     <?php $order = $block->getOrder() ?>
     <?php if ($this->helper(\Magento\Sales\Helper\Reorder::class)->canReorder($order->getEntityId())): ?>
         <?php $formData = json_decode(
@@ -32,7 +32,11 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             ),
             true
         ) ?>
-        <form action="<?= $escaper->escapeUrl($formData['action']) ?>" method="post" class="inline-flex items-center">
+        <form id="reorder-form"
+              action="<?= $escaper->escapeUrl($formData['action']) ?>"
+              method="post"
+              class="inline-flex items-center"
+        >
             <?= $block->getBlockHtml('formkey'); ?>
             <input type="hidden" name="data" value='<?= /** @noEscape */ json_encode($formData['data']) ?>'/>
             <button type="submit" class="btn btn-secondary text-secondary-darker">
@@ -42,7 +46,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         </form>
     <?php endif ?>
     <a href="<?= $escaper->escapeUrl($block->getPrintUrl($order)) ?>"
-       class="ml-6 btn btn-secondary text-secondary-darker"
+       class="btn btn-secondary text-secondary-darker"
        target="_blank"
        rel="noopener">
         <?= $heroicons->printerHtml('mr-1 inline-block', 24, 24, ['aria-hidden' => 'true']); ?>

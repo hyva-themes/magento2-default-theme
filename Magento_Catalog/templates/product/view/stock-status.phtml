@@ -31,21 +31,16 @@ $product = $block->hasData('product')
 if (!$product || !$product->getId()) {
     return;
 }
+
+$inStock = $product->getIsSalable();
 ?>
 <?php if ($block->getParentBlock()->displayProductStockStatus()): ?>
     <div class="text-right">
-        <?php if ($product->getIsSalable()): ?>
-            <p class="flex items-center justify-end align-middle available gap-x-2 stock"
-               title="<?= $escaper->escapeHtmlAttr(__('Availability')) ?>">
-                <span class="w-3 h-3 bg-green-500 rounded-full shrink-0"></span>
-                <span><?= $escaper->escapeHtml(__('In stock')) ?></span>
-            </p>
-        <?php else: ?>
-            <p class="flex items-center justify-end align-middle gap-x-2 unavailable stock"
-               title="<?= $escaper->escapeHtmlAttr(__('Availability')) ?>">
-                <span class="w-3 h-3 bg-red-500 rounded-full shrink-0"></span>
-                <span><?= $escaper->escapeHtml(__('Out of stock')) ?></span>
-            </p>
-        <?php endif; ?>
+        <p
+            class="flex items-center justify-end align-middle gap-x-2 stock
+                before:w-3 before:h-3 before:rounded-full before:shrink-0
+                <?= $inStock ? 'available before:bg-green-500' : 'unavailable before:bg-red-500' ?>"
+            title="<?= $escaper->escapeHtmlAttr(__('Availability')) ?>"
+        ><?= $escaper->escapeHtml($inStock ? __('In stock') : __('Out of stock')) ?></p>
     </div>
 <?php endif; ?>

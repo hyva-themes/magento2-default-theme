@@ -29,7 +29,7 @@ $optionId = $option->getId();
            form="product_addtocart_form"
            value="<?= (int)$selections[0]->getSelectionId() ?>"
            id="bundle-option-<?= (int)$optionId ?>-<?= (int)$selections[0]->getSelectionId() ?>"
-           checked="checked"
+           checked
            form="product_addtocart_form"
            data-option-id="<?= (int)$optionId ?>"
            data-selection-id="<?= (int)$selections[0]->getSelectionId() ?>"
@@ -45,9 +45,9 @@ $optionId = $option->getId();
                    name="bundle_option[<?= (int)$optionId ?>][<?= (int)$selectionId ?>]"
                    form="product_addtocart_form"
                    type="checkbox"
-                   <?php if ($block->isSelected($selection)) { echo ' checked="checked"'; } ?>
+                   <?php if ($block->isSelected($selection)) { echo ' checked'; } ?>
                    <?php if (!$selection->isSaleable()): ?>
-                       disabled="disabled"
+                       disabled
                    <?php endif; ?>
                    value="<?= (int)$selectionId ?>"
                    data-option-id="<?= $escaper->escapeHtmlAttr($optionSelectionId) ?>"

@@ -18,14 +18,13 @@
         }
 
         &:hover {
-             @apply bg-gray-600;
-         }
+            @apply bg-gray-600;
+        }
 
         &:focus {
-             @apply outline-none border-transparent ring-4 ring-primary ring-opacity-50;
+            @apply outline-none border-transparent ring-4 ring-primary ring-opacity-50;
         }
     }
-
 
     .btn-primary {
         @apply bg-primary text-white shadow-md;
@@ -33,20 +32,18 @@
         &:hover {
             @apply bg-primary-lighter text-white shadow-lg;
         }
-
     }
 
     .btn-secondary {
         @apply bg-white border-2 border-primary-lighter text-black shadow-md;
 
-    &:hover {
-        @apply bg-white border-primary-darker shadow-lg;
-    }
+        &:hover {
+            @apply bg-white border-primary-darker shadow-lg;
+        }
 
-    &:focus {
-        @apply border-2 border-transparent;
-    }
-
+        &:focus {
+            @apply border-2 border-transparent;
+        }
     }
 
     .btn-size-lg {

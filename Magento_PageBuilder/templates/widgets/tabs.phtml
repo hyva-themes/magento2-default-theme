@@ -28,7 +28,9 @@ use Magento\Framework\View\Element\Template;
                 const tabId = tabLink.getAttribute('href').replace('#', '');
 
                 tabHeader.setAttribute(':class', `{ 'active': tab === '${tabId}' }`);
-                tabLink.setAttribute('x-on:click.prevent', `tab = '${tabId}'`);
+                tabLink.setAttribute('x-on:click.prevent', `tab = '${tabId}';
+                 const nextTick = $nextTick(() => $dispatch('page-builder-tab-activate', {tab: document.getElementById('${tabId}'), nextTick}))`
+                );
 
                 if (index === defaultActiveTab) {
                     tab.setAttribute('x-data', `{ tab: '${tabId}' }`);

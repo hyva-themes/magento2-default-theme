@@ -30,7 +30,7 @@ $activeSelectOptions = [];
            name="bundle_option[<?= (int)$optionId ?>]"
            value="<?= (int)$selections[0]->getSelectionId() ?>"
            id="bundle-option-<?= (int)$optionId ?>-<?= (int)$selections[0]->getSelectionId() ?>"
-           checked="checked"
+           checked
            form="product_addtocart_form"
            data-option-id="<?= (int)$optionId ?>"
            data-selection-id="<?= (int)$selections[0]->getSelectionId() ?>"
@@ -59,7 +59,7 @@ $activeSelectOptions = [];
                     echo 'selected = "selected"';
                 } ?>
                 <?php if (!$selection->isSaleable()): ?>
-                    disabled="disabled"
+                    disabled
                 <?php endif; ?>
                 data-option-id="<?= $escaper->escapeHtmlAttr($optionSelectionId) ?>"
             >

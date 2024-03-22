@@ -74,51 +74,42 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
      x-data="initHeader()"
      @private-content-loaded.window="getData(event.detail.data)"
 >
-    <div class="container flex flex-wrap items-center justify-between w-full px-6 py-3 mx-auto mt-0">
+    <div class="container flex items-center justify-between w-full px-6 py-3 mx-auto mt-0">
         <!--Logo-->
         <?= $block->getChildHtml('logo'); ?>
 
         <!--Main Navigation-->
         <?= $block->getChildHtml('topmenu') ?>
 
-        <div class="flex items-center order-3">
+        <div class="flex items-center gap-2 md:gap-1 order-3 md:-mr-1">
             <!--Compare Icon-->
             <a id="compare-link"
-               class="relative invisible inline-block mx-1 no-underline sm:ml-3 hover:text-black"
+               class="relative inline-block rounded p-1 hover:bg-primary/10 outline-offset-2 invisible"
                :class="{ 'invisible': !(itemCount > 0) }"
                href="<?= $escaper->escapeUrl($block->getUrl('catalog/product_compare/index')) ?>"
-               title="<?= $escaper->escapeHtml(__('Compare Products')) ?>"
+               title="<?= $escaper->escapeHtmlAttr(__('Compare Products')) ?>"
                x-data="initCompareHeader()"
                @private-content-loaded.window="receiveCompareData($event.detail.data)"
+               :aria-label="`
+                    <?= $escaper->escapeHtmlAttr(__('Compare Products')) ?>,
+                    ${itemCount > 1
+                        ? hyva.str('<?= $escaper->escapeJs(__('%1 Items')) ?>', itemCount)
+                        : hyva.str('<?= $escaper->escapeJs(__('%1 Item')) ?>', itemCount)
+                    }`"
             >
-                <?= $heroicons->scaleHtml(
-                    "w-8 h-8 md:h-6 md:w-6 hover:text-black",
-                    25,
-                    25
-                ) ?>
-
-                <span class="sr-only label">
-                   <?= $escaper->escapeHtml(__('Compare Products')) ?>
-                </span>
-
-                <span class="absolute top-0 right-0 h-5 px-2 py-1 -mt-5 -mr-4 text-xs font-semibold
-                    leading-none text-center text-white uppercase transform -translate-x-1
-                    translate-y-1/2 bg-yellow-500 rounded-full"
-                >
-                    <span x-text="itemCount"></span>
-                    <span x-show="itemCount === 1" class="sr-only">
-                        <?= $escaper->escapeHtml(__('item')) ?>
-                    </span>
-                    <span x-show="itemCount > 1" class="sr-only">
-                        <?= $escaper->escapeHtml(__('items')) ?>
-                    </span>
-                </span>
+                <?= $heroicons->scaleHtml("md:h-6 md:w-6", 28, 28, ["aria-hidden" => "true"]) ?>
+                <span
+                    x-text="itemCount"
+                    class="absolute -top-1.5 -right-1.5 h-5 px-2 py-1 rounded-full bg-yellow-500 text-white
+                        text-xs font-semibold leading-none text-center uppercase tabular-nums"
+                    aria-hidden="true"
+                ></span>
             </a>
 
             <!--Search Icon-->
             <button
                 id="menu-search-icon"
-                class="inline-block ml-1 no-underline sm:ml-3 hover:text-black"
+                class="rounded p-1 hover:bg-primary/10 outline-offset-2"
                 @click.prevent="
                     searchOpen = !searchOpen;
                     $dispatch('search-open');
@@ -128,15 +119,11 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
                 :aria-expanded="searchOpen"
                 x-ref="searchButton"
             >
-                <?= $heroicons->searchHtml(
-                    "w-8 h-8 md:h-6 md:w-6 hover:text-black",
-                    25,
-                    25,
-                    [
-                        "aria-hidden" => "true"
-                    ]
-                ) ?>
+                <?= $heroicons->searchHtml("md:h-6 md:w-6", 28, 28, ["aria-hidden" => "true"]) ?>
             </button>
+
+            <!-- Additional Header Elements -->
+            <?= $block->getChildHtml('additional') ?>
 
             <!--Customer Icon & Dropdown-->
             <?= $block->getChildHtml('customer') ?>
@@ -148,10 +135,17 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
                 <a
             <?php endif ?>
                 id="menu-cart-icon"
-                class="relative inline-block ml-1 no-underline sm:ml-3 hover:text-black"
+                class="relative inline-block rounded p-1 hover:bg-primary/10 outline-offset-2"
                 x-ref="cartButton"
                 :aria-disabled="isCartEmpty()"
-                title="<?= $escaper->escapeHtmlAttr(__('Cart')) ?>"
+                :aria-label="`
+                    <?= $escaper->escapeHtmlAttr($showMiniCart ? __('Toggle minicart') : __('View cart')) ?>,
+                    ${isCartEmpty()
+                        ? '<?= $escaper->escapeHtmlAttr(__('Cart is empty')) ?>'
+                        : cart.summary_count > 1
+                            ? hyva.str('<?= $escaper->escapeHtmlAttr(__('%1 items')) ?>', cart.summary_count)
+                            : hyva.str('<?= $escaper->escapeHtmlAttr(__('%1 item')) ?>', cart.summary_count)
+                    }`"
                 <?php if ($showMiniCart): ?>
                     @click.prevent.stop="() => {
                         $dispatch('toggle-cart', { isOpen: true })
@@ -161,38 +155,16 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
                     aria-haspopup="dialog"
                 <?php else: ?>
                     href="<?= $escaper->escapeUrl($block->getUrl('checkout/cart/index')) ?>"
+                    title="<?= $escaper->escapeHtmlAttr(__('View cart')) ?>"
                 <?php endif ?>
             >
-                <span
-                    class="sr-only label"
-                    x-text="`
-                        <?= $escaper->escapeHtml($showMiniCart ? __('Toggle minicart') : __('View cart')) ?>,
-                        ${isCartEmpty() ?
-                        '<?= $escaper->escapeHtml(__('Cart is empty')) ?>' :
-                        hyva.str(
-                            'You have %1 product%2 in your cart.',
-                            cart.summary_count,
-                            cart.summary_count === 1 ? '' : 's'
-                        )}`
-                    "
-                >
-                </span>
-
-                <?= $heroicons->shoppingCartHtml(
-                    "w-8 h-8 md:h-6 md:w-6 hover:text-black",
-                    25,
-                    25
-                ) ?>
-
+                <?= $heroicons->shoppingCartHtml("md:h-6 md:w-6", 28, 28, ["aria-hidden" => "true"]) ?>
                 <span
                     x-text="cart.summary_count"
                     x-show="!isCartEmpty()"
                     x-cloak
-                    class="
-                        absolute top-0 right-0 h-5 px-2 py-1 -mt-5 -mr-4 text-xs font-semibold
-                        leading-none text-center text-white uppercase transform -translate-x-1
-                        translate-y-1/2 rounded-full bg-primary
-                    "
+                    class="absolute -top-1.5 -right-1.5 h-5 px-2 py-1 rounded-full bg-primary text-white
+                        text-xs font-semibold leading-none text-center uppercase tabular-nums"
                     aria-hidden="true"
                 ></span>
             <?php if ($showMiniCart): ?>
@@ -200,7 +172,6 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
             <?php else: ?>
                 </a>
             <?php endif ?>
-
         </div>
     </div>
     <!--Search-->

@@ -55,5 +55,8 @@
         "dealerdirect/phpcodesniffer-composer-installer": "dev-master",
         "magento/magento-coding-standard": "dev-master",
         "phpro/grumphp": "dev-master"
+    },
+    "archive": {
+      "exclude": [".gitlab"]
     }
 }

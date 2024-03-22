@@ -117,36 +117,38 @@ $recaptcha = $block->getData('viewModelRecaptcha');
          @toggle-authentication.window="open = forceAuthentication; redirectIfAuthenticated(event)"
          @keydown.window.escape="open = false"
 >
-        <div role="dialog"
-             aria-modal="true"
-             @click.outside="open = false"
-             class="inset-y-0 right-0 z-30 flex max-w-full"
-             :class="{'fixed': open }" x-cloak x-show="open"
+    <div role="dialog"
+         aria-modal="true"
+         @click.outside="open = false"
+         class="inset-y-0 right-0 z-30 flex max-w-full fixed"
+         x-cloak
+         x-show="open"
+    >
+        <div class="relative w-screen max-w-md pt-16 bg-container-lighter"
+             x-show="open"
+             x-cloak=""
+             x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700"
+             x-transition:enter-start="translate-x-full"
+             x-transition:enter-end="translate-x-0"
+             x-transition:leave="transform transition ease-in-out duration-500 sm:duration-700"
+             x-transition:leave-start="translate-x-0"
+             x-transition:leave-end="translate-x-full"
         >
-            <div class="relative w-screen max-w-md pt-16 bg-container-lighter"
-                 x-show="open"
-                 x-cloak=""
-                 x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700"
-                 x-transition:enter-start="translate-x-full"
-                 x-transition:enter-end="translate-x-0"
-                 x-transition:leave="transform transition ease-in-out duration-500 sm:duration-700"
-                 x-transition:leave-start="translate-x-0"
-                 x-transition:leave-end="translate-x-full"
-            >
-                <div
-                    x-show="open"
-                    x-cloak=""
-                    x-transition:enter="ease-in-out duration-500"
-                    x-transition:enter-start="opacity-0"
-                    x-transition:enter-end="opacity-100"
-                    x-transition:leave="ease-in-out duration-500"
-                    x-transition:leave-start="opacity-100"
-                    x-transition:leave-end="opacity-0" class="absolute top-0 right-0 flex p-2 mt-2">
-                    <button @click="open = false;" aria-label="Close panel"
-                            class="p-2 text-gray-300 transition duration-150 ease-in-out hover:text-black">
-                        <?= $heroicons->xHtml(); ?>
-                    </button>
-                </div>
+            <div
+                x-show="open"
+                x-cloak=""
+                x-transition:enter="ease-in-out duration-500"
+                x-transition:enter-start="opacity-0"
+                x-transition:enter-end="opacity-100"
+                x-transition:leave="ease-in-out duration-500"
+                x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0" class="absolute top-0 right-2 flex p-2 mt-2">
+                <button @click="open = false;" aria-label="Close panel"
+                        class="p-2 text-gray-300 transition duration-150 ease-in-out hover:text-black">
+                    <?= $heroicons->xHtml(); ?>
+                </button>
+            </div>
+            <template x-if="open">
                 <div class="flex flex-col h-full py-6 space-y-6 bg-white shadow-xl overflow-y-auto">
                     <div class="block-customer-login bg-container border border-container mx-4 p-4 shadow-sm">
                         <p id="authenticate-customer-login" class="text-lg leading-7 text-gray-900">
@@ -193,7 +195,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
 
                                 <input name="context" type="hidden" value="checkout" />
                                 <div class="actions-toolbar flex justify-between pt-6 pb-2 items-center">
-                                    <button type="submit"<?php if ($loginButtonViewModel->disabled()): ?> disabled="disabled" data-recaptcha-btn<?php endif; ?>
+                                    <button type="submit"<?php if ($loginButtonViewModel->disabled()): ?> disabled data-recaptcha-btn<?php endif; ?>
                                             class="inline-flex btn btn-primary disabled:opacity-75"
                                     >
                                         <?= $escaper->escapeHtml(__('Sign In')) ?>
@@ -234,6 +236,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                         </div>
                     </div>
                 </div>
-            </div>
+            </template>
         </div>
+    </div>
 </section>

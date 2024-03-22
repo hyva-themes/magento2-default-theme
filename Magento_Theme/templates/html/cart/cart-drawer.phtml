@@ -32,19 +32,17 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             cart: {},
             maxItemsToDisplay: <?= (int) $maxItemsToDisplay ?>,
             itemsCount: 0,
-            totalCartAmount: 0,
             getData(data) {
                 if (data.cart) {
                     this.cart = data.cart;
                     this.itemsCount = data.cart.items && data.cart.items.length || 0;
-                    this.totalCartAmount = this.cart.summary_count;
                     this.setCartItems();
                 }
                 this.isLoading = false;
             },
             cartItems: [],
             getItemCountTitle() {
-                return hyva.strf('<?= $escaper->escapeJs(__('%0 of %1 products in cart displayed')) ?>', this.maxItemsToDisplay, this.totalCartAmount)
+                return hyva.strf('<?= $escaper->escapeJs(__('%0 of %1 products in cart displayed')) ?>', this.maxItemsToDisplay, this.itemsCount)
             },
             setCartItems() {
                 this.cartItems = this.cart.items && this.cart.items.sort((a, b) => b.item_id - a.item_id) || [];
@@ -89,13 +87,17 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     window.dispatchEvent(new CustomEvent('reload-customer-section-data'));
                 });
             },
+            scrollLock(use = true) {
+                document.body.style.overflow = use ? "hidden" : "";
+            },
             toggleCartDrawer(event) {
                 if (event.detail && event.detail.isOpen !== undefined) {
                     if (event.detail.isOpen) {
-                        this.openCartDrawer()
+                        this.openCartDrawer();
                     } else {
-                        this.open = false
-                        this.$refs && this.$refs.cartDialogContent && hyva.releaseFocus(this.$refs.cartDialogContent)
+                        this.open = false;
+                        this.scrollLock(false);
+                        this.$refs && this.$refs.cartDialogContent && hyva.releaseFocus(this.$refs.cartDialogContent);
                     }
                 } else {
                     <?php
@@ -109,12 +111,13 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             },
             openCartDrawer() {
                 this.open = true;
+                this.scrollLock(true);
                 this.$nextTick(() => {
                     this.$refs && this.$refs.cartDialogContent && hyva.trapFocus(this.$refs.cartDialogContent)
                 })
             },
             closeCartDrawer() {
-                this.$dispatch('toggle-cart', { isOpen: false })
+                this.$dispatch('toggle-cart', { isOpen: false });
             }
         }
     }
@@ -179,12 +182,9 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 </template>
 
                 <template x-if="itemsCount">
-                    <div class="relative grid gap-6 px-4 py-6 overflow-y-auto overscroll-y-contain bg-white border-b
-                                sm:gap-8 sm:px-6 border-container"
-                    >
+                    <div class="relative grid gap-6 sm:gap-8 px-1 py-3 sm:px-3 bg-white border-b border-container overflow-y-auto overscroll-y-contain">
                         <template x-for="item in cartItems">
-                            <div class="flex items-start p-3 -m-3 space-x-4 transition duration-150
-                        ease-in-out rounded-lg hover:bg-gray-100">
+                            <div class="flex items-start p-3 space-x-4 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100">
                                 <a :href="item.product_url"
                                     class="w-1/4"
                                     :aria-label="hyva.strf('<?= $escaper->escapeJs(__('Product "%0"')) ?>', item.product_name)"
@@ -213,7 +213,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                     <p><span x-html="item.product_price"></span></p>
                                     <div class="pt-4">
                                         <a :href="item.configure_url"
-                                            x-show="item.product_type !== 'grouped'"
+                                            x-show="item.product_type !== 'grouped' && item.is_visible_in_site_visibility"
                                             class="inline-flex p-2 mr-2 btn btn-primary"
                                             :aria-label="hyva.strf('<?= $escaper->escapeJs(__('Edit product "%0"')) ?>', item.product_name)"
                                         >
@@ -238,15 +238,11 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     <div>
                         <?= $block->getChildHtml('cart-drawer.totals.before'); ?>
 
-                        <div class="relative grid gap-6 px-4 py-6 bg-white sm:gap-8 sm:px-6">
-                            <div class="w-full p-3 -m-3 space-x-4 transition duration-150 ease-in-out rounded-lg
-                                        hover:bg-gray-100"
-                            >
+                        <div class="relative grid gap-6 sm:gap-8 py-3 px-1 sm:px-3 bg-white">
+                            <div class="w-full p-3 space-x-4 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100">
                                 <p><?= $escaper->escapeHtml(__('Subtotal')) ?>: <span x-html="cart.subtotal"></span></p>
                             </div>
-                            <div class="w-full p-3 -m-3 space-x-4 transition duration-150 ease-in-out rounded-lg
-                                        hover:bg-gray-100"
-                            >
+                            <div class="w-full p-3 space-x-4 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100">
                                 <a @click.prevent.stop="$dispatch('toggle-authentication',
                                     {url: '<?= $escaper->escapeUrl($block->getUrl('checkout')) ?>'});"
                                     href="<?= $escaper->escapeUrl($block->getUrl('checkout')) ?>"
@@ -273,7 +269,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 type="button"
                 @click="closeCartDrawer"
                 aria-label="<?= $escaper->escapeHtmlAttr(__('Close minicart')) ?>"
-                class="absolute top-0 right-0 p-4 mt-2 text-gray-300 transition-colors hover:text-black"
+                class="absolute top-0 right-2 p-4 mt-2 text-gray-300 transition-colors hover:text-black"
             >
                 <?= $heroicons->xHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
             </button>

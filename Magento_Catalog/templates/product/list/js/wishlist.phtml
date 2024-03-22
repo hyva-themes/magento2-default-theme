@@ -7,7 +7,6 @@
  */
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\ProductCompare;
 use Hyva\Theme\ViewModel\Wishlist;
 use Magento\Framework\Escaper;
 
@@ -52,10 +51,7 @@ $wishlistViewModel = $viewModels->require(Wishlist::class);
                         [{
                             type: (response.success) ? "success" : "error",
                             text: (response.success)
-                                ? "<?= $escaper->escapeHtml(__(
-                                    "%1 has been added to your Wish List.",
-                                    __("Product")
-                                )) ?>"
+                                ? "<?= $escaper->escapeHtml(__("%1 has been added to your Wish List.", __("Product"))) ?>"
                                 : response.error_message
                         }], 5000
                     );

@@ -35,20 +35,20 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
     <!-- desktop -->
     <div x-ref="nav-desktop"
          @load.window="setActiveMenu($root)"
-         class="hidden lg:block lg:relative lg:min-h-0 lg:px-8 lg:w-auto lg:pt-0">
+         class="hidden lg:block lg:px-8">
         <nav
-            class="duration-150 ease-in-out transform w-auto relative min-h-0 transition-display"
+            class="relative"
             aria-label="<?= $escaper->escapeHtmlAttr(__('Main menu')) ?>"
         >
-            <ul class="flex justify-start">
+            <ul class="flex justify-start flex-wrap gap-x-7 py-4">
                 <?php foreach ($menuItems as $index => $menuItem): ?>
-                    <li class="relative mr-2 level-0"
+                    <li class="relative level-0 border-b-2 border-transparent hover:border-primary data-[active]:border-primary"
                         @mouseenter="hoverPanelActiveId = '<?= /* @noEscape */ (string) $index ?>'"
                         @mouseleave="hoverPanelActiveId = 0"
                         @keyup.escape="hoverPanelActiveId = 0"
                     >
-                        <span class="flex items-center gap-1 p-3 text-md bg-opacity-95">
-                            <a class="w-full py-3 text-base text-gray-700 hover:underline level-0"
+                        <span class="flex items-center text-md">
+                            <a class="w-full text-base text-gray-700 level-0 py-2 px-0.5"
                                href="<?= $escaper->escapeUrl($menuItem['url']) ?>"
                                title="<?= $escaper->escapeHtmlAttr($menuItem['name']) ?>"
                                @focus="hoverPanelActiveId = 0"
@@ -61,6 +61,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                                     data-sr-button-id="<?= $escaper->escapeHtmlAttr($index) ?>"
                                     :aria-expanded="hoverPanelActiveId === '<?= /* @noEscape */ (string) $index ?>' ? 'true' : 'false'"
                                     @click="openMenuOnClick('<?= /* @noEscape */ (string) $index ?>')"
+                                    class="rounded p-1 text-gray-500"
                                 >
                                     <?= $heroiconsSolid->chevronDownHtml("flex self-center h-5 w-5", 25, 25, ['aria-hidden' => 'true']) ?>
                                     <span class="sr-only">
@@ -71,7 +72,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                         </span>
                         <?php if (!empty($menuItem['childData'])): ?>
                             <ul
-                                class="absolute z-10 hidden px-6 py-4 -ml-6 shadow-lg bg-container-lighter/95"
+                                class="absolute top-full z-10 hidden px-6 py-4 mt-0.5 -ml-6 shadow-lg bg-container-lighter/95"
                                 :class="{
                                     'hidden' : hoverPanelActiveId !== '<?= /* @noEscape */ (string) $index ?>',
                                     'block' : hoverPanelActiveId === '<?= /* @noEscape */ (string) $index ?>'
@@ -81,7 +82,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                                     <li>
                                         <a href="<?= $escaper->escapeUrl($subMenuItem['url']) ?>"
                                            title="<?= $escaper->escapeHtmlAttr($subMenuItem['name']) ?>"
-                                           class="block w-full px-3 py-1 my-1 whitespace-nowrap first:mt-0 hover:underline"
+                                           class="block w-full px-3 py-1 my-1 whitespace-nowrap first:mt-0 hover:underline aria-[current=page]:underline"
                                            @keyup.escape="$nextTick(() => document.querySelector('[data-sr-button-id=<?= $escaper->escapeJs($index) ?>]').focus())"
                                         >
                                             <span class="text-base text-gray-700">
@@ -108,9 +109,8 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                 Array.from(menuNode.querySelectorAll('a')).filter(link => {
                     return link.href === window.location.href.split('?')[0];
                 }).map(item => {
-                    item.classList.add('underline');
-                    item.closest('div.level-0') &&
-                    item.closest('div.level-0').querySelector('a.level-0').classList.add('underline');
+                    item.setAttribute('aria-current', 'page');
+                    item.closest('li.level-0').setAttribute('data-active', 'true');
                 });
             },
             openMenuOnClick(menuNode) {
