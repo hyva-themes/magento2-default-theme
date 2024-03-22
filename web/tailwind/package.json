@@ -5,15 +5,13 @@
   "main": "tailwind.config.js",
   "dependencies": {
     "@hyva-themes/hyva-modules": "^1.0.9",
-    "@tailwindcss/forms": "^0.5.3",
-    "@tailwindcss/typography": "^0.5.7",
-    "autoprefixer": "^10.4.13",
+    "@tailwindcss/forms": "^0.5.7",
+    "@tailwindcss/typography": "^0.5.10",
     "browser-sync": "^2.27.10",
+    "postcss": "^8.4.33",
     "postcss-import": "^14.1.0",
-    "tailwindcss": "^3.2.7"
-  },
-  "devDependencies": {
-    "postcss": "^8.4.18"
+    "postcss-preset-env": "^9.3.0",
+    "tailwindcss": "^3.4.1"
   },
   "scripts": {
     "build": "NODE_ENV=production npx tailwindcss --postcss -i tailwind-source.css -o ../css/styles.css --minify",
@@ -24,8 +22,13 @@
     "output-success": "echo \"\\033[0;32mDone!\\033[0m\""
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=16.0.0"
   },
+  "browserslist": [
+    "last 3 version",
+    "> 0.5%",
+    "not dead"
+  ],
   "author": "Hyvä Themes BV",
   "license": "proprietary",
   "private": true
