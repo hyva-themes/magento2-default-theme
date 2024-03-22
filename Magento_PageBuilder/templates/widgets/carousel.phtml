@@ -76,6 +76,14 @@ $gliderUrl = $block->getViewFileUrl('Magento_PageBuilder::js/glider.min.js');
                         carousel.dataset.infiniteLoop
                     );
                 }
+                window.addEventListener('page-builder-tab-activate', event => {
+                    const tab = event.detail.tab;
+                    if (tab && tab.contains(gliderElement)) {
+                        event.detail.nextTick.then(() => {
+                            requestAnimationFrame(() => glider.refresh(true))
+                        });
+                    }
+                });
             };
 
             const initSliderCarousel = (slider) => {

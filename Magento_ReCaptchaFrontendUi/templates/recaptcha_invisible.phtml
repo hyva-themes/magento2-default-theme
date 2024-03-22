@@ -20,6 +20,7 @@ use Magento\Framework\View\Element\Template;
 $storeConfig = $viewModels->require(StoreConfig::class);
 $recaptcha   = $viewModels->require(ReCaptcha::class);
 $siteKey     = $storeConfig->getStoreConfig('recaptcha_frontend/type_invisible/public_key');
+$position    = $storeConfig->getStoreConfig('recaptcha_frontend/type_invisible/position') ?: 'inline';
 
 if (!$siteKey) {
     // No v2 invisible google API credentials configured
@@ -34,21 +35,34 @@ $grecaptchaContainerId = "grecaptcha-container-$elementIdSuffix";
 $grecaptchaInstanceId  = "grecaptchaInstance$instanceSuffix";
 
 // reCaptcha v2 invisible form element
-
+// Explicitly render the recaptcha, so it doesn't use the first .g-recaptcha on the page */
 ?>
-<div id="<?= $escaper->escapeHtmlAttr($grecaptchaContainerId) ?>" class="g-recaptcha">
-</div>
+<div id="<?= $escaper->escapeHtmlAttr($grecaptchaContainerId) ?>" class="g-recaptcha"></div>
 <script>
     'use strict';
-    <?php /* Explicitly render the recaptcha, so it doesn't use the first .g-recaptcha on the page */ ?>
-    document.addEventListener('DOMContentLoaded', () => {
-        grecaptchaV2LoadCallbacks.push(() => {
-            const containerId = '<?= $escaper->escapeJs($grecaptchaContainerId) ?>';
-            window.<?= /** @noEscape */ $grecaptchaInstanceId ?> = window.grecaptcha.render(containerId, {
-                sitekey: '<?= $escaper->escapeJs($siteKey) ?>',
-                callback: '<?= $escaper->escapeJs($callback) ?>',
-                size: 'invisible'
+
+    (() => {
+        const containerId = '<?= $escaper->escapeJs($grecaptchaContainerId) ?>';
+        const initRecaptcha = () => {
+            grecaptchaV2LoadCallbacks.push(() => {
+                window.<?= /** @noEscape */ $grecaptchaInstanceId ?> = window.grecaptcha.render(containerId, {
+                    sitekey: '<?= $escaper->escapeJs($siteKey) ?>',
+                    callback: '<?= $escaper->escapeJs($callback) ?>',
+                    size: 'invisible',
+                    badge: '<?= $escaper->escapeJs($position) ?>',
+                });
             });
-        });
-    });
+        };
+
+        // Dynamically rendered forms (eg. via Alpine or Magewire) are rendered post DOMContentLoaded event trigger
+        if (document.readyState !== 'loading') {
+            // Wait for 'nextTick' for alpine/magewire to finish re-rendering markup
+            setTimeout(() => {
+                initRecaptcha();
+                forceLoadRecaptchaScript(document.getElementById(containerId).closest('form'));
+            });
+        } else {
+            document.addEventListener('DOMContentLoaded', initRecaptcha);
+        }
+    })();
 </script>

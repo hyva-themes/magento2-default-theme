@@ -1,3 +1,7 @@
+:where(html) {
+    scrollbar-gutter: stable;
+}
+
 body {
     overflow-y: scroll;
 }
@@ -33,6 +37,7 @@ body {
     }
 }
 
+.account,
 .page-with-filter {
     .columns {
         .sidebar-main {
@@ -58,10 +63,19 @@ body {
         }
     }
 
+    .account,
     .page-with-filter {
         .columns {
             .sidebar-main {
-                @apply order-1 col-span-2;
+                @apply order-1 col-span-full;
+            }
+        }
+    }
+
+    .account {
+        .columns {
+            .sidebar-additional {
+                @apply col-span-2;
             }
         }
     }

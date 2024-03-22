@@ -1,0 +1,28 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Checkout\Block\Onepage\Failure;
+
+/** @var Escaper $escaper */
+/** @var Failure $block */
+?>
+<?php if ($block->getRealOrderId()): ?>
+    <p><?= $escaper->escapeHtml(__('Order #') . $block->getRealOrderId()) ?></p>
+<?php endif ?>
+<?php if ($error = $block->getErrorMessage()): ?>
+    <p><?= $escaper->escapeHtml($error) ?></p>
+<?php endif ?>
+<div class="my-4">
+    <a class="btn btn-primary inline-flex" href="<?= $escaper->escapeUrl($block->getContinueShoppingUrl()) ?>">
+        <span><?= $escaper->escapeHtml(__('Continue Shopping')) ?></span>
+    </a>
+</div>
+

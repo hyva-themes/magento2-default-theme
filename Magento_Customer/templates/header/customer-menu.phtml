@@ -22,21 +22,21 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
 
 <div
-    class="relative inline-block ml-1 sm:ml-3"
+    class="relative inline-block"
     x-data="{ open: false }"
     @keyup.escape="open = false"
+    @click.outside="open = false"
 >
     <button
         type="button"
         id="customer-menu"
-        class="block hover:text-black"
+        class="block rounded p-1 hover:bg-primary/10 outline-offset-2"
         @click="open = !open"
-        @click.outside="open = false"
         :aria-expanded="open ? 'true' : 'false'"
         aria-label="<?= $escaper->escapeHtmlAttr(__('My Account')) ?>"
         aria-haspopup="true"
     >
-        <?= $heroicons->userHtml('md:h-6 md:w-6', 32, 32, ['aria-hidden' => 'true']); ?>
+        <?= $heroicons->userHtml('md:h-6 md:w-6', 28, 28, ['aria-hidden' => 'true']); ?>
     </button>
     <nav
         class="
@@ -46,7 +46,6 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         x-cloak
         x-show="open"
         aria-labelledby="customer-menu"
-        @click.outside="open = false"
     >
         <?php if ($block->customerLoggedIn()): ?>
             <?= $block->getChildHtml('header.customer.logged.in.links') ?>

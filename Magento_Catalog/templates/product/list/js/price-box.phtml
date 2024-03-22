@@ -1,0 +1,37 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+?>
+<script>
+    function initPriceBox()
+    {
+        return {
+            updatePrice(priceData) {
+                const regularPriceLabel = this.$root.querySelector('.normal-price .price-label');
+                const regularPriceElement = this.$root.querySelector('.normal-price [data-price-type=finalPrice].price-wrapper .price');
+                const basePriceElement = this.$root.querySelector('.normal-price [data-price-type=basePrice].price-wrapper .price');
+                if (priceData.finalPrice.amount < priceData.oldPrice.amount) {
+                    regularPriceLabel.classList.add('hidden');
+                } else {
+                    regularPriceLabel.classList.remove('hidden');
+                }
+                regularPriceElement && (regularPriceElement.innerText = hyva.formatPrice(priceData.finalPrice.amount));
+                basePriceElement && (basePriceElement.innerText = hyva.formatPrice(priceData.basePrice.amount));
+            }
+        }
+    }
+</script>

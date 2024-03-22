@@ -27,6 +27,7 @@ $productViewModel = $viewModels->require(ProductPage::class);
 $attributesViewModel = $viewModels->require(ProductAttributes::class);
 /** @var Product $product */
 $product = $productViewModel->getProduct();
+$productType = $product->getTypeId();
 
 ?>
 <div class="w-full mb-6">
@@ -62,6 +63,12 @@ $product = $productViewModel->getProduct();
     <?= $block->getChildHtml('product.info.form') ?>
 
     <div class="flex flex-col sm:flex-row items-end my-4">
+
+        <?php if ($productType === 'bundle'): ?>
+            <span class="sr-only">
+                <?= $escaper->escapeHtml(__('The price depends on the chosen options')) ?>
+            </span>
+        <?php endif; ?>
 
         <div role="group" aria-label="<?= $escaper->escapeHtmlAttr('Price') ?>">
             <?= $block->getChildHtml("product.info.price") ?>

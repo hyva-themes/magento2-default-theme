@@ -52,6 +52,14 @@ $itemTemplate      = $block->getData('item_template') ?? 'Magento_Catalog::produ
 $containerTemplate = $block->getData('container_template')
     ?? 'Magento_Catalog::product/slider/product-slider-container.phtml';
 
+
+// The number of slides visible on the xl breakpoint
+$maxVisibleSlides = $block->getData('max_visible'); // default to null
+// Passed to the product slider container
+$slideSectionClasses = $block->getData('maybe_purged_tailwind_section_classes'); // default to null
+$slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes'); // default to null
+
+
 // In case $type is not set on the block, it will default the block class name, which is not what we need in this template.
 $type = is_string($type) && strpos($type, '\\') === false  ? $type : 'generic';
 
@@ -111,6 +119,9 @@ $sliderHtml = $sliderViewModel->getSliderForItems($itemTemplate, $items, $contai
     ->setData('title', $title)
     ->setData('item_relation_type', $type)
     ->setData('heading_tag', $headingTag)
+    ->setData('max_visible', $maxVisibleSlides)
+    ->setData('maybe_purged_tailwind_section_classes', $slideSectionClasses)
+    ->setData('maybe_purged_tailwind_slide_item_classes', $slideItemClasses)
     ->toHtml();
 
 if (empty($sliderHtml)) {

@@ -37,10 +37,16 @@ $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() 
 ?>
 <nav class="breadcrumbs bg-container-lighter shadow-sm" aria-label="Breadcrumb">
     <div class="container">
-        <ol x-data="initBreadcrumbsProduct()" class="items list-reset py-4 rounded flex flex-wrap text-grey text-sm">
-            <li>&ZeroWidthSpace;</li>
+        <ol
+            x-data="initBreadcrumbsProduct()"
+            class="items list-reset -mx-3 py-4 rounded flex flex-nowrap text-grey text-sm overflow-x-auto relative"
+        >
+            <li
+                class="shrink-0 sticky inset-y-0 left-0 w-3 bg-gradient-to-r from-white"
+                aria-hidden="true"
+            >&ZeroWidthSpace;</li>
             <template x-for="item in breadcrumbs">
-                <li class="item flex">
+                <li class="item inline-flex whitespace-nowrap">
                     <template x-if="item.name !== 'home'">
                         <span aria-hidden="true" class="separator text-primary-lighter px-2">/</span>
                     </template>
@@ -52,6 +58,10 @@ $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() 
                     </template>
                 </li>
             </template>
+            <li
+                class="shrink-0 sticky inset-y-0 right-0 w-3 bg-gradient-to-l from-white"
+                aria-hidden="true"
+            >&ZeroWidthSpace;</li>
         </ol>
     </div>
 </nav>

@@ -15,9 +15,7 @@ use Magento\Framework\Escaper;
 
 <div class="field field-reserved telephone <?= $block->isRequired() ? 'required' : '' ?>">
     <label for="telephone" class="label">
-        <span>
-            <?= $escaper->escapeHtml(__('Phone Number')) ?>
-        </span>
+        <span><?= $escaper->escapeHtml(__('Phone Number')) ?></span>
     </label>
     <div class="control">
         <input type="tel"

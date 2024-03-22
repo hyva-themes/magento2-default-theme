@@ -12,8 +12,7 @@ use Magento\Framework\Escaper;
 /** @var Amount $block */
 /** @var Escaper $escaper */
 ?>
-
-<span
+<div
     <?php if ($block->getPriceId()): ?>x-data x-id="['<?= $escaper->escapeJs($block->getPriceId()) ?>']"<?php endif; ?>
     class="price-container <?= $escaper->escapeHtmlAttr($block->getAdjustmentCssClasses()) ?>"
         <?= $block->getSchema() ? ' itemprop="offers" itemscope itemtype="http://schema.org/Offer"' : '' ?>
@@ -34,4 +33,4 @@ use Magento\Framework\Escaper;
         <meta itemprop="price" content="<?= $escaper->escapeHtmlAttr($block->getDisplayValue()) ?>" />
         <meta itemprop="priceCurrency" content="<?= $escaper->escapeHtmlAttr($block->getDisplayCurrencyCode()) ?>" />
     <?php endif; ?>
-</span>
+</div>

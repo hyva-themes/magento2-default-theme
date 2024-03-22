@@ -78,7 +78,7 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
                name="<?= /* @noEscape */ $fileName ?>"
                id="<?= /* @noEscape */ $fileName ?>"
                class="product-custom-option form-file w-full"
-            <?= $fileExists ? 'disabled="disabled"' : '' ?>
+            <?= $fileExists ? 'disabled' : '' ?>
             <?php if ($option->getIsRequire()): ?>
                 required
                 oninvalid="this.setCustomValidity('<?= $escaper

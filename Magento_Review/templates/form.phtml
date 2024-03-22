@@ -45,8 +45,32 @@ $gqlViewModel = $viewModels->require(GraphqlViewModel::class);
 /** @var ReCaptcha $recaptcha */
 $recaptcha = $block->getData('viewModelRecaptcha');
 
+$gqlCreateProductReviewMutation = '
+mutation createProductReviewMutation(
+    $sku: String!,
+    $nick: String!,
+    $summary: String!,
+    $review: String!,
+    $ratings: [ProductReviewRatingInput]!
+) {
+    createProductReview(
+        input: {
+            sku: $sku,
+            nickname: $nick,
+            summary: $summary,
+            text: $review,
+            ratings: $ratings
+        }
+    ) {
+        review {
+            nickname
+        }
+    }
+}
+';
+
 ?>
-<div class="mx-auto py-6 items-center" id="review-form" tabindex="0">
+<div class="mx-auto py-6 items-center" id="review-form" tabindex="-1">
     <div class="card w-full px-6 py-3">
         <div class="text-xl my-3">
             <?= $escaper->escapeHtml(__('Write Your Own Review')) ?>
@@ -195,13 +219,16 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                             </span>
                         </button>
                         <div class="flex flex-row justify-start items-center w-full"
-                             x-show="isLoading">
+                             x-show="isLoading" 
+                             x-cloak>
                             <?= $hyvaicons->loaderHtml('text-primary', 57, 57); ?>
                             <div class="ml-4 text-primary">
                                 <?= $escaper->escapeHtml(__('Loading...')) ?>
                             </div>
                         </div>
-                        <p x-show="displaySuccessMessage" class="text-green flex items-center">
+                        <p x-show="displaySuccessMessage" 
+                           x-cloak 
+                           class="text-green flex items-center">
                             <span class="inline-block w-8 h-8 mr-3">
                                 <?= $heroicons->checkCircleHtml(); ?>
                             </span>
@@ -291,29 +318,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                             this.isLoading = true;
                             this.displayErrorMessage = false;
 
-                            const query = `<?= /* @noEscape */ $gqlViewModel->query('create_product_review_mutation', '
-mutation createProductReviewMutation(
-    $sku: String!,
-    $nick: String!,
-    $summary: String!,
-    $review: String!,
-    $ratings: [ProductReviewRatingInput]!
-) {
-    createProductReview(
-        input: {
-            sku: $sku,
-            nickname: $nick,
-            summary: $summary,
-            text: $review,
-            ratings: $ratings
-        }
-    ) {
-        review {
-            nickname
-        }
-    }
-}
-                            ') ?>`;
+                            const query = `<?= /* @noEscape */ $gqlViewModel->query('create_product_review_mutation', $gqlCreateProductReviewMutation) ?>`;
                             const variables = {
                                 sku: '<?= $escaper->escapeJs($block->getProductInfo()->getSku()) ?>',
                                 nick: this.nickname,
@@ -358,7 +363,10 @@ mutation createProductReviewMutation(
                 }
             </script>
         <?php else: ?>
-            <div id="review-form">
+            <div
+                id="review-form"
+                tabindex="-1"
+            >
                 <div class="pb-6">
                     <?= $escaper->escapeHtml(
                         __(

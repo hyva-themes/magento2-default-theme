@@ -17,25 +17,40 @@
         <!-- Add ID to body tag to enable inline Page Builder styles -->
         <attribute name="id" value="html-body"/>
 
-        <!-- Recreate Page Builder frontend JS Widgets -->
-        <referenceContainer name="before.body.end">
-            <block name="pagebuilder.buttons"
-                   template="Magento_PageBuilder::widgets/buttons.phtml"/>
-            <block name="pagebuilder.carousel"
-                   template="Magento_PageBuilder::widgets/carousel.phtml"/>
-            <block name="pagebuilder.map"
-                   class="Magento\PageBuilder\Block\GoogleMapsApi"
-                   template="Magento_PageBuilder::widgets/map.phtml"/>
-            <block name="pagebuilder.parallax"
-                   template="Magento_PageBuilder::widgets/parallax.phtml"/>
-            <block name="pagebuilder.show.on.hover"
-                   template="Magento_PageBuilder::widgets/show-on-hover.phtml"/>
-            <block name="pagebuilder.tabs"
-                   template="Magento_PageBuilder::widgets/tabs.phtml"/>
-        </referenceContainer>
-
         <!-- Global carousel nav block - only output when referenced within other blocks -->
         <block name="pagebuilder.carousel.nav"
                template="Magento_PageBuilder::carousel-nav.phtml"/>
+
+        <!-- Render JS templates depending on PageBuilder CMS content rendered on a page -->
+        <referenceBlock name="page-js-dependencies">
+            <arguments>
+                <argument name="blockOutputPatternMap" xsi:type="array">
+                    <item name="page_builder.buttons" xsi:type="array">
+                        <item name="regex" xsi:type="string">/data-content-type="buttons"[^>]+data-same-width="true"/</item>
+                        <item name="template" xsi:type="string">Magento_PageBuilder::widgets/buttons.phtml</item>
+                    </item>
+                    <item name="page_builder.carousel" xsi:type="array">
+                        <item name="regex" xsi:type="string">/data-appearance="carousel"|data-content-type="slider"/</item>
+                        <item name="template" xsi:type="string">Magento_PageBuilder::widgets/carousel.phtml</item>
+                    </item>
+                    <item name="page_builder.map" xsi:type="array">
+                        <item name="regex" xsi:type="string">/data-content-type="map"/</item>
+                        <item name="template" xsi:type="string">Magento_PageBuilder::widgets/map.phtml</item>
+                    </item>
+                    <item name="page_builder.parallax" xsi:type="array">
+                        <item name="regex" xsi:type="string">/data-enable-parallax="1"/</item>
+                        <item name="template" xsi:type="string">Magento_PageBuilder::widgets/parallax.phtml</item>
+                    </item>
+                    <item name="page_builder.show.on.hover" xsi:type="array">
+                        <item name="regex" xsi:type="string">/data-content-type="banner"|data-content-type="slider"/</item>
+                        <item name="template" xsi:type="string">Magento_PageBuilder::widgets/show-on-hover.phtml</item>
+                    </item>
+                    <item name="page_builder.tabs" xsi:type="array">
+                        <item name="regex" xsi:type="string">/data-content-type="tabs"|data-content-type="tab-item"/</item>
+                        <item name="template" xsi:type="string">Magento_PageBuilder::widgets/tabs.phtml</item>
+                    </item>
+                </argument>
+            </arguments>
+        </referenceBlock>
     </body>
 </page>

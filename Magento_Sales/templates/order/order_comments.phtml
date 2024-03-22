@@ -11,9 +11,9 @@ use Magento\Sales\Block\Order\View;
 
 /** @var View $block  */
 /** @var Escaper $escaper */
-?>
 
-<?php $history = $block->getOrder()->getVisibleStatusHistory() ?>
+$history = $block->getOrder()->getVisibleStatusHistory();
+?>
 <?php if (!empty($history)): ?>
     <div class="my-6">
         <div class="font-semibold"><?= $escaper->escapeHtml(__('About Your Order')) ?></div>
