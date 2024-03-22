@@ -161,9 +161,13 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                 x-transition:leave="ease-in-out duration-500"
                 x-transition:leave-start="opacity-100"
                 x-transition:leave-end="opacity-0" class="absolute top-0 right-2 flex p-2 mt-2">
-                <button @click="open = false;" aria-label="Close panel"
-                        class="p-2 text-gray-300 transition duration-150 ease-in-out hover:text-black">
-                    <?= $heroicons->xHtml(); ?>
+                <button
+                    type="button"
+                    @click="open = false;"
+                    aria-label="<?= $escaper->escapeHtmlAttr(__('Close panel')) ?>"
+                    class="p-2 text-gray-300 transition duration-150 ease-in-out hover:text-black"
+                >
+                    <?= $heroicons->xHtml('', 24, 24, ['title' => __('Close panel')]); ?>
                 </button>
             </div>
             <template x-if="open">
