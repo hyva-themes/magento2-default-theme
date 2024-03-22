@@ -29,9 +29,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
      x-init="[initDate(), recalcDaysGrid()]"
 >
     <label for="<?= $escaper->escapeHtmlAttr($block->getHtmlId()) ?>" class="label">
-        <span>
-            <?= $escaper->escapeHtml($block->getStoreLabel('dob')) ?>
-        </span>
+        <span><?= $escaper->escapeHtml($block->getStoreLabel('dob')) ?></span>
     </label>
     <div class="inline-block relative control customer-dob">
         <?php

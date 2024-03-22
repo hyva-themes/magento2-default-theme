@@ -14,7 +14,7 @@ use Magento\Sales\Block\Order\Creditmemo;
 
 $order = $block->getOrder();
 ?>
-<div class="md:flex md:justify-between items-center mb-3">
+<div class="md:flex md:justify-between md:flex-wrap md:gap-4 items-center mb-3">
     <div class="lg:flex items-center text-center md:text-left">
         <div class="lg:inline-block">
             <div class="text-2xl"><?= $escaper->escapeHtml(__('Order # %1', $order->getRealOrderId())) ?></div>

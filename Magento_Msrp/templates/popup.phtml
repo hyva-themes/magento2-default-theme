@@ -1,0 +1,128 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Magento\Msrp\Block\Popup;
+use Magento\Framework\Escaper;
+
+/** @var Popup $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+?>
+
+<?php if ($block->isEnabled()): ?>
+    <div
+        class="z-10 fixed bottom-4 inset-x-4 w-96 max-w-prose mx-auto p-4 rounded shadow-2xl bg-container-lighter
+            lg:absolute lg:bottom-auto lg:right-auto lg:top-[var(--msrp-block-offset)] lg:left-[var(--msrp-inline-offset)] lg:shadow-lg lg:max-w-xs"
+        :style="setPosition()"
+        x-data="initMsrpPopover()"
+        x-cloak
+        x-show="open"
+        x-transition:enter="transition ease-out duration-300 opacity-0 translate-y-full lg:-translate-y-0"
+        x-transition:enter-end="transition ease-out duration-300 opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-150 opacity-0 translate-y-full lg:-translate-y-0"
+        @click.outside="closePopover($event)"
+        @msrp-popover.window="showPopover($event.detail)"
+        @resize.window.debounce="closePopover()"
+        @keydown.window.escape="closePopover()"
+    >
+        <div class="flex justify-between gap-2 mb-2">
+            <strong id="map-popup-heading-price" class="font-bold" x-text="title"></strong>
+            <button type="button" @click="closePopover()">
+                <?= $heroicons->xHtml(); ?>
+            </button>
+        </div>
+
+        <template x-if="type !== 'help'">
+            <div class="mb-4 text-sm">
+                <dl class="price-box">
+                    <div class="flex gap-2">
+                        <dt class="font-semibold whitespace-nowrap"><?= $escaper->escapeHtml(__('Price')) ?>:</dt>
+                        <dd x-html="msrpPrice"></dd>
+                    </div>
+                    <div class="flex gap-2">
+                        <dt class="font-semibold whitespace-nowrap"><?= $escaper->escapeHtml(__('Actual Price')) ?>:</dt>
+                        <dd x-html="actualPrice"></dd>
+                    </div>
+                </dl>
+            </div>
+        </template>
+
+        <div class="text-sm" x-html="content"></div>
+
+        <script>
+            function initMsrpPopover() {
+                return {
+                    open: false,
+                    type: "price", // price or help
+                    title: '',
+                    content: '<?= $escaper->escapeHtml($block->getExplanationMessage(), ["br"]) ?>',
+                    isSaleable: false,
+                    actualPrice: null,
+                    msrpPrice: null,
+                    productId: null,
+                    anchor: null,
+                    position: ['0', '0'],
+                    isInViewport() {
+                        const pageWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+                        const offset = this.anchor.offsetLeft + this.$root.offsetWidth;
+                        return pageWidth > offset;
+                    },
+                    setPosition() {
+                        return {
+                            '--msrp-block-offset': this.position[0],
+                            '--msrp-inline-offset': this.position[1]
+                        }
+                    },
+                    calcPosition() {
+                        const target = this.anchor;
+                        const pageTop = target.getBoundingClientRect().top + window.scrollY;
+                        const pageLeft = target.getBoundingClientRect().left + window.scrollX;
+                        const positionBlock = `${pageTop + target.clientHeight}px`;
+                        const positionInline = this.isInViewport()
+                            ? `${pageLeft}px`
+                            : `${(pageLeft - (this.$root.offsetWidth - target.offsetWidth))}px`;
+                        this.position = [positionBlock, positionInline]
+                    },
+                    closePopover(event) {
+                        if (event && event.target === this.anchor) return;
+                        this.open = false;
+                    },
+                    showPopover(event) {
+                        const data = event.msrpData;
+                        if (!data) return;
+
+                        this.open = true;
+                        this.type = data.type;
+                        this.productId = data.id;
+                        this.isSaleable = data.isSaleable;
+                        this.actualPrice = data.realPrice;
+                        this.msrpPrice = data.msrpPrice;
+                        this.title = this.type === 'help'
+                            ? ''
+                            : data.productName;
+                        this.content = this.type === 'help'
+                            ? '<?= $escaper->escapeHtml($block->getExplanationMessageWhatsThis(), ["br"]) ?>'
+                            : '<?= $escaper->escapeHtml($block->getExplanationMessage(), ["br"]) ?>';
+
+                        if (event.target) {
+                            this.anchor = event.target;
+                            this.$nextTick(() => this.calcPosition());
+                        }
+                    }
+                }
+            }
+        </script>
+    </div>
+<?php endif; ?>

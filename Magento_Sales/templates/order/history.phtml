@@ -20,8 +20,9 @@ use Magento\Sales\Block\Order\History;
 
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
+
+$orders = $block->getOrders();
 ?>
-<?php $orders = $block->getOrders(); ?>
 <h2 id="my-orders-title" class="text-2xl mb-6"><?= $escaper->escapeHtml(__('My Orders')) ?></h2>
 <?= $block->getChildHtml('info') ?>
 <?php if ($orders && count($orders)): ?>
@@ -39,6 +40,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     <th class="p-2 text-start hidden lg:table-cell">
                         <?= $escaper->escapeHtml(__('Date')) ?>
                     </th>
+                    <?= $block->getChildHtml('extra.column.header') ?>
                     <th class="p-2 text-start">
                         <?= $escaper->escapeHtml(__('Ship To')) ?>
                     </th>
@@ -76,6 +78,11 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                 </span>
                             </time>
                         </td>
+                        <?php $extra = $block->getChildBlock('extra.container') ?>
+                        <?php if ($extra): ?>
+                            <?php $extra->setOrder($order) ?>
+                            <?= $extra->getChildHtml() ?>
+                        <?php endif; ?>
                         <td class="p-2">
                             <?= $order->getBillingAddress()
                                 ? $escaper->escapeHtml($order->getBillingAddress()->getCompany())

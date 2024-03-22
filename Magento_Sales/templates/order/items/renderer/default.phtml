@@ -33,7 +33,7 @@ $cols = $block->getData('is_context_shipment') ? 3 : ($block->getData('is_contex
                             <?php $formatedOptionValue = $block->getFormatedOptionValue($option) ?>
                             <span class="ml-1">
                                 <?= $escaper->escapeHtml($formatedOptionValue['value'], ['a']) ?>
-                        </span>
+                            </span>
                         <?php else: ?>
                             <span class="ml-1">
                                 <?= $escaper->escapeHtml(

@@ -44,7 +44,7 @@ $allowedQty = $viewModel->setItem($item)->getMinMaxQty();
                        class="form-input qty"
                        name="qty[<?= $escaper->escapeHtmlAttr($item->getId()) ?>]"
                        value="<?= /* @noEscape */ $block->getAddToCartQty($item) * 1 ?>"
-                    <?= $product->isSaleable() ? '' : 'disabled="disabled"' ?>
+                    <?= $product->isSaleable() ? '' : 'disabled' ?>
                 >
             </div>
         </div>

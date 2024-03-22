@@ -19,7 +19,9 @@ use Magento\Framework\Escaper;
 /** @var Taxvat $block */
 ?>
 <div class="field field-reserved taxvat <?= $block->isRequired() ? 'required' : ''; ?>">
-    <label class="label" for="<?= $escaper->escapeHtmlAttr($block->getFieldId('taxvat')) ?>"><span><?= $escaper->escapeHtml($block->getStoreLabel('taxvat')) ?></span></label>
+    <label class="label" for="<?= $escaper->escapeHtmlAttr($block->getFieldId('taxvat')) ?>">
+        <span><?= $escaper->escapeHtml($block->getStoreLabel('taxvat')) ?></span>
+    </label>
     <div class="control">
         <input type="text"
                id="<?= $escaper->escapeHtmlAttr($block->getFieldId('taxvat')) ?>"

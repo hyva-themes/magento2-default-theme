@@ -100,7 +100,7 @@ $hasCouponCode = (bool) strlen($block->getCouponCode() ?: "");
                                    x-ref="couponInput"
                                    placeholder="<?= $escaper->escapeHtmlAttr(__('Enter discount code')) ?>"
                                     <?php if ($hasCouponCode): ?>
-                                       disabled="disabled"
+                                       disabled
                                     <?php else: ?>
                                         required
                                     <?php endif; ?>

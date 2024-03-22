@@ -32,7 +32,7 @@ $cols = $block->getData('is_context_shipment') ? 3 : 5;
         <?php if (!$block->getData('is_context_shipment')): ?>
             <div class="p-2 text-right"><?= $escaper->escapeHtml(__('Subtotal')) ?></div><?php endif; ?>
     </div>
-    <?php $items = $block->getItems(); ?>
+    <?php $items = $block->getOrder()->getAllItems(); ?>
     <?php $giftMessage = '' ?>
     <?php foreach ($items as $item): ?>
         <?php

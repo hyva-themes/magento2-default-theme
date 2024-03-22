@@ -34,21 +34,33 @@ $grecaptchaContainerId = "grecaptcha-container-$elementIdSuffix";
 $grecaptchaInstanceId  = "grecaptchaInstance$instanceSuffix";
 
 // reCaptcha v2 invisible form element
-
+// Explicitly render the recaptcha, so it doesn't use the first .g-recaptcha on the page */
 ?>
-<div id="<?= $escaper->escapeHtmlAttr($grecaptchaContainerId) ?>" class="g-recaptcha">
-</div>
+<div id="<?= $escaper->escapeHtmlAttr($grecaptchaContainerId) ?>" class="g-recaptcha"></div>
 <script>
     'use strict';
-    <?php /* Explicitly render the recaptcha, so it doesn't use the first .g-recaptcha on the page */ ?>
-    document.addEventListener('DOMContentLoaded', () => {
-        grecaptchaV2LoadCallbacks.push(() => {
-            const containerId = '<?= $escaper->escapeJs($grecaptchaContainerId) ?>';
-            window.<?= /** @noEscape */ $grecaptchaInstanceId ?> = window.grecaptcha.render(containerId, {
-                sitekey: '<?= $escaper->escapeJs($siteKey) ?>',
-                callback: '<?= $escaper->escapeJs($callback) ?>',
-                size: 'invisible'
+
+    (() => {
+        const containerId = '<?= $escaper->escapeJs($grecaptchaContainerId) ?>';
+        const initRecaptcha = () => {
+            grecaptchaV2LoadCallbacks.push(() => {
+                window.<?= /** @noEscape */ $grecaptchaInstanceId ?> = window.grecaptcha.render(containerId, {
+                    sitekey: '<?= $escaper->escapeJs($siteKey) ?>',
+                    callback: '<?= $escaper->escapeJs($callback) ?>',
+                    size: 'invisible'
+                });
             });
-        });
-    });
+        };
+
+        // Dynamically rendered forms (eg. via Alpine or Magewire) are rendered post DOMContentLoaded event trigger
+        if (document.readyState !== 'loading') {
+            // Wait for 'nextTick' for alpine/magewire to finish re-rendering markup
+            setTimeout(() => {
+                initRecaptcha();
+                forceLoadRecaptchaScript(document.getElementById(containerId).closest('form'));
+            });
+        } else {
+            document.addEventListener('DOMContentLoaded', initRecaptcha);
+        }
+    })();
 </script>

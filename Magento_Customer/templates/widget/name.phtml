@@ -33,9 +33,7 @@ $suffix = $block->showSuffix();
 <?php if ($prefix): ?>
     <div class="field field-reserved w-full field-name-prefix<?= $block->isPrefixRequired() ? ' required' : '' ?>">
         <label class="label" for="<?= $escaper->escapeHtmlAttr($block->getFieldId('prefix')) ?>">
-            <span>
-                <?= $escaper->escapeHtml($block->getStoreLabel('prefix')) ?>
-            </span>
+            <span><?= $escaper->escapeHtml($block->getStoreLabel('prefix')) ?></span>>
         </label>
         <div class="control">
             <?php if ($block->getPrefixOptions() === false): ?>

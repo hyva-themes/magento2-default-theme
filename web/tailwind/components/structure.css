@@ -61,7 +61,7 @@ body {
     .page-with-filter {
         .columns {
             .sidebar-main {
-                @apply order-1 col-span-2;
+                @apply order-1 col-span-full;
             }
         }
     }

@@ -177,7 +177,7 @@ $recipients = $formData->getRecipientData() ?? '[]';
                     <button type="submit"
                             class="action submit primary"
                         <?php if (!$block->canSend()): ?>
-                            disabled="disabled"
+                            disabled
                         <?php endif ?>
                     >
                         <span>

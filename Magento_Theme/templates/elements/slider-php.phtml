@@ -36,6 +36,15 @@ if (!$itemCount = count($items)) {
 }
 $sliderItemRenderer = $block->getChildBlock('slider.item.template');
 
+// The number of slides visible on the xl breakpoint
+$maxVisibleSlides = $block->getData('max_visible') ?? 4;
+
+// Breakpoints for 1 visible slider items on mobile, 2 visible on md, 3 on lg and 4 on xl (see $sliderPageSize).
+$defaultSliderItemClasses = 'py-1 md:w-1/2 lg:w-1/3 xl:w-1/4';
+
+$sliderSectionClasses = $block->getData('maybe_purged_tailwind_section_classes') ?? 'my-12 text-gray-700 body-font';
+$slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') ?? $defaultSliderItemClasses;
+
 ?>
 <script>
     'use strict';
@@ -84,10 +93,7 @@ $sliderItemRenderer = $block->getChildBlock('slider.item.template');
         }
     }
 </script>
-<section class="<?=
-    $escaper->escapeHtmlAttr($block->getData('maybe_purged_tailwind_section_classes'))
-    ?: 'my-12 text-gray-700 body-font';
-?>"
+<section class="<?= $escaper->escapeHtmlAttr($sliderSectionClasses) ?>"
          x-data="initSliderComponent()"
          x-init="calcPageSize();"
          @resize.window.debounce="calcPageSize(); $nextTick( function() { calcActive() })"
@@ -107,21 +113,17 @@ $sliderItemRenderer = $block->getChildBlock('slider.item.template');
                      @scroll.debounce="calcActive"
                 >
                     <?php foreach ($items as $item): ?>
-                        <div class="flex shrink-0 w-full py-1 js_slide md:w-1/2 lg:w-1/3 xl:w-1/4">
-                            <div class="mx-1 card card-interactive">
+                        <div class="js_slide flex shrink-0 <?= $escaper->escapeHtmlAttr($slideItemClasses) ?>">
+                            <div class="mx-1 card w-full card-interactive">
                                  <?= $sliderItemRenderer->setItem($item)->toHtml() ?>
                             </div>
                         </div>
                     <?php endforeach; ?>
+                    <?php for ($i = 0; $i < $maxVisibleSlides; $i++): /* Add empty filler slides in case the number of items is not dividable by the pagesize */ ?>
                     <div :class="{
-                        'js_dummy_slide w-full md:w-1/2 lg:w-1/3 xl:w-1/4 flex-none py-1' : pageFillers > 0
+                        'js_dummy_slide flex-none w-full <?= $escaper->escapeJs($slideItemClasses) ?>' : pageFillers > <?= (int) $i ?>
                         }"></div>
-                    <div :class="{
-                        'js_dummy_slide w-full md:w-1/2 lg:w-1/3 xl:w-1/4 flex-none py-1' : pageFillers > 1
-                        }"></div>
-                    <div :class="{
-                        'js_dummy_slide w-full md:w-1/2 lg:w-1/3 xl:w-1/4 flex-none py-1' : pageFillers > 2
-                        }"></div>
+                    <?php endfor; ?>
                 </div>
             </div>
             <div style="min-height: 65px">

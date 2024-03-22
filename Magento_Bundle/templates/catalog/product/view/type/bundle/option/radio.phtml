@@ -37,7 +37,7 @@ $activeSelectOptions = [];
            form="product_addtocart_form"
            class="bundle-option-<?= (int)$optionId ?>  product bundle option"
            value="<?= (int)$selections[0]->getSelectionId() ?>"
-           checked="checked"
+           checked
            data-option-id="<?= (int)$optionId ?>"
            data-selection-id="<?= (int)$selections[0]->getSelectionId() ?>"
     />
@@ -52,7 +52,7 @@ $activeSelectOptions = [];
                    name="bundle_option[<?= (int)$optionId ?>]"
                    form="product_addtocart_form"
                    class="radio product bundle option"
-                   <?= ($default && $default->isSalable())?'':' checked="checked" ' ?>
+                   <?= ($default && $default->isSalable())?'':' checked ' ?>
                    value=""
                    x-on:change="
                         activeSelectOptions['<?= (int)$optionId ?>'] = [$event.target.value];
@@ -85,7 +85,7 @@ $activeSelectOptions = [];
                             echo 'checked = "checked"';
                     } ?>
                     <?php if (!$selection->isSaleable()): ?>
-                            disabled="disabled"
+                            disabled
                     <?php endif; ?>
                     value="<?= (int)$selectionId ?>"
                     data-option-id="<?= $escaper->escapeHtmlAttr($optionSelectionId) ?>"
