@@ -162,7 +162,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
              aria-label="<?= $escaper->escapeHtmlAttr(__('My Cart')) ?>"
 
         >
-            <div class="flex flex-col h-full max-h-screen bg-white shadow-xl">
+            <div class="flex flex-col h-full max-h-screen bg-white pr-1.5 shadow-xl">
                 <?= $block->getChildHtml('cart-drawer.top'); ?>
 
                 <header class="relative px-4 py-6 sm:px-6">
@@ -271,7 +271,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 type="button"
                 @click="closeCartDrawer"
                 aria-label="<?= $escaper->escapeHtmlAttr(__('Close minicart')) ?>"
-                class="absolute top-0 right-0 p-4 mt-2 text-gray-300 transition-colors hover:text-black"
+                class="absolute top-0 right-2 p-4 mt-2 text-gray-300 transition-colors hover:text-black"
             >
                 <?= $heroicons->xHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
             </button>
