@@ -11,7 +11,7 @@ declare(strict_types=1);
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Hyva\Theme\ViewModel\HeroiconsSolid;
-use Hyva\Theme\ViewModel\PageJsDependencyRegistry;
+use Hyva\Theme\ViewModel\BlockJsDependencies;
 use Hyva\Theme\ViewModel\ProductCompare;
 use Hyva\Theme\ViewModel\ProductListItem;
 use Hyva\Theme\ViewModel\ProductPage;
@@ -76,7 +76,7 @@ $imageCustomAttributes = $product->getData('image_custom_attributes')
 $productName = $catalogOutputHelper->productAttribute($product, $product->getName(), 'name');
 
 // Ensure the required JS is rendered on the page
-$viewModels->require(PageJsDependencyRegistry::class)->requireTemplate('Magento_Catalog::product/list/js/price-box.phtml')
+$viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($block, 'Magento_Catalog::product/list/js/price-box.phtml');
 
 ?>
 
