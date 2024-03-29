@@ -74,7 +74,7 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
      x-data="initHeader()"
      @private-content-loaded.window="getData(event.detail.data)"
 >
-    <div class="container flex items-center justify-between w-full px-6 py-3 mx-auto mt-0">
+    <div class="container flex flex-wrap lg:flex-nowrap items-center justify-between w-full px-6 py-3 mx-auto mt-0">
         <!--Logo-->
         <?= $block->getChildHtml('logo'); ?>
 
