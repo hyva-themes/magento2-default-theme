@@ -1,3 +1,3 @@
 #category-view-container {
-    @apply mx-auto flex px-0 py-4 flex-col items-center;
+    @apply px-0 py-4 flex flex-col items-center;
 }
