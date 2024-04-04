@@ -26,8 +26,10 @@ $modal = $modalViewModel->createModal()->withContent(<<<END_OF_CONTENT
     id="cancel-order-modal-title"
     class="text-xl mb-2" x-text="`{$escaper->escapeJs(__('Cancel order'))} \${increment_id}`"
 ></div>
-<label for="cancel-order-reason">{$block->escapeHtml(__('Provide a cancellation reason:'))}</label>
-<div class="field field-reserved">
+<div class="field field-reserved required">
+    <label for="cancel-order-reason">
+        <span>{$block->escapeHtml(__('Provide a cancellation reason:'))}</span>
+    </label>
     <select id="cancel-order-reason" class="form-select max-w-full" x-ref="reason" required>
         <option value="">{$escaper->escapeHtml(__(''))}</option>
         <template x-for="reason in reasons">
