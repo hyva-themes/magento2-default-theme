@@ -46,7 +46,9 @@ $modal = $modalViewModel->createModal()->withContent(<<<END_OF_CONTENT
     </button>
 </div>
 END_OF_CONTENT
-)->withAriaLabelledby('cancel-order-modal-title')
+)
+->withAriaLabelledby('cancel-order-modal-title')
+->addDialogClass('m-4');
 
 ?>
 <script>
