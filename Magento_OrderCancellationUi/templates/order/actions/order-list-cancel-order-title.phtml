@@ -16,8 +16,11 @@ use Magento\Framework\View\Element\Template;
 /** @var Template $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
+
+/** @var OrderCancellation $orderCancellation */
 $orderCancellation = $viewModels->require(OrderCancellation::class);
 ?>
+
 <?php if ($orderCancellation->isEnabled()): ?>
     <?= $escaper->escapeHtml(__('Cancel')) ?>
 <?php endif; ?>

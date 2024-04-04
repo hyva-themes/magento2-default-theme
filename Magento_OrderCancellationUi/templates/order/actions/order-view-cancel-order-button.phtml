@@ -19,19 +19,24 @@ use Magento\OrderCancellationUi\ViewModel\Config as OrderCancellationUiConfig;
 /** @var Template $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
-/** @var Order $order */
+
+/** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
+
+/** @var OrderCancellation $orderCancellation */
 $orderCancellation = $viewModels->require(OrderCancellation::class);
+
+/** @var Order $order */
 $order = $block->getParentBlock()->getOrder();
 
-if (! $orderCancellation->canCancel($order->getEntityId())) {
+if (!$orderCancellation->canCancel($order->getEntityId())) {
     return;
 }
 
 $orderCancellationUiConfig = $viewModels->require(OrderCancellationUiConfig::class);
 $reasons = $orderCancellationUiConfig->getCancellationReasons((int) $order->getId());
-
 ?>
+
 <button
     x-data
     type="button"
