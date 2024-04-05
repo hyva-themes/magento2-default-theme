@@ -100,7 +100,7 @@ mutation cancelOrder($order_id: ID!, $reason: String!) {
                         return dispatchMessages([{text: result.data.cancelOrder.error, type: 'error'}]);
                     }
                     hyva.setCookie('mage-messages', JSON.stringify([{
-                        text: hyva.str('<?= $escaper->escapeJs(__('Order %1 cancelled.')) ?>', result.data.cancelOrder.order.increment_id),
+                        text: hyva.str('<?= $escaper->escapeJs(__('Order %1 canceled.')) ?>', result.data.cancelOrder.order.increment_id),
                         type: 'success'
                     }]), 1, true);
                     window.location.reload();
