@@ -182,7 +182,8 @@ $renderTargetElementId = sprintf('paypalInContextRenderTarget%d', $isMinicart)
                     if (! this.paypalButtons) {
                         await this.initializeButtons();
                     }
-                    this.paypalButtons && this.paypalButtons.render(document.getElementById(renderTargetId));
+                    const container = document.getElementById(renderTargetId);
+                    this.paypalButtons && ! container.innerHTML.trim().length && this.paypalButtons.render(container);
                 }
             }
         }
