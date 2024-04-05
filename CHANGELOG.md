@@ -7,7 +7,54 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.6...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.7...main
+
+## [1.3.7] - 2024-04-05
+
+[1.3.7]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.6...1.3.7
+
+### Added
+
+- **Compatibility with the upcoming Magento release 2.4.7**
+
+  Based on the 2.4.7-beta3 release, a new Magento_OrderCancellationUi module will be introduced in Magento 2.4.7.  
+  The layout changes introduced in 2.4.7-beta3 cause the order history and recent order tables to lose styling.  
+  This release fixes the issue by adding the ability to render more action buttons in the order history templates.
+
+  In addition to new phrases introduced in the Magento 2.4.7 core module, the compatibility template also introduces the 
+  new translated phrase `Order %1 canceled.`.
+
+  For more information, please refer to [merge request #1084](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1084).
+
+- **Add x-defer attribute to selected components to improve CWV**
+  
+  The `x-defer="intersect"` attribute was added to selected Alpine components to delay initialization of the components until it is visible in the viewport to improve CWV.  
+  The same components are also covered by the default [x-defer rule injection configuration](https://docs.hyva.io/hyva-themes/view-utilities/alpine-defer-plugin.html#injecting-x-defer-rules-through-backend-configuration) of the Hyvä theme-module.  
+  However, adding the attributes to the components in the templates allows the removal of the JS to inject the rules, further decreasing the main thread blocking time.
+
+  For more information, please refer to [merge request #1086](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1086) and the [x-defer directive documentation](https://docs.hyva.io/hyva-themes/view-utilities/alpine-defer-plugin.html).
+
+### Changed
+
+- **Reserve correct space for slider buttons to avoid CLS**
+
+  For more information, please refer to [issue #957](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/957).
+
+- **Improve a11y of purchased downloadable product links**
+
+  For more information, please refer to [merge request #1068](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1068).
+
+- **Improve lighthouse score by adding a missing href attribute to the slider-end link**
+
+  For more information, please refer to [merge request #1085](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1085).
+
+- **Fix PayPal In-Context buttons disappearing on cart page after cart updates**
+
+  For more information, please refer to [merge request #1087](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1087).
+
+### Removed
+
+- Nothing removed
 
 ## [1.3.6] - 2024-03-28
 
