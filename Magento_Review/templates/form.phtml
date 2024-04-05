@@ -81,6 +81,7 @@ mutation createProductReviewMutation(
                   @submit.prevent="submitForm()"
                   action=""
                   x-data="initReviewForm()"
+                  x-defer="intersect"
             >
                 <?= $block->getChildHtml('form_fields_before') ?>
                 <?= $recaptcha ? $recaptcha->getInputHtml(ReCaptcha::RECAPTCHA_FORM_ID_PRODUCT_REVIEW) : '' ?>
@@ -219,15 +220,15 @@ mutation createProductReviewMutation(
                             </span>
                         </button>
                         <div class="flex flex-row justify-start items-center w-full"
-                             x-show="isLoading" 
+                             x-show="isLoading"
                              x-cloak>
                             <?= $hyvaicons->loaderHtml('text-primary', 57, 57); ?>
                             <div class="ml-4 text-primary">
                                 <?= $escaper->escapeHtml(__('Loading...')) ?>
                             </div>
                         </div>
-                        <p x-show="displaySuccessMessage" 
-                           x-cloak 
+                        <p x-show="displaySuccessMessage"
+                           x-cloak
                            class="text-green flex items-center">
                             <span class="inline-block w-8 h-8 mr-3">
                                 <?= $heroicons->checkCircleHtml(); ?>

@@ -57,6 +57,7 @@ $tooltipBlockHtml = $block->getBlockHtml('product.swatch.tooltip');
          x-init="init(); initShowSwatchesIntersect();"
          @private-content-loaded.window="onGetCartData($event.detail.data)"
          class="relative mb-6"
+         x-defer="intersect"
     >
         <h2 class="mb-4 text-xl font-medium text-gray-900 title-font">
             <?= $escaper->escapeHtml(__('Product Options:')) ?>

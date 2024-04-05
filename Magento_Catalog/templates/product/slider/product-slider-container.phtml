@@ -147,6 +147,7 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
     aria-roledescription="<?= $escaper->escapeHtmlAttr(__('Carousel')) ?>"
     aria-label="<?= $escaper->escapeHtmlAttr(__('Carousel %1', $title)) ?>"
     :aria-describedby="$id('slider-desc')"
+    x-defer="intersect"
 >
     <?php if ($items): ?>
         <div class="relative">

@@ -73,6 +73,7 @@ if ($cookieHelper->isCookieRestrictionModeEnabled()): ?>
 <section id="notice-cookie-block"
          aria-label="<?= $escaper->escapeHtmlAttr(__('We use cookies to make your experience better.')) ?>"
          x-data="initCookieBanner();"
+         x-defer="intersect"
          @private-content-loaded.window="checkAcceptCookies()"
 >
     <template x-if="showCookieBanner">

@@ -146,6 +146,7 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
 
         <div class="pt-1 text-gray-900"
              x-data="initPriceBox()"
+             x-defer="intersect"
              @update-prices-<?= (int)$productId ?>.window="updatePrice($event.detail);"
         >
             <?= /* @noEscape */ $productListItemViewModel->getProductPriceHtml($product) ?>

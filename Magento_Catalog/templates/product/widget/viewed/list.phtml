@@ -48,6 +48,7 @@ $jsTemplate = 'Magento_Catalog::product/widget/viewed/js/recently-viewed-product
 ?>
 <section class="my-12 text-gray-700 body-font"
          x-data="initRecentlyViewedProductsComponent<?= /** @noEscape */ $uniqueId?>({isSlider: true})"
+         x-defer="intersect"
          x-init="getProducts();"
          :style="minHeight()"
          @resize.window.debounce="calcPageSize(); $nextTick( function() { calcActive() })"

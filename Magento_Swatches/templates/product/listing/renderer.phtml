@@ -160,6 +160,7 @@ $swatchItemBlock->setData('product_id', $productId);
     </script>
 
 <div x-data="initConfigurableSwatchOptions_<?= (int) $productId ?>()"
+     x-defer="intersect"
      x-init="findAllowedAttributeOptions(); initShowSwatchesIntersect();"
      @private-content-loaded.window="onGetCartData($event.detail.data)"
      @resize.window="resizeEvent()"

@@ -95,8 +95,14 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
 </script>
 <section class="<?= $escaper->escapeHtmlAttr($sliderSectionClasses) ?>"
          x-data="initSliderComponent()"
+         x-defer="intersect"
          x-init="calcPageSize();"
          @resize.window.debounce="calcPageSize(); $nextTick( function() { calcActive() })"
+         role="group"
+         aria-roledescription="<?= $escaper->escapeHtmlAttr(__('Carousel')) ?>"
+         <?php if ($title): ?>
+         aria-label="<?= $escaper->escapeHtmlAttr(__('Carousel %1', $title)) ?>"
+         <?php endif; ?>
 >
     <?php if ($items): ?>
         <div class="relative">

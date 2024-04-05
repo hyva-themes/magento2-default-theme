@@ -55,6 +55,7 @@ $jsTemplate = 'Magento_Catalog::product/widget/viewed/js/recently-viewed-product
            }
          )"
          x-init="getProducts();"
+         x-defer="intersect"
          :style="minHeight()"
 >
     <template x-if="products && products.length">
