@@ -38,7 +38,7 @@ $renderTargetElementId = sprintf('paypalInContextRenderTarget%d', $isMinicart)
      id="<?= $escaper->escapeHtmlAttr($renderTargetElementId) ?>"
     <?php if ($isMinicart): ?>
      x-init="cartSection = cart"
-     @toggle-cart.window="checkAndInitializeButtons()"
+     x-intersect="checkAndInitializeButtons()"
     <?php endif; ?>
      class="paypal checkout paypal-logo min-h-a11y cart-extra-actions-container isolate"
     <?php if ($isCartPage): ?>
@@ -51,6 +51,7 @@ $renderTargetElementId = sprintf('paypalInContextRenderTarget%d', $isMinicart)
         return {
             cartSection: false,
             actions: {},
+            paypalButtons: null,
             getData(sectionData) {
                 this.cartSection = sectionData.cart;
             },
@@ -81,8 +82,7 @@ $renderTargetElementId = sprintf('paypalInContextRenderTarget%d', $isMinicart)
             async initializeButtons() {
                 try {
                     const paypal = await this.initializePayPalScript();
-
-                    paypal && paypal.Buttons({
+                    return paypal && paypal.Buttons({
                         style: Object.assign({}, config.styles, {
                             height: 44, // Sets the style.height option to a value from 25 to 55.
                             disableMaxWidth: false, // The button has a default maximum width of 750px, but you can make the button larger with true and set container size
@@ -171,16 +171,18 @@ $renderTargetElementId = sprintf('paypalInContextRenderTarget%d', $isMinicart)
                                 text: '<?= $escaper->escapeJs(__('Error initializing Express Checkout, please try again later or choose a different checkout method.')) ?>'
                             }]);
                         }
-                    }).render(document.getElementById(renderTargetId));
+                    })
                 } catch (error) {
                     document.getElementById(renderTargetId).innerHTML = '';
                     console.error('Error loading PayPal SDK', error);
                 }
             },
-            checkAndInitializeButtons() {
-                if (this.cartSection.items && this.cartSection.items.length && !this.alreadyLoaded) {
-                    this.alreadyLoaded = true;
-                    this.initializeButtons();
+            async checkAndInitializeButtons() {
+                if (this.cartSection.items && this.cartSection.items.length) {
+                    if (! this.paypalButtons) {
+                        this.paypalButtons = await this.initializeButtons();
+                        this.paypalButtons && this.paypalButtons.render(document.getElementById(renderTargetId));
+                    }
                 }
             }
         }
