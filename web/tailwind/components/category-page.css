@@ -3,6 +3,8 @@
 }
 
 /*
-Use the following selector to extend the toolbar modes switcher with your own icon.
-.modes-mode.mode-grid {}
+Use the following selector to extend the toolbar modes switcher with your own icon,
+also replace `custom` with your own mode name.
+
+.modes-mode.mode-custom {}
 */
