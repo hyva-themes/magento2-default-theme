@@ -14,7 +14,7 @@ use Magento\Theme\Block\Html\Title;
 /** @var Escaper $escaper */
 /** @var Title $block */
 
-$textSizeCssClass = $block->getCssClass() ? ' ' . $block->getCssClass() : 'text-3xl';
+$textSizeCssClass = $block->getCssClass() ? ' ' . $block->getCssClass() : ' text-3xl';
 $titleContainerClasses = $block->getData('maybe_purged_tailwind_section_classes')
     ?? 'container flex flex-col md:flex-row flex-wrap my-6 font-bold lg:mt-8';
 $titleHtml = '';
