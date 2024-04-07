@@ -13,6 +13,7 @@
         "hyva-themes/magento2-email-module": "*",
         "hyva-themes/magento2-graphql-tokens": "*",
         "hyva-themes/magento2-graphql-view-model": ">=1.0.1",
+        "hyva-themes/magento2-order-cancellation-webapi": "^1.0.0",
         "magento/module-catalog-rule-graph-ql":"*",
         "magento/module-customer-graph-ql": "*",
         "magento/module-directory-graph-ql": "*",
