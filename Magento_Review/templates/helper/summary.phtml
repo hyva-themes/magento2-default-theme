@@ -27,6 +27,7 @@ $uniqueId = $productId . uniqid();
 <?php if ($block->isReviewEnabled()): ?>
     <div
         x-data="initRating<?= /* @noEscape */ $uniqueId ?>()"
+        x-defer="intersect"
         @keyup.enter="scrollToRatings()"
         @click="scrollToRatings()"
         class="rating-summary flex"

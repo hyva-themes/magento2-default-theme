@@ -184,6 +184,7 @@ function initCompareOnCompareList() {
                                     <?php if ($wishlistViewModel->isEnabled()): ?>
                                     <?php /* The initWishlist() function is rendered as a block JS dependency */ ?>
                                         <button x-data="initWishlist()"
+                                            x-defer="intersect"
                                             @click.prevent="addToWishlist(<?= (int)$product->getId() ?>)"
                                             aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Wish List')) ?> <?= $escaper->escapeHtmlAttr($product->getName()) ?>"
                                             class="rounded-full w-9 h-9 bg-gray-200 p-0 border-0 inline-flex

@@ -135,6 +135,7 @@ $uniqueId = '_' . uniqid();
 </script>
 
 <button x-data="initWishlist<?= /** @noEscape */ $uniqueId ?>()"
+        x-defer="intersect"
         @click.prevent="addToWishlist(<?= (int)$product->getId() ?>)"
         title="<?= $escaper->escapeHtmlAttr(
             ($updateParams) ? __('Update Wish List') : __('Add to Wish List')

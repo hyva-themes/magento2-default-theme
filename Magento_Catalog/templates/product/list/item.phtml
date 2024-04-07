@@ -189,6 +189,7 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
             <div class="flex flex-wrap gap-2">
                 <?php if ($showAddToWishlist): ?>
                 <button x-data="initWishlist()"
+                        x-defer="intersect"
                         @click.prevent="addToWishlist(<?= (int)$productId ?>)"
                         aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Wish List') . ' ' . $productName) ?>"
                         type="button"
@@ -200,6 +201,7 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
                 <?php endif; ?>
                 <?php if ($showAddToCompare): ?>
                 <button x-data="initCompareOnProductList()"
+                        x-defer="intersect"
                         @click.prevent="addToCompare(<?= (int)$productId ?>)"
                         aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Compare') . ' ' . $productName) ?>"
                         type="button"
