@@ -2,10 +2,6 @@
     scrollbar-gutter: stable;
 }
 
-body {
-    overflow-y: scroll;
-}
-
 .clearfix::after {
     content: "";
     display: block;
@@ -67,7 +63,7 @@ body {
     .page-with-filter {
         .columns {
             .sidebar-main {
-                @apply order-1 col-span-full;
+                @apply col-span-full;
             }
         }
     }

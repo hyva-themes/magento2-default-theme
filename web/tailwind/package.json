@@ -27,7 +27,8 @@
   "browserslist": [
     "last 3 version",
     "> 0.5%",
-    "not dead"
+    "not dead",
+    "not op_mini all"
   ],
   "author": "Hyvä Themes BV",
   "license": "proprietary",
