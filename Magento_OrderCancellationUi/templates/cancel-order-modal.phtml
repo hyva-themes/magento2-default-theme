@@ -38,11 +38,11 @@ $modal = $modalViewModel->createModal()->withContent(<<<END_OF_CONTENT
     </select>
 </div>
 <div class="mt-4 flex justify-between gap-2">
-    <button @click="cancel()" type="button" class="btn btn-secondary">
-        {$escaper->escapeHtml(__('Close'))}
-    </button>
-    <button @click="validateSafe().then(result => result && ok())" type="button" class="btn btn-primary">
+    <button @click="validateSafe().then(result => result && ok())" type="button" class="btn btn-primary order-2">
         {$escaper->escapeHtml(__('Confirm'))}
+    </button>
+    <button @click="cancel()" type="button" class="btn order-1">
+        {$escaper->escapeHtml(__('Close'))}
     </button>
 </div>
 END_OF_CONTENT
