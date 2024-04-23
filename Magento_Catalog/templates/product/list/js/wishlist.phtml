@@ -41,7 +41,7 @@ $wishlistViewModel = $viewModels->require(Wishlist::class);
                         typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
                             [{
                                 type: "warning",
-                                text: "<?= $escaper->escapeHtml(__('Could not add item to wishlist.')) ?>"
+                                text: "<?= $escaper->escapeJs(__('Could not add item to wishlist.')) ?>"
                             }], 5000
                         );
                     }
@@ -51,7 +51,7 @@ $wishlistViewModel = $viewModels->require(Wishlist::class);
                         [{
                             type: (response.success) ? "success" : "error",
                             text: (response.success)
-                                ? "<?= $escaper->escapeHtml(__("%1 has been added to your Wish List.", __("Product"))) ?>"
+                                ? "<?= $escaper->escapeJs(__("%1 has been added to your Wish List.", __("Product"))) ?>"
                                 : response.error_message
                         }], 5000
                     );
