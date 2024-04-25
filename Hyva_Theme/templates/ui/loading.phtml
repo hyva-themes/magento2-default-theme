@@ -26,10 +26,8 @@ $hyvaicons = $viewModels->require(SvgIcons::class);
 >
     <div class="flex gap-10 items-center p-4">
         <?= $hyvaicons->loaderHtml('text-primary', 57, 57); ?>
-        <div class="ml-10 text-primary text-xl">
+        <span class="text-xl select-none">
             <?= $escaper->escapeHtml(__('Loading...')) ?>
-        </div>
-    </div>
-</div>
+        </span>
     </div>
 </div>
