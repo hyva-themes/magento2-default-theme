@@ -17,10 +17,10 @@ use Magento\Theme\Block\Html\Header\Logo;
 /** @var Logo $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
-/** @var LogoSizeResolver $logoSizeResolver */
 
 $storeName = $block->getThemeName();
 
+/** @var LogoSizeResolver $logoSizeResolver */
 $logoSizeResolver = $viewModels->require(LogoSizeResolver::class);
 $logoWidth = $logoSizeResolver && $logoSizeResolver->getWidth()
     ? $logoSizeResolver->getWidth()
