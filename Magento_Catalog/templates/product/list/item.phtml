@@ -111,7 +111,6 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
             ->toHtml(); ?>
     </a>
     <div class="product-info flex flex-col grow">
-        <?php $productNameStripped = $block->stripTags($product->getName(), null, true); ?>
         <div class="mt-2 mb-1 items-center justify-center text-primary font-semibold text-lg text-center <?= $viewIsGrid ? '' : 'md:text-left' ?>">
             <a
                 class="product-item-link"
