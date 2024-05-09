@@ -7,7 +7,41 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.8...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.9...main
+
+## [1.3.9] - 2024-05-10
+
+[1.3.9]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.8...1.3.9
+
+### Added
+
+- **Add x-cloak to Hyva_Theme loader template**
+
+  For more information, please refer to [issue #984](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/984).
+
+### Changed
+
+- **Fix self-closing iframe for videos in product gallery**
+
+  For more information, please refer to [issue #995](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/995).
+
+- **Use attribute code not value for constructed product info CSS class name**
+
+  For more information, please refer to [issue #985](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/985).
+
+### Removed
+
+- **Remove duplicate form attribute from input element**
+
+  For more information, please refer to [issue #1003](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1003).
+
+  Many thanks to Guus Portegies (Cees&co) for the contribution!
+
+- **Remove unused variable from product/list/item template**
+
+  For more information, please refer to [issue #1004](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1004).
+
+  Many thanks to Guus Portegies (Cees&co) for the contribution!
 
 ## [1.3.8] - 2024-04-25
 
