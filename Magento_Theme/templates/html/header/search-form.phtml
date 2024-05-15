@@ -82,15 +82,8 @@ $helper = $this->helper(SearchHelper::class);
     }
 </script>
 <div class="container py-2 mx-auto text-black" x-data="initMiniSearch()">
-     <form
-        id="search_mini_form"
-        class="form minisearch"
-        x-ref="form"
-        @submit.prevent="search()"
-        action="<?= $escaper->escapeUrl($helper->getResultUrl()) ?>"
-        method="get"
-        role="search"
-    >
+    <form class="form minisearch" id="search_mini_form" x-ref="form" @submit.prevent="search()"
+          action="<?= $escaper->escapeUrl($helper->getResultUrl()) ?>" method="get" role="search">
         <div class="flex">
             <label class="sr-only" for="search" data-role="minisearch-label">
                 <span><?= $escaper->escapeHtml(__('Search')) ?></span>
