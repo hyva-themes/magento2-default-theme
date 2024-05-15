@@ -27,7 +27,7 @@
         <referenceBlock name="copyright" remove="true"/>
 
         <referenceContainer name="columns.top">
-            <container name="print.header" htmlTag="div" htmlClass="print-header mb-2"/>
+            <container name="print.header" htmlTag="div" htmlClass="print-header mb-6"/>
         </referenceContainer>
 
         <referenceBlock name="logo">
