@@ -15,6 +15,7 @@
     <update handle="sales_order_view"/>
     <update handle="print"/>
     <body>
+        <referenceBlock name="page.main.title" remove="true"/>
         <referenceBlock name="sales.order.buttons" remove="true"/>
         <referenceBlock name="sales.order.info.links" remove="true"/>
         <referenceBlock name="sales_order_item_pager" remove="true"/>

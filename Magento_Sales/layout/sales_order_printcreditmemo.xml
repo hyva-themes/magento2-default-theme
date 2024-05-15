@@ -15,5 +15,8 @@
     <update handle="sales_order_print_renderers"/>
     <update handle="sales_order_creditmemo"/>
     <update handle="print"/>
-    <referenceBlock name="sales.order.info.links" remove="true"/>
+    <body>
+        <referenceBlock name="page.main.title" remove="true"/>
+        <referenceBlock name="sales.order.info.links" remove="true"/>
+    </body>
 </page>
