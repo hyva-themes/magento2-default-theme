@@ -24,16 +24,22 @@
         <referenceContainer name="div.sidebar.main" remove="true"/>
         <referenceContainer name="div.sidebar.additional" remove="true"/>
         <referenceContainer name="footer-container" remove="true"/>
-        <move element="logo" destination="main.content" before="-" />
         <referenceBlock name="copyright" remove="true"/>
+
+        <referenceContainer name="columns.top">
+            <container name="print.header" htmlTag="div" htmlClass="print-header mb-2"/>
+        </referenceContainer>
 
         <referenceBlock name="logo">
             <arguments>
                 <argument name="logoPathResolver" xsi:type="object">Hyva\Theme\ViewModel\Logo\SalesLogoPathResolver</argument>
             </arguments>
         </referenceBlock>
+
+        <move element="logo" destination="print.header" before="-"/>
+
         <referenceContainer name="before.body.end">
-            <block class="Magento\Framework\View\Element\Template" name="sales.order.print.js" template="Magento_Theme::html/print.phtml" />
+            <block class="Magento\Framework\View\Element\Template" name="sales.order.print.js" template="Magento_Theme::html/print.phtml"/>
         </referenceContainer>
     </body>
 </page>
