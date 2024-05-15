@@ -78,7 +78,7 @@ $helper = $this->helper(SearchHelper::class);
 <div class="container py-2 mx-auto text-black" x-data="initMiniSearch()">
      <form class="form minisearch" id="search_mini_form" x-ref="form" @submit.prevent="search()"
           action="<?= $escaper->escapeUrl($helper->getResultUrl()) ?>" method="get" role="search">
-        <label class="hidden" for="search" data-role="minisearch-label">
+        <label class="sr-only" for="search" data-role="minisearch-label">
             <span><?= $escaper->escapeHtml(__('Search')) ?></span>
         </label>
         <input id="search"
