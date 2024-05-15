@@ -108,7 +108,7 @@ $helper = $this->helper(SearchHelper::class);
                 type="submit"
                 class="action search"
                 title="<?= $escaper->escapeHtml(__('Search')) ?>"
-                aria-label="search"
+                aria-label="<?= $escaper->escapeHtml(__('Search')) ?>"
             >
                 <?= $escaper->escapeHtml(__('Search')) ?>
             </button>
