@@ -1,0 +1,28 @@
+@media print {
+    :is(h1, h2, h3, h4, h5, h6) {
+        page-break-after: avoid;
+    }
+
+    :is(h2, h3, h4, h5, h6, p) {
+        orphans: 3;
+        widows: 3;
+    }
+
+    :is(tr, img, svg, pre, blockquote) {
+        page-break-inside: avoid;
+    }
+
+    abbr[title]::after {
+        content: " (" attr(title) ")";
+    }
+
+    /* Make sure the container is unset and uses the full print page */
+    :is(.columns, .container) {
+        max-width: 100% !important;
+    }
+
+    /* Optionaly hide the header and footer, depends on your design an prefrence */
+    :is(.page-header, .page-footer) {
+        display: none !important;
+    }
+}
