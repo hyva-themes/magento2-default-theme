@@ -279,7 +279,7 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
             },
             getSortedCountries(){
                 return Object.keys(this.directoryData)
-                    .filter(countryKey => countryKey !== 'data_id')
+                    .filter(countryKey => countryKey !== 'data_id' && this.directoryData[countryKey].name != null)
                     .sort((a,b) => {
                         if (this.directoryData[a].name < this.directoryData[b].name) {
                             return -1
