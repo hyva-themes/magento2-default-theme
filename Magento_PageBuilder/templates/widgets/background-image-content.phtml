@@ -9,12 +9,16 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\PageBuilder;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
+
+/** @var PageBuilder $pageBuilder */
+$pageBuilder = $viewModels->require(PageBuilder::class)
 
 /*
  * Lazy load page-builder background images when the content element intersects with the viewport.
@@ -32,25 +36,31 @@ use Magento\Framework\View\Element\Template;
         const observer = new IntersectionObserver(entries => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    const lazyBackgrounds = entry.target.querySelectorAll('[data-background-images]');
+                    const lazyBackgrounds = entry.target.hasAttribute('data-background-images') ? [entry.target] : entry.target.querySelectorAll('[data-background-images]');
                     <?php /* Inject css to load all background images of the content element. Could be multiple for sliders or tabs. */ ?>
-                    const css = Array.from(lazyBackgrounds)
+                    const bgImagesCss = Array.from(lazyBackgrounds)
                         .filter(element => element.dataset.backgroundImages !== "{}")
                         .map(element => {
                             try {
+                                const cssClass = Array.from(element.classList).find(cssClass => cssClass.startsWith('background-image-'))
                                 const parsedImages = JSON.parse(element.dataset.backgroundImages.replaceAll('\\', ''));
-                                const image = window.innerWidth <= 768 && (parsedImages.mobile_image_webp || parsedImages.mobile_image)
-                                    ? parsedImages.mobile_image_webp || parsedImages.mobile_image
-                                    : parsedImages.desktop_image_webp || parsedImages.desktop_image;
-                                const cssClass = Array.from(element.classList).find(cssClass => cssClass.startsWith('background-image-'));
-                                return `.${cssClass} {background-image: url(${image})}`;
+                                const mobile = parsedImages.mobile_image_webp || parsedImages.mobile_image;
+                                const desktop = parsedImages.desktop_image_webp || parsedImages.desktop_image;
+                                let css = [];
+                                if (desktop) {
+                                    css.push(`.${cssClass} {background-image: url(${desktop})}`);
+                                }
+                                if (mobile) {
+                                    css.push(`<?= $pageBuilder->getMobileMediaQuery() ?>{.${cssClass} {background-image: url(${mobile})}}`);
+                                }
+                                return css.join(' ');
                             } catch (error) {
                                 console.error(error)
                             }
                         })
                         .join("\n");
                     const style = document.createElement('style');
-                    style.innerText = css;
+                    style.innerHTML = bgImagesCss;
                     entry.target.append(style);
                     observer.unobserve(entry.target);
                 }
@@ -58,10 +68,6 @@ use Magento\Framework\View\Element\Template;
         }, {threshold: 0.01});
 
         lazyBackgrounds.forEach(element => {
-            <?php /* In case the styles were not removed by the theme-module plugin. */ ?>
-            if (getComputedStyle(element).backgroundImage !== 'none') {
-                return;
-            }
             const contentElement = element.closest('[data-content-type]');
 
             <?php /* Ensure every content element is only observed once even if it contains multiple children with background image */ ?>
