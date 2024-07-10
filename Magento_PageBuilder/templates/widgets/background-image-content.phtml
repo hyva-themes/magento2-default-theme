@@ -28,7 +28,11 @@ $pageBuilder = $viewModels->require(PageBuilder::class)
     'use strict';
 
     (() => {
-        const lazyBackgrounds = document.querySelectorAll('[data-background-images]');
+        <?php
+        /* If the background image styles were not removed by the theme-module plugin, there is no need to add them on intersection */
+        ?>
+        const lazyBackgrounds = Array.from(document.querySelectorAll('[data-background-images]'))
+            .filter(element => getComputedStyle(element).backgroundImage === 'none');
         if (! lazyBackgrounds.length) {
             return;
         }
@@ -36,7 +40,9 @@ $pageBuilder = $viewModels->require(PageBuilder::class)
         const observer = new IntersectionObserver(entries => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    const lazyBackgrounds = entry.target.hasAttribute('data-background-images') ? [entry.target] : entry.target.querySelectorAll('[data-background-images]');
+                    const lazyBackgrounds = entry.target.hasAttribute('data-background-images')
+                        ? [entry.target]
+                        : entry.target.querySelectorAll('[data-background-images]');
                     <?php /* Inject css to load all background images of the content element. Could be multiple for sliders or tabs. */ ?>
                     const bgImagesCss = Array.from(lazyBackgrounds)
                         .filter(element => element.dataset.backgroundImages !== "{}")
