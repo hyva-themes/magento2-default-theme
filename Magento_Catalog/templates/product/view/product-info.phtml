@@ -44,6 +44,8 @@ $productType = $product->getTypeId();
         <?= $block->getChildHtml("alert.urls") ?>
     </div>
 
+    <?= $block->getChildHtml('product.info.simple.extra.catalog_inventory_stockqty_default'); ?>
+
     <dl id="product-details">
         <?php foreach ($block->getAttributes() as $attributeConfig):
             $attribute = $attributesViewModel->getAttributeFromLayoutConfig($attributeConfig); ?>
