@@ -6,6 +6,18 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
 /**
  * The AlpineJS scope of this file is the method `initCartTotals()` in Magento_Checkout::php-cart/totals.phtml
  */
@@ -13,48 +25,36 @@
 <template x-if="segment.code === 'tax' && (segment.value > 0 || checkoutConfig.isZeroTaxDisplayed)">
     <div>
         <template x-if="!(segment.value > 0 && checkoutConfig.isFullTaxSummaryDisplayed)">
-            <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container">
-                <div class="w-7/12 text-left md:w-auto"
-                     x-html="segment.title"
-                ></div>
-                <div class="w-5/12 text-right md:w-auto"
-                     x-text="hyva.formatPrice(segment.value)"
-                ></div>
+            <div :class="wrapperClass">
+                <dt x-html="segment.title"></dt>
+                <dd x-text="hyva.formatPrice(segment.value)"></dd>
             </div>
         </template>
 
         <template x-if="segment.value > 0 && checkoutConfig.isFullTaxSummaryDisplayed">
-            <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container cursor-pointer"
-                @click="taxSummaryIsOpen = !taxSummaryIsOpen">
-                <div class="w-7/12 text-left md:w-auto items-center"
-                     x-html="segment.title"
-                ></div>
-                <div class="w-5/12 text-right justify-end items-center md:w-auto flex">
-                    <span x-text="hyva.formatPrice(segment.value)"></span>
-
-                    <span :class="{ 'rotate-180' : taxSummaryIsOpen}" class="block transform rotate-180">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6" width="25" height="25">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
+            <details class="group">
+                <summary class="block cursor-pointer [&::-webkit-details-marker]:hidden">
+                    <span :class="wrapperClass">
+                        <dt x-html="segment.title"></dt>
+                        <dd class="inline-flex items-center gap-x-1">
+                            <span x-text="hyva.formatPrice(segment.value)"></span>
+                            <?= $heroicons->chevronDownHtml('transform group-open:rotate-180', 18, 18, ['aria-hidden' => 'true']); ?>
+                        </dd>
                     </span>
-
-                </div>
-                <div x-show="taxSummaryIsOpen" class="col-span-2">
+                </summary>
+                <div>
                     <template x-for="(taxItem, index) in segment.extension_attributes.tax_grandtotal_details" :key="index">
-                        <div class="flex px-2 py-2 my-2 border-t border-b last:border-b-0 last:pb-0 text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container">
-                            <div class="w-7/12 text-left md:w-auto">
+                        <dl :class="wrapperClass">
+                            <dt>
                                 <template x-for="(taxRate, index) in taxItem.rates">
                                     <div x-html="`${taxRate.title} (${taxRate.percent}%)`"></div>
                                 </template>
-                            </div>
-                            <div class="w-5/12 text-right md:w-auto"
-                                 x-text="hyva.formatPrice(taxItem.amount)"
-                            ></div>
-                        </div>
+                            </dt>
+                            <dd x-text="hyva.formatPrice(taxItem.amount)"></dd>
+                        </dl>
                     </template>
                 </div>
             </div>
         </template>
     </div>
-
 </template>

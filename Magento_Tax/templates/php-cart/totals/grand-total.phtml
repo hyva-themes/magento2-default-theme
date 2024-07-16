@@ -12,38 +12,22 @@
 ?>
 <!-- display subtotal excluding tax -->
 <template x-if="segment.code === 'grand_total' && checkoutConfig.includeTaxInGrandTotal">
-    <div>
-        <div class="flex py-2 pt-6 my-2 mx-auto text-xl md:grid md:grid-cols-2 md:w-full border-b border-container">
-            <div class="w-7/12 font-semibold text-left md:w-auto"
-                 x-html="`${segment.title} ${includingTaxMessage}` "
-            ></div>
-            <div class="w-5/12 text-right md:w-auto"
-                 x-text="hyva.formatPrice(segment.value)"
-            ></div>
+    <div class="contents">
+        <div :class="wrapperClassTotals">
+            <dt x-html="`${segment.title} ${includingTaxMessage}`"></dt>
+            <dd x-text="hyva.formatPrice(segment.value)"></dd>
         </div>
-
-        <div class="flex py-2 my-2 mx-auto mb-12 text-md md:grid md:grid-cols-2 md:w-full">
-            <div class="w-7/12 font-semibold text-left md:w-auto"
-                 x-html="`${segment.title} ${excludingTaxMessage}` "
-            ></div>
-            <div class="w-5/12 text-right md:w-auto"
-                 x-text="hyva.formatPrice(totalsData.grand_total)"
-            ></div>
+        <div :class="wrapperClass">
+            <dt x-html="`${segment.title} ${excludingTaxMessage}`"></dt>
+            <dd x-text="hyva.formatPrice(totalsData.grand_total)"></dd>
         </div>
     </div>
 </template>
 
 <!-- display subtotal including tax -->
 <template x-if="segment.code === 'grand_total' && !checkoutConfig.includeTaxInGrandTotal">
-    <div class="flex py-2 pt-6 my-2 mx-auto mb-12 text-2xl md:grid md:grid-cols-2 md:w-full">
-
-        <div class="w-7/12 font-semibold text-left md:w-auto"
-             x-html="`${segment.title}`"
-        ></div>
-        <div class="w-5/12 text-right md:w-auto"
-             x-text="hyva.formatPrice(segment.value)"
-        ></div>
-
-
+    <div :class="wrapperClassTotals">
+        <dt x-html="`${segment.title}`"></dt>
+        <dd x-text="hyva.formatPrice(segment.value)"></dd>
     </div>
 </template>
