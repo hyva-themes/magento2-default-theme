@@ -13,9 +13,9 @@
 <!-- display shipping including and excluding tax -->
 <template x-if="segment.code === 'shipping' && quoteData.is_virtual === 0 && !!shippingMethod && 'both' === checkoutConfig.reviewShippingDisplayMode">
     <div :class="wrapperClass">
-        <dt x-html="`${segment.title} ${excludingTaxMessage}` "></dt>
+        <dt x-text="`${segment.title} ${excludingTaxMessage}`"></dt>
         <dd x-text="hyva.formatPrice(totalsData.shipping_amount)" class="justify-self-end"></dd>
-        <dt x-html="`${segment.title} ${includingTaxMessage}` "></dt>
+        <dt x-text="`${segment.title} ${includingTaxMessage}`"></dt>
         <dd x-text="hyva.formatPrice(totalsData.shipping_incl_tax)" class="justify-self-end"></dd>
     </div>
 </template>
@@ -23,7 +23,7 @@
 <!-- display shipping excluding tax -->
 <template x-if="segment.code === 'shipping' && quoteData.is_virtual === 0 && !!shippingMethod && 'excluding' === checkoutConfig.reviewShippingDisplayMode">
     <div :class="wrapperClass">
-        <dt x-html="`${segment.title}` "></dt>
+        <dt x-text="segment.title"></dt>
         <dd x-text="hyva.formatPrice(segment.value)" class="justify-self-end"></dd>
     </div>
 </template>
@@ -31,7 +31,7 @@
 <!-- display shipping including tax -->
 <template x-if="segment.code === 'shipping' && quoteData.is_virtual === 0 && !!shippingMethod && 'including' === checkoutConfig.reviewShippingDisplayMode">
     <div :class="wrapperClass">
-        <dt x-html="`${segment.title}`"></dt>
+        <dt x-text="segment.title"></dt>
         <dd x-text="hyva.formatPrice(totalsData.shipping_incl_tax)" class="justify-self-end"></dd>
     </div>
 </template>

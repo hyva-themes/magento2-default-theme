@@ -1,6 +1,6 @@
 <template x-if="segment.code === 'subtotal'">
     <div :class="wrapperClass">
-        <dt x-html="segment.title"></dt>
+        <dt x-text="segment.title"></dt>
         <dd x-text="hyva.formatPrice(segment.value)" class="justify-self-end"></dd>
     </div>
 </template>

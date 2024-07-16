@@ -26,7 +26,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
     <div>
         <template x-if="!(segment.value > 0 && checkoutConfig.isFullTaxSummaryDisplayed)">
             <div :class="wrapperClass">
-                <dt x-html="segment.title"></dt>
+                <dt x-text="segment.title"></dt>
                 <dd x-text="hyva.formatPrice(segment.value)" class="justify-self-end"></dd>
             </div>
         </template>
@@ -35,7 +35,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             <details class="group">
                 <summary class="block cursor-pointer [&::-webkit-details-marker]:hidden">
                     <span :class="wrapperClass">
-                        <dt x-html="segment.title"></dt>
+                        <dt x-text="segment.title"></dt>
                         <dd class="inline-flex items-center gap-x-1 justify-self-end">
                             <span x-text="hyva.formatPrice(segment.value)"></span>
                             <?= $heroicons->chevronDownHtml('transform group-open:rotate-180', 18, 18, ['aria-hidden' => 'true']); ?>
@@ -47,7 +47,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                         <dl :class="wrapperClass">
                             <dt>
                                 <template x-for="(taxRate, index) in taxItem.rates">
-                                    <div x-html="`${taxRate.title} (${taxRate.percent}%)`"></div>
+                                    <div x-text="`${taxRate.title} (${taxRate.percent}%)`"></div>
                                 </template>
                             </dt>
                             <dd x-text="hyva.formatPrice(taxItem.amount)" class="justify-self-end"></dd>
