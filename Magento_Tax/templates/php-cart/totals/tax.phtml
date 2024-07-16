@@ -26,34 +26,30 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
     <div>
         <template x-if="!(segment.value > 0 && checkoutConfig.isFullTaxSummaryDisplayed)">
             <div :class="wrapperClass">
-                <dt x-text="segment.title"></dt>
-                <dd x-text="hyva.formatPrice(segment.value)" class="justify-self-end"></dd>
+                <span x-text="segment.title"></span>
+                <span x-text="hyva.formatPrice(segment.value)" class="justify-self-end"></span>
             </div>
         </template>
 
         <template x-if="segment.value > 0 && checkoutConfig.isFullTaxSummaryDisplayed">
             <details class="group">
-                <summary class="block cursor-pointer [&::-webkit-details-marker]:hidden">
-                    <span :class="wrapperClass">
-                        <dt x-text="segment.title"></dt>
-                        <dd class="inline-flex items-center gap-x-1 justify-self-end">
-                            <span x-text="hyva.formatPrice(segment.value)"></span>
-                            <?= $heroicons->chevronDownHtml('transform group-open:rotate-180', 18, 18, ['aria-hidden' => 'true']); ?>
-                        </dd>
+                <summary class="block cursor-pointer [&::-webkit-details-marker]:hidden"  :class="wrapperClass">
+                    <span x-text="segment.title"></span>
+                    <span class="inline-flex items-center gap-x-1 justify-self-end">
+                        <span x-text="hyva.formatPrice(segment.value)"></span>
+                        <?= $heroicons->chevronDownHtml('transform group-open:rotate-180', 18, 18, ['aria-hidden' => 'true']); ?>
                     </span>
                 </summary>
-                <div>
-                    <template x-for="(taxItem, index) in segment.extension_attributes.tax_grandtotal_details" :key="index">
-                        <dl :class="wrapperClass">
-                            <dt>
-                                <template x-for="(taxRate, index) in taxItem.rates">
-                                    <div x-text="`${taxRate.title} (${taxRate.percent}%)`"></div>
-                                </template>
-                            </dt>
-                            <dd x-text="hyva.formatPrice(taxItem.amount)" class="justify-self-end"></dd>
-                        </dl>
-                    </template>
-                </div>
+                <template x-for="(taxItem, index) in segment.extension_attributes.tax_grandtotal_details" :key="index">
+                    <div :class="wrapperClass">
+                        <span>
+                            <template x-for="(taxRate, index) in taxItem.rates">
+                                <div x-text="`${taxRate.title} (${taxRate.percent}%)`"></div>
+                            </template>
+                        </span>
+                        <span x-text="hyva.formatPrice(taxItem.amount)" class="justify-self-end"></span>
+                    </div>
+                </template>
             </div>
         </template>
     </div>

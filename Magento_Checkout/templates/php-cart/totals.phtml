@@ -71,7 +71,7 @@ $totalsSort = $storeConfigViewModel->getStoreConfig('sales/totals_sort');
         }
     }
 </script>
-<dl
+<div
     id="cart-totals"
     class="cart-totals relative"
     x-data="initCartTotals()"
@@ -83,4 +83,4 @@ $totalsSort = $storeConfigViewModel->getStoreConfig('sales/totals_sort');
             <?= $block->getChildHtml(); ?>
         </div>
     </template>
-</dl>
+</div>

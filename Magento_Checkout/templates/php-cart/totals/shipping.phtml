@@ -1,6 +1,6 @@
 <template x-if="segment.code === 'shipping' && quoteData.is_virtual === 0 && !!shippingMethod">
     <div :class="wrapperClass">
-        <dt x-text="segment.title"></dt>
-        <dd x-text="hyva.formatPrice(segment.value)" class="justify-self-end"></dd>
+        <span x-text="segment.title"></span>
+        <span x-text="hyva.formatPrice(segment.value)" class="justify-self-end"></span>
     </div>
 </template>
