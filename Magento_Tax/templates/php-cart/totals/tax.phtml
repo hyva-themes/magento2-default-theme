@@ -26,8 +26,8 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
     <div>
         <template x-if="!(segment.value > 0 && checkoutConfig.isFullTaxSummaryDisplayed)">
             <div :class="wrapperClass">
-                <span x-text="segment.title"></span>
-                <span x-text="hyva.formatPrice(segment.value)" class="justify-self-end"></span>
+                <div x-text="segment.title"></div>
+                <div x-text="hyva.formatPrice(segment.value)" class="justify-self-end"></div>
             </div>
         </template>
 
@@ -42,12 +42,12 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 </summary>
                 <template x-for="(taxItem, index) in segment.extension_attributes.tax_grandtotal_details" :key="index">
                     <div :class="wrapperClass">
-                        <span>
+                        <div>
                             <template x-for="(taxRate, index) in taxItem.rates">
-                                <span x-text="`${taxRate.title} (${taxRate.percent}%)`"></span>
+                                <div x-text="`${taxRate.title} (${taxRate.percent}%)`"></div>
                             </template>
-                        </span>
-                        <span x-text="hyva.formatPrice(taxItem.amount)" class="justify-self-end"></span>
+                        </div>
+                        <div x-text="hyva.formatPrice(taxItem.amount)" class="justify-self-end"></div>
                     </div>
                 </template>
             </div>

@@ -1,6 +1,6 @@
 <template x-if="segment.code === 'discount'">
     <div :class="wrapperClass">
-        <span x-text="segment.title"></span>
-        <span x-text="hyva.formatPrice(segment.value)" class="justify-self-end"></span>
+        <div x-text="segment.title"></div>
+        <div x-text="hyva.formatPrice(segment.value)" class="justify-self-end"></div>
     </div>
 </template>
