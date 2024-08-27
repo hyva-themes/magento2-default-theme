@@ -10,15 +10,24 @@ declare(strict_types=1);
 
 // phpcs:disable Magento2.Files.LineLength.MaxExceeded
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\ProductStockItem;
 use Magento\Checkout\Block\Cart\Item\Renderer;
 use Magento\Framework\Escaper;
 
 /** @var Renderer $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
 
 $item = $block->getItem();
 $product = $item->getProduct();
 $isVisibleProduct = $product->isVisibleInSiteVisibility();
+
+$stockItemViewModel = $viewModels->require(ProductStockItem::class);
+$qty = $stockItemViewModel->isQtyDecimal($product)
+    ? $block->getQty()
+    : (int) $block->getQty();
+
 
 ?>
 <tbody class="cart item bg-white even:bg-container-darker">
@@ -95,7 +104,7 @@ $isVisibleProduct = $product->isVisibleInSiteVisibility();
                         <span class="label sr-only"><?= $escaper->escapeHtml(__('Qty')) ?></span>
                         <input id="cart-<?= $escaper->escapeHtmlAttr($item->getId()) ?>-qty"
                                name="cart[<?= $escaper->escapeHtmlAttr($item->getId()) ?>][qty]"
-                               value="<?= $escaper->escapeHtmlAttr($block->getQty()) ?>"
+                               value="<?= $escaper->escapeHtmlAttr($qty) ?>"
                                type="number"
                                size="4"
                                step="any"
