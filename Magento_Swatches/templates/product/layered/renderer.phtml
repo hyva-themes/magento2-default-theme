@@ -92,7 +92,7 @@ $swatchData = $block->getSwatchData();
 
             $swatchType = (string) $swatchData['swatches'][$option]['type'];
             $swatchValue = (string) $swatchData['swatches'][$option]['value'];
-            $isVisualSwatch = $swatchType === "1" || $swatchType === "2";
+            $isVisualSwatch = in_array((int) $swatchType, [Swatch::SWATCH_TYPE_VISUAL_COLOR, Swatch::SWATCH_TYPE_VISUAL_IMAGE], true);
             ?>
             <a
                 href="<?= $escaper->escapeUrl($label['link']) ?>" rel="nofollow"
