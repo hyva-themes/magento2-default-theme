@@ -1,41 +1,55 @@
-const path = require('path');
-const url = require('url');
-const fs = require('fs');
+const fs = require("node:fs");
+const path = require("node:path");
+const process = require("node:process");
 
-let baseDir = path.resolve(__dirname);
-do {
-    baseDir = baseDir.split('/').slice(0, -1).join('/');
-} while (baseDir !== '' && ! fs.existsSync(baseDir + '/app'));
+const baseDir = (() => {
+    let dir = path.resolve(__dirname);
+    const files = ["composer.json", "bin/magento"];
 
-if (baseDir === '') {
-    console.log('ERROR: unable to locate Magento base directory.');
-    console.log('Please run this script somewhere within a Magento project.');
-    require('process').exit(1)
+    while (dir !== path.parse(dir).root) {
+        if (files.every((file) => fs.existsSync(path.join(dir, file)))) {
+            return dir;
+        }
+        dir = path.dirname(dir);
+    }
+
+    console.error(`
+ERROR: Unable to locate Magento base directory.
+Please ensure you're running this script within a Magento 2 project.
+`);
+    process.exit(1);
+})();
+
+const hasProxyArg = process.argv.includes("--proxy");
+const proxy = "http://my-magento.test";
+
+if (!hasProxyArg && proxy === "http://my-magento.test") {
+    console.error(`
+To set an alternative proxy, use: 'npm run browser-sync -- --proxy http://hyva.test'.
+You can also use an HTTPS local address: 'npm run browser-sync -- --proxy https://hyva.test' --https.
+Alternatively, update the defaultProxy value in 'browser-sync.config.js'.
+`);
+    process.exit(1);
 }
 
-const proxy = process.env.PROXY_URL || 'http://magento.local/';
-const port = process.env.PORT || 3000;
-const { host } = url.parse(proxy);
-
-if (typeof process.env.PROXY_URL === 'undefined') {
-    console.log('Set an alternative proxy host using');
-    console.log('PROXY_URL="https://my-magento.test" npm run browser-sync', "\n");
+try {
+    module.exports = {
+        proxy,
+        port: 3000,
+        rewriteRules: [
+            {
+                match: new RegExp(`${new URL(proxy).origin}`, "g"),
+                replace: "",
+            },
+        ],
+        files: [
+            path.join(baseDir, "**/*.js"),
+            path.join(baseDir, "**/*.css"),
+            path.join(baseDir, "**/*.xml"),
+            path.join(baseDir, "**/*.phtml"),
+        ],
+    };
+} catch (error) {
+    console.error("ERROR: Failed to configure browser-sync:", error.message);
+    process.exit(1);
 }
-
-module.exports = {
-    proxy,
-    port,
-    rewriteRules: [
-        {
-            match: `.${host}`,
-            replace: '',
-        },
-    ],
-    files: [
-        `${baseDir}/**/*.js`,
-        `${baseDir}/**/*.css`,
-        `${baseDir}/**/*.xml`,
-        `${baseDir}/**/*.phtml`,
-    ],
-};
-
