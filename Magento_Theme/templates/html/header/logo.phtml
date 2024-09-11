@@ -21,7 +21,7 @@ use Magento\Theme\Block\Html\Header\Logo;
 
 /** @var StoreConfig $storeConfig */
 $storeConfig = $viewModels->require(StoreConfig::class);
-$storeName = $storeConfig->getStoreConfig('general/store_information/name') ?: $block->getThemeName() ?: __('Store logo');
+$storeName = $block->getThemeName() ?: $storeConfig->getStoreConfig('general/store_information/name') ?: __('Store logo');
 
 /** @var LogoSizeResolver $logoSizeResolver */
 $logoSizeResolver = $viewModels->require(LogoSizeResolver::class);
