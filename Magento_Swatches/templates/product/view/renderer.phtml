@@ -119,7 +119,7 @@ $tooltipBlockHtml = $block->getBlockHtml('product.swatch.tooltip');
                                     <?= $escaper->escapeHtml(__('Choose an Option...')) ?>
                                 </option>
                                 <template
-                                    x-for="(item, index) in optionConfig.attributes[<?= (int) $attributeId ?>].options"
+                                    x-for="(item, index) in getAllAttributeOptions(<?= (int) $attributeId ?>)"
                                     :key="item.id"
                                 >
                                     <option

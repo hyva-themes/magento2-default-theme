@@ -23,12 +23,6 @@ use Magento\Framework\View\Element\Template;
 
                 return swatchConfig;
             },
-            getAllAttributeOptions(attributeId) {
-                return (
-                    this.optionConfig.attributes[attributeId] &&
-                    this.optionConfig.attributes[attributeId].options
-                ) || []
-            },
             mapSwatchTypeNumberToTypeCode(typeNumber) {
                 switch ("" + typeNumber) {
                     case "1":

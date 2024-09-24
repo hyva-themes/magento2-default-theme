@@ -185,6 +185,12 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
             getAllowedAttributeOptions(attributeId) {
                 return this.allowedAttributeOptions[attributeId] || []
             },
+            getAllAttributeOptions(attributeId) {
+                return (
+                    this.optionConfig.attributes[attributeId] &&
+                    this.optionConfig.attributes[attributeId].options
+                ) || []
+            },
             getProductIdsForOption(option) {
                 const attributeId = this.findAttributeByOptionId(option.id);
                 const allOptions = this.optionConfig.attributes[attributeId];
