@@ -9,19 +9,17 @@
 declare(strict_types=1);
 
 use Magento\Catalog\Block\Product\View;
+use Magento\Framework\Escaper;
 
 /** @var View $block */
-
-$product = $block->getProduct();
+/** @var Escaper $escaper */
 ?>
-<section class="text-gray-700 body-font">
-    <div class="flex pb-6 md:py-6 lg:flex-row flex-col items-center">
-        <div class="grid grid-rows-auto grid-cols-1 md:gap-x-5 md:grid-cols-[42%_minmax(0,_1fr)] md:grid-rows-[min-content_minmax(0,_1fr)] lg:gap-x-10 lg:grid-cols-2 w-full">
-            <?= $block->getChildHtml('product.media') ?>
-            <?= $block->getChildHtml('product.info') ?>
-        </div>
-    </div>
+
+<section class="pb-6 md:py-6 text-gray-700 body-font grid grid-cols-1 gap-5 items-start md:grid-cols-[42%_minmax(0px,1fr)] lg:grid-cols-2 lg:gap-x-10 ">
+    <?= $block->getChildHtml('product.media') ?>
+    <?= $block->getChildHtml('product.info') ?>
 </section>
+
 <section>
     <?= $block->getChildHtml('product_options_wrapper_bottom') ?>
 </section>

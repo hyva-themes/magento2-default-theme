@@ -53,11 +53,11 @@ $galleryOptionVideoLoop = $storeConfig->getStoreConfig('catalog/product_video/vi
 $productName = $block->getProduct()->getName();
 ?>
 
-<div id="gallery"
-     x-data="initGallery()"
-     x-bind="eventListeners"
-     class="w-full pt-6 md:pt-0 md:h-auto md:row-start-1 md:row-span-2 md:col-start-1"
-    >
+<div
+    id="gallery"
+    x-data="initGallery()"
+    x-bind="eventListeners"
+>
     <div
         :class="{'w-full h-full fixed top-0 left-0 bg-white z-50 flex': fullscreen}"
         :role="fullscreen ? 'dialog' : false"
