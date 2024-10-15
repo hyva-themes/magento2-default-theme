@@ -38,7 +38,7 @@
         --btn-hover-bg: theme("backgroundColor.primary.lighter");
         --btn-active-bg: theme("backgroundColor.primary.darker");
 
-        &:hover {
+        &:hover:not(:disabled) {
             @apply shadow-lg;
         }
     }
@@ -49,7 +49,7 @@
         --btn-color: theme("colors.black");
         --btn-hover-stroke: theme("borderColor.primary.darker");
 
-        &:hover {
+        &:hover:not(:disabled) {
             @apply shadow-lg;
         }
     }
