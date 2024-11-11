@@ -24,6 +24,7 @@ use Magento\Framework\Escaper;
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
 // phpcs:disable Generic.Files.LineLength.TooLong
+// phpcs:disable Generic.WhiteSpace.ScopeIndent
 
 /** @var AbstractProduct $block */
 /** @var Escaper $escaper */
@@ -101,8 +102,15 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
            name="<?= $escaper->escapeHtml($optionItem['name']) ?>"
            value="<?= $escaper->escapeHtml($optionItem['value']) ?>">
     <?php endforeach; ?>
-    <?php else: ?>
-<div class="item product product-item card card-interactive flex flex-col w-full <?= $viewIsGrid ? '' : 'md:flex-row' ?>">
+<?php else: ?>
+<div class="item product product-item card card-interactive flex flex-col w-full <?= $viewIsGrid ? '' : 'md:flex-row' ?>"
+     <?php foreach ($block->getData('product_data_attributes') as $attribute => $include): ?>
+         <?php if ($include): ?>
+             <?php /** Append data-* attributes based on layout XML arguments */ ?>
+             <?= $escaper->escapeHtml(sprintf('data-%s', $attribute)); ?>="<?= $escaper->escapeHtmlAttr($product->getData($attribute)); ?>"
+         <?php endif; ?>
+    <?php endforeach; ?>
+>
 <?php endif; ?>
     <?php /* Product Image */ ?>
     <a href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>"
