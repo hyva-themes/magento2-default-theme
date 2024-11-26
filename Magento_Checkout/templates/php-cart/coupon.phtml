@@ -94,9 +94,8 @@ $recaptcha = $block->getData('viewModelRecaptcha');
             >
                 <?= $block->getBlockHtml('formkey') ?>
 
-                <div class="fieldset coupon">
+                <div class="fieldset coupon space-y-4">
                     <div class="flex flex-col sm:flex-row gap-2 justify-center md:justify-start">
-
                         <label for="coupon_code" class="label sr-only">
                             <?= $escaper->escapeHtml(__('Enter discount code')) ?>
                         </label>
