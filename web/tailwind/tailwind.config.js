@@ -19,7 +19,6 @@ module.exports = hyvaModules.mergeTailwindConfig({
         'xl': '1280px',
         // => @media (min-width: 1280px) { ... }
         '2xl': '1536px' // => @media (min-width: 1536px) { ... }
-
       },
       fontFamily: {
         sans: ["Segoe UI", "Helvetica Neue", "Arial", "sans-serif"]
@@ -72,9 +71,9 @@ module.exports = hyvaModules.mergeTailwindConfig({
           darker: colors.blue['300']
         },
         container: {
-          lighter: '#ffffff',
-          "DEFAULT": '#fafafa',
-          darker: '#f5f5f5'
+          lighter: colors.white,
+          "DEFAULT": colors.neutral['50'],
+          darker: colors.neutral['100']
         }
       },
       borderColor: {
@@ -89,33 +88,25 @@ module.exports = hyvaModules.mergeTailwindConfig({
           darker: colors.blue['300']
         },
         container: {
-          lighter: '#f5f5f5',
+          lighter: colors.neutral['100'],
           "DEFAULT": '#e7e7e7',
           darker: '#b6b6b6'
         }
       },
-      minWidth: {
-        8: spacing["8"],
-        20: spacing["20"],
-        40: spacing["40"],
-        48: spacing["48"]
-      },
       minHeight: {
-        14: spacing["14"],
-        a11y: '44px',
+        a11y: spacing["11"],
         'screen-25': '25vh',
         'screen-50': '50vh',
         'screen-75': '75vh'
       },
       maxHeight: {
-        '0': '0',
         'screen-25': '25vh',
         'screen-50': '50vh',
         'screen-75': '75vh'
       },
       container: {
         center: true,
-        padding: '1.5rem'
+        padding: spacing["6"]
       }
     }
   },
