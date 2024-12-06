@@ -87,7 +87,7 @@ $cols = $block->getData('is_context_shipment') ? 3 : ($block->getData('is_contex
                 <?php if ($block->getItem()->getQtyOrdered() > 0): ?>
                     <p>
                         <span class="title"><?= $escaper->escapeHtml(__('Ordered')) ?>:</span>
-                        <span class="content"><?= /** @noEscape */ $localeFormatter->formatNumber($block->getItem()->getQtyOrdered()) ?></span>
+                        <span class="content"><?= /** @noEscape */ $localeFormatter->formatNumber((float) $block->getItem()->getQtyOrdered()) ?></span>
                     </p>
                 <?php endif; ?>
                 <?php if ($block->getItem()->getQtyShipped() > 0): ?>

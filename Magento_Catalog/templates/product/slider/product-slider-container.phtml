@@ -186,7 +186,7 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
                      @scroll.debounce="calcActive"
                 >
                     <?php foreach ($items as $product): ?>
-                        <div class="js_slide flex shrink-0 w-full <?= $escaper->escapeHtmlAttr($slideItemClasses) ?>"
+                        <div class="js_slide flex flex-col shrink-0 w-full <?= $escaper->escapeHtmlAttr($slideItemClasses) ?>"
                              role="group"
                              :aria-hidden="<?= (int) $sliderIndex ?> > active && <?= (int) $sliderIndex ?> <= (active + pageSize) ? 'false' : 'true'"
                              aria-label="<?= $escaper->escapeHtmlAttr(__('Item %1', $sliderIndex++)) ?>"

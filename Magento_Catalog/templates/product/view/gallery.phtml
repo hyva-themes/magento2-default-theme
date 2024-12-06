@@ -84,8 +84,8 @@ $productName = $block->getProduct()->getName();
                 <img
                     alt="<?= $mainImage ? $escaper->escapeHtmlAttr($mainImage->getData('label')) : '' ?>"
                     title="<?= $mainImage ? $escaper->escapeHtmlAttr($mainImage->getData('label')) : '' ?>"
-                    class="object-contain object-center w-full h-auto max-h-screen-75"
-                    :class="'invisible'"
+                    class="object-contain object-center w-full h-auto"
+                    :class="fullscreen ? 'invisible max-h-screen-75' : 'invisible'"
                     src="<?= /* @noEscape */ $mainImageData ?>"
                     width="<?= /* @noEscape */ $mediumWidth ?>"
                     height="<?= /* @noEscape */ $mediumHeight ?>"
@@ -95,7 +95,8 @@ $productName = $block->getProduct()->getName();
                     <img
                         :alt="image.caption || '<?= $escaper->escapeJs($productName) ?>'"
                         :title="image.caption || '<?= $escaper->escapeJs($productName) ?>'"
-                        class="absolute inset-0 object-contain object-center w-full m-auto max-h-screen-75"
+                        class="absolute inset-0 object-contain object-center w-full m-auto"
+                        :class="{ 'max-h-screen-75': fullscreen }"
                         width="<?= /* @noEscape */ $mediumWidth ?>"
                         height="<?= /* @noEscape */ $mediumHeight ?>"
                         :loading="active !== index ? 'lazy' : 'eager'"
@@ -151,7 +152,7 @@ $productName = $block->getProduct()->getName();
             <div
                 id="thumbs"
                 class="flex items-center gap-4"
-                :class="{ 'fixed justify-center bottom-0 left-0 right-0 mx-6': fullscreen }"
+                :class="{ 'fixed justify-center bottom-0 left-0 right-0': fullscreen, 'mx-6' : fullscreen && !isSlider}"
                 style="min-height: 100px;"
                 x-show="images.length > 1"
                 x-cloak
@@ -162,9 +163,10 @@ $productName = $block->getProduct()->getName();
                     tabindex="-1"
                     class="p-2.5 flex items-center justify-center self-stretch text-black outline-none focus:outline-none flex-none"
                     :class="{ 'opacity-25 pointer-events-none' : isSliderStart, 'hidden' : !isSlider }"
-                    aria-hidden="true"
                     @click="scrollPrevious"
-                ><?= $heroicons->chevronLeftHtml() ?></button>
+                >
+                    <?= $heroicons->chevronLeftHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
+                </button>
                 <div class="js_thumbs_slides thumbs-wrapper relative flex flex-nowrap w-full overflow-auto js_slides snap"
                      x-ref="jsThumbSlides"
                      @scroll.debounce="calcPageSize(); calcActive(); calcScrollStartEnd()"
@@ -182,8 +184,8 @@ $productName = $block->getProduct()->getName();
                                 </span>
                                 <img
                                     :src="image.thumb"
-                                    :alt="hyva.str('%1 thumbnail', image.caption) || '<?= $escaper->escapeJs(__("%1 thumbnail", $productName)) ?>'"
-                                    :title="hyva.str('%1 thumbnail', image.caption) || '<?= $escaper->escapeJs(__("%1 thumbnail", $productName)) ?>'"
+                                    :alt="image.caption || '<?= $escaper->escapeJs(__("%1 thumbnail", $productName)) ?>'"
+                                    :title="image.caption || '<?= $escaper->escapeJs(__("%1 thumbnail", $productName)) ?>'"
                                     width="<?= /* @noEscape */ $smallWidth ?>"
                                     height="<?= /* @noEscape */ $smallHeight ?>"
                                 />
@@ -205,9 +207,10 @@ $productName = $block->getProduct()->getName();
                     tabindex="-1"
                     class="p-2.5 flex items-center justify-center self-stretch text-black outline-none focus:outline-none flex-none"
                     :class="{ 'opacity-25 pointer-events-none' : isSliderEnd, 'hidden' : !isSlider }"
-                    aria-hidden="true"
                     @click="scrollNext"
-                ><?= $heroicons->chevronRightHtml() ?></button>
+                >
+                    <?= $heroicons->chevronRightHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
+                </button>
             </div>
         </div>
         <div class="absolute top-0 right-0 pt-4 pr-4">
@@ -516,19 +519,24 @@ $productName = $block->getProduct()->getName();
                 });
             },
             handleTouchStart(event) {
-                if (this.images.length <= 1) {
-                    return;
-                }
-
+                if (
+                    this.images.length <= 1 ||
+                    event.touches.length > 1 ||
+                    (window.visualViewport && window.visualViewport.scale > 1.01)
+                ) return;
                 const firstTouch = event.touches[0];
 
                 touchXDown = firstTouch.clientX;
                 touchYDown = firstTouch.clientY;
             },
             handleTouchMove(event) {
-                if (this.images.length <= 1 || !touchXDown || !touchYDown) {
-                    return;
-                }
+                if (
+                    this.images.length <= 1 ||
+                    event.touches.length > 1 ||
+                    (window.visualViewport && window.visualViewport.scale > 1.01) ||
+                    !touchXDown ||
+                    !touchYDown
+                ) return;
 
                 const xDiff = touchXDown - event.touches[0].clientX;
                 const yDiff = touchYDown - event.touches[0].clientY;

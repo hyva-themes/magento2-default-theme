@@ -102,10 +102,7 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                 ).then(data=> {
                     this.isLoading = false;
                     if (data.errors) {
-                        dispatchMessages([{
-                            type: 'error',
-                            text: data.message
-                        }], 5000);
+                        this.setErrorMessages(data.message);
                         this.errors = 1;
                         this.hasCaptchaToken = 0;
                     } else {
@@ -172,6 +169,17 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
             </div>
             <template x-if="open">
                 <div class="flex flex-col h-full py-6 space-y-6 bg-white shadow-xl overflow-y-auto">
+                    <div class="mx-4">
+                        <div class="message error mb-0" x-show="errors" x-cloak>
+                            <template x-for="(message, index) in errorMessages" :key="index">
+                                <div>
+                                    <template x-if="message">
+                                        <span x-html="message"></span>
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
                     <div class="block-customer-login bg-container border border-container mx-4 p-4 shadow-sm">
                         <p id="authenticate-customer-login" class="text-lg leading-7 text-gray-900">
                             <strong class="font-medium"><?= $escaper->escapeHtml(__('Checkout using your account')) ?></strong>

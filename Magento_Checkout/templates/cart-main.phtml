@@ -96,7 +96,7 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
                     return;
                 }
 
-                if (cart) {
+                if (cart && cart.items) {
                     if (!window.checkoutConfig) {
                         if (cart.items.length) {
                             this.reloadCartContent();
@@ -104,15 +104,11 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
                         return;
                     }
 
-                    const roundUp = (number) => {
-                        return Math.round(number * 100);
-                    }
+                    if (window.checkoutConfig) {
+                        const roundUp = (number) => Math.round(number * 100);
 
-                    const decimalNumbersAreEqual = (number1, number2) => {
-                        return roundUp(number1) === roundUp(number2);
-                    }
+                        const decimalNumbersAreEqual = (number1, number2) => roundUp(number1) === roundUp(number2);
 
-                    if (window.checkoutConfig && cart) {
                         if (decimalNumbersAreEqual(
                             cart.items.reduce((totalQty, cartItem) => totalQty + cartItem.qty, 0),
                                 window.checkoutConfig.quoteData.items_qty

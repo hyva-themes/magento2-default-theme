@@ -24,6 +24,7 @@ use Magento\Framework\Escaper;
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
 // phpcs:disable Generic.Files.LineLength.TooLong
+// phpcs:disable Generic.WhiteSpace.ScopeIndent
 
 /** @var AbstractProduct $block */
 /** @var Escaper $escaper */
@@ -83,10 +84,16 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
 <?php if ($product->isSaleable()): ?>
 <form method="post"
     action="<?= $escaper->escapeUrl($productViewModel->getAddToCartUrl($product, ['useUencPlaceholder' => true])) ?>"
-    class="item product product-item product_addtocart_form card card-interactive flex flex-col w-full <?= $viewIsGrid ? '' : 'md:flex-row' ?>"
+    class="item product product-item product_addtocart_form card card-interactive grow flex flex-col w-full <?= $viewIsGrid ? '' : 'md:flex-row' ?>"
     <?php if ($product->getOptions()): ?>
     enctype="multipart/form-data"
     <?php endif; ?>
+    <?php foreach ($block->getData('product_data_attributes') as $attribute => $include): ?>
+        <?php if ($include): ?>
+            <?php /** Append data-* attributes based on layout XML arguments */ ?>
+            <?= $escaper->escapeHtml(sprintf('data-%s', $attribute)); ?>="<?= $escaper->escapeHtmlAttr($product->getData($attribute)); ?>"
+        <?php endif; ?>
+    <?php endforeach; ?>
 >
     <?= /** @noEscape */ $block->getBlockHtml('formkey') ?>
     <input type="hidden" name="product" value="<?= (int)$productId ?>"/>
@@ -95,8 +102,15 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
            name="<?= $escaper->escapeHtml($optionItem['name']) ?>"
            value="<?= $escaper->escapeHtml($optionItem['value']) ?>">
     <?php endforeach; ?>
-    <?php else: ?>
-<div class="item product product-item card card-interactive flex flex-col w-full <?= $viewIsGrid ? '' : 'md:flex-row' ?>">
+<?php else: ?>
+<div class="item product product-item card card-interactive flex flex-col w-full <?= $viewIsGrid ? '' : 'md:flex-row' ?>"
+     <?php foreach ($block->getData('product_data_attributes') as $attribute => $include): ?>
+         <?php if ($include): ?>
+             <?php /** Append data-* attributes based on layout XML arguments */ ?>
+             <?= $escaper->escapeHtml(sprintf('data-%s', $attribute)); ?>="<?= $escaper->escapeHtmlAttr($product->getData($attribute)); ?>"
+         <?php endif; ?>
+    <?php endforeach; ?>
+>
 <?php endif; ?>
     <?php /* Product Image */ ?>
     <a href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>"
@@ -187,16 +201,7 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
             <?php endif; ?>
             <div class="flex flex-wrap gap-2">
                 <?php if ($showAddToWishlist): ?>
-                <button x-data="initWishlist()"
-                        x-defer="intersect"
-                        @click.prevent="addToWishlist(<?= (int)$productId ?>)"
-                        aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Wish List') . ' ' . $productName) ?>"
-                        type="button"
-                        class="rounded-full w-9 h-9 bg-gray-200 p-0 border-0 inline-flex shrink-0 items-center justify-center text-gray-500 hover:text-red-600"
-                        data-addto="wishlist"
-                >
-                    <?= $heroiconsSolid->heartHtml("w-5 h-5", 25, 25, ['aria-hidden' => 'true']) ?>
-                </button>
+                    <?= $block->getChildBlock('wishlist')->setData('product', $product)->toHtml() ?>
                 <?php endif; ?>
                 <?php if ($showAddToCompare): ?>
                 <button x-data="initCompareOnProductList()"

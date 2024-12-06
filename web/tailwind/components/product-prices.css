@@ -15,15 +15,21 @@
     }
 }
 
-.price-excluding-tax {
+.price-excluding-tax,
+.weee[data-label] {
     @apply block;
+}
+
+.weee[data-label] {
+    @apply mt-1 text-sm;
 }
 
 .price-container.price-tier_price {
     @apply flex gap-1;
 }
 
-.price-container.price-tier_price > .price-including-tax + .price-excluding-tax {
+.price-container.price-tier_price > .price-including-tax + .price-excluding-tax,
+.price-container .weee {
     &:before {
         content: '(' attr(data-label) ': ';
     }

@@ -1,0 +1,23 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Cms\Block\Widget\Page\Link;
+use Magento\Framework\Escaper;
+
+/** @var Link $block */
+/** @var Escaper $escaper */
+?>
+
+<span class="widget block-cms-link">
+    <a
+        class="underline font-medium"
+        <?= /* @noEscape */ $block->getLinkAttributes() ?>
+    ><?= $escaper->escapeHtml($block->getLabel()) ?></a>
+</span>

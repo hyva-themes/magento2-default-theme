@@ -31,7 +31,18 @@ if ($item->getProductType() === 'configurable') {
 <button
     class="flex action action-delete"
     x-data="{}"
-    @click.prevent='hyva.postForm(<?= /* @noEscape */ $block->getDeletePostJson() ?>)'
+    @click.prevent='
+        hyva.postForm(<?= /* @noEscape */ $block->getDeletePostJson() ?>);
+        $dispatch(
+            "cart-item-removed",
+            [{
+                "product_sku": "<?= $escaper->escapeJs($item->getSku()); ?>",
+                "product_name": "<?= $escaper->escapeJs($item->getName()); ?>",
+                "product_price_value": "<?= $escaper->escapeJs($item->getPrice()); ?>",
+                "quantity": "<?= $escaper->escapeJs($item->getQty()); ?>",
+            }]
+        );
+    '
     aria-label="<?= $escaper->escapeHtmlAttr(__('Remove %1', $productName)) ?>"
     type="button"
 >

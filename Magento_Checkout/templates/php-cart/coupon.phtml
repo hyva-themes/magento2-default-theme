@@ -8,32 +8,45 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\ViewModel\ReCaptcha;
 use Magento\Checkout\Block\Cart\Coupon;
 use Magento\Framework\Escaper;
 
 /** @var Coupon $block */
 /** @var Escaper $escaper */
+/** @var ReCaptcha $recaptcha */
 
 // We should use strlen function because coupon code could be "0", converted to bool will lead to false
 $hasCouponCode = (bool) strlen($block->getCouponCode() ?: "");
+$recaptcha = $block->getData('viewModelRecaptcha');
 ?>
 <script>
     function initCouponForm() {
         return {
+            errors: 0,
+            hasCaptchaToken: 0,
             showCouponForm: <?= $hasCouponCode ? 1 : 0 ?>,
             formData: {
                 coupon_code: '<?= $escaper->escapeJs($block->getCouponCode()) ?>',
                 remove: '<?= (int) $hasCouponCode ?>'
             },
-            init(){
+            init() {
                 this.showCouponForm = JSON.parse(hyva.getBrowserStorage().getItem('hyva.showCouponForm'))
             },
-            toggleShowCoupon(){
+            toggleShowCoupon() {
                 this.showCouponForm = !this.showCouponForm;
 
                 hyva.getBrowserStorage().setItem('hyva.showCouponForm', this.showCouponForm);
 
                 this.$nextTick(() => this.$refs.couponInput.select());
+            },
+            submitForm() {
+                const $form = document.querySelector('#discount-coupon-form');
+                <?= $recaptcha ? $recaptcha->getValidationJsHtml(ReCaptcha::RECAPTCHA_FORM_ID_COUPON_CODE) : '' ?>
+
+                if (this.errors === 0) {
+                    hyva.postCart($form);
+                }
             }
         }
     }
@@ -77,16 +90,12 @@ $hasCouponCode = (bool) strlen($block->getCouponCode() ?: "");
                   x-cloak
                   action="<?= $escaper->escapeUrl($block->getUrl('checkout/cart/couponPost')) ?>"
                   method="post"
-                  @submit.prevent="hyva.postCart($event.target)"
+                  @submit.prevent="submitForm()"
             >
                 <?= $block->getBlockHtml('formkey') ?>
 
-                <div class="fieldset coupon">
-
-                    <input type="hidden" name="remove" id="remove-coupon" value="<?= (int) $hasCouponCode ?>"/>
-
+                <div class="fieldset coupon space-y-4">
                     <div class="flex flex-col sm:flex-row gap-2 justify-center md:justify-start">
-
                         <label for="coupon_code" class="label sr-only">
                             <?= $escaper->escapeHtml(__('Enter discount code')) ?>
                         </label>
@@ -116,6 +125,7 @@ $hasCouponCode = (bool) strlen($block->getCouponCode() ?: "");
                             </div>
                             <?php else: ?>
                                 <div class="primary">
+                                    <input type="hidden" name="remove" id="remove-coupon" value="1"/>
                                     <button type="submit" class="btn btn-primary"
                                             value="<?= $escaper->escapeHtmlAttr(__('Cancel Coupon')) ?>">
                                         <?= $escaper->escapeHtml(__('Cancel Coupon')) ?>
@@ -124,6 +134,10 @@ $hasCouponCode = (bool) strlen($block->getCouponCode() ?: "");
                             <?php endif; ?>
                         </div>
                     </div>
+                    <?= $recaptcha ? $recaptcha->getInputHtml(ReCaptcha::RECAPTCHA_FORM_ID_COUPON_CODE) : '' ?>
+                    <?php if ($recaptcha && $legalNoticeHtml = $recaptcha->getLegalNoticeHtml(ReCaptcha::RECAPTCHA_FORM_ID_COUPON_CODE)): ?>
+                        <?= $recaptcha->getLegalNoticeHtml(ReCaptcha::RECAPTCHA_FORM_ID_COUPON_CODE) ?>
+                    <?php endif; ?>
                 </div>
             </form>
         </div>
