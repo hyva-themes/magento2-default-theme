@@ -56,13 +56,15 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                     ) ?>
                 </div>
                 <div class="field email required">
-                    <label class="label" for="email"><span><?= $escaper->escapeHtml(__('Email')) ?></span></label>
+                    <label class="label" for="email">
+                        <span><?= $escaper->escapeHtml(__('Email')) ?></span>
+                    </label>
                     <div class="control">
                         <input name="login[username]"
                                class="form-input"
                                required
                                value="<?= $escaper->escapeHtmlAttr($block->getUsername()) ?>"
-                               autocomplete="<?= $block->isAutocompleteDisabled() ? 'off' : 'email' ?>"
+                               autocomplete="<?= $block->isAutocompleteDisabled() ? 'off' : 'username' ?>"
                                id="email"
                                type="email"
                                title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
@@ -71,9 +73,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                 </div>
                 <div class="field password required">
                     <label for="pass" class="label">
-                        <span>
-                            <?= $escaper->escapeHtml(__('Password')) ?>
-                        </span>
+                        <span><?= $escaper->escapeHtml(__('Password')) ?></span>
                     </label>
                     <div class="control flex items-center">
                         <div class="sr-only" aria-live="polite">
@@ -117,7 +117,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                 <?= $block->getChildHtml('form_additional_info') ?>
                 <div class="actions-toolbar flex justify-between pt-6 pb-2 items-center">
                         <button type="submit" class="btn btn-primary disabled:opacity-75" name="send"
-                            <?php if ($loginButtonViewModel->disabled()): ?> disabled="disabled" data-recaptcha-btn<?php endif; ?>
+                            <?php if ($loginButtonViewModel->disabled()): ?> disabled data-recaptcha-btn<?php endif; ?>
                         >
                             <span><?= $escaper->escapeHtml(__('Sign In')) ?></span></button>
                         <a class="underline text-secondary" href="<?= $escaper->escapeUrl(

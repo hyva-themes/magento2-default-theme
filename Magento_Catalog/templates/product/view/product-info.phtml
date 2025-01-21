@@ -27,6 +27,7 @@ $productViewModel = $viewModels->require(ProductPage::class);
 $attributesViewModel = $viewModels->require(ProductAttributes::class);
 /** @var Product $product */
 $product = $productViewModel->getProduct();
+$productType = $product->getTypeId();
 
 ?>
 <div class="w-full mb-6">
@@ -43,25 +44,31 @@ $product = $productViewModel->getProduct();
         <?= $block->getChildHtml("alert.urls") ?>
     </div>
 
-    <div id="product-details">
-        <?php foreach ($block->getAttributes() as $attributeConfig) {
+    <dl id="product-details">
+        <?php foreach ($block->getAttributes() as $attributeConfig):
             $attribute = $attributesViewModel->getAttributeFromLayoutConfig($attributeConfig); ?>
-            <?php if ($value = $attribute['value'] ?? null) { ?>
-                <div class="flex border-t border-gray-300 py-2 last:mb-6 last:border-b <?=/* @noEscape */ $attribute['value'] ?: "" ?>">
-                    <span class="w-1/2 text-left text-gray-700 product-detail-label">
+            <?php if ($value = $attribute['value'] ?? null): ?>
+                <div class="flex border-t border-gray-300 py-2 last:mb-6 last:border-b attribute-<?=/* @noEscape */ $attribute['code'] ?: "" ?>">
+                    <dt class="w-1/2 text-left text-gray-700 product-detail-label">
                         <?= $escaper->escapeHtml($attribute['label']) ?>
-                    </span>
-                    <span class="w-1/2 ml-2 text-left text-gray-900 product-detail-value">
+                    </dt>
+                    <dd class="w-1/2 ml-2 text-left text-gray-900 product-detail-value">
                         <?= $escaper->escapeHtml($value) ?>
-                    </span>
+                    </dd>
                 </div>
-            <?php } ?>
-        <?php } ?>
-    </div>
+            <?php endif ?>
+        <?php endforeach; ?>
+    </dl>
 
     <?= $block->getChildHtml('product.info.form') ?>
 
     <div class="flex flex-col sm:flex-row items-end my-4">
+
+        <?php if ($productType === 'bundle'): ?>
+            <span class="sr-only">
+                <?= $escaper->escapeHtml(__('The price depends on the chosen options')) ?>
+            </span>
+        <?php endif; ?>
 
         <div role="group" aria-label="<?= $escaper->escapeHtmlAttr('Price') ?>">
             <?= $block->getChildHtml("product.info.price") ?>

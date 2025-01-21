@@ -1,0 +1,28 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magento\Catalog\Block\Category\View;
+use Magento\Catalog\ViewModel\Category\Output as CategoryOutput;
+use Magento\Framework\Escaper;
+
+/** @var View $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var CategoryOutput $categoryOutput */
+$categoryOutput = $viewModels->require(CategoryOutput::class);
+?>
+
+<?php if ($description = $block->getCurrentCategory()->getDescription()): ?>
+    <div class="category-description max-w-4xl">
+        <?= /* @noEscape */ $categoryOutput->categoryAttribute($block->getCurrentCategory(), $description, 'description') ?>
+    </div>
+<?php endif; ?>

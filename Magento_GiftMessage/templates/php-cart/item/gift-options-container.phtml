@@ -94,7 +94,7 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
                     <button type="button"
                             class="absolute top-0 right-0 cursor-pointer"
                             @click.prevent="closeDialog"
-                            aria-label="<?= $escaper->escapeHtmlAttr('Close panel') ?>"
+                            aria-label="<?= $escaper->escapeHtmlAttr(__('Close panel')) ?>"
                     >
                         <?= $heroicons->xHtml('inline-block', 24, 24, ["aria-hidden" => "true"]) ?>
                     </button>

@@ -22,24 +22,26 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
 <div class="toolbar-sorter sorter flex items-center order-1 col-span-3 sm:col-span-6
         md:col-span-3 lg:col-span-6 justify-end">
-    <select data-role="sorter"
-            class="form-select sorter-options mr-3"
-            aria-label="<?= $escaper->escapeHtml(__('Sort By')) ?>"
-            @change="changeUrl(
-                'product_list_order',
-                $event.currentTarget.options[$event.currentTarget.selectedIndex].value,
-                options.orderDefault
-            )">
-        <?php foreach ($block->getAvailableOrders() as $orderCode => $orderLabel):?>
-            <option value="<?= $escaper->escapeHtmlAttr($orderCode) ?>"
-                <?php if ($block->isOrderCurrent($orderCode)): ?>
-                    selected="selected"
-                <?php endif; ?>
-                >
-                <?= $escaper->escapeHtml(__($orderLabel)) ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
+    <label class="inline-block mr-3">
+        <select data-role="sorter"
+                class="form-select sorter-options"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Sort By')) ?>"
+                @change="changeUrl(
+                    'product_list_order',
+                    $event.currentTarget.options[$event.currentTarget.selectedIndex].value,
+                    options.orderDefault
+                )">
+            <?php foreach ($block->getAvailableOrders() as $orderCode => $orderLabel):?>
+                <option value="<?= $escaper->escapeHtmlAttr($orderCode) ?>"
+                    <?php if ($block->isOrderCurrent($orderCode)): ?>
+                        selected="selected"
+                    <?php endif; ?>
+                    >
+                    <?= $escaper->escapeHtml(__($orderLabel)) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </label>
     <?php if ($block->getCurrentDirection() == 'desc'): ?>
         <a title="<?= $escaper->escapeHtmlAttr(__('Set Ascending Direction')) ?>"
            href="#"

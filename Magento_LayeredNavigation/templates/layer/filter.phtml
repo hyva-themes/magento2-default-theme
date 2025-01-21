@@ -33,9 +33,9 @@ $catalogHelper = $this->helper(Data::class);
                 href="<?= $escaper->escapeUrl($filterItem->getUrl()) ?>"
                 class="flex justify-between py-1 hover:text-black"
                 <?php if ((int) $filterItem->getCount() === 1): ?>
-                aria-label="<?= $escaper->escapeHtmlAttr(__('%1 filter, 1 available product', $filterItem->getLabel())) ?>"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('%1 filter, 1 available product', strip_tags((string)$filterItem->getLabel()))) ?>"
                 <?php else: ?>
-                aria-label="<?= $escaper->escapeHtmlAttr(__('%1 filter, %2 available products', $filterItem->getLabel(), $filterItem->getCount())) ?>"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('%1 filter, %2 available products', strip_tags((string)$filterItem->getLabel()), $filterItem->getCount())) ?>"
                 <?php endif; ?>
             >
                 <span><?= /* @noEscape */ $filterItem->getLabel() ?></span>

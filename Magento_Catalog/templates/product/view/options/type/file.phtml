@@ -62,9 +62,9 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
                 $event.target.parentNode.remove();
                 // show file upload
                 document.getElementById('input-box-<?= /* @noEscape */ $fileName ?>').style.display = 'block';
-                $refs['option-<?= $escaper->escapeHtmlAttr($optionId) ?>'].disabled = false;
+                document.getElementById('<?= /* @noEscape */ $fileName ?>').disabled = false;
                 // update hidden upload field
-                $refs['option-<?= $escaper->escapeHtmlAttr($optionId) ?>-hidden']
+                document.getElementById('<?= /* @noEscape */ $fileName ?>-hidden')
                     .dispatchEvent(new Event('image-removed'));"
         >
             <?= $escaper->escapeHtml(__('Change')) ?>
@@ -78,7 +78,7 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
                name="<?= /* @noEscape */ $fileName ?>"
                id="<?= /* @noEscape */ $fileName ?>"
                class="product-custom-option form-file w-full"
-            <?= $fileExists ? 'disabled="disabled"' : '' ?>
+            <?= $fileExists ? 'disabled' : '' ?>
             <?php if ($option->getIsRequire()): ?>
                 required
                 oninvalid="this.setCustomValidity('<?= $escaper
@@ -96,7 +96,7 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
                 )"
         />
         <input type="hidden" name="<?= /* @noEscape */ $fieldNameAction ?>"
-               x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>-hidden"
+               id="<?= /* @noEscape */ $fileName ?>-hidden"
                class="product-custom-option hidden-form-file"
                data-price-amount="<?= $escaper->escapeHtmlAttr($option->getPrice()) ?>"
                data-price-type="<?= $escaper->escapeHtmlAttr($option->getPriceType()) ?>"

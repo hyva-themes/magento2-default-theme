@@ -157,10 +157,12 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
                             this.selectedOptions = Object.keys(selectedProductsPerOption).map((optionId) => {
                                 return {
                                     label: this.optionConfig.options[optionId].title,
+                                    optionId: optionId,
                                     products: Object.values(selectedProductsPerOption[optionId]).map(product => {
                                         return {
                                             qty: product.qty,
-                                            name: product.data.name
+                                            name: product.data.name,
+                                            id: product.data.optionId,
                                         }
                                     })
                                 }
@@ -224,6 +226,7 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
                         dispatchOptionSelection();
                         $dispatch('set-selected-options', {});
                     })"
+                 x-defer="intersect"
                  class="w-full">
 
                 <fieldset class="fieldset fieldset-bundle-options min-w-48 mb-8" form="product_addtocart_form">

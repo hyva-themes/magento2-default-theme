@@ -14,179 +14,176 @@ use Magento\Paypal\Block\Express\InContext\Minicart\SmartButton;
 /** @var SmartButton $block */
 /** @var Escaper $escaper */
 
-$widgetData = json_decode($block->getJsInitParams(), true);
-$widgetJson = json_encode($widgetData['Magento_Paypal/js/in-context/button']);
-$uniqueId   = '_' . uniqid();
-?>
-<div x-data="initPayPalInContextButton<?= $escaper->escapeHtmlAttr($uniqueId) ?>()"
-     x-init="refs = $refs"
-     x-ref="buttonContainer-<?= $escaper->escapeHtmlAttr($uniqueId) ?>"
-     @private-content-loaded.window="getSectionData($event.detail.data);"
-     class="paypal checkout paypal-logo <?= $escaper->escapeHtmlAttr($block->getContainerId()) ?>-container">
-</div>
+/*
+ * This template renders the PayPal in-context shortcut button for the mini-cart and the cart.
+ * For the mini-cart, the html is part of the cart.extra_actions private section data, and is injected via JS.
+ */
 
+for ($candidate = $block, $isCartPage = false; $candidate && ! $isCartPage; $candidate = $candidate->getParentBlock()) {
+    $isCartPage = $candidate->getNameInLayout() === 'checkout.cart.shortcut.buttons';
+}
+$isMinicart = ! $isCartPage;
+
+$widgetData = json_decode($block->getJsInitParams(), true);
+$clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/button']['clientConfig']);
+
+$renderTargetElementId = sprintf('paypalInContextRenderTarget%d', $isMinicart)
+
+?>
+<div x-data="initPayPalInContextButton(
+        '<?= $escaper->escapeJs($renderTargetElementId) ?>',
+        <?= $escaper->escapeHtmlAttr($clientConfig) ?>,
+        <?= (int) $isMinicart ?>
+      )"
+     id="<?= $escaper->escapeHtmlAttr($renderTargetElementId) ?>"
+    <?php if ($isMinicart): ?>
+     x-init="cartSection = cart"
+     x-intersect="checkAndInitializeButtons()"
+    <?php endif; ?>
+     class="paypal checkout paypal-logo min-h-a11y cart-extra-actions-container isolate"
+    <?php if ($isCartPage): ?>
+     @private-content-loaded.window="getData($event.detail.data); checkAndInitializeButtons()"
+    <?php endif; ?>
+>
+</div>
 <script>
-    function initPayPalInContextButton<?= $escaper->escapeHtmlAttr($uniqueId) ?>() {
+    function initPayPalInContextButton(renderTargetId, config, isMinicart) {
         return {
-            refs: false,
-            clientConfig: <?= /** @noEscape */ $widgetJson ?>.clientConfig || {},
-            customerSection: {},
             cartSection: false,
             actions: {},
-            getSectionData(sectionData) {
-                if (sectionData.customer) {
-                    this.customerSection = sectionData.customer;
-                }
-                if (sectionData.cart) {
-                    this.cartSection = sectionData.cart;
-                }
-                if (this.cartSection.items && this.cartSection.items.length) {
-                    // todo: check if allowed by verifying logged in and isGuestCheckoutAllowed = true
-                    this.initializeButtons();
-                }
+            paypalButtons: null,
+            getData(sectionData) {
+                this.cartSection = sectionData.cart;
             },
-            initializeButtons() {
-                const element = this.refs['buttonContainer-<?= $escaper->escapeJs($uniqueId) ?>'];
-                const clientConfig = this.clientConfig;
+            initializePayPalScript() {
+                if (!window.paypalScriptPromise) {
+                    window.paypalScriptPromise = new Promise((resolve, reject) => {
+                        const scriptId = 'paypal-script';
 
-                const loadPayPalScriptPromise = this.createScriptLoadPromise(clientConfig.sdkUrl);
+                        const paypalScript = document.getElementById(scriptId);
+                        if (paypalScript) {
+                            if (window.paypal) {
+                                return resolve(window.paypal);
+                            }
+                        }
 
-                Promise.all(loadPayPalScriptPromise).then(() => {
-                    const paypal = window.paypal;
-                    const getCookie = this.getCookie;
+                        const script = document.createElement('script');
+                        script.src = config.sdkUrl;
+                        script.id = scriptId;
+                        script.setAttribute('data-partner-attribution-id', config.dataAttributes['data-partner-attribution-id']);
+                        script.onload = () => resolve(window.paypal);
+                        script.onerror = () => reject(new Error('<?= $escaper->escapeJs('PayPal SDK could not be loaded') ?>'));
+                        document.body.appendChild(script);
+                    });
+                }
 
-                    paypal && paypal.Buttons({
-                        style: clientConfig.styles,
-
-                        /**
-                         * onInit is called when the button first renders
-                         * @param {Object} data
-                         * @param {Object} actions
-                         */
-                        onInit(data, actions) {
+                return window.paypalScriptPromise;
+            },
+            async initializeButtons() {
+                try {
+                    const paypal = await this.initializePayPalScript();
+                    return paypal && paypal.Buttons({
+                        style: Object.assign({}, config.styles, {
+                            height: 44, // Sets the style.height option to a value from 25 to 55.
+                            disableMaxWidth: false, // The button has a default maximum width of 750px, but you can make the button larger with true and set container size
+                            tagline: false // Set the style.layout to horizontal for taglines.
+                        }),
+                        onInit: (data, actions) => {
                             this.actions = actions || this.actions;
                         },
-
-                        /**
-                         * Triggers beforePayment action on PayPal buttons
-                         * @returns {Object} jQuery promise
-                         */
+                        onClick: async (data, actions) => {
+                            this.actions = actions || this.actions;
+                        },
                         createOrder() {
-                            const params = "quote_id="+clientConfig.quoteId +
-                                "&customer_id=" + ( clientConfig.customerId ?
-                                    clientConfig.customerId :
-                                    ''
-                                ) +
-                                "&form_key=" + (getCookie('form_key') || '') +
-                                "&button=" + clientConfig.button;
+                            const params = 'quote_id=' + config.quoteId +
+                                '&customer_id=' + (config.customerId || '') +
+                                '&form_key=' + hyva.getFormKey() +
+                                '&button=' + config.button;
 
-                            return window.fetch(clientConfig.getTokenUrl, {
-                                "headers": {
-                                    "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                            return window.fetch(config.getTokenUrl, {
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                                    'X-Requested-With': 'XMLHttpRequest',
                                 },
-                                "body": params,
-                                "method": "POST",
-                                "mode": "cors",
-                                "credentials": "include"
+                                body: params,
+                                method: 'POST',
+                                mode: 'cors',
+                                credentials: 'include'
                             })
-                                .then(result => result.json())
-                                .then(data => data.token)
-                                .catch((error)=>console.log(error));
-
+                                .then(response => response.json())
+                                .then(result => result.token)
+                                .catch(console.error);
                         },
 
-                        /**
-                         * Triggers beforeOnAuthorize action on PayPal buttons
-                         * @param {Object} data
-                         * @param {Object} actions
-                         */
                         onApprove(data, actions) {
-                            const params = "paymentToken=" + (data.orderID || '') +
-                                "&payerId=" + (data.payerID || '') +
-                                "&quoteId=" + (clientConfig.quoteId || '') +
-                                "&customerId=" + (clientConfig.customerId || '') +
-                                "&form_key=" + (getCookie('form_key') || '');
+                            const params = 'paymentToken=' + (data.orderID || '') +
+                                '&payerId=' + (data.payerID || '') +
+                                '&quoteId=' + (config.quoteId || '') +
+                                '&customerId=' + (config.customerId || '') +
+                                '&form_key=' + hyva.getFormKey();
 
-                            return window.fetch(clientConfig.onAuthorizeUrl, {
-                                "headers": {
-                                    "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                            return window.fetch(config.onAuthorizeUrl, {
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                                    'X-Requested-With': 'XMLHttpRequest',
                                 },
-                                "body": params,
-                                "method": "POST",
-                                "mode": "cors",
-                                "credentials": "include"
+                                body: params,
+                                method: 'POST',
+                                mode: 'cors',
+                                credentials: 'include'
                             })
-                                .then(data => {
-                                    return data.json()
-                                }).then(response => {
-                                    if (response.success) {
-                                        return actions.redirect(response.redirectUrl);
+                                .then(response => response.json())
+                                .then(result => {
+                                    if (result.success) {
+                                        return actions.redirect(result.redirectUrl);
                                     }
 
-                                    throw new Error(response['error_message']);
+                                    throw new Error(result['error_message']);
                                 })
-                                .catch((error)=>console.log(error)).finally(()=>{
-                                    const reloadCustomerDataEvent = new CustomEvent("reload-customer-section-data");
-                                    window.dispatchEvent(reloadCustomerDataEvent);
+                                .catch(console.error).finally(() => {
+                                    window.dispatchEvent(new Event('reload-customer-section-data'));
                                 });
                         },
-
-                        /**
-                         * Execute logic on Paypal button click
-                         */
-                        onClick() {
-
-                            paypal.actions = this.actions;
-                            //clientConfig.rendererComponent.validate();
-                            //clientConfig.rendererComponent.onClick();
-                        },
-
-                        /**
-                         * Process cancel action
-                         * @param {Object} data
-                         * @param {Object} actions
-                         */
                         onCancel(data, actions) {
-                            //clientConfig.rendererComponent.onCancel(data, actions);
+                            window.dispatchEvent(new Event('reload-customer-section-data'));
 
+                            if (isMinicart) {
+                                window.dispatchEvent(new CustomEvent('toggle-cart', {detail: {isOpen: false}}));
+                            }
+
+                            return window.dispatchMessages([{
+                                type: 'error',
+                                text: '<?= $escaper->escapeJs(__('Express Checkout has been canceled.')) ?>'
+                            }]);
                         },
-
-                        /**
-                         * Process errors
-                         *
-                         * @param {Error} err
-                         */
                         onError(err) {
-                            //clientConfig.rendererComponent.onError(err);
+                            window.dispatchEvent(new Event('reload-customer-section-data'));
 
+                            // Alternative: forward to cart
+                            //window.location.href = config.onCancelUrl;
+
+                            if (isMinicart) {
+                                window.dispatchEvent(new CustomEvent('toggle-cart', {detail: {isOpen: false}}));
+                            }
+
+                            return window.dispatchMessages([{
+                                type: 'error',
+                                text: '<?= $escaper->escapeJs(__('Error initializing Express Checkout, please try again later or choose a different checkout method.')) ?>'
+                            }]);
                         }
-                    }).render(element);
-                });
+                    })
+                } catch (error) {
+                    document.getElementById(renderTargetId).innerHTML = '';
+                    console.error('Error loading PayPal SDK', error);
+                }
             },
-            createScriptLoadPromise(url) {
-                const promises = [];
-
-                promises.push(new Promise(function(resolve, reject) {
-                    const script = document.createElement('script');
-                    script.src = url;
-
-                    script.addEventListener('load', function() {
-                        resolve(script);
-                    }, false);
-
-                    script.addEventListener('error', function(event) {
-                        reject(script);
-                        console.log('The PayPal script could not be loaded', event);
-                    }, false);
-
-                    document.body.appendChild(script);
-                }));
-
-                return promises;
-            },
-            getCookie(name) {
-                const v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-                return v ? v[2] : null;
+            async checkAndInitializeButtons() {
+                if (this.cartSection.items && this.cartSection.items.length) {
+                    if (! this.paypalButtons) {
+                        this.paypalButtons = await this.initializeButtons();
+                        this.paypalButtons && this.paypalButtons.render(document.getElementById(renderTargetId));
+                    }
+                }
             }
         }
     }

@@ -10,6 +10,7 @@ use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Magento\Framework\Escaper;
 use Magento\Sales\Block\Order\History;
+use Magento\Sales\Model\Order;
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
@@ -20,8 +21,20 @@ use Magento\Sales\Block\Order\History;
 
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var Order[] $orders */
+$orders = $block->getOrders();
+
+$extraActions = [];
+if ($extraActionTitleBlocks = $block->getLayout()->getChildBlocks('order-list-extra-action-titles')) {
+    foreach ($extraActionTitleBlocks as $alias => $extraActionTitleBlock) {
+        $extraActions[$alias] = $extraActionTitleBlock->toHtml();
+    }
+    $extraActions = array_filter($extraActions, function ($output, string $alias) use ($block): bool {
+        return trim($output) && $block->getLayout()->getChildBlock('order-list-extra-action-buttons', $alias);
+    }, ARRAY_FILTER_USE_BOTH);
+}
+
 ?>
-<?php $orders = $block->getOrders(); ?>
 <h2 id="my-orders-title" class="text-2xl mb-6"><?= $escaper->escapeHtml(__('My Orders')) ?></h2>
 <?= $block->getChildHtml('info') ?>
 <?php if ($orders && count($orders)): ?>
@@ -39,6 +52,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     <th class="p-2 text-start hidden lg:table-cell">
                         <?= $escaper->escapeHtml(__('Date')) ?>
                     </th>
+                    <?= $block->getChildHtml('extra.column.header') ?>
                     <th class="p-2 text-start">
                         <?= $escaper->escapeHtml(__('Ship To')) ?>
                     </th>
@@ -53,6 +67,9 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                         <?php if ($this->helper(\Magento\Sales\Helper\Reorder::class)->isAllow()): ?>
                             / <?= $escaper->escapeHtml(__('Reorder')) ?>
                         <?php endif; ?>
+                        <?php foreach ($extraActions as $extraActionTitle): ?>
+                            / <?= /** @noEscape  */ $extraActionTitle ?>
+                        <?php endforeach; ?>
                     </th>
                 </tr>
             </thead>
@@ -76,10 +93,13 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                 </span>
                             </time>
                         </td>
+                        <?php $extra = $block->getChildBlock('extra.container') ?>
+                        <?php if ($extra): ?>
+                            <?php $extra->setOrder($order) ?>
+                            <?= $extra->getChildHtml() ?>
+                        <?php endif; ?>
                         <td class="p-2">
-                            <?= $order->getBillingAddress()
-                                ? $escaper->escapeHtml($order->getBillingAddress()->getCompany())
-                                : "" ?>
+                            <?= $order->getShippingAddress() ? $escaper->escapeHtml($order->getShippingAddress()->getName()) : '&nbsp;' ?>
                         </td>
                         <td class="p-2 hidden lg:table-cell">
                             <?= /* @noEscape */$order->formatPrice($order->getGrandTotal()) ?>
@@ -123,7 +143,13 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                                 <?= $heroicons->refreshHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
                                             </button>
                                         </form>
+                                    <?php else: ?>
+                                        <?= $heroicons->refreshHtml('text-gray-300', 24, 24, ['aria-hidden' => 'true']) ?>
                                     <?php endif ?>
+                                    <?php foreach (array_keys($extraActions) as $alias): ?>
+                                        <?php $button = $block->getLayout()->getChildBlock('order-list-extra-action-buttons', $alias) ?>
+                                        <?= $button->assign('order', $order)->setData('order', $order)->toHtml() ?>
+                                    <?php endforeach; ?>
                                 </div>
                             <?php endif ?>
                         </td>

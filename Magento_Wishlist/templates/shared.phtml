@@ -85,18 +85,13 @@ use Magento\Wishlist\Block\Share\Wishlist;
                                             @click.prevent='hyva.postForm(<?= /* @noEscape */
                                                 $block->getSharedItemAddToCartUrl($item) ?>)'
                                             class="inline-flex btn btn-primary"
+                                            data-addto="cart"
                                     >
                                         <?= $escaper->escapeHtml(__('Add to Cart')) ?>
                                     </button>
                                 <?php endif ?>
                             <?php endif; ?>
-                            <a href="#"
-                               @click.prevent='hyva.postForm(<?= /* @noEscape */ $block->getAddToWishlistParams($item) ?>)'
-                               id="wishlist-shared-item-<?= /* @noEscape */ $item->getId() ?>"
-                               class="action towishlist underline"
-                            >
-                                <span><?= $escaper->escapeHtml(__('Add to Wish List')) ?></span>
-                            </a>
+                            <?= $block->getChildBlock('customer.wishlist.shared.add.button')->setData('item', $item)->toHtml() ?>
                         </div>
                     </div>
                 <?php endforeach ?>

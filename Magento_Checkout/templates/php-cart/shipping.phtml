@@ -28,7 +28,6 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
             cartIsVirtual: <?= (int) $block->getQuote()->isVirtual() ?>,
             customer: false,
             availableShippingMethods: [],
-            dispatch: null,
             isLoading: false,
             cartData: {
                 address: {
@@ -50,7 +49,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
             },
             directoryData: false,
             shippingMethod: false,
-            init($dispatch){
+            init() {
                 const selectedShippingMethod = window.checkoutConfig.selectedShippingMethod;
                 if (selectedShippingMethod) {
                     this.shippingMethod = `${selectedShippingMethod.carrier_code}_${selectedShippingMethod.method_code}`
@@ -59,8 +58,6 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
                 this.showEstimateShipping = JSON.parse(
                     hyva.getBrowserStorage().getItem('hyva.showEstimateShipping')
                 );
-
-                this.dispatch = $dispatch;
             },
             toggleEstimateShipping() {
                 this.showEstimateShipping = !this.showEstimateShipping;
@@ -78,7 +75,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
                     this.abortShippingController.abort();
                 }
                 this.isLoading = true;
-                this.dispatch('update-shipping-method-start', {});
+                this.$dispatch('update-shipping-method-start', {});
 
                 const path = this.customer && this.customer.fullname
                     ? '/V1/carts/mine/estimate-shipping-methods'
@@ -103,13 +100,13 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
                         this.availableShippingMethods = result;
 
                         if(!this.availableShippingMethods.find(method => { return method.carrier_code + '_' + method.method_code === this.shippingMethod})) {
-                            this.dispatch('update-shipping-method', {method: false});
+                            this.$dispatch('update-shipping-method', {method: false});
                             this.shippingMethod = false;
                         }
                     })
                     .catch(this.displayError)
                     .finally(() => {
-                            this.dispatch('update-shipping-method-end', {});
+                            this.$dispatch('update-shipping-method-end', {});
                             this.fetchTotals();
                             this.isLoading = false;
                         }
@@ -122,7 +119,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
                 return this.availableShippingMethods.filter(rate => rate.carrier_title === carrierTitle);
             },
             updateShippingMethod() {
-                this.dispatch('update-shipping-method', {method: this.shippingMethod});
+                this.$dispatch('update-shipping-method', {method: this.shippingMethod});
                 this.fetchTotals();
             },
             abortTotalsController: null,
@@ -130,7 +127,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
                 if (this.abortTotalsController) {
                     this.abortTotalsController.abort();
                 }
-                this.dispatch('update-totals-start', {});
+                this.$dispatch('update-totals-start', {});
 
                 let carrierCode = null;
                 let methodCode = null;
@@ -176,11 +173,11 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
                         return result;
                     })
                     .then(result => {
-                        this.dispatch('update-totals', {data: result});
+                        this.$dispatch('update-totals', {data: result});
                     })
                     .catch(this.displayError)
                     .finally(() => {
-                            this.dispatch('update-totals-end', {});
+                            this.$dispatch('update-totals-end', {});
                         }
                     );
             },
@@ -218,7 +215,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
                     postcode: null
                 }
 
-                if (this.directoryData[countryId].regions) {
+                if (this.directoryData[countryId] && this.directoryData[countryId].regions) {
                     this.cartData.address.regionCode = "";
                     this.cartData.address.regionId = 0;
 
@@ -262,7 +259,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
             saveToCustomerSectionData(){
                 const browserStorage = hyva.getBrowserStorage();
 
-                const sectionData = JSON.parse(browserStorage.getItem('mage-cache-storage'));
+                const sectionData = JSON.parse(browserStorage.getItem('mage-cache-storage')) || {};
 
                 if (!sectionData['checkout-data']) {
                     sectionData['checkout-data'] = {};
@@ -293,7 +290,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
             },
             getSortedCountries(){
                 return Object.keys(this.directoryData)
-                    .filter(countryKey => countryKey !== 'data_id')
+                    .filter(countryKey => countryKey !== 'data_id' && this.directoryData[countryKey].name)
                     .sort((a,b) => {
                         if (this.directoryData[a].name < this.directoryData[b].name) {
                             return -1
@@ -331,9 +328,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
                 return this.cartData.address && this.cartData.address.countryId && this.getAvailableRegions().length
             },
             displayError(error) {
-                if (error.name === 'AbortError') {
-                    console.log('Fetch aborted');
-                } else {
+                if (error.name !== 'AbortError') {
                     console.error(error);
                     typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
                         [{
@@ -349,7 +344,6 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
 <div id="block-shipping"
      class="flex flex-col pb-2 my-2 border-b-2 border-gray-300 estimate-shipping-form"
      x-data="initShippingEstimation()"
-     x-init="init($dispatch)"
      @private-content-loaded.window="receiveCustomerData($event.detail.data)"
 >
     <h3 class="title" id="block-shipping-title">
@@ -479,18 +473,28 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
                             <div>
                                 <h4 class="font-semibold" x-text="carrier"></h4>
                                 <template x-for="(rate, index) in getRatesForCarrier(carrier)" :key="index">
-                                    <label class="flex items-center px-2 cursor-pointer">
+                                    <label class="flex items-center px-2 gap-2 cursor-pointer">
                                         <input class="mr-2 cursor-pointer" type="radio"
                                                :id="'shipping_method_' + rate.method_code"
                                                :value="rate.carrier_code + '_' + rate.method_code"
                                                x-model="shippingMethod"
                                                @change="updateShippingMethod()"/>
-                                        <div class="grid grid-cols-2 w-full">
-                                            <span x-text="rate.method_title"></span>
+                                        <span x-text="rate.method_title" class="break-words shrink hyphens-auto"></span>
+                                        <div class="flex flex-col justify-end ml-auto">
+                                            <?php if ($totalsOutput->displayCartShippingInclTax() || $totalsOutput->displayCartShippingBoth()): ?>
+                                                <span
+                                                    x-text="`${hyva.formatPrice(rate.price_incl_tax)}`"
+                                                    class="price-including-tax text-right"
+                                                    data-label="<?= $escaper->escapeHtmlAttr(__('Incl. Tax')) ?>"
+                                                ></span>
+                                            <?php endif; ?>
                                             <?php if ($totalsOutput->displayCartShippingExclTax() || $totalsOutput->displayCartShippingBoth()): ?>
-                                            <span x-text="hyva.formatPrice(rate.price_excl_tax)"></span>
-                                            <?php elseif ($totalsOutput->displayCartShippingInclTax() || $totalsOutput->displayCartShippingBoth()): ?>
-                                            <span x-text="hyva.formatPrice(rate.price_incl_tax)"></span>
+                                                <span
+                                                    x-text="`${hyva.formatPrice(rate.price_excl_tax)}`"
+                                                    <?= $totalsOutput->displayCartShippingBoth() ? 'x-show="rate.price_excl_tax !== rate.price_incl_tax"' : '' ?>
+                                                    class="price-excluding-tax"
+                                                    data-label="<?= $escaper->escapehtmlAttr(__('Excl. Tax')) ?>"
+                                                ></span>
                                             <?php endif; ?>
                                         </div>
                                     </label>

@@ -26,6 +26,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         title="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>"
         class="btn btn-primary"
         id="product-addtocart-button"
+        data-addto="cart"
 >
     <?= $heroicons->shoppingCartHtml('border-current'); ?>
     <span class="hidden sm:block md:hidden lg:block"><?= $block->getData('is_cart_configure') ?

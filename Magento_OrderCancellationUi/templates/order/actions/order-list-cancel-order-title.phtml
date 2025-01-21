@@ -1,0 +1,26 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Sales\OrderCancellation;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var OrderCancellation $orderCancellation */
+$orderCancellation = $viewModels->require(OrderCancellation::class);
+?>
+
+<?php if ($orderCancellation->isEnabled()): ?>
+    <?= $escaper->escapeHtml(__('Cancel')) ?>
+<?php endif; ?>

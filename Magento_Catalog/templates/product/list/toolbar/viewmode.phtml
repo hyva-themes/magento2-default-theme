@@ -8,57 +8,55 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
 use Magento\Catalog\Block\Product\ProductList\Toolbar;
 use Magento\Framework\Escaper;
 
 /** @var Toolbar $block */
 /** @var Escaper $escaper */
-?>
-<?php if ($block->isEnabledViewSwitcher()): ?>
+/** @var ViewModelRegistry $viewModels */
 
+// phpcs:disable Generic.Files.LineLength
+?>
+
+<?php if ($block->isEnabledViewSwitcher()): ?>
     <?php $modes = $block->getModes(); ?>
     <?php if ($modes && count($modes) > 1): ?>
-        <div
-            class="modes flex justify-center space-x-1 mr-2 items-center px-2 py-2 rounded-md border border-gray-300 bg-white text-sm leading-5
-             w-20 order-1 col-span-1 sm:col-span-2 md:col-span-1 lg:col-span-2"
+        <nav
+            class="modes flex justify-center gap-1 mr-2 items-center px-2 py-2 rounded-md border border-gray-300 bg-white text-sm leading-5
+                w-20 order-1 col-span-1 sm:col-span-2 md:col-span-1 lg:col-span-2"
             aria-label="<?= $escaper->escapeHtmlAttr(__('Products view mode')) ?>"
         >
+            <style>
+                .modes-mode.mode-grid {
+                    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>');
+                }
+
+                .modes-mode.mode-list {
+                    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" /></svg>');
+                }
+            </style>
             <?php foreach ($block->getModes() as $code => $label): ?>
-                <?php if ($block->isModeActive($code)): ?>
-                    <strong
-                        title="<?= $escaper->escapeHtmlAttr($label) ?>"
-                        class="modes-mode active mode-<?= $escaper->escapeHtmlAttr(strtolower($code)) ?>"
-                        role="checkbox"
-                        aria-checked="true"
-                        data-value="<?= $escaper->escapeHtmlAttr(strtolower($code)) ?>"
-                        aria-label="<?= $escaper->escapeHtmlAttr(__('Products view mode - %1', $label)) ?>"
-                    >
-                        <span><?= $escaper->escapeHtml($label) ?></span>
-                    </strong>
-                <?php else: ?>
-                    <button
-                        class="modes-mode mode-<?= $escaper->escapeHtmlAttr(strtolower($code)) ?> opacity-50 hover:opacity-100"
-                        title="<?= $escaper->escapeHtmlAttr($label) ?>"
-                        href="#"
+                <button
+                    type="button"
+                    class="modes-mode w-6 h-6 mode-<?= $escaper->escapeHtmlAttr(strtolower($code)) ?> <?= ($block->isModeActive($code)) ? 'active' : 'opacity-50 hover:opacity-100' ?>"
+                    title="<?= $escaper->escapeHtmlAttr($label) ?>"
+                    <?php if ($block->isModeActive($code)): ?>
+                        disabled
+                    <?php else: ?>
                         @click.prevent="changeUrl(
                             'product_list_mode',
                             '<?= $escaper->escapeHtmlAttr(strtolower($code)) ?>',
                             options.modeDefault
                         )"
-                        data-role="mode-switcher"
-                        data-value="<?= $escaper->escapeHtmlAttr(strtolower($code)) ?>"
-                        role="checkbox"
-                        aria-checked="false"
-                        aria-label="<?= $escaper->escapeHtmlAttr(__('Products view mode - %1', $label)) ?>"
-                    >
-                        <span><?= $escaper->escapeHtml($label) ?></span>
-                    </button>
-                <?php endif; ?>
+                    <?php endif; ?>
+                    data-role="mode-switcher"
+                    data-value="<?= $escaper->escapeHtmlAttr(strtolower($code)) ?>"
+                    aria-label="<?= $escaper->escapeHtmlAttr(__('Products view mode - %1', $label)) ?>"
+                ></button>
             <?php endforeach; ?>
-        </div>
-
+        </nav>
     <?php else: ?>
         <div class="modes w-20 order-1 col-span-1 sm:col-span-2 md:col-span-1 lg:col-span-2"></div>
     <?php endif; ?>
-
 <?php endif; ?>

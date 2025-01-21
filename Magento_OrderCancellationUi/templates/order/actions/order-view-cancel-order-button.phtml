@@ -1,0 +1,52 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\Sales\OrderCancellation;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Magento\Sales\Model\Order;
+use Magento\OrderCancellationUi\ViewModel\Config as OrderCancellationUiConfig;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
+/** @var OrderCancellation $orderCancellation */
+$orderCancellation = $viewModels->require(OrderCancellation::class);
+
+/** @var Order $order */
+$order = $block->getParentBlock()->getOrder();
+
+if (!$orderCancellation->canCancel($order->getEntityId())) {
+    return;
+}
+
+$orderCancellationUiConfig = $viewModels->require(OrderCancellationUiConfig::class);
+$reasons = $orderCancellationUiConfig->getCancellationReasons((int) $order->getId());
+?>
+
+<button
+    x-data
+    type="button"
+    class="btn btn-secondary text-secondary-darker"
+    @click="$dispatch('confirm-cancel-order', {
+        order_id: <?= (int) $order->getId() ?>,
+        increment_id: '<?= $escaper->escapeJs($order->getRealOrderId()) ?>',
+        reasons: <?= $escaper->escapeHtmlAttr(json_encode(array_values($reasons))) ?>,
+    })"
+>
+    <?= $heroicons->xCircleHtml('mr-1 inline-block', 24, 24, ['aria-hidden' => 'true']); ?>
+    <span><?= $escaper->escapeHtml(__('Cancel')) ?></span>
+</button>

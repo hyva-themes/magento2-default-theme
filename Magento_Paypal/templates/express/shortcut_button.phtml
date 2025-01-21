@@ -5,7 +5,191 @@
  * This product is licensed per Magento install
  * See https://hyva.io/license
  */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Paypal\Block\Express\InContext\SmartButton;
+
+/** @var SmartButton $block */
+/** @var Escaper $escaper */
+
+/*
+ * This template renders the PayPal in-context shortcut button on product detail pages.
+ */
+
+
+$widgetData = json_decode($block->getJsInitParams(), true);
+$clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/product-express-checkout']['clientConfig']);
+
 ?>
-<div>
-    PayPal Express in-context is not implemented yet. Please switch in-context.
+<div x-data="initPayPalInContext('paypalInContextPDP', <?= $escaper->escapeHtmlAttr($clientConfig) ?>)"
+     x-intersect="checkAndInitializeButtons()"
+     @private-content-loaded.window="getData($event.detail.data)"
+     class="min-h-a11y"
+>
+    <div id="paypalInContextPDP" class="paypal checkout paypal-logo product-shortcuts-container isolate">
+    </div>
 </div>
+<script>
+    function initPayPalInContext(renderTargetId, config) {
+        return {
+            cart: false,
+            actions: {},
+            alreadyLoaded: false,
+            cartDataUpdated: false,
+            getData(data) {
+                if (data.cart) {
+                    this.cart = data.cart;
+                    return true;
+                }
+            },
+            initializePayPalScript() {
+                if (!window.paypalScriptPromise) {
+                    window.paypalScriptPromise = new Promise((resolve, reject) => {
+                        const scriptId = 'paypal-script';
+
+                        const paypalScript = document.getElementById(scriptId);
+                        if (paypalScript) {
+                            if (window.paypal) {
+                                return resolve(window.paypal);
+                            }
+                        }
+
+                        const script = document.createElement('script');
+                        script.src = config.sdkUrl;
+                        script.id = scriptId;
+                        script.setAttribute('data-partner-attribution-id', config.dataAttributes['data-partner-attribution-id']);
+                        script.onload = () => resolve(window.paypal);
+                        script.onerror = () => reject(new Error('<?= $escaper->escapeJs('PayPal SDK could not be loaded') ?>'));
+                        document.body.appendChild(script);
+                    });
+                }
+
+                return window.paypalScriptPromise;
+            },
+            async initializeButtons() {
+                try {
+                    const paypal = await this.initializePayPalScript();
+                    const cart = this.cart;
+
+                    paypal && paypal.Buttons({
+                        style: Object.assign({}, config.styles, {
+                            height: 44, // Sets the style.height option to a value from 25 to 55.
+                            disableMaxWidth: false, // The button has a default maximum width of 750px, but you can make the button larger with true and set container size
+                            tagline: false // Set the style.layout to horizontal for taglines.
+                        }),
+                        onInit: (data, actions) => {
+                            this.actions = actions || this.actions;
+                        },
+                        onClick(data, actions) {
+                            const postUrl = `${BASE_URL}checkout/cart/add/`;
+
+                            const form = document.forms.product_addtocart_form;
+                            if (!form || !form.reportValidity()) {
+                                return;
+                            }
+
+                            const formData = new FormData(form);
+                            formData.append('form_key', hyva.getFormKey());
+
+                            return window.fetch(postUrl, {
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                                    'X-Requested-With': 'XMLHttpRequest',
+                                },
+                                body: formData,
+                                method: 'POST',
+                                mode: 'cors',
+                                credentials: 'include'
+                            })
+                                .catch(console.error)
+                                .finally(() => {
+                                    window.dispatchEvent(new Event('reload-customer-section-data'));
+                                });
+                        },
+                        createOrder() {
+                            const params = 'quote_id=' + cart.cartId +
+                                '&customer_id=' + (config.customerId || '') +
+                                '&form_key=' + hyva.getFormKey() +
+                                '&button=' + config.button;
+
+                            return window.fetch(config.getTokenUrl, {
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                                    'X-Requested-With': 'XMLHttpRequest',
+                                },
+                                body: params,
+                                method: 'POST',
+                                mode: 'cors',
+                                credentials: 'include'
+                            })
+                                .then(result => result.json())
+                                .then(data => data.token)
+                                .catch(console.error);
+                        },
+                        onApprove(data, actions) {
+                            const params = 'paymentToken=' + (data.orderID || '') +
+                                '&payerId=' + (data.payerID || '') +
+                                '&quoteId=' + (cart.quoteId || '') +
+                                '&customerId=' + (config.customerId || '') +
+                                '&form_key=' + hyva.getFormKey();
+
+                            return window.fetch(config.onAuthorizeUrl, {
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                                    'X-Requested-With': 'XMLHttpRequest',
+                                },
+                                body: params,
+                                method: 'POST',
+                                mode: 'cors',
+                                credentials: 'include'
+                            })
+                                .then(data => data.json())
+                                .then(response => {
+                                    if (response.success) {
+                                        return actions.redirect(response.redirectUrl);
+                                    }
+
+                                    throw new Error(response['error_message']);
+                                })
+                                .catch(console.error)
+                                .finally(() => {
+                                    window.dispatchEvent(new Event('reload-customer-section-data'));
+                                });
+                        },
+
+                        onCancel(data, actions) {
+                            // reload data because of add to cart
+                            window.dispatchEvent(new Event('reload-customer-section-data'));
+
+                            return window.dispatchMessages([{
+                                type: 'error',
+                                text: '<?= $escaper->escapeJs(__('Express Checkout has been canceled.')) ?>'
+                            }]);
+                        },
+                        onError(err) {
+                            return window.dispatchMessages([{
+                                type: 'error',
+                                text: '<?= $escaper->escapeJs(__('We can\'t initialize Express Checkout.')) ?>'
+                            }]);
+                        }
+                    }).render(document.getElementById(renderTargetId));
+                } catch (error) {
+                    document.getElementById(renderTargetId).innerHTML = '';
+                    console.error('Error loading PayPal SDK', error);
+                }
+            },
+            checkAndInitializeButtons() {
+                const form = document.forms.product_addtocart_form;
+                if (!form) {
+                    return;
+                }
+                if (this.cart && !this.alreadyLoaded) {
+                    this.alreadyLoaded = true;
+                    this.initializeButtons();
+                }
+            }
+        }
+    }
+</script>

@@ -3,23 +3,15 @@
 }
 
 .order-links {
-    @apply block;
-    @apply items-center;
-    @apply bg-container;
+    @apply block items-center bg-container;
 }
 
 .order-links li {
-    @apply inline-block;
-    @apply py-2;
-    @apply px-4;
-    @apply cursor-pointer;
-    @apply whitespace-nowrap;
-
+    @apply inline-block py-2 px-4 cursor-pointer whitespace-nowrap;
 }
 
 .order-links li.current {
-    @apply flex-grow;
-    @apply text-primary;
+    @apply flex-grow text-primary;
 }
 
 .order-links li a {

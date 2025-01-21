@@ -15,7 +15,13 @@
                    name="product.info.options.grouped"
                    as="options_grouped"
                    before="-"
-                   template="Magento_GroupedProduct::product/view/type/grouped.phtml"/>
+                   template="Magento_GroupedProduct::product/view/type/grouped.phtml">
+                <arguments>
+                    <argument name="product_data_attributes" xsi:type="array">
+                        <item name="sku" xsi:type="boolean">true</item>
+                    </argument>
+                </arguments>
+            </block>
 
             <referenceBlock name="product.info.price" remove="true" />
 

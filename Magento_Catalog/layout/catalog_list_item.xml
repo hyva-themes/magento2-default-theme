@@ -13,17 +13,27 @@
 
         <block class="Magento\Catalog\Block\Product\AbstractProduct" name="product_list_item"
                template="Magento_Catalog::product/list/item.phtml">
+            <arguments>
+                <argument name="hyva_js_block_dependencies" xsi:type="array">
+                    <item name="category.products.list.js.wishlist" xsi:type="boolean">true</item>
+                    <item name="category.products.list.js.compare" xsi:type="boolean">true</item>
+                </argument>
+                <argument name="product_data_attributes" xsi:type="array">
+                    <item name="sku" xsi:type="boolean">true</item>
+                </argument>
+            </arguments>
             <block class="Magento\Framework\View\Element\RendererList" name="category.product.type.details.renderers" as="details.renderers">
                 <block name="category.product.type.details.renderers.default" as="default"/>
             </block>
             <block class="Magento\Catalog\Block\Product\ProductList\Item\Container" name="catalog.list.item.addto" as="addto">
             </block>
+            <block name="catalog.list.item.wishlist" as="wishlist"  template="Magento_Catalog::product/list/wishlist/button.phtml"/>
             <block name="product.item.stockstatus" as="stockstatus"  template="Magento_Catalog::product/view/stock-status.phtml"/>
         </block>
 
-        <referenceContainer name="before.body.end">
-            <block name="category.products.list.js.compare" template="Magento_Catalog::product/list/js/compare.phtml"/>
-            <block name="category.products.list.js.wishlist" template="Magento_Catalog::product/list/js/wishlist.phtml"/>
-        </referenceContainer>
+        <!-- Rendered before.body.end only if product_list_item is rendered via hyva_js_block_dependencies -->
+        <block name="category.products.list.js.compare" template="Magento_Catalog::product/list/js/compare.phtml"/>
+        <block name="category.products.list.js.wishlist" template="Magento_Catalog::product/list/js/wishlist.phtml"/>
+
     </body>
 </page>

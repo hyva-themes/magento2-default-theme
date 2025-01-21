@@ -67,6 +67,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                 href="<?= $escaper->escapeUrl($block->getOrderViewUrl($item->getPurchased()->getOrderId()))?>"
                                 title="<?= $escaper->escapeHtml(__('View Order')) ?>"
                                 aria-label="<?= $escaper->escapeHtmlAttr(__('View order') . ' ' . $item->getPurchased()->getOrderIncrementId()) ?>"
+                                class="underline hover:no-underline"
                             ><?= $escaper->escapeHtml($item->getPurchased()->getOrderIncrementId()) ?></a>
                         </th>
                         <td class="p-2 hidden lg:table-cell">

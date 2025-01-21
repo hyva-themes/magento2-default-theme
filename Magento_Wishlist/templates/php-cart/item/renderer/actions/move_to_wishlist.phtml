@@ -20,14 +20,14 @@ $heroicons = $viewModels->require(HeroiconsSolid::class);
 
 ?>
 <?php if ($block->isAllowInCart() && $block->isProductVisibleInSiteVisibility()): ?>
-    <a href="#"
-       class="towishlist hover:text-red-600"
-       x-data="{}"
-       @click.prevent='hyva.postForm(<?= /* @noEscape */ $block->getMoveFromCartParams() ?>)'
+    <button
+        type="button"
+        class="towishlist hover:text-red-600"
+        x-data
+        @click.prevent='hyva.postForm(<?= /* @noEscape */ $block->getMoveFromCartParams() ?>)'
+        title="<?= $escaper->escapeHtmlAttr(__('Move to Wishlist')) ?>"
+        aria-label="<?= $escaper->escapeHtmlAttr(__('Move to Wishlist')) ?>"
     >
-        <?= $heroicons->heartHtml('w-6 h-6') ?>
-        <span class="sr-only">
-            <?= $escaper->escapeHtml(__('Move to Wishlist')) ?>
-        </span>
-    </a>
+        <?= $heroicons->heartHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
+    </button>
 <?php endif ?>

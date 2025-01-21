@@ -32,30 +32,39 @@ $inputElementId        = $block->getData('input_element_id');
 $instanceSuffix        = $recaptcha->calcJsInstanceSuffix($inputElementId ?: $block->getData('form_id') ?: 'x');
 $grecaptchaContainerId = "grecaptcha-container-$instanceSuffix";
 
+// Explicitly render the recaptcha, so it doesn't use the first .g-recaptcha on the page
 ?>
-<div id="<?= $escaper->escapeHtmlAttr($grecaptchaContainerId) ?>" class="g-recaptcha">
-</div>
+<div id="<?= $escaper->escapeHtmlAttr($grecaptchaContainerId) ?>" class="g-recaptcha"></div>
 <script>
     'use strict';
-    <?php /* Explicitly render the recaptcha, so it doesn't use the first .g-recaptcha on the page */ ?>
-    document.addEventListener('DOMContentLoaded', () => {
+    (() => {
         const containerId = '<?= $escaper->escapeJs($grecaptchaContainerId) ?>';
-        grecaptchaV2LoadCallbacks.push(() => {
-            grecaptcha.render(containerId, {sitekey: '<?= $escaper->escapeJs($siteKey) ?>'});
-        });
-        const container = document.getElementById(containerId);
-        <?php /* Polyfill element.closest until 98% support is available (at 96.81% at the time of writing), see https://caniuse.com/?search=element.closest */ ?>
-        if (container && ! container.closest) {
-            container.closest = function (s) {
-                let el = container;
-                do {
-                    if (el.matches(s)) return el;
-                    el = el.parentElement || el.parentNode;
-                } while (el !== null && el.nodeType === 1);
+        const initRecaptcha = () => {
+            grecaptchaV2LoadCallbacks.push(() => {
+                grecaptcha.render(containerId, {sitekey: '<?= $escaper->escapeJs($siteKey) ?>'});
+            });
+            const container = document.getElementById(containerId);
+            <?php /* Polyfill element.closest until 98% support is available (at 97.03% at the time of writing), see https://caniuse.com/?search=element.closest */ ?>
+            if (container && ! container.closest) {
+                container.closest = function (s) {
+                    let el = container;
+                    do {
+                        if (el.matches(s)) return el;
+                        el = el.parentElement || el.parentNode;
+                    } while (el !== null && el.nodeType === 1);
+                }
             }
+            forceLoadRecaptchaScript(document.getElementById(containerId).closest('form'));
+        };
+
+        // Dynamically rendered forms (eg. via Alpine or Magewire) are rendered post DOMContentLoaded event trigger
+        if (document.readyState !== 'loading') {
+            // Wait for 'nextTick' for alpine/magewire to finish re-rendering markup
+            setTimeout(() => {
+                initRecaptcha();
+            });
+        } else {
+            document.addEventListener('DOMContentLoaded', initRecaptcha);
         }
-        forceLoadRecaptchaScript(document.getElementById(containerId).closest('form'));
-    })
+    })();
 </script>
-
-

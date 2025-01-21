@@ -12,6 +12,7 @@ use Magento\Framework\Data\Helper\PostHelper;
 use Magento\Framework\Escaper;
 use Magento\Sales\Block\Order\Recent;
 use Magento\Sales\Helper\Reorder;
+use Magento\Sales\Model\Order;
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
@@ -22,8 +23,20 @@ use Magento\Sales\Helper\Reorder;
 
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var Order[] $orders */
 $orders = $block->getOrders();
 $count  = count($orders);
+
+$extraActions = [];
+if ($extraActionTitleBlocks = $block->getLayout()->getChildBlocks('order-list-extra-action-titles')) {
+    foreach ($extraActionTitleBlocks as $alias => $extraActionTitleBlock) {
+        $extraActions[$alias] = $extraActionTitleBlock->toHtml();
+    }
+    $extraActions = array_filter($extraActions, function ($output, string $alias) use ($block): bool {
+        return trim($output) && $block->getLayout()->getChildBlock('order-list-extra-action-buttons', $alias);
+    }, ARRAY_FILTER_USE_BOTH);
+}
+
 ?>
 <div
     class="block block-dashboard-orders card mt-4"
@@ -75,6 +88,9 @@ $count  = count($orders);
                             <?php if ($this->helper(Reorder::class)->isAllow()): ?>
                                 / <?= $escaper->escapeHtml(__('Reorder')) ?>
                             <?php endif; ?>
+                            <?php foreach ($extraActions as $extraActionTitle): ?>
+                                / <?= /** @noEscape  */ $extraActionTitle ?>
+                            <?php endforeach; ?>
                         </th>
                     </tr>
                 </thead>
@@ -104,9 +120,7 @@ $count  = count($orders);
                                 </span>
                             </td>
                             <td class="p-2">
-                                <?php if ($order->getBillingAddress() && $order->getBillingAddress()->getCompany()): ?>
-                                    <?= $escaper->escapeHtml($order->getBillingAddress()->getCompany()) ?>
-                                <?php endif; ?>
+                                <?= $order->getShippingAddress() ? $escaper->escapeHtml($order->getShippingAddress()->getName()) : '&nbsp;' ?>
                             </td>
                             <td class="p-2 hidden lg:table-cell">
                                 <?= /* @noEscape */ $order->formatPrice($order->getGrandTotal()) ?>
@@ -150,7 +164,13 @@ $count  = count($orders);
                                                     <?= $heroicons->refreshHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
                                                 </button>
                                             </form>
+                                        <?php else: ?>
+                                            <?= $heroicons->refreshHtml('text-gray-300', 24, 24, ['aria-hidden' => 'true']) ?>
                                         <?php endif ?>
+                                        <?php foreach (array_keys($extraActions) as $alias): ?>
+                                            <?php $button = $block->getLayout()->getChildBlock('order-list-extra-action-buttons', $alias) ?>
+                                            <?= $button->assign('order', $order)->setData('order', $order)->toHtml() ?>
+                                        <?php endforeach; ?>
                                     </div>
                                 <?php endif; ?>
                             </td>

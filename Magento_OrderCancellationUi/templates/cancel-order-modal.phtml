@@ -1,0 +1,101 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Modal;
+use Hyva\Theme\ViewModel\Store;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+$modalViewModel = $viewModels->require(Modal::class);
+$storeViewModel = $viewModels->require(Store::class);
+$order = $block->getData('order');
+
+$modal = $modalViewModel->createModal()->withContent(<<<END_OF_CONTENT
+<div
+    id="cancel-order-modal-title"
+    class="text-xl mb-2" x-text="`{$escaper->escapeJs(__('Cancel order'))} \${increment_id}`"
+></div>
+<div class="field field-reserved required">
+    <label for="cancel-order-reason">
+        <span>{$block->escapeHtml(__('Provide a cancellation reason:'))}</span>
+    </label>
+    <select id="cancel-order-reason" class="form-select max-w-full" x-ref="reason" required>
+        <option value=""></option>
+        <template x-for="reason in reasons">
+        <option :value="reason" x-text="reason"></option>
+        </template>
+    </select>
+</div>
+<div class="mt-4 flex justify-between gap-2">
+    <button @click="validateSafe().then(result => result && ok())" type="button" class="btn btn-primary order-2">
+        {$escaper->escapeHtml(__('Confirm'))}
+    </button>
+    <button @click="cancel()" type="button" class="btn order-1">
+        {$escaper->escapeHtml(__('Close'))}
+    </button>
+</div>
+END_OF_CONTENT
+)
+->withAriaLabelledby('cancel-order-modal-title')
+->addDialogClass('m-4');
+
+?>
+<script>
+    function initOrderCancellationModal() {
+        return {
+            order_id: null,
+            increment_id: null,
+            reasons: [],
+            setOrder(event) {
+                this.order_id = event.detail.order_id;
+                this.increment_id = event.detail.increment_id;
+                this.reasons = event.detail.reasons;
+            },
+            cancelOrder(order_id, reason) {
+                const restBaseUrl = BASE_URL + 'rest/' + CURRENT_STORE_CODE;
+                fetch(`${restBaseUrl}/V1/customers/me/cancel-order/${order_id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({'reason': reason}),
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.message && result.message.length) {
+                        return dispatchMessages([{text: result.message, type: 'error'}]);
+                    }
+                    if (result.status === 'canceled') {
+                        hyva.setCookie('mage-messages', JSON.stringify([{
+                            text: hyva.str('<?= $escaper->escapeJs(__('Order %1 canceled.')) ?>', result.increment_id),
+                            type: 'success'
+                        }]), 1, true);
+                    }
+                    window.location.reload();
+                })
+            },
+        }
+    }
+</script>
+<form
+    x-data="Object.assign(hyva.modal(), hyva.formValidation($el), initOrderCancellationModal())"
+    @submit.prevent="null"
+    @confirm-cancel-order.window="
+        setOrder($event);
+        <?= /** @noEscape */ $modal->getShowJs() ?>.then(result => result && cancelOrder(order_id, $refs.reason.value));
+    "
+>
+    <?= /** @noEscape */ $modal ?>
+</form>

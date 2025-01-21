@@ -1,0 +1,41 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Layout\Element as LayoutElement;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/*
+ * In Hyvä we have 2 sidebars - main and additional. They are created using containers in layout xml.
+ * Each aside should have unique label, however, it is not possible to add an aria-label attribute to containers in layout xml.
+ * This template renders a JS snippet that adds the aria-label with JavaScript.
+ */
+
+$asides = [];
+foreach ($block->getData('label_targets') ?? [] as $selector => $containerName) {
+    if ($block->getLayout()->isContainer($containerName)) {
+        $asides[$selector] = $block->getLayout()->getElementProperty($containerName, LayoutElement::CONTAINER_OPT_LABEL);
+    }
+}
+
+?>
+<script>
+  addEventListener('DOMContentLoaded', () => {
+      for (const [selector, label] of Object.entries(<?= /** @noEscape */ json_encode($asides) ?>)) {
+          const target = document.querySelector(selector);
+          target && target.setAttribute('aria-label', label);
+      }
+  }, {once: true})
+</script>

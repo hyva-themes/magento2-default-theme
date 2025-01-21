@@ -12,12 +12,24 @@
     <body>
         <referenceBlock name="checkout.cart.item.renderers">
             <block class="Magento\Checkout\Block\Cart\Item\Renderer" name="checkout.cart.item.renderers.default" as="default" template="Magento_Checkout::php-cart/item/default.phtml">
+                <arguments>
+                    <argument name="cart_item_data_attributes" xsi:type="array">
+                        <item name="item_id" xsi:type="boolean">true</item>
+                    </argument>
+                </arguments>
+
                 <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions" name="checkout.cart.item.renderers.default.actions" as="actions">
                     <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit" name="checkout.cart.item.renderers.default.actions.edit" template="Magento_Checkout::php-cart/item/renderer/actions/edit.phtml"/>
                     <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions\Remove" name="checkout.cart.item.renderers.default.actions.remove" template="Magento_Checkout::php-cart/item/renderer/actions/remove.phtml"/>
                 </block>
             </block>
             <block class="Magento\Checkout\Block\Cart\Item\Renderer" name="checkout.cart.item.renderers.simple" as="simple" template="Magento_Checkout::php-cart/item/default.phtml">
+                <arguments>
+                    <argument name="cart_item_data_attributes" xsi:type="array">
+                        <item name="item_id" xsi:type="boolean">true</item>
+                    </argument>
+                </arguments>
+
                 <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions" name="checkout.cart.item.renderers.simple.actions" as="actions">
                     <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit" name="checkout.cart.item.renderers.simple.actions.edit" template="Magento_Checkout::php-cart/item/renderer/actions/edit.phtml"/>
                     <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions\Remove" name="checkout.cart.item.renderers.simple.actions.remove" template="Magento_Checkout::php-cart/item/renderer/actions/remove.phtml"/>

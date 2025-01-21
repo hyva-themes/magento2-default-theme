@@ -33,7 +33,7 @@ if ($cookieHelper->isCookieRestrictionModeEnabled()): ?>
 
 <script>
     function initCookieBanner() {
-        const isUserAllowedSaveCookieName = '<?= /* @noEscape */  Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>';
+        const isUserAllowedSaveCookieName = '<?= /* @noEscape */ Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>';
         const currentWebsiteId = <?= (int) $storeViewModel->getStore()->getWebsiteId() ?>;
 
         const isAllowedSaveCookie = () => {
@@ -53,12 +53,11 @@ if ($cookieHelper->isCookieRestrictionModeEnabled()): ?>
             cookieValue: '<?= /* @noEscape */ $cookieHelper->getAcceptedSaveCookiesWebsiteIds() ?>',
             cookieLifetime: '<?= /* @noEscape */ $cookieHelper->getCookieRestrictionLifetime() ?>',
             noCookiesUrl: '<?= $escaper->escapeJs($block->getUrl('cookie/index/noCookies')) ?>',
-
             checkAcceptCookies() {
                 this.showCookieBanner = ! isAllowedSaveCookie();
             },
             setAcceptCookies() {
-                const cookieExpires = this.cookieLifetime /  60 / 60 / 24;
+                const cookieExpires = this.cookieLifetime / 60 / 60 / 24;
                 hyva.setCookie(this.cookieName, this.cookieValue, cookieExpires);
                 if (!hyva.getCookie(this.cookieName)) {
                     window.location.href = this.noCookiesUrl;
@@ -71,8 +70,10 @@ if ($cookieHelper->isCookieRestrictionModeEnabled()): ?>
 </script>
 
 <section id="notice-cookie-block"
-         x-data="initCookieBanner();"
-         @private-content-loaded.window="checkAcceptCookies()"
+         aria-label="<?= $escaper->escapeHtmlAttr(__('We use cookies to make your experience better.')) ?>"
+         x-data="initCookieBanner()"
+         x-init="checkAcceptCookies()"
+         x-defer="idle"
 >
     <template x-if="showCookieBanner">
         <div role="dialog"
@@ -80,7 +81,7 @@ if ($cookieHelper->isCookieRestrictionModeEnabled()): ?>
              class="container fixed py-0 right-0 bottom-0 z-30 flex max-w-full bg-container-darker
                 border-t-2 border-container-darker"
         >
-            <button @click="showCookieBanner = false;" aria-label="Close panel"
+            <button @click="showCookieBanner = false;" aria-label="<?= $escaper->escapeHtmlAttr(__('Close panel')) ?>"
                     class="absolute right-0 top-0 p-4">
                 <?= $heroicons->xHtml(); ?>
             </button>

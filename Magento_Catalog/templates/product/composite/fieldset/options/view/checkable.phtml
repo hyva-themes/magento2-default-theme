@@ -46,7 +46,7 @@ if ($option): ?>
                class="radio product-custom-option"
                name="options[<?= $escaper->escapeHtmlAttr($option->getId()) ?>]"
                value=""
-               checked="checked"
+               checked
                x-on:change="updateCustomOptionValue(
                 $dispatch, '<?= $escaper->escapeHtmlAttr($option->getId()) ?>', $event.target
                )"

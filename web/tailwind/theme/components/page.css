@@ -1,9 +1,4 @@
-.page-main {
-
-}
-
 .table-row-items > div.table-row-item {
-
     @apply bg-container-darker;
 
     &:nth-child(2n + 1) {

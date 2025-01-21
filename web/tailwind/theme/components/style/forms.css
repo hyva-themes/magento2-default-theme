@@ -50,3 +50,21 @@ fieldset {
 fieldset ~ fieldset {
     @apply mt-8
 }
+
+.field.required > label {
+    @apply after:relative after:-top-1 after:text-red-600 after:icon-asterisk after:text-xs;
+}
+
+@layer utilities {
+    .icon-asterisk {
+        --tw-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'%3E%3Cpath d='M12 6v12M17.196 9 6.804 15M6.804 9l10.392 6'/%3E%3C/svg%3E");
+        --tw-icon-size: 1em;
+        display: inline-block;
+        width: var(--tw-icon-size);
+        height: var(--tw-icon-size);
+        background-color: currentcolor;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        mask-image: var(--tw-icon);
+    }
+}

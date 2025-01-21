@@ -11,6 +11,7 @@ declare(strict_types=1);
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsSolid;
 use Hyva\Theme\ViewModel\ReCaptcha;
+use Hyva\Theme\ViewModel\StoreConfig;
 use Magento\Customer\Block\Form\Edit as CustomerEdit;
 use Magento\Customer\Block\Widget\Name;
 use Magento\Framework\Escaper;
@@ -29,6 +30,8 @@ $recaptcha = $block->getData('viewModelRecaptcha');
 $heroicons = $viewModels->require(HeroiconsSolid::class);
 $minimumPasswordLength = $block->getMinimumPasswordLength();
 $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
+$storeConfig = $viewModels->require(StoreConfig::class);
+$isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocomplete_on_storefront');
 
 ?>
 <form class="form form-edit-account"
@@ -68,9 +71,7 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                 aria-describedby="change_email_description"
             />
             <label class="label" for="change-email">
-                <span>
-                    <?= $escaper->escapeHtml(__('Change Email')) ?>
-                </span>
+                <span><?= $escaper->escapeHtml(__('Change Email')) ?></span>
             </label>
             <span class="sr-only" id="change_email_description"><?= $escaper->escapeHtml(__('form appears when field is selected')) ?></span>
         </div>
@@ -83,14 +84,12 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                 value="1"
                 title="<?= $escaper->escapeHtmlAttr(__('Change Password')) ?>"
                 @change="handleCheckboxChange('password-fields')"
-                <?php if ($block->getChangePassword()): ?> checked="checked"<?php endif; ?>
+                <?php if ($block->getChangePassword()): ?> checked<?php endif; ?>
                 class="checkbox"
                 aria-describedby="change_password_description"
             />
             <label class="label" for="change-password">
-                <span>
-                    <?= $escaper->escapeHtml(__('Change Password')) ?>
-                </span>
+                <span><?= $escaper->escapeHtml(__('Change Password')) ?></span>
             </label>
             <span class="sr-only" id="change_password_description"><?= $escaper->escapeHtml(__('form appears when field is selected')) ?></span>
         </div>
@@ -100,7 +99,9 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                 class="field field-reserved email required"
                 id="email-fields"
             >
-                <label class="label" for="email"><span><?= $escaper->escapeHtml(__('Email')) ?></span></label>
+                <label class="label" for="email">
+                    <span><?= $escaper->escapeHtml(__('Email')) ?></span>
+                </label>
                 <div class="control">
                     <input type="email" name="email" id="email" autocomplete="email" required
                            value="<?= $escaper->escapeHtmlAttr($block->getCustomer()->getEmail()) ?>"
@@ -123,7 +124,7 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                            name="current_password" id="current-password"
                            data-input="current-password"
                            required
-                           autocomplete="off"
+                           autocomplete="<?= $isAutocompleteEnabled ? 'current-password' : 'off' ?>"
                            aria-describedby="password-strength-meter"
                     />
                     <button
@@ -146,15 +147,21 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
 
         <template x-if="showPasswordFields">
             <div>
-                <div class="field field-reserved">
+                <div class="field field-reserved required">
                     <label class="label" for="password"><span>
                             <?= $escaper->escapeHtml(__('New Password')) ?>
                     </span></label>
                     <div class="control flex items-center">
-                        <input :type="showPasswordNew ? 'text' : 'password'" type="password" class="form-input" name="password" id="password" required
+                        <input :type="showPasswordNew ? 'text' : 'password'"
+                               type="password"
+                               class="form-input"
+                               name="password"
+                               id="password"
+                               required
                                data-validate='{"password-strength": {"minCharacterSets": <?= (int) $passwordMinCharacterSets ?>}}'
                                @input="onChange"
-                               minlength="<?= $escaper->escapeHtmlAttr($minimumPasswordLength) ?>" autocomplete="off"
+                               minlength="<?= $escaper->escapeHtmlAttr($minimumPasswordLength) ?>"
+                               autocomplete="<?= $isAutocompleteEnabled ? 'new-password' : 'off' ?>"
                                aria-describedby="password-strength-meter"
                         />
                         <button
@@ -186,11 +193,13 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                         <span><?= $escaper->escapeHtml(__('Confirm New Password')) ?></span>
                     </label>
                     <div class="control flex items-center">
-                        <input :type="showPasswordConfirm ? 'text' : 'password'" type="password" class="form-input"
+                        <input :type="showPasswordConfirm ? 'text' : 'password'"
+                               type="password"
+                               class="form-input"
                                name="password_confirmation" id="password-confirmation"
                                data-validate='{"equalTo": "password"}'
                                @input="onChange"
-                               autocomplete="off"
+                               autocomplete="<?= $isAutocompleteEnabled ? 'new-password' : 'off' ?>"
                                aria-describedby="password-strength-meter"
                         />
                         <button

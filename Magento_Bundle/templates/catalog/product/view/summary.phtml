@@ -33,22 +33,9 @@ $product = $block->getProduct();
                 </p>
 
                 <?= $block->getChildHtml('product.info.form') ?>
-
-                <?= $block->getChildHtml("product.info.bundle.price") ?>
-
-                <?php if ($product->isSaleable()): ?>
-                <div class="flex justify-between my-4 sm:mt-0 lg:justify-start">
-                    <?= $block->getChildHtml("product.info.quantity") ?>
-                    <?= $block->getChildHtml("product.info.addtocart") ?>
-                </div>
-                <div class="flex my-4 sm:mt-0">
-                    <?= $block->getChildHtml("addtocart.shortcut.buttons") ?>
-                </div>
-                <?php endif; ?>
-
             </div>
 
-            <div class="py-4 my-2 tier-price-container">
+            <div class="py-1 my-2 tier-price-container">
                 <?= $block->getChildHtml("product.price.tier") ?>
             </div>
 
@@ -58,7 +45,7 @@ $product = $block->getProduct();
              class="bundle-summary"
         >
             <div x-show="selectedOptions.length">
-                <div class="mb-2 w-full text-2xl leading-relaxed text-left text-gray-900 border-b subtitle title-font
+                <div class="mb-2 w-full text-xl leading-relaxed text-left text-gray-900 border-b subtitle title-font
                             font-base border-container">
                     <?= $escaper->escapeHtml(__('Summary')) ?>
                 </div>
@@ -75,6 +62,18 @@ $product = $block->getProduct();
                     </ul>
                 </div>
             </div>
+
+            <?= $block->getChildHtml("product.info.bundle.price") ?>
+
+            <?php if ($product->isSaleable()): ?>
+                <div class="flex mb-4 sm:mt-0 lg:justify-start">
+                    <?= $block->getChildHtml("product.info.quantity") ?>
+                    <?= $block->getChildHtml("product.info.addtocart") ?>
+                </div>
+                <div class="flex my-4 sm:mt-0">
+                    <?= $block->getChildHtml("addtocart.shortcut.buttons") ?>
+                </div>
+            <?php endif; ?>
         </div>
         <script>
             function initBundleSummary() {

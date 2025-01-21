@@ -1,9 +1,7 @@
-
 .page-product-bundle {
     .price-final_price {
         .price-from,
         .price-to {
-
             .price-container {
                 @apply text-gray-700 block mb-4;
 

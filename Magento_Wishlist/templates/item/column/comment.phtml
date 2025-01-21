@@ -32,7 +32,7 @@ $wishlistHelper = $this->helper(WishlistHelper::class);
                   name="description[<?= $escaper->escapeHtmlAttr($item->getWishlistItemId()) ?>]"
                   title="<?= $escaper->escapeHtmlAttr(__('Comment')) ?>"
                   class="product-item-comment form-textarea mt-1 block w-full"
-            <?= $item->getProduct()->isSaleable() ? '' : 'disabled="disabled"' ?>
+            <?= $item->getProduct()->isSaleable() ? '' : 'disabled' ?>
         ><?= ($escaper->escapeHtml($item->getDescription())) ?></textarea>
     </div>
 </div>

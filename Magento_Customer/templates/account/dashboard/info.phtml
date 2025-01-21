@@ -49,7 +49,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 </a>
                 <a
                     class="inline-flex items-center w-full md:text-sm text-secondary hover:text-secondary-darker"
-                    href="<?= $escaper->escapeUrl($block->getChangePasswordUrl()) ?>" class="action change-password"
+                    href="<?= $escaper->escapeUrl($block->getChangePasswordUrl()) ?>"
                 >
                     <?= $escaper->escapeHtml(__('Change Password')) ?>
                     <?= $heroicons->arrowRightHtml('ml-2', 16, 16, ['aria-hidden' => 'true']); ?>

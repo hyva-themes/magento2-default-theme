@@ -9,11 +9,9 @@
 -->
 <page layout="3columns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <!-- The dummy touchstart event listener prevents mobile safari from requiring a double tap to select swatches, buttons and links -->
-        <attribute name="ontouchstart" value="() => {}"/>
-
         <referenceContainer name="after.body.start">
             <block class="Magento\Framework\View\Element\FormKey" name="formkey" />
+            <block class="Magento\Theme\Block\Html\Notices" name="global_notices" template="Magento_Theme::html/notices.phtml"/>
         </referenceContainer>
 
         <referenceContainer name="page.messages">
@@ -25,7 +23,7 @@
         </referenceContainer>
 
         <referenceContainer name="main.content">
-            <block class="Magento\Framework\View\Element\Template" name="skip_to_content.target" before="-" template="Magento_Theme::html/skiptarget.phtml">
+            <block name="skip_to_content.target" before="-" template="Magento_Theme::html/skiptarget.phtml">
                 <arguments>
                     <argument name="target_id" xsi:type="string">contentarea</argument>
                 </arguments>
@@ -33,7 +31,7 @@
         </referenceContainer>
 
         <referenceContainer name="header.container">
-            <block class="Magento\Framework\View\Element\Template" name="skip_to_content" template="Magento_Theme::html/skip.phtml" before="-">
+            <block name="skip_to_content" template="Magento_Theme::html/skip.phtml" before="-">
                 <arguments>
                     <argument name="target" xsi:type="string">contentarea</argument>
                     <argument name="label" translate="true" xsi:type="string">Skip to Content</argument>
@@ -51,7 +49,7 @@
                 <block name="header-search" template="Magento_Theme::html/header/search-form.phtml"/>
                 <block name="cart-drawer" template="Magento_Theme::html/cart/cart-drawer.phtml" ifconfig="checkout/sidebar/display">
                     <block name="cart-drawer-loading" as="loading" template="Hyva_Theme::ui/loading.phtml"/>
-                    <block class="Magento\Checkout\Block\QuoteShortcutButtons" name="extra_actions"/>
+                    <container name="extra_actions"/>
                     <container name="cart-drawer.top"/>
                     <container name="cart-drawer.items.before"/>
                     <container name="cart-drawer.totals.before"/>
@@ -76,6 +74,7 @@
                            template="Magento_Theme::html/header/menu/desktop.phtml"
                     ></block>
                 </block>
+                <container name="header-content.additional" as="additional" />
             </block>
         </referenceContainer>
 
@@ -106,12 +105,13 @@
 
         <referenceContainer name="after.body.start">
             <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Theme::html/container.phtml"/>
+            <block name="mobile-safari-bug-workaround" template="Magento_Theme::html/mobile-safari-bug-workaround.phtml"/>
         </referenceContainer>
 
         <referenceContainer name="before.body.end">
             <block class="Magento\Theme\Block\Html\Footer" name="absolute_footer" template="Magento_Theme::html/absolute_footer.phtml" />
         </referenceContainer>
 
-        <block class="Magento\Framework\View\Element\Template" name="head.additional" as="head.additional" template="Magento_Theme::html/container.phtml"/>
+        <block name="head.additional" as="head.additional" template="Magento_Theme::html/container.phtml"/>
     </body>
 </page>

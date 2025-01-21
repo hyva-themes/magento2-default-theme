@@ -1,0 +1,30 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/*
+ * The dummy touchstart event listener prevents mobile safari from requiring a double tap to select swatches, buttons and links.
+ *
+ * The safari bug is triggered by the window.touchstart listener declared in Hyva_Theme::page/js/init-external-scripts.phtml.
+ * an alternative to this workaround is removing the touchstart from the events there, but that may inhibit the intended
+ * functionality of the init-external-scripts event.
+ */
+
+?>
+<script>
+    document.body.addEventListener('touchstart', () => {}, {passive: true})
+</script>

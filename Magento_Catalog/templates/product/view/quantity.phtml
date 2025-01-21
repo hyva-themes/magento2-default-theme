@@ -25,16 +25,27 @@ $product = $block->getProduct();
 
 /** @var ProductStockItem $stockItemViewModel */
 $stockItemViewModel = $viewModels->require(ProductStockItem::class);
-$minSalesQty        = $stockItemViewModel->getMinSaleQty($product);
-$maxSalesQty        = $stockItemViewModel->getMaxSaleQty($product);
-
-$maxSalesQtyLength  = ($maxSalesQty ? strlen((string) $maxSalesQty) : 4)
-    + (/* add one if decimal for separator */
-    (int) $stockItemViewModel->isQtyDecimal($product));
+$minSalesQty = $stockItemViewModel->getMinSaleQty($product);
+$maxSalesQty = $stockItemViewModel->getMaxSaleQty($product);
+$defaultQty = $block->getProductDefaultQty() * 1;
 
 $step = $stockItemViewModel->getQtyIncrements($product)
     ? $stockItemViewModel->getQtyIncrements($product)
     : null;
+
+/**
+ * sets minimum and maximum values taking into account the values set in the admin,
+ * but taking into account the value of Qty Increments
+ */
+if ($step) {
+    $minSalesQty = ceil($minSalesQty / $step) * $step;
+    $maxSalesQty = floor($maxSalesQty / $step) * $step;
+    $defaultQty = ceil($defaultQty / $step) * $step;
+}
+
+$maxSalesQtyLength = ($maxSalesQty ? strlen((string) $maxSalesQty) : 4)
+    + (/* add one if decimal for separator */ (int) $stockItemViewModel->isQtyDecimal($product));
+
 
 ?>
 <?php if ($block->shouldRenderQuantity()): ?>
@@ -54,7 +65,7 @@ $step = $stockItemViewModel->getQtyIncrements($product)
             }
 
             return {
-                qty: <?= $block->getProductDefaultQty() * 1 ?>,
+                qty: <?= /** @noEscape */ $defaultQty ?>,
                 itemId: (new URLSearchParams(window.location.search)).get('id') || findPathParam('id'),
                 productId: '<?= (int)$product->getId() ?>',
                 <?php /* populate the qty when editing a product from the cart */ ?>
@@ -74,7 +85,8 @@ $step = $stockItemViewModel->getQtyIncrements($product)
         }
     </script>
     <div x-data="initQtyField()"
-        class="">
+        x-init="$dispatch('update-qty-<?= (int)$product->getId() ?>', qty)"
+    >
         <?php if ($product->isSaleable()): ?>
             <div class="mr-2">
                 <label for="qty[<?= (int)$product->getId() ?>]"
@@ -99,9 +111,10 @@ $step = $stockItemViewModel->getQtyIncrements($product)
                     <?php if ($step): ?>step="<?= /** @noEscape */ $step ?>"<?php endif; ?>
                     <?php endif; ?>
                     :value="qty"
+                    value="<?= $block->getProductDefaultQty() * 1 ?>"
                     class="form-input px-2 py-2 w-20 text-center invalid:ring-2 invalid:ring-red-500"
                     x-model.number="qty"
-                    @change="$dispatch('update-qty-<?= (int)$product->getId() ?>', qty)"
+                    @input="$dispatch('update-qty-<?= (int)$product->getId() ?>', qty)"
                 />
             </div>
         <?php endif; ?>

@@ -23,6 +23,7 @@
                     class="Magento\Customer\Block\Form\Login"
                     name="customer_form_login"
                     template="Magento_Customer::form/login.phtml"
+                    cacheable="false"
                 >
                     <container name="form.additional.info" as="form_additional_info"/>
                 </block>

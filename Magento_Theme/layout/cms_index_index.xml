@@ -11,28 +11,39 @@
     <update handle="hyva_product_slider" />
     <body>
         <referenceContainer name="content">
-            <block name="hero" template="Magento_Theme::elements/hero.phtml"/>
-            <block name="content-1" template="Magento_Theme::elements/content-1.phtml"/>
-            <block name="slider-1" template="Magento_Catalog::product/slider/product-slider.phtml">
+            <block
+                name="hero"
+                template="Magento_Theme::elements/hero.phtml"
+                ifconfig="hyva_theme_general/demo_content/show_homepage_demo_content"
+            />
+            <block
+                name="content-1"
+                template="Magento_Theme::elements/content-1.phtml"
+                ifconfig="hyva_theme_general/demo_content/show_homepage_demo_content"
+            />
+            <block
+                name="slider-1"
+                template="Magento_Catalog::product/slider/product-slider.phtml"
+                ifconfig="hyva_theme_general/demo_content/show_homepage_demo_content"
+            >
                 <arguments>
                     <argument name="title" xsi:type="string" translate="true">Watches</argument>
                     <argument name="category_ids" xsi:type="string">6</argument>
-<!--                    <argument name="include_child_category_products" xsi:type="boolean">true</argument>-->
+                    <!-- <argument name="include_child_category_products" xsi:type="boolean">true</argument>-->
                     <argument name="page_size" xsi:type="string">8</argument>
-<!--                    <argument name="sort_attribute" xsi:type="string">position</argument>-->
-<!--                    <argument name="sort_direction" xsi:type="string">ASC</argument>-->
+                    <!-- <argument name="sort_attribute" xsi:type="string">position</argument>-->
+                    <!-- <argument name="sort_direction" xsi:type="string">ASC</argument>-->
                 </arguments>
             </block>
-            <block name="slider-2" template="Magento_Catalog::product/slider/product-slider.phtml">
+            <block
+                name="slider-2"
+                template="Magento_Catalog::product/slider/product-slider.phtml"
+                ifconfig="hyva_theme_general/demo_content/show_homepage_demo_content"
+            >
                 <arguments>
-<!--
-                    <argument name="product_skus" xsi:type="string"/>
--->
-<!--
-                    <argument name="category_ids" xsi:type="string">5,6</argument>
--->
-<!--
-                    <argument name="additional_filters" xsi:type="array">
+                    <!-- <argument name="product_skus" xsi:type="string"/> -->
+                    <!-- <argument name="category_ids" xsi:type="string">5,6</argument> -->
+                    <!-- <argument name="additional_filters" xsi:type="array">
                         <item name="color-filter" xsi:type="array">
                             <item name="field" xsi:type="string">color</item>
                             <item name="value" xsi:type="array">
@@ -42,18 +53,15 @@
                             </item>
                             <item name="conditionType" xsi:type="string">in</item>
                         </item>
-                    </argument>
--->
+                    </argument> -->
                     <argument name="title" xsi:type="string" translate="true">Popular Products</argument>
                     <argument name="price_from" xsi:type="string">30</argument>
                     <argument name="price_to" xsi:type="string">100</argument>
                     <argument name="page_size" xsi:type="string">8</argument>
                     <argument name="sort_attribute" xsi:type="string">price</argument>
                     <argument name="sort_direction" xsi:type="string">DESC</argument>
-<!--
-                    <argument name="hide_rating_summary" xsi:type="boolean">true</argument>
-                    <argument name="hide_details" xsi:type="boolean">true</argument>
--->
+                    <!-- <argument name="hide_rating_summary" xsi:type="boolean">true</argument> -->
+                    <!-- <argument name="hide_details" xsi:type="boolean">true</argument> -->
                 </arguments>
             </block>
         </referenceContainer>

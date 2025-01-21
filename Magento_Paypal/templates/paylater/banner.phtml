@@ -1,0 +1,112 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Paypal\Block\PayLater\Banner;
+use Magento\Checkout\Block\Cart;
+
+/** @var Escaper $escaper */
+/** @var Banner $block */
+/** @var Cart $cartBlock */
+
+$widgetData = json_decode($block->getJsLayout(), true);
+$widgetConfigJson = json_encode($widgetData['components']['payLater']['config']);
+
+?>
+<?php $cartBlock = $block->getLayout()->getBlock('checkout.cart'); ?>
+<?php if ($block->getData('placement') !== 'cart' || is_object($cartBlock) && $cartBlock->getItemsCount()): ?>
+    <div x-intersect.once="checkAndInitializeButtons()"
+         x-data="paypalPaylater(<?= $escaper->escapeHtmlAttr($widgetConfigJson) ?>)"
+         @private-content-loaded.window="getData($event.detail.data)"
+         class="px-6 md:px-0 my-3 min-h-[20px] order-last">
+        <div x-ref="ppMessage"
+             class="paypal checkout paypal-logo <?= $escaper->escapeHtmlAttr($block->getContainerId()) ?>-container"
+             data-pp-message>
+        </div>
+    </div>
+    <script>
+        function paypalPaylater(config) {
+            return {
+                cartSection: false,
+                alreadyLoaded: false,
+                getData(data) {
+                    if (data.cart) {
+                        this.cartSection = data.cart;
+                        this.checkAndInitializeButtons();
+                    }
+                },
+                initializePayPalScript() {
+                    if (!window.paypalScriptPromise) {
+                        window.paypalScriptPromise = new Promise((resolve, reject) => {
+                            const scriptId = 'paypal-script';
+
+                            const paypalScript = document.getElementById(scriptId);
+                            if (paypalScript) {
+                                if (window.paypal) {
+                                    return resolve(window.paypal);
+                                }
+                            }
+
+                            const script = document.createElement('script');
+                            script.src = config.sdkUrl;
+                            script.id = scriptId;
+                            script.setAttribute('data-partner-attribution-id', config.dataAttributes['data-partner-attribution-id']);
+                            script.onload = () => resolve(window.paypal);
+                            script.onerror = () => reject(new Error('<?= $escaper->escapeJs('PayPal SDK could not be loaded') ?>'));
+                            document.body.appendChild(script);
+                        });
+                    }
+
+                    return window.paypalScriptPromise;
+                },
+
+                async initializeButtons() {
+                    try {
+                        const paypal = await this.initializePayPalScript();
+                        const attributes = config.attributes;
+
+                        paypal && paypal.Messages({
+                            amount: this.cartSection.subtotalAmount,
+                            placement: attributes['data-pp-placement'] || 'product',
+                            style: {
+                                'layout': attributes['data-pp-style-layout'] || 'text',
+                                'logo': {
+                                    'type': attributes['data-pp-style-logo-type'] || 'primary',
+                                    'position': attributes['data-pp-style-logo-position'] || 'left',
+                                },
+                                'text': {
+                                    'color': attributes['data-pp-style-text-color'] || 'black',
+                                    'size': attributes['data-pp-style-text-size'] || '12',
+                                },
+                                'color': attributes['data-pp-style-color'] || 'blue',
+                                'ratio': attributes['data-pp-style-ratio'] || '1x1',
+                            },
+                        }).render(this.$refs.ppMessage);
+
+                    } catch (error) {
+                        this.$refs.ppMessage.innerHTML = '';
+                        console.error('Error loading PayPal SDK', error);
+                    }
+                },
+                checkAndInitializeButtons() {
+                    const form = document.forms.product_addtocart_form;
+                    if (!form) {
+                        return;
+                    }
+
+                    if (this.cartSection.items && this.cartSection.items.length && !this.alreadyLoaded) {
+                        this.alreadyLoaded = true;
+                        this.initializeButtons();
+                    }
+                }
+            }
+        }
+    </script>
+<?php endif; ?>

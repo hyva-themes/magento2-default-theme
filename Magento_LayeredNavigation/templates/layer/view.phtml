@@ -84,6 +84,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                             open: false,
                             id: $id('filter-option')
                         }"
+                        x-defer="intersect"
                         class="filter-option card my-4"
                     >
                         <h3 :id="`${id}-title`">

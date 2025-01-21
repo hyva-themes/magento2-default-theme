@@ -26,6 +26,7 @@ $uniqueId = $productId . uniqid();
 <?php if ($block->isReviewEnabled()): ?>
     <div
         x-data="initRating<?= /* @noEscape */ $uniqueId ?>()"
+        x-defer="intersect"
         @keyup.enter="scrollToRatings()"
         @click="scrollToRatings()"
         class="rating-summary flex"
@@ -33,12 +34,12 @@ $uniqueId = $productId . uniqid();
         <?php if (!$rating): ?>
             title="<?= $escaper->escapeHtmlAttr(__('Be the first to review this product')) ?>"
         <?php endif; ?>
-        tabindex="0"
+        :tabindex="reviewsSection ? '0' : '-1'"
         :aria-label="reviewsSection
             ? '<?= $escaper->escapeJs(__('%1 rating. %2 out of %3 stars. Click to go to reviews.', $productName, $starsFilled + $starFragment, $ratingSteps))?>'
             : '<?= $escaper->escapeJs(__('%1 rating. %2 out of %3 stars', $productName, $starsFilled + $starFragment, $ratingSteps))?>'
         "
-        role="group"
+        :role="reviewsSection ? 'button' : 'img'"
     >
         <?php if ($rating): ?>
             <?php $i = 0; ?>

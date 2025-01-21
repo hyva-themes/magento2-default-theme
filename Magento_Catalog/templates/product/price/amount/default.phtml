@@ -12,7 +12,6 @@ use Magento\Framework\Escaper;
 /** @var Amount $block */
 /** @var Escaper $escaper */
 ?>
-
 <span
     <?php if ($block->getPriceId()): ?>x-data x-id="['<?= $escaper->escapeJs($block->getPriceId()) ?>']"<?php endif; ?>
     class="price-container <?= $escaper->escapeHtmlAttr($block->getAdjustmentCssClasses()) ?>"

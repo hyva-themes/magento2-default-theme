@@ -8,17 +8,26 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\GoogleMapsApi;
 use Magento\Framework\Escaper;
-use Magento\PageBuilder\Block\GoogleMapsApi;
+use Magento\Framework\View\Element\Template;
 
 /** @var Escaper $escaper */
-/** @var GoogleMapsApi $block */
+/** @var Template $block */
+/** @var ViewModelRegistry $viewModels */
+
+$googleMapsApi = $viewModels->require(GoogleMapsApi::class);
+
 ?>
 <script>
     'use strict';
 
     (() => {
-        const initMaps = (elements) => {
+        const initMaps = async (elements) => {
+
+            const { Map, MapTypeControlStyle, InfoWindow } = await google.maps.importLibrary("maps");
+
             const renderMap = (element) => {
                 const dataLocations = element.dataset.locations;
 
@@ -28,7 +37,7 @@ use Magento\PageBuilder\Block\GoogleMapsApi;
                     return;
                 }
 
-                const map = new google.maps.Map(
+                const map = new Map(
                     element,
                     getMapOptions(
                         element.dataset.showControls !== 'true',
@@ -46,7 +55,7 @@ use Magento\PageBuilder\Block\GoogleMapsApi;
                     };
                     bounds.push(position);
 
-                    const infowindow = new google.maps.InfoWindow({
+                    const infowindow = new InfoWindow({
                         content: getInfoWindowContent(location),
                     });
                     const marker = new google.maps.Marker({
@@ -75,17 +84,18 @@ use Magento\PageBuilder\Block\GoogleMapsApi;
             };
 
             const getMapOptions = (disableDefaultUI, mapTypeControl) => {
-                const style = '<?= $escaper->escapeJs($block->getStyle()) ?>';
+                const style = '<?= $escaper->escapeJs($googleMapsApi->getStyle()) ?>';
                 return {
                     zoom: 8,
                     scrollwheel: false,
                     disableDoubleClickZoom: false,
                     mapTypeControlOptions: {
-                        style: google.maps.MapTypeControlStyle.DEFAULT,
+                        style: MapTypeControlStyle.DEFAULT,
                     },
                     styles: style ? JSON.parse(style) : [],
                     disableDefaultUI: disableDefaultUI,
                     mapTypeControl: mapTypeControl,
+                    mapId: Map.DEMO_MAP_ID
                 };
             };
 
@@ -143,11 +153,9 @@ use Magento\PageBuilder\Block\GoogleMapsApi;
                 const script = document.createElement('script');
                 script.type = 'text/javascript';
 
-                script.addEventListener('load', () => {
-                    initMaps(mapElements);
-                });
+                script.src = '<?= $escaper->escapeJs($googleMapsApi->getLibraryUrl()) ?>&loading=async&callback=initGoogleMapsLibrary';
 
-                script.src = '<?= $escaper->escapeJs($block->getLibraryUrl()) ?>';
+                window.initGoogleMapsLibrary = () => initMaps(mapElements);
                 document.head.appendChild(script);
             }
         });

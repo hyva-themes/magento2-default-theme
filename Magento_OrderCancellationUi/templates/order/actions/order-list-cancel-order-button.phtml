@@ -1,0 +1,52 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\Sales\OrderCancellation;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Magento\OrderCancellationUi\ViewModel\Config as OrderCancellationUiConfig;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
+/** @var OrderCancellation $orderCancellation */
+$orderCancellation = $viewModels->require(OrderCancellation::class);
+
+/** @var OrderCancellationUiConfig $orderCancellationUiConfig */
+$orderCancellationUiConfig = $viewModels->require(OrderCancellationUiConfig::class);
+
+$order = $block->getData('order');
+$reasons = $orderCancellationUiConfig->getCancellationReasons((int) $order->getId())
+?>
+
+<?php if ($orderCancellation->canCancel($order->getEntityId())): ?>
+    <button
+        type="button"
+        class="inline-block text-sm text-secondary-darker"
+        title="<?= $escaper->escapeHtmlAttr(__('Cancel order') . ' ' . ltrim($order->getRealOrderId(), '0')) ?>"
+        aria-label="<?= $escaper->escapeHtmlAttr(__('Cancel order') . ' ' . ltrim($order->getRealOrderId(), '0')) ?>"
+        x-data
+        @click="$dispatch('confirm-cancel-order', {
+            order_id: <?= (int) $order->getId() ?>,
+            increment_id: '<?= $escaper->escapeJs($order->getRealOrderId()) ?>',
+            reasons: <?= $escaper->escapeHtmlAttr(json_encode(array_values($reasons))) ?>,
+        })"
+    >
+        <?= $heroicons->xCircleHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
+    </button>
+<?php else: ?>
+    <?= $heroicons->xCircleHtml('text-gray-300', 24, 24, ['aria-hidden' => 'true']) ?>
+<?php endif ?>

@@ -12,6 +12,7 @@ use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\Customer\LoginButton;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Hyva\Theme\ViewModel\ReCaptcha;
+use Hyva\Theme\ViewModel\StoreConfig;
 use Magento\Framework\Escaper;
 use Magento\Customer\Block\Account\Customer;
 
@@ -20,6 +21,7 @@ use Magento\Customer\Block\Account\Customer;
 /** @var ViewModelRegistry $viewModels */
 /** @var ReCaptcha $recaptcha */
 /** @var HeroiconsOutline $heroicons */
+/** @var StoreConfig $storeConfig */
 
 $heroicons = $viewModels->require(HeroiconsOutline::class);
 $loginButtonViewModel = $viewModels->require(LoginButton::class);
@@ -27,6 +29,9 @@ $loginButtonViewModel = $viewModels->require(LoginButton::class);
 // Do not replace this with $viewModels->require(ReCaptcha::class); that might break the dependency
 // on the Magento_ReCaptchaCustomer module
 $recaptcha = $block->getData('viewModelRecaptcha');
+$storeConfig = $viewModels->require(StoreConfig::class);
+$isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocomplete_on_storefront');
+
 ?>
 <script>
     function initAuthentication() {
@@ -97,10 +102,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                 ).then(data=> {
                     this.isLoading = false;
                     if (data.errors) {
-                        dispatchMessages([{
-                            type: 'error',
-                            text: data.message
-                        }], 5000);
+                        this.setErrorMessages(data.message);
                         this.errors = 1;
                         this.hasCaptchaToken = 0;
                     } else {
@@ -117,37 +119,67 @@ $recaptcha = $block->getData('viewModelRecaptcha');
          @toggle-authentication.window="open = forceAuthentication; redirectIfAuthenticated(event)"
          @keydown.window.escape="open = false"
 >
-        <div role="dialog"
-             aria-modal="true"
-             @click.outside="open = false"
-             class="inset-y-0 right-0 z-30 flex max-w-full"
-             :class="{'fixed': open }" x-cloak x-show="open"
+    <div
+        class="backdrop"
+        aria-hidden="true"
+        x-cloak
+        x-show="open"
+        x-transition:enter="ease-in-out duration-500"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="ease-in-out duration-500"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        @click="open = false"
+    ></div>
+    <div role="dialog"
+         aria-modal="true"
+         @click.outside="open = false"
+         class="inset-y-0 right-0 z-30 flex max-w-full fixed"
+         x-cloak
+         x-show="open"
+    >
+        <div class="relative w-screen max-w-md pt-16 bg-container-lighter"
+             x-show="open"
+             x-cloak=""
+             x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700"
+             x-transition:enter-start="translate-x-full"
+             x-transition:enter-end="translate-x-0"
+             x-transition:leave="transform transition ease-in-out duration-500 sm:duration-700"
+             x-transition:leave-start="translate-x-0"
+             x-transition:leave-end="translate-x-full"
         >
-            <div class="relative w-screen max-w-md pt-16 bg-container-lighter"
-                 x-show="open"
-                 x-cloak=""
-                 x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700"
-                 x-transition:enter-start="translate-x-full"
-                 x-transition:enter-end="translate-x-0"
-                 x-transition:leave="transform transition ease-in-out duration-500 sm:duration-700"
-                 x-transition:leave-start="translate-x-0"
-                 x-transition:leave-end="translate-x-full"
-            >
-                <div
-                    x-show="open"
-                    x-cloak=""
-                    x-transition:enter="ease-in-out duration-500"
-                    x-transition:enter-start="opacity-0"
-                    x-transition:enter-end="opacity-100"
-                    x-transition:leave="ease-in-out duration-500"
-                    x-transition:leave-start="opacity-100"
-                    x-transition:leave-end="opacity-0" class="absolute top-0 right-0 flex p-2 mt-2">
-                    <button @click="open = false;" aria-label="Close panel"
-                            class="p-2 text-gray-300 transition duration-150 ease-in-out hover:text-black">
-                        <?= $heroicons->xHtml(); ?>
-                    </button>
-                </div>
+            <div
+                x-show="open"
+                x-cloak=""
+                x-transition:enter="ease-in-out duration-500"
+                x-transition:enter-start="opacity-0"
+                x-transition:enter-end="opacity-100"
+                x-transition:leave="ease-in-out duration-500"
+                x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0" class="absolute top-0 right-2 flex p-2 mt-2">
+                <button
+                    type="button"
+                    @click="open = false;"
+                    aria-label="<?= $escaper->escapeHtmlAttr(__('Close panel')) ?>"
+                    class="p-2 text-gray-300 transition duration-150 ease-in-out hover:text-black"
+                >
+                    <?= $heroicons->xHtml('', 24, 24, ['title' => __('Close panel')]); ?>
+                </button>
+            </div>
+            <template x-if="open">
                 <div class="flex flex-col h-full py-6 space-y-6 bg-white shadow-xl overflow-y-auto">
+                    <div class="mx-4">
+                        <div class="message error mb-0" x-show="errors" x-cloak>
+                            <template x-for="(message, index) in errorMessages" :key="index">
+                                <div>
+                                    <template x-if="message">
+                                        <span x-html="message"></span>
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
                     <div class="block-customer-login bg-container border border-container mx-4 p-4 shadow-sm">
                         <p id="authenticate-customer-login" class="text-lg leading-7 text-gray-900">
                             <strong class="font-medium"><?= $escaper->escapeHtml(__('Checkout using your account')) ?></strong>
@@ -171,6 +203,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                                                @change="errors = 0"
                                                type="email"
                                                required
+                                               autocomplete="<?= $isAutocompleteEnabled ? 'username' : 'off' ?>"
                                                class="form-input input-text"
                                         >
                                     </div>
@@ -186,6 +219,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                                                class="form-input input-text"
                                                required
                                                x-ref="customer-password"
+                                               autocomplete="<?= $isAutocompleteEnabled ? 'current-password' : 'off' ?>"
                                                @change="errors = 0"
                                         >
                                     </div>
@@ -193,7 +227,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
 
                                 <input name="context" type="hidden" value="checkout" />
                                 <div class="actions-toolbar flex justify-between pt-6 pb-2 items-center">
-                                    <button type="submit"<?php if ($loginButtonViewModel->disabled()): ?> disabled="disabled" data-recaptcha-btn<?php endif; ?>
+                                    <button type="submit"<?php if ($loginButtonViewModel->disabled()): ?> disabled data-recaptcha-btn<?php endif; ?>
                                             class="inline-flex btn btn-primary disabled:opacity-75"
                                     >
                                         <?= $escaper->escapeHtml(__('Sign In')) ?>
@@ -234,6 +268,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                         </div>
                     </div>
                 </div>
-            </div>
+            </template>
         </div>
+    </div>
 </section>

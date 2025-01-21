@@ -21,34 +21,63 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
 
 <div class="block <?= $escaper->escapeHtmlAttr($block->getBlockCss()) ?> card filter-option py-4 px-8 mb-6"
-     x-data="{ open: true }">
+     x-data="initAccountNavigation()"
+     x-init="checkIsMobileResolution()"
+     @resize.window.debounce="checkIsMobileResolution()"
+     @visibilitychange.window.debounce="checkIsMobileResolution()"
+
+>
     <button
         type="button"
         class="
             title <?= $escaper->escapeHtmlAttr($block->getBlockCss()) ?>-title
             flex justify-between
-            items-center cursor-pointer hover:text-secondary-darker w-full
+            items-center hover:text-secondary-darker w-full
         "
-        @click="open = !open"
-        :aria-expanded="open"
+        @click="blockOpen = !blockOpen"
+        :aria-expanded="blockOpen"
+        :aria-disabled="!isMobile"
+        :disabled="!isMobile ? '' : null"
     >
+
         <span class="text-lg title">
             <?= $escaper->escapeHtml(__($block->getData('block_title'))) ?>
         </span>
-        <span class="px-1 py-1 border rounded border-container">
+        <span
+            class="px-1 py-1 border rounded border-container md:hidden"
+            x-ref="AccountNavigationMobileToggleIcon"
+        >
             <?= $heroicons->chevronDownHtml(
                 'transition-transform duration-300 ease-in-out transform rotate-180',
                 24,
                 24,
-                [":class" => "{ 'rotate-180': open, 'rotate-0': !open }", 'aria-hidden' => 'true']
+                [
+                    ':class'      => "{ 'rotate-180': blockOpen }",
+                    'aria-hidden' => 'true',
+                    'focusable' => 'false'
+                ]
             ); ?>
         </span>
     </button>
-    <span x-show="open" class="delimiter block border-b border-container w-full mt-4 mb-3"></span>
-    <div class="content <?= $escaper->escapeHtmlAttr($block->getBlockCss()) ?>-content block"
-         :class="{ 'hidden': !open , 'block': open }"
+    <div :class="{ 'hidden': !blockOpen }" class="delimiter border-b border-container w-full mt-4 mb-3 hidden md:block"></div>
+    <div class="content <?= $escaper->escapeHtmlAttr($block->getBlockCss()) ?>-content hidden md:block"
+         :class="{ 'hidden': !blockOpen }"
          id="<?= $escaper->escapeHtmlAttr($block->getBlockCss()) ?>"
     >
         <?= $block->getChildHtml() ?>
     </div>
 </div>
+<script>
+    function initAccountNavigation() {
+        return {
+            isMobile: false,
+            blockOpen: false,
+            checkIsMobileResolution() {
+                const mobileElement = this.$refs.AccountNavigationMobileToggleIcon;
+                this.isMobile = mobileElement
+                    ? getComputedStyle(mobileElement).display !== 'none'
+                    : window.matchMedia('(max-width: 767px)').matches; // Fallback to `md` breakpoint
+            }
+        }
+    }
+</script>

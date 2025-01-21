@@ -11,6 +11,7 @@ declare(strict_types=1);
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\ProductPage;
 use Hyva\Theme\ViewModel\ProductPrice;
+use Magento\Bundle\Model\Product\Price as BundlePrice;
 use Magento\Catalog\Block\Product\View;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\FinalPrice;
@@ -38,6 +39,9 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
     $finalPriceExclTax = $productPriceViewModel->getPriceValueExclTax(FinalPrice::PRICE_CODE, $product);
 }
 
+// The price type is compared with in a non-type-safe operator on purpose, because the constant is an int but the attribute value is a string
+$isFixedPriceBundleProduct = $product->getPriceType() == BundlePrice::PRICE_TYPE_FIXED;
+
 $displayTax = $productPriceViewModel->displayPriceIncludingTax();
 
 ?>
@@ -46,14 +50,14 @@ $displayTax = $productPriceViewModel->displayPriceIncludingTax();
 
         return {
             activeProductsPriceData: false,
-            initialFinalPrice: <?= (float)$finalPrice ?>,
+            initialFinalPrice: <?= $isFixedPriceBundleProduct ? (float) $finalPrice : 0 ?>,
             initialTierPrices: <?= /** @noEscape */ json_encode($tierPrices) ?>,
             calculatedFinalPrice: false,
             calculatedFinalPriceWithCustomOptions: false,
             customOptionPrices: [],
             activeCustomOptions: [],
             <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
-            initialBasePrice: <?= (float)$finalPriceExclTax ?>,
+            initialBasePrice: <?= $isFixedPriceBundleProduct ? (float) $finalPriceExclTax : 0 ?>,
             calculatedBasePrice: false,
             customOptionBasePrices: [],
             calculatedBasePriceWithCustomOptions: false,
@@ -89,29 +93,25 @@ $displayTax = $productPriceViewModel->displayPriceIncludingTax();
                 this.calculateFinalPriceWithCustomOptions();
             },
             calculateFinalPrice() {
-                const calcPrice = (initialPrice, withTax) => {
-                    let price;
-                    if (this.activeProductsPriceData) {
-                        const key = withTax ? 'finalPrice' : 'basePrice';
-                        price = this.initialTierPrices.reduce((finalValue, tierPrice) => {
-                            if (this.qty >= tierPrice.price_qty) {
-                                return (this.activeProductsPriceDat[key] * (1 + (tierPrice.percentage_value / 100)) < finalValue)
-                                    ? this.activeProductsPriceData[key] * (1 + (tierPrice.percentage_value / 100))
-                                    : finalValue;
-                            }
-                            return finalValue;
-                        }, this.activeProductsPriceData[key] || initialPrice);
-                    }
-                    return price;
+                <?php /* This function only applies the tier price discounts for the bundled product. */ ?>
+                <?php /* The tier prices of associated products are already included in this.activeProductsPriceData */ ?>
+                const calcPrice = (price) => {
+                    return this.initialTierPrices.reduce((currentValue, tierPrice) => {
+                        if (this.qty >= tierPrice.price_qty) {
+                            const discount = price * (tierPrice.percentage_value / 100);
+                            return (price - discount <  currentValue) ? (price - discount) : currentValue;
+                        }
+                        return currentValue;
+                    }, price);
                 }
-                const finalPrice = this.activeProductsPriceData && this.activeProductsPriceData.finalPrice || this.initialFinalPrice;
-                this.calculatedFinalPrice = calcPrice(finalPrice, <?= $displayTax ? 'true' : 'false' ?>);
+                const price = (this.activeProductsPriceData && this.activeProductsPriceData.finalPrice || 0) + this.initialFinalPrice;
+                this.calculatedFinalPrice = calcPrice(price);
 
                 window.dispatchEvent(new CustomEvent("update-product-final-price", {detail: this.calculatedFinalPrice}));
 
                 <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
-                const basePrice = this.activeProductsPriceData && this.activeProductsPriceData.basePrice || this.initialBasePrice;
-                this.calculatedBasePrice = calcPrice(basePrice, false);
+                const basePrice = (this.activeProductsPriceData && this.activeProductsPriceData.basePrice || 0) + this.initialBasePrice;
+                this.calculatedBasePrice = calcPrice(basePrice);
 
                 window.dispatchEvent(new CustomEvent("update-product-base-price", {detail: this.calculatedBasePrice}));
                 <?php endif; ?>

@@ -10,11 +10,8 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="header.customer.logged.in.links">
-            <block name="customer.header.wishlist.link"
-                   class="Hyva\Theme\Block\SortableItemInterface">
+            <block name="customer.header.wishlist.link" template="Magento_Wishlist::link.phtml">
                 <arguments>
-                    <argument name="label" xsi:type="string" translate="true">My Wish List</argument>
-                    <argument name="path" xsi:type="string">wishlist</argument>
                     <argument name="sort_order" xsi:type="number">20</argument>
                 </arguments>
             </block>

@@ -1,0 +1,78 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Msrp\Pricing\Render\PriceBox;
+use Magento\Framework\Escaper;
+use Magento\Msrp\Pricing\Price\MsrpPriceInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Pricing\Render as PricingRender;
+
+/** @var PriceBox $block */
+/** @var Escaper $escaper */
+
+/** @var MsrpPriceInterface $priceType */
+$priceType = $block->getPrice();
+
+/** @var Product $product  */
+$product = $block->getSaleableItem();
+$productId = $product->getId();
+
+$amount = $block->getMsrpPriceCalculator()->getMsrpPriceValue($product);
+
+$msrpPrice = $block->renderAmount(
+    $priceType->getCustomAmount($amount),
+    [
+        'price_id' => $block->getPriceId() ? $block->getPriceId() : 'old-price-' . $productId,
+        'include_container' => false,
+        'skip_adjustments' => true
+    ]
+);
+$priceElementIdPrefix = $block->getPriceElementIdPrefix() ?: 'product-price-';
+
+?>
+
+<?php if ($amount): ?>
+    <span class="map-old-price old-price inline-block"><?= /* @noEscape */ $msrpPrice ?></span>
+    <span class="map-fallback-price normal-price hidden"><?= /* @noEscape */ $msrpPrice ?></span>
+<?php endif; ?>
+
+<?php if ($priceType->isShowPriceOnGesture()): ?>
+    <button
+        type="button"
+        class="underline hover:no-underline"
+        x-data="{ msrpData: {
+            type: 'price',
+            productId: '<?= $escaper->escapeHtml($productId) ?>',
+            productName: '<?= $escaper->escapeHtml($product->getName()) ?>',
+            productIdInput: '',
+            isSaleable: <?= $product->isSaleable() ? 'true' : 'false' ?>,
+            realPrice: <?= $escaper->escapeHtml(json_encode($block->getRealPriceHtml())); ?>,
+            msrpPrice: <?= $escaper->escapeHtml(json_encode($msrpPrice)); ?>
+        }}"
+        @click="$dispatch('msrp-popover', { msrpData, target: $el, })"
+    >
+        <?= $escaper->escapeHtml(__('Click for price')) ?>
+    </button>
+<?php else: ?>
+    <div class="msrp-message message notice message-notice my-2 py-2 px-3 text-xs">
+        <?= $escaper->escapeHtml($priceType->getMsrpPriceMessage()) ?>
+    </div>
+<?php endif; ?>
+
+<?php if ($block->getZone() == PricingRender::ZONE_ITEM_VIEW): ?>
+    <button
+        type="button"
+        class="underline hover:no-underline"
+        x-data=""
+        @click="$dispatch('msrp-popover', { msrpData: { type: 'help' }, target: $el })"
+    >
+        <?= $escaper->escapeHtml(__("What's this?")) ?>
+    </button>
+<?php endif; ?>
