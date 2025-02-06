@@ -86,7 +86,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                 <label for="coupon_code" class="label sr-only">
                     <?= $escaper->escapeHtml(__('Enter discount code')) ?>
                 </label>
-                <div class="space-y-2">
+                <div class="fieldset coupon space-y-2">
                     <div class="control">
                         <input
                             type="text"
@@ -114,9 +114,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                     <?php endif; ?>
                     <?= $recaptcha ? $recaptcha->getInputHtml(ReCaptcha::RECAPTCHA_FORM_ID_COUPON_CODE) : '' ?>
                     <?php if ($recaptcha && $legalNoticeHtml = $recaptcha->getLegalNoticeHtml(ReCaptcha::RECAPTCHA_FORM_ID_COUPON_CODE)): ?>
-                        <div class="w-full">
-                            <?= $recaptcha->getLegalNoticeHtml(ReCaptcha::RECAPTCHA_FORM_ID_COUPON_CODE) ?>
-                        </div>
+                        <?= $recaptcha->getLegalNoticeHtml(ReCaptcha::RECAPTCHA_FORM_ID_COUPON_CODE) ?>
                     <?php endif; ?>
                 </div>
             </form>
