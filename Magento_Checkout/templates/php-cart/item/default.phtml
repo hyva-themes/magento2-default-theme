@@ -8,20 +8,37 @@
 
 declare(strict_types=1);
 
+// phpcs:disable Generic.WhiteSpace.ScopeIndent
 // phpcs:disable Magento2.Files.LineLength.MaxExceeded
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\ProductStockItem;
 use Magento\Checkout\Block\Cart\Item\Renderer;
 use Magento\Framework\Escaper;
 
 /** @var Renderer $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
 
 $item = $block->getItem();
 $product = $item->getProduct();
 $isVisibleProduct = $product->isVisibleInSiteVisibility();
 
+$stockItemViewModel = $viewModels->require(ProductStockItem::class);
+$qty = $stockItemViewModel->isQtyDecimal($product)
+    ? $block->getQty()
+    : (int) $block->getQty();
+
+
 ?>
-<tbody class="cart item bg-white even:bg-container-darker">
+<tbody class="cart item bg-white even:bg-container-darker"
+       <?php foreach ($block->getData('cart_item_data_attributes') as $attribute => $include): ?>
+           <?php if ($include): ?>
+               <?php /** Append data-* attributes based on layout XML arguments */ ?>
+               <?= $escaper->escapeHtml(sprintf('data-%s', $attribute)); ?>="<?= $escaper->escapeHtmlAttr($item->getData($attribute)); ?>"
+           <?php endif; ?>
+       <?php endforeach; ?>
+>
     <tr class="item-info align-top text-left lg:text-right flex flex-wrap lg:table-row">
         <td data-th="<?= $escaper->escapeHtml(__('Item')) ?>" class="col item pt-6 px-4 flex flex-wrap gap-8 text-left w-full sm:flex-nowrap lg:w-auto">
             <?php if ($block->hasProductUrl()): ?>
@@ -95,7 +112,7 @@ $isVisibleProduct = $product->isVisibleInSiteVisibility();
                         <span class="label sr-only"><?= $escaper->escapeHtml(__('Qty')) ?></span>
                         <input id="cart-<?= $escaper->escapeHtmlAttr($item->getId()) ?>-qty"
                                name="cart[<?= $escaper->escapeHtmlAttr($item->getId()) ?>][qty]"
-                               value="<?= $escaper->escapeHtmlAttr($block->getQty()) ?>"
+                               value="<?= $escaper->escapeHtmlAttr($qty) ?>"
                                type="number"
                                size="4"
                                step="any"
@@ -118,7 +135,7 @@ $isVisibleProduct = $product->isVisibleInSiteVisibility();
     </tr>
     <tr class="item-actions">
         <td colspan="4">
-            <div class="flex justify-end gap-4 p-4 pt-2">
+            <div class="flex items-center justify-end gap-4 p-4 pt-2">
                 <?= /* @noEscape */ $block->getActions($item) ?>
             </div>
         </td>

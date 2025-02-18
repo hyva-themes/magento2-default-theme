@@ -37,8 +37,8 @@ $gliderUrl = $block->getViewFileUrl('Magento_PageBuilder::js/glider.min.js');
                 const gliderNext = carousel.querySelector('.glider-next');
 
                 const glider = new Glider(gliderElement, {
-                    slidesToShow: 2,
-                    slidesToScroll: 2,
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
                     scrollLock: true,
                     draggable: true,
                     dragVelocity: 2.5,
@@ -49,14 +49,21 @@ $gliderUrl = $block->getViewFileUrl('Magento_PageBuilder::js/glider.min.js');
                     },
                     responsive: [
                         {
-                            breakpoint: 768,
+                            breakpoint: 640,
+                            settings: {
+                                slidesToShow: 2,
+                                slidesToScroll: 2,
+                            }
+                        },
+                        {
+                            breakpoint: 1024,
                             settings: {
                                 slidesToShow: 3,
                                 slidesToScroll: 3,
                             }
                         },
                         {
-                            breakpoint: 1024,
+                            breakpoint: 1280,
                             settings: {
                                 slidesToShow: 4,
                                 slidesToScroll: 4,

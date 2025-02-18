@@ -23,27 +23,6 @@ use Magento\Framework\View\Element\Template;
 
                 return swatchConfig;
             },
-            getAllAttributeOptions(attributeId) {
-                return (
-                    this.optionConfig.attributes[attributeId] &&
-                    this.optionConfig.attributes[attributeId].options
-                ) || []
-            },
-            optionIsActive(attributeId, optionId) {
-                // return true if a product with this option is in stock
-                return !!this.getAllowedAttributeOptions(attributeId).find(
-                    option => option.id === optionId
-                )
-            },
-            optionIsEnabled(attributeId, optionId) {
-                // return true if a product with this option is enabled
-                for (const productId in this.optionConfig.index) {
-                    if (this.optionConfig.index[productId][attributeId] === optionId) {
-                        return true;
-                    }
-                }
-                return false;
-            },
             mapSwatchTypeNumberToTypeCode(typeNumber) {
                 switch ("" + typeNumber) {
                     case "1":

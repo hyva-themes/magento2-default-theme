@@ -54,6 +54,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             deleteItemFromCart(itemId) {
                 this.isLoading = true;
 
+                const itemData = this.cart.items.filter((item) => item['item_id'] === itemId);
                 const formKey = hyva.getFormKey();
                 const postUrl = BASE_URL + 'checkout/sidebar/removeItem/';
 
@@ -83,7 +84,12 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                         text: result.success
                             ? '<?= $escaper->escapeJs(__('You removed the item.')) ?>'
                             : result.error_message
-                    }], result.success ? 5000 : 0)
+                    }], result.success ? 5000 : 0);
+
+                    if (result.success && itemData) {
+                        window.dispatchEvent(new CustomEvent('cart-item-removed', { detail: itemData }));
+                    }
+
                     window.dispatchEvent(new CustomEvent('reload-customer-section-data'));
                 });
             },
@@ -197,18 +203,31 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     <div class="relative grid gap-6 sm:gap-8 px-1 py-3 sm:px-3 bg-white border-b border-container overflow-y-auto overscroll-y-contain">
                         <template x-for="item in cartItems">
                             <div class="flex items-start p-3 space-x-4 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100">
-                                <a :href="item.product_url"
-                                   class="w-1/4"
-                                   :aria-label="hyva.strf('<?= $escaper->escapeJs(__('Product "%0"')) ?>', item.product_name)"
-                                >
-                                    <img
-                                        :src="item.product_image.src"
-                                        :width="item.product_image.width"
-                                        :height="item.product_image.height"
-                                        loading="lazy"
-                                        alt=""
-                                    />
-                                </a>
+                                <template x-if="item.product_has_url && item.is_visible_in_site_visibility">
+                                    <a :href="item.product_url"
+                                       class="w-1/4 !ml-0"
+                                       :aria-label="hyva.strf('<?= $escaper->escapeJs(__('Product "%0"')) ?>', item.product_name)"
+                                    >
+                                        <img
+                                            :src="item.product_image.src"
+                                            :width="item.product_image.width"
+                                            :height="item.product_image.height"
+                                            loading="lazy"
+                                            :alt="item.product_name"
+                                        />
+                                    </a>
+                                </template>
+                                <template x-if="!item.product_has_url || !item.is_visible_in_site_visibility">
+                                    <div class="w-1/4 !ml-0">
+                                        <img
+                                            :src="item.product_image.src"
+                                            :width="item.product_image.width"
+                                            :height="item.product_image.height"
+                                            loading="lazy"
+                                            :alt="item.product_name"
+                                        />
+                                    </div>
+                                </template>
                                 <div class="w-3/4 space-y-2">
                                     <div>
                                         <p class="text-xl">

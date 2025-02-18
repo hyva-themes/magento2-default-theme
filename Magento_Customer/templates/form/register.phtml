@@ -191,7 +191,7 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                         </div>
                     </div>
                 </div>
-                <div class="field field-reserved">
+                <div class="field field-reserved required">
                     <label for="password-confirmation" class="label">
                         <span><?= $escaper->escapeHtml(__('Confirm Password')) ?></span>
                     </label>
@@ -379,7 +379,7 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                                :required="isZipRequired"
                                @change="onChange"
                                data-validate='{"postcode": true}'
-                        class="form-input validate-zip-international
+                               class="form-input validate-zip-international
                         <?= $escaper->escapeHtmlAttr($this->helper(Address::class)->getAttributeValidationClass('postcode')) ?>">
                     </div>
                 </div>
@@ -396,7 +396,7 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                         ?>
                         <select name="country_id"
                                 id="country"
-                                title="Country"
+                                title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('country_id') ?>"
                                 required
                                 class="form-select"
                                 x-ref="country_id"

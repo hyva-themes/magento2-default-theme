@@ -58,7 +58,7 @@ $configuredLinks          = $configuredValues->getLinks() ?? [];
                 const elementToSelect = this.$root.querySelector('#links_' + optionId);
                 if (elementToSelect) {
                     elementToSelect.checked = value;
-                    elementToSelect.dispatchEvent(new CustomEvent('change'));
+                    elementToSelect.dispatchEvent(new Event('change'));
                 }
             },
             validate() {

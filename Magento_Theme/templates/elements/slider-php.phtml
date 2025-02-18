@@ -119,8 +119,8 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
                      @scroll.debounce="calcActive"
                 >
                     <?php foreach ($items as $item): ?>
-                        <div class="js_slide flex shrink-0 <?= $escaper->escapeHtmlAttr($slideItemClasses) ?>">
-                            <div class="mx-1 card w-full card-interactive">
+                        <div class="js_slide flex flex-col shrink-0 <?= $escaper->escapeHtmlAttr($slideItemClasses) ?>">
+                            <div class="mx-1 grow card w-full card-interactive">
                                  <?= $sliderItemRenderer->setItem($item)->toHtml() ?>
                             </div>
                         </div>

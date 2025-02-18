@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="checkout.cart.coupon">
+            <!-- Do not remove the view model from layout! -->
+            <!--
+                Passing the view model in the layout xml keeps the recaptcha implementation in sync with Magento,
+                that means by disabling Magento's recaptcha modules, the ViewModel will not be available and therefore
+                the recaptcha code snippets will not be included.
+                If we would use the 'require' way, we would need some kind of logic inside the view model to detect
+                whether the corresponding recaptcha Magento modules are available or not.
+            -->
+            <arguments>
+                <argument name="viewModelRecaptcha" xsi:type="object">Hyva\Theme\ViewModel\ReCaptcha</argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>

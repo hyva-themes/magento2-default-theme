@@ -47,39 +47,46 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
                             this.changeOption(attributeId, value + '');
                         }
                     }
+                    this.preselectQuerystringItems();
+                    this.preselectLocationHashItems();
                 });
+            },
+            productIndex: 0,
+            productIndexForPrice: 0,
+            optionIsActive(attributeId, optionId) {
+                <?php /* return true if a product with this option is in stock */ ?>
+                return !!this.getAllowedAttributeOptions(attributeId).find(
+                    option => option.id === optionId
+                )
+            },
+            optionIsEnabled(attributeId, optionId) {
+                <?php /* return true if a product with this option is enabled */ ?>
+                for (const productId in this.optionConfig.index) {
+                    if (this.optionConfig.index[productId][attributeId] === optionId) {
+                        return true;
+                    }
+                }
+                return false;
             },
             findSimpleIndex() {
                 <?php /* a better method name would be `updateSelectedSimpleIndex` but keeping for bc */ ?>
                 this.productIndex = this.calculateSimpleIndexForPartialSelection(this.selectedValues);
+                this.productIndexForPrice = this.findCheapestProductForPartialSelection(this.selectedValues);
             },
             calculateSimpleIndexForPartialSelection(selectedValues) {
                 if (selectedValues.length === 0) return 0;
-                let productIndexIds = Object.keys(this.optionConfig.index);
-                Object.keys(this.optionConfig.attributes).forEach((attribute) => {
-                    <?php
-                    // for each attribute, check if a value is selected for the attribute
-                    // if it is, filter all products to only include those that match the selected attribute value
-                    ?>
-                    const productsWithAttributeMatch = selectedValues[attribute]
-                        ? productIndexIds.filter((productIndex) => {
-                            return this.optionConfig.index[productIndex][attribute] === this.selectedValues[attribute]
-                        })
-                        : [];
-
-                    <?php /* if we found matches, only keep the ones that match, otherwise, keep all products */ ?>
-                    productIndexIds = productsWithAttributeMatch.length ? productsWithAttributeMatch : productIndexIds
-                })
-                return productIndexIds[0];
+                return this.findProductIdsForPartialSelection(selectedValues)[0];
             },
             calculateSimpleIndexForFullSelection(selectedValues) {
+                if (! this.isFullSelection(selectedValues)) return false;
+
                 const productIndexes = this.optionConfig.index;
                 return Object.keys(productIndexes).find(productIndex => {
                     const productCandidateOptions = productIndexes[productIndex];
 
                     for (const productOption in productCandidateOptions) {
                         if (
-                            ! selectedValues[productOption] ||
+                            !selectedValues[productOption] ||
                             selectedValues[productOption] !== productCandidateOptions[productOption]
                         ) {
                             return false;
@@ -88,7 +95,6 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
                     return productIndex;
                 });
             },
-            productIndex: 0,
             findAllowedAttributeOptions() {
                 <?php /* a better method name would be `updateAllowedAttributeOptions` but keeping for bc */ ?>
                 this.allowedAttributeOptions = this.calculateAllowedAttributeOptions(this.selectedValues);
@@ -170,6 +176,12 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
             getAllowedAttributeOptions(attributeId) {
                 return this.allowedAttributeOptions[attributeId] || []
             },
+            getAllAttributeOptions(attributeId) {
+                return (
+                    this.optionConfig.attributes[attributeId] &&
+                    this.optionConfig.attributes[attributeId].options
+                ) || []
+            },
             getProductIdsForOption(option) {
                 const attributeId = this.findAttributeByOptionId(option.id);
                 const allOptions = this.optionConfig.attributes[attributeId];
@@ -208,7 +220,8 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
             },
             getAttributeOptionLabel(option) {
                 const optionProduct = this.findProductIdToUseForOptionPrice(option);
-                if ((! optionProduct) || (optionProduct === this.productIndex)) {
+
+                if ((! optionProduct) || (optionProduct === this.productIndexForPrice)) {
                     return option.label;
                 }
 
@@ -223,13 +236,10 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
                 return option.label;
             },
             getOptionPriceAdjustmentBasePrice() {
-                if (this.optionConfig.optionPrices[this.productIndex]) {
-                    return this.optionConfig.optionPrices[this.productIndex].finalPrice.amount
+                if (this.optionConfig.optionPrices[this.productIndexForPrice]) {
+                    return this.optionConfig.optionPrices[this.productIndexForPrice].finalPrice.amount
                 }
-                const cheapestForSelection = this.findCheapestProductForPartialSelection(this.selectedValues);
-                return this.optionConfig.optionPrices[cheapestForSelection]
-                    ? this.optionConfig.optionPrices[cheapestForSelection].finalPrice.amount
-                    : this.optionConfig.prices.finalPrice.amount; // default price if no option selection
+                return this.optionConfig.prices.finalPrice.amount; // default price if no option selection
             },
             clearOptionIfActive(optionId, value) {
                 if (this.selectedValues[optionId] === value) {
@@ -258,6 +268,9 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
                 this.findAllowedAttributeOptions();
                 this.updatePrices();
                 this.updateGallery();
+
+                const candidates = this.findProductIdsForPartialSelection(this.selectedValues);
+
                 window.dispatchEvent(
                     new CustomEvent(
                         'configurable-selection-changed',
@@ -268,22 +281,21 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
                                 value: value,
                                 productIndex: this.productIndex,
                                 selectedValues: this.selectedValues,
-                                candidates: this.findProductIdsForPartialSelection(this.selectedValues),
+                                candidates: candidates,
+                                skuCandidates: Object.values(candidates).map(id => this.optionConfig.sku[id]),
                             }
                         }
                     )
                 );
             },
             calculateIsMinimalPrice() {
-                return (
-                    this.selectedValues.filter(value => !!value).length <
-                        Object.keys(this.optionConfig.attributes).length
-                );
+                return ! this.isFullSelection(this.selectedValues);
+            },
+            isFullSelection(selectedValues) {
+                return Object.values(selectedValues).length === Object.keys(this.optionConfig.attributes).length;
             },
             updatePrices() {
-                const value = this.productIndex ?
-                    this.optionConfig.optionPrices[this.productIndex] :
-                    this.optionConfig.prices;
+                const value = this.optionConfig.optionPrices[this.productIndexForPrice] || this.optionConfig.prices;
                 window.dispatchEvent(
                     new CustomEvent(
                         "update-prices-" + this.productId,
@@ -316,8 +328,6 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
                 <?php if ($currentProduct->exists()): /* Only preconfigure the main product on product detail pages */ ?>
                 if (this.productId === '<?= (int) $currentProduct->get()->getEntityId() ?>') {
                     this.preselectCartItems(data);
-                    this.preselectQuerystringItems();
-                    this.preselectLocationHashItems();
                 }
                 <?php endif; ?>
             },
@@ -350,7 +360,8 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
             },
             preselectItemsBasedOnLocation(getLocationValue) {
                 Object.values(this.optionConfig.attributes).map(attribute => {
-                    this.changeOption(attribute.id, getLocationValue(attribute))
+                    const v = getLocationValue(attribute);
+                    v && this.changeOption(attribute.id, v)
                 });
             }
         }

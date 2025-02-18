@@ -24,9 +24,9 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 /** @var AddressViewModel $addressViewModel */
 $addressViewModel = $viewModels->require(AddressViewModel::class);
 ?>
-<div class="field date <?= $block->isRequired() ? 'required' : '' ?>"
-     x-data="initDatePicker()"
-     x-init="[initDate(), recalcDaysGrid()]"
+<div
+    class="field date <?= $block->isRequired() ? 'required' : '' ?>"
+    x-data="initDatePicker()"
 >
     <label for="<?= $escaper->escapeHtmlAttr($block->getHtmlId()) ?>" class="label">
         <span><?= $escaper->escapeHtml($block->getStoreLabel('dob')) ?></span>
@@ -60,11 +60,12 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
         </div>
 
         <div
-            class="absolute left-0 top-full p-3 mt-12 bg-white rounded-lg shadow"
+            class="absolute left-0 top-full p-3 mt-12 bg-white rounded-lg shadow calendar-window"
             style="width: 21rem"
-            x-cloak=""
+            x-cloak
             x-transition x-show="showDatepicker"
             @click.outside="showDatepicker = false"
+            @keydown="onCalendarKeydown($event)"
         >
 
             <div class="flex justify-between items-center mb-2">
@@ -72,6 +73,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
                     <select name="datepicker_month"
                         x-model="month"
                         class="text-sm rounded border-gray-300"
+                        @change="goToMonth(month)"
                     >
                         <template x-for="(monthName, index) in labels.monthNames">
                             <option :value="index" x-text="monthName"></option>
@@ -80,6 +82,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
                     <select name="datepicker_year"
                         x-model="year"
                         class="text-sm rounded border-gray-300"
+                        @change="recalcDaysGrid()"
                     >
                         <template x-for="option in yearRange">
                             <option :value="option" x-text="option"></option>
@@ -120,11 +123,11 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
                     </div>
                 </template>
                 <template x-for="(date, dateIndex) in dayNumbers" :key="dateIndex">
-                    <div class="p-1"
+                    <button type="button" class="p-1"
                         :style="getDayStyle(date)"
+                            @click="if (canSelectDate(date)) { setDate(date) }"
                     >
                         <div
-                            @click="if (canSelectDate(date)) { setDate(date) }"
                             x-text="date"
                             class="text-center text-sm rounded-full transition-colors
                                 flex items-center justify-center h-8"
@@ -134,7 +137,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
                                 'text-gray-500': isInFuture(date)
                             }"
                         ></div>
-                    </div>
+                    </button>
                 </template>
             </div>
 
@@ -161,13 +164,19 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
             yearRange: [],
             labels: labelsConfig,
             dateFormatter: DateFormatter(format),
+            calendarWindow: null,
 
-            initDate() {
+            init() {
                 const today = new Date();
-                this.month = today.getMonth();
-                this.year = today.getFullYear();
                 this.initYearsRange();
                 this.correctWeeks();
+
+                this.$nextTick(() => {
+                    this.month = today.getMonth();
+                    this.year = today.getFullYear();
+                    this.recalcDaysGrid();
+                    this.calendarWindow = this.$root.querySelector('.calendar-window');
+                });
             },
 
             initYearsRange() {
@@ -205,9 +214,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
 
             setDate(date) {
                 const selectedDate = new Date(this.year, this.month, date);
-                const value = this.dateFormatter.format(selectedDate);
-
-                this.value = value;
+                this.value = this.dateFormatter.format(selectedDate);
                 this.showDatepicker = false;
             },
 
@@ -285,8 +292,26 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
                     this.showDatepicker = false;
                 }
 
+                if (keyCode === "Tab") {
+                    return;
+                }
+
+                if (keyCode === "Enter") {
+                    evt.preventDefault();
+                    this.showDatepicker = true;
+                    hyva.trapFocus(this.calendarWindow);
+                }
+
                 if (keyCode !== "Enter") {
                     evt.preventDefault();
+                }
+            },
+            onCalendarKeydown(evt) {
+                const keyCode = evt.code;
+
+                if (keyCode === "Escape") {
+                    hyva.releaseFocus(this.calendarWindow);
+                    this.showDatepicker = false;
                 }
             }
         }

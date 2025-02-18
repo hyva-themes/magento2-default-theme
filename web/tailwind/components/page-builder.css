@@ -450,21 +450,6 @@ div {
     }
 }
 
-/* Products */
-[data-content-type='products'][data-appearance='carousel'] {
-    [data-role='glider-content'] {
-        grid-template-columns: repeat(100, calc(50% - 1rem));
-
-        @screen md {
-            grid-template-columns: repeat(100, calc(33% - 1rem));
-        }
-
-        @screen lg {
-            grid-template-columns: repeat(100, calc(25% - 1rem));
-        }
-    }
-}
-
 /**
  * Glider
  */

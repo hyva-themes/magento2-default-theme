@@ -202,10 +202,10 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                 this.open = true
                 this.$nextTick(() => hyva.trapFocus(this.$refs['mobileMenuNavLinks']));
                 // Prevent from body scrolling while mobile menu opened
-                document.body.style.position = 'fixed';
+                document.body.style.overflow = 'hidden';
             },
             closeMenu() {
-                document.body.style.position = '';
+                document.body.style.overflow = '';
 
                 if (this.open) {
                     this.$nextTick(() => this.$refs['mobileMenuTrigger'].focus() || hyva.releaseFocus());
