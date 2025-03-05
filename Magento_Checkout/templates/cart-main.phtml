@@ -148,14 +148,16 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
         }
     }
 </script>
-<div x-data="initCartForm()"
-     class="cart-form clearfix"
-     @private-content-loaded.window="checkCartShouldUpdate($event.detail.data)"
-     @storage.window="onStorageChange($event)"
+<section
+    x-data="initCartForm()"
+    class="cart-form"
+    aria-label="<?= $escaper->escapeHtmlAttr(__('Shopping Cart')) ?>"
+    @private-content-loaded.window="checkCartShouldUpdate($event.detail.data)"
+    @storage.window="onStorageChange($event)"
 >
     <?php if ($block->getItemsCount()): ?>
         <?= $block->getChildHtml('with-items') ?>
     <?php else: ?>
         <?= $block->getChildHtml('no-items') ?>
     <?php endif; ?>
-</div>
+</section>
