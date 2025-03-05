@@ -51,6 +51,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                 id="newsletter-subscribe"
                 class="form-input inline-flex w-full"
                 placeholder="<?= $escaper->escapeHtmlAttr(__('Enter your email address')) ?>"
+                autocomplete="email"
                 aria-describedby="footer-newsletter-heading"
             >
             <?= $block->getBlockHtml('formkey') ?>
