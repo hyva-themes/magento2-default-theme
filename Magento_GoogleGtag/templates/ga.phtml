@@ -8,12 +8,14 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Framework\Escaper;
 use Hyva\Theme\ViewModel\StoreConfig;
 use Magento\GoogleGtag\Block\Ga;
 
 /** @var Ga $block */
 /** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
 /** @var ViewModelRegistry $viewModels */
 
 /** @var $storeConfig StoreConfig */
@@ -100,5 +102,6 @@ $analyticsData = $block->getAnalyticsData();
             }
         }())
     </script>
+    <?php $hyvaCsp->registerInlineScript() ?>
     <!-- END GOOGLE ANALYTICS 4 CODE -->
 <?php endif; ?>

@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Hyva\Theme\ViewModel\ReCaptcha;
 use Magento\Framework\Escaper;
 use Hyva\Theme\ViewModel\StoreConfig;
@@ -15,6 +16,7 @@ use Magento\Framework\View\Element\Template;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
 /** @var ViewModelRegistry $viewModels */
 
 // reCaptcha v2 "I'm not a robot" form element
@@ -68,3 +70,4 @@ $grecaptchaContainerId = "grecaptcha-container-$instanceSuffix";
         }
     })();
 </script>
+<?php $hyvaCsp->registerInlineScript() ?>
