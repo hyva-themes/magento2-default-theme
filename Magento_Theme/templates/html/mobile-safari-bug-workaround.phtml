@@ -9,11 +9,13 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
 /** @var ViewModelRegistry $viewModels */
 
 /*
@@ -28,3 +30,4 @@ use Magento\Framework\View\Element\Template;
 <script>
     document.body.addEventListener('touchstart', () => {}, {passive: true})
 </script>
+<?php $hyvaCsp->registerInlineScript() ?>

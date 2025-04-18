@@ -11,6 +11,7 @@ declare(strict_types=1);
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\Currency;
 use Hyva\Theme\ViewModel\HeroiconsSolid;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
@@ -18,6 +19,7 @@ use Magento\Framework\View\Element\Template;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp   */
 /** @var ViewModelRegistry $viewModels */
 
 /** @var HeroiconsSolid $heroiconsSolid */
@@ -29,7 +31,7 @@ $currencyViewModel = $viewModels->require(Currency::class);
 <?php if ($currencyViewModel->getCurrencyCount() > 1): ?>
     <?php $currencies = $currencyViewModel->getCurrencies(); ?>
     <?php $currentCurrencyCode = $currencyViewModel->getCurrentCurrencyCode(); ?>
-    <div x-data="{ open: false }"
+    <div x-data="initCurrencySwitcher"
          class="w-full sm:w-1/2 md:w-full pr-4"
     >
         <h2
@@ -40,13 +42,13 @@ $currencyViewModel = $viewModels->require(Currency::class);
         </h2>
         <div class="relative inline-block text-left">
             <div>
-                <button @click.prevent="open = !open"
-                        @click.outside="open = false"
-                        @keydown.window.escape="open=false"
+                <button @click.prevent="toggleOpen"
+                        @click.outside="setOpenFalse"
+                        @keydown.window.escape="setOpenFalse"
                         type="button"
                         class="inline-flex justify-center w-full form-select px-4 py-2 bg-white focus:outline-none"
                         aria-haspopup="true"
-                        :aria-expanded="open"
+                        :aria-expanded="ariaExpanded"
                 >
                     <?= $escaper->escapeHtml($currentCurrencyCode) ?>
                     <?php if ($currencies[$currentCurrencyCode]): ?>
@@ -55,7 +57,7 @@ $currencyViewModel = $viewModels->require(Currency::class);
                     <?= $heroiconsSolid->chevronDownHtml("flex self-center h-5 w-5 -mr-1 ml-2", 25, 25) ?>
                 </button>
             </div>
-            <nav x-cloak=""
+            <nav x-cloak
                  x-show="open"
                  class="absolute right-0 top-full z-20 w-full lg:w-56 py-2 mt-1 overflow-auto origin-top-left rounded-sm shadow-lg sm:w-48 lg:mt-3 bg-container-lighter"
                  aria-labelledby="currency-heading"
@@ -67,7 +69,8 @@ $currencyViewModel = $viewModels->require(Currency::class);
                                role="link"
                                class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
                                aria-describedby="currency-heading"
-                               @click.prevent='hyva.postForm(<?= /* @noEscape */ $currencyViewModel->getSwitchCurrencyPostData($code) ?>)'
+                               @click.prevent="switchCurrency"
+                               data-currency-data="<?= $escaper->escapeHtmlAttr($currencyViewModel->getSwitchCurrencyPostData($code)) ?>"
                             >
                                 <?= $escaper->escapeHtml($code) ?> - <?= $escaper->escapeHtml($name) ?>
                             </button>
@@ -77,4 +80,18 @@ $currencyViewModel = $viewModels->require(Currency::class);
             </nav>
         </div>
     </div>
+    <script>
+        function initCurrencySwitcher() {
+            return hyva.createBooleanObject('open', false, {
+                ariaExpanded() {
+                    return this.open() ? 'true' : 'false';
+                },
+                switchCurrency() {
+                    hyva.postForm(this.$el.dataset.currencyData)
+                }
+            });
+        }
+        window.addEventListener('alpine:init', () => Alpine.data('initCurrencySwitcher', initCurrencySwitcher), {once: true})
+    </script>
+    <?php $hyvaCsp->registerInlineScript() ?>
 <?php endif; ?>

@@ -100,7 +100,7 @@ $cartItemOutputViewModel = $viewModels->require(ItemOutput::class);
                 ) ?>
                 <button @click="<?= /** @noEscape */ $confirmation->getShowJs() ?>.then(result => result && hyva.postForm(postData))"
                         type="button" title="<?= $escaper->escapeHtmlAttr(__('Clear Shopping Cart')) ?>"
-                        class="action clear" id="empty_cart_button">
+                        class="action clear btn" id="empty_cart_button">
                     <span><?= $escaper->escapeHtml(__('Clear Shopping Cart')) ?></span>
                 </button>
             </div>

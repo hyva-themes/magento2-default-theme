@@ -61,7 +61,7 @@ $productName = $block->getProduct()->getName();
         </div>
         <div class="card w-full px-6 py-3">
             <?php foreach ($items as $review): ?>
-                <div itemscope itemprop="review" itemtype="http://schema.org/Review"
+                <div itemscope itemprop="review" itemtype="https://schema.org/Review"
                     class="border-b pb-4 my-4 border-container last:border-0 last:mb-0">
                     <?php if (count($review->getRatingVotes())): ?>
                         <div class="table">
@@ -72,7 +72,7 @@ $productName = $block->getProduct()->getName();
                                 $starsFilled = is_numeric($rating) ? floor($rating / 100 * $ratingSteps) : 0;
                                 $starsEmpty = floor($ratingSteps - $starsFilled);
                             ?>
-                            <div class="table-row" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+                            <div class="table-row" itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
                                 <div class="table-cell pr-6 align-middle text-left">
                                     <?= $escaper->escapeHtml($vote->getRatingCode()) ?>
                                 </div>

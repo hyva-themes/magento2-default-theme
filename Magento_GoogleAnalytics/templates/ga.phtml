@@ -8,10 +8,12 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\GoogleAnalytics\Block\Ga;
 use Magento\GoogleAnalytics\Helper\Data;
 
 /** @var $block Ga */
+/** @var HyvaCsp $hyvaCsp */
 
 $accountId = $block->getConfig(Data::XML_PATH_ACCOUNT);
 // phpcs:disable Generic.ControlStructures.InlineControlStructure.NotAllowed
@@ -103,3 +105,4 @@ if (empty($accountId)) return;
     window.addEventListener("load", new GoogleAnalytics().initGoogleAnalytics);
 
 </script>
+<?php $hyvaCsp->registerInlineScript() ?>

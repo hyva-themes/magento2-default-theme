@@ -65,7 +65,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                             <a
                                 id="downloadableProduct<?= $escaper->escapeHtmlAttr($item->getPurchased()->getOrderId()) ?>"
                                 href="<?= $escaper->escapeUrl($block->getOrderViewUrl($item->getPurchased()->getOrderId()))?>"
-                                title="<?= $escaper->escapeHtml(__('View Order')) ?>"
+                                title="<?= $escaper->escapeHtmlAttr(__('View Order')) ?>"
                                 aria-label="<?= $escaper->escapeHtmlAttr(__('View order') . ' ' . $item->getPurchased()->getOrderIncrementId()) ?>"
                                 class="underline hover:no-underline"
                             ><?= $escaper->escapeHtml($item->getPurchased()->getOrderIncrementId()) ?></a>
@@ -96,7 +96,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                     aria-label="<?= $escaper->escapeHtmlAttr(__('Start Download')) ?>"
                                     class="action download"
                                 >
-                                    <?= $heroicons->documentDownloadHtml(); ?>
+                                    <?= $heroicons->documentDownloadHtml('', 24, 24, ['aria-hidden' => true]); ?>
                                 </a>
                                 <?php if ($block->getIsOpenInNewWindow()): ?>
                                     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(

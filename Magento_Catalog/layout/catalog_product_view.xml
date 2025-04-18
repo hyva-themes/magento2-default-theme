@@ -12,7 +12,7 @@
     <update handle="catalog_product_opengraph"/>
     <update handle="hyva_product_slider" />
     <body>
-        <attribute name="itemtype" value="http://schema.org/Product"/>
+        <attribute name="itemtype" value="https://schema.org/Product"/>
         <attribute name="itemscope" value="itemscope"/>
         <referenceBlock name="page.main.title">
             <arguments>
@@ -22,7 +22,7 @@
         </referenceBlock>
         <referenceBlock name="root">
             <arguments>
-                <argument name="add_attribute" xsi:type="string">itemscope itemtype="http://schema.org/Product"
+                <argument name="add_attribute" xsi:type="string">itemscope itemtype="https://schema.org/Product"
                 </argument>
             </arguments>
         </referenceBlock>
