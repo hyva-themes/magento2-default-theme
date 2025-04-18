@@ -8,12 +8,14 @@
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Hyva\Theme\ViewModel\ReCaptcha;
 use Magento\Framework\Escaper;
 use Magento\Newsletter\Block\Subscribe;
 
 /** @var Subscribe $block */
 /** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
 /** @var ViewModelRegistry $viewModels */
 /** @var ReCaptcha $recaptcha */
 /** @var HeroiconsOutline $heroicons */
@@ -29,8 +31,8 @@ $recaptcha = $block->getData('viewModelRecaptcha');
         class="form subscribe"
         action="<?= $escaper->escapeUrl($block->getFormActionUrl()) ?>"
         method="post"
-        x-data="initNewsletterForm()"
-        @submit.prevent="submitForm()"
+        x-data="initNewsletterForm"
+        @submit.prevent="submitForm"
         id="newsletter-validate-detail"
         aria-label="<?= $escaper->escapeHtmlAttr(__('Subscribe to Newsletter')) ?>"
     >
@@ -51,6 +53,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                 id="newsletter-subscribe"
                 class="form-input inline-flex w-full"
                 placeholder="<?= $escaper->escapeHtmlAttr(__('Enter your email address')) ?>"
+                autocomplete="email"
                 aria-describedby="footer-newsletter-heading"
             >
             <?= $block->getBlockHtml('formkey') ?>
@@ -63,7 +66,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
             <template x-if="displayErrorMessage">
                 <p class="flex items-center text-red">
                     <span class="inline-block w-8 h-8 mr-3">
-                        <?= $heroicons->exclamationCircleHtml(); ?>
+                        <?= $heroicons->exclamationCircleHtml('', 24, 24, ['aria-hidden' => true]); ?>
                     </span>
                     <template x-for="errorMessage in errorMessages">
                         <span x-html="errorMessage"></span>
@@ -97,5 +100,8 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                 }
             }
         }
+
+        window.addEventListener('alpine:init', () => Alpine.data('initNewsletterForm', initNewsletterForm), {once: true})
     </script>
+    <?php $hyvaCsp->registerInlineScript() ?>
 </div>

@@ -57,6 +57,7 @@ $recipients = $formData->getRecipientData() ?? '[]';
                                id="sender-name"
                                type="text"
                                class="form-input"
+                               autocomplete="name"
                                required
                         />
                     </div>
@@ -73,6 +74,7 @@ $recipients = $formData->getRecipientData() ?? '[]';
                                id="sender-email"
                                type="email"
                                class="form-input"
+                               autocomplete="email"
                                required
                         />
                     </div>
@@ -88,6 +90,7 @@ $recipients = $formData->getRecipientData() ?? '[]';
                         <textarea name="sender[message]"
                                   class="form-input mt-2 w-full h-48"
                                   id="sender-message"
+                                  autocomplete="off"
                                   required
                         ><?= $escaper->escapeHtml($block->getMessage()) ?></textarea>
                     </div>
@@ -118,6 +121,7 @@ $recipients = $formData->getRecipientData() ?? '[]';
                                                    class="form-input"
                                                    :id="`recipients-name${index}`"
                                                    :name="`recipients[name][${index}]`"
+                                                   autocomplete="off"
                                                    required
                                                    x-model="field.name"
                                             />
@@ -133,6 +137,7 @@ $recipients = $formData->getRecipientData() ?? '[]';
                                                    :name="`recipients[email][${index}]`"
                                                    type="email"
                                                    class="form-input"
+                                                   autocomplete="off"
                                                    required
                                                    validate
                                                    x-model="field.email"

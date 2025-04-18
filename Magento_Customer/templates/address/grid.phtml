@@ -21,14 +21,14 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 
 <div class="block block-addresses-list">
     <div class="block-title text-2xl mb-6">
-<?= $escaper->escapeHtml(__('Address Book')) ?></div>
+        <?= $escaper->escapeHtml(__('Address Book')) ?>
+    </div>
     <div class="block-content" x-data="initAddresses()">
         <?php if ($additionalAddresses = $block->getAdditionalAddresses()): ?>
             <div class="card grid grid-cols-3 lg:grid-cols-6 my-6">
                 <div class="text-sm text-secondary p-2">
-                    <?= $escaper->escapeHtml(
-                        __('Company')
-                    ) ?></div>
+                    <?= $escaper->escapeHtml(__('Company')) ?>
+                </div>
                 <div class="hidden lg:block text-sm text-secondary p-2">
                     <?= $escaper->escapeHtml(__('Name')) ?>
                 </div>
@@ -46,7 +46,8 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 <?php foreach ($additionalAddresses as $address): ?>
                     <?php $i++ ?>
                     <div class="p-2 <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
-                        <?= $escaper->escapeHtml($address->getCompany()) ?></div>
+                        <?= $escaper->escapeHtml($address->getCompany()) ?>
+                    </div>
                     <div class="hidden lg:block p-2 <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
                         <?= $escaper->escapeHtml($address->getLastname()) ?>,
                         <?= $escaper->escapeHtml($address->getFirstname()) ?>
@@ -67,13 +68,13 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                 'customer/address/edit',
                                 ['id' => $address->getId()]
                             )) ?>">
-                            <?= $heroicons->pencilAltHtml(); ?>
+                            <?= $heroicons->pencilAltHtml('', 24, 24, ['aria-hidden' => true]); ?>
                             <span></span>
                         </a>
                         <a class="action delete ml-2 inline-block text-sm underline text-secondary-darker"
                            title="<?= $escaper->escapeHtmlAttr(__('Delete')) ?>"
                            @click.prevent="deleteAddressById(<?= $escaper->escapeJs($address->getId()) ?>)" href="#">
-                            <?= $heroicons->trashHtml(); ?>
+                            <?= $heroicons->trashHtml('', 24, 24, ['aria-hidden' => true]); ?>
                         </a>
                     </div>
                 <?php endforeach; ?>
@@ -116,7 +117,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 <div class="actions-toolbar">
     <div class="primary">
         <a href="<?= $escaper->escapeUrl($block->getUrl('customer/address/new')) ?>"
-           class="btn btn-primary block w-full uppercase text-center">
+           class="btn btn-primary">
             <span>
                 <?= $escaper->escapeHtml(__('Add New Address')) ?>
             </span>

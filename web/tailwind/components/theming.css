@@ -2,10 +2,6 @@ body {
     @apply bg-container;
 }
 
-#cart-drawer {
-    @apply text-black;
-}
-
 [x-cloak] {
     display: none !important;
 }

@@ -10,14 +10,16 @@ declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Hyva\Theme\ViewModel\Store as StoreViewModel;
 use Magento\Cookie\Block\Html\Notices;
 use Magento\Framework\Escaper;
 use Magento\Cookie\Helper\Cookie;
 
 /** @var Notices $block */
-/** @var Escaper $escaper */
 /** @var Cookie $cookieHelper */
+/** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
 /** @var ViewModelRegistry $viewModels */
 
 /** @var HeroiconsOutline $heroicons */
@@ -56,6 +58,9 @@ if ($cookieHelper->isCookieRestrictionModeEnabled()): ?>
             checkAcceptCookies() {
                 this.showCookieBanner = ! isAllowedSaveCookie();
             },
+            hideCookieBanner() {
+                this.showCookieBanner = false;
+            },
             setAcceptCookies() {
                 const cookieExpires = this.cookieLifetime / 60 / 60 / 24;
                 hyva.setCookie(this.cookieName, this.cookieValue, cookieExpires);
@@ -64,15 +69,17 @@ if ($cookieHelper->isCookieRestrictionModeEnabled()): ?>
                 } else {
                     window.dispatchEvent(new CustomEvent('user-allowed-save-cookie'));
                 }
+                this.showCookieBanner = false;
             }
         }
     }
+    window.addEventListener('alpine:init', () => Alpine.data('initCookieBanner', initCookieBanner), {once: true})
 </script>
-
+    <?php $hyvaCsp->registerInlineScript() ?>
 <section id="notice-cookie-block"
          aria-label="<?= $escaper->escapeHtmlAttr(__('We use cookies to make your experience better.')) ?>"
-         x-data="initCookieBanner()"
-         x-init="checkAcceptCookies()"
+         x-data="initCookieBanner"
+         x-init="checkAcceptCookies"
          x-defer="idle"
 >
     <template x-if="showCookieBanner">
@@ -81,9 +88,13 @@ if ($cookieHelper->isCookieRestrictionModeEnabled()): ?>
              class="container fixed py-0 right-0 bottom-0 z-30 flex max-w-full bg-container-darker
                 border-t-2 border-container-darker"
         >
-            <button @click="showCookieBanner = false;" aria-label="<?= $escaper->escapeHtmlAttr(__('Close panel')) ?>"
-                    class="absolute right-0 top-0 p-4">
-                <?= $heroicons->xHtml(); ?>
+            <button
+                @click="hideCookieBanner"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Close panel')) ?>"
+                title="<?= $escaper->escapeHtmlAttr(__('Close panel')) ?>"
+                class="absolute right-0 top-0 p-4"
+            >
+                <?= $heroicons->xHtml('', 24, 24, ['aria-hidden' => true]); ?>
             </button>
 
             <div class="p-2 pr-4">
@@ -94,9 +105,7 @@ if ($cookieHelper->isCookieRestrictionModeEnabled()): ?>
                 </p>
                 <p class="mb-1">
                     <span>
-                        <?= $escaper->escapeHtml(__( // phpcs:disable Generic.Files.LineLength.TooLong
-                            'To comply with the new e-Privacy directive, we need to ask for your consent to set the cookies.'
-                        )) // phpcs:enable ?>
+                        <?= $escaper->escapeHtml(__('To comply with the new e-Privacy directive, we need to ask for your consent to set the cookies.')) ?>
                     </span>
                 </p>
                 <p class="mb-4">
@@ -106,7 +115,7 @@ if ($cookieHelper->isCookieRestrictionModeEnabled()): ?>
                     </a>
                 </p>
                 <div class="my-2">
-                    <button @click="setAcceptCookies(); showCookieBanner = false"
+                    <button @click="setAcceptCookies"
                             id="btn-cookie-allow"
                             class="btn btn-primary"
                     >

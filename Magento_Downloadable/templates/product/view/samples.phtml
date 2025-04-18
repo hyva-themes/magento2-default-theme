@@ -30,11 +30,12 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         <div class="flex flex-col border-t border-gray-300 py-2 last:mb-6 last:border-b">
         <?php foreach ($samples as $sample): ?>
             <div class="block w-full text-left text-gray-700 mb-2">
-                <a href="<?= $escaper->escapeHtml($block->getSampleUrl($sample)) ?>"
+                <a href="<?= $escaper->escapeHtmlAttr($block->getSampleUrl($sample)) ?>"
                    download
                    <?= $block->getIsOpenInNewWindow() ? 'onclick="this.target=\'_blank\'"' : '' ?>
-                   class="item-link samples-item-link">
-                    <?= $heroicons->documentDownloadHtml(); ?>
+                   class="item-link samples-item-link"
+                >
+                    <?= $heroicons->documentDownloadHtml('', 24, 24, ['aria-hidden' => true]); ?>
                     <?= $escaper->escapeHtml($sample->getTitle()) ?>
                 </a>
             </div>

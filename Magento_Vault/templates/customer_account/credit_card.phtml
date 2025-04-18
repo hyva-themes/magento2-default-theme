@@ -36,7 +36,7 @@ $block->getParentBlock()->setData('cards_row_number', $i);
 <div class="p-2 flex <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
     <div class="text-sm"><?= $escaper->escapeHtml($block->getExpDate()) ?></div>
 </div>
-<div class="p-2 flex items-center hidden lg:block <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+<div class="p-2 items-center hidden lg:flex <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
     <div class="text-sm">
         <img src="<?= /* @noEscape */ $block->getIconUrl() ?>"
              width="<?= /* @noEscape */ $block->getIconWidth() ?>"

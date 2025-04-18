@@ -45,6 +45,9 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
             if (!form.action) {
                 return;
             }
+            window.dispatchEvent(new CustomEvent("cart-is-loading", { detail: {
+                isLoading: true
+            }}));
             controller.abort();
             controller = new AbortController();
 
@@ -77,6 +80,10 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
                         }], 10000
                     );
                 }
+            }).finally(() => {
+                window.dispatchEvent(new CustomEvent("cart-is-loading", { detail: {
+                    isLoading: false
+                }}));
             })
         }
     }( window.hyva = window.hyva || {} ));
@@ -87,6 +94,7 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
     function initCartForm(){
         return {
             cartIsEmpty: !!window.checkoutConfig,
+            isLoading: false,
             checkCartShouldUpdate(data) {
                 const cart = data.cart;
 
@@ -148,14 +156,18 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
         }
     }
 </script>
-<div x-data="initCartForm()"
-     class="cart-form clearfix"
-     @private-content-loaded.window="checkCartShouldUpdate($event.detail.data)"
-     @storage.window="onStorageChange($event)"
+<section
+    x-data="initCartForm()"
+    class="cart-form"
+    aria-label="<?= $escaper->escapeHtmlAttr(__('Shopping Cart')) ?>"
+    @private-content-loaded.window="checkCartShouldUpdate($event.detail.data)"
+    @storage.window="onStorageChange($event)"
+    @cart-is-loading.window="isLoading = ($event.detail && $event.detail.isLoading) || false"
 >
     <?php if ($block->getItemsCount()): ?>
         <?= $block->getChildHtml('with-items') ?>
     <?php else: ?>
         <?= $block->getChildHtml('no-items') ?>
     <?php endif; ?>
-</div>
+    <?= $block->getChildHtml('loading') ?>
+</section>
