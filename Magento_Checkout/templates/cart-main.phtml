@@ -99,7 +99,7 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
             isLoading: false,
             checkCartShouldUpdate(data) {
                 const cart = data.cart;
-                if (! cart) return;
+                if (!cart) return;
 
                 const cartIsEmptyState = window.checkoutConfig === false;
                 if (this.cartIsEmpty !== cartIsEmptyState) {
@@ -111,12 +111,12 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
 
                 if (this.cartIsEmpty) return;
 
-                if (! cart.items) {
+                if (!cart.items) {
                     this.reloadCartContent();
                     return;
                 }
 
-                if (! window.checkoutConfig && cart.items.length) {
+                if (!window.checkoutConfig && cart.items.length) {
                     this.reloadCartContent();
                     return;
                 }
