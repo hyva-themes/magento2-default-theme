@@ -9,15 +9,16 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 use Magento\LoginAsCustomerFrontendUi\ViewModel\Configuration;
 
-/**
- * @var Template $block
- * @var Escaper $escaper
- * @var ViewModelRegistry $viewModels
- */
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
+/** @var ViewModelRegistry $viewModels */
+
 $viewFileUrl = $block->getViewFileUrl('Magento_LoginAsCustomerFrontendUi::images/magento-icon.svg');
 
 /** @var Configuration $configurationViewModel */
@@ -27,8 +28,8 @@ if (!$configurationViewModel->isEnabled()) {
 }
 ?>
 <div class="bg-gray-900"
-     x-data="initLoginAsCustomer()"
-     @private-content-loaded.window="receiveCustomerData(event.detail.data)"
+     x-data="initLoginAsCustomer"
+     @private-content-loaded.window="receiveCustomerData"
 >
     <div class="container mx-auto py-1 px-1 sm:px-6 lg:px-8" x-show="isVisible">
         <div class="flex items-center justify-between flex-wrap">
@@ -57,7 +58,8 @@ if (!$configurationViewModel->isEnabled()) {
             websiteName: null,
             fullname: null,
             notificationText: '',
-            receiveCustomerData: function receiveCustomerData(data) {
+            receiveCustomerData: function receiveCustomerData() {
+                const data = this.$event.detail.data
                 if (data.customer) {
                     this.fullname = data.customer.fullname;
                 }
@@ -82,4 +84,6 @@ if (!$configurationViewModel->isEnabled()) {
             }
         }
     }
+    window.addEventListener('alpine:init', () => Alpine.data('initLoginAsCustomer', initLoginAsCustomer), {once: true})
 </script>
+<?php $hyvaCsp->registerInlineScript() ?>

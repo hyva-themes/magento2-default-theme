@@ -192,7 +192,7 @@ function initCompareOnCompareList() {
                                             ml-2"
                                             data-addto="wishlist"
                                         >
-                                            <?= $heroiconsSolid->heartHtml('', 20, 20); ?>
+                                            <?= $heroiconsSolid->heartHtml('', 20, 20, ['aria-hidden' => true]); ?>
                                         </button>
                                     <?php endif; ?>
                                     <button x-data="initCompareOnCompareList()"
@@ -202,7 +202,7 @@ function initCompareOnCompareList() {
                                         class="rounded-full w-9 h-9 bg-gray-200 p-0 border-0 inline-flex shrink-0
                                         items-center justify-center text-gray-500 hover:text-black ml-2"
                                         title="<?= $escaper->escapeHtmlAttr(__('Remove Product')) ?>">
-                                        <?= $heroicons->xHtml('', 20, 20); ?>
+                                        <?= $heroicons->xHtml('', 20, 20, ['aria-hidden' => true]); ?>
                                     </button>
                                 </div>
                             </div>

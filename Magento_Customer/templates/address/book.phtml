@@ -19,22 +19,22 @@ use Magento\Framework\Escaper;
 $heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
 <div class="block block-addresses-default my-6">
-    <div class="block-title block-title text-2xl mb-6">
+    <div class="block-title text-2xl mb-6">
             <?= $escaper->escapeHtml(__('Default Addresses')) ?>
     </div>
     <div class="grid-cols-2 block-content md:grid gap-x-4 gap-y-0 my-6">
-        <?php if ($customerDefaultBillingAddress = $block->getDefaultBilling()): ?>
+        <?php if ($customerDefaultBillingAddressId = $block->getDefaultBilling()): ?>
             <div class="box box-address-billing card">
                 <div class="text-gray-900 text-lg title-font font-medium mb-3">
                     <span><?= $escaper->escapeHtml(__('Default Billing Address')) ?></span>
                 </div>
                 <div class="box-content">
                     <address>
-                        <?= $block->getAddressHtml($block->getAddressById($customerDefaultBillingAddress)) ?>
+                        <?= $block->getAddressHtml($block->getAddressById($customerDefaultBillingAddressId)) ?>
                     </address>
                 </div>
                 <div class="box-actions">
-                    <a href="<?= $escaper->escapeUrl($block->getAddressEditUrl($customerDefaultBillingAddress)) ?>"
+                    <a href="<?= $escaper->escapeUrl($block->getAddressEditUrl($customerDefaultBillingAddressId)) ?>"
                        class="inline-flex items-center w-full mt-3 md:text-sm text-secondary
                         hover:text-secondary-darker"
                        >
@@ -58,18 +58,18 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             </div>
         <?php endif ?>
 
-        <?php if ($customerDefaultBillingAddress = $block->getDefaultShipping()): ?>
+        <?php if ($customerDefaultShippingAddressId = $block->getDefaultShipping()): ?>
             <div class="box box-address-shipping card">
                 <div class="text-gray-900 text-lg title-font font-medium mb-3">
                     <span><?= $escaper->escapeHtml(__('Default Shipping Address')) ?></span>
                 </div>
                 <div class="box-content">
                     <address>
-                        <?= $block->getAddressHtml($block->getAddressById($customerDefaultBillingAddress)) ?>
+                        <?= $block->getAddressHtml($block->getAddressById($customerDefaultShippingAddressId)) ?>
                     </address>
                 </div>
                 <div class="box-actions">
-                    <a href="<?= $escaper->escapeUrl($block->getAddressEditUrl($customerDefaultBillingAddress)) ?>"
+                    <a href="<?= $escaper->escapeUrl($block->getAddressEditUrl($customerDefaultShippingAddressId)) ?>"
                        class="inline-flex items-center w-full mt-3 md:text-sm text-secondary
                         hover:text-secondary-darker"
                     >

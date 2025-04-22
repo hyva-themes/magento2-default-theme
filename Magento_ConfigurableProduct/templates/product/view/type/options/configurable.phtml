@@ -28,7 +28,6 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
     </script>
 
     <div x-data="initConfigurableDropdownOptions_<?= (int) $productId ?>()"
-         x-init="init()"
          @private-content-loaded.window="onGetCartData($event.detail.data)"
          class="mb-6"
     >
@@ -37,34 +36,37 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
         </h2>
 
         <?php foreach ($attributes as $attribute): ?>
+            <?php $attributeId = $attribute->getAttributeId(); ?>
         <div class="flex flex-col sm:flex-row border-t last:border-b border-gray-300 py-2 w-full items-center">
 
             <label class="w-full sm:w-1/2 text-left text-gray-700 label"
-                   for="attribute<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>"
+                   for="attribute<?= $escaper->escapeHtmlAttr($attributeId) ?>"
             >
                 <span>
                     <?= $escaper->escapeHtml($attribute->getProductAttribute()->getStoreLabel()) ?>
                 </span>
             </label>
             <div class="w-full sm:ml-2 sm:w-1/2 text-left text-gray-900">
-                <select name="super_attribute[<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>]"
-                        id="attribute<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>"
+                <select name="super_attribute[<?= $escaper->escapeHtmlAttr($attributeId) ?>]"
+                        id="attribute<?= $escaper->escapeHtmlAttr($attributeId) ?>"
                         class="form-select super-attribute-select max-w-full"
-                        x-on:change="changeOption(<?= (int) $attribute->getAttributeId() ?>, event.target.value)"
+                        x-on:change="changeOption(<?= (int) $attributeId ?>, event.target.value)"
                         required>
                     <option value="">
                         <?= $escaper->escapeHtml(__('Choose an Option...')) ?>
                     </option>
                     <template
-                        x-for="(item, index) in getAllowedAttributeOptions(<?= (int) $attribute->getAttributeId() ?>)"
+                        x-for="(item, index) in getAllAttributeOptions(<?= (int) $attributeId ?>)"
                         :key="item.id"
                     >
+                        <template x-if="optionIsEnabled(<?= (int) $attributeId ?>, item.id)">
                         <option
                             :value="item.id"
                             x-html="getAttributeOptionLabel(item)"
-                            :selected="selectedValues[<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>] ===
-                                item.id">
+                            :disabled="!optionIsActive(<?= (int) $attributeId ?>, item.id)"
+                            :selected="selectedValues[<?= $escaper->escapeHtmlAttr($attributeId) ?>] === item.id">
                         </option>
+                        </template>
                     </template>
                 </select>
             </div>

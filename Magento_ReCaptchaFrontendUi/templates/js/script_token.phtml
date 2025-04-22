@@ -9,6 +9,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Hyva\Theme\ViewModel\ReCaptcha;
 use Magento\Framework\Escaper;
 use Hyva\Theme\ViewModel\StoreConfig;
@@ -16,6 +17,7 @@ use Magento\Framework\View\Element\Template;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
 /** @var ViewModelRegistry $viewModels */
 
 /** @var StoreConfig $storeConfig */
@@ -40,7 +42,7 @@ $formId     = $block->getData('form_id') ?? '';
 <?php /* render_script_tag is never set, it is present to force editors to see the code as JavaScript */ ?>
 <?php if ($block->getData('render_script_tag')): ?>
 <script>
-    <?php endif; ?>
+<?php endif; ?>
     if (!this.hasCaptchaToken) {
         this.errors = 1;
 
@@ -51,14 +53,18 @@ $formId     = $block->getData('form_id') ?? '';
                     '<?= $escaper->escapeJs($siteKey) ?>',
                     {action: '<?= $escaper->escapeJs($action) ?>'}
                 ).then((token) => {
-                    if (token && token.length > 0) {
+                    const tokenElement = $form['<?= $escaper->escapeJs($recaptcha->getResultTokenFieldName($formId)) ?>'];
+
+                    if (tokenElement && token && token.length > 0) {
                         $form['<?= $escaper->escapeJs($recaptcha->getResultTokenFieldName($formId)) ?>'].value = token;
                         this.errors = 0;
                         this.hasCaptchaToken = 1;
                         (this.submitForm || $form.submit).call(this);
                     } else {
                         this.errors = 1;
-                        const error = '<?= $escaper->escapeJs(__('ReCaptcha validation failed, please try again')) ?>';
+                        const error = tokenElement
+                            ? '<?= $escaper->escapeJs(__('ReCaptcha validation failed, please try again')) ?>'
+                            : '<?= $escaper->escapeJs(__('ReCaptcha token element is missing. Please refresh the page and trying again.')) ?>';
                         if (this.setErrorMessages) {
                             this.setErrorMessages([error])
                             this.displayErrorMessage = true;
@@ -84,6 +90,7 @@ $formId     = $block->getData('form_id') ?? '';
             script.addEventListener("load", executeGreCaptcha, false);
         }
     }
-    <?php if ($block->getData('render_script_tag')): ?>
+<?php if ($block->getData('render_script_tag')): ?>
 </script>
+    <?php $hyvaCsp->registerInlineScript() ?>
 <?php endif; ?>

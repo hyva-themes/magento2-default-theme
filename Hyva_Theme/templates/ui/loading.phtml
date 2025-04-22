@@ -18,18 +18,16 @@ use Magento\Framework\Escaper;
 /** @var SvgIcons $hyvaicons */
 $hyvaicons = $viewModels->require(SvgIcons::class);
 ?>
-<div class="flex flex-row justify-center items-center w-full h-full fixed select-none z-50"
-     style="left: 50%;top: 50%;transform: translateX(-50%) translateY(-50%);background: rgba(255,255,255,0.7);"
-     x-show="isLoading"
-     x-cloak
-     x-transition:enter="ease-out duration-200"
-     x-transition:enter-start="opacity-0"
-     x-transition:enter-end="opacity-100"
-     x-transition:leave="ease-in duration-200"
-     x-transition:leave-start="opacity-100"
-     x-transition:leave-end="opacity-0">
-    <?= $hyvaicons->loaderHtml('text-primary', 57, 57); ?>
-    <div class="ml-10 text-primary text-xl">
-        <?= $escaper->escapeHtml(__('Loading...')) ?>
+<div
+    class="z-50 fixed inset-0 grid place-items-center bg-white/70 text-primary"
+    x-cloak
+    x-show="isLoading"
+    x-transition.opacity.duration.200ms
+>
+    <div class="flex gap-10 items-center p-4">
+        <?= $hyvaicons->loaderHtml('', 57, 57, ['aria-hidden' => 'true']); ?>
+        <span class="text-xl select-none">
+            <?= $escaper->escapeHtml(__('Loading...')) ?>
+        </span>
     </div>
 </div>

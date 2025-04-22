@@ -15,7 +15,7 @@ use Magento\Framework\Escaper;
 <span
     <?php if ($block->getPriceId()): ?>x-data x-id="['<?= $escaper->escapeJs($block->getPriceId()) ?>']"<?php endif; ?>
     class="price-container <?= $escaper->escapeHtmlAttr($block->getAdjustmentCssClasses()) ?>"
-        <?= $block->getSchema() ? ' itemprop="offers" itemscope itemtype="http://schema.org/Offer"' : '' ?>
+        <?= $block->getSchema() ? ' itemprop="offers" itemscope itemtype="https://schema.org/Offer"' : '' ?>
 >
     <?php if ($block->getDisplayLabel()): ?>
         <span class="price-label"><?= $escaper->escapeHtml($block->getDisplayLabel()) ?></span>

@@ -215,7 +215,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
                     postcode: null
                 }
 
-                if (this.directoryData[countryId].regions) {
+                if (this.directoryData[countryId] && this.directoryData[countryId].regions) {
                     this.cartData.address.regionCode = "";
                     this.cartData.address.regionId = 0;
 
@@ -259,7 +259,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
             saveToCustomerSectionData(){
                 const browserStorage = hyva.getBrowserStorage();
 
-                const sectionData = JSON.parse(browserStorage.getItem('mage-cache-storage'));
+                const sectionData = JSON.parse(browserStorage.getItem('mage-cache-storage')) || {};
 
                 if (!sectionData['checkout-data']) {
                     sectionData['checkout-data'] = {};
@@ -290,7 +290,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
             },
             getSortedCountries(){
                 return Object.keys(this.directoryData)
-                    .filter(countryKey => countryKey !== 'data_id')
+                    .filter(countryKey => countryKey !== 'data_id' && this.directoryData[countryKey].name)
                     .sort((a,b) => {
                         if (this.directoryData[a].name < this.directoryData[b].name) {
                             return -1
