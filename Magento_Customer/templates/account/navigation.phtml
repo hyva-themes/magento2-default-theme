@@ -17,7 +17,7 @@ use Magento\Framework\Escaper;
         <strong><?= $escaper->escapeHtml(__('My Account')) ?></strong>
     </div>
     <div class="content">
-        <nav class="account-nav">
+        <nav class="account-nav" aria-label="<?= $escaper->escapeHtmlAttr(__('My Account')) ?>">
             <ul class="nav items">
                 <?= $block->getChildHtml() ?>
             </ul>

@@ -12,7 +12,7 @@
     <update handle="catalog_product_opengraph"/>
     <update handle="hyva_product_slider" />
     <body>
-        <attribute name="itemtype" value="http://schema.org/Product"/>
+        <attribute name="itemtype" value="https://schema.org/Product"/>
         <attribute name="itemscope" value="itemscope"/>
         <referenceBlock name="page.main.title">
             <arguments>
@@ -22,7 +22,7 @@
         </referenceBlock>
         <referenceBlock name="root">
             <arguments>
-                <argument name="add_attribute" xsi:type="string">itemscope itemtype="http://schema.org/Product"
+                <argument name="add_attribute" xsi:type="string">itemscope itemtype="https://schema.org/Product"
                 </argument>
             </arguments>
         </referenceBlock>
@@ -94,11 +94,10 @@
 
                         <block name="product.info.addtocart"  template="Magento_Catalog::product/view/addtocart.phtml"/>
 
-                        <block name="product.info.addtowishlist"  template="Magento_Catalog::product/view/addtowishlist.phtml"/>
-
-                        <block name="product.info.addtocompare"  template="Magento_Catalog::product/view/addtocompare.phtml"/>
-
-                        <container name="product.info.additional.actions"/>
+                        <container name="product.info.additional.actions">
+                            <block name="product.info.addtowishlist"  template="Magento_Catalog::product/view/addtowishlist.phtml"/>
+                            <block name="product.info.addtocompare"  template="Magento_Catalog::product/view/addtocompare.phtml"/>
+                        </container>
 
                         <block name="product.info.stockstatus"  template="Magento_Catalog::product/view/stock-status.phtml"/>
 

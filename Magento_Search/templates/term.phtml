@@ -15,7 +15,7 @@ use Magento\Framework\Escaper;
 use Magento\Search\Block\Term;
 ?>
 <?php if (count($block->getTerms()) > 0): ?>
-    <ul class="flex flex-wrap -mx-2 md:-mx-4 items-baseline">
+    <ul role="list" class="flex flex-wrap -mx-2 md:-mx-4 items-baseline">
         <?php foreach ($block->getTerms() as $term): ?>
             <li class="m-2 md:mx-4"
                 style="font-size: <?= /** @noEscape */ ($term->getRatio()*70+75) ?>%"

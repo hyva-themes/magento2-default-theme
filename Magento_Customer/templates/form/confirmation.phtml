@@ -24,10 +24,10 @@ declare(strict_types=1);
                 <span><?= $escaper->escapeHtml(__('Email')) ?></span>
             </label>
             <input type="email" name="email" id="email_address" class="form-input inline-flex w-full"
-                   value="<?= $escaper->escapeHtmlAttr($block->getEmail()) ?>" required/>
+                   value="<?= $escaper->escapeHtmlAttr($block->getEmail()) ?>" autocomplete="off" required/>
         </div>
     </fieldset>
-    <div class="actions-toolbar flex-col">
+    <div class="actions-toolbar">
         <div class="primary">
             <button type="submit" class="action send primary">
                 <span><?= $escaper->escapeHtml(__('Send confirmation link')) ?></span>

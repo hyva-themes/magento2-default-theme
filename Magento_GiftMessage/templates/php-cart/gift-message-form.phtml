@@ -36,7 +36,7 @@ use Magento\Framework\View\Element\Template;
                         type="text"
                         x-model="formMessage.recipient"
                         @keydown.enter.prevent="submitGiftOption()"
-                        class="input-text w-full form-input disabled:opacity-75 disabled:bg-gray-100 disabled:pointer-events-none"
+                        class="form-input w-full disabled:opacity-75 disabled:bg-gray-100 disabled:pointer-events-none"
                     >
                 </div>
             </div>
@@ -54,7 +54,7 @@ use Magento\Framework\View\Element\Template;
                         type="text"
                         x-model="formMessage.sender"
                         @keydown.enter.prevent="submitGiftOption()"
-                        class="input-text w-full form-input disabled:opacity-75 disabled:bg-gray-100 disabled:pointer-events-none"
+                        class="form-input w-full disabled:opacity-75 disabled:bg-gray-100 disabled:pointer-events-none"
                     >
                 </div>
             </div>
@@ -66,7 +66,7 @@ use Magento\Framework\View\Element\Template;
                     <textarea
                         :id="$id('message')"
                         x-model="formMessage.message"
-                        class="input-text w-full form-input disabled:opacity-75 disabled:bg-gray-100 disabled:pointer-events-none"
+                        class="form-input w-full disabled:opacity-75 disabled:bg-gray-100 disabled:pointer-events-none"
                         rows="5"
                         cols="10">
                     </textarea>

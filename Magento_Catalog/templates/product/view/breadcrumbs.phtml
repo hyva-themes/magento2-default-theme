@@ -54,7 +54,7 @@ $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() 
                         <span class="text-primary-lighter" x-text="item.label"></span>
                     </template>
                     <template x-if="item.name !== 'product'">
-                        <a :href="item.link" class="no-underline" x-text="item.label"></a>
+                        <a :href="item.link" :aria-label="item.title" x-text="item.label"></a>
                     </template>
                 </li>
             </template>
@@ -98,7 +98,7 @@ $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() 
                 breadcrumbs.push({
                     name: 'category',
                     label: categories['c' + parts[i]]['name'],
-                    title: '',
+                    title: null,
                     link: categories['c' + parts[i]]['url']
                 });
             }
@@ -109,7 +109,7 @@ $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() 
         breadcrumbs.push({
             name: 'product',
             label: '<?= $escaper->escapeJs($product->getName()) ?>',
-            title: '',
+            title: null,
             link: BASE_URL + '<?= $escaper->escapeJs($product->getUrlKey()) ?>' + '<?= $escaper->escapeJs($productUrlSuffix) ?>'
         });
         <?php endif; ?>

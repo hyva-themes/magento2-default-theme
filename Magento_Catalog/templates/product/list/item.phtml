@@ -88,7 +88,7 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
     <?php if ($product->getOptions()): ?>
     enctype="multipart/form-data"
     <?php endif; ?>
-    <?php foreach ($block->getData('product_data_attributes') as $attribute => $include): ?>
+    <?php foreach ($block->getData('product_data_attributes') ?? [] as $attribute => $include): ?>
         <?php if ($include): ?>
             <?php /** Append data-* attributes based on layout XML arguments */ ?>
             <?= $escaper->escapeHtml(sprintf('data-%s', $attribute)); ?>="<?= $escaper->escapeHtmlAttr($product->getData($attribute)); ?>"
@@ -104,7 +104,7 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
     <?php endforeach; ?>
 <?php else: ?>
 <div class="item product product-item card card-interactive flex flex-col w-full <?= $viewIsGrid ? '' : 'md:flex-row' ?>"
-     <?php foreach ($block->getData('product_data_attributes') as $attribute => $include): ?>
+     <?php foreach ($block->getData('product_data_attributes')  ?? [] as $attribute => $include): ?>
          <?php if ($include): ?>
              <?php /** Append data-* attributes based on layout XML arguments */ ?>
              <?= $escaper->escapeHtml(sprintf('data-%s', $attribute)); ?>="<?= $escaper->escapeHtmlAttr($product->getData($attribute)); ?>"
@@ -115,7 +115,7 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
     <?php /* Product Image */ ?>
     <a href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>"
         title="<?= $escaper->escapeHtmlAttr($product->getName()) ?>"
-        class="product photo product-item-photo block mx-auto mb-3 <?= $viewIsGrid ? '' : 'md:w-2/6 md:mb-0 md:mr-5 md:shrink-0' ?>"
+        class="product photo product-item-photo block mx-auto mb-3 <?= $viewIsGrid ? '' : 'md:w-2/6 md:mb-0 md:shrink-0' ?>"
         tabindex="-1"
     >
         <?= $block->getImage($product, $imageDisplayArea)
@@ -124,7 +124,7 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
             ->setProductId($productId)
             ->toHtml(); ?>
     </a>
-    <div class="product-info flex flex-col grow">
+    <div class="product-info flex flex-col grow <?= $viewIsGrid ? '' : 'md:pl-5 md:w-4/6' ?>">
         <div class="mt-2 mb-1 items-center justify-center text-primary font-semibold text-lg text-center <?= $viewIsGrid ? '' : 'md:text-left' ?>">
             <a
                 class="product-item-link"
@@ -172,11 +172,11 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
                 <a
                     href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>"
                     class="w-auto btn btn-primary justify-center text-sm <?= $viewIsGrid ? 'mr-auto' : 'mr-auto md:mr-0' ?>"
-                    title="<?= $escaper->escapeHtmlAttr(__('Configure %1 on the product page')) ?>"
+                    title="<?= $escaper->escapeHtmlAttr(__('Configure %1 on the product page', $productName)) ?>"
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Configure %1 on the product page', $productName)) ?>"
                 >
                     <?= $heroicons->pencilAltHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
-                    <span class="ml-2 inline <?= $viewIsGrid ? 'md:ml-0 md:hidden lg:ml-2 lg:inline' : '' ?>">
+                    <span class="inline <?= $viewIsGrid ? 'md:hidden lg:inline' : '' ?>">
                         <?= $escaper->escapeHtml(__('Configure')) ?>
                     </span>
                 </a>
@@ -188,7 +188,7 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
                     data-addto="cart"
                 >
                     <?= $heroicons->shoppingCartHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
-                    <span class="ml-2 inline <?= $viewIsGrid ? 'md:ml-0 md:hidden lg:ml-2 lg:inline' : '' ?>">
+                    <span class="inline <?= $viewIsGrid ? 'md:hidden lg:inline' : '' ?>">
                         <?= $escaper->escapeHtml(__('Add to Cart')) ?>
                     </span>
                 </button>

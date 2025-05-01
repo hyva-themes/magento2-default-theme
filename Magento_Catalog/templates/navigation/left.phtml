@@ -38,7 +38,7 @@ if (!$count) {
                 <span class="title text-md md:text-lg font-semibold"><?= $escaper->escapeHtml(__('Category')) ?></span>
             </dt>
             <dd class="pt-3">
-                <ol class="items">
+                <ol role="list" class="items">
                     <?php  ?>
                     <?php foreach ($categories as $category):?>
                         <?php if ($category->getIsActive()): ?>

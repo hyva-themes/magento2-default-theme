@@ -55,7 +55,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                                $contactHelper->getPostValue('name')
                                    ?: $contactHelper->getUserName()
                            ) ?>"
-                           class="mt-2 input input-light w-full"
+                           class="form-input mt-2 w-full"
                            type="text"
                            placeholder="<?= $escaper->escapeHtml(__('Name')) ?>"
                     />
@@ -69,7 +69,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                                $contactHelper->getPostValue('email')
                                    ?: $contactHelper->getUserEmail()
                            ) ?>"
-                           class="mt-2 input input-light w-full"
+                           class="form-input mt-2 w-full"
                            placeholder="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
                            type="email"/>
                 </div>
@@ -82,7 +82,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                            value="<?= $escaper->escapeHtmlAttr(
                                $contactHelper->getPostValue('telephone')
                            ) ?>"
-                           class="mt-2 input input-light w-full"
+                           class="form-input mt-2 w-full"
                            placeholder="<?= $escaper->escapeHtmlAttr(__('Phone Number')) ?>"
                            type="text"/>
                 </div>
@@ -92,7 +92,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                     </label>
                     <textarea name="comment" id="comment" required
                               title="<?= $escaper->escapeHtmlAttr(__('What’s on your mind?')) ?>"
-                              class="mt-2 input input-light w-full h-48" cols="5" rows="3"><?= $escaper->escapeHtml(
+                              class="form-input mt-2 w-full h-48" cols="5" rows="3"><?= $escaper->escapeHtml(
                                   $contactHelper->getPostValue('comment')
                               ) ?></textarea>
                 </div>

@@ -24,8 +24,8 @@ $categoryOutput = $block->getOutput();
 $category = $block->getCurrentCategory();
 $imgHtml  = '';
 if ($imgUrl = $image->getUrl($category)) {
-    $width = $block->getVar('category_page_category_image/width');
-    $height = $block->getVar('category_page_category_image/height');
+    $width = $block->getVar('category_page_category_image/width', 'Magento_Catalog');
+    $height = $block->getVar('category_page_category_image/height', 'Magento_Catalog');
     $imgHtml = '<div class="category-image"><img src="'
         . $escaper->escapeUrl($imgUrl)
         . '" alt="'
@@ -36,7 +36,7 @@ if ($imgUrl = $image->getUrl($category)) {
         . ($width ? sprintf('width="%s"', $escaper->escapeHtmlAttr($width)) : '')
         . ' '
         . ($height ? sprintf('height="%s"', $escaper->escapeHtmlAttr($height)) : '')
-        . '"/></div>';
+        . '/></div>';
     /* @noEscape */ echo $categoryOutput->categoryAttribute($category, $imgHtml, 'image');
 }
 ?>

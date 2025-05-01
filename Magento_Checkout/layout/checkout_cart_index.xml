@@ -77,6 +77,7 @@
                         </block>
                     </container>
 
+                    <block name="checkout-cart-loading" as="loading" template="Hyva_Theme::ui/loading.phtml"/>
                 </container>
 
                 <container name="checkout.cart.noitems" as="no-items">

@@ -18,19 +18,20 @@ use Magento\Framework\Pricing\Render\PriceBox;
 /** @var TierPrice $tierPriceModel */
 $tierPriceModel = $block->getPrice();
 $tierPrices = $tierPriceModel->getTierPriceList();
+
+if (count($tierPrices) === 0) {
+    return '';
+}
 ?>
-<?php if (count($tierPrices)): ?>
-    <ul class="<?= $escaper
-        ->escapeHtmlAttr(($block->hasListClass() ? $block->getListClass() : 'prices-tier items')) ?>"
-    >
-        <?php foreach ($tierPrices as $index => $price): ?>
-            <li class="item bg-container-lighter p-2 shadow mb-2 border-l-4 border-green-400">
-                <?= /* @noEscape */ __(
-                    'Buy %1 with %2 discount each',
-                    $price['price_qty'],
-                    '<strong class="benefit">' . round((int) $price['percentage_value']) . '%</strong>'
-                ); ?>
-            </li>
-        <?php endforeach; ?>
-    </ul>
-<?php endif; ?>
+
+<ul role="list" class="<?= $escaper->escapeHtmlAttr(($block->hasListClass() ? $block->getListClass() : 'prices-tier items')) ?>">
+    <?php foreach ($tierPrices as $index => $price): ?>
+        <li class="item bg-container-lighter p-2 shadow mb-2 border-l-4 border-green-400">
+            <?= /* @noEscape */ __(
+                'Buy %1 with %2 discount each',
+                $price['price_qty'],
+                '<strong class="benefit">' . round((int) $price['percentage_value']) . '%</strong>'
+            ); ?>
+        </li>
+    <?php endforeach; ?>
+</ul>

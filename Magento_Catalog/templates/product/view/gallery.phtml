@@ -108,7 +108,7 @@ $productName = $block->getProduct()->getName();
                 <button
                     type="button"
                     class="absolute inset-0 w-full outline-offset-2"
-                    aria-label="<?= $escaper->escapeHtml(__('Click to view image in fullscreen')) ?>"
+                    aria-label="<?= $escaper->escapeHtmlAttr(__('Click to view image in fullscreen')) ?>"
                     x-ref="galleryFullscreenBtn"
                     x-show="!fullscreen && images[active].type !== 'video'"
                     x-cloak
@@ -164,9 +164,7 @@ $productName = $block->getProduct()->getName();
                     class="p-2.5 flex items-center justify-center self-stretch text-black outline-none focus:outline-none flex-none"
                     :class="{ 'opacity-25 pointer-events-none' : isSliderStart, 'hidden' : !isSlider }"
                     @click="scrollPrevious"
-                >
-                    <?= $heroicons->chevronLeftHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
-                </button>
+                ><?= $heroicons->chevronLeftHtml('', 24, 24, ['aria-hidden' => true]) ?></button>
                 <div class="js_thumbs_slides thumbs-wrapper relative flex flex-nowrap w-full overflow-auto js_slides snap"
                      x-ref="jsThumbSlides"
                      @scroll.debounce="calcPageSize(); calcActive(); calcScrollStartEnd()"
@@ -208,9 +206,7 @@ $productName = $block->getProduct()->getName();
                     class="p-2.5 flex items-center justify-center self-stretch text-black outline-none focus:outline-none flex-none"
                     :class="{ 'opacity-25 pointer-events-none' : isSliderEnd, 'hidden' : !isSlider }"
                     @click="scrollNext"
-                >
-                    <?= $heroicons->chevronRightHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
-                </button>
+                ><?= $heroicons->chevronRightHtml('', 24, 24, ['aria-hidden' => true]) ?></button>
             </div>
         </div>
         <div class="absolute top-0 right-0 pt-4 pr-4">

@@ -101,9 +101,11 @@ $activeSelectOptions = [];
                     <?= /* @noEscape */ $radioPriceRenderer->getSelectionTitlePrice($selection) ?>
                 </label>
             </div>
-            <div class="text-sm my-2">
-                <?= /* @noEscape */ $block->getTierPriceRenderer()->renderTierPrice($selection) ?>
-            </div>
+            <?php if ($tierPriceBlock = $block->getTierPriceRenderer()->renderTierPrice($selection)): ?>
+                <div class="text-sm my-2">
+                    <?= /* @noEscape */ $tierPriceBlock ?>
+                </div>
+            <?php endif; ?>
         <?php endforeach; ?>
     </div>
 <?php endif; ?>

@@ -21,13 +21,13 @@ use Magento\Framework\Escaper;
                 aria-level="2"><?= $escaper->escapeHtml(__('New Customers')) ?></h2>
         </div>
         <div class="block-content" aria-labelledby="block-new-customer-heading">
-            <p>
+            <p class="text-secondary-darker">
                 <?= $escaper->escapeHtml( // phpcs:disable Generic.Files.LineLength.TooLong
                     __('Creating an account has many benefits: check out faster, keep more than one address, track orders and more.')
                 ) // phpcs:enable ?>
             </p>
         </div>
-        <div class="actions-toolbar pt-6 pb-2 flex self-end">
+        <div class="actions-toolbar pt-6 pb-2">
             <a href="<?= $escaper->escapeUrl($block->getCreateAccountUrl()) ?>"
                class="btn btn-primary"><span><?= $escaper->escapeHtml(__('Create an Account')) ?></span></a>
         </div>

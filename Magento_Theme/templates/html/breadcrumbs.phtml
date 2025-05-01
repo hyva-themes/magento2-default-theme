@@ -26,9 +26,11 @@ use Magento\Framework\Escaper;
                     <span aria-hidden="true" class="separator text-primary-lighter px-2">/</span>
                 <?php endif; ?>
                 <?php if ($crumbInfo['link']): ?>
-                    <a href="<?= $escaper->escapeUrl($crumbInfo['link']) ?>"
-                       class="no-underline"
-                       title="<?= $escaper->escapeHtmlAttr($crumbInfo['title']) ?>"
+                    <a
+                        href="<?= $escaper->escapeUrl($crumbInfo['link']) ?>"
+                        <?php if ($crumbInfo['title']): ?>
+                            aria-label="<?= $escaper->escapeHtmlAttr($crumbInfo['title']) ?>"
+                        <?php endif; ?>
                     ><?= $escaper->escapeHtml($crumbInfo['label']) ?></a>
                 <?php elseif ($crumbInfo['last']): ?>
                     <span

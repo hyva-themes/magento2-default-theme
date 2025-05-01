@@ -178,11 +178,11 @@ div {
     }
 
     .pagebuilder-mobile-hidden {
-        @apply hidden md:block;
+        @apply hidden md:inline-block;
     }
 
     .pagebuilder-mobile-only {
-        @apply md:hidden;
+        @apply inline-block md:hidden;
     }
 
     figcaption {
