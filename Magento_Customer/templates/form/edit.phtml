@@ -45,19 +45,21 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
         <?= $block->getBlockHtml('formkey') ?>
         <legend class="legend"><span><?= $escaper->escapeHtml(__('Account Information')) ?></span></legend>
         <br>
-        <?= $block->getLayout()->createBlock(Name::class)->setObject($block->getCustomer())->toHtml() ?>
-        <?php $dob = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Dob::class) ?>
-        <?php $taxvat = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Taxvat::class) ?>
-        <?php $gender = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Gender::class) ?>
-        <?php if ($dob->isEnabled()): ?>
-            <?= $dob->setDate($block->getCustomer()->getDob())->toHtml() ?>
-        <?php endif ?>
-        <?php if ($taxvat->isEnabled()): ?>
-            <?= $taxvat->setTaxvat($block->getCustomer()->getTaxvat())->toHtml() ?>
-        <?php endif ?>
-        <?php if ($gender->isEnabled()): ?>
-            <?= $gender->setGender($block->getCustomer()->getGender())->toHtml() ?>
-        <?php endif ?>
+        <div class="md:grid grid-cols-2 gap-4">
+            <?= $block->getLayout()->createBlock(Name::class)->setObject($block->getCustomer())->toHtml() ?>
+            <?php $dob = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Dob::class) ?>
+            <?php $taxvat = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Taxvat::class) ?>
+            <?php $gender = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Gender::class) ?>
+            <?php if ($dob->isEnabled()): ?>
+                <?= $dob->setDate($block->getCustomer()->getDob())->toHtml() ?>
+            <?php endif ?>
+            <?php if ($taxvat->isEnabled()): ?>
+                <?= $taxvat->setTaxvat($block->getCustomer()->getTaxvat())->toHtml() ?>
+            <?php endif ?>
+            <?php if ($gender->isEnabled()): ?>
+                <?= $gender->setGender($block->getCustomer()->getGender())->toHtml() ?>
+            <?php endif ?>
+        </div>
 
         <div class="field choice">
             <input
