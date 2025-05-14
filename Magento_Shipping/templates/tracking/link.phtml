@@ -14,7 +14,7 @@ use Magento\Shipping\Block\Tracking\Link;
 
 $order = $block->getOrder();
 ?>
-<a href="<?= $escaper->escapeUrl($block->getWindowUrl($order)) ?>" class="text-primary underline"
+<a href="<?= $escaper->escapeUrl($block->getWindowUrl($order)) ?>" class="underline"
    target="_blank" rel="noopener" title="<?= $escaper->escapeHtmlAttr($block->getLabel()) ?>">
     <?= $escaper->escapeHtml($block->getLabel()) ?>
 </a>
