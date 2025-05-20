@@ -111,7 +111,7 @@ $ratingSteps = 5;
     </template>
     <template x-if="reviews && reviews.length">
         <div>
-            <template x-for="review in reviews" :key="index">
+            <template x-for="(review, index) in reviews" :key="index">
                 <div class="flex my-6 card">
                     <div class="w-32">
                         <img :src="review.product && review.product.image && review.product.image.url"
