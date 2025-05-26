@@ -59,7 +59,7 @@ $pageBuilder = $viewModels->require(PageBuilder::class)
         const observer = new IntersectionObserver(entries => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    const lazyBackgrounds = entry.target.dataset && entry.target.backgroundLazyLoad === 'true'
+                    const lazyBackgrounds = entry.target.dataset && entry.target.dataset.backgroundLazyLoad === 'true'
                         ? [entry.target]
                         : entry.target.querySelectorAll('[data-background-lazy-load=true]');
                     <?php /* Inject css to load all background images of the content element. Could be multiple for sliders or tabs. */ ?>
