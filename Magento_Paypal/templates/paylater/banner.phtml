@@ -36,10 +36,13 @@ $widgetConfigJson = json_encode($widgetData['components']['payLater']['config'])
             return {
                 cartSection: false,
                 alreadyLoaded: false,
+                intersected: false,
                 getData(data) {
                     if (data.cart) {
                         this.cartSection = data.cart;
-                        this.checkAndInitializeButtons();
+                        if (this.intersected && !this.alreadyLoaded) {
+                            this.checkAndInitializeButtons();
+                        }
                     }
                 },
                 initializePayPalScript() {
@@ -96,6 +99,8 @@ $widgetConfigJson = json_encode($widgetData['components']['payLater']['config'])
                     }
                 },
                 checkAndInitializeButtons() {
+                    this.intersected = true;
+                    
                     const form = document.forms.product_addtocart_form;
                     if (!form) {
                         return;
