@@ -95,7 +95,6 @@ $defaultSuccessMessageTimeout = $storeConfig->getStoreConfig('hyva_theme_general
 <section id="messages"
          x-data="initMessages"
          x-bind="eventListeners"
-         aria-live="assertive"
          role="alert"
 >
     <template x-if="hasMessages">
