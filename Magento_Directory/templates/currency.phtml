@@ -54,7 +54,7 @@ $currencyViewModel = $viewModels->require(Currency::class);
                     <?php if ($currencies[$currentCurrencyCode]): ?>
                         - <?= $escaper->escapeHtml($currencies[$currentCurrencyCode]) ?>
                     <?php endif; ?>
-                    <?= $heroiconsSolid->chevronDownHtml("flex self-center h-5 w-5 -mr-1 ml-2", 25, 25) ?>
+                    <?= $heroiconsSolid->chevronDownHtml("flex self-center -mr-1 ml-2", 20, 20, ['aria-hidden' => 'true']) ?>
                 </button>
             </div>
             <nav x-cloak

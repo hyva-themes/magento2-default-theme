@@ -56,7 +56,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
         <div class="absolute top-0 right-0 z-10 py-2 px-3 text-gray-300"
              @click="showDatepicker = true"
         >
-            <?= /** @noEscape */ $heroicons->calendarHtml('w-6 h-6', 25, 25); ?>
+            <?= /** @noEscape */ $heroicons->calendarHtml(); ?>
         </div>
 
         <div
@@ -97,7 +97,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
                         :disabled="isFirstMonth()"
                         :title="labels.prevText"
                         @click="goToMonth(month - 1)">
-                        <?= /** @noEscape */ $heroicons->chevronLeftHtml('w-6 h-6', 25, 25); ?>
+                        <?= /** @noEscape */ $heroicons->chevronLeftHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
                         <span class="sr-only" x-text="labels.prevText"></span>
                     </button>
                     <button
@@ -107,7 +107,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
                         :disabled="isLastMonth()"
                         :title="labels.nextText"
                         @click="goToMonth(month + 1)">
-                        <?= /** @noEscape */ $heroicons->chevronRightHtml('w-6 h-6', 25, 25); ?>
+                        <?= /** @noEscape */ $heroicons->chevronRightHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
                         <span class="sr-only" x-text="labels.nextText"></span>
                     </button>
                 </div>

@@ -43,20 +43,22 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         </select>
     </label>
     <?php if ($block->getCurrentDirection() == 'desc'): ?>
-        <a title="<?= $escaper->escapeHtmlAttr(__('Set Ascending Direction')) ?>"
-           href="#"
-           class="action sorter-action sort-desc"
-           @click.prevent="changeUrl('product_list_dir', 'asc', options.directionDefault)"
+        <button
+            title="<?= $escaper->escapeHtmlAttr(__('Set Ascending Direction')) ?>"
+            type="button"
+            class="action sorter-action sort-desc"
+            @click.prevent="changeUrl('product_list_dir', 'asc', options.directionDefault)"
         >
-            <?= $heroicons->sortAscendingHtml('', 24, 24, ['aria-hidden' => true]); ?>
-        </a>
+            <?= $heroicons->sortAscendingHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
+        </button>
     <?php else: ?>
-        <a title="<?= $escaper->escapeHtmlAttr(__('Set Descending Direction')) ?>"
-           href="#"
-           class="action sorter-action sort-asc"
-           @click.prevent="changeUrl('product_list_dir', 'desc', options.directionDefault)"
+        <button
+            type="button"
+            title="<?= $escaper->escapeHtmlAttr(__('Set Descending Direction')) ?>"
+            class="action sorter-action sort-asc"
+            @click.prevent="changeUrl('product_list_dir', 'desc', options.directionDefault)"
         >
-            <?= $heroicons->sortDescendingHtml('', 24, 24, ['aria-hidden' => true]); ?>
-        </a>
+            <?= $heroicons->sortDescendingHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
+        </button>
     <?php endif; ?>
 </div>

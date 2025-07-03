@@ -63,7 +63,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                                     @click="openMenuOnClick('<?= /* @noEscape */ (string) $index ?>')"
                                     class="rounded p-1 text-gray-500"
                                 >
-                                    <?= $heroiconsSolid->chevronDownHtml("flex self-center h-5 w-5", 25, 25, ['aria-hidden' => 'true']) ?>
+                                    <?= $heroiconsSolid->chevronDownHtml("flex self-center", 20, 20, ['aria-hidden' => 'true']) ?>
                                     <span class="sr-only">
                                         <?= $escaper->escapeHtml(__('Show submenu for %1 category', $menuItem['name'])) ?>
                                     </span>

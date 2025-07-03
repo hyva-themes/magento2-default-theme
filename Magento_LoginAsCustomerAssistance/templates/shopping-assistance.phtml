@@ -79,7 +79,7 @@ if (!$shoppingAssistanceViewModel->isLoginAsCustomerEnabled()) {
             aria-labelledby="assistance_allowed_checkbox_tooltip"
             aria-disabled="true"
         >
-        <?= $heroicons->questionMarkCircleHtml('cursor-hand') ?>
+            <?= $heroicons->questionMarkCircleHtml('cursor-hand', 24, 24, ['aria-hidden' => 'true']) ?>
         </button>
         <div class="relative" x-cloak x-show="showTooltip">
             <div class="shadow-lg">

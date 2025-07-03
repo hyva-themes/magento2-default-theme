@@ -128,7 +128,7 @@ $configuredLinks          = $configuredValues->getLinks() ?? [];
                     <a class="item-link samples-item-link"
                        href="<?= $escaper->escapeUrl($block->getLinkSampleUrl($link)) ?>"
                        <?= $block->getIsOpenInNewWindow() ? 'target="_blank"' : '' ?>>
-                       <?= $iconViewModel->documentDownloadHtml('inline-block w-6 h-6 mr-1', 26, 26) ?>
+                       <?= $iconViewModel->documentDownloadHtml('inline-block mr-1', 24, 24) ?>
                        <?= $escaper->escapeHtml(__('sample')) ?>
                     </a>
                 <?php endif; ?>
@@ -137,7 +137,7 @@ $configuredLinks          = $configuredValues->getLinks() ?? [];
         <?php if ($linksPurchasedSeparately && count($links) > 1): ?>
             <div class="field choice downloads-all">
                 <button type="button" class="" @click="toggleAll">
-                    <?= $iconViewModel->checkCircleHtml('inline-flex w-6 h-6 mr-1', 26, 26) ?>
+                    <?= $iconViewModel->checkCircleHtml('inline-flex mr-1', 24, 24, ['aria-hidden' => 'true']) ?>
                     <span x-text="
                         areAllSelected()
                             ? '<?= $escaper->escapeJs(__('Unselect all')) ?>'

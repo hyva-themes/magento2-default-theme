@@ -141,7 +141,7 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
                         class="mr-4 text-black rounded-full outline-none focus:outline-none flex-none"
                         :class="{ 'opacity-25 pointer-events-none' : active === 0 }"
                         @click="scrollPrevious">
-                        <?= $heroicons->chevronLeftHtml("w-5 h-5", 25, 25) ?>
+                        <?= $heroicons->chevronLeftHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
                     </button>
                     <div class="flex flex-wrap w-full md:w-auto justify-center">
                     <?php for ($i=0; $i < $itemCount; $i++): ?>
@@ -161,7 +161,7 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
                         class="ml-4 text-black rounded-full outline-none focus:outline-none flex-none"
                         :class="{ 'opacity-25 pointer-events-none' : active >= itemCount-pageSize }"
                         @click="scrollNext">
-                        <?= $heroicons->chevronRightHtml("w-5 h-5", 25, 25) ?>
+                        <?= $heroicons->chevronRightHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
                     </button>
                 </div>
             </template>

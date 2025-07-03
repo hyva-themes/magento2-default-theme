@@ -34,14 +34,14 @@ $storeEmail = $storeConfig->getStoreConfig('trans_email/ident_general/email') ??
 <ul role="list">
     <?php if ($storePhoneNumber): ?>
     <li class="mt-10">
-        <?= $heroicons->phoneHtml("w-5 h-5 inline mr-1", 25, 25) ?>
+        <?= $heroicons->phoneHtml("inline mr-1", 20, 20, ['aria-hidden' => 'true']) ?>
         <a class="inline" href="tel:<?= $escaper->escapeHtmlAttr(preg_replace("/[^0-9+]/", "", $storePhoneNumber)) ?>">
             <?= $escaper->escapeHtml($storePhoneNumber); ?>
         </a>
     </li>
     <?php endif; ?>
     <li>
-        <?= $heroicons->mailHtml("w-5 h-5 inline mr-1", 25, 25) ?>
+        <?= $heroicons->mailHtml("inline mr-1", 20, 20, ['aria-hidden' => 'true']) ?>
         <a href="mailto:<?= $escaper->escapeHtmlAttr($storeEmail); ?>">
             <?= $escaper->escapeHtml($storeEmail); ?>
         </a>

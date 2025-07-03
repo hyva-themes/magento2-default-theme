@@ -96,7 +96,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                     aria-label="<?= $escaper->escapeHtmlAttr(__('Start Download')) ?>"
                                     class="action download"
                                 >
-                                    <?= $heroicons->documentDownloadHtml('', 24, 24, ['aria-hidden' => true]); ?>
+                                    <?= $heroicons->documentDownloadHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
                                 </a>
                                 <?php if ($block->getIsOpenInNewWindow()): ?>
                                     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(

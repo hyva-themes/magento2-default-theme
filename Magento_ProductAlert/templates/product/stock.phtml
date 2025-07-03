@@ -40,7 +40,7 @@ $signupLabel = __("Notify me when this product is in stock");
     <a href="<?= $escaper->escapeUrl($productAlertViewModel->getSaveUrl($currentProduct->get(), 'stock')) ?>"
        title="<?= $escaper->escapeHtml($signupLabel) ?>" class="action alert">
         <span class="text-orange-400">
-            <?= $heroicons->bellHtml('w-6 h-6 inline') ?>
+            <?= $heroicons->bellHtml('inline', 24, 24, ['aria-hidden' => 'true']) ?>
         </span>
         <span class="underline">
             <?= $escaper->escapeHtml($signupLabel) ?>

@@ -168,10 +168,10 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                                 :aria-label="showPassword ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
                             >
                                 <template x-if="!showPassword">
-                                    <?= $heroicons->eyeHtml('w-5 h-5'); ?>
+                                    <?= $heroicons->eyeHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                                 </template>
                                 <template x-if="showPassword">
-                                    <?= $heroicons->eyeOffHtml('w-5 h-5'); ?>
+                                    <?= $heroicons->eyeOffHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                                 </template>
                             </button>
                         </div>
@@ -230,10 +230,10 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                             "
                         >
                             <template x-if="!showPasswordConfirm">
-                                <?= $heroicons->eyeHtml('w-5 h-5'); ?>
+                                <?= $heroicons->eyeHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                             </template>
                             <template x-if="showPasswordConfirm">
-                                <?= $heroicons->eyeOffHtml('w-5 h-5'); ?>
+                                <?= $heroicons->eyeOffHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                             </template>
                         </button>
                     </div>

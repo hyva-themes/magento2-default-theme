@@ -136,11 +136,11 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                         :aria-label="showPasswordCurrent ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
                     >
                         <template x-if="!showPasswordCurrent">
-                            <?= $heroicons->eyeHtml('w-5 h-5'); ?>
+                            <?= $heroicons->eyeHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                         </template>
 
                         <template x-if="showPasswordCurrent">
-                            <?= $heroicons->eyeOffHtml('w-5 h-5'); ?>
+                            <?= $heroicons->eyeOffHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                         </template>
                     </button>
                 </div>
@@ -173,10 +173,10 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                             :aria-label="showPasswordNew ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
                         >
                             <template x-if="!showPasswordNew">
-                                <?= $heroicons->eyeHtml('w-5 h-5'); ?>
+                                <?= $heroicons->eyeHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                             </template>
                             <template x-if="showPasswordNew">
-                                <?= $heroicons->eyeOffHtml('w-5 h-5'); ?>
+                                <?= $heroicons->eyeOffHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                             </template>
                         </button>
                         <div id="password-strength-meter-container" data-role="password-strength-meter" aria-live="polite">
@@ -211,10 +211,10 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                             :aria-label="showPasswordConfirm ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
                         >
                             <template x-if="!showPasswordConfirm">
-                                <?= $heroicons->eyeHtml('w-5 h-5'); ?>
+                                <?= $heroicons->eyeHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                             </template>
                             <template x-if="showPasswordConfirm">
-                                <?= $heroicons->eyeOffHtml('w-5 h-5'); ?>
+                                <?= $heroicons->eyeOffHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                             </template>
                         </button>
                     </div>

@@ -102,10 +102,10 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                             :aria-label="showPassword ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
                         >
                             <template x-if="!showPassword">
-                                <?= $heroiconssolid->eyeHtml('w-5 h-5'); ?>
+                                <?= $heroiconssolid->eyeHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                             </template>
                             <template x-if="showPassword">
-                                <?= $heroiconssolid->eyeOffHtml('w-5 h-5'); ?>
+                                <?= $heroiconssolid->eyeOffHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                             </template>
                         </button>
                     </div>
