@@ -1,48 +1,56 @@
 @layer components {
     .btn {
-        @apply flex bg-gray-500 rounded-lg px-4 py-2 text-white text-base font-medium shadow-md items-center;
-
-        @screen md {
-            @apply px-6 text-lg;
-        }
-        @screen xl {
-            @apply text-base;
-        }
-
-        svg {
-            @apply inline-flex;
-        }
-
-        span {
-            vertical-align: middle;
-        }
+        --btn-stroke: transparent;
+        --btn-bg: theme("colors.gray.500");
+        --btn-color: theme("colors.white");
+        @apply flex justify-center items-center gap-1.5 border-2 shadow-md rounded-lg px-4 py-2 text-base font-medium select-none cursor-pointer align-middle;
+        border-color: var(--btn-stroke);
+        background-color: var(--btn-bg);
+        color: var(--btn-color);
 
         &:hover {
-            @apply bg-gray-600;
+            border-color: var(--btn-hover-stroke, var(--btn-stroke));
+            background-color: var(--btn-hover-bg, var(--btn-bg));
+            color: var(--btn-hover-color, var(--btn-color));
         }
 
-        &:focus {
-            @apply outline-none border-transparent ring-4 ring-primary ring-opacity-50;
+        &:focus-visible {
+            @apply outline outline-4 outline-primary/50 outline-offset-0;
+        }
+
+        &:active {
+            border-color: var(--btn-active-stroke, var(--btn-stroke));
+            background-color: var(--btn-active-bg, var(--btn-bg));
+            color: var(--btn-active-color, var(--btn-color));
+        }
+
+        &:disabled {
+            @apply opacity-70 cursor-not-allowed shadow-none hover:shadow-none;
+            border-color: var(--btn-disabled-stroke, theme("colors.gray.200"));
+            background-color: var(--btn-disabled-bg, theme("colors.white"));
+            color: var(--btn-disabled-color, theme("colors.gray.600"));
         }
     }
 
     .btn-primary {
-        @apply bg-primary text-white shadow-md;
+        --btn-bg: theme("backgroundColor.primary.DEFAULT");
+        --btn-color: theme("colors.white");
+        --btn-hover-bg: theme("backgroundColor.primary.lighter");
+        --btn-active-bg: theme("backgroundColor.primary.darker");
 
         &:hover {
-            @apply bg-primary-lighter text-white shadow-lg;
+            @apply shadow-lg;
         }
     }
 
     .btn-secondary {
-        @apply bg-white border-2 border-primary-lighter text-black shadow-md;
+        --btn-stroke: theme("borderColor.primary.lighter");
+        --btn-bg: theme("colors.white");
+        --btn-color: theme("colors.black");
+        --btn-hover-stroke: theme("borderColor.primary.darker");
 
         &:hover {
-            @apply bg-white border-primary-darker shadow-lg;
-        }
-
-        &:focus {
-            @apply border-2 border-transparent;
+            @apply shadow-lg;
         }
     }
 

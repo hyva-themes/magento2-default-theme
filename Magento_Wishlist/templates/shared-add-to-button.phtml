@@ -1,0 +1,34 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Magento\Wishlist\Block\Share\Wishlist;
+use Magento\Wishlist\Model\Item;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var Item $item */
+/** @var Wishlist $parentBlock */
+
+$parentBlock = $block->getParentBlock();
+
+if (! ($item = $block->getData('item'))) {
+    return;
+}
+
+?>
+<button
+    id="wishlist-shared-item-<?= /* @noEscape */ $item->getId() ?>"
+    type="button"
+    class="action towishlist underline"
+    @click='hyva.postForm(<?= /* @noEscape */ $parentBlock->getAddToWishlistParams($item) ?>)'
+    data-addto="wishlist"
+>
+    <span><?= $escaper->escapeHtml(__('Add to Wish List')) ?></span>
+</button>

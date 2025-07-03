@@ -48,7 +48,7 @@ $configuredLinks          = $configuredValues->getLinks() ?? [];
             init() {
                 this.$nextTick(() => {
                     window.dispatchEvent(new CustomEvent('update-custom-option-prices', {detail: optionPrices}));
-                    [<?= /** noEscape */ join(',', $configuredLinks)?>].map(linkId => {
+                    [<?= /** @noEscape */ join(',', $configuredLinks)?>].map(linkId => {
                        this.toggleOption(linkId, true);
                     })
                     this.validate();
@@ -58,7 +58,7 @@ $configuredLinks          = $configuredValues->getLinks() ?? [];
                 const elementToSelect = this.$root.querySelector('#links_' + optionId);
                 if (elementToSelect) {
                     elementToSelect.checked = value;
-                    elementToSelect.dispatchEvent(new CustomEvent('change'));
+                    elementToSelect.dispatchEvent(new Event('change'));
                 }
             },
             validate() {

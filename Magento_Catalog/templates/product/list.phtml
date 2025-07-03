@@ -68,7 +68,7 @@ $productCollection = $block->getLoadedProductCollection();
                         $product->setData('image_custom_attributes', ['loading' => 'eager', 'fetchpriority' => 'high']);
                     }
                     ?>
-                    <li>
+                    <li class="flex flex-col">
                         <?= $productListItemViewModel->getItemHtml(
                             $product,
                             $block,

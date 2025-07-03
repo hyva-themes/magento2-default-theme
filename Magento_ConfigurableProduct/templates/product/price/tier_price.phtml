@@ -78,7 +78,7 @@ $productViewModel = $viewModels->require(ProductPage::class);
      x-bind="eventListeners"
 >
     <template x-if="getConfiguredTierPrices()">
-        <ul class="prices-tier items mb-4">
+        <ul role="list" class="prices-tier items mb-4">
             <template x-for="tierPrice in getConfiguredTierPrices()">
                 <li class="item bg-container-lighter p-2 shadow mb-2 border-l-4 border-green-400 mx-1">
                     <span x-html="getItemHtml(tierPrice)"></span>

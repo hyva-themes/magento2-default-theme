@@ -45,6 +45,9 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
             if (!form.action) {
                 return;
             }
+            window.dispatchEvent(new CustomEvent("cart-is-loading", { detail: {
+                isLoading: true
+            }}));
             controller.abort();
             controller = new AbortController();
 
@@ -77,6 +80,10 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
                         }], 10000
                     );
                 }
+            }).finally(() => {
+                window.dispatchEvent(new CustomEvent("cart-is-loading", { detail: {
+                    isLoading: false
+                }}));
             })
         }
     }( window.hyva = window.hyva || {} ));
@@ -84,64 +91,73 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
 
 <script>
 
-    function initCartForm(){
+    function initCartForm() {
+        let cartIsReloading = false;
+
         return {
-            cartIsEmpty: !!window.checkoutConfig,
+            cartIsEmpty: window.checkoutConfig === false,
+            isLoading: false,
             checkCartShouldUpdate(data) {
                 const cart = data.cart;
+                if (!cart) return;
 
-                if (this.cartIsEmpty !== !!window.checkoutConfig) {
-                    this.cartIsEmpty = !!window.checkoutConfig;
+                const cartIsEmptyState = window.checkoutConfig === false;
+                if (this.cartIsEmpty !== cartIsEmptyState) {
+                    this.cartIsEmpty = cartIsEmptyState;
+
                     this.reloadCartContent();
                     return;
                 }
 
-                if (cart) {
-                    if (!window.checkoutConfig) {
-                        if (cart.items.length) {
-                            this.reloadCartContent();
-                        }
-                        return;
-                    }
+                if (this.cartIsEmpty) return;
 
-                    const roundUp = (number) => {
-                        return Math.round(number * 100);
-                    }
-
-                    const decimalNumbersAreEqual = (number1, number2) => {
-                        return roundUp(number1) === roundUp(number2);
-                    }
-
-                    if (window.checkoutConfig && cart) {
-                        if (decimalNumbersAreEqual(
-                            cart.items.reduce((totalQty, cartItem) => totalQty + cartItem.qty, 0),
-                                window.checkoutConfig.quoteData.items_qty
-                            ) &&
-                            decimalNumbersAreEqual(
-                                cart.subtotalAmount,
-                                window.checkoutConfig.totalsData.total_segments.find((segment) => segment.code === "subtotal").value
-                            )
-                        ) {
-                            return;
-                        }
-                    }
+                if (!cart.items) {
+                    this.reloadCartContent();
+                    return;
                 }
+
+                if (!window.checkoutConfig && cart.items.length) {
+                    this.reloadCartContent();
+                    return;
+                }
+
+                const roundUp = (number) => Math.round(number * 1000);
+                const decimalNumbersAreEqual = (number1, number2) => roundUp(number1) === roundUp(number2);
+
+                if (decimalNumbersAreEqual(
+                    cart.items.reduce((totalQty, cartItem) => totalQty + cartItem.qty, 0),
+                        window.checkoutConfig.quoteData.items_qty
+                    ) &&
+                    decimalNumbersAreEqual(
+                        cart.subtotalAmount,
+                        window.checkoutConfig.totalsData.total_segments.find((segment) => segment.code === "subtotal").value
+                    )
+                ) {
+                    return;
+                }
+
                 this.reloadCartContent();
             },
             reloadCartContent() {
+                if (cartIsReloading) return;
+                cartIsReloading = true;
+
                 window.fetch(window.location.href, {
                     method: "GET"
-                }).then((result) => {
-                    return result.text()
-
-                }).then((body) => {
+                })
+                .then((result) => result.text())
+                .then((body) => {
                     hyva.setCookie('mage-cache-sessid', '', -1, true);
                     window.checkoutConfig = null;
                     hyva.replaceDomElement('#maincontent', body)
 
-                }).catch((error) => {
-                    console.error(error);
-                    window.location.reload()
+                })
+                .catch(() => {
+                    if (window.location.search.indexOf('reload=1') > -1) return;
+                    window.location = window.location + (window.location.search.length < 1 ? '?' : '&') + 'reload=1'
+                })
+                .finally(() => {
+                    cartIsReloading = false;
                 })
             },
             onStorageChange(event) {
@@ -152,14 +168,18 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
         }
     }
 </script>
-<div x-data="initCartForm()"
-     class="cart-form clearfix"
-     @private-content-loaded.window="checkCartShouldUpdate($event.detail.data)"
-     @storage.window="onStorageChange($event)"
+<section
+    x-data="initCartForm()"
+    class="cart-form"
+    aria-label="<?= $escaper->escapeHtmlAttr(__('Shopping Cart')) ?>"
+    @private-content-loaded.window="checkCartShouldUpdate($event.detail.data)"
+    @storage.window="onStorageChange($event)"
+    @cart-is-loading.window="isLoading = ($event.detail && $event.detail.isLoading) || false"
 >
     <?php if ($block->getItemsCount()): ?>
         <?= $block->getChildHtml('with-items') ?>
     <?php else: ?>
         <?= $block->getChildHtml('no-items') ?>
     <?php endif; ?>
-</div>
+    <?= $block->getChildHtml('loading') ?>
+</section>

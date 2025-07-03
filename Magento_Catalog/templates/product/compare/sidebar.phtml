@@ -127,7 +127,7 @@ function initCompareSidebarClear() {
             >
                 <?= $escaper->escapeHtml(__('Compare Products')) ?>
             </h2>
-            <ul class="my-4" aria-labelledby="compare-sidebar">
+            <ul role="list" class="my-4" aria-labelledby="compare-sidebar">
                 <template x-for="product in compareItems">
                     <li class="flex items-start mb-4">
                         <a

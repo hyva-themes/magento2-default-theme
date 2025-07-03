@@ -39,8 +39,13 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
     >
         <div class="flex justify-between gap-2 mb-2">
             <strong id="map-popup-heading-price" class="font-bold" x-text="title"></strong>
-            <button type="button" @click="closePopover()">
-                <?= $heroicons->xHtml(); ?>
+            <button
+                type="button"
+                @click="closePopover()"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Close panel')) ?>"
+                title="<?= $escaper->escapeHtmlAttr(__('Close panel')) ?>"
+            >
+                <?= $heroicons->xHtml('', 24, 24, ['aria-hidden' => true]); ?>
             </button>
         </div>
 

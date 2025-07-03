@@ -31,7 +31,7 @@ $storeEmail = $storeConfig->getStoreConfig('trans_email/ident_general/email') ??
     <?= $escaper->escapeHtml($storeConfig->getStoreConfig('general/store_information/city') ?? ''); ?><br/>
     <?= $escaper->escapeHtml($storeConfig->getStoreConfig('general/store_information/postcode') ?? ''); ?><br/>
 </address>
-<ul>
+<ul role="list">
     <?php if ($storePhoneNumber): ?>
     <li class="mt-10">
         <?= $heroicons->phoneHtml("w-5 h-5 inline mr-1", 25, 25) ?>

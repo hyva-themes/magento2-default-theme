@@ -25,7 +25,7 @@ $storeConfig = $viewModels->require(StoreConfig::class);
 ?>
 <div class="md:w-1/2 w-full flex flex-wrap pr-4">
     <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-8 xl:col-span-2">
-        <div>
+        <nav aria-label="Company Menu">
             <h2 class="text-md leading-5 font-semibold tracking-wider uppercase">
                 Company
             </h2>
@@ -64,8 +64,8 @@ $storeConfig = $viewModels->require(StoreConfig::class);
                     </a>
                 </li>
             </ul>
-        </div>
-        <div>
+        </nav>
+        <nav aria-label="Legal Menu">
             <h2 class="text-md leading-5 font-semibold tracking-wider uppercase">
                 Legal
             </h2>
@@ -81,6 +81,6 @@ $storeConfig = $viewModels->require(StoreConfig::class);
                     </a>
                 </li>
             </ul>
-        </div>
+        </nav>
     </div>
 </div>

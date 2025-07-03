@@ -25,7 +25,7 @@ $catalogHelper = $this->helper(Data::class);
 /** @var array $filterItems */
 ?>
 
-<ol class="items" aria-label="<?= $escaper->escapeHtmlAttr(__('%1 filter options', $block->getFilterTitle())) ?>">
+<ol role="list" class="items" aria-label="<?= $escaper->escapeHtmlAttr(__('%1 filter options', $block->getFilterTitle())) ?>">
 <?php foreach ($filterItems as $filterItem): ?>
     <li>
         <?php if ($filterItem->getCount() > 0): ?>

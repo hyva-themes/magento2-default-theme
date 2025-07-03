@@ -116,7 +116,7 @@ if (! $customer->customerLoggedIn()) {
             </strong>
             <template x-if="itemCount">
                 <div>
-                    <ol id="cart-sidebar-reorder" class="product-items product-items-names">
+                    <ol role="list" id="cart-sidebar-reorder" class="product-items product-items-names">
                         <template x-for="product in reorderItems">
                             <li class="flex items-start mb-4">
                                 <div class="shrink-0 mr-2">

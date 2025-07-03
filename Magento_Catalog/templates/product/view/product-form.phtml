@@ -12,6 +12,8 @@ use Magento\Catalog\Block\Product\View;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Escaper;
 
+// phpcs:disable Generic.WhiteSpace.ScopeIndent
+
 /** @var View $block */
 /** @var Escaper $escaper */
 
@@ -23,22 +25,27 @@ $product = $block->getProduct();
  * @see \Magento\Checkout\Block\Cart\Item\Configure::_prepareLayout
  */
 $productInfoBlock = $block->getLayout()->getBlock('product.info');
-
 ?>
-
 <?php if ($product->isSaleable()): ?>
     <form method="post"
           action="<?= $escaper->escapeUrl($productInfoBlock->getSubmitUrl($product)) ?>"
           class="mb-6"
-          id="product_addtocart_form"<?php if ($product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>
+          id="product_addtocart_form"
+          <?php if ($product->getOptions()): ?>
+              enctype="multipart/form-data"
+          <?php endif; ?>
+          <?php foreach ($block->getData('product_data_attributes') ?? [] as $attribute => $include): ?>
+              <?php if ($include): ?>
+                  <?php /** Append data-* attributes based on layout XML arguments */ ?>
+                  <?= $escaper->escapeHtml(sprintf('data-%s', $attribute)); ?>="<?= $escaper->escapeHtmlAttr($product->getData($attribute)); ?>"
+              <?php endif; ?>
+          <?php endforeach; ?>
     >
         <input type="hidden" name="product" value="<?= (int)$product->getId() ?>" />
         <input type="hidden" name="selected_configurable_option" value=""  />
         <input type="hidden" name="related_product" id="related-products-field" value="" />
         <input type="hidden" name="item"  value="<?= (int)$block->getRequest()->getParam('id') ?>">
         <?= $block->getBlockHtml('formkey') ?>
-
         <?= $block->getChildHtml() ?>
-
     </form>
 <?php endif; ?>

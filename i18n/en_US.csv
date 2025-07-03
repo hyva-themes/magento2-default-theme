@@ -182,3 +182,5 @@ incl.,incl.
 "The price depends on the chosen options","The price depends on the chosen options"
 "The price depends on the options chosen on the product page","The price depends on the options chosen on the product page"
 "Order %1 canceled.","Order %1 canceled."
+"The 'Min' value must be lower than the 'Max' value.","The 'Min' value must be lower than the 'Max' value."
+"The 'From' date must precede the 'To' date.","The 'From' date must precede the 'To' date."

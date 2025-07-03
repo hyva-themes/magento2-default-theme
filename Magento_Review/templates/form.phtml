@@ -88,9 +88,7 @@ mutation createProductReviewMutation(
                 <fieldset>
                     <legend class="text-xs">
                         <span>
-                            <?= $escaper->escapeHtml(
-                                __("You're reviewing:")
-                            ) ?>
+                            <?= $escaper->escapeHtml(__("You're reviewing:")) ?>
                         </span>
                         <span class="font-semibold">
                             <?= $escaper->escapeHtml($block->getProductInfo()->getName()) ?>
@@ -108,7 +106,7 @@ mutation createProductReviewMutation(
                                             <div class="table-row">
                                                 <label
                                                     class="table-cell pr-6 align-middle text-left"
-                                                    id="<?= $escaper->escapeHtml($rating->getRatingCode()) ?>_rating_label"
+                                                    id="<?= $escaper->escapeHtmlAttr($rating->getRatingCode()) ?>_rating_label"
                                                 >
                                                     <span>
                                                         <?php if ($block->getRatings()->getSize() <= 1): ?>
@@ -131,14 +129,8 @@ mutation createProductReviewMutation(
                                                         >
                                                             <label
                                                                 class="rating-<?= (int)$iterator ?> m-0 cursor-pointer text-gray-400"
-                                                                for="<?= $escaper
-                                                                     ->escapeHtmlAttr(
-                                                                         $rating->getRatingCode() . '_' . $option->getValue()
-                                                                     ) ?>"
-                                                                id="<?= $escaper
-                                                                    ->escapeHtmlAttr(
-                                                                        $rating->getRatingCode() . '_' . $option->getValue()
-                                                                    ) ?>_label"
+                                                                for="<?= $escaper->escapeHtmlAttr($rating->getRatingCode() . '_' . $option->getValue()) ?>"
+                                                                id="<?= $escaper->escapeHtmlAttr($rating->getRatingCode() . '_' . $option->getValue()) ?>_label"
                                                             >
                                                                 <span :class="<?= (int)$iterator ?> <= clickedRatingId
                                                                     ? 'text-yellow-400'
@@ -179,10 +171,11 @@ mutation createProductReviewMutation(
                                 <span><?= $escaper->escapeHtml(__('Nickname')) ?></span>
                             </label>
                             <div>
-                                <input class="form-input mt-3 block w-full text-sm"
+                                <input class="form-input mt-3 block w-full"
                                        required
                                        placeholder="<?= $escaper->escapeHtmlAttr(__('Nickname') . '*') ?>" type="text"
-                                       name="nickname" id="nickname_field"/>
+                                       name="nickname" id="nickname_field"
+                                       autocomplete="nickname"/>
                             </div>
                         </div>
                         <div>
@@ -190,11 +183,12 @@ mutation createProductReviewMutation(
                                 <span><?= $escaper->escapeHtml(__('Summary')) ?></span>
                             </label>
                             <div>
-                                <input class="form-input mt-3 block w-full text-sm"
+                                <input class="form-input mt-3 block w-full"
                                        required
-                                       placeholder="<?= $escaper->escapeHtml(__('Summary') . '*') ?>" type="text"
+                                       placeholder="<?= $escaper->escapeHtmlAttr(__('Summary') . '*') ?>" type="text"
                                        name="title"
-                                       id="summary_field"/>
+                                       id="summary_field"
+                                       autocomplete="off"/>
                             </div>
                         </div>
                         <div>
@@ -202,11 +196,11 @@ mutation createProductReviewMutation(
                                 <span><?= $escaper->escapeHtml(__('Review')) ?></span>
                             </label>
                             <div>
-                            <textarea class="form-input mt-3 block w-full text-sm"
+                            <textarea class="form-input mt-3 block w-full"
                                       required
-                                      placeholder="<?= $escaper->escapeHtml(__('Review') . '*') ?>" name="detail"
+                                      placeholder="<?= $escaper->escapeHtmlAttr(__('Review') . '*') ?>" name="detail"
                                       id="review_field" cols="5"
-                                      rows="3"></textarea>
+                                      rows="3" autocomplete="off"></textarea>
                             </div>
                         </div>
                     </div>
@@ -231,14 +225,14 @@ mutation createProductReviewMutation(
                            x-cloak
                            class="text-green flex items-center">
                             <span class="inline-block w-8 h-8 mr-3">
-                                <?= $heroicons->checkCircleHtml(); ?>
+                                <?= $heroicons->checkCircleHtml('', 24, 24, ['aria-hidden' => true]); ?>
                             </span>
                             <?= $escaper->escapeHtml(__('You submitted your review for moderation.')) ?>
                         </p>
                         <template x-if="displayErrorMessage">
                             <p class="text-red flex items-center">
                                 <span class="inline-block w-8 h-8 mr-3">
-                                    <?= $heroicons->exclamationCircleHtml(); ?>
+                                    <?= $heroicons->exclamationCircleHtml('', 24, 24, ['aria-hidden' => true]); ?>
                                 </span>
                                 <template x-for="errorMessage in errorMessages">
                                     <span x-html="errorMessage"></span>
@@ -305,10 +299,7 @@ mutation createProductReviewMutation(
                                 Object.keys(this.ratings).length === <?= count($block->getRatings()) ?>
                             )) {
                                 this.setErrorMessages(
-                                    ['<?= $escaper
-                                        ->escapeJs(
-                                            __('Please verify you\'ve entered all required information')
-                                        ) ?>']
+                                    ['<?= $escaper->escapeJs(__('Please verify you\'ve entered all required information')) ?>']
                                 );
                                 this.displayErrorMessage = true;
                                 this.errors = 1;
