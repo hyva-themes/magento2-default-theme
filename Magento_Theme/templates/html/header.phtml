@@ -147,7 +147,7 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
                             : hyva.str('<?= $escaper->escapeHtmlAttr(__('%1 item')) ?>', cart.summary_count)
                     }`"
                 <?php if ($showMiniCart): ?>
-                    @click.prevent.stop="() => {
+                    @click.prevent="() => {
                         $dispatch('toggle-cart', { isOpen: true })
                     }"
                     @toggle-cart.window="toggleCart($event)"

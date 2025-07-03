@@ -8,12 +8,14 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Framework\Escaper;
 use Hyva\Theme\ViewModel\StoreConfig;
 use Magento\Framework\View\Element\Template;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
 /** @var ViewModelRegistry $viewModels */
 
 // This is the reCaptcha script loader (for v2 and v3)
@@ -72,3 +74,4 @@ if (!$siteKeyV2checkbox && !$siteKeyV2invisible && !$siteKeyV3) {
     }());
 
 </script>
+<?php $hyvaCsp->registerInlineScript() ?>

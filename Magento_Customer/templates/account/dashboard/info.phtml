@@ -35,8 +35,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 </h3>
                 <p>
                     <?= $escaper->escapeHtml($block->getName()) ?><br>
-                    <?= ''//$escaper->escapeHtml($block->getCustomer()->getCompany()) ?><br>
-                    <?= $escaper->escapeHtml($block->getCustomer()->getEmail()) ?><br>
+                    <?= $escaper->escapeHtml($block->getCustomer()->getEmail()) ?>
                 </p>
                 <?= $block->getChildHtml('customer.account.dashboard.info.extra'); ?>
                 <a

@@ -11,6 +11,7 @@ declare(strict_types=1);
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\Customer\LoginButton;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Hyva\Theme\ViewModel\ReCaptcha;
 use Hyva\Theme\ViewModel\StoreConfig;
 use Magento\Framework\Escaper;
@@ -18,6 +19,7 @@ use Magento\Customer\Block\Account\Customer;
 
 /** @var Escaper $escaper */
 /** @var Customer $block */
+/** @var HyvaCsp $hyvaCsp */
 /** @var ViewModelRegistry $viewModels */
 /** @var ReCaptcha $recaptcha */
 /** @var HeroiconsOutline $heroicons */
@@ -37,17 +39,20 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
     function initAuthentication() {
         return {
             open: false,
+            close() {
+                this.open = false;
+            },
             forceAuthentication: false,
             checkoutUrl: '<?= $escaper->escapeUrl($block->getUrl('checkout/index')) ?>',
             errors: 0,
             hasCaptchaToken: 0,
             displayErrorMessage: false,
             errorMessages: [],
-            setErrorMessages: function setErrorMessages(messages) {
-                this.errorMessages = [messages];
-                this.displayErrorMessage = this.errorMessages.length;
+            setErrorMessages(message) {
+                this.errorMessages = [message];
+                this.displayErrorMessage = true;
             },
-            submitForm: function () {
+            submitForm() {
                 // Do not rename $form, the variable is expected to be declared in the recaptcha output
                 const $form = document.querySelector('#login-form');
                 <?= $recaptcha ? $recaptcha->getValidationJsHtml('customer_login', 'auth-popup') : '' ?>
@@ -56,13 +61,17 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                     this.dispatchLoginRequest($form);
                 }
             },
-            onPrivateContentLoaded: function (data) {
+            onPrivateContentLoaded() {
+                const data = this.$event.detail.data;
                 const isLoggedIn = data.customer && data.customer.firstname;
                 if (data.cart && !isLoggedIn) {
                     this.forceAuthentication = !data.cart.isGuestCheckoutAllowed;
                 }
             },
-            redirectIfAuthenticated: function (event) {
+            redirectIfAuthenticated() {
+                const event = this.$event;
+                this.open = this.forceAuthentication;
+
                 if (event.detail && event.detail.url) {
                     this.checkoutUrl = event.detail.url;
                 }
@@ -70,7 +79,10 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                     window.location.href = this.checkoutUrl;
                 }
             },
-            dispatchLoginRequest: function(form) {
+            resetErrors() {
+                this.errors = 0;
+            },
+            dispatchLoginRequest(form) {
                 this.isLoading = true;
                 const username = this.$refs['customer-email'].value;
                 const password = this.$refs['customer-password'].value;
@@ -99,13 +111,10 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                 ).then(response => {
                         return response.json()
                     }
-                ).then(data=> {
+                ).then(data => {
                     this.isLoading = false;
                     if (data.errors) {
-                        dispatchMessages([{
-                            type: 'error',
-                            text: data.message
-                        }], 5000);
+                        this.setErrorMessages(data.message);
                         this.errors = 1;
                         this.hasCaptchaToken = 0;
                     } else {
@@ -115,12 +124,15 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
             }
         }
     }
+
+    window.addEventListener('alpine:init', () => Alpine.data('initAuthentication', initAuthentication), {once: true})
 </script>
+<?php $hyvaCsp->registerInlineScript() ?>
 <section id="authentication-popup"
-         x-data="initAuthentication()"
-         @private-content-loaded.window="onPrivateContentLoaded($event.detail.data)"
-         @toggle-authentication.window="open = forceAuthentication; redirectIfAuthenticated(event)"
-         @keydown.window.escape="open = false"
+         x-data="initAuthentication"
+         @private-content-loaded.window="onPrivateContentLoaded"
+         @toggle-authentication.window="redirectIfAuthenticated"
+         @keydown.window.escape="close"
 >
     <div
         class="backdrop"
@@ -133,18 +145,18 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
         x-transition:leave="ease-in-out duration-500"
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
-        @click="open = false"
+        @click="close"
     ></div>
     <div role="dialog"
          aria-modal="true"
-         @click.outside="open = false"
+         @click.outside="close"
          class="inset-y-0 right-0 z-30 flex max-w-full fixed"
          x-cloak
          x-show="open"
     >
         <div class="relative w-screen max-w-md pt-16 bg-container-lighter"
              x-show="open"
-             x-cloak=""
+             x-cloak
              x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700"
              x-transition:enter-start="translate-x-full"
              x-transition:enter-end="translate-x-0"
@@ -154,7 +166,7 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
         >
             <div
                 x-show="open"
-                x-cloak=""
+                x-cloak
                 x-transition:enter="ease-in-out duration-500"
                 x-transition:enter-start="opacity-0"
                 x-transition:enter-end="opacity-100"
@@ -163,15 +175,26 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                 x-transition:leave-end="opacity-0" class="absolute top-0 right-2 flex p-2 mt-2">
                 <button
                     type="button"
-                    @click="open = false;"
+                    @click="close"
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Close panel')) ?>"
                     class="p-2 text-gray-300 transition duration-150 ease-in-out hover:text-black"
                 >
-                    <?= $heroicons->xHtml('', 24, 24, ['title' => __('Close panel')]); ?>
+                    <?= $heroicons->xHtml('', 24, 24, ['aria-hidden' => true]); ?>
                 </button>
             </div>
             <template x-if="open">
                 <div class="flex flex-col h-full py-6 space-y-6 bg-white shadow-xl overflow-y-auto">
+                    <div class="mx-4">
+                        <div class="message error mb-0" x-show="errors" x-cloak>
+                            <template x-for="(message, index) in errorMessages" :key="index">
+                                <div>
+                                    <template x-if="message">
+                                        <span x-html="message"></span>
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
                     <div class="block-customer-login bg-container border border-container mx-4 p-4 shadow-sm">
                         <p id="authenticate-customer-login" class="text-lg leading-7 text-gray-900">
                             <strong class="font-medium"><?= $escaper->escapeHtml(__('Checkout using your account')) ?></strong>
@@ -179,7 +202,7 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
 
                         <form class="form form-login"
                               method="post"
-                              @submit.prevent="submitForm();"
+                              @submit.prevent="submitForm"
                               id="login-form"
                         >
                             <?= $recaptcha ? $recaptcha->getInputHtml('customer_login', 'auth-popup') : '' ?>
@@ -192,11 +215,11 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                                         <input name="username"
                                                id="form-login-username"
                                                x-ref="customer-email"
-                                               @change="errors = 0"
+                                               @change="resetErrors"
                                                type="email"
                                                required
-                                               autocomplete="<?= $isAutocompleteEnabled ? 'username' : 'off' ?>"
-                                               class="form-input input-text"
+                                               autocomplete="<?= $isAutocompleteEnabled ? 'email' : 'off' ?>"
+                                               class="form-input"
                                         >
                                     </div>
                                 </div>
@@ -208,17 +231,17 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                                         <input name="password"
                                                id="form-login-password"
                                                type="password"
-                                               class="form-input input-text"
+                                               class="form-input"
                                                required
                                                x-ref="customer-password"
                                                autocomplete="<?= $isAutocompleteEnabled ? 'current-password' : 'off' ?>"
-                                               @change="errors = 0"
+                                               @change="resetErrors"
                                         >
                                     </div>
                                 </div>
 
                                 <input name="context" type="hidden" value="checkout" />
-                                <div class="actions-toolbar flex justify-between pt-6 pb-2 items-center">
+                                <div class="actions-toolbar pt-6 pb-2">
                                     <button type="submit"<?php if ($loginButtonViewModel->disabled()): ?> disabled data-recaptcha-btn<?php endif; ?>
                                             class="inline-flex btn btn-primary disabled:opacity-75"
                                     >
@@ -251,7 +274,7 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                                 <li> <?= $escaper->escapeHtml(__('Track order history')) ?></li>
                                 <li> <?= $escaper->escapeHtml(__('Check out faster')) ?></li>
                             </ul>
-                            <div class="actions-toolbar flex justify-between mt-6 mb-2 items-center">
+                            <div class="actions-toolbar mt-6 mb-2">
                                 <a href="<?= $escaper->escapeUrl($block->getUrl('customer/account/create')) ?>"
                                    class="inline-flex btn btn-primary">
                                     <?= $escaper->escapeHtml(__('Create an Account')) ?>

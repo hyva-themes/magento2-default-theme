@@ -8,24 +8,41 @@
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Customer\Block\Account\AuthorizationLink;
 use Magento\Framework\Escaper;
 
 /** @var AuthorizationLink $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
 
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
 
 $dataPostParam = '';
 if ($block->isLoggedIn()) {
-    $dataPostParam = sprintf(" @click.prevent='hyva.postForm(%s)'", $block->getPostParams());
+    $dataPostParam = sprintf(' @click.prevent="closeSession"');
 }
 ?>
-
-<a class="-mr-1 flex p-2 rounded-md text-white" <?= /* @noEscape */ $block->getLinkAttributes()
-?><?= /* @noEscape */ $dataPostParam ?>>
+<script>
+    function initCloseLoginAsCustomerSession() {
+        return {
+            closeSession() {
+                hyva.postForm(<?= /** @noEscape */ $block->getPostParams() ?>);
+            }
+        }
+    }
+    window.addEventListener('alpine:init', () => Alpine.data('initCloseLoginAsCustomerSession', initCloseLoginAsCustomerSession), {once: true})
+</script>
+<?php $hyvaCsp->registerInlineScript(); ?>
+<a x-data="initCloseLoginAsCustomerSession"
+    class="-mr-1 flex p-2 rounded-md text-white"
+    <?= /* @noEscape */ $block->getLinkAttributes() ?>
+    <?= /* @noEscape */ $dataPostParam ?>
+    aria-label="<?= $escaper->escapeHtmlAttr(__('Close Session')) ?>"
+    title="<?= $escaper->escapeHtmlAttr(__('Close Session')) ?>"
+>
     <span class="hidden md:block"><?= $escaper->escapeHtml(__('Close Session')) ?></span>
-    <?= $heroicons->xHtml(); ?>
+    <?= $heroicons->xHtml('', 24, 24, ['aria-hidden' => true]); ?>
 </a>

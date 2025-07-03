@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Hyva\Theme\ViewModel\Store as StoreViewModel;
 use Hyva\Theme\ViewModel\StoreConfig;
 use Magento\Cookie\Helper\Cookie;
@@ -19,6 +20,7 @@ use Magento\GoogleGtag\ViewModel\Adwords;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
 /** @var ViewModelRegistry $viewModels */
 /** @var Adwords $adsViewModel */
 
@@ -123,5 +125,6 @@ $lazyLoadScript = $storeConfig->getStoreConfig('google/gtag/lazyload')
             }())
         }
     </script>
+    <?php $hyvaCsp->registerInlineScript() ?>
     <!-- END GOOGLE ADWORDS CODE -->
 <?php endif ?>

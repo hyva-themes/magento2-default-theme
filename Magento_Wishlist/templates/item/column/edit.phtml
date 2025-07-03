@@ -36,8 +36,10 @@ $editProductUrl = $configureUrl . (count($urlHash) > 1 ? '#' . $urlHash[1] : '')
 
 <?php if ($product->isVisibleInSiteVisibility()): ?>
     <a class="action edit btn btn-secondary inline-flex mr-2 p-2"
-       href="<?= $escaper->escapeUrl($editProductUrl) ?>">
-        <?= $heroicons->pencilHtml('', 20, 20); ?>
+       href="<?= $escaper->escapeUrl($editProductUrl) ?>"
+       title="<?= $escaper->escapeHtmlAttr(__('Edit %1', $product->getName())) ?>"
+    >
+        <?= $heroicons->pencilHtml('', 20, 20, ["aria-hidden" => "true"]); ?>
         <span class="sr-only">
             <?= $escaper->escapeHtml(__('Edit %1', $product->getName())) ?>
         </span>

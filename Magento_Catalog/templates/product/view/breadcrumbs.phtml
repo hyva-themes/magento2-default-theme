@@ -35,7 +35,7 @@ $skipLinkedDataJsonSchema = $block->getData('skip_ld_json_schema');
 $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() : null;
 
 ?>
-<nav class="breadcrumbs bg-container-lighter shadow-sm" aria-label="Breadcrumb">
+<nav class="breadcrumbs bg-container-lighter text-slate-900 shadow-sm" aria-label="Breadcrumb">
     <div class="container">
         <ol
             x-data="initBreadcrumbsProduct()"
@@ -48,13 +48,13 @@ $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() 
             <template x-for="item in breadcrumbs">
                 <li class="item inline-flex whitespace-nowrap">
                     <template x-if="item.name !== 'home'">
-                        <span aria-hidden="true" class="separator text-primary-lighter px-2">/</span>
+                        <span aria-hidden="true" class="separator text-slate-600 px-2">/</span>
                     </template>
                     <template x-if="item.name === 'product'">
-                        <a :href="item.link" class="text-primary-lighter" aria-current="page" x-text="item.label"></a>
+                        <a :href="item.link" class="text-slate-600" aria-current="page" x-text="item.label"></a>
                     </template>
                     <template x-if="item.name !== 'product'">
-                        <a :href="item.link" class="no-underline" x-text="item.label"></a>
+                        <a :href="item.link" :aria-label="item.title" x-text="item.label"></a>
                     </template>
                 </li>
             </template>
@@ -80,7 +80,7 @@ $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() 
         function getProductCategoryUrl() {
             <?php if ($breadcrumbsViewModel->isCategoryUsedInProductUrl()): ?>
             const productUrl = window.location.href.split('?')[0];
-            return productUrl.substring(0, productUrl.lastIndexOf('/')) + '<?= $escaper->escapeJs($categoryUrlSuffix) ?>';;
+            return productUrl.substring(0, productUrl.lastIndexOf('/')) + '<?= $escaper->escapeJs($categoryUrlSuffix) ?>';
             <?php else: ?>
             return document.referrer.split('?')[0]
             <?php endif; ?>
@@ -98,7 +98,7 @@ $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() 
                 breadcrumbs.push({
                     name: 'category',
                     label: categories['c' + parts[i]]['name'],
-                    title: '',
+                    title: null,
                     link: categories['c' + parts[i]]['url']
                 });
             }
@@ -109,7 +109,7 @@ $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() 
         breadcrumbs.push({
             name: 'product',
             label: '<?= $escaper->escapeJs($product->getName()) ?>',
-            title: '',
+            title: null,
             link: BASE_URL + '<?= $escaper->escapeJs($product->getUrlKey()) ?>' + '<?= $escaper->escapeJs($productUrlSuffix) ?>'
         });
         <?php endif; ?>

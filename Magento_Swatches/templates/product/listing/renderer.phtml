@@ -53,6 +53,9 @@ $swatchItemBlock->setData('product_id', $productId);
                         this.findAllowedAttributeOptions();
                         this.updatePrices();
                         !skipUpdateGallery && this.updateGallery();
+
+                        const candidates = this.findProductIdsForPartialSelection(this.selectedValues);
+
                         window.dispatchEvent(new CustomEvent('listing-configurable-selection-changed', {
                             detail: {
                                 productId: this.productId,
@@ -60,7 +63,8 @@ $swatchItemBlock->setData('product_id', $productId);
                                 value,
                                 productIndex: this.productIndex,
                                 selectedValues: this.selectedValues,
-                                candidates: this.findProductIdsForPartialSelection(this.selectedValues),
+                                candidates: candidates,
+                                skuCandidates: Object.values(candidates).map(id => this.optionConfig.sku[id]),
                             }
                         }));
                     },

@@ -56,7 +56,8 @@ $recipients = $formData->getRecipientData() ?? '[]';
                                title="<?= $escaper->escapeHtmlAttr(__('Name')) ?>"
                                id="sender-name"
                                type="text"
-                               class="form-input input-text"
+                               class="form-input"
+                               autocomplete="name"
                                required
                         />
                     </div>
@@ -72,7 +73,8 @@ $recipients = $formData->getRecipientData() ?? '[]';
                                title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
                                id="sender-email"
                                type="email"
-                               class="form-input input-text"
+                               class="form-input"
+                               autocomplete="email"
                                required
                         />
                     </div>
@@ -86,8 +88,9 @@ $recipients = $formData->getRecipientData() ?? '[]';
                     </label>
                     <div class="control">
                         <textarea name="sender[message]"
-                                  class="form-input input-text mt-2 input input-light w-full h-48"
+                                  class="form-input mt-2 w-full h-48"
                                   id="sender-message"
+                                  autocomplete="off"
                                   required
                         ><?= $escaper->escapeHtml($block->getMessage()) ?></textarea>
                     </div>
@@ -115,9 +118,10 @@ $recipients = $formData->getRecipientData() ?? '[]';
                                         <div class="control">
                                             <input type="text"
                                                    title="<?= $escaper->escapeHtmlAttr(__('Name')) ?>"
-                                                   class="form-input input-text"
+                                                   class="form-input"
                                                    :id="`recipients-name${index}`"
                                                    :name="`recipients[name][${index}]`"
+                                                   autocomplete="off"
                                                    required
                                                    x-model="field.name"
                                             />
@@ -132,7 +136,8 @@ $recipients = $formData->getRecipientData() ?? '[]';
                                                    :id="`recipients-email${index}`"
                                                    :name="`recipients[email][${index}]`"
                                                    type="email"
-                                                   class="form-input input-text"
+                                                   class="form-input"
+                                                   autocomplete="off"
                                                    required
                                                    validate
                                                    x-model="field.email"
@@ -142,12 +147,12 @@ $recipients = $formData->getRecipientData() ?? '[]';
                                     </div>
                                     <div class="field">
                                         <button type="button"
-                                                class="btn btn-secondary"
+                                                class="btn btn-secondary p-2"
                                                 @click="removeField(index)"
                                                 :disabled="fields.length <= 1"
-                                                :class="{'opacity-25': fields.length <= 1}"
+                                                :class="{'opacity-60': fields.length <= 1}"
                                         >
-                                            <?= $icons->trashHtml('h-6 w-6') ?>
+                                            <?= $icons->trashHtml('', 24, 24, ['title' => __('Remove')]) ?>
                                         </button>
                                     </div>
                                 </div>

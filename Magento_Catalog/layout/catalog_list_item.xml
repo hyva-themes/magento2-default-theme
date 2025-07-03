@@ -18,12 +18,16 @@
                     <item name="category.products.list.js.wishlist" xsi:type="boolean">true</item>
                     <item name="category.products.list.js.compare" xsi:type="boolean">true</item>
                 </argument>
+                <argument name="product_data_attributes" xsi:type="array">
+                    <item name="sku" xsi:type="boolean">true</item>
+                </argument>
             </arguments>
             <block class="Magento\Framework\View\Element\RendererList" name="category.product.type.details.renderers" as="details.renderers">
                 <block name="category.product.type.details.renderers.default" as="default"/>
             </block>
             <block class="Magento\Catalog\Block\Product\ProductList\Item\Container" name="catalog.list.item.addto" as="addto">
             </block>
+            <block name="catalog.list.item.wishlist" as="wishlist"  template="Magento_Catalog::product/list/wishlist/button.phtml"/>
             <block name="product.item.stockstatus" as="stockstatus"  template="Magento_Catalog::product/view/stock-status.phtml"/>
         </block>
 

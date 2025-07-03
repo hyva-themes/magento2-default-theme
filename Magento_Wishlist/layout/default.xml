@@ -10,7 +10,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="header.customer.logged.in.links">
-            <block name="customer.header.wishlist.link" template="Magento_Wishlist::link.phtml">
+            <block name="customer.header.wishlist.link" template="Magento_Wishlist::link.phtml" ifconfig="wishlist/general/active">
                 <arguments>
                     <argument name="sort_order" xsi:type="number">20</argument>
                 </arguments>

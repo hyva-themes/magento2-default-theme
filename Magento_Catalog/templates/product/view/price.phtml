@@ -269,7 +269,7 @@ if ($msrpPrice = iterator_to_array($product->getPriceInfo()->getPrices())[MsrpPr
                 <?php endif; ?>
             <?php endif; ?>
 
-            <div class="final-price inline-block" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
+            <div class="final-price inline-block" itemprop="offers" itemscope="" itemtype="https://schema.org/Offer">
                     <span class="price-label block">
                         <?= ($product->canConfigure() && is_int($product->getPrice())) ?
                             $escaper->escapeHtml(__('As low as')) . ':' :

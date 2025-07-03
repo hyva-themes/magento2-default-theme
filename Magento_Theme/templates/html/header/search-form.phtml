@@ -8,9 +8,12 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 use Magento\Search\Helper\Data as SearchHelper;
+use Magento\Search\ViewModel\ConfigProvider as SearchConfig;
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
@@ -18,8 +21,16 @@ use Magento\Search\Helper\Data as SearchHelper;
 /** @var Escaper $escaper */
 /** @var Template $block */
 /** @var SearchHelper $helper */
+/** @var ViewModelRegistry $viewModels */
 
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
+/** @var SearchHelper $helper */
 $helper = $this->helper(SearchHelper::class);
+
+/** @var SearchConfig $searchConfig */
+$searchConfig = $viewModels->require(SearchConfig::class);
 ?>
 <script>
     'use strict';
@@ -27,6 +38,7 @@ $helper = $this->helper(SearchHelper::class);
     function initMiniSearch() {
         return {
             minSearchLength: <?= (int) $helper->getMinQueryLength() ?>,
+            <?php if ($searchConfig->isSuggestionsAllowed()): ?>
             suggestions: [],
             suggest() {
                 const search = this.$refs.searchInput;
@@ -50,6 +62,7 @@ $helper = $this->helper(SearchHelper::class);
                 .then(response => response.json())
                 .then(result => this.suggestions = result);
             },
+            <?php endif ?>
             search(term) {
                 const search = this.$refs.searchInput;
                 term = term || search.value;
@@ -76,54 +89,65 @@ $helper = $this->helper(SearchHelper::class);
     }
 </script>
 <div class="container py-2 mx-auto text-black" x-data="initMiniSearch()">
-     <form class="form minisearch" id="search_mini_form" x-ref="form" @submit.prevent="search()"
-          action="<?= $escaper->escapeUrl($helper->getResultUrl()) ?>" method="get" role="search">
-        <label class="hidden" for="search" data-role="minisearch-label">
-            <span><?= $escaper->escapeHtml(__('Search')) ?></span>
-        </label>
-        <input id="search"
-               x-ref="searchInput"
-               type="search"
-               autocomplete="off"
-               name="<?= $escaper->escapeHtmlAttr($helper->getQueryParamName()) ?>"
-               value="<?= /** @noEscape */ $helper->getEscapedQueryText() ?>"
-               placeholder="<?= $escaper->escapeHtmlAttr(__('Search entire store here...')) ?>"
-               maxlength="<?= $escaper->escapeHtmlAttr($helper->getMaxQueryLength()) ?>"
-               class="w-full p-2 text-lg leading-normal transition appearance-none text-grey-800
-                focus:outline-none focus:border-transparent lg:text-xl"
-               @focus.once="suggest"
-               @input.debounce.300="suggest"
-               @keydown.arrow-down.prevent="focusElement($root.querySelector('[tabindex]'))"
-               @search-open.window.debounce.10="
-                    $el.focus()
-                    $el.select()
-               "
-        />
-         <template x-if="suggestions.length > 0">
-             <div class="w-full leading-normal transition appearance-none text-grey-800 flex flex-col mt-1">
-                 <template x-for="suggestion in suggestions">
-                     <div class="flex justify-between p-2 bg-container-lighter even:bg-container mb-1 cursor-pointer
-                                 border border-container hover:bg-container-darker"
-                          tabindex="0"
-                          @click="search(suggestion.title)"
-                          @keydown.enter="search(suggestion.title)"
-                          @keydown.arrow-up.prevent="
-                              focusElement($event.target.previousElementSibling) || $refs.searchInput.focus()
-                          "
-                          @keydown.arrow-down.prevent="focusElement($event.target.nextElementSibling)"
-                     >
-                         <span x-text="suggestion.title"></span>
-                         <span x-text="suggestion.num_results"></span>
-                     </div>
-                 </template>
-             </div>
-         </template>
-        <button type="submit"
-                title="<?= $escaper->escapeHtml(__('Search')) ?>"
-                class="action search sr-only"
-                aria-label="Search"
+    <search title="<?= $escaper->escapeHtmlAttr(__('Store')) ?>" role="search">
+        <form
+            id="search_mini_form"
+            class="form minisearch flex"
+            action="<?= $escaper->escapeUrl($helper->getResultUrl()) ?>"
+            method="get"
+            @submit.prevent="search()"
+            x-ref="form"
         >
-            <?= $escaper->escapeHtml(__('Search')) ?>
-        </button>
-    </form>
+            <label class="sr-only" for="search">
+                <?= $escaper->escapeHtml(__('Search')) ?>
+            </label>
+            <input
+                id="search"
+                x-ref="searchInput"
+                type="search"
+                autocomplete="off"
+                name="<?= $escaper->escapeHtmlAttr($helper->getQueryParamName()) ?>"
+                value="<?= /** @noEscape */ $helper->getEscapedQueryText() ?>"
+                placeholder="<?= $escaper->escapeHtmlAttr(__('Search entire store here...')) ?>"
+                maxlength="<?= $escaper->escapeHtmlAttr($helper->getMaxQueryLength()) ?>"
+                class="w-full text-lg lg:text-xl text-grey-800 focus:border-transparent focus:outline-none rounded-l"
+                @search-open.window.debounce.10="$el.focus(); $el.select()"
+                <?php if ($searchConfig->isSuggestionsAllowed()): ?>
+                    @focus.once="suggest"
+                    @input.debounce.300="suggest"
+                    @keydown.arrow-down.prevent="focusElement($root.querySelector('[tabindex]'))"
+                <?php endif ?>
+            >
+            <button
+                type="submit"
+                class="action search btn btn-primary rounded-l-none rounded-r shrink-0 p-3 shadow-none"
+                title="<?= $escaper->escapeHtmlAttr(__('Search')) ?>"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Search')) ?>"
+            >
+                <?= $heroicons->searchHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
+            </button>
+        </form>
+    </search>
+    <?php if ($searchConfig->isSuggestionsAllowed()): ?>
+        <template x-if="suggestions.length > 0">
+            <nav
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Search Suggestions')) ?>"
+                class="flex flex-col mt-1 text-grey-800 gap-1"
+            >
+                <template x-for="suggestion in suggestions">
+                    <button
+                        type="button"
+                        class="flex justify-between p-2 bg-container-lighter even:bg-container border border-container hover:bg-container-darker"
+                        @click="search(suggestion.title)"
+                        @keydown.enter="search(suggestion.title)"
+                        @keydown.arrow-up.prevent="focusElement($event.target.previousElementSibling) || $refs.searchInput.focus()"
+                        @keydown.arrow-down.prevent="focusElement($event.target.nextElementSibling)"
+                    >
+                        <span x-text="suggestion.title"></span>
+                        <span x-text="suggestion.num_results"></span>
+                    </button>
+                </template>
+            </nav>
+        </template>
+    <?php endif ?>
 </div>

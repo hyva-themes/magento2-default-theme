@@ -178,11 +178,11 @@ div {
     }
 
     .pagebuilder-mobile-hidden {
-        @apply hidden md:block;
+        @apply hidden md:inline-block;
     }
 
     .pagebuilder-mobile-only {
-        @apply md:hidden;
+        @apply inline-block md:hidden;
     }
 
     figcaption {
@@ -447,21 +447,6 @@ div {
     .block-banners .banner-item-content,
     .block-banners-inline .banner-item-content {
         @apply mb-auto;
-    }
-}
-
-/* Products */
-[data-content-type='products'][data-appearance='carousel'] {
-    [data-role='glider-content'] {
-        grid-template-columns: repeat(100, calc(50% - 1rem));
-
-        @screen md {
-            grid-template-columns: repeat(100, calc(33% - 1rem));
-        }
-
-        @screen lg {
-            grid-template-columns: repeat(100, calc(25% - 1rem));
-        }
     }
 }
 

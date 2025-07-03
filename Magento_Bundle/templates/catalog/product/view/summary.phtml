@@ -26,7 +26,7 @@ $product = $block->getProduct();
         </h2>
     </div>
     <div class="content">
-        <div class="bundle-info">
+        <div class="bundle-info mb-2">
             <div class="product-details">
                 <p class="text-lg font-semibold product-name">
                     <?= $escaper->escapeHtml($product->getName()) ?>
@@ -35,10 +35,11 @@ $product = $block->getProduct();
                 <?= $block->getChildHtml('product.info.form') ?>
             </div>
 
-            <div class="py-1 my-2 tier-price-container">
-                <?= $block->getChildHtml("product.price.tier") ?>
-            </div>
-
+            <?php if ($tierPriceBlock = $block->getChildHtml("product.price.tier")): ?>
+                <div class="py-1 mt-2 tier-price-container">
+                    <?= /** @noEscape */ $tierPriceBlock ?>
+                </div>
+            <?php endif; ?>
         </div>
         <div x-data="initBundleSummary()"
              x-bind="eventListeners"
@@ -50,7 +51,7 @@ $product = $block->getProduct();
                     <?= $escaper->escapeHtml(__('Summary')) ?>
                 </div>
                 <div>
-                    <ul class="bundle items">
+                    <ul role="list" class="bundle items">
                         <template x-for="option in selectedOptions">
                         <li class="mb-2" x-show="option.products.length">
                             <span class="text-base font-semibold" x-html="option.label"></span>
