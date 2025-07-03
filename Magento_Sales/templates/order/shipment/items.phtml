@@ -30,7 +30,7 @@ $shippingHelper = $this->helper(ShippingHelper::class);
     <div class="order-title text-center md:text-left font-semibold">
         <?= $escaper->escapeHtml(__('Shipment #')) ?><?= $escaper->escapeHtml($shipment->getIncrementId()) ?>
         <a href="<?= $escaper->escapeUrl($block->getUrl('*/*/printShipment', ['shipment_id' => $shipment->getId()])) ?>"
-           class="text-primary inline-block ml-2 pl-2 border-l text-sm font-normal"
+           class="inline-block ml-2 pl-2 border-l text-sm font-normal"
            target="_blank"
            rel="noopener">
             <?= $heroicons->printerHtml('inline-block', 20, 20); ?>
@@ -39,7 +39,7 @@ $shippingHelper = $this->helper(ShippingHelper::class);
         <?php if ($tracks->count()): ?>
             <a href="<?= $escaper->escapeUrl($shippingHelper->getTrackingPopupUrlBySalesModel($shipment)) ?>"
                target="_blank" rel="noopener" title="<?= $escaper->escapeHtml(__('Track Shipment')) ?>"
-               class="text-primary inline-block ml-2 pl-2 border-l text-sm font-normal">
+               class="inline-block ml-2 pl-2 border-l text-sm font-normal">
                 <?= $heroicons->searchHtml('inline-block', 20, 20); ?>
                 <span class="inline-block ml-1 underline"><?= $escaper->escapeHtml(__('Track Shipment')) ?></span>
             </a>

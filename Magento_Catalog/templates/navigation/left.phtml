@@ -29,7 +29,7 @@ if (!$count) {
 ?>
 
 <div class="block my-6">
-    <h2 class="block-title text-primary text-md md:text-3xl font-medium uppercase">
+    <h2 class="block-title text-md md:text-3xl font-medium uppercase">
         <?= $escaper->escapeHtml(__('Shop By')) ?>
     </h2>
     <div class="block-content pt-4">
@@ -56,7 +56,7 @@ if (!$count) {
                                     <?php endif; ?>
                                 >
                                     <span><?= $escaper->escapeHtml($category->getName()) ?></span>
-                                    <span class="count text-primary">(<?= $escaper->escapeHtml($category->getProductCount()) ?>)</span>
+                                    <span class="county">(<?= $escaper->escapeHtml($category->getProductCount()) ?>)</span>
                                 </a>
                             </li>
                         <?php endif; ?>

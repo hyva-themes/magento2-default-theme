@@ -17,13 +17,13 @@ use Magento\Framework\Escaper;
 
 ?>
 <?php if ($crumbs && is_array($crumbs)): ?>
-<nav class="breadcrumbs bg-container-lighter shadow-sm" aria-label="Breadcrumb">
+<nav class="breadcrumbs bg-container-lighter text-slate-900 shadow-sm" aria-label="Breadcrumb">
     <div class="container">
         <ol class="items list-reset py-4 rounded flex flex-wrap text-grey text-sm">
             <?php foreach ($crumbs as $crumbName => $crumbInfo): ?>
                 <li class="item flex <?= $escaper->escapeHtmlAttr($crumbName) ?>">
                 <?php if (!$crumbInfo['first']): ?>
-                    <span aria-hidden="true" class="separator text-primary-lighter px-2">/</span>
+                    <span aria-hidden="true" class="separator text-slate-600 px-2">/</span>
                 <?php endif; ?>
                 <?php if ($crumbInfo['link']): ?>
                     <a
@@ -34,7 +34,7 @@ use Magento\Framework\Escaper;
                     ><?= $escaper->escapeHtml($crumbInfo['label']) ?></a>
                 <?php elseif ($crumbInfo['last']): ?>
                     <span
-                       class="text-primary-lighter"
+                       class="text-slate-600"
                        aria-current="page"
                     ><?= $escaper->escapeHtml($crumbInfo['label']) ?></span>
                 <?php else: ?>

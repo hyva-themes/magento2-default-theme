@@ -91,7 +91,7 @@ $jsTemplate = 'Magento_Catalog::product/widget/viewed/js/recently-viewed-product
                                     </a>
                                 <?php endif; ?>
                                 <?php if (in_array("name", $widgetAttributesToShow)): ?>
-                                    <p class="flex items-center justify-center px-1 pt-3 text-primary">
+                                    <p class="flex items-center justify-center px-1 pt-3">
                                         <a class="truncate product-item-link"
                                            :href="'<?= $escaper->escapeJs($escaper->escapeUrl($block->getBaseUrl())) ?>'
                                                   + product.url_key + (product.url_suffix || '')"

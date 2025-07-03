@@ -125,7 +125,7 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
             ->toHtml(); ?>
     </a>
     <div class="product-info flex flex-col grow <?= $viewIsGrid ? '' : 'md:pl-5 md:w-4/6' ?>">
-        <div class="mt-2 mb-1 items-center justify-center text-primary font-semibold text-lg text-center <?= $viewIsGrid ? '' : 'md:text-left' ?>">
+        <div class="mt-2 mb-1 items-center justify-center font-semibold text-lg text-center <?= $viewIsGrid ? '' : 'md:text-left' ?>">
             <a
                 class="product-item-link"
                 href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>"
@@ -146,7 +146,7 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
         <?php endif; ?>
 
         <?php if ($showDescription): ?>
-        <div class="mt-2 mb-1 items-center justify-center text-primary text-center <?= $viewIsGrid ? '' : 'md:text-left' ?>">
+        <div class="mt-2 mb-1 items-center justify-center text-center <?= $viewIsGrid ? '' : 'md:text-left' ?>">
             <?= /* @noEscape */ $productViewModel->getShortDescriptionForProduct($product) ?>
         </div>
         <?php endif; ?>

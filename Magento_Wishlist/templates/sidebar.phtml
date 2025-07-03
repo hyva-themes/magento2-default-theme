@@ -108,7 +108,7 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
         <template x-if="itemCount">
             <div class="mt-8">
                 <h2 class="border-t border-container mb-6 pt-5" id="wishlist-sidebar">
-                    <strong class="title text-primary font-semibold text-lg"><?= $escaper->escapeHtml($block->getTitle()) ?></strong>
+                    <strong class="title font-semibold text-lg"><?= $escaper->escapeHtml($block->getTitle()) ?></strong>
                     <span class="counter text-xs" x-html="wishlistCountLabel"></span>
                 </h2>
                 <ul role="list" class="my-4" aria-labelledby="wishlist-sidebar">
@@ -153,18 +153,18 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
                                 :aria-label="hyva.str('<?= $escaper->escapeJs(__('Remove product "%1" from My Wish List')) ?>', product.product_name)"
                                 class="
                                     p-1 inline-flex shrink-0 items-center
-                                    justify-center text-gray-500 hover:text-primary ml-auto
+                                    justify-center text-slate-400 hover:text-slate-800 ml-auto
                                 "
                             >
-                                <?= $heroiconsOutline->xHtml('h-6 w-6', 25, 25, ['aria-hidden' => 'true']); ?>
+                                <?= $heroiconsOutline->xHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
                             </button>
                         </li>
                     </template>
                 </ul>
-                <div class="flex flex-wrap items-center md:mt-5 space-x-4 text-sm">
+                <div class="flex flex-wrap items-center md:mt-5 gap-2 text-sm">
                     <a href="<?= $escaper->escapeUrl($block->getUrl('wishlist')) ?>"
                        aria-label="<?= $escaper->escapeHtmlAttr(__('Go to Wish List page')); ?>"
-                       class="px-4 text-sm text-gray-500 hover:text-primary"
+                       class="btn btn-secondary text-sm"
                     >
                         <?= $escaper->escapeHtml(__('Go to Wish List')); ?>
                     </a>

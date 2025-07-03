@@ -25,7 +25,7 @@ $order = $block->getOrder();
         <?= $escaper->escapeHtml(__('Refund #')) ?>
         <?= $escaper->escapeHtml($creditmemo->getIncrementId()) ?>
         <a href="<?= $escaper->escapeUrl($block->getPrintCreditmemoUrl($creditmemo)) ?>"
-           class="text-primary inline-block ml-2 pl-2 border-l text-sm font-normal"
+           class="inline-block ml-2 pl-2 border-l text-sm font-normal"
             target="_blank"
             rel="noopener">
             <?= $heroicons->printerHtml('inline-block', 20, 20); ?>

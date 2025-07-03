@@ -35,7 +35,7 @@ $skipLinkedDataJsonSchema = $block->getData('skip_ld_json_schema');
 $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() : null;
 
 ?>
-<nav class="breadcrumbs bg-container-lighter shadow-sm" aria-label="Breadcrumb">
+<nav class="breadcrumbs bg-container-lighter text-slate-900 shadow-sm" aria-label="Breadcrumb">
     <div class="container">
         <ol
             x-data="initBreadcrumbsProduct()"
@@ -48,10 +48,10 @@ $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() 
             <template x-for="item in breadcrumbs">
                 <li class="item inline-flex whitespace-nowrap">
                     <template x-if="item.name !== 'home'">
-                        <span aria-hidden="true" class="separator text-primary-lighter px-2">/</span>
+                        <span aria-hidden="true" class="separator text-slate-600 px-2">/</span>
                     </template>
                     <template x-if="item.name === 'product'">
-                        <span class="text-primary-lighter" x-text="item.label"></span>
+                        <span class="text-slate-600" x-text="item.label"></span>
                     </template>
                     <template x-if="item.name !== 'product'">
                         <a :href="item.link" :aria-label="item.title" x-text="item.label"></a>

@@ -25,7 +25,7 @@ $order = $block->getOrder();
     <div class="order-title text-center md:text-left font-semibold">
         <?= $escaper->escapeHtml(__('Invoice #')) ?><?= $escaper->escapeHtml($invoice->getIncrementId()) ?>
         <a href="<?= $escaper->escapeUrl($block->getPrintInvoiceUrl($invoice)) ?>"
-           class="text-primary inline-block ml-2 pl-2 border-l text-sm font-normal"
+           class="inline-block ml-2 pl-2 border-l text-sm font-normal"
            target="_blank"
            rel="noopener">
             <?= $heroicons->printerHtml('inline-block', 20, 20); ?>
