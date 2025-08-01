@@ -1,0 +1,29 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+/** @var string  $htmlAttributes */
+/** @var string  $headAttributes */
+/** @var string  $headContent */
+/** @var string  $headAdditional */
+/** @var string  $bodyAttributes */
+/** @var string  $layoutContent */
+?>
+<!doctype html>
+<html <?= /* @noEscape */ $htmlAttributes ?>>
+<head <?= /* @noEscape */ $headAttributes ?>>
+    <?= /* @noEscape */ $headContent ?>
+    <?= /* @noEscape */ $headCritical ?? '' ?>
+    <?= /* @noEscape */ $headAssets ?? '' ?>
+    <?= /* @noEscape */ $headAdditional ?>
+</head>
+<body <?= /* @noEscape */ $bodyAttributes ?>>
+<?= /* @noEscape */ $layoutContent ?>
+</body>
+</html>
