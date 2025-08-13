@@ -159,6 +159,12 @@ div {
     }
 }
 
+/* Divider */
+[data-content-type="divider"] hr {
+    border-block-end: 0;
+    border-inline: 0;
+}
+
 /* HTML Code */
 [data-content-type='html'] {
     @apply break-words;
