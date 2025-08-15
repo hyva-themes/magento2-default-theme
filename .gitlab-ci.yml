@@ -21,7 +21,7 @@ test:integration:
     parallel:
         matrix:
             # Note: 2.4.0 fails due to a bug in dotmailer/dotmailer-magento2-extension integration tests
-            - MAGEVERSION: ['2.4.7-p6']
+            - MAGEVERSION: ['2.4.7-p7']
 
 test:cypress:
     extends: .test:cypress
@@ -29,4 +29,4 @@ test:cypress:
         matrix:
             # Note: The cypress tests do not pass on 2.4.0 because the customer API is missing the login feature
             # Note: The cypress tests do not pass on 2.4.1 because the missing add coupon success message
-            - MAGEVERSION: ['2.4.7-p6']
+            - MAGEVERSION: ['2.4.7-p7']
