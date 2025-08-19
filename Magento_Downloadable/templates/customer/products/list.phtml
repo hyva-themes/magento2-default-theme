@@ -101,7 +101,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                 <?php if ($block->getIsOpenInNewWindow()): ?>
                                     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                                         'onclick',
-                                        "this.target='_blank'",
+                                        "this.target='_blank'; this.rel='noopener';",
                                         'a#download_' . $item->getPurchased()->getProductId()
                                     ) ?>
                                 <?php endif; ?>

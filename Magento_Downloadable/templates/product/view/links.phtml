@@ -127,7 +127,7 @@ $configuredLinks          = $configuredValues->getLinks() ?? [];
                 <?php if ($link->getSampleFile() || $link->getSampleUrl()): ?>
                     <a class="item-link samples-item-link"
                        href="<?= $escaper->escapeUrl($block->getLinkSampleUrl($link)) ?>"
-                       <?= $block->getIsOpenInNewWindow() ? 'target="_blank"' : '' ?>>
+                       <?= $block->getIsOpenInNewWindow() ? 'target="_blank" rel="noopener"' : '' ?>>
                        <?= $iconViewModel->documentDownloadHtml('inline-block mr-1', 24, 24) ?>
                        <?= $escaper->escapeHtml(__('sample')) ?>
                     </a>
