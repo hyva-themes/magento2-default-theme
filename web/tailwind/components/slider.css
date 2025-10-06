@@ -5,7 +5,6 @@
         --snap-size: calc(
             (100% - var(--snap-gap) * (var(--snap-cols) - 1)) / var(--snap-cols)
         );
-        container-type: inline-size;
         display: grid;
         grid-auto-flow: column;
         grid-auto-columns: var(--snap-size);
