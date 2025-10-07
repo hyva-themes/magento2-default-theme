@@ -19,8 +19,8 @@ use Magento\Framework\Escaper;
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
-$sliderName = $block->getData('slider_name') ?: str_replace(['.', '/', '\\'], '_', $block->getNameInLayout());
-$cssClasses = $block->getData('css_classes') ?: 'widget-product-carousel';
+$sliderName = $block->getSliderName() ?: str_replace(['.', '/', '\\'], '_', $block->getNameInLayout());
+$cssClasses = $block->getCssClasses() ?: 'widget-product-carousel';
 
 // There is is sadly no clean option to display a A11Y title for the section.
 // So the generic one has to do, until fixed in M2 Core
@@ -40,7 +40,7 @@ $productListItemViewModel = $viewModels->require(ProductListItem::class);
     <?php $items = $block->getProductCollection()->getItems(); ?>
 
     <section
-        id="<?= /* @noEscape */ $sliderName ?>"
+        id="<?= $escaper->escapeHtmlAttr($sliderName) ?>"
         class="<?= $escaper->escapeHtmlAttr($cssClasses) ?>"
         data-slider-type="<?= $escaper->escapeHtmlAttr($type) ?>"
     >
