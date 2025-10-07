@@ -27,7 +27,7 @@ $cssClasses = $block->getCssClasses() ?: 'my-8';
 $headingCssClasses = $block->getHeadingCssClasses() ?: 'text-2xl font-medium';
 $columnCount = $block->getColumnCount() ?: 1;
 $sliderClasses = implode(' ', array_filter([
-    'snap-slider',
+    'snap-track',
     $columnCount > 1 ? 'md:[--snap-cols:2]' : '',
     $columnCount > 2 ? 'lg:[--snap-cols:3]' : '',
     $columnCount > 3 ? 'xl:[--snap-cols:4]' : '',

@@ -1,5 +1,5 @@
 @layer components {
-    .snap-slider {
+    .snap-track {
         --snap-cols: 1;
         --snap-gap: theme(spacing.4);
         --snap-size: calc(

@@ -300,10 +300,10 @@ div {
     position: relative;
     padding-block-end: theme("spacing.12");
 
-    &:not(:has(.snap-slider)) {
+    &:not(:has(.snap-track)) {
         display: grid;
         grid-auto-flow: column;
-        grid-auto-columns: var(--snap-size, 100%);
+        grid-auto-columns: 100%;
         padding-block: theme("spacing.6")
             calc(theme("spacing.6") + theme("spacing.12"));
         overflow-x: auto;

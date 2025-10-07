@@ -49,7 +49,7 @@ $productListItemViewModel = $viewModels->require(ProductListItem::class);
             class="sr-only focus:not-sr-only focus:absolute focus:p-2 focus:bg-white"
         ><?= $escaper->escapeHtml(__('Press to skip carousel')) ?></a>
 
-        <div class="snap-slider md:[--snap-cols:2] lg:[--snap-cols:3] xl:[--snap-cols:4]" data-track>
+        <div class="snap-track md:[--snap-cols:2] lg:[--snap-cols:3] xl:[--snap-cols:4]" data-track>
             <?php foreach ($items as $item): ?>
                 <div class="flex flex-col">
                     <?= $productListItemViewModel->getItemHtml($item, $block, $mode, $templateType, $image, $description) ?>
