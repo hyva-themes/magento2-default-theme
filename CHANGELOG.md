@@ -35,6 +35,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **Update browser-sync to v3.0.3**  
   For more information, please refer to [merge request #1188](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1188)
 
+- **Fixed the toggle action for the minicart panel**  
+  For more information, please refer to [issue #918](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/918)
+
 ### Removed
 
 - **Removed the scroll to review function summary short**  
