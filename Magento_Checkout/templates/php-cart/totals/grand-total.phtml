@@ -1,10 +1,6 @@
 <template x-if="segment.code === 'grand_total'">
-    <div class="flex py-2 pt-6 my-2 mx-auto mb-12 text-2xl md:grid md:grid-cols-2 md:w-full">
-        <h3 class="w-7/12 font-semibold text-left md:w-auto"
-            x-html="segment.title"
-        ></h3>
-        <div class="w-5/12 text-right md:w-auto"
-             x-text="hyva.formatPrice(segment.value)"
-        ></div>
+    <div :class="wrapperClassTotals" class="mt-6 mb-12">
+        <div x-text="segment.title" class="font-semibold"></div>
+        <div x-text="hyva.formatPrice(segment.value)" class="justify-self-end"></div>
     </div>
 </template>

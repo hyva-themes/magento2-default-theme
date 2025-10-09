@@ -18,27 +18,24 @@ $magento = $viewModels->require(MagentoMetadata::class);
 ?>
 <!-- display subtotal excluding tax -->
 <template x-if="segment.code === 'grand_total' && checkoutConfig.includeTaxInGrandTotal">
-    <div>
-        <div class="flex py-2 pt-6 my-2 mx-auto text-xl md:grid md:grid-cols-2 md:w-full border-b border-container">
-            <div class="w-7/12 font-semibold text-left md:w-auto"
-                 x-html="`${segment.title} ${includingTaxMessage}` "
-            ></div>
-            <div class="w-5/12 text-right md:w-auto"
-                 x-text="hyva.formatPrice(segment.value)"
-            ></div>
+    <div class="mt-6 mb-12 divide-y">
+        <div :class="wrapperClassTotals">
+            <div x-text="`${segment.title} ${includingTaxMessage}`" class="font-semibold"></div>
+            <div x-text="hyva.formatPrice(segment.value)" class="justify-self-end"></div>
         </div>
-
-        <div class="flex py-2 my-2 mx-auto mb-12 text-md md:grid md:grid-cols-2 md:w-full">
-            <div class="w-7/12 font-semibold text-left md:w-auto"
-                 x-html="`${segment.title} ${excludingTaxMessage}` "
+        <div :class="wrapperClass" class="text-base">
+            <div
+                class="font-semibold"
+                x-html="`${segment.title} ${excludingTaxMessage}`"
             ></div>
-            <div class="w-5/12 text-right md:w-auto"
-                 <?php /* All Mage-OS releases with a version < 2.4.6 match Magento code >= 2.4.6 */ ?>
-                 <?php if ($magento->versionCompare('<', '2.4.6') && $magento->getDistributionName() === 'Magento'): ?>
-                 x-text="hyva.formatPrice(totalsData.grand_total)"
-                 <?php else: ?>
-                 x-text="hyva.formatPrice(totalsData.grand_total - totalsData.tax_amount)"
-                 <?php endif; ?>
+            <div
+                class="justify-self-end"
+                <?php /* All Mage-OS releases with a version < 2.4.6 match Magento code >= 2.4.6 */ ?>
+                <?php if ($magento->versionCompare('<', '2.4.6') && $magento->getDistributionName() === 'Magento'): ?>
+                x-text="hyva.formatPrice(totalsData.grand_total)"
+                <?php else: ?>
+                x-text="hyva.formatPrice(totalsData.grand_total - totalsData.tax_amount)"
+                <?php endif; ?>
             ></div>
         </div>
     </div>
@@ -46,15 +43,8 @@ $magento = $viewModels->require(MagentoMetadata::class);
 
 <!-- display subtotal including tax -->
 <template x-if="segment.code === 'grand_total' && !checkoutConfig.includeTaxInGrandTotal">
-    <div class="flex py-2 pt-6 my-2 mx-auto mb-12 text-2xl md:grid md:grid-cols-2 md:w-full">
-
-        <div class="w-7/12 font-semibold text-left md:w-auto"
-             x-html="`${segment.title}`"
-        ></div>
-        <div class="w-5/12 text-right md:w-auto"
-             x-text="hyva.formatPrice(segment.value)"
-        ></div>
-
-
+    <div :class="wrapperClassTotals" class="mt-6 mb-12">
+        <div x-text="`${segment.title}`" class="font-semibold"></div>
+        <div x-text="hyva.formatPrice(segment.value)" class="justify-self-end"></div>
     </div>
 </template>
