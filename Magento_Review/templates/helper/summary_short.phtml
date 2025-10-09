@@ -45,8 +45,11 @@ $uniqueId = $productId . uniqid();
             <?php $i = 0; ?>
             <?php while ($i < $starsFilled): ?>
                 <svg
-                    xmlns="http://www.w3.org/2000/svg" class="fill-current w-6 h-6" viewBox="3 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="3 0 20 20"
                     style="color: <?= /** @noEscape */ $yellowHex ?>"
+                    width="24"
+                    height="24"
                     fill="currentColor"
                     aria-hidden="true"
                 >
@@ -62,8 +65,9 @@ $uniqueId = $productId . uniqid();
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="3 0 20 20"
+                    width="24"
+                    height="24"
                     fill="currentColor"
-                    class="w-6 h-6"
                     aria-hidden="true"
                 >
                     <defs>
@@ -87,9 +91,10 @@ $uniqueId = $productId . uniqid();
                 <?php while ($i < $starsEmpty): ?>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="fill-current w-6 h-6"
                     style="color: <?= /** @noEscape */ $greyHex ?>"
                     viewBox="3 0 20 20"
+                    width="24"
+                    height="24"
                     fill="currentColor"
                     aria-hidden="true"
                 >
@@ -107,8 +112,10 @@ $uniqueId = $productId . uniqid();
             <?php while ($i < $ratingSteps): ?>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="fill-current text-gray-200 w-6 h-6"
+                    class="text-gray-200"
                     viewBox="3 0 20 20"
+                    width="24"
+                    height="24"
                     fill="currentColor"
                     aria-hidden="true"
                 >

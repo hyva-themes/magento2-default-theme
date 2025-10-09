@@ -39,7 +39,7 @@ fieldset {
     }
 
     legend {
-        @apply text-primary text-xl mb-3
+        @apply text-xl mb-3
     }
 
     legend + br {

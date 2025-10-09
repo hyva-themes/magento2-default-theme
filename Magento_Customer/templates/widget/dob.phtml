@@ -32,7 +32,7 @@ $validationClass = $addressViewModel->addressGetAttributeValidationClass('dob');
 ?>
 
 <div
-    class="field date customer-dob <?= $block->isRequired() ? 'required' : '' ?>"
+    class="field field-reserved date <?= $block->isRequired() ? 'required' : '' ?>"
     x-data="initDatePicker()"
 >
     <label for="<?= $escaper->escapeHtmlAttr($block->getHtmlId()) ?>_picker" class="label">

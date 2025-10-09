@@ -70,7 +70,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     </span>
                 </span>
                 <span>
-                    <a class="py-2 px-2 text-center block action remove text-primary hover:text-primary-darker"
+                    <a class="py-2 px-2 text-center block action remove text-slate-600 hover:text-slate-800"
                        href="<?= $escaper->escapeUrl($filter->getRemoveUrl()) ?>"
                        title="<?= /* @noEscape */ $escaper->escapeHtmlAttr(__('Remove active %1 filter: %2', $filterName, $filterLabel)) ?>">
                         <?= $heroicons->trashHtml('', 20, 20, ["aria-hidden" => "true"]); ?>
@@ -82,7 +82,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
     <?php if ($block->getLayer()->getState()->getFilters()): ?>
         <div class="block-actions filter-actions">
             <a href="<?= $escaper->escapeUrl($block->getClearUrl()) ?>"
-               class="text-xs text-primary hover:text-primary-darker"><?= $escaper->escapeHtml(__('Clear All')) ?></a>
+               class="text-sm text-slate-600 hover:text-slate-800"><?= $escaper->escapeHtml(__('Clear All')) ?></a>
         </div>
     <?php endif; ?>
 </div>

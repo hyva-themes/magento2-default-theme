@@ -102,8 +102,8 @@ $googleMapsApi = $viewModels->require(GoogleMapsApi::class);
             const getInfoWindowContent = (location) => {
                 const title = location.location_name ?
                     `<h3 class="text-2xl font-medium text-gray-900 title-font">${location.location_name}</h3>` : '';
-                const comment = location.comment ? `<p class="px-1 pt-3 text-primary">${location.comment}</p>` : '';
-                const phone = location.phone ? `<p class="px-1 pt-3 text-primary">Phone: ${location.phone}</p>` : '';
+                const comment = location.comment ? `<p class="px-1 pt-3">${location.comment}</p>` : '';
+                const phone = location.phone ? `<p class="px-1 pt-3">Phone: ${location.phone}</p>` : '';
                 const street = location.address ? `${location.address}<br/>` : '';
                 const city = location.city ? `${location.city}<br/>` : '';
                 const state = location.state ? `${location.state}<br/>` : '';
@@ -114,7 +114,7 @@ $googleMapsApi = $viewModels->require(GoogleMapsApi::class);
                             ${title}
                             ${comment}
                             ${phone}
-                            <p class="px-1 pt-3 text-primary">
+                            <p class="px-1 pt-3">
                                 ${street}
                                 ${city}
                                 ${state}

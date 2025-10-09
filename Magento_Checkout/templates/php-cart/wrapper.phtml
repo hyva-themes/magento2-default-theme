@@ -15,21 +15,19 @@ use Magento\Framework\Escaper;
 /** @var Escaper $escaper */
 ?>
 
-<div class="w-full">
-    <div class="w-full lg:w-1/4 float-left lg:float-right lg:order-2 top-0 lg:sticky">
-        <div class="flex pb-3 my-2 border-b-2 border-gray-300 flex-col">
-            <h2 class="w-full text-2xl text-center text-gray-900 title-font font-base md:text-left">
+<div class="flex flex-col lg:flex-row-reverse lg:items-start gap-8">
+    <div class="lg:w-80 2xl:w-96 lg:sticky lg:top-2">
+        <div class="flex flex-col mb-2 pb-3 border-b-2 border-gray-300">
+            <h2 class="text-2xl text-center text-gray-900 title-font font-base md:text-left">
                 <?= $escaper->escapeHtml(__('Summary')) ?>
             </h2>
         </div>
         <?= $block->getChildHtml('cart.summary') ?>
     </div>
-    <div class="w-full lg:w-3/4 float-left lg:order-1 lg:pr-8">
+    <div class="lg:flex-1">
         <?= $block->getChildHtml('form_before') ?>
         <?= $block->getChildHtml('cart-items') ?>
         <?= $block->getChildHtml('checkout_cart_widget') ?>
-    </div>
-    <div class="w-full lg:w-3/4 lg:pr-8">
         <?= $block->getChildHtml('cart.discount') ?>
     </div>
 </div>

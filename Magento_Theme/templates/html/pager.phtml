@@ -215,13 +215,14 @@ $pagerItemBtnClass = $pagerItemClass
 
     <?php if ($block->isShowPerPage()): ?>
         <div class="flex items-center justify-end order-3 col-span-2 limiter sm:order-2 md:order-3 lg:order-2">
-            <label class="text-sm label" for="limiter">
-                <span class="mr-2" aria-hidden="true"><?= $escaper->escapeHtml(__('Show')) ?></span>
+            <label class="text-sm label">
+                <span class="mr-2" aria-label="<?= $escaper->escapeHtmlAttr(__('Show items per page')) ?>">
+                    <?= $escaper->escapeHtml(__('Show')) ?>
+                </span>
                 <select
                     id="limiter"
-                    class="form-select"
+                    class="form-select limiter-options"
                     onchange="location.href = this.value"
-                    aria-label="<?= $escaper->escapeHtmlAttr(__('Show items per page')) ?>"
                 >
                     <?php foreach ($block->getAvailableLimit() as $key => $limit): ?>
                         <option value="<?= $escaper->escapeUrl($block->getLimitUrl($key)) ?>"

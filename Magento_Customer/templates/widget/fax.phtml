@@ -31,7 +31,8 @@ $validationClass = $escaper->escapeHtmlAttr($this->helper(AddressHelper::class)-
                id="fax"
                value="<?= $escaper->escapeHtmlAttr($block->getFax()) ?>"
                title="<?= $escaper->escapeHtmlAttr(__('Fax')) ?>"
-               class="form-input <?= $validationClass ?: '' ?>"
+               class="form-input w-full <?= $validationClass ?: '' ?>"
+               <?= $block->isRequired() ? ' required' : '' ?>
         >
     </div>
 </div>

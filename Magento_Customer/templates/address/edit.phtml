@@ -66,7 +66,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
             <?php endif ?>
 
             <?php if ($faxBlock->isEnabled()): ?>
-                <div class="field field-reserved w-full">
+                <div class="w-full">
                     <?= $faxBlock->setFax($block->getAddress()->getFax())->toHtml() ?>
                 </div>
             <?php endif ?>
@@ -75,7 +75,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
     <fieldset class="fieldset">
         <legend class="legend w-full"><span><?= $escaper->escapeHtml(__('Address')) ?></span></legend>
         <div class="md:grid grid-cols-2 gap-x-4 gap-y-0">
-            <div class="street w-full">
+            <div class="street col-span-full md:grid grid-cols-2 gap-x-4 mb-6">
 
                 <div class="field field-reserved required">
                     <label for="street_1" class="label">
@@ -88,7 +88,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                                value="<?= $escaper->escapeHtmlAttr($block->getStreetLine(1)) ?>"
                                title="<?= /* @noEscape */ $streetLabel ?>"
                                id="street_1"
-                               class="form-input"
+                               class="form-input w-full"
                                @input.debounce="onChange"
                         />
                     </div>
@@ -104,7 +104,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                                    value="<?= $escaper->escapeHtmlAttr($block->getStreetLine($i + 1)) ?>"
                                    title="<?= $escaper->escapeHtmlAttr(__('Street Address %1', $i + 1)) ?>"
                                    id="street_<?= /* @noEscape */ $i + 1 ?>"
-                                   class="form-input"
+                                   class="form-input w-full"
                                    @input.debounce="onChange"
                             />
                         </div>
@@ -122,7 +122,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                                name="vat_id"
                                value="<?= $escaper->escapeHtmlAttr($block->getAddress()->getVatId()) ?>"
                                title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('vat_id') ?>"
-                               class="form-input"
+                               class="form-input w-full"
                                id="vat_id"
                                @input.debounce="onChange">
                     </div>
@@ -142,7 +142,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                            :required="isZipRequired"
                            @input.debounce="onChange"
                            data-validate='{"postcode": true}'
-                           class="form-input">
+                           class="form-input w-full">
                 </div>
             </div>
 
@@ -156,7 +156,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                            required
                            value="<?= $escaper->escapeHtmlAttr($block->getAddress()->getCity()) ?>"
                            title="<?= $escaper->escapeHtmlAttr(__('City')) ?>"
-                           class="form-input"
+                           class="form-input w-full"
                            id="city"
                            @input.debounce="onChange">
                 </div>
@@ -232,7 +232,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                            x-ref="region"
                            value="<?= $escaper->escapeHtmlAttr($block->getRegion()) ?>"
                            title="<?= /* @noEscape */ $regionLabel ?>"
-                           class="form-input"
+                           class="form-input w-full"
                            aria-label="<?= /* @noEscape */ $regionLabel ?>"
                            :required="!hasAvailableRegions() && !showOptionalRegions ? isRegionRequired : false"
                            @input.debounce="onChange"

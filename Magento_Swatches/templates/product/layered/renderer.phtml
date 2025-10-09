@@ -92,41 +92,43 @@ $swatchData = $block->getSwatchData();
      x-data="initLayeredSwatch_<?= $escaper->escapeJs($swatchData['attribute_code']) ?>()"
 >
     <div class="swatch-attribute-options clearfix">
-        <?php foreach ($swatchData['options'] as $option => $label):
+        <?php foreach ($swatchData['options'] as $option => $label): ?>
+            <?php
             // check required if attribute property "is_filterable" is set to "Filterable (no results)"
-            if (!isset($swatchData['swatches'][$option])):
+            if (!isset($swatchData['swatches'][$option])) {
                 continue;
-            endif; ?>
-            <?php $isImageSwatch = (int) $swatchData['swatches'][$option]['type'] === Swatch::SWATCH_TYPE_VISUAL_IMAGE; ?>
-            <a href="<?= $escaper->escapeUrl($label['link']) ?>" rel="nofollow"
-               aria-label="<?= $escaper->escapeHtmlAttr(__('Filter %1 %2', $swatchData['attribute_label'], $label['label'])) ?>"
-               class="swatch-option-link-layered swatch-option cursor-pointer bg-container-lighter shadow-sm relative select-none border-container-darker"
-               :class="{ 'w-6 h-6' : getSwatchType('<?= (string) $swatchData['swatches'][$option]['type'] ?>') !== 'text' }"
-               <?php if ((int) $swatchData['swatches'][$option]['type'] !== Swatch::SWATCH_TYPE_TEXTUAL): ?>
-                   :style="getSwatchBackgroundStyle(
-                        '<?= (string) $swatchData['swatches'][$option]['type'] ?>',
-                        '<?= (string) $swatchData['swatches'][$option]['value'] ?>',
-                        '<?= $isImageSwatch ? $escaper->escapeJs($block->getSwatchPath('swatch_image', $swatchData['swatches'][$option]['value'])) : '' ?>'
-                    )"
+            }
+
+            $swatchType = (string) $swatchData['swatches'][$option]['type'];
+            $swatchValue = (string) $swatchData['swatches'][$option]['value'];
+            $isVisualSwatch = in_array((int) $swatchType, [Swatch::SWATCH_TYPE_VISUAL_COLOR, Swatch::SWATCH_TYPE_VISUAL_IMAGE], true);
+            ?>
+            <a
+                href="<?= $escaper->escapeUrl($label['link']) ?>" rel="nofollow"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Filter %1 %2', $swatchData['attribute_label'], $label['label'])) ?>"
+                class="swatch-option-link-layered swatch-option cursor-pointer bg-container-lighter shadow-sm relative select-none border-container-darker <?= $isVisualSwatch ? 'w-6 h-6' : '' ?>"
+                <?php if ($isVisualSwatch): ?>
+                    style="<?= $swatchType === '2'
+                        ? 'background: #fff url(' . $escaper->escapeUrl($block->getSwatchPath('swatch_image', $swatchValue)) . ') center no-repeat'
+                        : 'background-color: ' . (/* @noEscape */ $swatchType === '1' ? $swatchValue : '') ?>;"
                 <?php endif; ?>
                 <?php if ($configurableViewModel->getShowSwatchTooltip()): ?>
-                    <?php if ((int) $swatchData['swatches'][$option]['type'] !== Swatch::SWATCH_TYPE_TEXTUAL): ?>
-                        <?php $swatchThumbPath = $isImageSwatch ? $block->getSwatchPath('swatch_thumb', $swatchData['swatches'][$option]['value']) : ''; ?>
+                    <?php if ((int) $swatchType !== Swatch::SWATCH_TYPE_TEXTUAL): ?>
+                        <?php $swatchThumbPath = $swatchType === "2" ? $block->getSwatchPath('swatch_thumb', $swatchValue) : ''; ?>
                     <?php endif; ?>
-
                     @mouseenter.self="activeTooltipItem = {
-                            attribute: '<?= $escaper->escapeJs($swatchData['swatches'][$option]['value']) ?>',
-                            type: '<?= $escaper->escapeJs($swatchData['swatches'][$option]['type']) ?>',
+                            attribute: '<?= $escaper->escapeJs($swatchValue) ?>',
+                            type: '<?= $escaper->escapeJs($swatchType) ?>',
                             id: '<?= $escaper->escapeJs($option) ?>',
                             label: '<?= $escaper->escapeJs($label['label']) ?>',
                             thumb: '<?= $escaper->escapeJs($swatchThumbPath ?? '') ?>',
-                            value: '<?= $escaper->escapeJs($swatchData['swatches'][$option]['value']) ?>'
+                            value: '<?= $escaper->escapeJs($swatchValue) ?>'
                         }; tooltipPositionElement = $event.target;"
                     @mouseleave.self="activeTooltipItem = false"
                 <?php endif; ?>
             >
-                <?php if ((string)$swatchData['swatches'][$option]['type'] === "0"): ?>
-                    <?= $escaper->escapeHtml($swatchData['swatches'][$option]['value'] ?: $label['label']) ?>
+                <?php if ($swatchType === "0"): ?>
+                    <?= $escaper->escapeHtml($swatchValue ?: $label['label']) ?>
                 <?php endif; ?>
             </a>
         <?php endforeach; ?>

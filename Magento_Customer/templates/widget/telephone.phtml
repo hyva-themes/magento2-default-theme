@@ -26,7 +26,7 @@ use Magento\Framework\Escaper;
                data-validate='{"telephone": true}'
                value="<?= $escaper->escapeHtmlAttr($block->getTelephone()) ?>"
                title="<?= $escaper->escapeHtmlAttr(__('Phone Number')) ?>"
-               class="form-input <?= $escaper->escapeHtmlAttr(
+               class="form-input w-full <?= $escaper->escapeHtmlAttr(
                    $block->getAttributeValidationClass('telephone')
                ) ?>"
         >

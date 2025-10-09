@@ -16,56 +16,65 @@ use Magento\Framework\View\Element\Template;
 /** @var Template $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
+
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
+
+$blockId = $block->getBlockId() ?: 'collapsible';
+$blockClass = $block->getBlockCss();
+$blockTitle = $block->getBlockTitle() ?: __('Details');
+$isNav = $block->getIsNav() !== null ? $block->getIsNav() : false;
 ?>
 
-<div class="block <?= $escaper->escapeHtmlAttr($block->getBlockCss()) ?> card filter-option py-4 px-8 mb-6"
+<div class="card py-2 px-8 mb-6 <?= $escaper->escapeHtmlAttr($blockClass) ?>"
      x-data="initAccountNavigation()"
      x-init="checkIsMobileResolution()"
      @resize.window.debounce="checkIsMobileResolution()"
      @visibilitychange.window.debounce="checkIsMobileResolution()"
-
 >
     <button
         type="button"
-        class="
-            title <?= $escaper->escapeHtmlAttr($block->getBlockCss()) ?>-title
-            flex justify-between
-            items-center hover:text-secondary-darker w-full
-        "
+        id="<?= $escaper->escapeHtmlAttr($blockId) ?>-title"
+        class="group py-2 flex justify-between items-center w-full"
         @click="blockOpen = !blockOpen"
         :aria-expanded="blockOpen"
         :aria-disabled="!isMobile"
         :disabled="!isMobile ? '' : null"
     >
 
-        <span class="text-lg title">
-            <?= $escaper->escapeHtml(__($block->getData('block_title'))) ?>
+        <span class="text-lg">
+            <?= $escaper->escapeHtml($blockTitle) ?>
         </span>
         <span
             class="px-1 py-1 border rounded border-container md:hidden"
             x-ref="AccountNavigationMobileToggleIcon"
         >
             <?= $heroicons->chevronDownHtml(
-                'transition-transform duration-300 ease-in-out transform rotate-180',
+                'transition-transform duration-300 ease-in-out transform group-aria-expanded:rotate-180',
                 24,
                 24,
-                [
-                    ':class'      => "{ 'rotate-180': blockOpen }",
-                    'aria-hidden' => 'true',
-                    'focusable' => 'false'
-                ]
+                ['aria-hidden' => 'true']
             ); ?>
         </span>
     </button>
-    <div :class="{ 'hidden': !blockOpen }" class="delimiter border-b border-container w-full mt-4 mb-3 hidden md:block"></div>
-    <div class="content <?= $escaper->escapeHtmlAttr($block->getBlockCss()) ?>-content hidden md:block"
-         :class="{ 'hidden': !blockOpen }"
-         id="<?= $escaper->escapeHtmlAttr($block->getBlockCss()) ?>"
-    >
-        <?= $block->getChildHtml() ?>
-    </div>
+    <?php if ($isNav): ?>
+        <nav
+            id="<?= $escaper->escapeHtmlAttr($blockId) ?>"
+            aria-labelledby="<?= $escaper->escapeHtmlAttr($blockId) ?>-title"
+            class="hidden md:block border-t pt-3 my-2 border-container"
+            :class="{ 'hidden': !blockOpen }"
+        >
+            <?= $block->getChildHtml() ?>
+        </nav>
+    <?php else: ?>
+        <div
+            id="<?= $escaper->escapeHtmlAttr($blockId) ?>"
+            class="hidden md:block border-t pt-3 my-2 border-container"
+            :class="{ 'hidden': !blockOpen }"
+        >
+            <?= $block->getChildHtml() ?>
+        </div>
+    <?php endif; ?>
 </div>
 <script>
     function initAccountNavigation() {

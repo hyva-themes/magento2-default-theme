@@ -34,7 +34,6 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
 >
     <!-- desktop -->
     <div x-ref="nav-desktop"
-         @load.window="setActiveMenu($root)"
          class="hidden lg:block lg:px-8">
         <nav
             class="relative"
@@ -63,7 +62,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                                     @click="openMenuOnClick('<?= /* @noEscape */ (string) $index ?>')"
                                     class="rounded p-1 text-gray-500"
                                 >
-                                    <?= $heroiconsSolid->chevronDownHtml("flex self-center h-5 w-5", 25, 25, ['aria-hidden' => 'true']) ?>
+                                    <?= $heroiconsSolid->chevronDownHtml("flex self-center", 20, 20, ['aria-hidden' => 'true']) ?>
                                     <span class="sr-only">
                                         <?= $escaper->escapeHtml(__('Show submenu for %1 category', $menuItem['name'])) ?>
                                     </span>
@@ -105,6 +104,9 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
     const initMenuDesktop<?= $escaper->escapeHtml($uniqueId) ?> = () => {
         return {
             hoverPanelActiveId: null,
+            init() {
+                this.setActiveMenu(this.$root);
+            },
             setActiveMenu(menuNode) {
                 Array.from(menuNode.querySelectorAll('a')).filter(link => {
                     return link.href === window.location.href.split('?')[0];

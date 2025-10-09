@@ -34,6 +34,6 @@ if ($item->getProductType() === 'configurable') {
         href="<?= $escaper->escapeUrl($block->getConfigureUrl()) ?>"
         aria-label="<?= $escaper->escapeHtmlAttr(__('Edit %1', $productName)) ?>"
     >
-        <?= $heroicons->pencilHtml('h-6 w-6', 24, 24, ['aria-hidden' => 'true']) ?>
+        <?= $heroicons->pencilHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
     </a>
 <?php endif ?>

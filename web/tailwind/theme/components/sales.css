@@ -11,7 +11,7 @@
 }
 
 .order-links li.current {
-    @apply flex-grow text-primary;
+    @apply flex-grow;
 }
 
 .order-links li a {

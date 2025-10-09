@@ -45,19 +45,21 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
         <?= $block->getBlockHtml('formkey') ?>
         <legend class="legend"><span><?= $escaper->escapeHtml(__('Account Information')) ?></span></legend>
         <br>
-        <?= $block->getLayout()->createBlock(Name::class)->setObject($block->getCustomer())->toHtml() ?>
-        <?php $dob = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Dob::class) ?>
-        <?php $taxvat = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Taxvat::class) ?>
-        <?php $gender = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Gender::class) ?>
-        <?php if ($dob->isEnabled()): ?>
-            <?= $dob->setDate($block->getCustomer()->getDob())->toHtml() ?>
-        <?php endif ?>
-        <?php if ($taxvat->isEnabled()): ?>
-            <?= $taxvat->setTaxvat($block->getCustomer()->getTaxvat())->toHtml() ?>
-        <?php endif ?>
-        <?php if ($gender->isEnabled()): ?>
-            <?= $gender->setGender($block->getCustomer()->getGender())->toHtml() ?>
-        <?php endif ?>
+        <div class="md:grid grid-cols-2 gap-4">
+            <?= $block->getLayout()->createBlock(Name::class)->setObject($block->getCustomer())->toHtml() ?>
+            <?php $dob = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Dob::class) ?>
+            <?php $taxvat = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Taxvat::class) ?>
+            <?php $gender = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Gender::class) ?>
+            <?php if ($dob->isEnabled()): ?>
+                <?= $dob->setDate($block->getCustomer()->getDob())->toHtml() ?>
+            <?php endif ?>
+            <?php if ($taxvat->isEnabled()): ?>
+                <?= $taxvat->setTaxvat($block->getCustomer()->getTaxvat())->toHtml() ?>
+            <?php endif ?>
+            <?php if ($gender->isEnabled()): ?>
+                <?= $gender->setGender($block->getCustomer()->getGender())->toHtml() ?>
+            <?php endif ?>
+        </div>
 
         <div class="field choice">
             <input
@@ -134,11 +136,11 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                         :aria-label="showPasswordCurrent ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
                     >
                         <template x-if="!showPasswordCurrent">
-                            <?= $heroicons->eyeHtml('w-5 h-5'); ?>
+                            <?= $heroicons->eyeHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                         </template>
 
                         <template x-if="showPasswordCurrent">
-                            <?= $heroicons->eyeOffHtml('w-5 h-5'); ?>
+                            <?= $heroicons->eyeOffHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                         </template>
                     </button>
                 </div>
@@ -171,10 +173,10 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                             :aria-label="showPasswordNew ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
                         >
                             <template x-if="!showPasswordNew">
-                                <?= $heroicons->eyeHtml('w-5 h-5'); ?>
+                                <?= $heroicons->eyeHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                             </template>
                             <template x-if="showPasswordNew">
-                                <?= $heroicons->eyeOffHtml('w-5 h-5'); ?>
+                                <?= $heroicons->eyeOffHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                             </template>
                         </button>
                         <div id="password-strength-meter-container" data-role="password-strength-meter" aria-live="polite">
@@ -209,10 +211,10 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                             :aria-label="showPasswordConfirm ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
                         >
                             <template x-if="!showPasswordConfirm">
-                                <?= $heroicons->eyeHtml('w-5 h-5'); ?>
+                                <?= $heroicons->eyeHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                             </template>
                             <template x-if="showPasswordConfirm">
-                                <?= $heroicons->eyeOffHtml('w-5 h-5'); ?>
+                                <?= $heroicons->eyeOffHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                             </template>
                         </button>
                     </div>

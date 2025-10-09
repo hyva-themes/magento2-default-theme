@@ -123,7 +123,7 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                             required
                             value="<?= $escaper->escapeHtmlAttr($block->getFormData()->getEmail()) ?>"
                             title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
-                            class="form-input"
+                            class="form-input w-full"
                             @input.debounce="onChange"
                         />
                     </div>
@@ -168,14 +168,14 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                                 :aria-label="showPassword ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
                             >
                                 <template x-if="!showPassword">
-                                    <?= $heroicons->eyeHtml('w-5 h-5'); ?>
+                                    <?= $heroicons->eyeHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                                 </template>
                                 <template x-if="showPassword">
-                                    <?= $heroicons->eyeOffHtml('w-5 h-5'); ?>
+                                    <?= $heroicons->eyeOffHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                                 </template>
                             </button>
                         </div>
-                        <div class="self-center">
+                        <div class="self-center mt-0.5">
                             <div
                                 id="password-strength-meter-container"
                                 data-role="password-strength-meter"
@@ -184,8 +184,8 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                                 <div id="password-strength-meter" class="password-strength-meter">
                                     <?= $escaper->escapeHtml(__('Password Strength')) ?>:
                                     <span id="password-strength-meter-label" data-role="password-strength-meter-label">
-                                        <?= $escaper->escapeHtml(__('No Password')) ?>
-                                    </span>
+                                            <?= $escaper->escapeHtml(__('No Password')) ?>
+                                        </span>
                                 </div>
                             </div>
                         </div>
@@ -230,10 +230,10 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                             "
                         >
                             <template x-if="!showPasswordConfirm">
-                                <?= $heroicons->eyeHtml('w-5 h-5'); ?>
+                                <?= $heroicons->eyeHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                             </template>
                             <template x-if="showPasswordConfirm">
-                                <?= $heroicons->eyeOffHtml('w-5 h-5'); ?>
+                                <?= $heroicons->eyeOffHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                             </template>
                         </button>
                     </div>
@@ -323,7 +323,7 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                 </div>
 
                 <div
-                    class="field field-reserved region w-full"
+                    class="field field-reserved region"
                     x-cloak
                     x-show="(hasAvailableRegions() && isRegionRequired) || showOptionalRegions"
                     :class="{ 'required': isRegionRequired }"
@@ -365,7 +365,7 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                     </div>
                 </div>
 
-                <div class="field field-reserved zip w-full" :class="{ 'required': isZipRequired }">
+                <div class="field field-reserved zip" :class="{ 'required': isZipRequired }">
                     <label class="label" for="zip">
                         <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('postcode') ?></span>
                     </label>
@@ -384,7 +384,7 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                     </div>
                 </div>
 
-                <div class="field field-reserved required country w-full">
+                <div class="field field-reserved required country">
                     <label class="label" for="country">
                         <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('country_id') ?></span>
                     </label>
@@ -426,7 +426,7 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                 <input type="hidden" name="default_shipping" value="1">
             </fieldset>
         <?php endif; ?>
-        <div class="actions-toolbar flex">
+        <div class="actions-toolbar">
             <div class="primary">
                 <button type="submit" class="action submit primary btn btn-primary disabled:opacity-75"
                         title="<?= $escaper->escapeHtmlAttr(__('Create an Account')) ?>"

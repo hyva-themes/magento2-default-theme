@@ -28,7 +28,7 @@ use Magento\Framework\Escaper;
                name="<?= $escaper->escapeHtmlAttr($block->getFieldName('taxvat')) ?>"
                value="<?= $escaper->escapeHtmlAttr($block->getTaxvat()) ?>"
                title="<?= $escaper->escapeHtmlAttr($block->getStoreLabel('taxvat')) ?>"
-               class="form-input <?= $escaper->escapeHtmlAttr($this->helper(AddressHelper::class)->getAttributeValidationClass('taxvat')) ?>"
+               class="form-input w-full <?= $escaper->escapeHtmlAttr($this->helper(AddressHelper::class)->getAttributeValidationClass('taxvat')) ?>"
             <?= $block->isRequired() ? ' required' : '' ?>
         >
     </div>

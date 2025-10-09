@@ -44,7 +44,9 @@ $number = is_object($track) ? $track->getTracking() : $track['number'];
                 <div class="inline-block px-1">
                     <?= $escaper->escapeHtml(__('Tracking information is currently not available. Please ')) ?>
                     <?php if ($parentBlock->getContactUsEnabled()): ?>
-                        <a href="<?= $escaper->escapeUrl($parentBlock->getContactUs()) ?>" target="_blank"
+                        <a href="<?= $escaper->escapeUrl($parentBlock->getContactUs()) ?>"
+                           target="_blank"
+                           rel="noopener"
                            title="<?= $escaper->escapeHtml(__('contact us')) ?>">
                             <?= $escaper->escapeHtml(__('contact us')) ?>
                         </a>
@@ -63,7 +65,7 @@ $number = is_object($track) ? $track->getTracking() : $track['number'];
             <div>
                 <div class="inline-block pr-1"><?= $escaper->escapeHtml(__('Track:')) ?></div>
                 <div class="inline-block px-1">
-                    <a href="<?= $escaper->escapeUrl($track->getUrl()) ?>" target="_blank">
+                    <a href="<?= $escaper->escapeUrl($track->getUrl()) ?>" target="_blank" rel="noopener">
                         <?= $escaper->escapeUrl($track->getUrl()) ?>
                     </a>
                 </div>

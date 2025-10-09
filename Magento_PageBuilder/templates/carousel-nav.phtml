@@ -23,14 +23,18 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 
 <div class="carousel-nav flex items-center justify-center flex-1 p-4">
     <button
-        aria-label="<?= $escaper->escapeHtml(__('Previous')) ?>"
-        class="glider-prev w-8 h-8 mr-1 text-black rounded-full outline-none focus:outline-none hidden">
-        <?= $heroicons->chevronLeftHtml(); ?>
+        aria-label="<?= $escaper->escapeHtmlAttr(__('Previous')) ?>"
+        title="<?= $escaper->escapeHtmlAttr(__('Previous')) ?>"
+        class="glider-prev w-8 h-8 mr-1 text-black rounded-full outline-none focus:outline-none hidden"
+    >
+        <?= $heroicons->chevronLeftHtml('', 24, 24, ['aria-hidden' => true]); ?>
     </button>
     <div role="tablist" class="glider-dots select-none flex flex-wrap mx-1 justify-center p-0 focus:outline-none"></div>
     <button
-        aria-label="<?= $escaper->escapeHtml(__('Next')) ?>"
-        class="glider-next w-8 h-8 ml-1 text-black rounded-full outline-none focus:outline-none hidden">
-        <?= $heroicons->chevronRightHtml(); ?>
+        aria-label="<?= $escaper->escapeHtmlAttr(__('Next')) ?>"
+        title="<?= $escaper->escapeHtmlAttr(__('Next')) ?>"
+        class="glider-next w-8 h-8 ml-1 text-black rounded-full outline-none focus:outline-none hidden"
+    >
+        <?= $heroicons->chevronRightHtml('', 24, 24, ['aria-hidden' => true]); ?>
     </button>
 </div>

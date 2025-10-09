@@ -31,7 +31,6 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
 ?>
 <nav
     x-data="initMenuMobile<?= $escaper->escapeHtml($uniqueId) ?>()"
-    @load.window="setActiveMenu($root)"
     @keydown.window.escape="closeMenu()"
     class="z-20 order-2 sm:order-1 lg:order-2 navigation lg:hidden w-12 h-12"
     aria-label="<?= $escaper->escapeHtmlAttr(__('Site navigation')) ?>"
@@ -189,6 +188,9 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
         return {
             mobilePanelActiveId: null,
             open: false,
+            init() {
+                this.setActiveMenu(this.$root);
+            },
             setActiveMenu(menuNode) {
                 Array.from(menuNode.querySelectorAll('a')).filter(link => {
                     return link.href === window.location.href.split('?')[0];

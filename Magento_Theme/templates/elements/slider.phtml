@@ -343,7 +343,7 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
                                     </span>
                                 </a>
 
-                                <p class="flex items-center justify-center px-1 pt-3 text-primary">
+                                <p class="flex items-center justify-center px-1 pt-3">
                                     <a class="truncate product-item-link"
                                        :href="'<?= $escaper->escapeUrl($block->getBaseUrl()) ?>' +
                                             product.url_key + (product.url_suffix || '')"
@@ -353,7 +353,7 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
                                 </p>
                                 <p class="pt-1 text-lg text-center text-gray-900"
                                    x-text="hyva.formatPrice(product.price_range.minimum_price.final_price.value)"></p>
-                                <p class="flex flex-wrap gap-2 inline px-1 pt-3">
+                                <p class="flex flex-wrap gap-2 px-1 pt-3">
                                     <a class="justify-center w-auto mr-auto btn btn-primary"
                                        :href="'<?= $escaper->escapeUrl($block->getBaseUrl()) ?>' +
                                             product.url_key + (product.url_suffix || '')">
@@ -367,7 +367,7 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
                                                     items-center justify-center text-gray-500 hover:text-yellow-500"
                                                     data-addto="compare"
                                             >
-                                            <?= $heroicons->scaleHtml("w-5 h-5") ?>
+                                            <?= $heroicons->scaleHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
                                         </button>
                                         <?php endif; ?>
                                         <?php if ($wishlistViewModel->isEnabled()): ?>
@@ -378,7 +378,7 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
                                             text-gray-500 bg-gray-200 border-0 rounded-full hover:text-red-600"
                                                 data-addto="wishlist"
                                             >
-                                            <?= $heroicons->heartHtml("w-5 h-5", 25, 25) ?>
+                                            <?= $heroicons->heartHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
                                         </button>
                                         <?php endif; ?>
                                     </span>
@@ -407,7 +407,7 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
                         :class="{ 'invisible' : active === 0 }"
                         @click="getSlider().scrollLeft =
                             (getSlider().scrollWidth / products.length) * (active-pageSize); active=active-pageSize;">
-                        <?= $heroicons->chevronLeftHtml("w-5 h-5", 25, 25) ?>
+                        <?= $heroicons->chevronLeftHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
                     </button>
                     <template x-for="(product, index) in products" :key="index">
                         <span class="shrink-0 block w-3 h-3 mx-1 bg-black bg-opacity-25 rounded-full shadow cursor-pointer"
@@ -428,7 +428,7 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
                         :class="{ 'invisible' : active >= products.length-pageSize }"
                         @click="getSlider().scrollLeft =
                             (getSlider().scrollWidth / products.length) * (active+pageSize); active=active+pageSize">
-                        <?= $heroicons->chevronRightHtml("w-5 h-5", 25, 25) ?>
+                        <?= $heroicons->chevronRightHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
                     </button>
                 </div>
             </template>

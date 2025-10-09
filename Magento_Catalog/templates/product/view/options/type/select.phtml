@@ -26,7 +26,7 @@ $customOptionsViewModel = $viewModels->require(CustomOption::class);
 ?>
 <div class="flex flex-col sm:flex-row border-t border-gray-300 py-2 last:mb-6 last:border-b w-full items-center">
     <label class="label text-gray-700 text-left w-full sm:w-1/2"
-           for="select_<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
+           for="options_<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
     >
         <span><?= $escaper->escapeHtml($option->getTitle()) ?></span>
         <?php if ($option->getIsRequire()): ?>

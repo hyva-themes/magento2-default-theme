@@ -349,7 +349,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
     <h3 class="title" id="block-shipping-title">
         <button
             @click="toggleEstimateShipping"
-            class="flex justify-between w-full font-semibold whitespace-nowrap cursor-pointer select-none text-primary-lighter"
+            class="flex justify-between w-full font-semibold whitespace-nowrap cursor-pointer select-none"
             id="shipping-estimate-toggle"
             type="button"
             :aria-expanded="showEstimateShipping"
@@ -364,9 +364,8 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
-                    class="w-6 h-6"
-                    width="25"
-                    height="25"
+                    width="24"
+                    height="24"
                     aria-hidden="true"
                 >
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>

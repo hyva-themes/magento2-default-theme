@@ -10,10 +10,12 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="sales_order_shipment"/>
     <update handle="print"/>
-    <referenceBlock name="sales.order.info.links" remove="true"/>
-    <referenceBlock name="logo">
-        <arguments>
-            <argument name="logoPathResolver" xsi:type="object">Hyva\Theme\ViewModel\Logo\SalesLogoPathResolver</argument>
-        </arguments>
-    </referenceBlock>
+    <body>
+        <referenceBlock name="sales.order.info.links" remove="true"/>
+        <referenceBlock name="logo">
+            <arguments>
+                <argument name="logoPathResolver" xsi:type="object">Hyva\Theme\ViewModel\Logo\SalesLogoPathResolver</argument>
+            </arguments>
+        </referenceBlock>
+    </body>
 </page>

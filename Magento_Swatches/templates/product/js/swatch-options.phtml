@@ -6,11 +6,13 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
 
 ?>
 <script>
@@ -82,7 +84,7 @@ use Magento\Framework\View\Element\Template;
                 if (type === "color") {
                         return 'background-color:' + config.value;
                 } else if (type === "image") {
-                        return "background: #ffffff url('" + config.value + "') no-repeat center";
+                        return "background: #fff url('" + config.value + "') no-repeat center";
                 } else {
                     return '';
                 }
@@ -169,3 +171,4 @@ use Magento\Framework\View\Element\Template;
         }
     }
 </script>
+<?php $hyvaCsp->registerInlineScript() ?>

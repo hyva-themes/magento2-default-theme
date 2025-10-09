@@ -122,12 +122,12 @@ function initCompareSidebarClear() {
 >
     <template x-if="itemCount">
         <div class="mt-8">
-            <h2 class="border-t border-container mb-6 pt-5 text-primary font-semibold text-lg"
+            <h2 class="border-t border-container mb-6 pt-5 font-semibold text-lg"
                 id="compare-sidebar"
             >
                 <?= $escaper->escapeHtml(__('Compare Products')) ?>
             </h2>
-            <ul class="my-4" aria-labelledby="compare-sidebar">
+            <ul role="list" class="my-4" aria-labelledby="compare-sidebar">
                 <template x-for="product in compareItems">
                     <li class="flex items-start mb-4">
                         <a
@@ -149,25 +149,25 @@ function initCompareSidebarClear() {
                             type="button"
                             @click.prevent="removeFromCompare(product.id)"
                             :aria-label="hyva.str('<?= $escaper->escapeJs(__('Remove product "%1" from the comparison')) ?>', product.name)"
-                            class="p-1 inline-flex shrink-0 items-center justify-center text-gray-500
-                                   hover:text-primary ml-auto"
+                            class="p-1 inline-flex shrink-0 items-center justify-center text-slate-400
+                                   hover:text-slate-800 ml-auto"
                         >
-                            <?= $heroicons->xHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
+                            <?= $heroicons->xHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
                         </button>
                     </li>
                 </template>
             </ul>
-            <div class="flex flex-wrap items-center md:mt-5 space-x-4 text-sm">
+            <div class="flex flex-wrap items-center md:mt-5 gap-2 text-sm">
                 <a href="<?= $escaper->escapeUrl($block->getUrl('catalog/product_compare/index')) ?>"
                     title="<?= $escaper->escapeHtmlAttr(__('Compare Products')); ?>"
-                    class="btn btn-secondary px-4 text-sm">
+                    class="btn btn-secondary text-sm">
                     <span><?= $escaper->escapeHtml(__('Compare')); ?></span>
                 </a>
                 <button x-data="initCompareSidebarClear()"
                     @click.prevent="clearCompare()"
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Remove all Products')) ?>"
-                    class="p-1 inline-flex shrink-0 items-center justify-center text-gray-500 hover:text-primary ml-auto">
-                    <span><?= $escaper->escapeHtml(__('Clear all')); ?></span>
+                    class="btn text-sm shadow-none bg-transparent text-inherit">
+                    <span><?= $escaper->escapeHtml(__('Remove All')); ?></span>
                 </button>
             </div>
         </div>

@@ -42,7 +42,7 @@ $cartItemOutputViewModel = $viewModels->require(ItemOutput::class);
     <?= $block->getBlockHtml('formkey') ?>
     <div class="cart table-wrapper<?= $mergedCells == 2 ? ' detailed' : '' ?>">
         <?php if ($block->getPagerHtml()): ?>
-            <div class="cart-products-toolbar cart-products-toolbar-top toolbar">
+            <div class="cart-products-toolbar cart-products-toolbar-top toolbar mb-4">
                 <?= $block->getPagerHtml() ?>
             </div>
         <?php endif ?>
@@ -73,7 +73,7 @@ $cartItemOutputViewModel = $viewModels->require(ItemOutput::class);
             <?php endforeach ?>
         </table>
         <?php if ($block->getPagerHtml()): ?>
-            <div class="cart-products-toolbar cart-products-toolbar-bottom toolbar">
+            <div class="cart-products-toolbar cart-products-toolbar-bottom toolbar mt-8">
                 <?= $block->getPagerHtml() ?>
             </div>
         <?php endif ?>
@@ -100,7 +100,7 @@ $cartItemOutputViewModel = $viewModels->require(ItemOutput::class);
                 ) ?>
                 <button @click="<?= /** @noEscape */ $confirmation->getShowJs() ?>.then(result => result && hyva.postForm(postData))"
                         type="button" title="<?= $escaper->escapeHtmlAttr(__('Clear Shopping Cart')) ?>"
-                        class="action clear" id="empty_cart_button">
+                        class="action clear btn" id="empty_cart_button">
                     <span><?= $escaper->escapeHtml(__('Clear Shopping Cart')) ?></span>
                 </button>
             </div>

@@ -42,7 +42,7 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
             type="button"
             x-ref="giftOptionsTrigger"
             @click="openDialog"
-            class="cursor-pointer text-primary-lighter select-none whitespace-nowrap underline"
+            class="cursor-pointer select-none whitespace-nowrap underline"
             :aria-expanded="formBlockVisibility"
             aria-haspopup="dialog"
         >
@@ -64,7 +64,6 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
             @keydown.window.escape="closeDialog"
             class="fixed inset-y-0 right-0 z-30 flex max-w-full"
             x-init="hyva.trapFocus($refs['giftOptionsDialog'])"
-            :aria-hidden="!formBlockVisibility"
         >
             <div
                 class="backdrop"

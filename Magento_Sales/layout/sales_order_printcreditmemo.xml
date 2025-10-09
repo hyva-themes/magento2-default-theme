@@ -11,10 +11,12 @@
     <update handle="sales_order_print_renderers"/>
     <update handle="sales_order_creditmemo"/>
     <update handle="print"/>
-    <referenceBlock name="sales.order.info.links" remove="true"/>
-    <referenceBlock name="logo">
-        <arguments>
-            <argument name="logoPathResolver" xsi:type="object">Magento\Sales\ViewModel\Header\LogoPathResolver</argument>
-        </arguments>
-    </referenceBlock>
+    <body>
+        <referenceBlock name="sales.order.info.links" remove="true"/>
+        <referenceBlock name="logo">
+            <arguments>
+                <argument name="logoPathResolver" xsi:type="object">Magento\Sales\ViewModel\Header\LogoPathResolver</argument>
+            </arguments>
+        </referenceBlock>
+    </body>
 </page>
