@@ -32,6 +32,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **Recaptcha badge is hidden the wrong way**  
   For more information, please refer to [issue #1211](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1211)
 
+- **Update browser-sync to v3.0.3**  
+  For more information, please refer to [merge request #1188](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1188)
+
 ### Removed
 
 - **Removed the scroll to review function summary short**  
