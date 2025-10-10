@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Theme\Block\Html\Notices;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Framework\Escaper;
@@ -17,6 +18,7 @@ use Magento\Framework\Escaper;
 /** @var Escaper $escaper */
 /** @var Notices $block */
 /** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
 /** @var SecureHtmlRenderer $secureRenderer */
 
 /** @var HeroiconsOutline $heroicons */
@@ -42,9 +44,9 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 
 <?php if ($block->displayNoLocalStorageNotice()): ?>
     <section
-        x-data
-        x-show="typeof(Storage) === 'undefined'"
-        x-cloak
+        id="localStorageMissingMessage"
+        hidden
+        style="display: none"
         class="message global local_storage border-b-2 border-blue-500 bg-blue-50 shadow-none m-0 px-0 rounded-none font-normal"
     >
         <div class="container text-center">
@@ -56,6 +58,16 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             </p>
         </div>
     </section>
+    <script>
+        (() => {
+            if (typeof(Storage) !== 'undefined') return;
+            const message = document.getElementById('localStorageMissingMessage');
+            if (!message) return;
+            message.removeAttribute('hidden');
+            message.style.display = null;
+        })()
+    </script>
+    <?php $hyvaCsp->registerInlineScript() ?>
 <?php endif; ?>
 
 <?php if ($block->displayDemoNotice()): ?>
