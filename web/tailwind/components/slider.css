@@ -1,13 +1,58 @@
-.snap {
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    scrollbar-width: none;
+@layer components {
+    .snap-track {
+        --snap-cols: 1;
+        --snap-gap: theme(spacing.4);
+        --snap-size: calc(
+            (100% - var(--snap-gap) * (var(--snap-cols) - 1)) / var(--snap-cols)
+        );
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: var(--snap-size);
+        gap: var(--snap-gap);
+        padding-block: theme(spacing.6);
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
 
-    &::-webkit-scrollbar {
-        display: none;
+        @media (prefers-reduced-motion: no-preference) {
+            scroll-behavior: smooth;
+        }
+
+        & > * {
+            scroll-snap-align: start;
+        }
     }
 
-    & > div {
-        scroll-snap-align: start;
+    .snap-pager {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: theme(spacing.3);
+        min-block-size: theme(spacing.11);
+        padding-block: theme(spacing.2);
+    }
+
+    .snap-marker {
+        flex-shrink: 0;
+        block-size: theme(spacing.4);
+        inline-size: theme(spacing.4);
+        border-width: 1px;
+        border-color: theme(colors.slate.600);
+        border-radius: 1rem;
+        transition-duration: 300ms;
+        transition-property: border-color, background-color;
+
+        @media (prefers-reduced-motion: no-preference) {
+            transition-property: inline-size, border-color, background-color;
+            will-change: inline-size;
+        }
+
+        &[aria-current="true"] {
+            inline-size: theme(spacing.7);
+            border-color: #0000;
+            background-color: theme(colors.primary.DEFAULT);
+        }
     }
 }

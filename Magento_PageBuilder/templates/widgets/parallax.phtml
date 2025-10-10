@@ -18,13 +18,9 @@ $jarallaxUrl = $block->getViewFileUrl('Magento_PageBuilder::js/jarallax.min.js')
 $jarallaxVideoUrl = $block->getViewFileUrl('Magento_PageBuilder::js/jarallax-video.min.js');
 ?>
 <script>
-    'use strict';
-
     (() => {
         const initParallaxImage = (element) => {
-            if (!window.jarallax) {
-                return;
-            }
+            if (!window.jarallax)  eturn;
 
             element.classList.add('jarallax');
             element.dataset.jarallax = '';
@@ -40,10 +36,7 @@ $jarallaxVideoUrl = $block->getViewFileUrl('Magento_PageBuilder::js/jarallax-vid
         };
 
         const initVideoBackground = (element) => {
-            if (!window.jarallax) {
-                return;
-            }
-
+            if (!window.jarallax) return;
             let slider = null;
 
             if (element.classList.contains('pagebuilder-slide-wrapper')) {
@@ -70,17 +63,9 @@ $jarallaxVideoUrl = $block->getViewFileUrl('Magento_PageBuilder::js/jarallax-vid
             });
 
             if (slider) {
-                if (slider.dataset.afterChangeIsSet) {
-                    return;
-                }
+                if (slider.dataset.afterChangeIsSet) return;
 
-                slider.addEventListener('glider-loaded', () => {
-                    slider.querySelectorAll('.jarallax').forEach(videoSlide => {
-                        videoSlide.jarallax && videoSlide.jarallax.onScroll();
-                    });
-                });
-
-                slider.addEventListener('glider-animated', () => {
+                slider.addEventListener('slideChange', () => {
                     slider.querySelectorAll('.jarallax').forEach(videoSlide => {
                         videoSlide.jarallax && videoSlide.jarallax.onScroll();
                     });
@@ -105,16 +90,12 @@ $jarallaxVideoUrl = $block->getViewFileUrl('Magento_PageBuilder::js/jarallax-vid
 
             if (parallaxImageElements.length > 0 || videoBackgroundsElements.length > 0) {
                 const jarallaxScript = document.createElement('script');
-                jarallaxScript.type = 'text/javascript';
-
                 jarallaxScript.addEventListener('load', () => {
                     parallaxImageElements.forEach(row => {
                         initParallaxImage(row);
                     });
 
                     const jarallaxVideoScript = document.createElement('script');
-                    jarallaxVideoScript.type = 'text/javascript';
-
                     jarallaxVideoScript.addEventListener('load', () => {
                         videoBackgroundsElements.forEach(element => {
                             initVideoBackground(element);

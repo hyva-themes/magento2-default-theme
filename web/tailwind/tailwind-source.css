@@ -25,4 +25,5 @@
 /* purgecss end ignore */
 
 @import "tailwindcss/utilities";
+@import url(./utilities/snap.css);
 @import "theme.css";

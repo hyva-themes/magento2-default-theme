@@ -1,0 +1,14 @@
+@layer utilities {
+    /**
+     * @deprecated snap will be removed in version 1.5
+     * Use the `@apply` values instead
+     */
+    .snap {
+        @apply snap-x snap-mandatory scroll-smooth [&>*]:snap-start;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+}

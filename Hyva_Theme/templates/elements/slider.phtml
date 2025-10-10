@@ -1,0 +1,90 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\LucideIcons;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
+
+$sliderName = $block->getSliderName() ?: str_replace(['.', '/', '\\'], '_', $block->getNameInLayout());
+$title = $block->getTitle() ?: '';
+$headingTag = $block->getHeadingTag() ?: 'h3';
+$cssClasses = $block->getCssClasses() ?: 'snap-slider my-8';
+$headingCssClasses = $block->getHeadingCssClasses() ?: 'text-2xl font-medium';
+$columnCount = $block->getColumnCount() ?? 1;
+$sliderClasses = implode(' ', array_filter([
+    'snap-track',
+    $columnCount > 1 ? 'md:[--snap-cols:2]' : '',
+    $columnCount > 2 ? 'lg:[--snap-cols:3]' : '',
+    $columnCount > 3 ? 'xl:[--snap-cols:4]' : '',
+    $columnCount > 4 ? '2xl:[--snap-cols:5]' : '',
+    $block->getSliderCssClasses()
+]));
+
+$showHeading = $block->getShowHeading() ?? true;
+$showPager = $block->getShowPager() ?? true;
+$type = 'generic';
+?>
+
+<section
+    id="<?= $escaper->escapeHtmlAttr($sliderName) ?>"
+    class="<?= $escaper->escapeHtmlAttr($cssClasses) ?>"
+    aria-label="<?= $escaper->escapeHtmlAttr($title); ?>"
+    data-slider-type="<?= $escaper->escapeHtmlAttr($type) ?>"
+    x-data
+    x-snap-slider.group-pager
+    x-defer="intersect"
+>
+    <a
+        href="#<?= $escaper->escapeHtmlAttr($sliderName) ?>-slider-end"
+        class="sr-only focus:not-sr-only focus:absolute focus:z-30 focus:bg-white"
+    ><?= $escaper->escapeHtml(__('Press to skip carousel')) ?></a>
+
+    <div class="flex gap-2 justify-between items-center">
+        <?php if ($showHeading): ?>
+            <?= $escaper->escapeHtml(str_replace(
+                ['%1', '%2', '%3'],
+                [$headingTag, $title, $headingCssClasses],
+                '<%1 class="%3">%2</%1>'
+            ), ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']) ?>
+        <?php endif; ?>
+        <div class="flex gap-2">
+            <button
+                class="btn btn-secondary p-2 invisible"
+                aria-label="Previous Slide"
+                data-prev
+                disabled
+            ><?= $lucideIcons->arrowLeftHtml('rtl:-rotate-180', 18, 18, ['aria-hidden' => 'true']); ?></button>
+            <button
+                class="btn btn-secondary p-2 invisible"
+                aria-label="Next Slide"
+                data-next
+                disabled
+            ><?= $lucideIcons->arrowRightHtml('rtl:-rotate-180', 18, 18, ['aria-hidden' => 'true']); ?></button>
+        </div>
+    </div>
+
+    <div class="<?= $escaper->escapeHtmlAttr($sliderClasses) ?>" data-track tabindex="0" aria-live="polite">
+        <?= $block->getChildHtml() ?>
+    </div>
+
+    <?php if ($showPager): ?>
+        <div class="snap-pager" data-pager></div>
+    <?php endif; ?>
+
+    <span id="<?= $escaper->escapeHtmlAttr($sliderName) ?>-slider-end" tabindex="-1"></span>
+</section>

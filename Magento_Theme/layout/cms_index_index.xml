@@ -7,8 +7,11 @@
  * See https://hyva.io/license
  */
 -->
-<page layout="3columns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <update handle="hyva_product_slider" />
+<page
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd"
+>
+    <update handle="hyva_product_slider"/>
     <body>
         <referenceContainer name="content">
             <block
@@ -29,6 +32,7 @@
                 <arguments>
                     <argument name="title" xsi:type="string" translate="true">Watches</argument>
                     <argument name="category_ids" xsi:type="string">6</argument>
+                    <argument name="column_count" xsi:type="number">5</argument>
                     <!-- <argument name="include_child_category_products" xsi:type="boolean">true</argument>-->
                     <argument name="page_size" xsi:type="string">8</argument>
                     <!-- <argument name="sort_attribute" xsi:type="string">position</argument>-->
@@ -41,6 +45,7 @@
                 ifconfig="hyva_theme_general/demo_content/show_homepage_demo_content"
             >
                 <arguments>
+                    <!-- <argument name="show_pager" xsi:type="boolean">false</argument> -->
                     <!-- <argument name="product_skus" xsi:type="string"/> -->
                     <!-- <argument name="category_ids" xsi:type="string">5,6</argument> -->
                     <!-- <argument name="additional_filters" xsi:type="array">

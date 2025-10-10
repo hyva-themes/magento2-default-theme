@@ -13,204 +13,81 @@ use Magento\Framework\View\Element\Template;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
-
-$gliderUrl = $block->getViewFileUrl('Magento_PageBuilder::js/glider.min.js');
 ?>
 <script>
-    'use strict';
-
     (() => {
-        const initCarousels = (elements) => {
-            if (!Glider) {
-                return;
-            }
+        const initSliderCarousel = (el) => {
+            const sliderId = el.getAttribute('data-pb-style');
 
-            const initProductCarousel = (carousel) => {
-                const gliderElement = carousel.querySelector('[data-role="glider-content"]');
+            const skipLink = document.createElement('a');
+            skipLink.setAttribute('href', `#${sliderId}-slider-end`);
+            skipLink.classList.add('sr-only', 'focus:not-sr-only', 'focus:absolute', 'focus:p-2', 'focus:bg-white');
+            skipLink.innerText = '<?= $escaper->escapeJs(__('Press to skip carousel')) ?>';
 
-                if (!gliderElement) {
-                    return;
-                }
+            const skipLinkTarget = document.createElement('span');
+            skipLinkTarget.setAttribute('id', `${sliderId}-slider-end`);
+            skipLinkTarget.setAttribute('tabindex', '-1');
 
-                const gliderDots = carousel.querySelector('.glider-dots');
-                const gliderPrev = carousel.querySelector('.glider-prev');
-                const gliderNext = carousel.querySelector('.glider-next');
+            const track = document.createElement('div');
+            track.setAttribute('data-track', '');
+            track.classList.add('snap-track');
+            Array.from(el.children).forEach(slide => track.appendChild(slide));
 
-                const glider = new Glider(gliderElement, {
-                    slidesToShow: 1,
-                    slidesToScroll: 1,
-                    scrollLock: true,
-                    draggable: true,
-                    dragVelocity: 2.5,
-                    dots: gliderDots,
-                    arrows: {
-                        prev: gliderPrev,
-                        next: gliderNext,
-                    },
-                    responsive: [
-                        {
-                            breakpoint: 640,
-                            settings: {
-                                slidesToShow: 2,
-                                slidesToScroll: 2,
-                            }
-                        },
-                        {
-                            breakpoint: 1024,
-                            settings: {
-                                slidesToShow: 3,
-                                slidesToScroll: 3,
-                            }
-                        },
-                        {
-                            breakpoint: 1280,
-                            settings: {
-                                slidesToShow: 4,
-                                slidesToScroll: 4,
-                            }
-                        },
-                    ],
-                });
-
-                carousel.classList.remove('overflow-x-scroll');
-                gliderPrev.classList.remove('hidden');
-                gliderNext.classList.remove('hidden');
-
-                if (carousel.dataset.autoplay !== 'false') {
-                    gliderAutoplay(
-                        glider,
-                        carousel.dataset.autoplaySpeed,
-                        carousel.dataset.infiniteLoop
-                    );
-                }
-                window.addEventListener('page-builder-tab-activate', event => {
-                    const tab = event.detail.tab;
-                    if (tab && tab.contains(gliderElement)) {
-                        event.detail.nextTick.then(() => {
-                            requestAnimationFrame(() => glider.refresh(true))
-                        });
-                    }
-                });
-            };
-
-            const initSliderCarousel = (slider) => {
-                slider.innerHTML = `<div data-role="glider-content">${slider.innerHTML}</div>`;
-                slider.classList.add('glider-contain');
-
-                slider.insertAdjacentHTML(
-                    'beforeend',
-                    '<?= $escaper->escapeJs($block->getBlockHtml('pagebuilder.carousel.nav')) ?>'
-                );
-
-                const gliderElement = slider.querySelector('[data-role="glider-content"]');
-                const gliderDots = slider.querySelector('.glider-dots');
-                const gliderPrev = slider.querySelector('.glider-prev');
-                const gliderNext = slider.querySelector('.glider-next');
-
-                const glider = new Glider(gliderElement, {
-                    slidesToShow: 1,
-                    slidesToScroll: 1,
-                    scrollLock: true,
-                    scrollLockDelay: 250,
-                    draggable: true,
-                    dragVelocity: 2.5,
-                    dots: gliderDots,
-                    arrows: {
-                        prev: gliderPrev,
-                        next: gliderNext,
-                    },
-                });
-
-                slider.classList.add('glider-initialized');
-                if (slider.dataset.showArrows === 'true') {
-                    gliderPrev.classList.remove('hidden');
-                    gliderNext.classList.remove('hidden');
-                }
-
-                if (slider.dataset.autoplay !== 'false') {
-                    gliderAutoplay(
-                        glider,
-                        slider.dataset.autoplaySpeed,
-                        slider.dataset.infiniteLoop
-                    );
-                }
-            };
-
-            const gliderAutoplay = (glider, milliseconds, loop) => {
-                const pagesCount = glider.track.childElementCount;
-                let slideTimeout = null;
-                let nextIndex = 1;
-                let paused = false;
-
-                const slide = () => {
-                    slideTimeout = setTimeout(
-                        () => {
-                            if (loop && nextIndex >= pagesCount) {
-                                nextIndex = 0;
-                            }
-                            glider.scrollItem(nextIndex);
-                        },
-                        parseInt(milliseconds)
-                    );
-                };
-
-                glider.ele.addEventListener('glider-animated', () => {
-                    nextIndex = glider.slide + glider.opt.slidesToScroll;
-                    window.clearInterval(slideTimeout);
-                    if (!paused && (loop || nextIndex < pagesCount)) {
-                        slide();
-                    }
-                });
-
-                const pause = () => {
-                    if (!paused) {
-                        clearInterval(slideTimeout);
-                        paused = true;
-                    }
-                };
-
-                const unpause = () => {
-                    if (paused) {
-                        slide();
-                        paused = false;
-                    }
-                };
-
-                glider.ele.parentElement.addEventListener('mouseover', pause, {passive: true});
-                glider.ele.parentElement.addEventListener('touchstart', pause, {passive: true});
-                glider.ele.parentElement.addEventListener('mouseout', unpause, {passive: true});
-                glider.ele.parentElement.addEventListener('touchend', unpause, {passive: true});
-
-                slide();
-            };
-
-            elements.forEach(element => {
-                if (element.dataset.contentType === 'products') {
-                    initProductCarousel(element);
-                }
-                if (element.dataset.contentType === 'slider') {
-                    initSliderCarousel(element);
-                }
-            });
-        };
+            el.appendChild(track);
+            el.insertBefore(skipLink, track);
+            el.appendChild(skipLinkTarget);
+            el.classList.add('snap-slider');
+        }
 
         window.addEventListener('DOMContentLoaded', () => {
-            const carouselElements = document.querySelectorAll(
-                `[data-content-type="products"][data-appearance="carousel"],
-                [data-content-type="slider"]`
-            );
+            if (typeof SnapSlider === 'undefined') return;
 
-            if (carouselElements.length > 0) {
-                const script = document.createElement('script');
-                script.type = 'text/javascript';
+            const carousels = document.querySelectorAll(`
+                [data-content-type="products"][data-appearance="carousel"],
+                [data-content-type="slider"]
+            `);
 
-                script.addEventListener('load', () => {
-                    initCarousels(carouselElements);
-                });
+            carousels.forEach(el => {
+                const sliderOptions = el.dataset;
+                const autoPager = sliderOptions.showDots === "true";
+                const showArrows = sliderOptions.showArrows === "true";
 
-                script.src = '<?= $escaper->escapeJs($escaper->escapeUrl($gliderUrl)) ?>';
-                document.head.appendChild(script);
-            }
+                if (el.dataset.contentType === 'slider') {
+                    initSliderCarousel(el);
+
+                    if (showArrows) {
+                        el.insertAdjacentHTML(
+                            'beforeend',
+                            '<?= $escaper->escapeJs($block->getBlockHtml('pagebuilder.carousel.nav')) ?>'
+                        );
+                    }
+
+                    if (autoPager) {
+                        const pager = el.querySelector('[data-init-pager]');
+                        pager.setAttribute('data-pager', '');
+                        pager.removeAttribute('data-init-pager');
+                    }
+
+                    new SnapSlider(el, { autoPager, groupPager: true });
+                }
+
+                if (el.dataset.contentType === 'products') {
+                    const slider = el.querySelector('[data-slider-type]');
+                    const sliderNav = el.querySelector('[data-page-builder-slider-nav]');
+
+                    if (sliderNav && autoPager) {
+                        const pager = sliderNav.querySelector('[data-init-pager]');
+                        pager.setAttribute('data-pager', '');
+                        pager.removeAttribute('data-init-pager');
+                    }
+
+                    if (sliderNav && !showArrows) {
+                        sliderNav.querySelectorAll('[data-prev],[data-next]').forEach((btn) => btn.remove());
+                    }
+
+                    new SnapSlider(slider, { autoPager, groupPager: true });
+                }
+            });
         });
     })();
 </script>

@@ -9,7 +9,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Escaper;
 
@@ -17,24 +17,22 @@ use Magento\Framework\Escaper;
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 ?>
 
-<div class="carousel-nav flex items-center justify-center flex-1 p-4">
+<div data-page-builder-slider-nav class="flex justify-between items-center gap-2">
     <button
-        aria-label="<?= $escaper->escapeHtmlAttr(__('Previous')) ?>"
-        title="<?= $escaper->escapeHtmlAttr(__('Previous')) ?>"
-        class="glider-prev w-8 h-8 mr-1 text-black rounded-full outline-none focus:outline-none hidden"
-    >
-        <?= $heroicons->chevronLeftHtml('', 24, 24, ['aria-hidden' => true]); ?>
-    </button>
-    <div role="tablist" class="glider-dots select-none flex flex-wrap mx-1 justify-center p-0 focus:outline-none"></div>
+        class="btn btn-secondary p-2"
+        aria-label="Previous Slide"
+        data-prev
+        disabled
+    ><?= $lucideIcons->arrowLeftHtml('rtl:-rotate-180', 18, 18, ['aria-hidden' => 'true']); ?></button>
+    <div class="snap-pager" data-init-pager></div>
     <button
-        aria-label="<?= $escaper->escapeHtmlAttr(__('Next')) ?>"
-        title="<?= $escaper->escapeHtmlAttr(__('Next')) ?>"
-        class="glider-next w-8 h-8 ml-1 text-black rounded-full outline-none focus:outline-none hidden"
-    >
-        <?= $heroicons->chevronRightHtml('', 24, 24, ['aria-hidden' => true]); ?>
-    </button>
+        class="btn btn-secondary p-2"
+        aria-label="Next Slide"
+        data-next
+        disabled
+    ><?= $lucideIcons->arrowRightHtml('rtl:-rotate-180', 18, 18, ['aria-hidden' => 'true']); ?></button>
 </div>

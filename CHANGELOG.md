@@ -46,6 +46,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
   Many thanks to Simon Sprankel (Customgento) for the contribution!
 
+- **Replaced Custom Js in Product Slider with Hyvä Snap Slider**  
+  For more information, please refer to [issue #1227](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1227)
+
+- **Replaced GliderJs in PageBuilder Sliders with Hyvä Snap Slider**  
+  For more information, please refer to [issue #1227](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1227)
+
+
 ### Removed
 
 - **Removed the scroll to review function summary short**  

@@ -9,12 +9,12 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Hyva\Theme\ViewModel\Cart\Items as CartItems;
-use Hyva\Theme\ViewModel\ProductCompare;
 use Hyva\Theme\ViewModel\ProductList;
-use Hyva\Theme\ViewModel\Slider;
+use Hyva\Theme\ViewModel\ProductListItem;
 use Hyva\Theme\ViewModel\Store;
-use Hyva\Theme\ViewModel\Wishlist;
+use Magento\Catalog\Block\Product\ReviewRendererInterface as ProductReviewRenderer;
 use Magento\Catalog\Model\Product\Visibility as ProductVisibility;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
@@ -22,82 +22,90 @@ use Magento\Framework\View\Element\Template;
 /** @var Template $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
-/** @var Slider $sliderViewModel */
+
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
+
 /** @var ProductList $productListViewModel */
-/** @var Wishlist $wishlistViewModel */
-/** @var ProductCompare $compareViewModel */
-/** @var Store $storeViewModel */
-
-$sliderViewModel      = $viewModels->require(Slider::class);
 $productListViewModel = $viewModels->require(ProductList::class);
-$wishlistViewModel    = $viewModels->require(Wishlist::class);
-$compareViewModel     = $viewModels->require(ProductCompare::class);
-$storeViewModel       = $viewModels->require(Store::class);
 
-$sliderName        = str_replace('.', '_', $block->getNameInLayout());
-$categoryIds       = $block->getData('category_ids') ?: '';
-$isAnchorCategory  = $block->getData('include_child_category_products');
-$pageSize          = $block->getData('page_size') ?: 8;
-$priceFrom         = $block->getData('price_from');
-$priceTo           = $block->getData('price_to');
-$sortAttribute     = $block->getData('sort_attribute') ?: '';
-$sortDirection     = $block->getData('sort_direction') ?: 'ASC';
-$title             = $block->getData('title') ?: '';
-$headingTag        = $block->getData('heading_tag') ?: 'h3';
-$hideDetails       = $block->getData('hide_details') ?? false;
-$hideRatingSummary = $block->getData('hide_rating_summary') ?? false;
-$type              = $block->getData('type');
-$skusFilter        = $block->getData('product_skus') ? explode(',', $block->getData('product_skus')) : [];
-$additionalFilters = (array) $block->getData('additional_filters');
-$itemTemplate      = $block->getData('item_template') ?? 'Magento_Catalog::product/list/item.phtml';
-$containerTemplate = $block->getData('container_template')
-    ?? 'Magento_Catalog::product/slider/product-slider-container.phtml';
+/** @var ProductListItem $productListItemViewModel */
+$productListItemViewModel = $viewModels->require(ProductListItem::class);
 
+/** @var Store $storeViewModel */
+$storeViewModel = $viewModels->require(Store::class);
 
-// The number of slides visible on the xl breakpoint
-$maxVisibleSlides = $block->getData('max_visible'); // default to null
-// Passed to the product slider container
-$slideSectionClasses = $block->getData('maybe_purged_tailwind_section_classes'); // default to null
-$slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes'); // default to null
+$sliderName = $block->getSliderName() ?: str_replace(['.', '/', '\\'], '_', $block->getNameInLayout());
+$title = $block->getTitle() ?: '';
+$headingTag = $block->getHeadingTag() ?: 'h3';
+$cssClasses = $block->getCssClasses() ?: 'product-slider snap-slider my-8';
+$headingCssClasses = $block->getHeadingCssClasses() ?: 'text-2xl font-medium';
+$columnCount = $block->getColumnCount() ?? 4;
+$sliderClasses = implode(' ', array_filter([
+    'snap-track',
+    $columnCount > 1 ? 'md:[--snap-cols:2]' : '',
+    $columnCount > 2 ? 'lg:[--snap-cols:3]' : '',
+    $columnCount > 3 ? 'xl:[--snap-cols:4]' : '',
+    $columnCount > 4 ? '2xl:[--snap-cols:5]' : '',
+    $block->getSliderCssClasses()
+]));
 
+$showHeading = $block->getShowHeading() ?? true;
+$showPager = $block->getShowPager() ?? true;
+$hideDetails = $block->getHideDetails() ?? false;
+$hideRatingSummary = $block->getHideRatingSummary() ?? false;
 
+// Filter Options
+$pageSize = $block->getPageSize() ?: 8;
+$skusFilter = $block->getProductSkus() ? explode(',', $block->getProductSkus()) : [];
+$additionalFilters = $block->getAdditionalFilters() ?: [];
+
+$sortAttribute = $block->getSortAttribute() ?: '';
+$sortDirection = $block->getSortDirection() ?: 'ASC';
+
+$type = $block->getType();
 // In case $type is not set on the block, it will default the block class name, which is not what we need in this template.
 $type = is_string($type) && strpos($type, '\\') === false  ? $type : 'generic';
 
-if ($categoryIds) {
+if ($hideRatingSummary) {
+    $productListViewModel->excludeReviewSummary();
+}
+
+if ($categoryIds = $block->getCategoryIds()) {
     $productListViewModel->addFilter('category_id', $categoryIds, 'in');
 }
 
-if ($isAnchorCategory) {
+if ($isAnchorCategory = $block->getIncludeChildCategoryProducts()) {
     // Only has an effect if a single category ID filter is set, and that category is an anchor category
     $productListViewModel->includeChildCategoryProducts();
 }
 
-if ($priceFrom) {
+if ($priceFrom = $block->getPriceFrom()) {
     $productListViewModel->addFilter('price', $priceFrom, 'gteq');
 }
-if ($priceTo) {
-    $productListViewModel->addFilter('price', $priceTo, 'lteq');
-}
 
-if ($hideRatingSummary) {
-    $productListViewModel->excludeReviewSummary();
+if ($priceTo = $block->getPriceTo()) {
+    $productListViewModel->addFilter('price', $priceTo, 'lteq');
 }
 
 if ($skusFilter) {
     $productListViewModel->addFilter('sku', array_map('trim', $skusFilter), 'in');
 }
 
-foreach ($additionalFilters as $filter) {
-    $productListViewModel->addFilter($filter['field'], $filter['value'], $filter['conditionType'] ?? 'eq');
+if (is_string($additionalFilters)) {
+    $additionalFilters = json_decode($additionalFilters, true);
+}
+
+if (is_array($additionalFilters)) {
+    foreach ($additionalFilters as $filter) {
+        $productListViewModel->addFilter($filter['field'], $filter['value'], $filter['conditionType'] ?? 'eq');
+    }
 }
 
 $productListViewModel->setPageSize($pageSize);
 $productListViewModel->addFilter('website_id', $storeViewModel->getWebsiteId());
-$productListViewModel->addFilter('visibility', [
-    ProductVisibility::VISIBILITY_IN_CATALOG,
-    ProductVisibility::VISIBILITY_BOTH,
-], 'in');
+$productListViewModel->addFilter('visibility', [ProductVisibility::VISIBILITY_IN_CATALOG, ProductVisibility::VISIBILITY_BOTH, ], 'in');
+
 if ($sortAttribute) {
     $sortDirection === 'ASC'
         ? $productListViewModel->addAscendingSortOrder($sortAttribute)
@@ -105,31 +113,98 @@ if ($sortAttribute) {
 }
 
 if (in_array($type, ['related', 'upsell', 'crosssell'], true)) {
-
     $items = $type === 'crosssell'
         ? $productListViewModel->getCrosssellItems(...$viewModels->require(CartItems::class)->getCartItems())
         : $productListViewModel->getLinkedItems($type, $block->getProduct());
-
 } else {
     $items = $productListViewModel->getItems();
 }
 
-$sliderHtml = $sliderViewModel->getSliderForItems($itemTemplate, $items, $containerTemplate)
-    ->setData('hide_details', $hideDetails)
-    ->setData('hide_rating_summary', $hideRatingSummary)
-    ->setData('name', $sliderName)
-    ->setData('title', $title)
-    ->setData('item_relation_type', $type)
-    ->setData('heading_tag', $headingTag)
-    ->setData('max_visible', $maxVisibleSlides)
-    ->setData('maybe_purged_tailwind_section_classes', $slideSectionClasses)
-    ->setData('maybe_purged_tailwind_slide_item_classes', $slideItemClasses)
-    ->toHtml();
-
-if (empty($sliderHtml)) {
+if (!$items) {
     return '';
 }
+
+$itemRenderer = $block->getLayout()->getBlock('product_list_item')
+    ?: $block->getChildBlock('slider.item.template')
+    ?: $block->getLayout()->createBlock(Template::class);
+
+$itemRenderer->setData('hide_details', $hideDetails);
 ?>
-<div class="product-slider <?= $escaper->escapeHtmlAttr($type) ?>-product-slider">
-    <?= /* @noEscape */ $sliderHtml ?>
-</div>
+
+<section
+    id="<?= $escaper->escapeHtmlAttr($sliderName) ?>"
+    class="<?= $escaper->escapeHtmlAttr($cssClasses) ?>"
+    aria-label="<?= $escaper->escapeHtmlAttr($title); ?>"
+    data-slider-type="<?= $escaper->escapeHtmlAttr($type) ?>"
+    x-data
+    x-snap-slider.group-pager
+    x-defer="intersect"
+>
+    <a
+        href="#<?= $escaper->escapeHtmlAttr($sliderName) ?>-slider-end"
+        class="sr-only focus:not-sr-only focus:absolute focus:z-30 focus:bg-white"
+    ><?= $escaper->escapeHtml(__('Press to skip carousel')) ?></a>
+
+    <div class="flex gap-2 justify-between items-center">
+        <?php if ($showHeading): ?>
+            <?= $escaper->escapeHtml(str_replace(
+                ['%1', '%2', '%3'],
+                [$headingTag, $title, $headingCssClasses],
+                '<%1 class="%3">%2</%1>'
+            ), ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']) ?>
+        <?php endif; ?>
+        <div class="flex gap-2">
+            <button
+                class="btn btn-secondary p-2 invisible"
+                aria-label="Previous Slide"
+                data-prev
+                disabled
+            ><?= $lucideIcons->arrowLeftHtml('rtl:-rotate-180', 18, 18, ['aria-hidden' => 'true']); ?></button>
+            <button
+                class="btn btn-secondary p-2 invisible"
+                aria-label="Next Slide"
+                data-next
+                disabled
+            ><?= $lucideIcons->arrowRightHtml('rtl:-rotate-180', 18, 18, ['aria-hidden' => 'true']); ?></button>
+        </div>
+    </div>
+
+    <div class="<?= $escaper->escapeHtmlAttr($sliderClasses) ?>" data-track tabindex="0" aria-live="polite">
+        <?php foreach ($items as $product): ?>
+            <div
+                id="<?= $escaper->escapeHtmlAttr($sliderName . '-' . $product->getId()) ?>"
+                class="flex flex-col"
+                role="tabpanel"
+            >
+                <?= /** @noEscape */ $productListItemViewModel->getItemHtmlWithRenderer(
+                    $itemRenderer,
+                    $product,
+                    $block,
+                    'grid',
+                    ProductReviewRenderer::SHORT_VIEW,
+                    'category_page_grid',
+                    false
+                ) ?>
+            </div>
+        <?php endforeach; ?>
+    </div>
+
+    <?php if ($showPager): ?>
+        <div class="snap-pager" data-pager>
+            <?php foreach ($items as $product): ?>
+                <a
+                    href="#<?= $escaper->escapeHtmlAttr($sliderName . '-' . $product->getId()) ?>"
+                    class="snap-marker"
+                    role="tab"
+                    x-cloak
+                >
+                    <span class="sr-only">
+                        <?= $escaper->escapeHtmlAttr(__('View more about %1', $product->getName())) ?>
+                    </span>
+                </a>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
+    <span id="<?= $escaper->escapeHtmlAttr($sliderName) ?>-slider-end" tabindex="-1"></span>
+</section>
