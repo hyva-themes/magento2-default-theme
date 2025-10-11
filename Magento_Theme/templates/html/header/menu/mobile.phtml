@@ -233,10 +233,11 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                 ['@keydown.window.escape']() {
                     this.closeMenu();
                 },
-				['@pageshow.window'](event) {
-                    if (!event.persisted && !this.open) return;
-                    this.open = false;
-				}
+                ['@pageshow.window'](event) {
+                    if (event.persisted) {
+                        this.open = false;
+                    };
+                }
 		  	}
         }
     }

@@ -125,10 +125,11 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                 }
             },
             eventListeners: {
-				['@pageshow.window'](event) {
-                    if (!event.persisted && !this.hoverPanelActiveId) return;
-                    this.hoverPanelActiveId = null;
-				}
+                ['@pageshow.window'](event) {
+                    if (event.persisted) {
+                        this.hoverPanelActiveId = null;
+                    };
+                }
 		  	}
         }
     }

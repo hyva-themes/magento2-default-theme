@@ -133,9 +133,10 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                     this.close();
                 },
                 ['@pageshow.window'](event) {
-                    if (!event.persisted && !this.open) return;
-                    this.close();
-				}
+                    if (event.persisted) {
+                        this.close();
+                    };
+                }
             }
         }
     }

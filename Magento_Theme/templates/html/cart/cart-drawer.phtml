@@ -158,9 +158,10 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     this.closeCartDrawer();
                 },
 				['@pageshow.window'](event) {
-                    if (!event.persisted) return;
-                    this.closeCartDrawer();
-                    this.reloadData();
+                    if (event.persisted) {
+                        this.closeCartDrawer();
+                        this.reloadData();
+                    };
 				}
 		  	}
         }
