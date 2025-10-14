@@ -39,8 +39,7 @@ $logoSrc = $logoPathResolver && method_exists($logoPathResolver, 'getLogoSrc')
     : $block->getLogoSrc();
 ?>
 <a
-    class="flex items-center justify-center text-xl font-medium tracking-wide text-gray-800
-        no-underline hover:no-underline font-title"
+    class="flex items-center justify-center text-xl font-medium"
     href="<?= $escaper->escapeUrl($block->getUrl('')) ?>"
     aria-label="<?= $escaper->escapeHtmlAttr(__('Go to Home page')) ?>"
 >
