@@ -20,10 +20,10 @@ $tokens = $block->getPaymentTokens();
 <?php if (count($tokens) > 0): ?>
     <caption class="table-caption"><?= $escaper->escapeHtml(__('Stored Payment Methods')) ?></caption>
     <div class="card grid grid-cols-3 lg:grid-cols-4 mb-4">
-        <div class="text-sm text-secondary p-2"><?= $escaper->escapeHtml(__('Card Number')) ?></div>
-        <div class="text-sm text-secondary p-2"><?= $escaper->escapeHtml(__('Expiration Date')) ?></div>
-        <div class="text-sm hidden lg:block text-secondary p-2"><?= $escaper->escapeHtml(__('Type')) ?></div>
-        <div class="text-sm text-secondary p-2 text-center">
+        <div class="text-sm p-2"><?= $escaper->escapeHtml(__('Card Number')) ?></div>
+        <div class="text-sm p-2"><?= $escaper->escapeHtml(__('Expiration Date')) ?></div>
+        <div class="text-sm hidden lg:block p-2"><?= $escaper->escapeHtml(__('Type')) ?></div>
+        <div class="text-sm p-2 text-center">
             <span class="sr-only"><?= $escaper->escapeHtml(__('Actions')) ?></span>
         </div>
 

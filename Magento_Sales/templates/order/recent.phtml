@@ -66,7 +66,7 @@ if ($extraActionTitleBlocks = $block->getLayout()->getChildBlocks('order-list-ex
                 class="block-content w-full sm:table-fixed lg:table-auto"
                 aria-labelledby="recentOrders"
             >
-                <thead class="text-sm text-secondary">
+                <thead class="text-sm">
                     <tr>
                         <th class="p-2 text-start">
                             <?= $escaper->escapeHtml(__('Order #')) ?>
@@ -135,7 +135,7 @@ if ($extraActionTitleBlocks = $block->getLayout()->getChildBlocks('order-list-ex
                                     <div class="flex items-center justify-evenly">
                                         <a
                                             href="<?= $escaper->escapeUrl($block->getViewUrl($order)) ?>"
-                                            class="inline-block text-sm underline text-secondary-darker"
+                                            class="inline-block text-sm underline"
                                             title="<?= $escaper->escapeHtmlAttr(__('View Order')) ?>"
                                             aria-label="<?= $escaper->escapeHtmlAttr(__('View order') . ' ' . ltrim($order->getRealOrderId(), '0')) ?>"
                                         >
@@ -158,7 +158,7 @@ if ($extraActionTitleBlocks = $block->getLayout()->getChildBlocks('order-list-ex
                                                 <button
                                                     title="<?= $escaper->escapeHtmlAttr(__('Reorder')) ?>"
                                                     type="submit"
-                                                    class="inline-block text-sm text-secondary-darker"
+                                                    class="inline-block text-sm"
                                                     aria-label="<?= $escaper->escapeHtmlAttr(__('Reorder') . ' ' . ltrim($order->getRealOrderId(), '0')) ?>"
                                                 >
                                                     <?= $heroicons->refreshHtml('', 24, 24, ['aria-hidden' => 'true']) ?>

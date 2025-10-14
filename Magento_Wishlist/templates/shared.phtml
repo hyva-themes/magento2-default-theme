@@ -25,9 +25,9 @@ use Magento\Wishlist\Block\Share\Wishlist;
               action="<?= $escaper->escapeUrl($block->getUrl('wishlist/index/update')) ?>"
               method="post">
             <div class="hidden md:grid grid-cols-3 " id="wishlist-items">
-                <div class="text-sm text-secondary p-2"><?= $escaper->escapeHtml(__('Product')) ?></div>
-                <div class="text-sm text-secondary p-2"><?= $escaper->escapeHtml(__('Comment')) ?></div>
-                <div class="text-sm text-secondary p-2"><?= $escaper->escapeHtml(__('Add to Cart')) ?></div>
+                <div class="text-sm p-2"><?= $escaper->escapeHtml(__('Product')) ?></div>
+                <div class="text-sm p-2"><?= $escaper->escapeHtml(__('Comment')) ?></div>
+                <div class="text-sm p-2"><?= $escaper->escapeHtml(__('Add to Cart')) ?></div>
             </div>
                 <?php foreach ($block->getWishlistItems() as $item): ?>
                     <?php
@@ -36,7 +36,7 @@ use Magento\Wishlist\Block\Share\Wishlist;
                     ?>
                     <div class="grid grid-cols-1 md:grid-cols-3 even:bg-container-darker" id="wishlist-items">
                         <div class="p-4 flex flex-wrap gap-4 items-center">
-                            <div class="md:hidden text-sm text-secondary w-full ">
+                            <div class="md:hidden text-sm w-full ">
                                 <?= $escaper->escapeHtml(__('Product')) ?>
                             </div>
                             <a class="product shadow photo mr-4 inline-flex"
@@ -69,7 +69,7 @@ use Magento\Wishlist\Block\Share\Wishlist;
 
                         <div class="p-4 flex flex-wrap items-center">
                             <?php if ($block->hasDescription($item)): ?>
-                                <div class="md:hidden text-sm text-secondary w-full ">
+                                <div class="md:hidden text-sm w-full ">
                                     <?= $escaper->escapeHtml(__('Comment')) ?>
                                 </div>
                                 <?= /* @noEscape */ $block->getEscapedDescription($item) ?>

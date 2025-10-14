@@ -23,7 +23,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 <div class="flex items-center justify-center md:justify-start flex-wrap gap-4 md:gap-x-6 my-4 md:my-0">
     <?php $order = $block->getOrder() ?>
     <a href="<?= $escaper->escapeUrl($block->getUrl('*/*/printInvoice', ['order_id' => $order->getId()])) ?>"
-       class="btn btn-secondary text-secondary-darker"
+       class="btn btn-secondary"
        target="_blank"
        rel="noopener">
         <?= $heroicons->printerHtml('mr-1 inline-block'); ?>

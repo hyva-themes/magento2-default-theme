@@ -19,8 +19,8 @@ $tokens = $block->getPaymentTokens();
 ?>
 <?php if (count($tokens) !== 0): ?>
 <div class="card grid grid-cols-2 mb-4">
-    <div class="text-sm text-secondary p-2"><?= $escaper->escapeHtml(__('PayPal Account')) ?></div>
-    <div class="text-sm text-secondary p-2 text-center">
+    <div class="text-sm p-2"><?= $escaper->escapeHtml(__('PayPal Account')) ?></div>
+    <div class="text-sm p-2 text-center">
         <span class="sr-only"></span>
     </div>
     <?php foreach ($tokens as $token): ?>

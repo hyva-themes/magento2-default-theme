@@ -22,7 +22,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
 <?php if ($block->getCanViewOrder() && $block->getCanPrintOrder()): ?>
     <a href="<?= $escaper->escapeUrl($block->getPrintUrl()) ?>"
-       class="mt-3 md:-mt-1 md:ml-auto w-fit btn btn-secondary text-secondary-darker"
+       class="mt-3 md:-mt-1 md:ml-auto w-fit btn btn-secondary"
        target="_blank"
        rel="noopener">
         <?= $heroicons->printerHtml('mr-1 inline-block', 24, 24, ['aria-hidden' => 'true']); ?>

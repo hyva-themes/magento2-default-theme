@@ -428,7 +428,7 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
         <?php endif; ?>
         <div class="actions-toolbar">
             <div class="primary">
-                <button type="submit" class="action submit primary btn btn-primary disabled:opacity-75"
+                <button type="submit" class="action submit primary btn btn-primary"
                         title="<?= $escaper->escapeHtmlAttr(__('Create an Account')) ?>"
                         <?php if ($createAccountButtonViewModel->disabled()): ?> disabled data-recaptcha-btn<?php endif; ?>>
                         <span><?= $escaper->escapeHtml(__('Create an Account')) ?></span>

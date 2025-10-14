@@ -40,7 +40,7 @@ $reasons = $orderCancellationUiConfig->getCancellationReasons((int) $order->getI
 <button
     x-data
     type="button"
-    class="btn btn-secondary text-secondary-darker"
+    class="btn btn-secondary"
     @click="$dispatch('confirm-cancel-order', {
         order_id: <?= (int) $order->getId() ?>,
         increment_id: '<?= $escaper->escapeJs($order->getRealOrderId()) ?>',

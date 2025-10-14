@@ -50,7 +50,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                         <?= $escaper->escapeHtml(__('Login')) ?>
                     </h2>
                 </legend>
-                <p class="text-secondary-darker mb-8">
+                <p class="mb-8">
                     <?= $escaper->escapeHtml(__('If you have an account, sign in with your email address.')) ?>
                 </p>
                 <div class="field email required">
@@ -110,12 +110,12 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                 <?= $recaptcha ? $recaptcha->getInputHtml(ReCaptcha::RECAPTCHA_FORM_ID_CUSTOMER_LOGIN) : '' ?>
                 <?= $block->getChildHtml('form_additional_info') ?>
                 <div class="actions-toolbar pt-6 pb-2">
-                        <button type="submit" class="btn btn-primary disabled:opacity-75" name="send"
+                        <button type="submit" class="btn btn-primary" name="send"
                             <?php if ($loginButtonViewModel->disabled()): ?> disabled data-recaptcha-btn<?php endif; ?>
                         >
                             <span><?= $escaper->escapeHtml(__('Sign In')) ?></span>
                         </button>
-                        <a class="underline text-secondary" href="<?= $escaper->escapeUrl(
+                        <a class="underline" href="<?= $escaper->escapeUrl(
                             $block->getForgotPasswordUrl()
                         ) ?>"><span><?= $escaper->escapeHtml(__('Forgot Your Password?')) ?></span>
                         </a>

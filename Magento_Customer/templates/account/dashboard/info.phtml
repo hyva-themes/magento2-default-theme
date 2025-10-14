@@ -26,7 +26,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         <div class="flex flex-col h-full p-8 sm:flex-row card">
             <div
                 class="inline-flex items-center justify-center shrink-0 w-16 h-16 mb-4
-                    rounded-full sm:mr-8 sm:mb-0 bg-container-darker text-secondary">
+                    rounded-full sm:mr-8 sm:mb-0 bg-container-darker">
                 <?= $heroicons->userHtml('', 32, 32, ['aria-hidden' => 'true']) ?>
             </div>
             <div class="grow">
@@ -39,7 +39,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 </p>
                 <?= $block->getChildHtml('customer.account.dashboard.info.extra'); ?>
                 <a
-                    class="inline-flex items-center w-full mt-3 md:text-sm text-secondary hover:text-secondary-darker"
+                    class="inline-flex items-center w-full mt-3 md:text-sm"
                     href="<?= $escaper->escapeUrl($block->getUrl('customer/account/edit')) ?>"
                     aria-label="<?= $escaper->escapeHtml(__('Edit contact information')) ?>"
                 >
@@ -47,7 +47,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     <?= $heroicons->arrowRightHtml('ml-2', 16, 16, ['aria-hidden' => 'true']); ?>
                 </a>
                 <a
-                    class="inline-flex items-center w-full md:text-sm text-secondary hover:text-secondary-darker"
+                    class="inline-flex items-center w-full md:text-sm"
                     href="<?= $escaper->escapeUrl($block->getChangePasswordUrl()) ?>"
                 >
                     <?= $escaper->escapeHtml(__('Change Password')) ?>
@@ -61,7 +61,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             <div class="flex flex-col h-full p-8 border border-gray-200 sm:flex-row card">
                 <div
                     class="inline-flex items-center justify-center shrink-0 w-16 h-16 mb-4
-                        rounded-full sm:mr-8 sm:mb-0 bg-container-darker text-secondary">
+                        rounded-full sm:mr-8 sm:mb-0 bg-container-darker">
                     <?= $heroicons->mailHtml('', 32, 32, ['aria-hidden' => 'true']) ?>
                 </div>
                 <div class="grow">
@@ -76,7 +76,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                         <?php endif; ?>
                     </p>
                     <a
-                        class="mt-3 w-full inline-flex items-center md:text-sm text-secondary hover:text-secondary-darker"
+                        class="mt-3 w-full inline-flex items-center md:text-sm"
                         href="<?= $escaper->escapeUrl($block->getUrl('newsletter/manage')) ?>"
                         aria-label="<?= $escaper->escapeHtml(__('Edit newsletters')) ?>"
                     >

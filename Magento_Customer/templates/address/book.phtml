@@ -35,8 +35,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 </div>
                 <div class="box-actions">
                     <a href="<?= $escaper->escapeUrl($block->getAddressEditUrl($customerDefaultBillingAddressId)) ?>"
-                       class="inline-flex items-center w-full mt-3 md:text-sm text-secondary
-                        hover:text-secondary-darker"
+                       class="inline-flex items-center w-full mt-3 md:text-sm"
                        >
                         <span>
                             <?= $escaper->escapeHtml(__('Change Billing Address')) ?>
@@ -70,9 +69,8 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 </div>
                 <div class="box-actions">
                     <a href="<?= $escaper->escapeUrl($block->getAddressEditUrl($customerDefaultShippingAddressId)) ?>"
-                       class="inline-flex items-center w-full mt-3 md:text-sm text-secondary
-                        hover:text-secondary-darker"
-                    >
+                       class="inline-flex items-center w-full mt-3 md:text-sm"
+                       >
                         <span><?= $escaper->escapeHtml(__('Change Shipping Address')) ?></span>
                         <?= $heroicons->arrowRightHtml('ml-2', 16, 16); ?>
                     </a>

@@ -258,7 +258,7 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                                 <input name="context" type="hidden" value="checkout">
                                 <div class="actions-toolbar pt-6 pb-2">
                                     <button type="submit"<?php if ($loginButtonViewModel->disabled()): ?> disabled data-recaptcha-btn<?php endif; ?>
-                                            class="inline-flex btn btn-primary disabled:opacity-75"
+                                            class="inline-flex btn btn-primary"
                                     >
                                         <?= $escaper->escapeHtml(__('Sign In')) ?>
                                     </button>

@@ -39,7 +39,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                             <?= $block->getPrimaryBillingAddressHtml() ?>
                         </address>
                         <a
-                            class="mt-3 w-full inline-flex items-center md:text-sm text-secondary hover:text-secondary-darker"
+                            class="mt-3 w-full inline-flex items-center md:text-sm"
                             href="<?= $escaper->escapeUrl($block->getPrimaryBillingAddressEditUrl()) ?>"
                             data-ui-id="default-billing-edit-link"
                             aria-label="<?= $escaper->escapeHtmlAttr(__('Edit Address - billing default')) ?>"
@@ -60,7 +60,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                             <?= $block->getPrimaryShippingAddressHtml() ?>
                         </address>
                         <a
-                            class="mt-3 w-full inline-flex items-center md:text-sm text-secondary hover:text-secondary-darker"
+                            class="mt-3 w-full inline-flex items-center md:text-sm"
                             href="<?= $escaper->escapeUrl($block->getPrimaryShippingAddressEditUrl()) ?>"
                             data-ui-id="default-billing-edit-link"
                             aria-label="<?= $escaper->escapeHtmlAttr(__('Edit Address - shipping default')) ?>"

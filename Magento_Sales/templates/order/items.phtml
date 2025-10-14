@@ -24,7 +24,7 @@ $cols = $block->getData('is_context_shipment') ? 3 : 5;
     <?php if ($block->isPagerDisplayed()): ?>
         <?= $block->getPagerHtml() ?>
     <?php endif ?>
-    <div class="hidden lg:grid grid-cols-<?= $escaper->escapeHtmlAttr($cols) ?> text-sm text-secondary mt-2">
+    <div class="hidden lg:grid grid-cols-<?= $escaper->escapeHtmlAttr($cols) ?> text-sm mt-2">
         <div class="p-2 col-span-2"><?= $escaper->escapeHtml(__('Product Name')) ?></div>
         <?php if (!$block->getData('is_context_shipment')): ?>
             <div class="p-2"><?= $escaper->escapeHtml(__('Price')) ?></div><?php endif; ?>

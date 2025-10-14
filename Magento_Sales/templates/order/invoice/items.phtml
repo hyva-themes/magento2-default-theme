@@ -34,7 +34,7 @@ $order = $block->getOrder();
     </div>
     <?= $block->getInvoiceCommentsHtml($invoice) ?>
     <div class="order-items invoice">
-        <div class="hidden lg:grid grid-cols-5 text-sm text-secondary ">
+        <div class="hidden lg:grid grid-cols-5 text-sm">
             <div class="p-2 col-span-2"><?= $escaper->escapeHtml(__('Product Name')) ?></div>
             <div class="p-2"><?= $escaper->escapeHtml(__('Price')) ?></div>
             <div class="p-2"><?= $escaper->escapeHtml(__('Qty Invoiced')) ?></div>
