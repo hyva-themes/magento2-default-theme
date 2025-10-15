@@ -7,7 +7,7 @@
  */
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Hyva\Theme\ViewModel\Navigation;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Escaper;
@@ -16,8 +16,8 @@ use Magento\Framework\Escaper;
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 
 /** @var Navigation $viewModelNavigation */
 $viewModelNavigation = $viewModels->require(Navigation::class, $block);
@@ -28,217 +28,180 @@ $uniqueId = '_' . uniqid();
 $menuItems = $viewModelNavigation->getNavigation(4);
 $block->setData('cache_tags', $viewModelNavigation->getIdentities());
 
+$itemClasses = (string) $block->getItemClasses() ?: "flex items-center gap-2 py-3 px-6 border-b border-slate-200 outline-offset-0";
 ?>
-<nav
-    x-data="initMenuMobile<?= $escaper->escapeHtml($uniqueId) ?>()"
-    x-bind="eventListeners"
-    class="navigation lg:hidden w-12 h-12"
-    aria-label="<?= $escaper->escapeHtmlAttr(__('Site navigation')) ?>"
-    role="navigation"
->
-    <!-- mobile -->
+<div x-data="initMobileMenu" x-bind="eventListeners" class="lg:hidden">
     <button
-        x-ref="mobileMenuTrigger"
-        @click="openMenu()"
-        :class="{'overflow-x-hidden overflow-y-auto fixed top-0 left-0 w-full' : open}"
         type="button"
+        class="btn bg-transparent border-transparent p-2"
         aria-label="<?= $escaper->escapeHtmlAttr(__('Open menu')) ?>"
-        aria-haspopup="menu"
-        :aria-expanded="open"
-        :hidden="open"
+        aria-controls="mobileMenu"
+        @click="open"
     >
-        <?= $heroicons->menuHtml('p-3', 48, 48, [":class" => "{ 'hidden' : open, 'block': !open }", "aria-hidden" => "true"]) ?>
+        <?= $lucideIcons->menuHtml('', 24, 24, ["aria-hidden" => "true"]) ?>
     </button>
-    <div
-        x-ref="mobileMenuNavLinks"
-        class="
-            z-20 fixed top-0 right-0 w-full h-full p-1 hidden
-            flex-col border-t border-container bg-container-lighter
-            overflow-y-auto overflow-x-hidden
-        "
-        :class="{ 'flex': open, 'hidden': !open }"
-        :aria-hidden="open ? 'false' : 'true'"
-        role="dialog"
-        aria-modal="true"
+    <dialog
+        class="size-full max-h-full ms-0 p-0 open:flex flex-col transition ease-out duration-300 open:duration-500 rounded-s-none"
+        x-show="isOpen"
+        x-htmldialog.noscroll="close"
+        closeby="any"
+        x-transition:enter-start="-translate-x-full"
+        x-transition:enter-end="translate-x-0"
+        x-transition:leave-start="translate-x-0"
+        x-transition:leave-end="-translate-x-full"
     >
-        <ul
-            class="border-t flex flex-col gap-y-1 mt-16"
-            aria-label="<?= $escaper->escapeHtmlAttr(__('Site navigation links')) ?>"
-        >
-            <?php foreach ($menuItems as $index => $menuItem): ?>
-                <li
-                    data-child-id="<?= $escaper->escapeHtmLAttr($index) ?>-main"
-                    class="level-0"
+        <div class="border-b border-slate-200">
+            <div class="flex items-center gap-2 py-4 px-6">
+                <div><?= $block->getChildHtml('logo') ?></div>
+                <button
+                    type="button"
+                    @click="close"
+                    class="btn bg-transparent border-transparent p-1 ms-auto"
+                    aria-label="<?= $escaper->escapeHtmlAttr(__('Close menu')) ?>"
                 >
-                    <div
-                        class="flex items-center transition-transform duration-150 ease-in-out transform"
-                        :class="{
-                            '-translate-x-full' : mobilePanelActiveId,
-                            'translate-x-0' : !mobilePanelActiveId
-                        }"
-                    >
-                        <a
-                            class="flex items-center w-full px-8 py-4 border-b cursor-pointer
-                                bg-container-lighter border-container level-0
-                            "
-                            href="<?= $escaper->escapeUrl($menuItem['url']) ?>"
-                            title="<?= $escaper->escapeHtmlAttr($menuItem['name']) ?>"
-                        >
-                            <?= $escaper->escapeHtml($menuItem['name']) ?>
-                        </a>
+                    <?= $lucideIcons->xHtml('', 24, 24, ["aria-hidden" => "true"]) ?>
+                </button>
+            </div>
+        </div>
+        <div class="grow relative overflow-y-auto overflow-x-clip py-0.5" :style="lockWrapperScroll">
+            <nav aria-label="<?= $escaper->escapeHtmlAttr(__('Mobile Main Menu')) ?>">
+                <ul>
+                    <?php foreach ($menuItems as $menuItem): ?>
                         <?php if (!empty($menuItem['childData'])): ?>
-                            <button
-                                @click="openSubcategory('<?= /* @noEscape */ $index ?>')"
-                                class="absolute right-0 flex items-center justify-center w-11 h-11 mr-8 cursor-pointer
-                                bg-container-lighter border-container"
-                                aria-label="<?= $escaper->escapeHtmlAttr(__('Open %1 subcategories', $menuItem['name'])) ?>"
-                                aria-haspopup="true"
-                                :aria-expanded="mobilePanelActiveId === '<?= /* @noEscape */ (string) $index ?>'"
-                            >
-                                <div class="w-8 h-8 border rounded">
-                                    <?= $heroicons->chevronRightHtml('w-full h-full p-1', 24, 24, ["aria-hidden" => "true"]) ?>
-                                </div>
-                            </button>
-                        <?php endif; ?>
-                    </div>
-                    <?php if (!empty($menuItem['childData'])): ?>
-                        <div
-                            data-child-id="<?= $escaper->escapeHtmLAttr($index) ?>"
-                            class="absolute top-0 right-0 z-10 flex flex-col gap-1 w-full h-full p-1 bg-container-lighter"
-                            :class="{
-                                'hidden': mobilePanelActiveId !== '<?= /* @noEscape */ (string) $index ?>'
-                            }"
-                        >
-                            <ul
-                                class="mt-16 transition-transform duration-200 ease-in-out translate-x-full transform"
-                                :class="{
-                                    'translate-x-full' : mobilePanelActiveId !== '<?= /* @noEscape */ (string) $index ?>',
-                                    'translate-x-0' : mobilePanelActiveId === '<?= /* @noEscape */ (string) $index ?>',
-                                }"
-                                aria-label="<?= $escaper->escapeHtmlAttr(__('Subcategories')) ?>"
-                            >
-                                <li>
-                                    <button
-                                        type="button"
-                                        class="flex items-center px-8 py-4 border-b cursor-pointer bg-container border-container w-full border-t"
-                                        @click="backToMainCategories('<?= /* @noEscape */ $index ?>-main')"
-                                        aria-label="<?= $escaper->escapeHtmlAttr(__('Back to main categories')) ?>"
-                                    >
-                                        <?= $heroicons->chevronLeftHtml('', 24, 24, ["aria-hidden" => "true"]); ?>
-                                        <span class="ml-4">
-                                            <?= $escaper->escapeHtml($menuItem['name']) ?>
-                                        </span>
-                                    </button>
-                                </li>
-                                <li>
-                                    <a
-                                        href="<?= $escaper->escapeUrl($menuItem['url']) ?>"
-                                        title="<?= $escaper->escapeHtmlAttr($menuItem['name']) ?>"
-                                        class="flex items-center w-full px-8 py-4 border-b cursor-pointer
-                                            bg-container-lighter border-container
-                                        "
-                                    >
-                                        <span class="ml-10">
-                                            <?= $escaper->escapeHtml(__('View All')) ?>
-                                        </span>
-                                    </a>
-                                </li>
-                                <?php foreach ($menuItem['childData'] as $subMenuItem): ?>
-                                    <li>
-                                        <a
-                                            href="<?= $escaper->escapeUrl($subMenuItem['url']) ?>"
-                                            title="<?= $escaper->escapeHtmlAttr($subMenuItem['name']) ?>"
-                                            class="flex items-center w-full px-8 py-4 border-b cursor-pointer
-                                                bg-container-lighter border-container
-                                            "
+                            <li data-level="0" x-data="initMobileSubMenu">
+                                <button
+                                    type="button"
+                                    class="w-full justify-between <?= $escaper->escapeHtmlAttr($itemClasses) ?>"
+                                    aria-controls="<?= $escaper->escapeHtml($menuItem['id']) ?>-mobile-menu-panel"
+                                    aria-expanded="false"
+                                    x-ref="openSubMenuBtn"
+                                    :aria-expanded="isOpen"
+                                    :disabled="isOpen"
+                                    @click="open"
+                                >
+                                    <span><?= $escaper->escapeHtml($menuItem['name']) ?></span>
+                                    <span class="btn p-1.5 border border-slate-300 bg-transparent text-current">
+                                        <?= $lucideIcons->chevronRightHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
+                                    </span>
+                                </button>
+                                <ul
+                                    id="<?= $escaper->escapeHtml($menuItem['id']) ?>-mobile-menu-panel"
+                                    class="z-10 absolute inset-0 bg-white py-0.5 overflow-y-auto overscroll-y-contain transition duration-300"
+                                    x-show="isOpen"
+                                    x-transition:enter-start="opacity-0 translate-x-8"
+                                    x-transition:enter-end="opacity-100 translate-x-0"
+                                    x-transition:leave-start="opacity-100 translate-x-0"
+                                    x-transition:leave-end="opacity-0 translate-x-8"
+                                    @keydown.escape.stop.prevent="close"
+                                >
+                                    <li data-level="1">
+                                        <button
+                                            type="button"
+                                            class="w-full bg-slate-50 font-bold <?= $escaper->escapeHtmlAttr($itemClasses) ?>"
+                                            @click="close"
+                                            x-ref="closeSubMenuBtn"
                                         >
-                                            <span class="ml-10 text-base text-gray-700">
-                                                <?= $escaper->escapeHtml($subMenuItem['name']) ?>
-                                            </span>
+                                            <?= $lucideIcons->chevronLeftHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
+                                            <?= $escaper->escapeHtml($menuItem['name']) ?>
+                                        </button>
+                                        <a
+                                            href="<?= $escaper->escapeUrl($menuItem['url']) ?>"
+                                            class="<?= $escaper->escapeHtmlAttr($itemClasses) ?>"
+                                        >
+                                            <span class="ms-7"><?= $escaper->escapeHtml(__('See all %1', $menuItem['name'])) ?></span>
                                         </a>
                                     </li>
-                                <?php endforeach; ?>
-                            </ul>
-                            <button
-                                @click="closeMenu()"
-                                class="absolute flex justify-end w-16 self-end mb-1 transition-none"
-                                aria-label="<?= $escaper->escapeHtmlAttr(__('Close menu')) ?>"
-                            >
-                                <?= $heroicons->xHtml('hidden p-4', 64, 64, [":class" => "{ 'hidden' : !open, 'block': open }", "aria-hidden" => "true"]) ?>
-                            </button>
-                        </div>
-                    <?php endif; ?>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-        <button
-            @click="closeMenu()"
-            class="absolute flex justify-end w-16 self-end mb-1"
-            aria-label="<?= $escaper->escapeHtmlAttr(__('Close menu')) ?>"
-            type="button"
-        >
-            <?= $heroicons->xHtml('hidden p-4', 64, 64, [":class" => "{ 'hidden' : !open, 'block': open }", "aria-hidden" => "true"]) ?>
-        </button>
-    </div>
-</nav>
+                                    <?php foreach ($menuItem['childData'] as $subMenuItem): ?>
+                                        <li data-level="1">
+                                            <a
+                                                href="<?= $escaper->escapeUrl($subMenuItem['url']) ?>"
+                                                class="<?= $escaper->escapeHtmlAttr($itemClasses) ?>"
+                                            >
+                                                <span class="ms-7"><?= $escaper->escapeHtml($subMenuItem['name']) ?></span>
+                                            </a>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </li>
+                        <?php else: ?>
+                            <li data-level="0">
+                                <a
+                                    href="<?= $escaper->escapeUrl($menuItem['url']) ?>"
+                                    class="<?= $escaper->escapeHtmlAttr($itemClasses) ?>"
+                                >
+                                    <?= $escaper->escapeHtml($menuItem['name']) ?>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </ul>
+            </nav>
+        </div>
+    </dialog>
+</div>
 <script>
-    'use strict';
-
-    const initMenuMobile<?= $escaper->escapeHtml($uniqueId) ?> = () => {
-        return {
-            mobilePanelActiveId: null,
-            open: false,
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('initMobileMenu', () => ({
+            isOpen: false,
+            isSubMenuOpen: false,
+            isOverflowing: false,
             init() {
-                this.setActiveMenu(this.$root);
-            },
-            setActiveMenu(menuNode) {
-                Array.from(menuNode.querySelectorAll('a')).filter(link => {
-                    return link.href === window.location.href.split('?')[0];
-                }).map(item => {
-                    item.classList.add('underline');
-                    item.closest('li.level-0') &&
-                    item.closest('li.level-0').querySelector('a.level-0').classList.add('underline');
+                Array.from(this.$root.querySelectorAll('a')).forEach(link => {
+                    if (link.href === `${window.location.origin}${window.location.pathname}`) {
+                        link.setAttribute('aria-current', 'page');
+                    }
                 });
             },
-            openMenu() {
-                this.open = true
-                this.$nextTick(() => hyva.trapFocus(this.$refs['mobileMenuNavLinks']));
-                // Prevent from body scrolling while mobile menu opened
-                document.body.style.overflow = 'hidden';
+            open() {
+                this.isOpen = true;
             },
-            closeMenu() {
-                document.body.style.overflow = '';
-
-                if (this.open) {
-                    this.$nextTick(() => this.$refs['mobileMenuTrigger'].focus() || hyva.releaseFocus());
-                }
-
-                this.open = false
-                this.mobilePanelActiveId = null
+            close() {
+                this.isOpen = false;
             },
-            openSubcategory(index) {
-                const menuNodeRef = document.querySelector('[data-child-id=' + index + ']')
-                this.mobilePanelActiveId = this.mobilePanelActiveId === index ? 0 : index
-                this.$nextTick(() => hyva.trapFocus(menuNodeRef))
+            lockWrapperScroll() {
+                return this.isSubMenuOpen ? { overflow: 'hidden' } : {}
             },
-            backToMainCategories(index) {
-                const menuNodeRef = document.querySelector('[data-child-id=' + index + ']')
-                this.mobilePanelActiveId = 0
-                this.$nextTick(() => {
-                    hyva.trapFocus(this.$refs['mobileMenuNavLinks'])
-                    menuNodeRef.querySelector('a').focus()
-                })
+            hasActiveSubMenu() {
+                this.isSubMenuOpen = !!this.$root.querySelector('[data-open]');
             },
             eventListeners: {
-                ['@keydown.window.escape']() {
-                    this.closeMenu();
-                },
                 ['@pageshow.window'](event) {
                     if (event.persisted) {
-                        this.closeMenu();
+                        this.close();
                     };
                 }
             }
-        }
-    }
+        }));
+
+        Alpine.data('initMobileSubMenu', () => ({
+            isOpen: false,
+            open() {
+                this.isOpen = true;
+                this.$root.setAttribute('data-open', '');
+                this.$nextTick(() => {
+                    this.$dispatch('sub-menu-state-change');
+                    this.$refs.closeSubMenuBtn.focus();
+                    this.toggleInert();
+                })
+            },
+            close() {
+                this.isOpen = false;
+                this.$root.removeAttribute('data-open');
+                this.toggleInert();
+                this.$nextTick(() => {
+                    this.$dispatch('sub-menu-state-change')
+                    this.$refs.openSubMenuBtn.focus();
+                })
+            },
+            toggleInert() {
+                const items = this.$root.parentElement.children;
+
+                for (item of items) {
+                    if (item.hasAttribute('data-open')) continue;
+                    item.toggleAttribute('inert', this.isOpen);
+                }
+            }
+        }));
+    });
 </script>
+<?php $hyvaCsp->registerInlineScript() ?>
