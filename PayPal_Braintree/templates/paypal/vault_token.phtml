@@ -23,7 +23,7 @@ $modalViewModel = $viewModels->require(Modal::class);
 $i = $block->getParentBlock()->getData('tokens_row_number') + 1 ?? 0;
 $block->getParentBlock()->setData('tokens_row_number', $i);
 ?>
-<div class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+<div class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-gray-100' ?>">
     <div class="text-sm">
         <img class="hidden lg:block"
              src="<?= $escaper->escapeHtmlAttr($block->getIconUrl()) ?>"
@@ -33,7 +33,7 @@ $block->getParentBlock()->setData('tokens_row_number', $i);
         <span><?= $escaper->escapeHtml($block->getPayerEmail()) ?></span>
     </div>
 </div>
-<div class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"  x-data="hyva.modal()">
+<div class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-gray-100' ?>"  x-data="hyva.modal()">
     <div class="text-sm">
         <form class="form"
               action="<?= $escaper->escapeUrl($block->getUrl('vault/cards/deleteaction')) ?>"

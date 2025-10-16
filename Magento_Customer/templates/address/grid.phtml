@@ -45,23 +45,23 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 <?php $i = 0; ?>
                 <?php foreach ($additionalAddresses as $address): ?>
                     <?php $i++ ?>
-                    <div class="p-2 <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+                    <div class="p-2 <?= $i % 2 === 0 ? '' : ' bg-gray-100' ?>">
                         <?= $escaper->escapeHtml($address->getCompany()) ?>
                     </div>
-                    <div class="hidden lg:block p-2 <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+                    <div class="hidden lg:block p-2 <?= $i % 2 === 0 ? '' : ' bg-gray-100' ?>">
                         <?= $escaper->escapeHtml($address->getLastname()) ?>,
                         <?= $escaper->escapeHtml($address->getFirstname()) ?>
                     </div>
-                    <div class="hidden lg:block p-2 <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+                    <div class="hidden lg:block p-2 <?= $i % 2 === 0 ? '' : ' bg-gray-100' ?>">
                         <?= $escaper->escapeHtml($block->getStreetAddress($address)) ?>
                     </div>
-                    <div class=" p-2 <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+                    <div class=" p-2 <?= $i % 2 === 0 ? '' : ' bg-gray-100' ?>">
                         <?= $escaper->escapeHtml($address->getCity()) ?>
                     </div>
-                    <div class="hidden lg:block p-2 <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+                    <div class="hidden lg:block p-2 <?= $i % 2 === 0 ? '' : ' bg-gray-100' ?>">
                         <?= $escaper->escapeHtml($block->getCountryByCode($address->getCountryId())) ?>
                     </div>
-                    <div class="p-2 <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+                    <div class="p-2 <?= $i % 2 === 0 ? '' : ' bg-gray-100' ?>">
                         <a class="action edit inline-block text-sm underline"
                             title="<?= $escaper->escapeHtmlAttr(__('Edit')) ?>"
                             href="<?= $escaper->escapeUrl($block->getUrl(

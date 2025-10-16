@@ -19,7 +19,7 @@ $magento = $viewModels->require(MagentoMetadata::class);
 <!-- display subtotal excluding tax -->
 <template x-if="segment.code === 'grand_total' && checkoutConfig.includeTaxInGrandTotal">
     <div>
-        <div class="flex py-2 pt-6 my-2 mx-auto text-xl md:grid md:grid-cols-2 md:w-full border-b border-container">
+        <div class="flex py-2 pt-6 my-2 mx-auto text-xl md:grid md:grid-cols-2 md:w-full border-b border-gray-300">
             <div class="w-7/12 font-semibold text-left md:w-auto"
                  x-html="`${segment.title} ${includingTaxMessage}` "
             ></div>

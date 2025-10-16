@@ -26,7 +26,7 @@ use Magento\Framework\View\Element\Template;
                 :class="{'-translate-x-5' : isFirstItemCol()}"
         >
         <template x-if="isVisualSwatch(activeTooltipItem.attribute, activeTooltipItem.item)">
-            <div class="inline-block border shadow-sm border-container"
+            <div class="inline-block border shadow-sm border-gray-300"
                     :style="getTooltipImageStyle(activeTooltipItem.attribute, activeTooltipItem.item)"
             ></div>
         </template>

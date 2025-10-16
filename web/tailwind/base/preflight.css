@@ -15,13 +15,12 @@
     }
 
     :disabled {
-       cursor: not-allowed;
+        cursor: not-allowed;
     }
 
     :target {
         scroll-margin-block: var(--anchor-offset, 6ex);
     }
-    
 
     @media (prefers-reduced-motion: no-preference) {
         :where(html):has(:target) {
@@ -69,8 +68,8 @@
         position: fixed;
         max-block-size: calc(100% - 2rem);
         max-inline-size: calc(100% - 2rem);
-        background-color: var(--color-bg);
-        color: var(--color-text);
+        background-color: var(--color-surface, canvas);
+        color: var(--color-text, canvastext);
         border-radius: 1rem;
         margin: auto;
         padding: 1.5rem;
@@ -79,5 +78,9 @@
         &::backdrop {
             background-color: var(--backdrop, hsl(0 0 0 / 20%));
         }
+    }
+
+    :where(:root:has(dialog[open]:modal)) {
+        overflow: hidden;
     }
 }

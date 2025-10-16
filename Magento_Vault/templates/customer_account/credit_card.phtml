@@ -26,17 +26,17 @@ $ccNumberView = $escaper->escapeHtml($block->getNumberLast4Digits());
 $i = $block->getParentBlock()->getData('cards_row_number') + 1 ?? 0;
 $block->getParentBlock()->setData('cards_row_number', $i);
 ?>
-<div class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+<div class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-gray-100' ?>">
     <div class="text-sm">
         <span class="hidden lg:inline">
             <?= $escaper->escapeHtml(__('ending')) ?>
         </span> <?= /* @noEscape */ $ccNumberView ?>
     </div>
 </div>
-<div class="p-2 flex <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+<div class="p-2 flex <?= $i % 2 === 0 ? '' : ' bg-gray-100' ?>">
     <div class="text-sm"><?= $escaper->escapeHtml($block->getExpDate()) ?></div>
 </div>
-<div class="p-2 items-center hidden lg:flex <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+<div class="p-2 items-center hidden lg:flex <?= $i % 2 === 0 ? '' : ' bg-gray-100' ?>">
     <div class="text-sm">
         <img src="<?= /* @noEscape */ $block->getIconUrl() ?>"
              width="<?= /* @noEscape */ $block->getIconWidth() ?>"
@@ -45,7 +45,7 @@ $block->getParentBlock()->setData('cards_row_number', $i);
         >
     </div>
 </div>
-<div class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>" x-data="hyva.modal()">
+<div class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-gray-100' ?>" x-data="hyva.modal()">
     <div class="text-sm">
     <form class="form"
           action="<?= $escaper->escapeUrl($block->getUrl('vault/cards/deleteaction')) ?>"

@@ -80,7 +80,7 @@ $productViewModel = $viewModels->require(ProductPage::class);
     <template x-if="getConfiguredTierPrices()">
         <ul role="list" class="prices-tier items mb-4">
             <template x-for="tierPrice in getConfiguredTierPrices()">
-                <li class="item bg-container-lighter p-2 shadow mb-2 border-l-4 border-green-400 mx-1">
+                <li class="item bg-white p-2 shadow mb-2 border-l-4 border-green-400 mx-1">
                     <span x-html="getItemHtml(tierPrice)"></span>
                     <strong class="benefit">
                         <?= $escaper->escapeHtml(__('save')) ?>

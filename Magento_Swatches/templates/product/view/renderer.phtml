@@ -67,7 +67,7 @@ $tooltipBlockHtml = $block->getBlockHtml('product.swatch.tooltip');
                 <?php $attributeId = $attribute->getAttributeId(); ?>
                 <?php $productAttribute = $attribute->getProductAttribute();  ?>
                 <?php if ($swatchRendererViewModel->isSwatchAttribute($productAttribute)): ?>
-                    <div class="swatch-attribute border-t last:border-b border-container min-h-14
+                    <div class="swatch-attribute border-t last:border-b border-gray-300 min-h-14
                             <?= $escaper->escapeHtmlAttr($productAttribute->getAttributeCode()) ?>">
                         <template x-if="showSwatches">
                             <div class="flex flex-col sm:flex-row items-center py-4 sm:py-1 w-full border-gray-300">

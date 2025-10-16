@@ -13,7 +13,7 @@
 <!-- display shipping including and excluding tax -->
 <template x-if="segment.code === 'shipping' && quoteData.is_virtual === 0 && !!shippingMethod && 'both' === checkoutConfig.reviewShippingDisplayMode">
     <div>
-        <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container">
+        <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-gray-300">
             <div class="w-7/12 text-left md:w-auto"
                  x-html="`${segment.title} ${excludingTaxMessage}` "
             ></div>
@@ -22,7 +22,7 @@
             ></div>
         </div>
 
-        <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container">
+        <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-gray-300">
             <div class="w-7/12 text-left md:w-auto"
                  x-html="`${segment.title} ${includingTaxMessage}` "
             ></div>
@@ -35,7 +35,7 @@
 
 <!-- display shipping excluding tax -->
 <template x-if="segment.code === 'shipping' && quoteData.is_virtual === 0 && !!shippingMethod && 'excluding' === checkoutConfig.reviewShippingDisplayMode">
-    <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container">
+    <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-gray-300">
         <div class="w-7/12 text-left md:w-auto"
              x-html="`${segment.title}` "
         ></div>
@@ -47,7 +47,7 @@
 
 <!-- display shipping including tax -->
 <template x-if="segment.code === 'shipping' && quoteData.is_virtual === 0 && !!shippingMethod && 'including' === checkoutConfig.reviewShippingDisplayMode">
-    <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container">
+    <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-gray-300">
         <div class="w-7/12 text-left md:w-auto"
              x-html="`${segment.title}`"
         ></div>

@@ -57,7 +57,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             </thead>
             <tbody>
                 <?php foreach ($items as $item): ?>
-                    <tr class="align-top even:bg-container-darker">
+                    <tr class="align-top even:bg-gray-100">
                         <th
                             class="p-2 text-start font-normal"
                             aria-label="<?= $escaper->escapeHtmlAttr($item->getPurchased()->getOrderIncrementId()) ?>"

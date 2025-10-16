@@ -13,7 +13,7 @@
 <template x-if="segment.code === 'tax' && (segment.value > 0 || checkoutConfig.isZeroTaxDisplayed)">
     <div>
         <template x-if="!(segment.value > 0 && checkoutConfig.isFullTaxSummaryDisplayed)">
-            <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container">
+            <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-gray-300">
                 <div class="w-7/12 text-left md:w-auto"
                      x-html="segment.title"
                 ></div>
@@ -24,7 +24,7 @@
         </template>
 
         <template x-if="segment.value > 0 && checkoutConfig.isFullTaxSummaryDisplayed">
-            <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container cursor-pointer"
+            <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-gray-300 cursor-pointer"
                 @click="taxSummaryIsOpen = !taxSummaryIsOpen">
                 <div class="w-7/12 text-left md:w-auto items-center"
                      x-html="segment.title"
@@ -41,7 +41,7 @@
                 </div>
                 <div x-show="taxSummaryIsOpen" class="col-span-2">
                     <template x-for="(taxItem, index) in segment.extension_attributes.tax_grandtotal_details" :key="index">
-                        <div class="flex px-2 py-2 my-2 border-t border-b last:border-b-0 last:pb-0 text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container">
+                        <div class="flex px-2 py-2 my-2 border-t border-b last:border-b-0 last:pb-0 text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-gray-300">
                             <div class="w-7/12 text-left md:w-auto">
                                 <template x-for="(taxRate, index) in taxItem.rates">
                                     <div x-html="`${taxRate.title} (${taxRate.percent}%)`"></div>

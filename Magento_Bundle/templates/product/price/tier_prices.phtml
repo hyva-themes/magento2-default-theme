@@ -26,7 +26,7 @@ if (count($tierPrices) === 0) {
 
 <ul role="list" class="<?= $escaper->escapeHtmlAttr(($block->hasListClass() ? $block->getListClass() : 'prices-tier items')) ?>">
     <?php foreach ($tierPrices as $index => $price): ?>
-        <li class="item bg-container-lighter p-2 shadow mb-2 border-l-4 border-green-400">
+        <li class="item bg-white p-2 shadow mb-2 border-l-4 border-green-400">
             <?= /* @noEscape */ __(
                 'Buy %1 with %2 discount each',
                 $price['price_qty'],

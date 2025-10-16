@@ -25,12 +25,8 @@
 @import "./generated/hyva-tokens.css";
 
 @theme {
-    /* @deprecated Will be removed in favor for named variables, in the future */
-    --color-container-lighter: #f5f5f5;
-    --color-container: #e7e7e7;
-    --color-container-darker: #b6b6b6;
-
-    --bg-container-lighter: #fff;
-    --bg-container: #fafafa;
-    --bg-container-darker: #f5f5f5;
+    --color-bg: var(--color-slate-50);
+    --color-fg: var(--color-slate-950);
+    --color-fg-secondary: var(--color-slate-600);
+    --color-surface: var(--color-white);
 }

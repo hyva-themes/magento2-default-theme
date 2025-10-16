@@ -96,7 +96,7 @@ if ($extraActionTitleBlocks = $block->getLayout()->getChildBlocks('order-list-ex
                 </thead>
                 <tbody>
                     <?php foreach ($orders as $order): ?>
-                        <tr class="align-top even:bg-container-darker">
+                        <tr class="align-top even:bg-gray-100">
                             <th
                                 id="order<?= $escaper->escapeHtmlAttr($order->getRealOrderId()) ?>"
                                 class="p-2 text-start font-normal"

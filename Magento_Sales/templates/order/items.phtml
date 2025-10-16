@@ -42,7 +42,7 @@ $cols = $block->getData('is_context_shipment') ? 3 : 5;
         }
         ?>
         <div class="<?= ($parentItem) ?
-            'child-item ml-2 px-4 mb-2 border-l-4 border-container text-sm' :
+            'child-item ml-2 px-4 mb-2 border-l-4 border-gray-300 text-sm' :
             'parent-item mb-2'
         ?>">
             <?= $block->getItemHtml($item) ?>
@@ -93,7 +93,7 @@ $cols = $block->getData('is_context_shipment') ? 3 : 5;
         <?= $block->getPagerHtml() ?>
     <?php endif ?>
 </div>
-<div class="flex justify-end border-t border-container mt-2">
+<div class="flex justify-end border-t border-gray-300 mt-2">
     <div class="lg:w-1/3">
         <div class="grid grid-cols-2 text-right p-2 gap-2">
             <?= $block->getChildHtml('order_totals') ?>

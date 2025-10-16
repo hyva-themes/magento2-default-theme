@@ -56,7 +56,7 @@ $currentStore = $storeSwitcherViewModel->getStore();
             </div>
             <nav x-cloak
                  x-show="open"
-                 class="absolute right-0 top-full z-20 w-56 py-2 mt-1 overflow-auto origin-top-left rounded-sm shadow-lg sm:w-48 lg:mt-3 bg-container-lighter">
+                 class="absolute right-0 top-full z-20 w-56 py-2 mt-1 overflow-auto origin-top-left rounded-sm shadow-lg sm:w-48 lg:mt-3 bg-white">
                 <div class="my-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                     <?php foreach ($storeSwitcherViewModel->getStores() as $lang): ?>
                         <?php if ($lang->getId() != $storeViewModel->getStoreId()): ?>

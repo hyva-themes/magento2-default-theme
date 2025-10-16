@@ -34,14 +34,14 @@ if (!$productId || !$attributeId) {
     <template x-if="optionIsEnabled(<?= (int) $attributeId ?>, item.id) && optionIsActive(<?= (int) $attributeId ?>, item.id)">
         <label
             :for="$id('attribute-option-<?= (int) $productId ?>-'+item.id)"
-            class="swatch-option relative shadow-sm cursor-pointer select-none bg-container-lighter product-option-value-label"
+            class="swatch-option relative shadow-sm cursor-pointer select-none bg-white product-option-value-label"
             :class="{
-                'border-container-lighter ring ring-primary/50':
+                'border-gray-100 ring ring-primary/50':
                     (selectedValues[<?= (int)$attributeId ?>] === item.id),
-                'border-container-darker':
+                'border-gray-400':
                     (selectedValues[<?= (int)$attributeId ?>] !== item.id),
                 'w-6 h-6' : !isTextSwatch(<?= (int) $attributeId ?>, item.id),
-                'border-container-lighter ring ring-primary/75' : focusedLabel === item.id
+                'border-gray-100 ring ring-primary/75' : focusedLabel === item.id
             }"
             :style="getSwatchBackgroundStyle('<?= (int) $attributeId ?>',item.id)"
             <?php if ($configurableViewModel->getShowSwatchTooltip()): ?>
@@ -83,7 +83,7 @@ if (!$productId || !$attributeId) {
 
     <template x-if="optionIsEnabled(<?= (int) $attributeId ?>, item.id) && !optionIsActive(<?= (int) $attributeId ?>, item.id)">
         <div
-            class="relative border-2 shadow-sm opacity-50 cursor-pointer select-none border-container-darker swatch-option bg-container-lighter"
+            class="relative border-2 shadow-sm opacity-50 cursor-pointer select-none border-gray-400 swatch-option bg-white"
             :class="{
                                                         'w-6 h-6' : !isTextSwatch(<?= (int) $attributeId ?>, item.id),
                                                     }"

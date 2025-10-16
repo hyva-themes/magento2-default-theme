@@ -182,7 +182,7 @@ $swatchItemNumber = $block->getNumberSwatchesPerProduct();
             <?php if (!$productAttribute->getUsedInProductListing() || !$swatchRendererViewModel->isSwatchAttribute($productAttribute)) {
                 continue;
             } ?>
-        <div class="swatch-attribute border-t last:border-b border-container
+        <div class="swatch-attribute border-t last:border-b border-gray-300
             <?= $escaper->escapeHtmlAttr($productAttribute->getAttributeCode()) ?>"
         >
             <div class="w-full overflow-x-hidden swatch-attribute-options min-h-14">

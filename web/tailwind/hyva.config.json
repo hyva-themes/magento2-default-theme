@@ -19,11 +19,7 @@
         "on": {
           "primary": "#fff",
           "secondary": "#fff"
-        },
-        "bg": "var(--color-slate-50)",
-        "text": "var(--color-slate-950)",
-        "text-secondary": "var(--color-slate-600)",
-        "surface": "var(--color-white)"
+        }
       },
       "form": {
         "radius": "var(--radius-lg)",

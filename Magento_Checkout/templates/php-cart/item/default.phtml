@@ -31,7 +31,7 @@ $qty = $stockItemViewModel->isQtyDecimal($product)
 
 
 ?>
-<tbody class="cart item bg-white even:bg-container-darker"
+<tbody class="cart item bg-white even:bg-gray-100"
        <?php foreach ($block->getData('cart_item_data_attributes') ?? [] as $attribute => $include): ?>
            <?php if ($include): ?>
                <?php /** Append data-* attributes based on layout XML arguments */ ?>

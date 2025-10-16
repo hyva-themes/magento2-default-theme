@@ -107,7 +107,7 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
     >
         <template x-if="itemCount">
             <div class="mt-8">
-                <h2 class="border-t border-container mb-6 pt-5" id="wishlist-sidebar">
+                <h2 class="border-t border-gray-300 mb-6 pt-5" id="wishlist-sidebar">
                     <strong class="title font-semibold text-lg"><?= $escaper->escapeHtml($block->getTitle()) ?></strong>
                     <span class="counter text-xs" x-html="wishlistCountLabel"></span>
                 </h2>

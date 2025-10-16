@@ -34,7 +34,7 @@ use Magento\Wishlist\Block\Share\Wishlist;
                     $product = $item->getProduct();
                     $isVisibleProduct = $product->isVisibleInSiteVisibility();
                     ?>
-                    <div class="grid grid-cols-1 md:grid-cols-3 even:bg-container-darker" id="wishlist-items">
+                    <div class="grid grid-cols-1 md:grid-cols-3 even:bg-gray-100" id="wishlist-items">
                         <div class="p-4 flex flex-wrap gap-4 items-center">
                             <div class="md:hidden text-sm w-full ">
                                 <?= $escaper->escapeHtml(__('Product')) ?>
