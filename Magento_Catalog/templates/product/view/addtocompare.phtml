@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\CurrentProduct;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Hyva\Theme\ViewModel\ProductCompare;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Escaper;
@@ -23,8 +23,8 @@ use Magento\Framework\View\Element\Template;
 /** @var ProductCompare $compareViewModel */
 $compareViewModel = $viewModels->require(ProductCompare::class);
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 
 /** @var CurrentProduct $currentProduct */
 $currentProduct = $viewModels->require(CurrentProduct::class);
@@ -73,9 +73,8 @@ if (!$product->getId() || !$compareViewModel->showOnProductPage()) {
         title="<?= $escaper->escapeHtmlAttr(__('Add to Compare')) ?>"
         aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Compare')) ?>"
         id="add-to-compare"
-        class="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center
-            justify-center text-gray-500 hover:text-yellow-500 ml-2"
+        class="btn p-2 rounded-full hover:text-yellow-600 ml-2"
         data-addto="compare"
 >
-    <?= $heroicons->scaleHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
+    <?= $lucideIcons->scaleHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
 </button>

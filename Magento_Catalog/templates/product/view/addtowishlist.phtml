@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\CurrentProduct;
-use Hyva\Theme\ViewModel\HeroiconsSolid;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Hyva\Theme\ViewModel\Wishlist;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Escaper;
@@ -23,8 +23,8 @@ use Magento\Framework\View\Element\Template;
 /** @var Wishlist $wishlistViewModel */
 $wishlistViewModel = $viewModels->require(Wishlist::class);
 
-/** @var HeroiconsSolid $heroicons */
-$heroicons = $viewModels->require(HeroiconsSolid::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 
 /** @var CurrentProduct $currentProduct */
 $currentProduct = $viewModels->require(CurrentProduct::class);
@@ -144,9 +144,8 @@ $uniqueId = '_' . uniqid();
             ($updateParams) ? __('Update Wish List') : __('Add to Wish List')
         ) ?>"
         id="add-to-wishlist"
-        class="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex
-                items-center justify-center text-gray-500 hover:text-red-600 ml-4"
+        class="btn p-2 rounded-full hover:text-red-600 ml-4"
         data-addto="wishlist"
 >
-    <?= $heroicons->heartHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
+    <?= $lucideIcons->heartHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
 </button>
