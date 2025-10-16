@@ -106,7 +106,7 @@ $swatchData = $block->getSwatchData();
             <a
                 href="<?= $escaper->escapeUrl($label['link']) ?>" rel="nofollow"
                 aria-label="<?= $escaper->escapeHtmlAttr(__('Filter %1 %2', $swatchData['attribute_label'], $label['label'])) ?>"
-                class="swatch-option-link-layered swatch-option cursor-pointer bg-white shadow-sm relative select-none border-gray-400 <?= $isVisualSwatch ? 'w-6 h-6' : '' ?>"
+                class="swatch-option-link-layered swatch-option cursor-pointer bg-white shadow-sm relative select-none border-gray-300 <?= $isVisualSwatch ? 'w-6 h-6' : '' ?>"
                 <?php if ($isVisualSwatch): ?>
                     style="<?= $swatchType === '2'
                         ? 'background: #fff url(' . $escaper->escapeUrl($block->getSwatchPath('swatch_image', $swatchValue)) . ') center no-repeat'

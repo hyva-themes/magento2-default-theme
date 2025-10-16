@@ -38,7 +38,7 @@ if (!$productId || !$attributeId) {
             :class="{
                 'border-gray-100 ring ring-primary/50':
                     (selectedValues[<?= (int)$attributeId ?>] === item.id),
-                'border-gray-400':
+                'border-gray-300':
                     (selectedValues[<?= (int)$attributeId ?>] !== item.id),
                 'w-6 h-6' : !isTextSwatch(<?= (int) $attributeId ?>, item.id),
                 'border-gray-100 ring ring-primary/75' : focusedLabel === item.id
@@ -83,7 +83,7 @@ if (!$productId || !$attributeId) {
 
     <template x-if="optionIsEnabled(<?= (int) $attributeId ?>, item.id) && !optionIsActive(<?= (int) $attributeId ?>, item.id)">
         <div
-            class="relative border-2 shadow-sm opacity-50 cursor-pointer select-none border-gray-400 swatch-option bg-white"
+            class="relative border-2 shadow-sm opacity-50 cursor-pointer select-none border-gray-300 swatch-option bg-white"
             :class="{
                                                         'w-6 h-6' : !isTextSwatch(<?= (int) $attributeId ?>, item.id),
                                                     }"
