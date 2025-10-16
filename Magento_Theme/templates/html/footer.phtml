@@ -14,23 +14,18 @@ use Magento\Framework\Escaper;
 /** @var Template $block */
 /** @var Escaper $escaper */
 ?>
-<div class="text-gray-700 body-font bg-container-darker border-t border-container-darker shadow pb-16">
-    <div class="container py-8 mx-auto">
-        <div class="flex flex-wrap order-first gap-y-16">
+<div class="bg-gray-100 border-t border-gray-300 pb-16">
+    <div class="container py-8">
+        <div class="flex flex-wrap gap-y-16">
             <?php foreach ($block->getChildNames() as $childName): ?>
                 <?= $childName !== 'footer-copyright' ? $block->getBlockHtml($childName) : '' ?>
             <?php endforeach; ?>
         </div>
     </div>
-    <div class="bg-container border-t border-b border-container">
-        <div class="container py-6 mx-auto flex items-center sm:flex-row flex-col">
-            <a  href="https://hyva.io"
-                class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
-                <span class="ml-3 text-xl">Hyvä Theme</span>
-            </a>
-            <p>
-                <?= $block->getChildHtml('copyright') ?>
-            </p>
+    <div class="bg-surface border-t border-b border-gray-300">
+        <div class="container py-6 flex items-center sm:flex-row flex-col">
+            <a href="https://hyva.io" class="text-xl font-medium">Hyvä Theme</a>
+            <p><?= $block->getChildHtml('copyright') ?></p>
         </div>
     </div>
 </div>
