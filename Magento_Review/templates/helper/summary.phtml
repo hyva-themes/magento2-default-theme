@@ -47,7 +47,7 @@ $product = $block->getProduct();
                 $rating
                     ? __('%1 rating. %2 out of %3 stars', $product->getName(), $starsFilled + $starFragment, $ratingSteps)
                     : __('Be the first to review this product')
-            )?>"
+            ) ?>"
         >
             <?php if ($rating): ?>
                 <?php $i = 0; ?>
@@ -80,7 +80,7 @@ $product = $block->getProduct();
                     </span>
                 <?php endif; ?>
                 <?php $i = 0; ?>
-                    <?php while ($i < $starsEmpty): ?>
+                <?php while ($i < $starsEmpty): ?>
                     <?= $lucideIcons->starHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
                     <?php $i++; ?>
                 <?php endwhile; ?>
