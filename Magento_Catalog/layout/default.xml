@@ -7,7 +7,7 @@
         <referenceContainer name="head.additional">
             <block
                 name="view-transition.product.gallery"
-                template="Hyva_Theme::page/js/view-transition-product-gallery.phtml"
+                template="Magento_Catalog::page/js/view-transition-product-gallery.phtml"
             />
         </referenceContainer>
 
