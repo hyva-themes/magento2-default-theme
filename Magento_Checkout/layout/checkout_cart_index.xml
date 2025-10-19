@@ -97,9 +97,6 @@
                     <argument name="hide_rating_summary" xsi:type="boolean">true</argument>
                 </arguments>
             </block>
-
-
         </referenceContainer>
-
     </body>
 </page>
