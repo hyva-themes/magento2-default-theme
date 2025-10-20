@@ -7,13 +7,13 @@
  * The `@utility` directive is used, for backwards compatibility, to define button styles.
  */
 
-@utility btn {
+@theme {
     --btn-stroke: #0000;
-    --btn-bg: color-mix(in oklch, var(--color-primary), #0000 94%);
-    --btn-hover-bg: color-mix(in oklch, var(--color-primary), #0000 86%);
-    --btn-active-bg: color-mix(in oklch, var(--color-primary), #0000 86%);
+    --btn-bg: var(--color-slate-100);
+    --btn-hover-bg: var(--color-slate-200);
+    --btn-active-bg: var(--color-slate-200);
     --btn-color: var(--color-text);
-    display: flex;
+}
     justify-content: center;
     align-items: center;
     gap: --spacing(1.5);
