@@ -8,11 +8,11 @@
 
 declare(strict_types=1);
 
-/** @var Term $block */
-/** @var Escaper $escaper */
-
 use Magento\Framework\Escaper;
 use Magento\Search\Block\Term;
+
+/** @var Term $block */
+/** @var Escaper $escaper */
 ?>
 <?php if (count($block->getTerms()) > 0): ?>
     <ul role="list" class="flex flex-wrap -mx-2 md:-mx-4 items-baseline">
