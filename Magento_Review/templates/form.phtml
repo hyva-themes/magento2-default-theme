@@ -9,8 +9,7 @@
 
 use Hyva\GraphqlViewModel\ViewModel\GraphqlViewModel;
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
-use Hyva\Theme\ViewModel\HeroiconsSolid;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Hyva\Theme\ViewModel\SvgIcons;
 use Hyva\Theme\ViewModel\Store;
 use Magento\Framework\Escaper;
@@ -23,11 +22,8 @@ use Hyva\Theme\ViewModel\ReCaptcha;
 /** @var Form $block */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
-
-/** @var HeroiconsSolid $heroiconsSolid */
-$heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 
 /** @var SvgIcons $hyvaicons */
 $hyvaicons = $viewModels->require(SvgIcons::class);
@@ -95,29 +91,26 @@ mutation createProductReviewMutation(
                         </span>
                     </legend>
                     <?php if ($block->getRatings() && $block->getRatings()->getSize()): ?>
-                        <fieldset name="rating-group">
+                        <div name="rating-group">
                             <div class="flex flex-col mt-4 mb-3">
                                 <div class="text-md <?php if ($block->getRatings()->getSize() <= 1): ?>hidden<?php endif ?>">
                                     <?= $escaper->escapeHtml(__('Your Rating')) ?>:
                                 </div>
-                                <div class="mt-4">
+                                <div>
                                     <div id="product-review-table">
                                         <?php foreach ($block->getRatings() as $rating): ?>
-                                            <div class="table-row">
-                                                <label
-                                                    class="table-cell pr-6 align-middle text-left"
-                                                    id="<?= $escaper->escapeHtmlAttr($rating->getRatingCode()) ?>_rating_label"
-                                                >
-                                                    <span>
+                                            <fieldset class="flex flex-col md:flex-row gap-y-2 gap-x-4 md:items-center mb-2">
+                                                <div>
+                                                    <legend class="inline-block my-0">
                                                         <?php if ($block->getRatings()->getSize() <= 1): ?>
                                                             <?= $escaper->escapeHtml(__('Your Rating')) ?>:
                                                         <?php else: ?>
                                                             <?= $escaper->escapeHtml($rating->getRatingCode()) ?>
                                                         <?php endif ?>
-                                                    </span>
-                                                </label>
+                                                    </legend>
+                                                </div>
                                                 <div
-                                                    class="flex flex-row grow-0 focus-within:ring-4 ring-primary ring-opacity-50"
+                                                    class="rating-summary grow-0 has-[:focus-visible]:outline-2 outline-primary"
                                                     x-data="{ clickedRatingId: 0 }"
                                                 >
                                                     <?php $options = $rating->getOptions(); ?>
@@ -128,22 +121,18 @@ mutation createProductReviewMutation(
                                                             @click="clickedRatingId = <?= (int)$iterator ?> || 0"
                                                         >
                                                             <label
-                                                                class="rating-<?= (int)$iterator ?> m-0 cursor-pointer text-gray-400"
+                                                                class="rating-<?= (int)$iterator ?> m-0 text-current"
                                                                 for="<?= $escaper->escapeHtmlAttr($rating->getRatingCode() . '_' . $option->getValue()) ?>"
-                                                                id="<?= $escaper->escapeHtmlAttr($rating->getRatingCode() . '_' . $option->getValue()) ?>_label"
                                                             >
-                                                                <span :class="<?= (int)$iterator ?> <= clickedRatingId
-                                                                    ? 'text-yellow-400'
-                                                                    : 'text-gray-400'"
-                                                                >
-                                                                    <?= $heroiconsSolid->starHtml('', 32, 32, ["aria-hidden" => "true"]); ?>
-                                                                </span>
+                                                                <?= $lucideIcons->starHtml('', 24, 24, [
+                                                                    'aria-hidden' => 'true',
+                                                                    ':class' => (int)$iterator . "<= clickedRatingId ? 'fill-current' : ''"
+                                                                ]); ?>
                                                                 <input
-                                                                    class="absolute opacity-0 bottom-0 left-0 cursor-pointer"
+                                                                    name="ratings[<?= $escaper->escapeHtmlAttr($rating->getId()) ?>]"
+                                                                    class="absolute inset-0 size-full opacity-0 cursor-pointer"
                                                                     type="radio"
                                                                     <?php if ($iterator === 1): ?>required<?php endif; ?>
-                                                                    name="ratings[<?= $escaper->escapeHtmlAttr($rating->getId()) ?>]"
-                                                                    id="<?= $escaper->escapeHtmlAttr($rating->getRatingCode() . '_' . $option->getValue()) ?>"
                                                                     value="<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
                                                                     <?php if ($iterator === 1): ?>
                                                                     aria-label="<?= $escaper->escapeHtmlAttr(__('1 star')) ?>"
@@ -157,13 +146,13 @@ mutation createProductReviewMutation(
                                                         <?php $iterator++; ?>
                                                     <?php endforeach; ?>
                                                 </div>
-                                            </div>
+                                            </fieldset>
                                         <?php endforeach; ?>
                                     </div>
                                     <input type="hidden" name="validate_rating" value="">
                                 </div>
                             </div>
-                        </fieldset>
+                        </div>
                     <?php endif ?>
                     <div>
                         <div>
@@ -225,14 +214,14 @@ mutation createProductReviewMutation(
                            x-cloak
                            class="text-green flex items-center">
                             <span class="inline-block w-8 h-8 mr-3">
-                                <?= $heroicons->checkCircleHtml('', 24, 24, ['aria-hidden' => true]); ?>
+                                <?= $lucideIcons->circleCheckHtml('', 24, 24, ['aria-hidden' => true]); ?>
                             </span>
                             <?= $escaper->escapeHtml(__('You submitted your review for moderation.')) ?>
                         </p>
                         <template x-if="displayErrorMessage">
                             <p class="text-red flex items-center">
                                 <span class="inline-block w-8 h-8 mr-3">
-                                    <?= $heroicons->exclamationCircleHtml('', 24, 24, ['aria-hidden' => true]); ?>
+                                    <?= $lucideIcons->circleAlertHtml('', 24, 24, ['aria-hidden' => true]); ?>
                                 </span>
                                 <template x-for="errorMessage in errorMessages">
                                     <span x-html="errorMessage"></span>

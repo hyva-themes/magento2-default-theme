@@ -1,0 +1,6 @@
+@layer components {
+    .rating-summary {
+        display: flex;
+        color: var(--color-primary);
+    }
+}

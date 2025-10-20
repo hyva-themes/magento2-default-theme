@@ -8,8 +8,7 @@
  */
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
-use Hyva\Theme\ViewModel\HeroiconsSolid;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Framework\Escaper;
 use Magento\Review\Block\Product\View as ProductReview;
@@ -23,11 +22,8 @@ use Magento\Theme\Block\Html\Pager;
 /** @var Pager $toolbar */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
-
-/** @var HeroiconsSolid $heroiconsSolid */
-$heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 
 $reviewCollection = $block->getReviewsCollection();
 
@@ -75,18 +71,18 @@ $productName = $block->getProduct()->getName();
                                 </div>
                                 <span class="hidden" itemprop="ratingValue"><?= /** @noEscape */ $starsFilled; ?></span>
                                 <div
-                                    class="flex flex-row"
+                                    class="rating-summary"
                                     role="img"
                                     aria-label="<?= $escaper->escapeHtmlAttr(__('%1 rating. %2 out of %3 stars', $productName, $starsFilled, $ratingSteps))?>"
                                 >
                                     <?php $i = 0; ?>
                                     <?php while ($i < $starsFilled): ?>
-                                        <?= $heroiconsSolid->starHtml('text-yellow-400', 24, 24, ["aria-hidden" => "true"]); ?>
+                                        <?= $lucideIcons->starHtml('fill-current', 24, 24, ['aria-hidden' => 'true']); ?>
                                         <?php $i++; ?>
                                     <?php endwhile; ?>
                                     <?php $i = 0; ?>
                                     <?php while ($i < $starsEmpty): ?>
-                                        <?= $heroiconsSolid->starHtml('text-gray-400', 24, 24, ["aria-hidden" => "true"]); ?>
+                                        <?= $lucideIcons->starHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
                                         <?php $i++; ?>
                                     <?php endwhile; ?>
                                 </div>

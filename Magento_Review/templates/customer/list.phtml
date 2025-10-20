@@ -8,8 +8,7 @@
  */
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
-use Hyva\Theme\ViewModel\HeroiconsSolid;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Hyva\Theme\ViewModel\Customer\ReviewList;
 use Hyva\Theme\ViewModel\Store;
 use Hyva\Theme\ViewModel\StoreConfig;
@@ -20,11 +19,8 @@ use Magento\Framework\View\Element\Template;
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
-
-/** @var HeroiconsSolid $heroiconsSolid */
-$heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 
 /** @var ReviewList $viewModelCustomerReviews */
 $viewModelCustomerReviews = $viewModels->require(ReviewList::class);
@@ -65,7 +61,7 @@ $ratingSteps = 5;
                                :class="{'cursor-default' : currentPage < 2}"
                                title="<?= $escaper->escapeHtmlAttr(__('Previous')) ?>">
                                 <span>
-                                    <?= $heroicons->chevronLeftHtml('', 20, 20); ?>
+                                    <?= $lucideIcons->chevronLeftHtml('', 20, 20); ?>
                                 </span>
                             </a>
                         </li>
@@ -100,7 +96,7 @@ $ratingSteps = 5;
                                :class="{'cursor-default' : currentPage >= pageInfo.total_pages}"
                                href="#" title="<?= $escaper->escapeHtmlAttr(__('Next')) ?>">
                                 <span>
-                                    <?= $heroicons->chevronRightHtml('', 20, 20); ?>
+                                    <?= $lucideIcons->chevronRightHtml('', 20, 20); ?>
                                 </span>
                             </a>
                         </li>
@@ -135,14 +131,14 @@ $ratingSteps = 5;
                             ></span>
                         </p>
                         <template x-for="(item, index) in review.ratings_breakdown" :key="index">
-                            <div class="flex">
+                            <div class="rating-summary">
                                 <template x-for="i in <?= $escaper->escapeJs($ratingSteps) ?>">
                                     <div>
                                         <template x-if="i <= item.value">
-                                            <?= $heroiconsSolid->starHtml('text-yellow-400'); ?>
+                                            <?= $lucideIcons->starHtml('fill-current', 24, 24, ['aria-hidden' => 'true']); ?>
                                         </template>
                                         <template x-if="i > item.value">
-                                            <?= $heroiconsSolid->starHtml('text-gray-400'); ?>
+                                            <?= $lucideIcons->starHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
                                         </template>
                                     </div>
                                 </template>
