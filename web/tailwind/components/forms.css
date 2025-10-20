@@ -51,6 +51,10 @@
 }
 
 @layer components {
+    .form-input.qty {
+        max-inline-size: calc(6ch + var(--form-px));
+    }
+
     .field {
         @apply mt-1;
 

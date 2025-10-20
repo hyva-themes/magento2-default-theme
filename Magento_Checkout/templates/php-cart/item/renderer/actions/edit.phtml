@@ -9,7 +9,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsSolid;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit;
 use Magento\Framework\Escaper;
 
@@ -17,10 +17,10 @@ use Magento\Framework\Escaper;
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsSolid $heroicons */
-$heroicons = $viewModels->require(HeroiconsSolid::class);
-$item = $block->getItem();
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 
+$item = $block->getItem();
 if ($item->getProductType() === 'configurable') {
     $productOptions = $item->getProduct()->getTypeInstance()->getOrderOptions($item->getProduct());
     $productName = $productOptions["simple_name"];
@@ -30,10 +30,10 @@ if ($item->getProductType() === 'configurable') {
 ?>
 <?php if ($block->isProductVisibleInSiteVisibility()): ?>
     <a
-        class="action action-edit"
+        class="btn p-2"
         href="<?= $escaper->escapeUrl($block->getConfigureUrl()) ?>"
         aria-label="<?= $escaper->escapeHtmlAttr(__('Edit %1', $productName)) ?>"
     >
-        <?= $heroicons->pencilHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
+        <?= $lucideIcons->pencilHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
     </a>
 <?php endif ?>

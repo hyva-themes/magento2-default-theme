@@ -20,7 +20,7 @@
             </image>
             <image id="cart_page_product_thumbnail" type="small_image">
                 <width>110</width>
-                <height>160</height>
+                <height>110</height>
             </image>
             <image id="category_page_grid" type="small_image">
                 <width>360</width>
