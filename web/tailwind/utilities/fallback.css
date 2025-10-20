@@ -1,0 +1,30 @@
+/**
+ * ! @deprecated custom utilities from Hyvä v1.3 and older
+ */
+
+@theme {
+    --color-container-lighter: var(--color-white);
+    --color-container: var(--color-gray-50);
+    --color-container-darker: var(--color-gray-100);
+}
+
+/* Preserve the older opacity utility for bg-primary */
+@utility bg-primary {
+    &[class*="bg-opacity-"] {
+        background-color: color-mix(
+            in srgb,
+            var(--color-primary) calc(100% / var(--tw-bg-opacity)),
+            #0000
+        );
+    }
+}
+
+/* Preserve the snap for older sliders */
+@utility snap {
+    @apply snap-x snap-mandatory scroll-smooth [&>*]:snap-start;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}

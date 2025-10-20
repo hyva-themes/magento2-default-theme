@@ -1,23 +1,9 @@
 @import "./icons.css";
+@import "./fallback.css";
 
-/** @deprecated custom utilities from Hyvä v1.3 and older */
-@utility bg-container-lighter {
-    --color-container-lighter: var(--bg-container-lighter);
-}
-
-@utility bg-container {
-    --color-container: var(--bg-container);
-}
-
-@utility bg-container-darker {
-    --color-container-darker: var(--bg-container-darker);
-}
-
-@utility snap {
-    @apply snap-x snap-mandatory scroll-smooth [&>*]:snap-start;
-    scrollbar-width: none;
-
-    &::-webkit-scrollbar {
+/* Disable the -webkit-details-marker when the summary has the `list-none` class */
+@utility list-none {
+    &::-webkit-details-marker {
         display: none;
     }
 }
