@@ -71,6 +71,7 @@
                             <block class="Magento\Checkout\Block\Cart\Grid" name="checkout.cart.form" as="cart-items" template="Magento_Checkout::php-cart/form.phtml" after="cart.summary">
                                 <block class="Magento\Framework\View\Element\RendererList" name="checkout.cart.item.renderers" as="renderer.list"/>
                                 <block class="Magento\Framework\View\Element\Text\ListText" name="checkout.cart.order.actions"/>
+                                <block class="Magento\Checkout\Block\Cart\Grid" name="checkout.cart.form.clear" template="Magento_Checkout::php-cart/form/clear.phtml" />
                             </block>
 
                             <container name="checkout.cart.widget" as="checkout_cart_widget" label="Shopping Cart Items After" after="cart-items"/>
