@@ -17,7 +17,7 @@ use Magento\Framework\Escaper;
         {url: '<?= $escaper->escapeHtmlAttr($escaper->escapeUrl($block->getCheckoutUrl())) ?>'});"
         href="<?= $escaper->escapeHtmlAttr($escaper->escapeUrl($block->getCheckoutUrl())) ?>"
         title="<?= $escaper->escapeHtmlAttr(__('Proceed to Checkout')) ?>"
-        class="checkout my-4 btn btn-primary btn-size-lg justify-center"
+        class="btn btn-primary btn-checkout w-full"
         id="checkout-link-button"
     >
         <?= $escaper->escapeHtml(__('Proceed to Checkout')) ?>
