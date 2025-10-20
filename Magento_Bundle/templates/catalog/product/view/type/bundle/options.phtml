@@ -241,19 +241,33 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
                         if (!$option->getSelections()) {
                             continue;
                         } ?>
-                        <div class="my-2 pt-4 pb-2 w-full border-t border-gray-300">
-                            <label
-                                id="option-label-<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
-                                class="label text-lg font-semibold"
-                            >
-                                <?= $escaper->escapeHtml($option->getTitle()) ?>
-                            </label>
-                            <div class="control mt-2">
-                                <div class="nested options-list">
-                                    <?= $block->getOptionHtml($option); ?>
+
+                        <?php if ($option->getType() === "radio" || count($option->getSelections()) === 1): ?>
+                            <fieldset class="mt-0 mb-4 pb-4 border-b border-gray-300 last:border-b-0 last:pb-0">
+                                <legend class="block mt-0 mb-2 font-bold">
+                                    <?= $escaper->escapeHtml($option->getTitle()) ?>
+                                </legend>
+                                <div class="control">
+                                    <div class="nested options-list">
+                                        <?= $block->getOptionHtml($option); ?>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        <?php else: ?>
+                            <div class="mt-0 mb-4 pb-4 border-b border-gray-300 last:border-b-0 last:pb-0">
+                                <label
+                                    id="option-label-<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
+                                    class="block mt-0 mb-2 font-bold"
+                                >
+                                    <?= $escaper->escapeHtml($option->getTitle()) ?>
+                                </label>
+                                <div class="control">
+                                    <div class="nested options-list">
+                                        <?= $block->getOptionHtml($option); ?>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        <?php endif; ?>
                     <?php endforeach; ?>
                 </fieldset>
                 <?= $block->getChildHtml('product_info_bundle_options_bottom') ?>
