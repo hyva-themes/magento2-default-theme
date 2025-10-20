@@ -51,7 +51,7 @@ $maxSalesQtyLength = ($maxSalesQty ? strlen((string) $maxSalesQty) : 4)
     + (/* add one if decimal for separator */ (int) $stockItemViewModel->isQtyDecimal($product));
 
 ?>
-<article class="cart item grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-[auto_1fr]"
+<article class="cart item flex gap-4 md:gap-6"
     <?php foreach ($block->getData('cart_item_data_attributes') ?? [] as $attribute => $include): ?>
         <?php if ($include): ?>
             <?php /** Append data-* attributes based on layout XML arguments */ ?>
@@ -77,9 +77,9 @@ $maxSalesQtyLength = ($maxSalesQty ? strlen((string) $maxSalesQty) : 4)
         </div>
     <?php endif; ?>
 
-    <div class="flex flex-col">
+    <div class="flex flex-col grow">
         <div class="product-item-details grow">
-            <div class="flex justify-between gap-2">
+            <div class="sm:flex sm:justify-between sm:gap-2">
                 <h3 class="product-item-name text-xl break-all">
                     <?php if ($block->hasProductUrl()): ?>
                         <a href="<?= $escaper->escapeUrl($block->getProductUrl()) ?>">
