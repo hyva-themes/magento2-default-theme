@@ -38,14 +38,26 @@
 
                                 <container name="cart.summary.before" after="checkout.cart.summary.title" htmlTag="div" htmlClass="cart-summary-actions my-4">
                                     <container name="cart.discount" label="Cart Discount Container">
-                                        <block class="Magento\Checkout\Block\Cart\Coupon" name="checkout.cart.coupon" as="coupon" template="Magento_Checkout::php-cart/coupon.phtml"/>
+                                        <block class="Magento\Checkout\Block\Cart\Coupon" name="checkout.cart.coupon" as="coupon" template="Magento_Checkout::php-cart/coupon.phtml">
+                                            <!--
+                                            <arguments>
+                                                <argument name="show_icon" xsi:type="boolean">false</argument>
+                                            </arguments>
+                                            -->
+                                        </block>
                                     </container>
                                     <block
                                         name="checkout.cart.shipping"
                                         class="Magento\Checkout\Block\Cart\Shipping"
                                         as="shipping"
                                         template="Magento_Checkout::php-cart/shipping.phtml"
-                                    />
+                                    >
+                                        <!--
+                                        <arguments>
+                                            <argument name="show_icon" xsi:type="boolean">false</argument>
+                                        </arguments>
+                                        -->
+                                    </block>
                                 </container>
 
                                 <container name="checkout.cart.totals.container" as="totals" label="Shopping Cart Totals">

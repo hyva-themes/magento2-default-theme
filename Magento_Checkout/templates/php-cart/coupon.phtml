@@ -70,7 +70,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
         class="list-none flex justify-between items-center gap-2 py-2 font-semibold"
     >
         <span class="inline-flex items-center gap-2">
-            <?= $lucideIcons->sparklesHtml('text-primary', 20, 20, ['aria-hidden' => 'true']); ?>
+            <?= $showIcon ? $lucideIcons->sparklesHtml('text-primary', 20, 20, ['aria-hidden' => 'true']) : ''; ?>
             <span><?= $escaper->escapeHtml(__('Apply Discount Code')) ?></span>
         </span>
         <?= $lucideIcons->chevronDownHtml('transform group-open:rotate-180', 20, 20, ['aria-hidden' => 'true']); ?>

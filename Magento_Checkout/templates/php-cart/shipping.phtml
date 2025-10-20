@@ -359,7 +359,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
         class="list-none flex justify-between items-center gap-2 py-2 font-semibold"
     >
         <span class="inline-flex items-center gap-2">
-            <?= $lucideIcons->giftHtml('text-primary', 20, 20, ['aria-hidden' => 'true']); ?>
+            <?= $showIcon ? $lucideIcons->giftHtml('text-primary', 20, 20, ['aria-hidden' => 'true']) : ''; ?>
             <?= $block->getQuote()->isVirtual()
                 ? $escaper->escapeHtml(__('Estimate Tax'))
                 : $escaper->escapeHtml(__('Estimate Shipping and Tax'))
