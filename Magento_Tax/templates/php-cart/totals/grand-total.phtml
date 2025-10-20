@@ -18,16 +18,13 @@ $magento = $viewModels->require(MagentoMetadata::class);
 ?>
 <!-- display subtotal excluding tax -->
 <template x-if="segment.code === 'grand_total' && checkoutConfig.includeTaxInGrandTotal">
-    <div class="mt-6 mb-12 divide-y">
+    <div class="divide-y">
         <div :class="wrapperClassTotals">
             <div x-text="`${segment.title} ${includingTaxMessage}`" class="font-semibold"></div>
             <div x-text="hyva.formatPrice(segment.value)" class="justify-self-end"></div>
         </div>
         <div :class="wrapperClass" class="text-base">
-            <div
-                class="font-semibold"
-                x-html="`${segment.title} ${excludingTaxMessage}`"
-            ></div>
+            <div x-html="`${segment.title} ${excludingTaxMessage}`"></div>
             <div
                 class="justify-self-end"
                 <?php /* All Mage-OS releases with a version < 2.4.6 match Magento code >= 2.4.6 */ ?>
@@ -43,8 +40,8 @@ $magento = $viewModels->require(MagentoMetadata::class);
 
 <!-- display subtotal including tax -->
 <template x-if="segment.code === 'grand_total' && !checkoutConfig.includeTaxInGrandTotal">
-    <div :class="wrapperClassTotals" class="mt-6 mb-12">
-        <div x-text="`${segment.title}`" class="font-semibold"></div>
+    <div :class="wrapperClassTotals">
+        <div x-text="`${segment.title}`"></div>
         <div x-text="hyva.formatPrice(segment.value)" class="justify-self-end"></div>
     </div>
 </template>

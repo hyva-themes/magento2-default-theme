@@ -65,14 +65,13 @@ $recaptcha = $block->getData('viewModelRecaptcha');
 >
     <summary
         @click.prevent="toggleShowCoupon"
-        class="flex justify-between items-center gap-2 py-2 border-b-2 border-gray-300 font-semibold cursor-pointer [&::-webkit-details-marker]:hidden"
+        class="list-none flex justify-between items-center gap-2 py-2 font-semibold"
     >
         <span><?= $escaper->escapeHtml(__('Apply Discount Code')) ?></span>
         <?= $heroicons->chevronDownHtml('transform group-open:rotate-180', 18, 18, ['aria-hidden' => 'true']); ?>
     </summary>
     <form
         id="discount-coupon-form"
-        class="card my-4"
         action="<?= $escaper->escapeUrl($block->getUrl('checkout/cart/couponPost')) ?>"
         method="post"
         @submit.prevent="submitForm()"
@@ -85,9 +84,9 @@ $recaptcha = $block->getData('viewModelRecaptcha');
             <div class="control">
                 <input
                     type="text"
-                    class="form-input w-full disabled:opacity-75 disabled:bg-gray-100 disabled:cursor-not-allowed"
                     id="coupon_code"
                     name="coupon_code"
+                    class="form-input w-full"
                     value="<?= $escaper->escapeHtmlAttr($block->getCouponCode()) ?>"
                     x-model="formData.coupon_code"
                     x-ref="couponInput"

@@ -354,7 +354,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
 >
     <summary
         @click.prevent="toggleEstimateShipping"
-        class="flex justify-between items-center gap-2 py-2 border-b-2 border-gray-300 font-semibold cursor-pointer [&::-webkit-details-marker]:hidden"
+        class="list-none flex justify-between items-center gap-2 py-2 font-semibold"
     >
         <span>
             <?= $block->getQuote()->isVirtual()
@@ -364,7 +364,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
         </span>
         <?= $heroicons->chevronDownHtml('transform group-open:rotate-180', 18, 18, ['aria-hidden' => 'true']); ?>
     </summary>
-    <div class="my-4 card">
+    <div>
         <form method="post" id="shipping-zip-form" @submit.prevent="fetchTotals()">
             <fieldset class="fieldset estimate" aria-labelledby="block-shipping-title">
                 <p class="field note">

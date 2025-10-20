@@ -30,8 +30,8 @@ $totalsSort = $storeConfigViewModel->getStoreConfig('sales/totals_sort');
             shippingMethod: window.checkoutConfig.selectedShippingMethod,
             totalsSort: <?= /** @noEscape */ json_encode($totalsSort) ?>,
             isLoading: false,
-            wrapperClass: 'grid grid-cols-[1.5fr_1fr] md:grid-cols-2 gap-x-1 py-2 border-b border-container',
-            wrapperClassTotals: 'grid grid-cols-[1.5fr_1fr] md:grid-cols-2 gap-x-1 py-2 text-xl',
+            wrapperClass: 'grid grid-cols-[1.5fr_1fr] md:grid-cols-2 gap-x-1 py-2 border-b border-gray-300 text-fg-secondary',
+            wrapperClassTotals: 'mt-4 grid grid-cols-[1.5fr_1fr] md:grid-cols-2 gap-x-1 py-2 text-xl font-semibold',
             getSortedSegments() {
                 const segments = this.totalsData.total_segments;
 
@@ -73,13 +73,13 @@ $totalsSort = $storeConfigViewModel->getStoreConfig('sales/totals_sort');
 </script>
 <div
     id="cart-totals"
-    class="cart-totals relative"
+    class="cart-totals relative my-4"
     x-data="initCartTotals()"
     x-bind="eventListeners"
 >
     <?= $block->getBlockHtml('block-loader') ?>
     <template x-for="(segment, index) in getSortedSegments()" :key="index">
-        <div class="text-md lg:text-sm">
+        <div>
             <?= $block->getChildHtml(); ?>
         </div>
     </template>
