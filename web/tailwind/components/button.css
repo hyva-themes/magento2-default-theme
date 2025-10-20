@@ -88,8 +88,3 @@
 .btn-size-sm {
     @apply px-2 py-2 text-sm;
 }
-
-/* @deprecated */
-.action.primary {
-    @apply btn btn-primary;
-}
