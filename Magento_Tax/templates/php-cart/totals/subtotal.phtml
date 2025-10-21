@@ -12,47 +12,26 @@
 ?>
 <!-- display subtotal including and excluding tax -->
 <template x-if="segment.code === 'subtotal' && 'both' === checkoutConfig.reviewTotalsDisplayMode">
-    <div>
-        <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-gray-300">
-            <div class="w-7/12 text-left md:w-auto"
-                 x-html="`${segment.title} (${excludingTaxMessage})` "
-            ></div>
-            <div class="w-5/12 text-right md:w-auto"
-                 x-text="hyva.formatPrice(totalsData.subtotal)"
-            ></div>
-        </div>
-
-        <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-gray-300">
-            <div class="w-7/12 text-left md:w-auto"
-                 x-html="`${segment.title} (${includingTaxMessage})` "
-            ></div>
-            <div class="w-5/12 text-right md:w-auto"
-                 x-text="hyva.formatPrice(totalsData.subtotal_incl_tax)"
-            ></div>
-        </div>
+    <div :class="wrapperClass">
+        <div x-html="`${segment.title} (${excludingTaxMessage})`"></div>
+        <div x-text="hyva.formatPrice(totalsData.subtotal)" class="justify-self-end"></div>
+        <div x-html="`${segment.title} (${includingTaxMessage})`"></div>
+        <div x-text="hyva.formatPrice(totalsData.subtotal_incl_tax)" class="justify-self-end"></div>
     </div>
 </template>
 
 <!-- display subtotal excluding tax -->
 <template x-if="segment.code === 'subtotal' && 'excluding' === checkoutConfig.reviewTotalsDisplayMode">
-    <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-gray-300">
-        <div class="w-7/12 text-left md:w-auto"
-             x-html="`${segment.title}` "
-        ></div>
-        <div class="w-5/12 text-right md:w-auto"
-             x-text="hyva.formatPrice(totalsData.subtotal)"
-        ></div>
+    <div :class="wrapperClass">
+        <div x-html="segment.title"></div>
+        <div x-text="hyva.formatPrice(totalsData.subtotal)" class="justify-self-end"></div>
     </div>
 </template>
 
 <!-- display subtotal including tax -->
 <template x-if="segment.code === 'subtotal' && 'including' === checkoutConfig.reviewTotalsDisplayMode">
-    <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-gray-300">
-        <div class="w-7/12 text-left md:w-auto"
-             x-html="`${segment.title}`"
-        ></div>
-        <div class="w-5/12 text-right md:w-auto"
-             x-text="hyva.formatPrice(totalsData.subtotal_incl_tax)"
-        ></div>
+    <div :class="wrapperClass">
+        <div x-html="segment.title"></div>
+        <div x-text="hyva.formatPrice(totalsData.subtotal_incl_tax)" class="justify-self-end"></div>
     </div>
 </template>

@@ -12,47 +12,26 @@
 ?>
 <!-- display shipping including and excluding tax -->
 <template x-if="segment.code === 'shipping' && quoteData.is_virtual === 0 && !!shippingMethod && 'both' === checkoutConfig.reviewShippingDisplayMode">
-    <div>
-        <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-gray-300">
-            <div class="w-7/12 text-left md:w-auto"
-                 x-html="`${segment.title} ${excludingTaxMessage}` "
-            ></div>
-            <div class="w-5/12 text-right md:w-auto"
-                 x-text="hyva.formatPrice(totalsData.shipping_amount)"
-            ></div>
-        </div>
-
-        <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-gray-300">
-            <div class="w-7/12 text-left md:w-auto"
-                 x-html="`${segment.title} ${includingTaxMessage}` "
-            ></div>
-            <div class="w-5/12 text-right md:w-auto"
-                 x-text="hyva.formatPrice(totalsData.shipping_incl_tax)"
-            ></div>
-        </div>
+    <div :class="wrapperClass">
+        <div x-text="`${segment.title} ${excludingTaxMessage}`"></div>
+        <div x-text="hyva.formatPrice(totalsData.shipping_amount)" class="justify-self-end"></div>
+        <div x-text="`${segment.title} ${includingTaxMessage}`"></div>
+        <div x-text="hyva.formatPrice(totalsData.shipping_incl_tax)" class="justify-self-end"></div>
     </div>
 </template>
 
 <!-- display shipping excluding tax -->
 <template x-if="segment.code === 'shipping' && quoteData.is_virtual === 0 && !!shippingMethod && 'excluding' === checkoutConfig.reviewShippingDisplayMode">
-    <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-gray-300">
-        <div class="w-7/12 text-left md:w-auto"
-             x-html="`${segment.title}` "
-        ></div>
-        <div class="w-5/12 text-right md:w-auto"
-             x-text="hyva.formatPrice(segment.value)"
-        ></div>
+    <div :class="wrapperClass">
+        <div x-text="segment.title"></div>
+        <div x-text="hyva.formatPrice(segment.value)" class="justify-self-end"></div>
     </div>
 </template>
 
 <!-- display shipping including tax -->
 <template x-if="segment.code === 'shipping' && quoteData.is_virtual === 0 && !!shippingMethod && 'including' === checkoutConfig.reviewShippingDisplayMode">
-    <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-gray-300">
-        <div class="w-7/12 text-left md:w-auto"
-             x-html="`${segment.title}`"
-        ></div>
-        <div class="w-5/12 text-right md:w-auto"
-             x-text="hyva.formatPrice(totalsData.shipping_incl_tax)"
-        ></div>
+    <div :class="wrapperClass">
+        <div x-text="segment.title"></div>
+        <div x-text="hyva.formatPrice(totalsData.shipping_incl_tax)" class="justify-self-end"></div>
     </div>
 </template>

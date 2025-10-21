@@ -32,90 +32,48 @@ $cartItemOutputViewModel = $viewModels->require(ItemOutput::class);
 ?>
 <?php $mergedCells = ($cartItemOutputViewModel->isItemPriceDisplayBoth() ? 2 : 1); ?>
 <?= $block->getChildHtml('form_before') ?>
-<form action="<?= $escaper->escapeUrl($block->getUrl('checkout/cart/updatePost')) ?>"
-      x-data="{}"
-      @submit.prevent="hyva.postCart($event.target)"
-      method="post"
-      id="form-validate"
-      class="form form-cart w-full float-left"
+<form
+    id="form-validate"
+    class="form form-cart"
+    action="<?= $escaper->escapeUrl($block->getUrl('checkout/cart/updatePost')) ?>"
+    method="post"
+    x-data
+    @submit.prevent="hyva.postCart($event.target)"
 >
     <?= $block->getBlockHtml('formkey') ?>
-    <div class="cart table-wrapper<?= $mergedCells == 2 ? ' detailed' : '' ?>">
+    <div class="<?= $mergedCells == 2 ? 'cart detailed' : 'cart' ?>">
+        <fieldset id="shopping-cart-table">
+            <legend class="sr-only">
+                <h2><?= $escaper->escapeHtml(__('Shopping Cart Items')) ?></h2>
+            </legend>
+            <ul>
+                <?php foreach ($block->getItems() as $item): ?>
+                    <li class="py-6 border-b border-gray-300 first:pt-0 last:pb-0 last:border-b-0">
+                        <?= $block->getItemHtml($item) ?>
+                    </li>
+                <?php endforeach ?>
+            </ul>
+        </fieldset>
         <?php if ($block->getPagerHtml()): ?>
-            <div class="cart-products-toolbar cart-products-toolbar-top toolbar mb-4">
-                <?= $block->getPagerHtml() ?>
-            </div>
-        <?php endif ?>
-        <table id="shopping-cart-table"
-               class="cart items data table w-full table-row-items"
-        >
-            <caption class="table-caption sr-only">
-                <?= $escaper->escapeHtml(__('Shopping Cart Items')) ?>
-            </caption>
-            <thead class="hidden lg:table-header-group">
-                <tr class="text-right">
-                    <th class="col item text-left pt-4 px-4 pb-2" scope="col">
-                        <?= $escaper->escapeHtml(__('Item')) ?>
-                    </th>
-                    <th class="col price pt-4 px-4 pb-2" scope="col">
-                        <?= $escaper->escapeHtml(__('Price')) ?>
-                    </th>
-                    <th class="col qty pt-4 px-4 pb-2" scope="col">
-                        <?= $escaper->escapeHtml(__('Qty')) ?>
-                    </th>
-                    <th class="col subtotal pt-4 px-4 pb-2" scope="col">
-                        <?= $escaper->escapeHtml(__('Subtotal')) ?>
-                    </th>
-                </tr>
-            </thead>
-            <?php foreach ($block->getItems() as $item): ?>
-                <?= $block->getItemHtml($item) ?>
-            <?php endforeach ?>
-        </table>
-        <?php if ($block->getPagerHtml()): ?>
-            <div class="cart-products-toolbar cart-products-toolbar-bottom toolbar mt-8">
+            <div class="toolbar cart-products-toolbar mt-8">
                 <?= $block->getPagerHtml() ?>
             </div>
         <?php endif ?>
     </div>
-    <div class="cart actions flex flex-col sm:flex-row justify-end gap-4 items-center my-4">
-        <?php if ($cartViewModel->isClearShoppingCartEnabled()): ?>
-        <script>
-            function initClearShoppingCartModal() {
-                return Object.assign(
-                    hyva.modal(),
-                    {
-                        postData: {
-                            action: '<?= $escaper->escapeUrl($block->getUrl('checkout/cart/updatePost')) ?>',
-                            data: {update_cart_action: 'empty_cart'}
-                        }
-                    }
-                );
-            }
-        </script>
-            <div x-data="initClearShoppingCartModal()">
-                <?= /** @noEscape */ ($confirmation = $modalViewModel
-                    ->confirm(__('Are you sure?'))
-                    ->withDetails(__('Are you sure you want to remove all items from your shopping cart?'))
-                ) ?>
-                <button @click="<?= /** @noEscape */ $confirmation->getShowJs() ?>.then(result => result && hyva.postForm(postData))"
-                        type="button" title="<?= $escaper->escapeHtmlAttr(__('Clear Shopping Cart')) ?>"
-                        class="action clear btn" id="empty_cart_button">
-                    <span><?= $escaper->escapeHtml(__('Clear Shopping Cart')) ?></span>
-                </button>
-            </div>
+    <div class="actions-toolbar cart actions">
+        <button
+            type="submit"
+            name="update_cart_action"
+            value="update_qty"
+            class="btn btn-secondary"
+            data-cart-item-update
+        ><?= $escaper->escapeHtml(__('Update Shopping Cart')) ?></button>
 
+        <?php if ($cartViewModel->isClearShoppingCartEnabled()): ?>
+            <?= $block->getChildHtml('checkout.cart.form.clear') ?>
         <?php endif ?>
-        <button type="submit"
-                name="update_cart_action"
-                data-cart-item-update=""
-                value="update_qty"
-                title="<?= $escaper->escapeHtmlAttr(__('Update Shopping Cart')) ?>"
-                class="action update btn btn-secondary"
-        >
-            <?= $escaper->escapeHtml(__('Update Shopping Cart')) ?>
-        </button>
+
+        <?= $block->getChildHtml('checkout.cart.order.actions') ?>
     </div>
 </form>
-<?= $block->getChildHtml('checkout.cart.order.actions') ?>
 <?= $block->getChildHtml('shopping.cart.table.after') ?>

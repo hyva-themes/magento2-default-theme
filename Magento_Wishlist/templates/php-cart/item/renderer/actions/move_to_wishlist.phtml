@@ -7,7 +7,7 @@
  */
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsSolid;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Framework\Escaper;
 use Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist;
 
@@ -15,19 +15,19 @@ use Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist;
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsSolid $heroicons */
-$heroicons = $viewModels->require(HeroiconsSolid::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 
 ?>
 <?php if ($block->isAllowInCart() && $block->isProductVisibleInSiteVisibility()): ?>
     <button
         type="button"
-        class="towishlist hover:text-red-600"
+        class="btn p-2"
         x-data
         @click.prevent='hyva.postForm(<?= /* @noEscape */ $block->getMoveFromCartParams() ?>)'
         title="<?= $escaper->escapeHtmlAttr(__('Move to Wishlist')) ?>"
         aria-label="<?= $escaper->escapeHtmlAttr(__('Move to Wishlist')) ?>"
     >
-        <?= $heroicons->heartHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
+        <?= $lucideIcons->heartHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
     </button>
 <?php endif ?>

@@ -7,10 +7,13 @@
  * See https://hyva.io/license
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column"
-      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page
+    layout="1column"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd"
+>
     <update handle="hyva_modal"/>
-    <update handle="hyva_product_slider" />
+    <update handle="hyva_product_slider"/>
     <body>
         <block name="block-loader" template="Hyva_Theme::ui/loading-block.phtml"/>
 
@@ -33,12 +36,29 @@
 
                             <container name="cart.summary" label="Cart Summary Container" htmlTag="div" htmlClass="cart-summary" after="-">
 
-                                <block class="Magento\Checkout\Block\Cart\Shipping"
-                                       name="checkout.cart.shipping"
-                                       as="shipping"
-                                       template="Magento_Checkout::php-cart/shipping.phtml"
-                                       after="checkout.cart.summary.title"
-                                />
+                                <container name="cart.summary.before" after="checkout.cart.summary.title" htmlTag="div" htmlClass="cart-summary-actions my-4">
+                                    <container name="cart.discount" label="Cart Discount Container">
+                                        <block class="Magento\Checkout\Block\Cart\Coupon" name="checkout.cart.coupon" as="coupon" template="Magento_Checkout::php-cart/coupon.phtml">
+                                            <!--
+                                            <arguments>
+                                                <argument name="show_icon" xsi:type="boolean">false</argument>
+                                            </arguments>
+                                            -->
+                                        </block>
+                                    </container>
+                                    <block
+                                        name="checkout.cart.shipping"
+                                        class="Magento\Checkout\Block\Cart\Shipping"
+                                        as="shipping"
+                                        template="Magento_Checkout::php-cart/shipping.phtml"
+                                    >
+                                        <!--
+                                        <arguments>
+                                            <argument name="show_icon" xsi:type="boolean">false</argument>
+                                        </arguments>
+                                        -->
+                                    </block>
+                                </container>
 
                                 <container name="checkout.cart.totals.container" as="totals" label="Shopping Cart Totals">
                                     <block class="Magento\Checkout\Block\Cart\Totals" name="checkout.cart.totals" template="Magento_Checkout::php-cart/totals.phtml">
@@ -68,13 +88,10 @@
                             <block class="Magento\Checkout\Block\Cart\Grid" name="checkout.cart.form" as="cart-items" template="Magento_Checkout::php-cart/form.phtml" after="cart.summary">
                                 <block class="Magento\Framework\View\Element\RendererList" name="checkout.cart.item.renderers" as="renderer.list"/>
                                 <block class="Magento\Framework\View\Element\Text\ListText" name="checkout.cart.order.actions"/>
+                                <block class="Magento\Checkout\Block\Cart\Grid" name="checkout.cart.form.clear" template="Magento_Checkout::php-cart/form/clear.phtml" />
                             </block>
 
                             <container name="checkout.cart.widget" as="checkout_cart_widget" label="Shopping Cart Items After" after="cart-items"/>
-
-                            <container name="cart.discount" label="Cart Discount Container" htmlTag="div" htmlClass="cart-discount" after="-">
-                                <block class="Magento\Checkout\Block\Cart\Coupon" name="checkout.cart.coupon" as="coupon" template="Magento_Checkout::php-cart/coupon.phtml"/>
-                            </container>
                         </block>
                     </container>
 
@@ -89,17 +106,18 @@
             </block>
 
 
-            <block name="crosssell" class="Magento\Catalog\Block\Product\View"
-                   template="Magento_Catalog::product/slider/product-slider.phtml">
+            <block
+                name="crosssell"
+                class="Magento\Catalog\Block\Product\View"
+                template="Magento_Catalog::product/slider/product-slider.phtml"
+            >
                 <arguments>
                     <argument name="type" xsi:type="string">crosssell</argument>
                     <argument name="title" xsi:type="string" translate="true">You might also like:</argument>
                     <argument name="hide_rating_summary" xsi:type="boolean">true</argument>
+                    <argument name="column_count" xsi:type="number">4</argument>
                 </arguments>
             </block>
-
-
         </referenceContainer>
-
     </body>
 </page>

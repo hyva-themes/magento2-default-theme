@@ -16,27 +16,47 @@ use Magento\Framework\View\Element\Template;
 
 ?>
 
-<div class="flex flex-col gap-6 w-full" :class="inSlideOut ? '' : 'md:flex-row'">
-    <div x-show="formBlockVisibility && hasActiveOptions" class="w-full order-1" :class="inSlideOut ? '' : 'md:flex-row'">
+<div class="gift-summary mb-4" x-show="resultBlockVisibility">
+    <div class="additional-options-summary"></div>
+    <dl x-show="savedFormMessage.message" aria-describedby="<?= $escaper->escapeHtml(__('Gift Message')) ?>">
+        <div>
+            <dt class="font-bold inline"><?= $escaper->escapeHtml(__('To:')) ?></dt>
+            <dd class="inline" x-text="savedFormMessage.recipient"></dd>
+        </div>
+        <div>
+            <dt class="font-bold inline"><?= $escaper->escapeHtml(__('From:')) ?></dt>
+            <dd class="inline" x-text="savedFormMessage.sender"></dd>
+        </div>
+        <div>
+            <dt class="font-bold inline"><?= $escaper->escapeHtml(__('Message:')) ?></dt>
+            <dd class="inline" x-text="savedFormMessage.message"></dd>
+        </div>
+    </dl>
+</div>
+
+<div class="flex flex-col gap-6">
+    <div x-show="hasActiveOptions">
         <?= $block->getChildHtml('additional-options') ?>
     </div>
     <template x-if="isGiftMsgEnabled">
-        <div x-show="formBlockVisibility" class="w-full order-2" :class="inSlideOut ? '' : 'md:flex-row'">
+        <div>
             <?= $block->getChildHtml('gift-message') ?>
         </div>
     </template>
 </div>
-<div x-show="formBlockVisibility" class="gift-options-buttons w-full order-3">
-    <div class="actions-toolbar my-6">
-        <div class="primary">
-            <button type="button" class="action action-update btn btn-primary" @click.prevent="submitGiftOption()">
-                <span><?= $escaper->escapeHtml(__('Update')) ?></span>
-            </button>
-        </div>
-        <div class="secondary">
-            <button type="button" class="action action-cancel underline" @click="closeDialog">
-                <span><?= $escaper->escapeHtml(__('Cancel')) ?></span>
-            </button>
-        </div>
-    </div>
+
+<div class="actions-toolbar">
+    <button type="button" class="btn btn-primary" @click="submitGiftOption">
+        <?= $escaper->escapeHtml(__('Update')) ?>
+    </button>
+    <template x-if="isGiftMsgEnabled">
+        <button type="button" class="btn" @click="clearGiftOption">
+            <?= $escaper->escapeHtml(__('Clear')) ?>
+        </button>
+    </template>
+    <button type="button" class="btn" @click="closeDialog">
+        <?= $escaper->escapeHtml(__('Cancel')) ?>
+    </button>
 </div>
+
+<?= $block->getChildHtml('loading') ?>

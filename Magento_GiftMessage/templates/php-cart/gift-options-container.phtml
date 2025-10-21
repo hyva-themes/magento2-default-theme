@@ -9,7 +9,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Hyva\Theme\ViewModel\StoreConfig;
 use Magento\Framework\Escaper;
 use Magento\GiftMessage\Block\Cart\GiftOptions;
@@ -17,7 +17,6 @@ use Magento\GiftMessage\Block\Cart\GiftOptions;
 /** @var Escaper $escaper */
 /** @var GiftOptions $block */
 /** @var ViewModelRegistry $viewModels */
-/** @var HeroiconsOutline $heroicons */
 /** @var StoreConfig $storeConfigViewModel */
 
 $storeConfigViewModel = $viewModels->require(StoreConfig::class);
@@ -33,24 +32,23 @@ if (! $isOrderLevelGiftOptionsEnabled && ! $isItemLevelGiftOptionsEnabled &&
     return;
 }
 
-$heroicons = $viewModels->require(HeroiconsOutline::class);
-
-$slideOutDrawer = (bool) $block->getSlideOutDrawer();
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 ?>
 <script>
     window.giftOptionsConfig = <?= /* @noEscape */ $block->getGiftOptionsConfigJson() ?>;
 
     function initGiftOptions() {
-        'use strict';
         return {
-            inSlideOut: <?= $slideOutDrawer ? 'true' : 'false' ?>,
             formBlockVisibility: false,
             resultBlockVisibility: false,
             hasActiveOptions: false,
             itemId: 'orderLevel',
             isGiftMsgEnabled: window.giftOptionsConfig.isOrderLevelGiftOptionsEnabled,
-            <?php // Gift Wrapping is a feature for Adobe Commerce Only.
-                  // On Magento Open Source this condition will always return false. ?>
+            <?php
+                // Gift Wrapping is a feature for Adobe Commerce Only.
+                // On Magento Open Source this condition will always return false.
+            ?>
             isGiftWrapEnabled: window.giftOptionsConfig.giftWrapping && window.giftOptionsConfig.giftWrapping.allowForOrder,
             formMessage: {
                 recipient: null,
@@ -65,6 +63,7 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
                 alreadyAdded: null,
             },
             extensionAttributes: {},
+            isLoading: false,
             getMessage() {
                 return window.giftOptionsConfig.giftMessage.hasOwnProperty(this.itemId)
                     ? window.giftOptionsConfig.giftMessage[this.itemId]
@@ -82,17 +81,6 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
                     this.formMessage = Object.assign({}, this.savedFormMessage);
                     this.resultBlockVisibility = true;
                 }
-
-                <?php if ($slideOutDrawer): ?>
-                    const onDrawerToggle = () => {
-                        if (this.formBlockVisibility) {
-                            document.body.style.overflow = 'hidden';
-                        } else {
-                            document.body.style.overflow = null;
-                        }
-                    }
-                    this.$watch('formBlockVisibility', () => onDrawerToggle());
-                <?php endif ?>
 
                 this.initEventListeners();
             },
@@ -119,8 +107,15 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
                     ? restBaseUrl + 'carts/mine/gift-message'
                     : restBaseUrl + 'guest-carts/' + window.checkoutConfig.quoteData.entity_id + '/gift-message';
             },
+            clearGiftOption() {
+                this.formMessage = {
+                    recipient: null,
+                    sender: null,
+                    message: null,
+                    alreadyAdded: null,
+                };
+            },
             submitGiftOption() {
-
                 window.dispatchEvent(new CustomEvent('before-gift-options-submit-' + this.itemId, {
                     detail: {}
                 }))
@@ -153,44 +148,40 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
                 });
             },
             openDialog(event) {
-                event.preventDefault()
                 this.formBlockVisibility = true
-                this.$nextTick(() => hyva.trapFocus(this.$refs['giftOptionsDialog']));
             },
             closeDialog() {
-                if (this.formBlockVisibility) {
-                    this.$nextTick(() => {
-                        hyva.releaseFocus(this.$refs['giftOptionsDialog'])
-                        this.$refs['giftOptionsTrigger'].focus()
-                    });
-                }
-
                 this.formBlockVisibility = false
+            },
+            eventListeners: {
+                ['@gift-message-loading-start.window']() {
+                    this.isLoading = true;
+                },
+                ['@gift-message-loading-end.window']() {
+                    this.isLoading = false;
+                }
             }
         }
     }
 
-    function initGiftItemOptions(options) {
-        'use strict';
-        const itemId = options.itemId;
+    function initGiftItemOptions() {
+        const itemId = this.$root.dataset.itemId;
         return Object.assign({}, initGiftOptions(), {
             itemId: itemId,
-
             isGiftMsgEnabled: window.giftOptionsConfig.isItemLevelGiftOptionsEnabled &&
                 window.giftOptionsConfig.giftMessage.itemLevel[`${itemId}`].is_available !== false,
-
-            <?php // Gift Wrapping is a feature for Adobe Commerce Only.
-                  // On Magento Open Source this condition will always return false. ?>
+            <?php
+                // Gift Wrapping is a feature for Adobe Commerce Only.
+                // On Magento Open Source this condition will always return false.
+            ?>
             isGiftWrapEnabled: window.giftOptionsConfig.giftWrapping && window.giftOptionsConfig.giftWrapping.allowForItems &&
                 window.giftOptionsConfig.giftWrapping.itemsInfo[`${itemId}`].is_available !== false,
-
             getMessage() {
                 return window.giftOptionsConfig.giftMessage.hasOwnProperty('itemLevel') &&
                 window.giftOptionsConfig.giftMessage.itemLevel.hasOwnProperty(itemId)
                     ? window.giftOptionsConfig.giftMessage.itemLevel[itemId].message
                     : null;
             },
-
             initEventListeners() {
                 window.addEventListener('additional-gift-options-loaded-' + itemId, (event) => {
                     if (this.hasActiveOptions) return;
@@ -208,7 +199,6 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
                     this.extensionAttributes = Object.assign({}, this.extensionAttributes, event.detail);
                 });
             },
-
             getRestEndpoint() {
                 const restBaseUrl = BASE_URL + 'rest/' + CURRENT_STORE_CODE + '/V1/';
                 return window.giftOptionsConfig.isCustomerLoggedIn
@@ -217,13 +207,14 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
             }
         })
     }
+
+    window.addEventListener('alpine:init', () => {
+        Alpine.data('initGiftOptions', initGiftOptions);
+        Alpine.data('initGiftItemOptions', initGiftItemOptions);
+    }, { once: true })
 </script>
-<div x-data="{isLoading: false}" x-cloak
-     @gift-message-loading-start.window="isLoading = true"
-     @gift-message-loading-end.window="isLoading = false"
->
-    <?= $block->getChildHtml('loading') ?>
-</div>
+<?php $hyvaCsp->registerInlineScript() ?>
+
 <?php
 
 if (! $isOrderLevelGiftOptionsEnabled && ! $isOrderLevelGiftWrappingEnabled) {
@@ -231,74 +222,35 @@ if (! $isOrderLevelGiftOptionsEnabled && ! $isOrderLevelGiftWrappingEnabled) {
 }
 // Only render the DOM elements for order level gift options if either or both gift messages or gift wrapping are enabled
 ?>
-<div x-data="initGiftOptions()" class="gift-options-component w-full flex flex-wrap my-6" :data-item-id="itemId" x-cloak>
-    <div class="text-left gift-options-title w-full order-first" x-show="isGiftMsgEnabled || isGiftWrapEnabled || hasActiveOptions">
-        <button
-            type="button"
-            x-ref="giftOptionsTrigger"
-            @click="openDialog"
-            class="cursor-pointer select-none whitespace-nowrap underline"
-            :aria-expanded="formBlockVisibility"
-            aria-haspopup="dialog"
-        >
-            <?= $escaper->escapeHtml(__('Gift options')) ?>
-            <?php if (!$slideOutDrawer): ?>
-                <span x-show="!formBlockVisibility" aria-hidden="true">
-                    <?= $heroicons->chevronDownHtml('inline-block', 16, 16) ?>
-                </span>
-                <span x-show="formBlockVisibility" aria-hidden="true">
-                    <?= $heroicons->chevronUpHtml('inline-block', 16, 16) ?>
-                </span>
-            <?php endif ?>
-        </button>
-    </div>
-    <?php if ($slideOutDrawer): ?>
-        <div role="dialog"
-            aria-labelledby="enquiry-form-drawer-title-order-gift-options"
-            aria-modal="true"
-            @keydown.window.escape="closeDialog"
-            class="fixed inset-y-0 right-0 z-30 flex max-w-full"
-        >
-            <div class="backdrop"
-                x-show="formBlockVisibility"
-                x-transition:enter="ease-in-out duration-500"
-                x-transition:enter-start="opacity-0"
-                x-transition:enter-end="opacity-100"
-                x-transition:leave="ease-in-out duration-500"
-                x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0"
-                @click="closeDialog"
-                aria-hidden="true"
-            ></div>
-            <div
-                class="relative w-screen max-w-md shadow-2xl bg-white p-8 flex flex-col overflow-y-auto"
-                x-show="formBlockVisibility"
-                x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700"
-                x-transition:enter-start="translate-x-full"
-                x-transition:enter-end="translate-x-0"
-                x-transition:leave="transform transition ease-in-out duration-500 sm:duration-700"
-                x-transition:leave-start="translate-x-0"
-                x-transition:leave-end="translate-x-full"
-                x-ref="giftOptionsDialog"
+<div x-data="initGiftOptions" x-bind="eventListeners">
+    <button
+        type="button"
+        class="btn w-full"
+        aria-label="<?= $escaper->escapeHtml(__('Add Gift Options for the Entire Order')) ?>"
+        @click="openDialog"
+    >
+        <span class="relative">
+            <span
+                class="absolute -top-2 -right-2 rounded-full p-1 bg-primary text-on-primary"
+                x-show="savedFormMessage.message"
+                x-cloak
             >
-                <div class="relative">
-                    <div class="text-lg font-medium leading-7 text-gray-900" id="enquiry-form-drawer-title-order-gift-options">
-                        <?= $escaper->escapeHtml('Order Gift Options') ?>
-                    </div>
-                    <button class="absolute top-0 right-0 cursor-pointer" @click.prevent="closeDialog" aria-label="<?= $escaper->escapeHtmlAttr(__('Close panel')) ?>">
-                        <?= $heroicons->xHtml('inline-block', 24, 24, ["aria-hidden" => "true"]) ?>
-                    </button>
-                </div>
-                <?= $block->getChildHtml('gift-options-body') ?>
-            </div>
-        </div>
-    <?php else: ?>
+                <?= $lucideIcons->mailHtml('', 12, 12, ['aria-hidden' => 'true']) ?>
+            </span>
+            <?= $lucideIcons->giftHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
+        </span>
+        <?= $escaper->escapeHtml(__('Gift options')) ?>
+    </button>
+
+    <dialog
+        class="w-xl"
+        x-show="formBlockVisibility"
+        x-transition
+        x-htmldialog="closeDialog"
+    >
+        <p class="text-xl mb-4">
+            <strong><?= $escaper->escapeHtml(__('Add Gift Options for the Entire Order')) ?></strong>
+        </p>
         <?= $block->getChildHtml('gift-options-body') ?>
-    <?php endif ?>
-    <div x-show="(resultBlockVisibility && !formBlockVisibility) || (resultBlockVisibility && inSlideOut)" class="gift-summary pt-2" @click="formBlockVisibility = true">
-        <div class="additional-options-summary"></div>
-        <div x-show="savedFormMessage.message">
-            <span><?= $escaper->escapeHtml(__('Message:')) ?></span> <span x-text="savedFormMessage.message"></span>
-        </div>
-    </div>
+    </dialog>
 </div>

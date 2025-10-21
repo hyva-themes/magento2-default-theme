@@ -16,18 +16,13 @@ use Magento\Framework\Escaper;
 ?>
 
 <div class="flex flex-col lg:flex-row-reverse lg:items-start gap-8">
-    <div class="lg:w-80 2xl:w-96 lg:sticky lg:top-2">
-        <div class="flex flex-col mb-2 pb-3 border-b-2 border-gray-300">
-            <h2 class="text-2xl text-center text-gray-900 title-font font-base md:text-left">
-                <?= $escaper->escapeHtml(__('Summary')) ?>
-            </h2>
-        </div>
+    <div class="card lg:w-80 2xl:w-96 lg:sticky lg:top-4">
+        <h2 class="text-lg font-bold"><?= $escaper->escapeHtml(__('Summary')) ?></h2>
         <?= $block->getChildHtml('cart.summary') ?>
     </div>
     <div class="lg:flex-1">
         <?= $block->getChildHtml('form_before') ?>
         <?= $block->getChildHtml('cart-items') ?>
         <?= $block->getChildHtml('checkout_cart_widget') ?>
-        <?= $block->getChildHtml('cart.discount') ?>
     </div>
 </div>

@@ -1,0 +1,68 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Checkout\Block\Cart\Grid;
+use Magento\Framework\Escaper;
+
+/** @var Grid $block */
+/** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
+?>
+
+<div x-data="initClearShoppingCartModal">
+    <dialog
+        role="alertdialog"
+        x-show="isOpen"
+        x-transition
+        x-htmldialog="close"
+        aria-labelledby="clearShoppingCartModal"
+    >
+        <p id="clearShoppingCartModal" class="text-xl">
+            <strong><?= $escaper->escapeHtml(__('Clear Shopping Cart')) ?></strong>
+        </p>
+        <p><?= $escaper->escapeHtml(__('Are you sure you want to remove all items from your shopping cart?')) ?></p>
+        <div class="actions-toolbar">
+            <button type="button" class="btn btn-primary" @click="clearCart"><?= $escaper->escapeHtml(__('OK')) ?></button>
+            <button type="button" class="btn" @click="close"><?= $escaper->escapeHtml(__('Cancel')) ?></button>
+        </div>
+    </dialog>
+
+    <button
+        id="empty_cart_button"
+        type="button"
+        class="btn w-full"
+        @click="open"
+    ><?= $escaper->escapeHtml(__('Clear Shopping Cart')) ?></button>
+</div>
+<script>
+    function initClearShoppingCartModal() {
+        return {
+            isOpen: false,
+            open() {
+                this.isOpen = true;
+            },
+            close() {
+                this.isOpen = false;
+            },
+            clearCart() {
+                hyva.postForm({
+                    action: '<?= $escaper->escapeUrl($block->getUrl('checkout/cart/updatePost')) ?>',
+                    data: { update_cart_action: 'empty_cart' }
+                });
+            }
+        };
+    }
+
+    window.addEventListener('alpine:init', () => {
+        Alpine.data('initClearShoppingCartModal', initClearShoppingCartModal)
+    }, { once: true })
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

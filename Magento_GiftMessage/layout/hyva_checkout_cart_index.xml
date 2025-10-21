@@ -7,19 +7,38 @@
  * See https://hyva.io/license
  */
  -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd"
+>
     <body>
-        <referenceContainer name="checkout.cart.widget">
-           <block class="Magento\GiftMessage\Block\Cart\GiftOptions" name="checkout.cart.order.actions.gift_options.container" template="Magento_GiftMessage::php-cart/gift-options-container.phtml" cacheable="false">
-                <arguments>
-                    <argument name="slide_out_drawer" xsi:type="boolean">true</argument>
-                </arguments>
-                <block name="loading" template="Hyva_Theme::ui/loading.phtml"/>
-                <block name="checkout.cart.order.actions.gift_options.body" as="gift-options-body" template="Magento_GiftMessage::php-cart/gift-options-body.phtml">
-                    <block class="Magento\GiftMessage\Block\Cart\GiftOptions" as="gift-message" name="checkout.cart.order.actions.gift_options.message" template="Magento_GiftMessage::php-cart/gift-message-form.phtml"/>
-                    <container name="checkout.cart.order.actions.gift_options.additional" as="additional-options" htmlTag="div" htmlClass="additional-options" />
+        <referenceContainer name="checkout.cart.order.actions">
+            <block
+                class="Magento\GiftMessage\Block\Cart\GiftOptions"
+                name="checkout.cart.order.actions.gift_options.container"
+                template="Magento_GiftMessage::php-cart/gift-options-container.phtml"
+                cacheable="false"
+            >
+                <block
+                    name="checkout.cart.order.actions.gift_options.body"
+                    as="gift-options-body"
+                    template="Magento_GiftMessage::php-cart/gift-options-body.phtml"
+                >
+                    <block name="checkout.cart.order.actions.gift_options.loading" as="loading" template="Hyva_Theme::ui/loading.phtml"/>
+                    <block
+                        class="Magento\GiftMessage\Block\Cart\GiftOptions"
+                        as="gift-message"
+                        name="checkout.cart.order.actions.gift_options.message"
+                        template="Magento_GiftMessage::php-cart/gift-message-form.phtml"
+                    />
+                    <container
+                        name="checkout.cart.order.actions.gift_options.additional"
+                        as="additional-options"
+                        htmlTag="div"
+                        htmlClass="additional-options"
+                    />
                 </block>
-           </block>
+            </block>
         </referenceContainer>
     </body>
 </page>

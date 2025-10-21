@@ -1,7 +1,19 @@
 @layer components {
     .actions-toolbar {
-        @apply mt-6 border-t border-gray-300 pt-4 flex justify-between flex-row-reverse items-center;
+        display: flex;
+        gap: --spacing(4);
+        flex-direction: column;
+        margin-block-start: --spacing(6);
+        padding-block-start: --spacing(4);
+        border-block-start-width: 1px;
+        border-block-start-color: var(--color-gray-300);
 
+        @variant md {
+            flex-direction: row-reverse;
+            align-items: center;
+        }
+
+        /* @deprecated */
         & a.back {
             @apply underline;
         }
