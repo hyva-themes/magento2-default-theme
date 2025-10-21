@@ -83,4 +83,8 @@
     :where(:root:has(dialog[open]:modal)) {
         overflow: hidden;
     }
+
+    address {
+        font-style: normal;
+    }
 }
