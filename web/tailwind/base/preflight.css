@@ -38,6 +38,7 @@
     }
 
     /* Prevent touch delay on touch devices */
+    /* prettier-ignore */
     :where(
         :any-link,
         button,
@@ -52,6 +53,7 @@
     }
 
     /* Set a default cursor for interactive elements */
+    /* prettier-ignore */
     :where(
         :any-link,
         button,
@@ -76,7 +78,7 @@
         box-shadow: var(--shadow-lg);
 
         &::backdrop {
-            background-color: var(--backdrop, hsl(0 0 0 / 20%));
+            background-color: var(--backdrop, hsl(0 0% 0% / 20%));
         }
     }
 
