@@ -7,38 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.18-beta...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.4.0-beta...main
 
-## [1.3.18-beta] - 2025-10-23
+## [1.4.0-beta] - 2025-10-23
 
-[1.3.18-beta]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.17...1.3.18-beta
-
-### Added
-
-- Nothing added
-
-### Changed
-
-- **Cleanup forward slash from self closing HTML tags**  
-  For more information, please refer to [issue #993](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/993)
-
-- **Cleanup Redundant box-sizing styles in Pagebuilder output**  
-  For more information, please refer to [issue #1221](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1221)
-
-- **Remove requirement for reset-theme**  
-  For more information, please refer to [issue #1215](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1215)
-
-- **Mark forgotpassword page as uncacheable to fix an issue with Varnish and ESI**  
-  For more information, please refer to [issue #1228](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1228)
-
-  Many thanks to Pieter Hoste (Baldwin) for the contribution!
-
-- **Fix duplicate deferral of swatch components**  
-  For more information, please refer to [issue #1046](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1046)
-
-### Removed
-
-- Nothing removed
+[1.4.0-beta]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.18-beta...1.4.0-beta
 
 ### Added
 
@@ -123,6 +96,37 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   For more information, please refer to [issue #814](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/814)
 
   Many thanks to Ivan Tarkovych (Perspective Magento Team) for the contribution!
+
+## [1.3.18-beta] - 2025-10-23
+
+[1.3.18-beta]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.17...1.3.18-beta
+
+### Added
+
+- Nothing added
+
+### Changed
+
+- **Cleanup forward slash from self closing HTML tags**  
+  For more information, please refer to [issue #993](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/993)
+
+- **Cleanup Redundant box-sizing styles in Pagebuilder output**  
+  For more information, please refer to [issue #1221](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1221)
+
+- **Remove requirement for reset-theme**  
+  For more information, please refer to [issue #1215](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1215)
+
+- **Mark forgotpassword page as uncacheable to fix an issue with Varnish and ESI**  
+  For more information, please refer to [issue #1228](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1228)
+
+  Many thanks to Pieter Hoste (Baldwin) for the contribution!
+
+- **Fix duplicate deferral of swatch components**  
+  For more information, please refer to [issue #1046](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1046)
+
+### Removed
+
+- Nothing removed
 
 ## [1.3.17] - 2025-09-02
 
