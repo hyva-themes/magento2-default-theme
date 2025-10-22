@@ -8,11 +8,13 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
 ?>
 <script>
     (() => {
@@ -91,3 +93,4 @@ use Magento\Framework\View\Element\Template;
         });
     })();
 </script>
+<?php $hyvaCsp->registerInlineScript() ?>
