@@ -27,7 +27,6 @@ $swatchRendererViewModel = $viewModels->require(SwatchRenderer::class);
 $layout = $block->getLayout();
 $swatchItemBlock = $layout->getBlock('product.swatch.item');
 $swatchItemBlock->setData('product_id', $productId);
-$swatchItemNumber = $block->getNumberSwatchesPerProduct();
 ?>
 <?php if ($product->isSaleable() && count($attributes)): ?>
 
@@ -118,8 +117,6 @@ $swatchItemNumber = $block->getNumberSwatchesPerProduct();
                     maxScroll: 0,
                     scrollLeft: null,
                     slider: null,
-                    showMore: false,
-                    swatchLimit: <?= (int) $swatchItemNumber ?: 16 ?>,
                     scrollEvents: {
                         ['@mousedown'](e) {
                             this.slider = e.target.closest('.snap');
@@ -169,7 +166,7 @@ $swatchItemNumber = $block->getNumberSwatchesPerProduct();
 
 <div x-data="initConfigurableSwatchOptions_<?= (int) $productId ?>()"
      x-defer="intersect"
-     x-init="findAllowedAttributeOptions(); initShowSwatchesIntersect();"
+     x-init="findAllowedAttributeOptions()"
      @private-content-loaded.window="onGetCartData($event.detail.data)"
      @resize.window="resizeEvent()"
      class="mb-2 relative"
@@ -182,36 +179,22 @@ $swatchItemNumber = $block->getNumberSwatchesPerProduct();
             <?php if (!$productAttribute->getUsedInProductListing() || !$swatchRendererViewModel->isSwatchAttribute($productAttribute)) {
                 continue;
             } ?>
-        <div class="swatch-attribute border-t last:border-b border-gray-300
+        <div class="swatch-attribute border-t last:border-b border-container
             <?= $escaper->escapeHtmlAttr($productAttribute->getAttributeCode()) ?>"
         >
             <div class="w-full overflow-x-hidden swatch-attribute-options min-h-14">
-                <template x-if="showSwatches">
-                    <div class="flex flex-nowrap w-full overflow-auto snap items-center py-1"
-                        id="attribute-label-<?= $escaper->escapeHtmlAttr($productId . '-' . $attributeId) ?>"
-                        role="radiogroup"
-                        x-bind="scrollEvents"
-                        aria-label="<?= $escaper->escapeHtml($productAttribute->getStoreLabel()) ?>"
+                <div class="flex flex-nowrap w-full overflow-auto snap items-center py-1"
+                    id="attribute-label-<?= $escaper->escapeHtmlAttr($productId . '-' . $attributeId) ?>"
+                    role="radiogroup"
+                    x-bind="scrollEvents"
+                    aria-label="<?= $escaper->escapeHtml($productAttribute->getStoreLabel()) ?>"
+                >
+                    <template x-for="(item, index) in optionConfig.attributes[<?= (int) $attributeId ?>].options"
+                              :key="item.id"
                     >
-                        <template
-                            x-for="(item, index) in optionConfig.attributes[<?= (int) $attributeId ?>].options"
-                            :key="item.id"
-                        >
-                            <div x-show="showMore || index < swatchLimit">
-                                <?= /* @noEscape */ $swatchItemBlock->setData('attribute_id', $attributeId)->toHtml(); ?>
-                            </div>
-                        </template>
-
-                        <button
-                            class="ms-2 p-1 text-nowrap text-sm hover:underline"
-                            x-show="!showMore && optionConfig.attributes[<?= (int) $attributeId ?>].options.length > swatchLimit"
-                            @click.prevent="showMore = true"
-                            aria-label="<?= $escaper->escapeHtml(__('Show more')) ?>"
-                        >
-                            <?= $escaper->escapeHtml(__('More')) ?>
-                        </button>
-                    </div>
-                </template>
+                        <?= /* @noEscape */ $swatchItemBlock->setData('attribute_id', $attributeId)->toHtml(); ?>
+                    </template>
+                </div>
             </div>
         </div>
         <?php endforeach; ?>
