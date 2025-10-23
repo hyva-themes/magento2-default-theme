@@ -65,7 +65,7 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
                         '<?= $escaper->escapeHtmlAttr($optionId) ?>',
                         $event.target
                    )"
-            />
+            >
         <?php elseif ($option->getType() == ProductCustomOptionInterface::OPTION_TYPE_AREA): ?>
             <textarea id="options_<?= $escaper->escapeHtmlAttr($optionId) ?>_text"
                       class="product-custom-option form-textarea"

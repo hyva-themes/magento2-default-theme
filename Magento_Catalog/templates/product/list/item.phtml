@@ -96,7 +96,7 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
     <?php endforeach; ?>
 >
     <?= /** @noEscape */ $block->getBlockHtml('formkey') ?>
-    <input type="hidden" name="product" value="<?= (int)$productId ?>"/>
+    <input type="hidden" name="product" value="<?= (int)$productId ?>">
     <?php foreach ($options as $optionItem): ?>
     <input type="hidden"
            name="<?= $escaper->escapeHtml($optionItem['name']) ?>"

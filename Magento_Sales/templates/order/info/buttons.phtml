@@ -38,7 +38,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
               class="inline-flex items-center"
         >
             <?= $block->getBlockHtml('formkey'); ?>
-            <input type="hidden" name="data" value='<?= /** @noEscape */ json_encode($formData['data']) ?>'/>
+            <input type="hidden" name="data" value='<?= /** @noEscape */ json_encode($formData['data']) ?>'>
             <button type="submit" class="btn btn-secondary text-secondary-darker">
                 <?= $heroicons->refreshHtml('mr-1 inline-block', 24, 24, ['aria-hidden' => 'true']); ?>
                 <span><?= $escaper->escapeHtml(__('Reorder')) ?></span>

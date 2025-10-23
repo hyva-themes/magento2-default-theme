@@ -16,7 +16,7 @@ use Magento\Framework\Escaper;
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
-if (! $block->getMessageCollection()->getCount()) {
+if (!$block->getMessageCollection()->getCount()) {
     return;
 }
 
@@ -38,52 +38,58 @@ foreach ($block->getMessageTypes() as $type) {
         console.warn("Hyvä helpers are not loaded yet. Make sure they are included before this script");
     }
 
-    (function( hyva, undefined ) {
-        let dispatchedMessages = false;
-
+    (function (hyva, undefined) {
         hyva.initCartMessages = () => {
-            try {
-                <?php
-                /**
-                 * Wrap window.dispatchMessages() to avoid duplicate error messages.
-                 * Duplicate messages are permitted to be displayed again after 10 seconds.
-                 *
-                 * Out of stock error messages are triggered when the cart page loads initially and
-                 * are then triggered again when the GraphQL cart query is processed.
-                 * This leads to duplicate error messages.
-                 */
-                ?>
-                if (dispatchedMessages === false && window.dispatchMessages) {
-                    const origDispatchMessages = window.dispatchMessages;
-                    window.dispatchMessages = function(messages, hideAfter) {
-
-                        const oldMessages = (dispatchedMessages || []).filter(message => message.ttl > Date.now());
-
-                        const newMessages = messages.filter(newMessage => {
-                            const duplicateMessages = oldMessages.filter(oldMessage => {
-                                    return newMessage.type === oldMessage.type && newMessage.text === oldMessage.text
-                                });
-                            return duplicateMessages.length === 0;
-                        });
-
-                        origDispatchMessages(newMessages, hideAfter);
-
-                        dispatchedMessages = oldMessages.concat(newMessages.map(message => {
-                            return Object.assign(message, {ttl: Date.now() + 10000}) // expire after 10 seconds
-                        }))
+            <?php
+            /**
+             * Wrap window.dispatchMessages() to avoid duplicate error messages.
+             * Duplicate messages are permitted to be displayed again after 10 seconds.
+             *
+             * Out of stock error messages are triggered when the cart page loads initially and
+             * are then triggered again when the GraphQL cart query is processed.
+             * This leads to duplicate error messages.
+             */
+            ?>
+            if (window.dispatchMessages && !window.dispatchMessages._checkoutproxy) {
+                window.dispatchedMessages = [];
+                const origDispatchMessages = window.dispatchMessages;
+                window.dispatchMessages = function (messages, hideAfter) {
+                    if (messages.length === 0) {
+                        return;
                     }
-                }
 
+                    const oldMessages = window.dispatchedMessages.filter(message => {
+                        return message.ttl > Date.now()
+                    });
+
+                    const newMessages = messages.filter(newMessage => {
+                        const isInOldMessages = oldMessages.find(oldMessage => {
+                            return newMessage.type === oldMessage.type && newMessage.text === oldMessage.text
+                        });
+                        return !isInOldMessages;
+                    });
+
+                    <?php /* Use requestAnimationFrame to give the message component time to reinitialize after replaceDomElement */ ?>
+                    requestAnimationFrame(() => origDispatchMessages(newMessages, hideAfter));
+
+                    window.dispatchedMessages = oldMessages.concat(newMessages.map(message => {
+                        return Object.assign(message, {ttl: Date.now() + 5000}) // expire after 5 seconds
+                    }));
+
+                }
+                window.dispatchMessages._checkoutproxy = true;
+            }
+
+            try {
                 const messages = <?= /** @noEscape */ json_encode($messages) ?>;
-                window.dispatchMessages && dispatchMessages(messages);
+                window.dispatchMessages && window.dispatchMessages(messages);
             } catch (error) {
-                console.warn('Error parsing Cookie Messages:', error);
+                console.warn('Error parsing Messages:', error);
             }
         }
 
-        window.addEventListener('load', function () {
-            hyva.initCartMessages();
-        })
+        window.addEventListener('load', () => hyva.initCartMessages());
+        window.addEventListener('reload-customer-section-data', () => hyva.initCartMessages());
 
-    }( window.hyva = window.hyva || {} ));
+    }(window.hyva = window.hyva || {}));
 </script>

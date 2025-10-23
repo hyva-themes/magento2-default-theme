@@ -442,7 +442,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
                                    name="region"
                                    @change.debounce="setRegion($event.target.value)"
                                    :value="cartData.address && cartData.address.region"
-                            />
+                            >
                         </label>
                     </template>
                 </div>
@@ -457,7 +457,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
                                name="postcode"
                                @input.debounce.1000ms="setPostcode($event.target.value)"
                                :value="cartData.address && cartData.address.postcode"
-                        />
+                        >
                     </label>
                 </div>
 
@@ -477,7 +477,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
                                                :id="'shipping_method_' + rate.method_code"
                                                :value="rate.carrier_code + '_' + rate.method_code"
                                                x-model="shippingMethod"
-                                               @change="updateShippingMethod()"/>
+                                               @change="updateShippingMethod()">
                                         <span x-text="rate.method_title" class="break-words shrink hyphens-auto"></span>
                                         <div class="flex flex-col justify-end ml-auto">
                                             <?php if ($totalsOutput->displayCartShippingInclTax() || $totalsOutput->displayCartShippingBoth()): ?>

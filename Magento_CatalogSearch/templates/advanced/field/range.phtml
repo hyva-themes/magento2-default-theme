@@ -65,7 +65,7 @@ $code = $attribute->getAttributeCode();
                         ? ''
                         : '<?= $escaper->escapeJs($validationMessage) ?>'
                )
-               "/>
+               ">
         <?php if ($attrInputType === 'price'): ?>
         <div class="inline-block md:hidden">
             <?= $escaper->escapeHtml($block->getCurrency($attribute)) ?>
@@ -91,7 +91,7 @@ $code = $attribute->getAttributeCode();
                         ? ''
                         : '<?= $escaper->escapeJs($validationMessage) ?>'
                )
-               "/>
+               ">
         <?php if ($attrInputType === 'price'): ?>
         <label class="inline-block"
                for="<?= $escaper->escapeHtmlAttr($code) ?>_to">

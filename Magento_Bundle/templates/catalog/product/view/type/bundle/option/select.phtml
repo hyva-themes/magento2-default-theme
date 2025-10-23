@@ -34,7 +34,7 @@ $activeSelectOptions = [];
            form="product_addtocart_form"
            data-option-id="<?= (int)$optionId ?>"
            data-selection-id="<?= (int)$selections[0]->getSelectionId() ?>"
-    />
+    >
     <?php if ((int)$selections[0]->getSelectionId()) {
         array_push($activeSelectOptions, (int)$selections[0]->getSelectionId());
     } ?>
@@ -109,7 +109,7 @@ $activeSelectOptions = [];
             calculateTotalPrice($dispatch)"
         <?php if (!$canChangeQty): ?> disabled <?php endif; ?>
         :disabled="getQtyDisabled(<?= (int)$optionId ?>)"
-    />
+    >
 </div>
 
 <?php

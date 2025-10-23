@@ -94,7 +94,7 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
                     '<?= $escaper->escapeJs($optionId) ?>',
                     $event.target
                 )"
-        />
+        >
         <input type="hidden" name="<?= /* @noEscape */ $fieldNameAction ?>"
                id="<?= /* @noEscape */ $fileName ?>-hidden"
                class="product-custom-option hidden-form-file"
@@ -107,7 +107,7 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
                     '<?= $escaper->escapeHtmlAttr($optionId) ?>',
                     $event.target
                 )"
-        />
+        >
         <?php if ($option->getFileExtension()): ?>
             <p class="my-2 text-sm">
                 <?= $escaper->escapeHtml(__('Compatible file extensions to upload')) ?>:

@@ -59,7 +59,7 @@ $recipients = $formData->getRecipientData() ?? '[]';
                                class="form-input"
                                autocomplete="name"
                                required
-                        />
+                        >
                     </div>
                 </div>
 
@@ -76,7 +76,7 @@ $recipients = $formData->getRecipientData() ?? '[]';
                                class="form-input"
                                autocomplete="email"
                                required
-                        />
+                        >
                     </div>
                 </div>
 
@@ -98,14 +98,14 @@ $recipients = $formData->getRecipientData() ?? '[]';
             </fieldset>
 
             <div x-data="rowHandler()">
-                <input name="recipient_data" :value="JSON.stringify(fields)" type="hidden"/>
+                <input name="recipient_data" :value="JSON.stringify(fields)" type="hidden">
                 <fieldset class="fieldset recipients">
                     <legend class="legend">
                     <span x-text="fields.length > 1 ? plural : single">
                         <?= $escaper->escapeHtml(__('Invitee')) ?>
                     </span>
                     </legend>
-                    <br/>
+                    <br>
                     <div id="recipients-options">
                         <fieldset class="fieldset">
                             <template x-for="(field, index) in fields" :key="index">
@@ -124,7 +124,7 @@ $recipients = $formData->getRecipientData() ?? '[]';
                                                    autocomplete="off"
                                                    required
                                                    x-model="field.name"
-                                            />
+                                            >
                                         </div>
                                     </div>
                                     <div class="field email required inline-block">
@@ -141,7 +141,7 @@ $recipients = $formData->getRecipientData() ?? '[]';
                                                    required
                                                    validate
                                                    x-model="field.email"
-                                            />
+                                            >
                                         </div>
                                     </div>
                                     </div>

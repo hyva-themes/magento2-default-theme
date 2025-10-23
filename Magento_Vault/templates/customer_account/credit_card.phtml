@@ -42,7 +42,7 @@ $block->getParentBlock()->setData('cards_row_number', $i);
              width="<?= /* @noEscape */ $block->getIconWidth() ?>"
              height="<?= /* @noEscape */ $block->getIconHeight() ?>"
              alt=""
-        />
+        >
     </div>
 </div>
 <div class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>" x-data="hyva.modal()">
@@ -55,7 +55,7 @@ $block->getParentBlock()->setData('cards_row_number', $i);
         <input
             name="<?= /* @noEscape */ PaymentTokenInterface::PUBLIC_HASH ?>"
             value="<?= $escaper->escapeHtmlAttr($block->getToken()->getPublicHash()) ?>"
-            type="hidden"/>
+            type="hidden">
 
         <?php $message = $escaper->escapeHtml(__('Are you sure you want to delete this card: %1?', $ccNumberView)) ?>
         <?php $confirmation = $modalViewModel->confirm($message) ?>

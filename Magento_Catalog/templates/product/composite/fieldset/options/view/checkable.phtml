@@ -50,7 +50,7 @@ if ($option): ?>
                x-on:change="updateCustomOptionValue(
                 $dispatch, '<?= $escaper->escapeHtmlAttr($option->getId()) ?>', $event.target
                )"
-        />
+        >
         <label class="label text-left"
                for="options_<?= $escaper->escapeHtmlAttr($option->getId()) ?>">
             <span>
@@ -110,7 +110,7 @@ if ($option): ?>
                    x-on:change="updateCustomOptionValue(
                     $dispatch, '<?= $escaper->escapeHtmlAttr($optionId) ?>', $event.target
                    )"
-            />
+            >
             <label class="label text-left"
                    for="options_<?= $escaper->escapeHtmlAttr($optionId) ?>"
                    x-html="updateOptionPrice('<?= $escaper->escapeJs($optionId) ?>', $el)"

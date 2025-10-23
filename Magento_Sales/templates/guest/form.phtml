@@ -30,7 +30,7 @@ use Magento\Sales\Block\Widget\Guest\Form as GuestFormWidget;
                     ) ?></span></label>
                     <div class="control">
                         <input type="text" class="form-input w-full" id="oar-order-id" name="oar_order_id"
-                               required/>
+                               required>
                     </div>
                 </div>
                 <div class="field">
@@ -52,7 +52,7 @@ use Magento\Sales\Block\Widget\Guest\Form as GuestFormWidget;
                     <div class="control">
                         <input type="text" class="form-input w-full" id="oar-billing-lastname"
                                name="oar_billing_lastname"
-                               required/>
+                               required>
                     </div>
                 </div>
                 <div class="field" x-show="authenticateBy !== 'zip'">
@@ -62,7 +62,7 @@ use Magento\Sales\Block\Widget\Guest\Form as GuestFormWidget;
                     <div class="control">
                         <input type="email" class="form-input w-full"
                                id="oar_email" name="oar_email" :required="authenticateBy !== 'zip'"
-                        />
+                        >
                     </div>
                 </div>
                 <div class="field" x-show="authenticateBy === 'zip'">
@@ -72,7 +72,7 @@ use Magento\Sales\Block\Widget\Guest\Form as GuestFormWidget;
                     <div class="control">
                         <input type="text" class="form-input w-full"
                                id="oar_zip" name="oar_zip" :required="authenticateBy === 'zip'"
-                        />
+                        >
                     </div>
                 </div>
             </div>

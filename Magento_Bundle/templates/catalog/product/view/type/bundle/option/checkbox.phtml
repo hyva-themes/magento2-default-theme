@@ -32,7 +32,7 @@ $optionId = $option->getId();
            checked
            data-option-id="<?= (int)$optionId ?>"
            data-selection-id="<?= (int)$selections[0]->getSelectionId() ?>"
-    />
+    >
 <?php else: ?>
     <?php foreach ($selections as $selection): ?>
         <?php $selectionId = $selection->getSelectionId(); ?>
@@ -51,7 +51,7 @@ $optionId = $option->getId();
                    value="<?= (int)$selectionId ?>"
                    data-option-id="<?= $escaper->escapeHtmlAttr($optionSelectionId) ?>"
                    x-on:change="calculateTotalPrice()"
-            />
+            >
             <label class="label"
                    for="bundle-option-<?= $escaper->escapeHtmlAttr($optionSelectionId) ?>">
                 <span><?= /* @noEscape */ $block->getSelectionQtyTitlePrice($selection) ?></span>

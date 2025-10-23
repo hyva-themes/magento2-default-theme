@@ -115,7 +115,7 @@ $configuredLinks          = $configuredValues->getLinks() ?? [];
                                <?= $escaper->escapeHtml($block->getLinkCheckedValue($link)) ?>
                                x-model="selectedOptions"
                                @change="linkSelectionChange($event.target)"
-                        />
+                        >
                         <label class="inline-block" for="links_<?= $escaper->escapeHtmlAttr($link->getId()) ?>">
                     <?php endif; ?>
                         <span><?= $escaper->escapeHtml($link->getTitle()) ?></span>

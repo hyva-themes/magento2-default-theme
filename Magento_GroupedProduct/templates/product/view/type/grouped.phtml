@@ -117,7 +117,7 @@ $hasAssociatedProducts = count($associatedProducts) > 0;
                                    class="qty form-input px-2 py-2 w-20 text-center"
                                    :class=" { 'border-red-500 focus:border-red-500 focus:ring-red-500': !isValid }"
                                    @input.debounce="validateForm()"
-                            />
+                            >
                         </div>
                     <?php else: ?>
                         <div class="stock unavailable"

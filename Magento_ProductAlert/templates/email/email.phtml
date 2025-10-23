@@ -28,5 +28,5 @@ $productId = $block->getProductId();
       x-data=""
       x-init="$root.submit()">
     <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
-    <input type="hidden" id="productId" name="product" value="<?= $escaper->escapeHtml($productId) ?>" />
+    <input type="hidden" id="productId" name="product" value="<?= $escaper->escapeHtml($productId) ?>">
 </form>

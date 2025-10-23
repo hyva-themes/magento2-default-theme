@@ -88,21 +88,21 @@ $htmlInputTypes = [
              $refs[`option-${id}-day-part`] && ($refs[`option-${id}-day-part`].value = d.getHours() < 12 ? 'am' : 'pm');
              <?php endif; ?>
            "
-        />
+        >
 
         <?php if ($option->getType() == ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME
             || $option->getType() == ProductCustomOptionInterface::OPTION_TYPE_DATE): ?>
-            <input type="hidden" name="options[<?= $escaper->escapeHtmlAttr($optionId) ?>][day]" x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>-day"/>
-            <input type="hidden" name="options[<?= $escaper->escapeHtmlAttr($optionId) ?>][month]" x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>-month"/>
-            <input type="hidden" name="options[<?= $escaper->escapeHtmlAttr($optionId) ?>][year]" x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>-year"/>
+            <input type="hidden" name="options[<?= $escaper->escapeHtmlAttr($optionId) ?>][day]" x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>-day">
+            <input type="hidden" name="options[<?= $escaper->escapeHtmlAttr($optionId) ?>][month]" x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>-month">
+            <input type="hidden" name="options[<?= $escaper->escapeHtmlAttr($optionId) ?>][year]" x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>-year">
         <?php endif; ?>
 
         <?php if ($option->getType() == ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME
             || $option->getType() == ProductCustomOptionInterface::OPTION_TYPE_TIME): ?>
-            <input type="hidden" name="options[<?= $escaper->escapeHtmlAttr($optionId) ?>][hour]" x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>-hour"/>
-            <input type="hidden" name="options[<?= $escaper->escapeHtmlAttr($optionId) ?>][minute]" x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>-minute"/>
+            <input type="hidden" name="options[<?= $escaper->escapeHtmlAttr($optionId) ?>][hour]" x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>-hour">
+            <input type="hidden" name="options[<?= $escaper->escapeHtmlAttr($optionId) ?>][minute]" x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>-minute">
             <?php if (! $customOptionViewModel->is24hTimeFormat()): ?>
-            <input type="hidden" name="options[<?= $escaper->escapeHtmlAttr($optionId) ?>][day_part]" x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>-day-part"/>
+            <input type="hidden" name="options[<?= $escaper->escapeHtmlAttr($optionId) ?>][day_part]" x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>-day-part">
             <?php endif; ?>
         <?php endif; ?>
     </div>

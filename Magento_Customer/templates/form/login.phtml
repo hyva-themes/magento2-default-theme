@@ -66,7 +66,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                                id="email"
                                type="email"
                                title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
-                        />
+                        >
                     </div>
                 </div>
                 <div class="field password required">
@@ -91,7 +91,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                             autocomplete="<?= $block->isAutocompleteDisabled() ? 'off' : 'current-password' ?>"
                             id="pass"
                             title="<?= $escaper->escapeHtmlAttr(__('Password')) ?>"
-                        />
+                        >
                         <button
                             type="button"
                             x-on:click="showPassword = !showPassword"

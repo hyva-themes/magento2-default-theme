@@ -57,7 +57,7 @@ $logoSrc = $logoPathResolver && method_exists($logoPathResolver, 'getLogoSrc')
                 : 'height="150"'
             ?>
             loading="eager"
-        />
+        >
         <?php if (!$logoSrc): ?>
             <?= $escaper->escapeHtml($storeName) ?>
         <?php endif; ?>

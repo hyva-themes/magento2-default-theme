@@ -113,7 +113,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                                     <?php else: ?>
                                         required
                                     <?php endif; ?>
-                            />
+                            >
                         </div>
 
                         <div>
@@ -125,7 +125,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                             </div>
                             <?php else: ?>
                                 <div class="primary">
-                                    <input type="hidden" name="remove" id="remove-coupon" value="1"/>
+                                    <input type="hidden" name="remove" id="remove-coupon" value="1">
                                     <button type="submit" class="btn btn-primary"
                                             value="<?= $escaper->escapeHtmlAttr(__('Cancel Coupon')) ?>">
                                         <?= $escaper->escapeHtml(__('Cancel Coupon')) ?>

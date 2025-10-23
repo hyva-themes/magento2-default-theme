@@ -71,7 +71,7 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                 @change="handleCheckboxChange('email-fields')"
                 class="checkbox"
                 aria-describedby="change_email_description"
-            />
+            >
             <label class="label" for="change-email">
                 <span><?= $escaper->escapeHtml(__('Change Email')) ?></span>
             </label>
@@ -89,7 +89,7 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                 <?php if ($block->getChangePassword()): ?> checked<?php endif; ?>
                 class="checkbox"
                 aria-describedby="change_password_description"
-            />
+            >
             <label class="label" for="change-password">
                 <span><?= $escaper->escapeHtml(__('Change Password')) ?></span>
             </label>
@@ -108,7 +108,7 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                     <input type="email" name="email" id="email" autocomplete="email" required
                            value="<?= $escaper->escapeHtmlAttr($block->getCustomer()->getEmail()) ?>"
                            title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
-                           class="form-input"/>
+                           class="form-input">
                 </div>
             </div>
         </template>
@@ -128,7 +128,7 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                            required
                            autocomplete="<?= $isAutocompleteEnabled ? 'current-password' : 'off' ?>"
                            aria-describedby="password-strength-meter"
-                    />
+                    >
                     <button
                         type="button"
                         @click="showPasswordCurrent = !showPasswordCurrent"
@@ -165,7 +165,7 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                                minlength="<?= $escaper->escapeHtmlAttr($minimumPasswordLength) ?>"
                                autocomplete="<?= $isAutocompleteEnabled ? 'new-password' : 'off' ?>"
                                aria-describedby="password-strength-meter"
-                        />
+                        >
                         <button
                             type="button"
                             @click="showPasswordNew = !showPasswordNew"
@@ -203,7 +203,7 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                                @input="onChange"
                                autocomplete="<?= $isAutocompleteEnabled ? 'new-password' : 'off' ?>"
                                aria-describedby="password-strength-meter"
-                        />
+                        >
                         <button
                             type="button"
                             @click="showPasswordConfirm = !showPasswordConfirm"

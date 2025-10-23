@@ -125,7 +125,7 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                             title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
                             class="form-input w-full"
                             @input.debounce="onChange"
-                        />
+                        >
                     </div>
                 </div>
                 <div class="field field-reserved required">
@@ -250,7 +250,7 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                         <?= $escaper->escapeHtml(__('Address Information')) ?>
                     </span>
                 </legend>
-                <input type="hidden" name="create_address" value="1"/>
+                <input type="hidden" name="create_address" value="1">
 
                 <?php $company = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Company::class) ?>
                 <?php if ($company->isEnabled()): ?>
@@ -361,7 +361,7 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                                title="<?= /* @noEscape */ $regionLabel ?>"
                                class="form-input"
                                :required="isRegionRequired"
-                        />
+                        >
                     </div>
                 </div>
 

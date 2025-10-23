@@ -149,24 +149,6 @@ use Magento\Framework\View\Element\Template;
             },
             blurLabel() {
                 this.focusedLabel = false;
-            },
-            showSwatches: false,
-            initShowSwatchesIntersect() {
-                if ('IntersectionObserver' in window && !window.scrollY) {
-                    let io = new IntersectionObserver(
-                        entries => {
-                            entries.map(entry => {
-                                if (entry.isIntersecting) {
-                                    this.showSwatches = true;
-                                    io.unobserve(this.$root);
-                                }
-                            })
-                        }
-                    );
-                    io.observe(this.$root);
-                } else {
-                    this.showSwatches = true
-                }
             }
         }
     }

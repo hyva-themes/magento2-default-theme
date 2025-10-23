@@ -30,7 +30,7 @@ use Magento\Framework\Escaper;
         <?= $block->getAdjustmentsHtml() ?>
     <?php endif; ?>
     <?php if ($block->getSchema()): ?>
-        <meta itemprop="price" content="<?= $escaper->escapeHtmlAttr($block->getDisplayValue()) ?>" />
-        <meta itemprop="priceCurrency" content="<?= $escaper->escapeHtmlAttr($block->getDisplayCurrencyCode()) ?>" />
+        <meta itemprop="price" content="<?= $escaper->escapeHtmlAttr($block->getDisplayValue()) ?>">
+        <meta itemprop="priceCurrency" content="<?= $escaper->escapeHtmlAttr($block->getDisplayCurrencyCode()) ?>">
     <?php endif; ?>
 </span>

@@ -54,7 +54,6 @@ $tooltipBlockHtml = $block->getBlockHtml('product.swatch.tooltip');
     </script>
 
     <div x-data="initConfigurableSwatchOptions_<?= (int) $productId ?>()"
-         x-init="initShowSwatchesIntersect();"
          @private-content-loaded.window="onGetCartData($event.detail.data)"
          class="relative mb-6"
          x-defer="intersect"
@@ -69,36 +68,33 @@ $tooltipBlockHtml = $block->getBlockHtml('product.swatch.tooltip');
                 <?php if ($swatchRendererViewModel->isSwatchAttribute($productAttribute)): ?>
                     <div class="swatch-attribute border-t last:border-b border-container min-h-14
                             <?= $escaper->escapeHtmlAttr($productAttribute->getAttributeCode()) ?>">
-                        <template x-if="showSwatches">
-                            <div class="flex flex-col sm:flex-row items-center py-4 sm:py-1 w-full border-gray-300">
-
-                                <label
-                                    class="w-full sm:w-1/2 text-left text-gray-700 label product-option-label"
-                                    id="attribute-label-<?= $escaper->escapeHtmlAttr($productId . '-' . $attributeId) ?>"
-                                    aria-hidden="true"
+                        <div class="flex flex-col sm:flex-row items-center py-4 sm:py-1 w-full border-gray-300">
+                            <label
+                                class="w-full sm:w-1/2 text-left text-gray-700 label product-option-label"
+                                id="attribute-label-<?= $escaper->escapeHtmlAttr($productId . '-' . $attributeId) ?>"
+                                aria-hidden="true"
+                            >
+                                <span><?= $escaper->escapeHtml($productAttribute->getStoreLabel()) ?></span>
+                                <span
+                                    class="text-gray-900 ml-2 font-bold"
+                                    x-text="getSwatchText(<?= (int) $attributeId ?>, selectedValues[<?= (int) $attributeId ?>])"
+                                ></span>
+                            </label>
+                            <div class="w-full sm:ml-2 sm:w-1/2 text-left text-gray-900 product-option-values">
+                                <div
+                                     class="flex items-center -mx-4 space-x-4 swatch-attribute-options"
+                                     role="radiogroup"
+                                     aria-label="<?= $escaper->escapeHtmlAttr($productAttribute->getStoreLabel()) ?>"
                                 >
-                                    <span><?= $escaper->escapeHtml($productAttribute->getStoreLabel()) ?></span>
-                                    <span
-                                        class="text-gray-900 ml-2 font-bold"
-                                        x-text="getSwatchText(<?= (int) $attributeId ?>, selectedValues[<?= (int) $attributeId ?>])"
-                                    ></span>
-                                </label>
-                                <div class="w-full sm:ml-2 sm:w-1/2 text-left text-gray-900 product-option-values">
-                                    <div
-                                         class="flex items-center -mx-4 space-x-4 swatch-attribute-options"
-                                         role="radiogroup"
-                                         aria-label="<?= $escaper->escapeHtmlAttr($productAttribute->getStoreLabel()) ?>"
+                                    <template
+                                        x-for="(item, index) in optionConfig.attributes[<?= (int) $attributeId ?>].options"
+                                        :key="item.id"
                                     >
-                                        <template
-                                            x-for="(item, index) in optionConfig.attributes[<?= (int) $attributeId ?>].options"
-                                            :key="item.id"
-                                        >
-                                            <?= /* @noEscape */ $swatchItemBlock->setData('attribute_id', $attributeId)->toHtml(); ?>
-                                        </template>
-                                    </div>
+                                        <?= /* @noEscape */ $swatchItemBlock->setData('attribute_id', $attributeId)->toHtml(); ?>
+                                    </template>
                                 </div>
                             </div>
-                        </template>
+                        </div>
                     </div>
                 <?php else: ?>
                     <div class="flex flex-col sm:flex-row items-center py-2 w-full border-t border-gray-300 last:border-b">

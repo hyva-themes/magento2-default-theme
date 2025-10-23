@@ -150,7 +150,7 @@ mutation createProductReviewMutation(
                                                                     <?php else: ?>
                                                                     aria-label="<?= $escaper->escapeHtmlAttr(__('%1 stars', $iterator)) ?>"
                                                                     <?php endif; ?>
-                                                                />
+                                                                >
                                                             </label>
 
                                                         </div>
@@ -160,7 +160,7 @@ mutation createProductReviewMutation(
                                             </div>
                                         <?php endforeach; ?>
                                     </div>
-                                    <input type="hidden" name="validate_rating" value=""/>
+                                    <input type="hidden" name="validate_rating" value="">
                                 </div>
                             </div>
                         </fieldset>
@@ -175,7 +175,7 @@ mutation createProductReviewMutation(
                                        required
                                        placeholder="<?= $escaper->escapeHtmlAttr(__('Nickname') . '*') ?>" type="text"
                                        name="nickname" id="nickname_field"
-                                       autocomplete="nickname"/>
+                                       autocomplete="nickname">
                             </div>
                         </div>
                         <div>
@@ -188,7 +188,7 @@ mutation createProductReviewMutation(
                                        placeholder="<?= $escaper->escapeHtmlAttr(__('Summary') . '*') ?>" type="text"
                                        name="title"
                                        id="summary_field"
-                                       autocomplete="off"/>
+                                       autocomplete="off">
                             </div>
                         </div>
                         <div>

@@ -42,7 +42,7 @@ $block->getParentBlock()->setData('tokens_row_number', $i);
             <?= $block->getBlockHtml('formkey') ?>
             <input name="public_hash"
                    value="<?= $escaper->escapeHtmlAttr($block->getToken()->getPublicHash()) ?>"
-                   type="hidden"/>
+                   type="hidden">
 
         <?php $message = $escaper->escapeHtml(__('Are you sure you want to delete this PayPal account?')) ?>
         <?php $confirmation = $modalViewModel->confirm($message)

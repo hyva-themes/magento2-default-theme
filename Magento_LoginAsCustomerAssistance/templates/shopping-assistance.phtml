@@ -58,7 +58,7 @@ if (!$shoppingAssistanceViewModel->isLoginAsCustomerEnabled()) {
         <?php if ($shoppingAssistanceViewModel->isAssistanceAllowed()): ?>
             checked
         <?php endif; ?>
-    />
+    >
     <label class="label" for="assistance_allowed_checkbox">
         <span><?= $escaper->escapeHtml(__($shoppingAssistanceViewModel->getAssistanceCheckboxTitle())) ?></span>
     </label>
@@ -66,7 +66,7 @@ if (!$shoppingAssistanceViewModel->isLoginAsCustomerEnabled()) {
            name="assistance_allowed"
            x-ref="assistance-input"
            value="<?= (int) $shoppingAssistanceViewModel->isAssistanceAllowed() + 1 ?>"
-    />
+    >
 
     <div class="inline-flex px-4">
         <button

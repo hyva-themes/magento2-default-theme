@@ -19,7 +19,7 @@ $maxQueryLength = $catalogSearchHelper->getMaxQueryLength();
 ?>
 <form class="form search advanced" action="<?= $escaper->escapeUrl($block->getSearchPostUrl()) ?>" method="get">
 <fieldset class="fieldset">
-    <legend class="legend"><span><?= $escaper->escapeHtml(__('Search Settings')) ?></span></legend><br />
+    <legend class="legend"><span><?= $escaper->escapeHtml(__('Search Settings')) ?></span></legend><br>
     <?php foreach ($block->getSearchableAttributes() as $attribute): ?>
         <?php $code = $attribute->getAttributeCode() ?>
         <div class="field <?= $escaper->escapeHtmlAttr($code) ?>">

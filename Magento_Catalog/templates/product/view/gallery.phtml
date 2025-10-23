@@ -90,7 +90,7 @@ $productName = $block->getProduct()->getName();
                     width="<?= /* @noEscape */ $mediumWidth ?>"
                     height="<?= /* @noEscape */ $mediumHeight ?>"
                     itemprop="image"
-                />
+                >
                 <template x-for="(image, index) in images" :key="index">
                     <img
                         :alt="image.caption || '<?= $escaper->escapeJs($productName) ?>'"
@@ -103,7 +103,7 @@ $productName = $block->getProduct()->getName();
                         :src="fullscreen ? image.full : image.img"
                         x-transition.opacity.duration.500ms
                         x-show="active === index"
-                    />
+                    >
                 </template>
                 <button
                     type="button"
@@ -186,7 +186,7 @@ $productName = $block->getProduct()->getName();
                                     :title="image.caption || '<?= $escaper->escapeJs(__("%1 thumbnail", $productName)) ?>'"
                                     width="<?= /* @noEscape */ $smallWidth ?>"
                                     height="<?= /* @noEscape */ $smallHeight ?>"
-                                />
+                                >
                                 <span
                                     class="absolute inset-0 grid place-items-center"
                                     x-show="image.type === 'video'"

@@ -27,7 +27,7 @@ declare(strict_types=1);
                 <input type="checkbox" name="is_subscribed" id="subscription" value="1"
                        title="<?= $escaper->escapeHtmlAttr(__('General Subscription')) ?>"
                         <?php if ($block->getIsSubscribed()): ?> checked<?php endif; ?>
-                       class="checkbox" />
+                       class="checkbox">
                 <label for="subscription" class="label">
                     <span>
                         <?= $escaper->escapeHtml(__('General Subscription')) ?>

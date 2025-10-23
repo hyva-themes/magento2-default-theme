@@ -27,9 +27,9 @@ $storeEmail = $storeConfig->getStoreConfig('trans_email/ident_general/email') ??
 </h2>
 <h3 class="title-font font-bold"><?= $escaper->escapeHtml($storeConfig->getStoreConfig('general/store_information/name') ?? ''); ?></h3>
 <address>
-    <?= $escaper->escapeHtml($storeConfig->getStoreConfig('general/store_information/street_line1') ?? ''); ?><br/>
-    <?= $escaper->escapeHtml($storeConfig->getStoreConfig('general/store_information/city') ?? ''); ?><br/>
-    <?= $escaper->escapeHtml($storeConfig->getStoreConfig('general/store_information/postcode') ?? ''); ?><br/>
+    <?= $escaper->escapeHtml($storeConfig->getStoreConfig('general/store_information/street_line1') ?? ''); ?><br>
+    <?= $escaper->escapeHtml($storeConfig->getStoreConfig('general/store_information/city') ?? ''); ?><br>
+    <?= $escaper->escapeHtml($storeConfig->getStoreConfig('general/store_information/postcode') ?? ''); ?><br>
 </address>
 <ul role="list">
     <?php if ($storePhoneNumber): ?>

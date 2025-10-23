@@ -115,7 +115,7 @@ $maxSalesQtyLength = ($maxSalesQty ? strlen((string) $maxSalesQty) : 4)
                     class="form-input px-2 py-2 w-20 text-center invalid:ring-2 invalid:ring-red-500"
                     x-model.number="qty"
                     @input="$dispatch('update-qty-<?= (int)$product->getId() ?>', qty)"
-                />
+                >
             </div>
         <?php endif; ?>
     </div>
