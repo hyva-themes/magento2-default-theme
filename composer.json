@@ -34,24 +34,6 @@
             "registration.php"
         ]
     },
-    "repositories": {
-        "magento": {
-            "type": "composer",
-            "url": "https://repo.magento.com/"
-        },
-        "hyva-themes/magento2-theme-module": {
-            "type": "git",
-            "url": "git@gitlab.hyva.io:hyva-themes/magento2-theme-module.git"
-        },
-        "hyva-themes/magento2-reset-theme": {
-            "type": "git",
-            "url": "git@gitlab.hyva.io:hyva-themes/magento2-reset-theme.git"
-        },
-        "hyva-themes/magento2-email-module": {
-            "type": "git",
-            "url": "git@gitlab.hyva.io:hyva-themes/magento2-email-module.git"
-        }
-    },
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "dev-master",
         "magento/magento-coding-standard": "dev-master",
