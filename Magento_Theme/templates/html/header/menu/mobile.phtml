@@ -37,7 +37,6 @@ $itemClasses = (string) $block->getItemClasses() ?: "flex items-center gap-2 py-
         type="button"
         class="btn bg-transparent border-transparent p-2"
         aria-label="<?= $escaper->escapeHtmlAttr(__('Open menu')) ?>"
-        aria-controls="mobileMenu"
         @click="open"
     >
         <?= $lucideIcons->menuHtml('', 24, 24, ["aria-hidden" => "true"]) ?>
