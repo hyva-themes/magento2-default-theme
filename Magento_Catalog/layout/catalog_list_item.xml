@@ -18,6 +18,9 @@
                     <item name="category.products.list.js.wishlist" xsi:type="boolean">true</item>
                     <item name="category.products.list.js.compare" xsi:type="boolean">true</item>
                 </argument>
+                <argument name="hyva_js_template_dependencies" xsi:type="array">
+                    <item name="Magento_Catalog::product/list/js/image.phtml" xsi:type="boolean">true</item>
+                </argument>
                 <argument name="product_data_attributes" xsi:type="array">
                     <item name="sku" xsi:type="boolean">true</item>
                 </argument>
