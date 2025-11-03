@@ -2,16 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
-and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.18-beta...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.18...main
 
-## [1.3.18-beta] - 2025-10-23
+## [1.3.18] - 2025-11-03
 
-[1.3.18-beta]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.17...1.3.18-beta
+[1.3.18]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.17...1.3.18
 
 ### Added
 
