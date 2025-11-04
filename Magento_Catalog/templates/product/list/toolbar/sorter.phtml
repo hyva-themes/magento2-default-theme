@@ -24,6 +24,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         md:col-span-3 lg:col-span-6 justify-end">
     <label class="inline-block mr-3">
         <select data-role="sorter"
+                name="sorter"
                 class="form-select sorter-options"
                 aria-label="<?= $escaper->escapeHtmlAttr(__('Sort By')) ?>"
                 @change="changeUrl(
