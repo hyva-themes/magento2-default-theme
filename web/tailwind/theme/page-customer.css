@@ -5,3 +5,13 @@
         @apply grid-cols-2;
     }
 }
+
+.order-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: --spacing(4);
+
+    a {
+        text-decoration: underline;
+    }
+}
