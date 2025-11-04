@@ -39,7 +39,7 @@ $productName = $productAttribute->getValue($product, 'name');
         @click.prevent="addToWishlist(<?= (int) $productId ?>)"
         aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Wish List') . ' ' . $productName) ?>"
         type="button"
-        class="btn p-2 rounded-full hover:text-red-600"
+        class="btn p-2 rounded-full"
         data-addto="wishlist"
 >
     <?= $lucideIcons->heartHtml('', 20, 20, ['aria-hidden' => 'true']) ?>

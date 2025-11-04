@@ -3,12 +3,12 @@
         position: relative;
         border-radius: var(--card-radius, var(--radius-lg));
         border-width: 1px;
-        padding-block: var(--card-py, --spacing(4));
-        padding-inline: var(--card-px, --spacing(4));
+        padding-block: var(--card-py, --spacing(6));
+        padding-inline: var(--card-px, --spacing(6));
         border-color: var(--card-stroke, var(--color-gray-300));
         background-color: var(--card-bg, var(--color-surface));
         color: var(--card-color, var(--color-fg));
-        transition-property: color, background-color, border-color,
+        transition-property: color, background-color, border-color, box-shadow,
             outline-color;
         transition-timing-function: var(--default-transition-timing-function);
         transition-duration: var(--default-transition-duration);

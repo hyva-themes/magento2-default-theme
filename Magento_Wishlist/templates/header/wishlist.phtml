@@ -35,7 +35,7 @@ $lucideIcons = $viewModels->require(LucideIcons::class);
     <template x-if="itemCount">
         <span
             x-text="itemCount"
-            class="absolute -top-1.5 -right-1.5 px-2 py-0.5 rounded-full bg-primary text-on-primary text-xs
+            class="absolute -top-1.5 -right-1.5 px-2 py-1 rounded-full bg-primary text-on-primary text-xs
                 font-semibold leading-none text-center uppercase tabular-nums"
             aria-hidden="true"
         ></span>
@@ -55,10 +55,7 @@ $lucideIcons = $viewModels->require(LucideIcons::class);
             },
             receiveWishlistData() {
                 const data = this.$event.detail.data;
-
-                this.itemCount = data.wishlist && data.wishlist.items
-                    ? data.wishlist.items.length
-                    : 0;
+                this.itemCount = data.wishlist ? parseInt(data.wishlist.counter) : 0;
             }
         }
     }

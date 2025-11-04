@@ -207,7 +207,7 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
                         @click.prevent="addToCompare(<?= (int)$productId ?>)"
                         aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Compare') . ' ' . $productName) ?>"
                         type="button"
-                        class="btn p-2 rounded-full hover:text-yellow-600"
+                        class="btn p-2 rounded-full"
                         data-addto="compare"
                 >
                     <?= $lucideIcons->scaleHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
