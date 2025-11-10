@@ -23,11 +23,12 @@ You have the choice which of the two licenses to use.
 
 ### Additional Licenses for Included Assets
 
-* **Copyright:** This product includes software developed by Magento, Inc. (https://github.com/magento/magento2) and distributed under the Academic Free License (AFL) v3.0. The Source Code of the original Work is available at https://github.com/magento/magento2.  
-  Included libraries from Nick Piscitelli (https://github.com/NickPiscitelli/) licensed under MIT license.  
+* **Copyright:** This product includes software developed by Magento, Inc. (https://github.com/magento/magento2) and distributed under the Academic Free License (AFL) v3.0.  
+  The Source Code of the original Work is available at https://github.com/magento/magento2.  
+  Included libraries from Nick Piscitelli (https://github.com/NickPiscitelli/) are distributed under the MIT license.
 * **License Texts:**
-  * The full text of the AFL 3.0 license can be found in `LICENSE_AFL.txt` and online at [http://opensource.org/licenses/afl-3.0.php](http://opensource.org/licenses/afl-3.0.php).
-  * The full text of the MIT license can be found online at [https://opensource.org/license/MIT](https://opensource.org/license/MIT).
+  The full text of the AFL 3.0 license can be found in `LICENSE_AFL.txt` and online at [http://opensource.org/licenses/afl-3.0.php](http://opensource.org/licenses/afl-3.0.php).  
+  The full text of the MIT license can be found online at [https://opensource.org/license/MIT](https://opensource.org/license/MIT).
 
 ## Changelog
 Please see [The Changelog](CHANGELOG.md).
