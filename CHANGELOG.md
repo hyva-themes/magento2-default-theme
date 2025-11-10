@@ -25,10 +25,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
   Many thanks to Andrei Pavlikov (Perspective Magento Team) for the contribution!
 
-- **Add AlpineJs based HTML Dialog to the Header Mobile Menu and Minicart**
+- **Add AlpineJs based HTML Dialog to the Header Mobile Menu and Minicart**  
   For more information, please refer to [merge request #1358](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1358)
 
-- **Add view-transitions to the theme as a stable feature**
+- **Add view-transitions to the theme as a stable feature**  
   For more information, please refer to [merge request #1360](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1360)
 
 - **Add support for showing the Wishlist icon in the Page Header**  
@@ -116,6 +116,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
   For more information, please refer to [issue #814](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/814)
 
   Many thanks to Ivan Tarkovych (Perspective Magento Team) for the contribution!
+
+- **Removed dependency on the reset-theme**
+  For more information, please refer to the [upgrade docs](./upgrading-to-1-4-0.md).
 
 ## [1.3.18] - 2025-11-03
 
