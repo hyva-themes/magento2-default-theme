@@ -13,7 +13,7 @@ Please refer to https://docs.hyva.io for instructions
 
 ## License
 
-This package is primarily dual-licensed under the **Open Software License (OSL 3.0)** and the Academic Free Software License (ASL 3.0).
+This package is primarily dual-licensed under the **Open Software License (OSL 3.0)** and the **Academic Free Software License (ASL 3.0)**.
 
 * **Copyright:** Copyright © 2020-present Hyvä Themes. All rights reserved.
 * **License Text (OSL 3.0):** The full text of the OSL 3.0 license can be found in the `LICENSE.txt` file within this package, and is also available online at [http://opensource.org/licenses/osl-3.0.php](http://opensource.org/licenses/osl-3.0.php).
