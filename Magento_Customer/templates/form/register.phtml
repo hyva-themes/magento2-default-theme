@@ -286,7 +286,7 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                             <?php for ($i = 2, $n = $this->helper(Address::class)->getStreetLines(); $i <= $n; $i++): ?>
                                 <div class="field additional">
                                     <label class="label" for="street_<?= /* @noEscape */ $i ?>">
-                                        <span><?= $escaper->escapeHtml(__('Address')) ?></span>
+                                        <?= $escaper->escapeHtml(__('Street Address %1', $i)) ?>
                                     </label>
                                     <div class="control">
                                         <input type="text" name="street[]"
