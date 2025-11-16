@@ -54,6 +54,35 @@ $storeConfig = $viewModels->require(StoreConfig::class);
 /** @var Currency $viewModelCurrency */
 $viewModelCurrency = $viewModels->require(Currency::class);
 
+$gqlRecentlyViewedProductsQuery = 'query ($skus: [String!]!) {
+products(filter: { sku: { in: $skus } }) {
+    items {
+      sku
+      id
+      name
+      small_image {
+        label
+        url
+      }
+      url_key
+      url_suffix
+      visibility
+      status
+      price_range {
+        minimum_price {
+          regular_price {
+            value
+            currency
+          }
+          final_price {
+            value
+            currency
+          }
+        }
+      }
+    }
+  }
+}';
 ?>
 <script>
         const defaultOptions = {
@@ -106,40 +135,9 @@ $viewModelCurrency = $viewModels->require(Currency::class);
                 const skusToFetch = itemsToShow.map(product => product.sku);
                 <?php /* It is not possible to query prices incl and excl tax from the GraphQL api */ ?>
                 <?php /* If display incl + excl is required, ensure catalog/recently_products/synchronize_with_backend is set to No */ ?>
-                const query = `<?= /** @noEscape */ $gqlViewModel->query(
-                    "recently_viewed_products_query",
-                    'query ($skus: [String!]!) {
-  products(filter: { sku: { in: $skus } }) {
-    items {
-      sku
-      id
-      name
-      small_image {
-        label
-        url
-      }
-      url_key
-      url_suffix
-      visibility
-      status
-      price_range {
-        minimum_price {
-          regular_price {
-            value
-            currency
-          }
-          final_price {
-            value
-            currency
-          }
-        }
-      }
-    }
-  }
-}'
-                ) ?>`;
                 const variables = JSON.stringify({skus: skusToFetch});
                 window.fetch(BASE_URL + 'graphql?' + new URLSearchParams({query, variables}), {
+                const query = `<?= /** @noEscape */ $gqlViewModel->query("recently_viewed_products_query", $gqlRecentlyViewedProductsQuery) ?>`;
                     method: 'GET',
                     headers: {
                         'Store': '<?= $escaper->escapeJs($viewModelStore->getStoreCode()) ?>',
