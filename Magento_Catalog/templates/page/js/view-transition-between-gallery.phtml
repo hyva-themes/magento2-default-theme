@@ -19,6 +19,7 @@ use Magento\Framework\View\Element\Template;
 ?>
 
 <script>
+    const viewTransitionToGalleryPageStorage = 'view-transition-to-gallery-page-type';
     const setTransitionNameBetweenGallery = async (url, promise) => {
         if (window.matchMedia('(prefers-reduced-motion)').matches) return;
 
@@ -34,14 +35,26 @@ use Magento\Framework\View\Element\Template;
         }
     };
 
+    const getViewTransitionToGalleryPageIsProduct = () => {
+        return document.body.classList.contains('catalog-product-view') ? 'product-page' : 'other'
+    }
+
     window.addEventListener('pageswap', async (e) => {
         if (!e.viewTransition) return;
+        const pageType = getViewTransitionToGalleryPageIsProduct();
         const target = new URL(e.activation.entry.url);
+
+        sessionStorage.setItem(viewTransitionToGalleryPageStorage, pageType);
         setTransitionNameBetweenGallery(target.href, e.viewTransition.finished);
     });
 
     window.addEventListener('pagereveal', async (e) => {
         if (!e.viewTransition || (window.navigation && !window.navigation.activation.from)) return;
+        const previousPageType = sessionStorage.getItem(viewTransitionToGalleryPageStorage);
+        const pageType = getViewTransitionToGalleryPageIsProduct();
+        sessionStorage.removeItem(viewTransitionToGalleryPageStorage);
+
+        if (previousPageType === pageType) return;
         const target = new URL(window.navigation.activation.from.url);
         setTransitionNameBetweenGallery(target.href, e.viewTransition.ready);
     });
