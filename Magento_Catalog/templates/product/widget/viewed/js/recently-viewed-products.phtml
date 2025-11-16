@@ -18,20 +18,10 @@ use Hyva\Theme\ViewModel\StoreConfig;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
-/**
- * These variables are automatically assigned to any template
- *
- * @var Template $block
- * @var Escaper $escaper
- * @var ViewModelRegistry $viewModels
- */
-
-/**
- * These variables are assigned in the parent templates: grid.phtml, list.phtml and sidebar.phtml
- *
- * @var string $uniqueId
- * @var string $title
- */
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
 
 /** @var GraphqlViewModel $gqlViewModel */
 $gqlViewModel = $viewModels->require(GraphqlViewModel::class);
@@ -50,6 +40,8 @@ $viewModelStore = $viewModels->require(Store::class);
 
 /** @var StoreConfig $storeConfig */
 $storeConfig = $viewModels->require(StoreConfig::class);
+
+$noOfProductsToShow = (int) $storeConfig->getStoreConfig('catalog/recently_products/viewed_count');
 
 /** @var Currency $viewModelCurrency */
 $viewModelCurrency = $viewModels->require(Currency::class);
@@ -85,13 +77,11 @@ products(filter: { sku: { in: $skus } }) {
 }';
 ?>
 <script>
-        const defaultOptions = {
-            isSlider: false,
-            useGraphQL: <?= /** @noEscape */ $recentlyViewed->isFetchRecentlyViewedEnabled() ? 'true' : 'false' ?>,
-            noOfProductsToShow: <?= (int) $storeConfig->getStoreConfig('catalog/recently_products/viewed_count') ?>
-        };
-        const config = Object.assign({}, defaultOptions, options || {});
     function initRecentlyViewedProductsComponent() {
+        const config = {
+            useGraphQL: <?= $escaper->escapeJs($recentlyViewed->isFetchRecentlyViewedEnabled() ? 'true' : 'false') ?>,
+            noOfProductsToShow: this.$root.dataset.productsToShow || <?= $escaper->escapeJs($noOfProductsToShow) ?>
+        }
 
         function readRecentlyViewedFromStorage () {
             const data = hyva.getBrowserStorage().getItem('recently_viewed_products');
@@ -103,41 +93,46 @@ products(filter: { sku: { in: $skus } }) {
 
         return {
             products: [],
-            currency: [],
-            noOfProductsToShow: config.noOfProductsToShow,
+            maxProductsToShow: config.noOfProductsToShow,
+            hasProducts: false,
             loading: true,
+            init() {
+                this.$watch('products', products => {
+                    this.hasProducts = products.length > 0;
+                    console.log(this.products, this.hasProducts);
+                });
+
+                this.getProducts();
+            },
             minHeight() {
-                return 'min-height: ' + ((this.loading && '491px') || 0);
+                return this.loading ? { minHeight: '491px' } : {};
             },
             getProducts() {
                 const recentlyViewedProductsArray = readRecentlyViewedFromStorage();
                 let itemsToShow = [];
+
                 if (recentlyViewedProductsArray.length > 0) {
                     // Avoid showing the current product
                     const start = '<?= $escaper->escapeJs($currentProductSku) ?>' === '' ? 0 : 1;
                     itemsToShow = recentlyViewedProductsArray.slice(start)
                 }
 
-                itemsToShow = itemsToShow.slice(0, this.noOfProductsToShow);
-
-                if (!itemsToShow.length) {
-                    this.noOfProductsToShow = 0;
-                    this.loading = false;
-                    return;
-                }
+                itemsToShow = itemsToShow.slice(0, this.maxProductsToShow);
 
                 config.useGraphQL
                     ? this.fetchProducts(itemsToShow)
-                    : this.renderRecentlyViewedProducts(itemsToShow)
+                    : this.renderRecentlyViewedProducts(itemsToShow);
             },
-
             fetchProducts(itemsToShow) {
                 const skusToFetch = itemsToShow.map(product => product.sku);
+                console.log('gql', skusToFetch);
+
                 <?php /* It is not possible to query prices incl and excl tax from the GraphQL api */ ?>
                 <?php /* If display incl + excl is required, ensure catalog/recently_products/synchronize_with_backend is set to No */ ?>
-                const variables = JSON.stringify({skus: skusToFetch});
-                window.fetch(BASE_URL + 'graphql?' + new URLSearchParams({query, variables}), {
                 const query = `<?= /** @noEscape */ $gqlViewModel->query("recently_viewed_products_query", $gqlRecentlyViewedProductsQuery) ?>`;
+                const variables = JSON.stringify({ skus: skusToFetch });
+
+                window.fetch(BASE_URL + 'graphql?' + new URLSearchParams({ query, variables }), {
                     method: 'GET',
                     headers: {
                         'Store': '<?= $escaper->escapeJs($viewModelStore->getStoreCode()) ?>',
@@ -170,8 +165,7 @@ products(filter: { sku: { in: $skus } }) {
                         }
                     )
                     .finally(() => this.loading = false)
-            }, // end fetchProducts()
-
+            },
             renderRecentlyViewedProducts(products) {
                 this.products = products;
                 this.loading = false;
@@ -179,7 +173,6 @@ products(filter: { sku: { in: $skus } }) {
                     this.$nextTick(() => this.calcPageSize());
                 }
             },
-
             addToWishlist(productId) {
                 const formKey = hyva.getFormKey();
                 const postUrl = BASE_URL + 'wishlist/index/add/';
@@ -225,8 +218,7 @@ products(filter: { sku: { in: $skus } }) {
                         }], 5000
                     );
                 });
-            }, // end addToWishlist()
-
+            },
             addToCompare(productId) {
                 const formKey = hyva.getFormKey();
                 const postUrl = BASE_URL + 'catalog/product_compare/add/';
@@ -252,32 +244,8 @@ products(filter: { sku: { in: $skus } }) {
                     );
                 });
             },
-
-            // slider properties
-            active: 0,
-            getSlider() {
-                return this.$root.querySelector('.js_slides');
             },
-            pageSize: 4,
-            pageFillers: 0,
-            calcPageSize() {
-                const slider = this.getSlider();
-                if (slider) {
-                    this.pageSize = Math.round(slider.clientWidth / slider.querySelector('.js_slide').clientWidth);
-                    this.pageFillers = (
-                        this.pageSize * Math.ceil(this.products.length / this.pageSize)
-                    ) - this.products.length;
-                }
             },
-            calcActive() {
-                const slider = this.getSlider();
-                if (slider) {
-                    this.active = Math.ceil(
-                        Math.round(
-                            slider.scrollLeft / (slider.scrollWidth / (this.products.length + this.pageFillers))
-                        ) / this.pageSize
-                    ) * this.pageSize;
-                }
             }
         }
     }
