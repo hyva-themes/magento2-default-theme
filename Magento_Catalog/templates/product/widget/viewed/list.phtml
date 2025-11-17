@@ -163,7 +163,7 @@ $jsTemplate = 'Magento_Catalog::product/widget/viewed/js/recently-viewed-product
                                 <div class="flex flex-wrap gap-2">
                                     <?php if ($wishlistViewModel->isEnabled() && in_array("add_to_wishlist", $widgetButtonsToShow)): ?>
                                         <button
-                                            @click.prevent="addToWishlist(product.id)"
+                                            @click.prevent="addToWishlist"
                                             aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Wish List')) ?>"
                                             type="button"
                                             class="btn p-2 rounded-full"
@@ -175,7 +175,7 @@ $jsTemplate = 'Magento_Catalog::product/widget/viewed/js/recently-viewed-product
 
                                     <?php if ($compareViewModel->showInProductList() && in_array("add_to_compare", $widgetButtonsToShow)): ?>
                                         <button
-                                            @click.prevent="addToCompare(product.id)"
+                                            @click.prevent="addToCompare"
                                             aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Compare')) ?>"
                                             type="button"
                                             class="btn p-2 rounded-full"

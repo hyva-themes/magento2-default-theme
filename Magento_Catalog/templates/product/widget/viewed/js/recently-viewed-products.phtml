@@ -169,11 +169,9 @@ products(filter: { sku: { in: $skus } }) {
             renderRecentlyViewedProducts(products) {
                 this.products = products;
                 this.loading = false;
-                if (config.isSlider) {
-                    this.$nextTick(() => this.calcPageSize());
-                }
             },
-            addToWishlist(productId) {
+            addToWishlist() {
+                const productId = this.product.id;
                 const formKey = hyva.getFormKey();
                 const postUrl = BASE_URL + 'wishlist/index/add/';
 
@@ -219,7 +217,8 @@ products(filter: { sku: { in: $skus } }) {
                     );
                 });
             },
-            addToCompare(productId) {
+            addToCompare() {
+                const productId = this.product.id;
                 const formKey = hyva.getFormKey();
                 const postUrl = BASE_URL + 'catalog/product_compare/add/';
 

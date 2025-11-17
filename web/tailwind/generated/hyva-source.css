@@ -8,6 +8,9 @@
 
 @source "../../../../magento2-theme-module/src/**/*.phtml";
 @source "../../../../magento2-theme-module/src/**/*.xml";
+@source "../../../../../mollie/magento2-hyva-compatibility/src/Mollie_HyvaCompatibility/**/*.phtml";
+@source "../../../../../mollie/magento2-hyva-compatibility/src/Mollie_HyvaCompatibility/**/*.xml";
 
+@import "../../../../../mollie/magento2-hyva-compatibility/src/Mollie_HyvaCompatibility/view/frontend/tailwind/tailwind-source.css";
 
 
