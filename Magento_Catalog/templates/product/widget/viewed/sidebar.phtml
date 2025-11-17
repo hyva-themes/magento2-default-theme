@@ -44,7 +44,7 @@ $jsTemplate = 'Magento_Catalog::product/widget/viewed/js/recently-viewed-product
     data-products-to-show="<?= $escaper->escapeHtmlAttr($pageSize) ?>"
     class="min-h-80"
 >
-    <template x-if="products && products.length">
+    <template x-if="hasProducts">
         <div class="mt-8">
             <h2 class="border-t border-gray-300 mb-6 pt-5 font-semibold text-lg">
                 <?= $escaper->escapeHtml(__('Recently Viewed Products')); ?>

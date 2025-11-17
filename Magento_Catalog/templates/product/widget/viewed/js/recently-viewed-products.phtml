@@ -258,6 +258,9 @@ products(filter: { sku: { in: $skus } }) {
             },
             productTaxPrice() {
                 return hyva.formatPrice(this.product?.price_range?.minimum_price?.base_price.value || 0);
+            },
+            hasProducts() {
+                return this.products && this.products.length;
             }
         }
     }
