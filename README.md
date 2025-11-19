@@ -50,7 +50,7 @@ You have the choice which of the two licenses to use.
 
 ### Additional Licenses for Included Assets
 
-* **Copyright:** This product includes software developed by Magento, Inc. (https://github.com/magento/magento2) and distributed under the Academic Free License (AFL) v3.0.  
+* **Copyright:** This product includes software developed by Magento, Inc. (https://github.com/magento/magento2) and distributed under the Open Source License (OSL) v3.0.  
   The Source Code of the original Work is available at https://github.com/magento/magento2.  
   Included libraries from Nick Piscitelli (https://github.com/NickPiscitelli/) are distributed under the MIT license.
 * **License Texts:**
