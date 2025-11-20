@@ -505,7 +505,8 @@ $productName = $block->getProduct()->getName();
 
                 hyva.trapFocus(this.$root);
             },
-            closeFullScreen(setFocusTo = this.$refs.galleryFullscreenBtn) {
+            closeFullScreen() {
+                const setFocusTo = this.$refs.galleryFullscreenBtn;
                 this.fullscreen = false;
                 hyva.releaseFocus(this.$root);
                 this.$nextTick(() => {
