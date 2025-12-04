@@ -23,27 +23,27 @@ $lucideIcons = $viewModels->require(LucideIcons::class);
 ?>
 
 <div
-        class="relative inline-block"
-        x-data="initCustomerMenu"
-        x-bind="eventListeners"
+    class="relative inline-block"
+    x-data="initCustomerMenu"
+    x-bind="eventListeners"
 >
     <button
-            type="button"
-            id="customer-menu"
-            class="btn bg-transparent border-transparent p-1"
-            @click="toggleOpen"
-            :aria-expanded="ariaExpanded"
-            aria-label="<?= $escaper->escapeHtmlAttr(__('My Account')) ?>"
-            aria-haspopup="true"
+        type="button"
+        id="customer-menu"
+        class="btn bg-transparent border-transparent p-1"
+        @click="toggleOpen"
+        :aria-expanded="ariaExpanded"
+        aria-label="<?= $escaper->escapeHtmlAttr(__('My Account')) ?>"
+        aria-haspopup="true"
     >
         <?= $lucideIcons->userHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
     </button>
     <nav
-            class="z-10 absolute right-0 w-40 sm:w-48 mt-2 lg:mt-3 -me-4 py-2 px-1 rounded-md shadow-lg bg-white overflow-auto"
-            aria-labelledby="customer-menu"
-            x-show="open"
-            x-transition
-            x-cloak
+        class="z-10 absolute right-0 w-40 sm:w-48 mt-2 lg:mt-3 -me-4 py-2 px-1 rounded-md shadow-lg bg-white overflow-auto"
+        aria-labelledby="customer-menu"
+        x-show="open"
+        x-transition
+        x-cloak
     >
         <?php if ($block->customerLoggedIn()): ?>
             <?= $block->getChildHtml('header.customer.logged.in.links') ?>
