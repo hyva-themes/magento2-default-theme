@@ -163,6 +163,11 @@ $miniCartOptionShowSku = $block->getShowSku() !== null ? (bool) $block->getShowS
                     if (!event.detail) return;
                     const { itemId, message } = event.detail;
                     this.setItemMessage(itemId, message);
+                },
+                ["@pageshow.window"](event) {
+                    if (event.persisted) {
+                        this.open = false;
+                    }
                 }
             }
         }
