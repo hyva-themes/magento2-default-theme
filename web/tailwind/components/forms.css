@@ -44,7 +44,7 @@
             }
         }
 
-        &:dir(rtl):checked {
+        &:dir(rtl):checked::after {
             translate: calc(var(--switch-thumb-offset) / -1) 0%;
         }
     }

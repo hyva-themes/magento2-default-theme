@@ -65,8 +65,10 @@ use Magento\Framework\View\Element\Template;
 
                     if (autoPager) {
                         const pager = el.querySelector('[data-init-pager]');
-                        pager.setAttribute('data-pager', '');
-                        pager.removeAttribute('data-init-pager');
+                        if (pager) {
+                            pager.setAttribute('data-pager', '');
+                            pager.removeAttribute('data-init-pager');
+                        }
                     }
 
                     new SnapSlider(el, { autoPager, groupPager: true });
@@ -78,8 +80,10 @@ use Magento\Framework\View\Element\Template;
 
                     if (sliderNav && autoPager) {
                         const pager = sliderNav.querySelector('[data-init-pager]');
-                        pager.setAttribute('data-pager', '');
-                        pager.removeAttribute('data-init-pager');
+                        if (pager) {
+                            pager.setAttribute('data-pager', '');
+                            pager.removeAttribute('data-init-pager');
+                        }
                     }
 
                     if (sliderNav && !showArrows) {

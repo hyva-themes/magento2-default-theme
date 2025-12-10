@@ -1,0 +1,50 @@
+@layer components {
+    .form-input-addon {
+        @apply form-input-field;
+
+        &:first-child {
+            padding-inline-end: 0;
+            border-inline-end: 0;
+        }
+
+        &:last-child {
+            padding-inline-start: 0;
+            border-inline-start: 0;
+        }
+    }
+
+    .input-group {
+        position: relative;
+        display: flex;
+        border-radius: var(--form-radius);
+        vertical-align: middle;
+
+        &:focus-within {
+            --form-stroke: var(--form-active-color);
+            outline: var(--outline-size, 1px) solid var(--form-active-color);
+            outline-offset: var(--outline-offset, 0px);
+        }
+
+        & > * {
+            margin: 0;
+            border-radius: 0;
+            outline: none;
+        }
+
+        & > :first-child {
+            border-start-start-radius: inherit;
+            border-end-start-radius: inherit;
+        }
+
+        & > :last-child {
+            border-start-end-radius: inherit;
+            border-end-end-radius: inherit;
+        }
+
+        &
+            > :not(template, [hidden]:where(:not([hidden="until-found"])))
+            + :not(button, .btn) {
+            border-inline-start-width: 0;
+        }
+    }
+}

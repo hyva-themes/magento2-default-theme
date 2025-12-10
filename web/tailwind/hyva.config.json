@@ -1,6 +1,15 @@
 {
+  "notice": [
+    "This is a complementary config file for Tailwind v4 and is not a replacement for the Tailwind v3 config file.",
+    "For usage, see the docs: https://docs.hyva.io/hyva-themes/working-with-tailwindcss/using-hyva-modules/"
+  ],
   "tailwind": {
-    "include": [],
+    "include": [
+      {
+        "comment": "Example of how to include parent themes or modules. Use the 'src' key, instead of 'example_src' to use this",
+        "example_src": "vendor/hyva-themes/magento2-default-theme"
+      }
+    ],
     "exclude": []
   },
   "tokens": {

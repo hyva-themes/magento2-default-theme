@@ -84,7 +84,7 @@ $productName = $block->getProduct()->getName();
                     alt="<?= $mainImage ? $escaper->escapeHtmlAttr($mainImage->getData('label')) : '' ?>"
                     title="<?= $mainImage ? $escaper->escapeHtmlAttr($mainImage->getData('label')) : '' ?>"
                     class="object-contain object-center w-full h-auto"
-                    :class="fullscreen ? 'invisible max-h-screen-75' : 'invisible'"
+                    :class="fullscreen ? 'invisible max-h-[75vh]' : 'invisible'"
                     src="<?= /* @noEscape */ $mainImageData ?>"
                     width="<?= /* @noEscape */ $mediumWidth ?>"
                     height="<?= /* @noEscape */ $mediumHeight ?>"
@@ -95,7 +95,7 @@ $productName = $block->getProduct()->getName();
                         :alt="image.caption || '<?= $escaper->escapeJs($productName) ?>'"
                         :title="image.caption || '<?= $escaper->escapeJs($productName) ?>'"
                         class="absolute inset-0 object-contain object-center w-full m-auto"
-                        :class="{ 'max-h-screen-75': fullscreen }"
+                        :class="{ 'max-h-[75vh]': fullscreen }"
                         width="<?= /* @noEscape */ $mediumWidth ?>"
                         height="<?= /* @noEscape */ $mediumHeight ?>"
                         :loading="active !== index ? 'lazy' : 'eager'"
@@ -505,7 +505,8 @@ $productName = $block->getProduct()->getName();
 
                 hyva.trapFocus(this.$root);
             },
-            closeFullScreen(setFocusTo = this.$refs.galleryFullscreenBtn) {
+            closeFullScreen() {
+                const setFocusTo = this.$refs.galleryFullscreenBtn;
                 this.fullscreen = false;
                 hyva.releaseFocus(this.$root);
                 this.$nextTick(() => {

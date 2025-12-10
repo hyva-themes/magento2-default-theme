@@ -89,11 +89,11 @@ $maxSalesQtyLength = ($maxSalesQty ? strlen((string) $maxSalesQty) : 4)
                     <?php endif; ?>
                 </h3>
 
-                <p class="inline-flex gap-4">
+                <p class="price-box inline-flex gap-4">
+                    <?php if ($qty > 1): ?>
+                        <span><?= $escaper->escapeHtmlAttr(__('%1 x', $qty)) ?></span>
+                    <?php endif; ?>
                     <span class="text-fg-secondary">
-                        <?php if ($qty > 1): ?>
-                            <span><?= $escaper->escapeHtmlAttr(__('%1 x', $qty)) ?></span>
-                        <?php endif; ?>
                         <span class="sr-only"><?= $escaper->escapeHtml(__('Price')) ?></span>
                         <span><?= $block->getUnitPriceHtml($item) ?></span>
                     </span>

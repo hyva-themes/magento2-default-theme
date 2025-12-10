@@ -9,11 +9,13 @@ declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\LucideIcons;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Customer\Block\Account\Customer;
 use Magento\Framework\Escaper;
 
 /** @var Customer $block */
 /** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
 /** @var ViewModelRegistry $viewModels */
 
 /** @var LucideIcons $lucideIcons */
@@ -22,16 +24,15 @@ $lucideIcons = $viewModels->require(LucideIcons::class);
 
 <div
     class="relative inline-block"
-    x-data="{ open: false }"
-    @keyup.escape="open = false"
-    @click.outside="open = false"
+    x-data="initCustomerMenu"
+    x-bind="eventListeners"
 >
     <button
         type="button"
         id="customer-menu"
         class="btn bg-transparent border-transparent p-1"
-        @click="open = !open"
-        :aria-expanded="open ? 'true' : 'false'"
+        @click="toggleOpen"
+        :aria-expanded="open"
         aria-label="<?= $escaper->escapeHtmlAttr(__('My Account')) ?>"
         aria-haspopup="true"
     >
@@ -51,3 +52,24 @@ $lucideIcons = $viewModels->require(LucideIcons::class);
         <?php endif; ?>
     </nav>
 </div>
+<script>
+    function initCustomerMenu() {
+        return hyva.createBooleanObject('open', false, {
+            eventListeners: {
+                ['@pageshow.window'](event) {
+                    if (event.persisted) {
+                        this.setOpenFalse()
+                    }
+                },
+                ['@keyup.escape']() {
+                    this.setOpenFalse()
+                },
+                ['@click.outside']() {
+                    this.setOpenFalse()
+                }
+            }
+        })
+    }
+    window.addEventListener('alpine:init', () => Alpine.data('initCustomerMenu', initCustomerMenu), {once: true})
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

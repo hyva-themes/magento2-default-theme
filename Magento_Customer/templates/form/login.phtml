@@ -13,6 +13,7 @@ use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Hyva\Theme\ViewModel\HeroiconsSolid;
 use Hyva\Theme\ViewModel\ReCaptcha;
 use Magento\Customer\Block\Form\Login;
+use Magento\Customer\Model\Account\Redirect;
 use Magento\Framework\Escaper;
 
 /** @var Escaper $escaper */
@@ -153,7 +154,15 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                     // do not rename $form, the variable is the expected name in the recaptcha output
                     const $form = document.querySelector('#customer-login-form');
                     <?= $recaptcha ? $recaptcha->getValidationJsHtml(ReCaptcha::RECAPTCHA_FORM_ID_CUSTOMER_LOGIN) : '' ?>
+                    const redirectUrl = hyva.getCookie('<?= $escaper->escapeJs(Redirect::LOGIN_REDIRECT_URL) ?>');
+                    const hasLogoutSuccess = redirectUrl?.includes("logoutSuccess");
 
+                    if (hasLogoutSuccess) {
+                        hyva.setCookie('<?= $escaper->escapeJs(Redirect::LOGIN_REDIRECT_URL) ?>',
+                            window.location.href
+                        )
+                    }
+                    
                     if (this.errors === 0) {
                         $form.submit();
                     }

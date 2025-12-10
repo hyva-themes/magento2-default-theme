@@ -91,7 +91,7 @@ $swatchItemBlock->setData('product_id', $productId);
                             } else {
                                 data && window.dispatchEvent(
                                     new CustomEvent(
-                                        "update-gallery-<?= (int)$productId ?>",
+                                        `update-gallery-${productId}`,
                                         { detail: data }
                                     )
                                 );

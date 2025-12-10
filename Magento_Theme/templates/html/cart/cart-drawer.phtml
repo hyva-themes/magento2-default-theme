@@ -163,6 +163,11 @@ $miniCartOptionShowSku = $block->getShowSku() !== null ? (bool) $block->getShowS
                     if (!event.detail) return;
                     const { itemId, message } = event.detail;
                     this.setItemMessage(itemId, message);
+                },
+                ["@pageshow.window"](event) {
+                    if (event.persisted) {
+                        this.open = false;
+                    }
                 }
             }
         }
@@ -318,7 +323,7 @@ $miniCartOptionShowSku = $block->getShowSku() !== null ? (bool) $block->getShowS
                             <p class="text-lg">
                                 <span x-html="item.qty"></span> x <strong x-html="item.product_name"></strong>
                             </p>
-                            <span x-html="item.product_price"></span>
+                            <span class="price-box" x-html="item.product_price"></span>
                         </div>
                         <template x-if="showDetails">
                             <dl class="table text-sm">
