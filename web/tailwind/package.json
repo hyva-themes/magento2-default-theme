@@ -4,7 +4,7 @@
   "description": "Hyvä-Themes Default Theme, a TailwindCSS and Alpine.js based Magento frontend theme that makes eCommerce happy.",
   "type": "module",
   "dependencies": {
-    "@hyva-themes/hyva-modules": "^1.2.2",
+    "@hyva-themes/hyva-modules": "^1.2.4",
     "@tailwindcss/cli": "^4.1.12",
     "tailwindcss": "^4.1.15"
   },
