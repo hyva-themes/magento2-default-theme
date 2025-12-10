@@ -51,6 +51,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
     Many thanks to Olexandr Khokhlov (Perspective Magento Team) for the contribution!
 
+-   **Fix Cart/Minicart Missing Tax Styling & Data-label**  
+    For more information, please refer to [issue #1251](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1251).
+
 ### Removed
 
 -   Nothing removed
