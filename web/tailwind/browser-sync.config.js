@@ -1,3 +1,8 @@
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 const path = require('path');
 const url = require('url');
 const fs = require('fs');

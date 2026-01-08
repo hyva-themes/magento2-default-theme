@@ -1,3 +1,8 @@
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 @layer utilities {
     /* This class only exists for backwards compatibility, */
     /* The default is applied in tailwind.config.js since Hyvä 1.2.0 */

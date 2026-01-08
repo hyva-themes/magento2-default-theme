@@ -1,0 +1,9 @@
+This product includes software developed by Magento, Inc. (https://github.com/magento/magento2)
+and distributed under the Academic Free License (AFL) v3.0, as well as software developed by Nick Piscitelli (https://github.com/NickPiscitelli/ and distributed under the MIT License.
+
+All other files copyright © 2020-present by Hyvä Themes are distributed dual-licensed under OSL 3.0 and the AFL 3.0.
+
+Please see http://opensource.org/licenses/osl-3.0.php or LICENSE.txt for the full text of the OSL 3.0 license.
+Please see http://opensource.org/licenses/afl-3.0.php or LICENSE_AFL.txt for the full text of the ASL 3.0 license.
+
+You have the choice which of the two licenses to use.
