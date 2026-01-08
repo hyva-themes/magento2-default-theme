@@ -1,3 +1,8 @@
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 #customer-login-container {
     @apply grid gap-x-4 gap-y-8 grid-cols-1 py-8;
 

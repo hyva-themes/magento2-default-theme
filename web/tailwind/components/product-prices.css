@@ -1,3 +1,8 @@
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 .price-including-tax + .price-excluding-tax {
     @apply text-sm;
 
