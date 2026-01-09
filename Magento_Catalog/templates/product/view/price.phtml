@@ -60,6 +60,16 @@ if ($msrpPrice = iterator_to_array($product->getPriceInfo()->getPrices())[MsrpPr
         return;
     }
 }
+
+$availability = $product->getIsSalable() ? 'http://schema.org/InStock' : 'http://schema.org/OutOfStock';
+if ($product->getIsSalable()) {
+    $specialToDate = $product->getSpecialToDate();
+    $priceValidUntil = $specialToDate
+        ? date('Y-m-d', strtotime($specialToDate))
+        : date('Y-m-d', strtotime('+1 year'));
+} else {
+    $priceValidUntil = null;
+}
 ?>
 <script>
     function initPrice<?= (int)$product->getId() ?>() {
@@ -283,6 +293,10 @@ if ($msrpPrice = iterator_to_array($product->getPriceInfo()->getPrices())[MsrpPr
                 <meta itemprop="price" content="<?= $escaper->escapeHtmlAttr($finalPrice) ?>">
                 <meta itemprop="priceCurrency"
                       content="<?= $escaper->escapeHtmlAttr($productViewModel->getCurrencyData()['code']) ?>">
+                <?php if ($priceValidUntil): ?>
+                    <meta itemprop="priceValidUntil" content="<?= $escaper->escapeHtmlAttr($priceValidUntil) ?>" />
+                <?php endif; ?>
+                <link itemprop="availability" href="<?= $availability ?>" />
             </div>
             <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
                 <div class="final-price-excl-tax">
