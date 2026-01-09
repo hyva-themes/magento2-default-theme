@@ -25,6 +25,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
   Many thanks to Christoph Hendreich (In Session) for the contribution!
 
+- **Fix undefined productId variable in product list item swatches**
+  The script used `productId` instead of `this.productId` in one place.
+
 - **Improve README.md**
 
 ### Removed
