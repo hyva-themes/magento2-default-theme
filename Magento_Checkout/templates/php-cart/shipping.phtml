@@ -81,6 +81,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
                 if (this.abortShippingController) {
                     this.abortShippingController.abort();
                 }
+
                 this.isLoading = true;
                 this.$dispatch('update-shipping-method-start', {});
 
@@ -106,18 +107,35 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
                     .then(result => {
                         this.availableShippingMethods = result;
 
-                        if(!this.availableShippingMethods.find(method => { return method.carrier_code + '_' + method.method_code === this.shippingMethod})) {
-                            this.$dispatch('update-shipping-method', {method: false});
+                        if (
+                            !this.shippingMethod &&
+                            Array.isArray(this.availableShippingMethods) &&
+                            this.availableShippingMethods.length === 1
+                        ) {
+                            const firstRate = this.availableShippingMethods[0];
+                            this.shippingMethod = `${firstRate.carrier_code}_${firstRate.method_code}`;
+                            this.updateShippingMethod();
+                            this._autoSelectedShipping = true;
+                            return;
+                        }
+
+                        this._autoSelectedShipping = false;
+
+                        if (!this.availableShippingMethods.find(method =>
+                            method.carrier_code + '_' + method.method_code === this.shippingMethod
+                        )) {
+                            this.$dispatch('update-shipping-method', { method: false });
                             this.shippingMethod = false;
                         }
                     })
                     .catch(this.displayError)
                     .finally(() => {
-                            this.$dispatch('update-shipping-method-end', {});
+                        this.$dispatch('update-shipping-method-end', {});
+                        if (!this._autoSelectedShipping) {
                             this.fetchTotals();
-                            this.isLoading = false;
                         }
-                    );
+                        this.isLoading = false;
+                    });
             },
             getEstimatedShippingRateCarriers() {
                 return Array.from(new Set(this.availableShippingMethods.map(rate => rate.carrier_title)));
