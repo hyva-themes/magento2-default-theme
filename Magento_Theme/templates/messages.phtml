@@ -50,6 +50,7 @@ $defaultSuccessMessageTimeout = $storeConfig->getStoreConfig('hyva_theme_general
             },
             addMessages(messages, hideAfter) {
                 messages.map((message) => {
+                    if (!message.text || !message.text.trim()) return;
                     this.messages = this.messages.concat(message);
                     if (hideAfter === undefined && message.type === 'success' && window.defaultSuccessMessageTimeout) {
                         hideAfter = window.defaultSuccessMessageTimeout;
