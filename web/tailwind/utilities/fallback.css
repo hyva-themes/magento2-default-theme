@@ -8,12 +8,32 @@
     --color-container-darker: var(--color-gray-100);
 }
 
-/* Preserve the older opacity utility for bg-primary */
+/* Preserve the older opacity utility for bg-{primary,white,black} */
 @utility bg-primary {
     &[class*="bg-opacity-"] {
         background-color: color-mix(
             in srgb,
             var(--color-primary) calc(100% / var(--tw-bg-opacity)),
+            #0000
+        );
+    }
+}
+
+@utility bg-white {
+    &[class*="bg-opacity-"] {
+        background-color: color-mix(
+            in srgb,
+            var(--color-white) calc(100% / var(--tw-bg-opacity)),
+            #0000
+        );
+    }
+}
+
+@utility bg-black {
+    &[class*="bg-opacity-"] {
+        background-color: color-mix(
+            in srgb,
+            var(--color-black) calc(100% / var(--tw-bg-opacity)),
             #0000
         );
     }
