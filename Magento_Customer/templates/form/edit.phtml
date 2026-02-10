@@ -228,7 +228,7 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
     <?= $recaptcha ? $recaptcha->getInputHtml(ReCaptcha::RECAPTCHA_FORM_ID_CUSTOMER_EDIT) : '' ?>
     <div class="actions-toolbar">
         <div class="primary">
-            <button type="submit" class="action save primary" title="<?= $escaper->escapeHtmlAttr(__('Save')) ?>">
+            <button type="submit" class="action save btn btn-primary" title="<?= $escaper->escapeHtmlAttr(__('Save')) ?>">
                 <span><?= $escaper->escapeHtml(__('Save')) ?></span>
             </button>
         </div>
