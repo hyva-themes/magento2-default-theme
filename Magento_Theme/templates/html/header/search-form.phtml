@@ -32,8 +32,6 @@ $helper = $this->helper(SearchHelper::class);
 $searchConfig = $viewModels->require(SearchConfig::class);
 ?>
 <script>
-    'use strict';
-
     function initMiniSearch() {
         return {
             minSearchLength: <?= (int) $helper->getMinQueryLength() ?>,
@@ -83,7 +81,11 @@ $searchConfig = $viewModels->require(SearchConfig::class);
                 } else {
                     return false;
                 }
-            }
+            },
+            isMac: /Mac|iPod|iPhone|iPad/.test(navigator.platform),
+            textShortcutModifier() {
+                return this.isMac ? '⌘ K' : 'Ctrl+K';
+            },
         }
     }
 </script>
@@ -91,35 +93,41 @@ $searchConfig = $viewModels->require(SearchConfig::class);
     <search title="<?= $escaper->escapeHtmlAttr(__('Store')) ?>" role="search">
         <form
             id="search_mini_form"
-            class="form minisearch flex"
+            class="form minisearch input-group"
             action="<?= $escaper->escapeUrl($helper->getResultUrl()) ?>"
             method="get"
             @submit.prevent="search()"
             x-ref="form"
         >
-            <label class="sr-only" for="search">
-                <?= $escaper->escapeHtml(__('Search')) ?>
-            </label>
-            <input
-                id="search"
-                x-ref="searchInput"
-                type="search"
-                autocomplete="off"
-                name="<?= $escaper->escapeHtmlAttr($helper->getQueryParamName()) ?>"
-                value="<?= /** @noEscape */ $helper->getEscapedQueryText() ?>"
-                placeholder="<?= $escaper->escapeHtmlAttr(__('Search entire store here...')) ?>"
-                maxlength="<?= $escaper->escapeHtmlAttr($helper->getMaxQueryLength()) ?>"
-                class="form-input w-full rounded-e-none"
-                @search-open.window.debounce.10="$el.focus(); $el.select()"
-                <?php if ($searchConfig->isSuggestionsAllowed()): ?>
-                    @focus.once="suggest"
-                    @input.debounce.300="suggest"
-                    @keydown.arrow-down.prevent="focusElement($root.querySelector('[tabindex]'))"
-                <?php endif ?>
-            >
+            <div class="input-group relative grow">
+                <input
+                    id="search"
+                    x-ref="searchInput"
+                    type="search"
+                    autocomplete="off"
+                    name="<?= $escaper->escapeHtmlAttr($helper->getQueryParamName()) ?>"
+                    value="<?= /** @noEscape */ $helper->getEscapedQueryText() ?>"
+                    placeholder="<?= $escaper->escapeHtmlAttr(__('Search entire store here...')) ?>"
+                    maxlength="<?= $escaper->escapeHtmlAttr($helper->getMaxQueryLength()) ?>"
+                    class="form-input grow"
+                    @search-open.window.debounce.10="$el.focus(); $el.select()"
+                    <?php if ($searchConfig->isSuggestionsAllowed()): ?>
+                        @focus.once="suggest"
+                        @input.debounce.300="suggest"
+                        @keydown.arrow-down.prevent="focusElement($root.querySelector('[tabindex]'))"
+                    <?php endif ?>
+                >
+                <label class="sr-only" for="search">
+                    <?= $escaper->escapeHtml(__('Search')) ?>
+                </label>
+                <kbd
+                    class="absolute top-1/2 right-4 -translate-y-1/2 hidden pointer-fine:flex gap-1 border border-gray-300 rounded px-1 font-sans text-sm"
+                    x-text="textShortcutModifier"
+                ></kbd>
+            </div>
             <button
                 type="submit"
-                class="btn btn-primary p-2.5 rounded-s-none shrink-0 outline-offset-0"
+                class="btn btn-primary p-2.5 rounded-s-none shrink-0"
                 title="<?= $escaper->escapeHtmlAttr(__('Search')) ?>"
                 aria-label="<?= $escaper->escapeHtmlAttr(__('Search')) ?>"
             >

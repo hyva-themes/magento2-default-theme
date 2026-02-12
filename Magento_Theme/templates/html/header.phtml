@@ -27,7 +27,6 @@ $lucideIcons = $viewModels->require(LucideIcons::class);
 $storeConfig = $viewModels->require(StoreConfig::class);
 $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDEBAR_DISPLAY);
 
-$showSearchShortcut = $block->getShowSearchShortcut() !== null ? (bool) $block->getShowSearchShortcut() : true;
 $showCompare = $block->getShowCompare() !== null ? (bool) $block->getShowCompare() : true;
 $showWishlist = $block->getShowWishlist() !== null ? (bool) $block->getShowWishlist() : false;
 ?>
@@ -79,7 +78,7 @@ $showWishlist = $block->getShowWishlist() !== null ? (bool) $block->getShowWishl
             },
             searchShortcut(e) {
                 const modifier = this.isMac ? e.metaKey : e.ctrlKey;
-                if (modifier && e.key === 'k') {
+                if (modifier && e.key === 'k' || e.key === '/') {
                     e.preventDefault();
                     this.toggleSearchOpen();
                 }
@@ -114,27 +113,16 @@ $showWishlist = $block->getShowWishlist() !== null ? (bool) $block->getShowWishl
 
             <button
                 id="menu-search-icon"
-                class="btn bg-transparent border-transparent p-1
-                    <?php if ($showSearchShortcut): ?>
-                    lg:justify-between lg:min-w-28 lg:py-1.5 lg:px-2
-                    lg:border-gray-300 lg:border lg:hover:bg-gray-100 lg:hover:border-current
-                    <?php endif ?>"
+                class="btn bg-transparent border-transparent p-1"
                 @click.prevent="toggleSearch"
                 @keydown.window="searchShortcut"
                 aria-label="<?= $escaper->escapeHtmlAttr(__('Toggle search form')) ?>"
                 aria-haspopup="true"
                 :aria-expanded="searchOpen"
+                :aria-keyshortcuts="textShortcutModifier"
                 x-ref="searchButton"
             >
                 <?= $lucideIcons->searchHtml('', 24, 24, ["aria-hidden" => "true"]) ?>
-                <?php if ($showSearchShortcut): ?>
-                    <kbd
-                        class="hidden lg:flex gap-1 border border-gray-300 rounded px-1 font-sans text-sm"
-                        x-text="textShortcutModifier"
-                        :aria-keyshortcuts="textShortcutModifier"
-                        x-cloak
-                    ></kbd>
-                <?php endif ?>
             </button>
 
             <?= $block->getChildHtml('additional') ?>
