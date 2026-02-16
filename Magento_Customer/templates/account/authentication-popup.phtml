@@ -146,7 +146,7 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
 
 <dialog
     id="authentication-popup"
-    aria-labelledby="cart-drawer-title"
+    aria-labelledby="authentication-popup-title"
     class="open:flex flex-col transition ease-out duration-300 motion-reduce:duration-0 p-0"
     x-data="initAuthentication"
     x-bind="eventListeners"
@@ -157,7 +157,7 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
 >
     <div class="pt-8 px-8">
         <div class="flex gap-2 justify-between items-center">
-            <p class="text-xl">
+            <p id="authentication-popup-title" class="text-xl">
                 <strong><?= $escaper->escapeHtml(__('Customer Login')) ?></strong>
             </p>
             <button
