@@ -10,41 +10,44 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
--   **Add availability and priceValidUntil for product rich snippet**
+-   **Add availability and priceValidUntil for product rich snippet**  
     For more information, please refer to [issue #680](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/680).
 
     Many thanks to Vita Samohina (Perspective) for the contribution!
 
 ### Changed
 
--   **Fix missing support for legacy opacity modifier for the Hyvä checkout with Tailwind 4**
+-   **Fix missing support for legacy opacity modifier for the Hyvä checkout with Tailwind 4**  
     For more information, please refer to [issue #1279](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1279).
 
--   **Fix wrong icon in cart page sidebar for shipping and tax**
+-   **Fix wrong icon in cart page sidebar for shipping and tax**  
     For more information, please refer to [issue #1283](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1283).
 
--   **Fix alignment in pagebuilder product slider if only the dots are enabled**
+-   **Fix alignment in pagebuilder product slider if only the dots are enabled**  
     For more information, please refer to [merge request #1440](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1440).
 
--   **Fix layout shift on PDP caused by preformatted span**
+-   **Fix layout shift on PDP caused by preformatted span**  
     For more information, please refer to [merge request #1436](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1436).
 
     Many thanks to Finn Reinhardt (Basecom) for the contribution!
 
--   **Fix missing styling for buttons in user forms**
+-   **Fix missing styling for buttons in user forms**  
     For more information, please refer to [issue #1271](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1271).
 
     Many thanks to Viktor Yakaba (Perspective) for the contribution!
 
--   **Fix use case where success message is empty if no text is passed**
+-   **Fix use case where success message is empty if no text is passed**  
     For more information, please refer to [issue #1257](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1257).
 
     Many thanks to Oleksii Rozhnenko (Perspective) for the contribution!
 
--   **Move standalone php statement into php block**
+-   **Move standalone php statement into php block**  
     For more information, please refer to [merge request #1453](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1453).
 
     Many thanks to Finn Reinhardt (Basecom) for the contribution!
+
+-   **Fix invalid aria-label in authentication-popup**  
+    For more information, please refer to [issue #1281](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1281).
 
 ### Removed
 
@@ -62,12 +65,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 -   **Fix remove wishlist button closing tag**
 
--   **Fix PayPal Buttons / PayLater initialization on intersect**
+-   **Fix PayPal Buttons / PayLater initialization on intersect**  
     Fixed an issue where PayPal (PayLater or Express) buttons were not initialized when the cart data wasn't yet available.
 
     Many thanks to Christoph Hendreich (In Session) for the contribution!
 
--   **Fix undefined productId variable in product list item swatches**
+-   **Fix undefined productId variable in product list item swatches**  
     The script used `productId` instead of `this.productId` in one place.
 
 -   **Improve README.md**
