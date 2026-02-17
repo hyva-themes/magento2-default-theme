@@ -149,8 +149,9 @@ $productName = $block->getProduct()->getName();
         </div>
 
         <div @resize.window.debounce="calcPageSize(); $nextTick(() => calcActive())">
-            <div
+            <nav
                 id="thumbs"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('%1 Gallery Thumbnails', $productName)) ?>"
                 class="flex items-center gap-4"
                 :class="{ 'fixed justify-center bottom-0 left-0 right-0': fullscreen, 'mx-6' : fullscreen && !isSlider}"
                 style="min-height: 100px;"
@@ -176,6 +177,7 @@ $productName = $block->getProduct()->getName();
                                 @click.prevent="setActive(index);"
                                 class="relative block border border-gray-300 hover:border-primary focus:border-primary"
                                 :class="{'border-primary': active === index}"
+                                tabindex="-1"
                             >
                                 <span class="sr-only">
                                     <?= $escaper->escapeHtml('View larger image') ?>
@@ -207,7 +209,7 @@ $productName = $block->getProduct()->getName();
                     :class="{ 'opacity-25 pointer-events-none' : isSliderEnd, 'hidden' : !isSlider }"
                     @click="scrollNext"
                 ><?= $heroicons->chevronRightHtml('', 24, 24, ['aria-hidden' => true]) ?></button>
-            </div>
+            </nav>
         </div>
         <div class="absolute top-0 right-0 pt-4 pr-4">
             <button @click="closeFullScreen()"
