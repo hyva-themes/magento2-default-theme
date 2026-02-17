@@ -95,36 +95,41 @@ $maxSalesQtyLength = ($maxSalesQty ? strlen((string) $maxSalesQty) : 4)
         window.addEventListener('alpine:init', () => Alpine.data('initQtyField', initQtyField), {once: true})
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
-    <div x-data="initQtyField">
-        <?php if ($product->isSaleable()): ?>
-            <div class="mr-2">
-                <label for="qty[<?= (int)$product->getId() ?>]"
-                    class="sr-only"
-                >
-                    <?= $escaper->escapeHtml(__('Quantity')) ?>
-                </label>
-                <input name="qty"
-                    @private-content-loaded.window="onGetCartData"
-                    id="qty[<?= (int)$product->getId() ?>]"
-                    form="product_addtocart_form"
-                    <?php if ($stockItemViewModel->isQtyDecimal($product)): ?>
-                    type="text"
-                    pattern="[0-9]+(\.[0-9]{1,<?= /** @noEscape */ $maxSalesQtyLength ?>})?"
-                    inputmode="decimal"
-                    <?php else: ?>
-                    type="number"
-                    pattern="[0-9]{0,<?= /** @noEscape */ $maxSalesQtyLength ?>}"
-                    inputmode="numeric"
-                    <?php if ($minSalesQty): ?>min="<?= /** @noEscape */ $minSalesQty ?>"<?php endif; ?>
-                    <?php if ($maxSalesQty): ?>max="<?= /** @noEscape */ $maxSalesQty ?>"<?php endif; ?>
-                    <?php if ($step): ?>step="<?= /** @noEscape */ $step ?>"<?php endif; ?>
-                    <?php endif; ?>
-                    :value="qty"
-                    value="<?= $block->getProductDefaultQty() * 1 ?>"
-                    class="form-input px-2 py-2 w-20 text-center invalid:ring-2 invalid:ring-red-500"
-                    @input="onInput"
-                >
-            </div>
-        <?php endif; ?>
-    </div>
+
+    <?php if ($product->isSaleable()): ?>
+        <label
+            for="qty[<?= (int)$product->getId() ?>]"
+            class="sr-only"
+        ><?= $escaper->escapeHtml(__('Quantity')) ?></label>
+
+        <input
+            id="qty[<?= (int)$product->getId() ?>]"
+            name="qty"
+            form="product_addtocart_form"
+            value="<?= $block->getProductDefaultQty() * 1 ?>"
+            class="form-input px-2 py-2 w-20 text-center invalid:ring-2 invalid:ring-red-500"
+            <?php if ($stockItemViewModel->isQtyDecimal($product)): ?>
+                type="text"
+                pattern="[0-9]+(\.[0-9]{1,<?= /** @noEscape */ $maxSalesQtyLength ?>})?"
+                inputmode="decimal"
+            <?php else: ?>
+                type="number"
+                pattern="[0-9]{0,<?= /** @noEscape */ $maxSalesQtyLength ?>}"
+                inputmode="numeric"
+                <?php if ($minSalesQty): ?>
+                    min="<?= /** @noEscape */ $minSalesQty ?>"
+                <?php endif; ?>
+                <?php if ($maxSalesQty): ?>
+                    max="<?= /** @noEscape */ $maxSalesQty ?>"
+                <?php endif; ?>
+                <?php if ($step): ?>
+                    step="<?= /** @noEscape */ $step ?>"
+                <?php endif; ?>
+            <?php endif; ?>
+            x-data="initQtyField"
+            :value="qty"
+            @private-content-loaded.window="onGetCartData"
+            @input="onInput"
+        >
+    <?php endif; ?>
 <?php endif; ?>
