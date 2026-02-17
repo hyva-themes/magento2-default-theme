@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Hyva\Theme\ViewModel\ProductStockItem;
 use Magento\Catalog\Block\Product\View;
 use Magento\Catalog\Model\Product;
@@ -17,6 +18,7 @@ use Magento\Framework\Escaper;
 
 /** @var View $block */
 /** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
 /** @var ViewModelRegistry $viewModels */
 
 /** @var Product $product */
@@ -67,8 +69,12 @@ $maxSalesQtyLength = ($maxSalesQty ? strlen((string) $maxSalesQty) : 4)
                 qty: <?= /** @noEscape */ $defaultQty ?>,
                 itemId: (new URLSearchParams(window.location.search)).get('id') || findPathParam('id'),
                 productId: '<?= (int)$product->getId() ?>',
+                init() {
+                    this.$dispatch('update-qty-<?= (int)$product->getId() ?>', this.qty);
+                },
                 <?php /* populate the qty when editing a product from the cart */ ?>
-                onGetCartData: function onGetCartData(data, $dispatch) {
+                onGetCartData() {
+                    const data = this.$event.detail.data;
                     const cart = data && data.data && data.data.cart;
                     if (this.itemId && cart && cart.items) {
                         const cartItem = cart.items.find((item) => {
@@ -76,16 +82,20 @@ $maxSalesQtyLength = ($maxSalesQty ? strlen((string) $maxSalesQty) : 4)
                         });
                         if (cartItem && cartItem.qty) {
                             this.qty = cartItem.qty;
-                            $dispatch('update-qty-' + this.productId, this.qty);
+                            this.$dispatch('update-qty-' + this.productId, this.qty);
                         }
                     }
+                },
+                onInput() {
+                    this.qty = hyva.safeParseNumber(this.$event.target.value);
+                    this.$dispatch('update-qty-<?= (int)$product->getId() ?>', this.qty);
                 }
             };
         }
+        window.addEventListener('alpine:init', () => Alpine.data('initQtyField', initQtyField), {once: true})
     </script>
-    <div x-data="initQtyField()"
-        x-init="$dispatch('update-qty-<?= (int)$product->getId() ?>', qty)"
-    >
+    <?php $hyvaCsp->registerInlineScript() ?>
+    <div x-data="initQtyField">
         <?php if ($product->isSaleable()): ?>
             <div class="mr-2">
                 <label for="qty[<?= (int)$product->getId() ?>]"
@@ -94,7 +104,7 @@ $maxSalesQtyLength = ($maxSalesQty ? strlen((string) $maxSalesQty) : 4)
                     <?= $escaper->escapeHtml(__('Quantity')) ?>
                 </label>
                 <input name="qty"
-                    @private-content-loaded.window="onGetCartData($event.detail, $dispatch)"
+                    @private-content-loaded.window="onGetCartData"
                     id="qty[<?= (int)$product->getId() ?>]"
                     form="product_addtocart_form"
                     <?php if ($stockItemViewModel->isQtyDecimal($product)): ?>
@@ -112,8 +122,7 @@ $maxSalesQtyLength = ($maxSalesQty ? strlen((string) $maxSalesQty) : 4)
                     :value="qty"
                     value="<?= $block->getProductDefaultQty() * 1 ?>"
                     class="form-input px-2 py-2 w-20 text-center invalid:ring-2 invalid:ring-red-500"
-                    x-model.number="qty"
-                    @input="$dispatch('update-qty-<?= (int)$product->getId() ?>', qty)"
+                    @input="onInput"
                 >
             </div>
         <?php endif; ?>
