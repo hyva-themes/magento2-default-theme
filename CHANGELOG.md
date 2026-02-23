@@ -58,7 +58,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
     For more information, please refer to [issue #1291](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1291).
 
 -   **Make the View Transition from the Product List to the Gallery optional and configurable**  
-    For more information, please refer to [issue ##1286](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/#1286).
+    For more information, please refer to [issue #1286](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/#1286).
+
+-   **Preload the gallery main image to improve the LCP of the product page**  
+    For more information, please refer to [issue #1285](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/#1285).
+
+-   **Remove search params in the current url for Breadcrumbs**  
+    For more information, please refer to [issue #1282](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/#1282)
 
 ### Removed
 
