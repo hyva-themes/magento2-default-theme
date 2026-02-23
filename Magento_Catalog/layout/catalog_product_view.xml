@@ -14,6 +14,14 @@
         <attribute name="itemtype" value="https://schema.org/Product"/>
         <attribute name="itemscope" value="itemscope"/>
 
+        <referenceContainer name="head.additional">
+            <block
+                name="catalog.preload.product.gallery"
+                class="Magento\Catalog\Block\Product\View\Gallery"
+                template="Magento_Catalog::page/catalog-preload-product-gallery.phtml"
+            />
+        </referenceContainer>
+
         <referenceBlock name="page.main.title">
             <arguments>
                 <argument name="css_classes" xsi:type="string">text-3xl font-semibold mb-8 text-center md:sr-only</argument>

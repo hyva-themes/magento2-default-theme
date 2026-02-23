@@ -1,0 +1,31 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Catalog\Block\Product\View\Gallery;
+
+/** @var Gallery $block */
+/** @var Escaper $escaper */
+
+$images = $block->getGalleryImages()->getItems();
+$mainImage = current(array_filter($images, [$block, 'isMainImage']));
+
+if (!empty($images) && empty($mainImage)) {
+    $mainImage = reset($images);
+}
+
+/** @var Image $helper */
+$helper = $block->getData('imageHelper');
+
+$mainImageData = $mainImage
+    ? $mainImage->getData('medium_image_url')
+    : $helper->getDefaultPlaceholderUrl('image');
+?>
+
+<link rel="preload" href="<?= $escaper->escapeUrl($mainImageData) ?>" as="image">
