@@ -64,7 +64,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
     For more information, please refer to [issue #1285](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1285).
 
 -   **Remove search params in the current url for Breadcrumbs**  
-    For more information, please refer to [issue #1282](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1282)
+    For more information, please refer to [issue #1282](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1282).
+
+-   **Improve PDP gallery keyboard accessibility**  
+    For more information, please refer to [issue #1191](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1191).
+
+-   **Visual improvements for 1.4.4**  
+    For more information, please refer to [merge request #1454](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1454).
 
 ### Removed
 
