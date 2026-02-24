@@ -1,6 +1,8 @@
 # Defaults
 variables:
   SRC_DIR: '.'
+  # Set to 'integration' or 'playwright' in the "Run Pipeline" UI to run only that job type
+  RUN_ONLY: ''
 
 include:
   - project: 'hyva-themes/base-ci'
@@ -16,14 +18,45 @@ include:
     file: 'test/theme-playwright.yml'
     ref: main
 
+# Override static jobs from includes to skip when RUN_ONLY is set
+static:lint:
+  rules:
+    - if: $RUN_ONLY != ''
+      when: never
+    - when: on_success
+
+static:phpcs:
+  rules:
+    - if: $RUN_ONLY != ''
+      when: never
+    - when: on_success
+
 test:integration:
   extends: .test:integration
+  needs:
+    - job: static:lint
+      optional: true
+    - job: static:phpcs
+      optional: true
+  rules:
+    - if: $RUN_ONLY != '' && $RUN_ONLY != "integration"
+      when: never
+    - when: on_success
   parallel:
     matrix:
       - MAGEVERSION: ['2.4.8-p3']
 
 test:playwright:
   extends: .test:theme_playwright
+  needs:
+    - job: static:lint
+      optional: true
+    - job: static:phpcs
+      optional: true
+  rules:
+    - if: $RUN_ONLY != '' && $RUN_ONLY != "playwright"
+      when: never
+    - when: on_success
   parallel:
     matrix:
       - MAGEVERSION: ['2.4.8-p3']
