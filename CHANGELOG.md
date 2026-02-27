@@ -72,6 +72,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 -   **Visual improvements for 1.4.4**  
     For more information, please refer to [merge request #1454](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1454).
 
+-   **Revert Mark forgotpassword page as uncacheable to fix an issue with Varnish**  
+    For more information, please refer to [merge request #1434](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1434).
+
+    Many thanks to Pieter Hoste (Baldwin) for the contribution!
+
+-   **Add keyboard shortcut to open search and fix focus ring in input groups**
+    The search panel can now be opened with `Cmd+K` (macOS) or `Ctrl+K` (Windows/Linux), following the convention used by popular search interfaces.
+
+    For more information, please refer to [issue #1288](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1288).
+
+-   **Optimize Product Selection Lookup Performance**  
+    For more information, please refer to [issue #1292](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1292).
+
 ### Removed
 
 -   Nothing Removed
