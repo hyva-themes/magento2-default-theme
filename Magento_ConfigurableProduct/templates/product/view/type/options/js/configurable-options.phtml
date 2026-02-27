@@ -41,6 +41,7 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
             allowedAttributeOptions: [],
             selectedValues: [],
             init() {
+                this.buildLookupMap();
                 this.findAllowedAttributeOptions();
                 this.$nextTick(() => {
                     if (typeof this.optionConfig.defaultValues === 'object') {
@@ -54,6 +55,9 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
             },
             productIndex: 0,
             productIndexForPrice: 0,
+            productIndexesMap: null,
+            productIndexesKeys: null,
+            attributeCount: 0,
             optionIsActive(attributeId, optionId) {
                 <?php /* return true if a product with this option is in stock */ ?>
                 return !!this.getAllowedAttributeOptions(attributeId).find(
@@ -78,23 +82,30 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
                 if (selectedValues.length === 0) return 0;
                 return this.findProductIdsForPartialSelection(selectedValues)[0];
             },
+            buildLookupMap() {
+                <?php /* Pre-index products by sorted option key for O(1) full-selection lookups */ ?>
+                this.productIndexesMap = new Map();
+                this.attributeCount = Object.keys(this.optionConfig.attributes).length;
+                for (const id in this.optionConfig.index) {
+                    const options = this.optionConfig.index[id];
+                    if (! this.productIndexesKeys) {
+                        this.productIndexesKeys = Object.keys(options).sort();
+                    }
+                    const key = JSON.stringify(options, this.productIndexesKeys);
+                    this.productIndexesMap.set(key, id);
+                }
+            },
             calculateSimpleIndexForFullSelection(selectedValues) {
                 if (! this.isFullSelection(selectedValues)) return false;
 
-                const productIndexes = this.optionConfig.index;
-                return Object.keys(productIndexes).find(productIndex => {
-                    const productCandidateOptions = productIndexes[productIndex];
-
-                    for (const productOption in productCandidateOptions) {
-                        if (
-                            !selectedValues[productOption] ||
-                            selectedValues[productOption] !== productCandidateOptions[productOption]
-                        ) {
-                            return false;
-                        }
-                    }
-                    return productIndex;
-                });
+                <?php /* Build a lookup key using the cached sorted attribute keys */ ?>
+                const attrKeys = this.productIndexesKeys || [];
+                const normalised = {};
+                for (let i = 0; i < attrKeys.length; i++) {
+                    normalised[attrKeys[i]] = selectedValues[attrKeys[i]];
+                }
+                const queryKey = JSON.stringify(normalised, attrKeys);
+                return this.productIndexesMap.get(queryKey);
             },
             findAllowedAttributeOptions() {
                 <?php /* a better method name would be `updateAllowedAttributeOptions` but keeping for bc */ ?>
@@ -294,7 +305,7 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
                 return ! this.isFullSelection(this.selectedValues);
             },
             isFullSelection(selectedValues) {
-                return Object.values(selectedValues).length === Object.keys(this.optionConfig.attributes).length;
+                return Object.keys(selectedValues).length === this.attributeCount;
             },
             updatePrices() {
                 const value = this.optionConfig.optionPrices[this.productIndexForPrice] || this.optionConfig.prices;
