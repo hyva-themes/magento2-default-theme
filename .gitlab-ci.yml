@@ -1,32 +1,62 @@
 # Defaults
 variables:
   SRC_DIR: '.'
+  # Set to 'integration' or 'playwright' in the "Run Pipeline" UI to run only that job type
+  RUN_ONLY: ''
 
 include:
-  -  project: 'hyva-themes/base-ci'
-     file: 'lint/php.yml'
-     ref: main
-  -  project: 'hyva-themes/base-ci'
-     file: 'static/phpcs.yml'
-     ref: main
-  -  project: 'hyva-themes/base-ci'
-     file: 'test/integration.yml'
-     ref: main
-  -  project: 'hyva-themes/base-ci'
-     file: 'test/cypress.yml'
-     ref: main
+  - project: 'hyva-themes/base-ci'
+    file: 'lint/php.yml'
+    ref: main
+  - project: 'hyva-themes/base-ci'
+    file: 'static/phpcs.yml'
+    ref: main
+  - project: 'hyva-themes/base-ci'
+    file: 'test/integration.yml'
+    ref: main
+  - project: 'hyva-themes/base-ci'
+    file: 'test/theme-playwright.yml'
+    ref: main
+
+# Override static jobs from includes to skip when RUN_ONLY is set
+static:lint:
+  rules:
+    - if: $RUN_ONLY != ''
+      when: never
+    - when: on_success
+
+static:phpcs:
+  rules:
+    - if: $RUN_ONLY != ''
+      when: never
+    - when: on_success
 
 test:integration:
-    extends: .test:integration
-    parallel:
-        matrix:
-            # Note: 2.4.0 fails due to a bug in dotmailer/dotmailer-magento2-extension integration tests
-            - MAGEVERSION: ['2.4.7-p7']
+  extends: .test:integration
+  needs:
+    - job: static:lint
+      optional: true
+    - job: static:phpcs
+      optional: true
+  rules:
+    - if: $RUN_ONLY != '' && $RUN_ONLY != "integration"
+      when: never
+    - when: on_success
+  parallel:
+    matrix:
+      - MAGEVERSION: ['2.4.8-p3']
 
-test:cypress:
-    extends: .test:cypress
-    parallel:
-        matrix:
-            # Note: The cypress tests do not pass on 2.4.0 because the customer API is missing the login feature
-            # Note: The cypress tests do not pass on 2.4.1 because the missing add coupon success message
-            - MAGEVERSION: ['2.4.7-p7']
+test:playwright:
+  extends: .test:theme_playwright
+  needs:
+    - job: static:lint
+      optional: true
+    - job: static:phpcs
+      optional: true
+  rules:
+    - if: $RUN_ONLY != '' && $RUN_ONLY != "playwright"
+      when: never
+    - when: on_success
+  parallel:
+    matrix:
+      - MAGEVERSION: ['2.4.8-p3']
