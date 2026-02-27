@@ -189,21 +189,12 @@ body:where(:not([class*="-full-width"])) {
 
 /* Video */
 [data-content-type="video"] {
-    font-size: 0;
-
-    .pagebuilder-video-inner {
-        @apply inline-block w-full;
+    .pagebuilder-video-wrapper {
+        overflow: hidden;
     }
 
-    .pagebuilder-video-container {
-        @apply overflow-hidden relative;
-        border-radius: inherit;
-        padding-top: 56.25%;
-    }
-
-    iframe,
-    video {
-        @apply h-full w-full absolute left-0 top-0;
+    :is(iframe, video) {
+        aspect-ratio: 16/9;
     }
 }
 
