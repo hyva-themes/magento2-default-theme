@@ -26,21 +26,19 @@ $specialEscaper = $viewModels->require(EscapeHtmlAllowingAnchorAttributes::class
 $storeConfig = $viewModels->require(StoreConfig::class);
 
 $legalNoticeMode = $storeConfig->getStoreConfig('recaptcha_frontend/legal_notice/legal_notice_mode') ?? 'default';
-$customLegalNotice = $storeConfig->getStoreConfig('recaptcha_frontend/legal_notice/notice') ?? '';
-$legalText = __(
-    'This form is protected by reCAPTCHA - the <a class="underline" href="%1" target="_blank" rel="noopener">Google Privacy Policy</a> and <a class="underline" href="%2" target="_blank" rel="noopener">Terms of Service</a> apply.',
-    'https://policies.google.com/privacy',
-    'https://policies.google.com/terms'
-);
+$legalNotice = $legalNoticeMode === 'default'
+    ? __(
+        'This form is protected by reCAPTCHA - the <a class="underline" href="%1" target="_blank" rel="noopener">Google Privacy Policy</a> and <a class="underline" href="%2" target="_blank" rel="noopener">Terms of Service</a> apply.',
+        'https://policies.google.com/privacy',
+        'https://policies.google.com/terms'
+    )
+    : trim($storeConfig->getStoreConfig('recaptcha_frontend/legal_notice/notice') ?? '');
 
-if ($legalNoticeMode === 'disabled') {
+if ($legalNoticeMode === 'custom' && $legalNotice === '') {
     return;
 }
 
-if ($legalNoticeMode === 'custom' && $customLegalNotice) {
-    $legalText = $customLegalNotice;
-}
 ?>
 <p class="prose my-4 text-sm">
-    <em><?= $specialEscaper->escapeHtml($legalText, ['a']) ?></em>
+    <em><?= $specialEscaper->escapeHtml($legalNotice, ['a']) ?></em>
 </p>
