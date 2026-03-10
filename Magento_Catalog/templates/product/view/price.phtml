@@ -322,7 +322,7 @@ if ($msrpPrice = iterator_to_array($product->getPriceInfo()->getPrices())[MsrpPr
     </template>
     <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
     <template x-if="activeProductsPriceData">
-        <div class="price-excl-taxinline-block">
+        <div class="price-excl-tax inline-block">
             <span><?= $escaper->escapeHtml(__('Excl. Tax')) ?>:</span>
             <span class="font-regular text-gray-900">
                 <span class="price" x-html="getFormattedBasePrice()"></span>
