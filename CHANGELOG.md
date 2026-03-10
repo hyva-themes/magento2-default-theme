@@ -10,16 +10,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
-- Nothing added
+-   Nothing added
 
 ### Changed
 
-- **Fix missing space in the the excl-tax price**  
-  For more information, please refer to [issue #1273](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1273)
+-   **Fix missing space in the the excl-tax price**  
+    For more information, please refer to [issue #1273](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1273)
 
 ### Removed
 
-- Nothing removed
+-   Nothing removed
 
 ## [1.3.21] - 2026-01-08
 
