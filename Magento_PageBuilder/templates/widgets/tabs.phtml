@@ -12,29 +12,108 @@ use Magento\Framework\View\Element\Template;
 /** @var Template $block */
 ?>
 <script>
-    'use strict';
-
     (() => {
-        document.querySelectorAll('[data-content-type="tab-item"]').forEach(tabItem => {
-            tabItem.setAttribute('x-show', `tab === '${tabItem.id}'`);
-        });
+        function activateTab(tabId, tabIds, tabContainer) {
+            tabIds.forEach(id => {
+                const panel = tabContainer.querySelector(`#${id}`);
+                const link = document.getElementById(`tab-link-${id}`);
+                const header = link?.closest('.tab-header');
+                const isActive = id === tabId;
 
-        document.querySelectorAll('[data-content-type="tabs"]').forEach(tab => {
-            const defaultActiveTab = parseInt(tab.dataset.activeTab) || 0;
+                if (panel) {
+                    panel.hidden = !isActive;
+                    panel.setAttribute('aria-hidden', String(!isActive));
+                }
 
-            tab.querySelectorAll('.tab-header').forEach((tabHeader, index) => {
-                const tabLink = tabHeader.querySelector('a');
-                const tabId = tabLink.getAttribute('href').replace('#', '');
+                if (link) {
+                    link.setAttribute('aria-selected', String(isActive));
+                    link.setAttribute('tabindex', isActive ? '0' : '-1');
+                }
 
-                tabHeader.setAttribute(':class', `{ 'active': tab === '${tabId}' }`);
-                tabLink.setAttribute('x-on:click.prevent', `tab = '${tabId}';
-                 const nextTick = $nextTick(() => $dispatch('page-builder-tab-activate', {tab: document.getElementById('${tabId}'), nextTick}))`
-                );
-
-                if (index === defaultActiveTab) {
-                    tab.setAttribute('x-data', `{ tab: '${tabId}' }`);
+                if (header) {
+                    header.classList.toggle('active', isActive);
                 }
             });
+
+            const activePanel = tabContainer.querySelector(`#${tabId}`);
+            if (activePanel) {
+                tabContainer.dispatchEvent(new CustomEvent('page-builder-tab-activate', {
+                    bubbles: true,
+                    detail: { tab: activePanel }
+                }));
+            }
+        }
+
+        document.querySelectorAll('[data-content-type="tabs"]').forEach(tabContainer => {
+            const defaultActiveTab = parseInt(tabContainer.dataset.activeTab) || 0;
+            const tabHeaders = tabContainer.querySelectorAll('.tab-header');
+            const tabIds = [];
+            let defaultTabId = null;
+
+            tabHeaders.forEach((tabHeader, index) => {
+                const tabLink = tabHeader.querySelector('a');
+                const tabId = tabLink.getAttribute('href').replace('#', '');
+                tabIds.push(tabId);
+
+                const tabLinkId = `tab-link-${tabId}`;
+                tabLink.setAttribute('id', tabLinkId);
+                tabLink.setAttribute('role', 'tab');
+                tabLink.setAttribute('aria-controls', tabId);
+                tabLink.setAttribute('aria-selected', 'false');
+                tabLink.setAttribute('tabindex', '-1');
+                tabHeader.setAttribute('role', 'presentation');
+
+                const panel = tabContainer.querySelector(`#${tabId}`);
+                if (panel) {
+                    panel.setAttribute('role', 'tabpanel');
+                    panel.setAttribute('aria-labelledby', tabLinkId);
+                    panel.setAttribute('aria-hidden', 'true');
+                    panel.hidden = true;
+                }
+
+                tabLink.addEventListener('click', e => {
+                    e.preventDefault();
+                    activateTab(tabId, tabIds, tabContainer);
+                });
+
+                if (index === defaultActiveTab) {
+                    defaultTabId = tabId;
+                }
+            });
+
+            const tabList = tabContainer.querySelector('[data-element="navigation"]') || tabContainer.querySelector('ul');
+            if (tabList) {
+                tabList.setAttribute('role', 'tablist');
+                tabList.addEventListener('keydown', e => {
+                    const current = tabIds.indexOf(
+                        tabList.querySelector('[aria-selected="true"]')?.getAttribute('aria-controls')
+                    );
+
+                    let next = current;
+                    if (e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        next = (current + 1) % tabIds.length;
+                    } else if (e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        next = (current - 1 + tabIds.length) % tabIds.length;
+                    } else if (e.key === 'Home') {
+                        e.preventDefault();
+                        next = 0;
+                    } else if (e.key === 'End') {
+                        e.preventDefault();
+                        next = tabIds.length - 1;
+                    } else {
+                        return;
+                    };
+
+                    activateTab(tabIds[next], tabIds, tabContainer);
+                    document.getElementById(`tab-link-${tabIds[next]}`)?.focus();
+                });
+            }
+
+            if (defaultTabId) {
+                activateTab(defaultTabId, tabIds, tabContainer);
+            }
         });
     })();
 </script>
