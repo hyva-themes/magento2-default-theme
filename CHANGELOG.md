@@ -6,7 +6,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.4.4...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.4.5...main
+
+## [1.4.5] - 2026-03-16
+
+[1.4.5]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.4.4...1.4.5
 
 ### Added
 
