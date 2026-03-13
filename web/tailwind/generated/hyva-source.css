@@ -6,10 +6,8 @@
  * please exclude them in your theme using the hyva.config.json configuration.
  */
 
-@source "../../../../magento2-theme-module/src/**/*.phtml";
-@source "../../../../magento2-theme-module/src/**/*.xml";
-@source "../../../../../mollie/magento2-hyva-compatibility/src/Mollie_HyvaCompatibility/**/*.phtml";
-@source "../../../../../mollie/magento2-hyva-compatibility/src/Mollie_HyvaCompatibility/**/*.xml";
+@source "../../../../magento2-theme-module/src";
+@source "../../../../../mollie/magento2-hyva-compatibility/src/Mollie_HyvaCompatibility";
 
 @import "../../../../../mollie/magento2-hyva-compatibility/src/Mollie_HyvaCompatibility/view/frontend/tailwind/tailwind-source.css";
 
