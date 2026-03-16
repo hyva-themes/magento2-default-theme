@@ -6,7 +6,24 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.21...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.22...main
+
+## [1.3.22] - 2026-03-16
+
+[1.3.22]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.21...1.3.22
+
+### Added
+
+-   Nothing added
+
+### Changed
+
+-   **Fix missing space in the the excl-tax price**  
+    For more information, please refer to [issue #1273](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1273)
+
+### Removed
+
+-   Nothing removed
 
 ## [1.3.21] - 2026-01-08
 
