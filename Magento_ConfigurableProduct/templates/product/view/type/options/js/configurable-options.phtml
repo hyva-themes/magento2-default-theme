@@ -49,8 +49,12 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
                             this.changeOption(attributeId, value + '');
                         }
                     }
-                    this.preselectQuerystringItems();
-                    this.preselectLocationHashItems();
+                    <?php if ($currentProduct->exists()): ?>
+                    if (this.productId === '<?= (int) $currentProduct->get()->getEntityId() ?>') {
+                        this.preselectQuerystringItems();
+                        this.preselectLocationHashItems();
+                    }
+                    <?php endif; ?>
                 });
             },
             productIndex: 0,

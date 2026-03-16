@@ -6,7 +6,32 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.4.4...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.4.5...main
+
+## [1.4.5] - 2026-03-16
+
+[1.4.5]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.4.4...1.4.5
+
+### Added
+
+-   Nothing Added
+
+### Changed
+
+-   **Fix missing imageHelper for the gallery preload**  
+    For more information, please refer to [issue #1297](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1297).
+
+-   **Make Page Builder tabs widget compliant with ARIA tabs pattern**  
+    For more information, please refer to [issue #1299](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1299).
+
+-   **Fix issue with related product for configured product in wishlist**  
+    For more information, please refer to [issue #1169](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1169).
+
+    Many thanks to Nataliia Bratchykova (Perspective) for the contribution!
+
+### Removed
+
+-   Nothing Removed
 
 ## [1.4.4] - 2026-03-03
 
@@ -342,6 +367,44 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 -   **Removed dependency on the reset-theme**
     For more information, please refer to the [upgrade docs](./upgrading-to-1-4-0.md).
+
+## [1.3.22] - 2026-03-16
+
+[1.3.22]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.21...1.3.22
+
+### Added
+
+-   Nothing added
+
+### Changed
+
+-   **Fix missing space in the the excl-tax price**  
+    For more information, please refer to [issue #1273](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1273)
+
+### Removed
+
+-   Nothing removed
+
+## [1.3.21] - 2026-01-08
+
+[1.3.21]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.20...1.3.21
+
+### Added
+
+-   Nothing added
+
+### Changed
+
+-   **Changed licensing to be dual licensed under OSL and AFL**
+
+-   **Replaced hyva-themes/magento2-reset-theme dependency with hyva-themes/magento2-base-layout-reset**
+
+    This change improves the TTFB for requests hitting a cold layout cache.  
+    It also provides consistency between the 1.4 and the 1.3 version of Hyvä being released open source.
+
+### Removed
+
+-   Nothing removed
 
 ## [1.3.20] - 2025-11-04
 

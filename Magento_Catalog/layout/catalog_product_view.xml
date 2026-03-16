@@ -152,13 +152,13 @@
                         <container name="product.info.additional" />
                     </block>
 
-                    <block class="Magento\Catalog\Block\Product\View\Gallery" name="product.media"
-                           template="Magento_Catalog::product/view/gallery.phtml">
+                    <block
+                        class="Magento\Catalog\Block\Product\View\Gallery"
+                        name="product.media"
+                        template="Magento_Catalog::product/view/gallery.phtml"
+                    >
                         <arguments>
-                            <argument name="gallery_options"
-                                      xsi:type="object">Magento\Catalog\Block\Product\View\GalleryOptions
-                            </argument>
-                            <argument name="imageHelper" xsi:type="object">Magento\Catalog\Helper\Image</argument>
+                            <argument name="gallery_options" xsi:type="object">Magento\Catalog\Block\Product\View\GalleryOptions</argument>
                         </arguments>
                     </block>
 

@@ -7,11 +7,14 @@
 
 declare(strict_types=1);
 
-use Magento\Framework\Escaper;
+use Hyva\Theme\Model\ViewModelRegistry;
 use Magento\Catalog\Block\Product\View\Gallery;
+use Magento\Catalog\Helper\Image;
+use Magento\Framework\Escaper;
 
 /** @var Gallery $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
 
 $images = $block->getGalleryImages()->getItems();
 $mainImage = current(array_filter($images, [$block, 'isMainImage']));
@@ -21,7 +24,7 @@ if (!empty($images) && empty($mainImage)) {
 }
 
 /** @var Image $helper */
-$helper = $block->getData('imageHelper');
+$helper = $block->getData('imageHelper') ?? $viewModels->require(Image::class);
 
 $mainImageData = $mainImage
     ? $mainImage->getData('medium_image_url')
