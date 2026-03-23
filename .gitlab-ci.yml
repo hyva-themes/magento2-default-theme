@@ -1,3 +1,9 @@
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - when: always
+
 # Defaults
 variables:
   SRC_DIR: '.'
@@ -12,10 +18,10 @@ include:
     file: 'static/phpcs.yml'
     ref: main
   - project: 'hyva-themes/base-ci'
-    file: 'test/integration.yml'
+    file: 'test/integration-box.yml'
     ref: main
   - project: 'hyva-themes/base-ci'
-    file: 'test/theme-playwright.yml'
+    file: 'test/theme-playwright-box.yml'
     ref: main
 
 # Override static jobs from includes to skip when RUN_ONLY is set
@@ -32,7 +38,7 @@ static:phpcs:
     - when: on_success
 
 test:integration:
-  extends: .test:integration
+  extends: .test:integration_box
   needs:
     - job: static:lint
       optional: true
@@ -44,10 +50,10 @@ test:integration:
     - when: on_success
   parallel:
     matrix:
-      - MAGEVERSION: ['2.4.8-p3']
+      - BOX_IMAGE_TAG: ['php84-fpm-magento2.4.8-p4']
 
 test:playwright:
-  extends: .test:theme_playwright
+  extends: .test:theme_playwright_box
   needs:
     - job: static:lint
       optional: true
@@ -59,4 +65,4 @@ test:playwright:
     - when: on_success
   parallel:
     matrix:
-      - MAGEVERSION: ['2.4.8-p3']
+      - BOX_IMAGE_TAG: ['php84-fpm-magento2.4.8-p4-sample-data']
