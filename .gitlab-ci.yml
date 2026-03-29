@@ -4,6 +4,11 @@ workflow:
       when: never
     - when: always
 
+stages:
+  - .pre
+  - build
+  - test
+
 # Defaults
 variables:
   SRC_DIR: '.'
@@ -18,10 +23,10 @@ include:
     file: 'static/phpcs.yml'
     ref: main
   - project: 'hyva-themes/base-ci'
-    file: 'test/integration-box.yml'
+    file: 'test/integration.yml'
     ref: main
   - project: 'hyva-themes/base-ci'
-    file: 'test/theme-playwright-box.yml'
+    file: 'test/playwright.yml'
     ref: main
 
 # Override static jobs from includes to skip when RUN_ONLY is set
@@ -37,9 +42,25 @@ static:phpcs:
       when: never
     - when: on_success
 
+build:
+  extends: .build:hyva
+  rules:
+    - if: $RUN_ONLY != ''
+      when: never
+    - when: on_success
+  parallel:
+    matrix:
+      - CI_IMAGE_TAG: ['2.4.8-p4']
+        HYVA_THEME_REF: ['main']
+
 test:integration:
-  extends: .test:integration_box
+  extends: .test:integration
   needs:
+    - job: build
+      parallel:
+        matrix:
+          - CI_IMAGE_TAG: ['2.4.8-p4']
+            HYVA_THEME_REF: ['main']
     - job: static:lint
       optional: true
     - job: static:phpcs
@@ -50,11 +71,17 @@ test:integration:
     - when: on_success
   parallel:
     matrix:
-      - BOX_IMAGE_TAG: ['php84-fpm-magento2.4.8-p4']
+      - CI_IMAGE_TAG: ['2.4.8-p4']
+        HYVA_THEME_REF: ['main']
 
 test:playwright:
-  extends: .test:theme_playwright_box
+  extends: .test:playwright
   needs:
+    - job: build
+      parallel:
+        matrix:
+          - CI_IMAGE_TAG: ['2.4.8-p4']
+            HYVA_THEME_REF: ['main']
     - job: static:lint
       optional: true
     - job: static:phpcs
@@ -65,4 +92,6 @@ test:playwright:
     - when: on_success
   parallel:
     matrix:
-      - BOX_IMAGE_TAG: ['php84-fpm-magento2.4.8-p4-sample-data']
+      - CI_IMAGE_TAG: ['2.4.8-p4']
+        HYVA_THEME_REF: 'main'
+        HYVA_PLAYWRIGHT_REF: 'main'
