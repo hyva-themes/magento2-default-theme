@@ -6,7 +6,25 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.4.7...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.4.8...main
+
+## [1.4.8] - 2026-07-01
+
+[1.4.8]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.4.7...1.4.8
+
+This release contains no changes - it is to keep the theme version in sync with the theme-module.
+
+### Added
+
+-   Nothing added
+
+### Changed
+
+-   Nothing changed
+
+### Removed
+
+-   Nothing removed
 
 ## [1.4.7] - 2026-06-30
 
