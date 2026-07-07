@@ -22,9 +22,9 @@ Please ensure you're running this script within a Magento 2 project.
 
 const nodeEnvArg = process.env.PROXY_URL; // Legacy method, use `--proxy` arg instead
 const hasProxyArg = process.argv.includes("--proxy") || !!nodeEnvArg;
-const proxy = nodeEnvArg || "https://mage-theme.test";
+const proxy = nodeEnvArg || "http://my-magento.test";
 
-if (!hasProxyArg && proxy === "https://mage-theme.test") {
+if (!hasProxyArg && proxy === "http://my-magento.test") {
     console.error(`
 To set an alternative proxy, use: 'npm run browser-sync -- --proxy http://hyva.test'.
 You can also use an HTTPS local address: 'npm run browser-sync -- --proxy https://hyva.test --https'.
@@ -41,7 +41,10 @@ try {
             {
                 // Skip the origin used for `var BASE_URL = '...'`, so frontend JS
                 // relying on window.BASE_URL keeps the full URL instead of just "/".
-                match: new RegExp(`(?<!BASE_URL = ['"])${new URL(proxy).origin}`, "g"),
+                match: new RegExp(
+                    `(?<!BASE_URL = ['"])${new URL(proxy).origin}`,
+                    "g",
+                ),
                 replace: "",
             },
         ],
