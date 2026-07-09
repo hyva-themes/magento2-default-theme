@@ -6,12 +6,26 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.4.8...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.4.9...main
+
+## [1.4.9] - 2026-07-09
+
+[1.4.9]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.4.8...1.4.9
+
+### Added
+
+-   Nothing added
 
 ### Changed
 
 -   **Fixed `browser-sync.config.cjs` stripping `window.BASE_URL` down to `/`**  
     The `rewriteRules` regex removed the proxy origin everywhere in the response body, including inside the inline `var BASE_URL = '...'` assignment, leaving `window.BASE_URL` as just `/` and breaking JS that relies on it for absolute request URLs. The rewrite now skips that occurrence.
+
+    For more information, please refer to [merge request #1509](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1509).
+
+### Removed
+
+-   Nothing removed
 
 ## [1.4.8] - 2026-07-01
 
