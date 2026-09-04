@@ -51,8 +51,8 @@ $priceElementIdPrefix = $block->getPriceElementIdPrefix() ?: 'product-price-';
         class="underline hover:no-underline"
         x-data="{ msrpData: {
             type: 'price',
-            productId: '<?= $escaper->escapeHtml($productId) ?>',
-            productName: '<?= $escaper->escapeHtml($product->getName()) ?>',
+            productId: '<?= $escaper->escapeJs($productId) ?>',
+            productName: '<?= $escaper->escapeJs($product->getName()) ?>',
             productIdInput: '',
             isSaleable: <?= $product->isSaleable() ? 'true' : 'false' ?>,
             realPrice: <?= $escaper->escapeHtml(json_encode($block->getRealPriceHtml())); ?>,
