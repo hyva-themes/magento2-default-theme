@@ -18,6 +18,9 @@ use Magento\Framework\Escaper;
 
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
+
+$explanationMessage = $escaper->escapeHtml($block->getExplanationMessage(), ["br"]);
+$whatsThisMessage = $escaper->escapeHtml($block->getExplanationMessageWhatsThis(), ["br"]);
 ?>
 
 <?php if ($block->isEnabled()): ?>
@@ -71,7 +74,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     open: false,
                     type: "price", // price or help
                     title: '',
-                    content: '<?= $escaper->escapeHtml($block->getExplanationMessage(), ["br"]) ?>',
+                    content: '<?= $escaper->escapeJs($explanationMessage) ?>',
                     isSaleable: false,
                     actualPrice: null,
                     msrpPrice: null,
@@ -117,8 +120,8 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                             ? ''
                             : data.productName;
                         this.content = this.type === 'help'
-                            ? '<?= $escaper->escapeHtml($block->getExplanationMessageWhatsThis(), ["br"]) ?>'
-                            : '<?= $escaper->escapeHtml($block->getExplanationMessage(), ["br"]) ?>';
+                            ? '<?= $escaper->escapeJs($whatsThisMessage) ?>'
+                            : '<?= $escaper->escapeJs($explanationMessage) ?>';
 
                         if (event.target) {
                             this.anchor = event.target;

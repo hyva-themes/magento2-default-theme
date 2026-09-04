@@ -8,6 +8,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 [Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.4.10...main
 
+### Changed
+
+-   **Fixed a cross-site scripting issue in the MSRP price and popup templates**  
+
+    The product name and the MSRP explanation message are now escaped for the JavaScript context they are rendered into.
+
+    For more information, please refer to [merge request #XXXX](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/XXXX).
+
+    Many thanks to Jelle Janssens (Singto BV) for reporting this issue!
+
 ## [1.4.10] - 2026-07-10
 
 [1.4.10]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.4.8...1.4.10
