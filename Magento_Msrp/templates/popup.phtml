@@ -121,8 +121,8 @@ $whatsThisMessage = $escaper->escapeHtml($block->getExplanationMessageWhatsThis(
                             ? ''
                             : data.productName;
                         this.content = this.type === 'help'
-                            ? '<?= /* @noEscape */ $whatsThisMessage ?>'
-                            : '<?= /* @noEscape */ $explanationMessage ?>';
+                            ? '<?= $escaper->escapeJs($whatsThisMessage) ?>'
+                            : '<?= $escaper->escapeJs($explanationMessage) ?>';
 
                         if (event.target) {
                             this.anchor = event.target;
