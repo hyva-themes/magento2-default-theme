@@ -38,27 +38,30 @@ $msrpPrice = $block->renderAmount(
 );
 $priceElementIdPrefix = $block->getPriceElementIdPrefix() ?: 'product-price-';
 
+
+$msrpData = [
+    'type' => 'price',
+    'productId' => $productId,
+    'productName' => $product->getName(),
+    'productIdInput' => '',
+    'isSaleable' => (bool) $product->isSaleable(),
+    'realPrice' => $block->getRealPriceHtml(),
+    'msrpPrice' => $msrpPrice
+];
+
 ?>
 
 <?php if ($amount): ?>
     <span class="map-old-price old-price inline-block"><?= /* @noEscape */ $msrpPrice ?></span>
     <span class="map-fallback-price normal-price hidden"><?= /* @noEscape */ $msrpPrice ?></span>
 <?php endif; ?>
-
 <?php if ($priceType->isShowPriceOnGesture()): ?>
     <button
         type="button"
         class="underline hover:no-underline"
-        x-data="{ msrpData: {
-            type: 'price',
-            productId: '<?= $escaper->escapeJs($productId) ?>',
-            productName: '<?= $escaper->escapeJs($product->getName()) ?>',
-            productIdInput: '',
-            isSaleable: <?= $product->isSaleable() ? 'true' : 'false' ?>,
-            realPrice: <?= $escaper->escapeHtml(json_encode($block->getRealPriceHtml())); ?>,
-            msrpPrice: <?= $escaper->escapeHtml(json_encode($msrpPrice)); ?>
-        }}"
-        @click="$dispatch('msrp-popover', { msrpData, target: $el, })"
+        x-data="initMsrpPrice"
+        @click="onClick"
+        data-msrp-data="<?= $escaper->escapeHtmlAttr(json_encode($msrpData)) ?>"
     >
         <?= $escaper->escapeHtml(__('Click for price')) ?>
     </button>
@@ -72,8 +75,9 @@ $priceElementIdPrefix = $block->getPriceElementIdPrefix() ?: 'product-price-';
     <button
         type="button"
         class="underline hover:no-underline"
-        x-data=""
-        @click="$dispatch('msrp-popover', { msrpData: { type: 'help' }, target: $el })"
+        x-data="initMsrpPrice"
+        @click="onClick"
+        data-msrp-data="<?= $escaper->escapeHtmlAttr(json_encode(['type' => 'help'])) ?>"
     >
         <?= $escaper->escapeHtml(__("What's this?")) ?>
     </button>
