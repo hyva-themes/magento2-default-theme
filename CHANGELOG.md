@@ -12,6 +12,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 [1.4.11]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.4.10...1.4.11
 
+### Added
+
+-   Nothing added
+
 ### Changed
 
 -   **Fixed a cross-site scripting issue in the MSRP price and popup templates**  
@@ -27,6 +31,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
     The popup data is passed through a data attribute and read with `JSON.parse`, and the Alpine components are registered with `Alpine.data` instead of being declared in the `x-data` attribute. Child themes overriding `Magento_Msrp/templates/popup.phtml` or `Magento_Msrp/templates/product/price/msrp.phtml` need to be updated.
 
     For more information, please refer to [merge request #1549](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1549).
+
+### Removed
+
+-   Nothing removed
 
 ## [1.4.10] - 2026-07-10
 
