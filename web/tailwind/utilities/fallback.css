@@ -13,7 +13,7 @@
     &[class*="bg-opacity-"] {
         background-color: color-mix(
             in srgb,
-            var(--color-primary) calc(var(--tw-bg-opacity) * 100%),
+            var(--color-primary) calc(var(--tw-bg-opacity) * 1%),
             #0000
         );
     }
@@ -23,7 +23,7 @@
     &[class*="bg-opacity-"] {
         background-color: color-mix(
             in srgb,
-            var(--color-white) calc(var(--tw-bg-opacity) * 100%),
+            var(--color-white) calc(var(--tw-bg-opacity) * 1%),
             #0000
         );
     }
@@ -33,7 +33,7 @@
     &[class*="bg-opacity-"] {
         background-color: color-mix(
             in srgb,
-            var(--color-black) calc(var(--tw-bg-opacity) * 100%),
+            var(--color-black) calc(var(--tw-bg-opacity) * 1%),
             #0000
         );
     }
