@@ -532,8 +532,6 @@ $captionCssClasses = 'absolute bottom-2 text-sm py-1 px-2 rounded bg-gray-200/60
                 return !this.lightbox.isVideo;
             },
             lightboxVideoSrcs() {
-                // Changing the src of a mounted iframe adds a browser history entry,
-                // so the iframe is recreated per video instead.
                 return this.lightbox.isVideo && this.lightbox.src ? [this.lightbox.src] : [];
             },
             showLightbox(idx) {
