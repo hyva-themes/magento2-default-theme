@@ -8,6 +8,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 [Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.5.3...main
 
+### Added
+
+-   Nothing Added
+
+### Changed
+
+-   **Fixes fallback bg opacity calc**  
+    For more information, please refer to [merge request #1583](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1583).
+
+### Removed
+
+-   Nothing Removed
+
 ### Fixed
 
 -   **Cart page shipping estimate for guests without `hyva-themes/magento2-graphql-tokens`**  
