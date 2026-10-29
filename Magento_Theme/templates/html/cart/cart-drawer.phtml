@@ -435,7 +435,7 @@ $miniCartOptionShowSku = $block->getShowSku() !== null ? (bool) $block->getShowS
     <?php
     /**
      * Rendered outside the x-if templates, so child blocks run their scripts once and keep their state.
-     * The output is full page cached, so cart specific data must come from $store.privateContent.data.cart.
+     * The output is full page cached, so cart specific data must come from $store.privateContent.cart.
      */
     ?>
     <?= $block->getChildHtml('cart-drawer.shortcut-buttons'); ?>
