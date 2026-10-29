@@ -127,6 +127,12 @@ $miniCartOptionShowSku = $block->getShowSku() !== null ? (bool) $block->getShowS
             closeCartDrawer() {
                 this.open = false;
             },
+            <?php
+            /**
+             * @deprecated The section data extra actions don't work with Alpine CSP.
+             *             Add shortcut buttons as a block to the cart-drawer.shortcut-buttons container instead.
+             */
+            ?>
             getSectionDataExtraActions() {
                 if (!this.cart.extra_actions) {
                     return '';
@@ -425,6 +431,14 @@ $miniCartOptionShowSku = $block->getShowSku() !== null ? (bool) $block->getShowS
             </div>
         </div>
     </template>
+
+    <?php
+    /**
+     * Rendered outside the x-if templates, so child blocks run their scripts once and keep their state.
+     * The output is full page cached, so cart specific data must come from $store.privateContent.data.cart.
+     */
+    ?>
+    <?= $block->getChildHtml('cart-drawer.shortcut-buttons'); ?>
 
     <template x-if="cartIsEmpty">
         <div class="flex flex-col">

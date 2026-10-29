@@ -10,7 +10,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
--   Nothing Added
+-   **`cart-drawer.shortcut-buttons` container for payment shortcut buttons**  
+    Payment modules can add a block with their own Alpine component to this container, as a CSP compatible replacement
+    for the `extra_actions` HTML in the `cart` section data, which is now deprecated. The container is rendered once,
+    outside the item templates, so cart data such as the totals must be read from `$store.privateContent.data.cart`.
+    This requires Hyvä Theme Module 1.5.4.
+
+    Use this container instead of the `extra_actions` container for buttons with their own script. The `extra_actions`
+    container is rendered inside the `x-if` template of the cart items, so its scripts only run after Alpine has started,
+    and again each time the cart changes from empty to filled. An `alpine:init` listener in there is never called, and the
+    component state is lost.
+
+    For more information, please refer to [issue #545](https://gitlab.hyva.io/hyva-themes/magento2-theme-module/-/work_items/545).
 
 ### Changed
 
