@@ -17,23 +17,21 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 -   **Fixes fallback bg opacity calc**  
     For more information, please refer to [merge request #1583](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1583).
 
-### Removed
-
--   Nothing Removed
-
-### Fixed
-
--   **Cart page shipping estimate for guests without `hyva-themes/magento2-graphql-tokens`**  
+-   **Fixed Cart page shipping estimate for guests without `hyva-themes/magento2-graphql-tokens`**  
     The guest REST requests for the shipping estimate and totals used the `cartId` of the `cart` section, which is only
     added by `hyva-themes/magento2-graphql-tokens`, so they were sent to `guest-carts/undefined`. They now use the masked
     quote id from `window.checkoutConfig.quoteData.entity_id`.
 
     For more information, please refer to [issue #1386](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1386).
 
--   **PayPal Express shortcut sending `quote_id=undefined` without `hyva-themes/magento2-graphql-tokens`**  
+-   **Fixed PayPal Express shortcut sending `quote_id=undefined` without `hyva-themes/magento2-graphql-tokens`**  
     The `quote_id` is now sent empty, like in Luma, so Magento uses the quote of the current session.
 
     For more information, please refer to [issue #1386](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1386).
+
+### Removed
+
+-   Nothing Removed
 
 ## [1.5.3] - 2026-10-12
 
