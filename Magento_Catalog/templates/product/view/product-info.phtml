@@ -68,13 +68,14 @@ $productType = $product->getTypeId();
 
     <?= $block->getChildHtml('product.info.form') ?>
 
-    <div class="flex flex-col sm:flex-row items-end my-4">
-
-
-        <div role="group" aria-label="<?= $escaper->escapeHtmlAttr(__('Price')) ?>">
+    <div class="flex flex-col sm:flex-row gap-y-2 gap-x-4 sm:justify-between sm:items-end my-4">
+        <div
+            role="group"
+            aria-label="<?= $escaper->escapeHtmlAttr(__('Price')) ?>"
             <?php if ($productType === 'bundle'): ?>
                 aria-description="<?= $escaper->escapeHtml(__('The price depends on the chosen options')) ?>"
             <?php endif; ?>
+        >
             <?= $block->getChildHtml("product.info.price") ?>
         </div>
 
