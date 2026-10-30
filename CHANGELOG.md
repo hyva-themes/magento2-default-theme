@@ -23,6 +23,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 -   **Fixes gallery back navigation**  
     For more information, please refer to [merge request #1587](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1587).
 
+-   **Fixes 500 error on configurable products without available children on Magento 2.4.7 and 2.4.8**  
+    For more information, please refer to [issue #1388](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1388).
+
 ### Removed
 
 -   Nothing Removed
