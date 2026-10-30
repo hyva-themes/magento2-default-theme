@@ -79,13 +79,12 @@ $productType = $product->getTypeId();
             <?= $block->getChildHtml("product.info.price") ?>
         </div>
 
-        <div class="flex flex-wrap gap-2 mt-4 ms-auto sm:mt-0 [&_.btn]:ml-0">
-            <?php if ($product->isSaleable()): ?>
+        <?php if ($product->isSaleable()): ?>
+            <div class="flex flex-wrap gap-2 [&_.btn]:ml-0">
                 <?= $block->getChildHtml("product.info.quantity") ?>
                 <?= $block->getChildHtml("product.info.addtocart") ?>
-            <?php endif; ?>
-        </div>
-
+            </div>
+        <?php endif; ?>
     </div>
 
     <?php if ($product->isSaleable() && $block->getChildHtml('addtocart.shortcut.buttons')): ?>
