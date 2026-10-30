@@ -80,7 +80,7 @@ $productType = $product->getTypeId();
             <?= $block->getChildHtml("product.info.price") ?>
         </div>
 
-        <div class="flex flex-wrap gap-2 mt-4 ms-auto sm:mt-0">
+        <div class="flex flex-wrap gap-2 mt-4 ms-auto sm:mt-0 [&_.btn]:ml-0">
             <?php if ($product->isSaleable()): ?>
                 <?= $block->getChildHtml("product.info.quantity") ?>
                 <?= $block->getChildHtml("product.info.addtocart") ?>
@@ -90,13 +90,13 @@ $productType = $product->getTypeId();
     </div>
 
     <?php if ($product->isSaleable() && $block->getChildHtml('addtocart.shortcut.buttons')): ?>
-        <div class="flex flex-wrap mt-4 justify-end">
+        <div class="flex flex-wrap gap-2 mt-4 justify-end [&_.btn]:ml-0">
             <?= $block->getChildHtml('addtocart.shortcut.buttons') ?>
         </div>
     <?php endif; ?>
 
     <?php if ($additionalActions = $block->getChildHtml('product.info.additional.actions')): ?>
-        <div class="flex flex-wrap mt-4 justify-end">
+        <div class="flex flex-wrap gap-2 mt-4 justify-end [&_.btn]:ml-0">
             <?= /** @noEscape */ $additionalActions; ?>
         </div>
     <?php endif; ?>
