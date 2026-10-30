@@ -50,6 +50,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
     For more information, please refer to [issue #839](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/839).
 
+    Many thanks to Vincent MARMIESSE (ph2m) for the contribution!
+
 ### Removed
 
 -   Nothing Removed
