@@ -29,6 +29,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
     For more information, please refer to [issue #1386](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1386).
 
+-   **Fixes gallery back navigation**  
+    For more information, please refer to [merge request #1587](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1587).
+
 ### Removed
 
 -   Nothing Removed
