@@ -374,15 +374,16 @@ $captionCssClasses = 'absolute bottom-2 text-sm py-1 px-2 rounded bg-gray-200/60
             :alt="lightbox.caption"
             class="rounded max-h-[90svh] object-contain"
         >
-        <iframe
-            x-show="lightbox.isVideo"
-            :src="lightbox.src"
-            :title="lightbox.caption"
-            class="rounded max-h-[90svh] aspect-video"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen
-        ></iframe>
+        <template x-for="videoSrc in lightboxVideoSrcs" :key="videoSrc">
+            <iframe
+                :src="videoSrc"
+                :title="lightbox.caption"
+                class="rounded max-h-[90svh] aspect-video"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen
+            ></iframe>
+        </template>
         <?php if ($navStyle !== 'none'): ?>
             <div class="z-10 absolute flex gap-2 bottom-2 end-2
                 xl:bottom-auto xl:top-1/2 xl:-translate-y-1/2 xl:inset-x-0 xl:justify-between pointer-events-none">
@@ -529,6 +530,9 @@ $captionCssClasses = 'absolute bottom-2 text-sm py-1 px-2 rounded bg-gray-200/60
             },
             lightboxIsNotVideo() {
                 return !this.lightbox.isVideo;
+            },
+            lightboxVideoSrcs() {
+                return this.lightbox.isVideo && this.lightbox.src ? [this.lightbox.src] : [];
             },
             showLightbox(idx) {
                 const items = this.getLightboxItems();
