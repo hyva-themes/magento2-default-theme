@@ -45,6 +45,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 -   **Fixes 500 error on configurable products without available children on Magento 2.4.7 and 2.4.8**  
     For more information, please refer to [issue #1388](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1388).
 
+-   **Sign in link uses the referer param instead of the login redirect cookie**  
+    Previously a stale `login_redirect` cookie from an earlier click could redirect the customer to the wrong page after logging in.
+
+    For more information, please refer to [issue #839](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/839).
+
 ### Removed
 
 -   Nothing Removed
