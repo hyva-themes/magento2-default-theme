@@ -17,6 +17,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 -   **Fixes fallback bg opacity calc**  
     For more information, please refer to [merge request #1583](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1583).
 
+-   **Fixes overflow for when extra buttons are added the the main btn strip**  
+    For more information, please refer to [merge request #1584](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1584).
+
 -   **Fixes gallery back navigation**  
     For more information, please refer to [merge request #1587](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1587).
 

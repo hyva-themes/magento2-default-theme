@@ -68,35 +68,33 @@ $productType = $product->getTypeId();
 
     <?= $block->getChildHtml('product.info.form') ?>
 
-    <div class="flex flex-col sm:flex-row items-end my-4">
-
-        <?php if ($productType === 'bundle'): ?>
-            <span class="sr-only">
-                <?= $escaper->escapeHtml(__('The price depends on the chosen options')) ?>
-            </span>
-        <?php endif; ?>
-
-        <div role="group" aria-label="<?= $escaper->escapeHtmlAttr(__('Price')) ?>">
+    <div class="flex flex-col sm:flex-row gap-y-2 gap-x-4 sm:justify-between sm:items-end my-4">
+        <div
+            role="group"
+            aria-label="<?= $escaper->escapeHtmlAttr(__('Price')) ?>"
+            <?php if ($productType === 'bundle'): ?>
+                aria-description="<?= $escaper->escapeHtml(__('The price depends on the chosen options')) ?>"
+            <?php endif; ?>
+        >
             <?= $block->getChildHtml("product.info.price") ?>
         </div>
 
-        <div class="flex gap-2 mt-4 ml-auto sm:mt-0">
-            <?php if ($product->isSaleable()): ?>
+        <?php if ($product->isSaleable()): ?>
+            <div class="flex flex-wrap gap-2 [&_.btn]:ml-0">
                 <?= $block->getChildHtml("product.info.quantity") ?>
                 <?= $block->getChildHtml("product.info.addtocart") ?>
-            <?php endif; ?>
-        </div>
-
+            </div>
+        <?php endif; ?>
     </div>
 
     <?php if ($product->isSaleable() && $block->getChildHtml('addtocart.shortcut.buttons')): ?>
-        <div class="flex mt-4 justify-end">
+        <div class="flex flex-wrap gap-2 mt-4 justify-end [&_.btn]:ml-0">
             <?= $block->getChildHtml('addtocart.shortcut.buttons') ?>
         </div>
     <?php endif; ?>
 
     <?php if ($additionalActions = $block->getChildHtml('product.info.additional.actions')): ?>
-        <div class="flex mt-4 justify-end">
+        <div class="flex flex-wrap gap-2 mt-4 justify-end [&_.btn]:ml-0">
             <?= /** @noEscape */ $additionalActions; ?>
         </div>
     <?php endif; ?>
