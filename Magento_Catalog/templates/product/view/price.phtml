@@ -43,8 +43,10 @@ $regularPriceModel = $productPriceViewModel->getPrice(RegularPrice::PRICE_CODE, 
 $hasPriceRange = false;
 if ($regularPriceModel instanceof ConfigurableRegularPriceInterface) {
     if (method_exists($regularPriceModel, 'isChildProductsOfEqualPrices')) {
+        // Magento 2.4.7 and 2.4.8 fail inside this method when no child is available, so check for one first.
         // Magento 2.4.9 and up compare the final prices, so a special price on a single child counts as a range
-        $hasPriceRange = ! $regularPriceModel->isChildProductsOfEqualPrices($product);
+        $hasPriceRange = $regularPriceModel->getMaxRegularAmount()
+            && ! $regularPriceModel->isChildProductsOfEqualPrices($product);
     } else {
         $minRegularAmount = $regularPriceModel->getMinRegularAmount();
         $maxRegularAmount = $regularPriceModel->getMaxRegularAmount();
