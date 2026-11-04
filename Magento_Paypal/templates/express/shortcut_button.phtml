@@ -113,7 +113,7 @@ $clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/product-ex
                                 });
                         },
                         createOrder() {
-                            const params = 'quote_id=' + cart.cartId +
+                            const params = 'quote_id=' +
                                 '&customer_id=' + (config.customerId || '') +
                                 '&form_key=' + hyva.getFormKey() +
                                 '&button=' + config.button;
