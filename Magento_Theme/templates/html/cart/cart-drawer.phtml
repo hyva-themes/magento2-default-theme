@@ -420,7 +420,7 @@ $miniCartOptionShowSku = $block->getShowSku() !== null ? (bool) $block->getShowS
                 >
                     <?= $escaper->escapeHtml(__('View and Edit Cart')) ?>
                 </a>
-                <div x-html-safe="getSectionDataExtraActions"></div>
+                <div x-html="getSectionDataExtraActions"></div>
                 <?= $block->getChildHtml('extra_actions'); ?>
             </div>
         </div>

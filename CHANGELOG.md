@@ -29,6 +29,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
     For more information, please refer to [issue #1386](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1386).
 
+-   **Restored `x-html` for the cart drawer extra actions from section data**  
+    Since 1.5.3 `x-html-safe` stripped the attributes that shortcut buttons (Apple Pay, Google Pay, PayPal and the like)
+    need, so they rendered but did nothing when clicked. With "Map x-html-safe to x-html" enabled, the buttons are still
+    sanitized.
+
+    For more information, please refer to [issue #545](https://gitlab.hyva.io/hyva-themes/magento2-theme-module/-/work_items/545).
+
 -   **Fixes overflow for when extra buttons are added the the main btn strip**  
     For more information, please refer to [merge request #1584](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1584).
 
