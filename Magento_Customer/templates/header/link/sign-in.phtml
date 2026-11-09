@@ -33,7 +33,6 @@ $label = $block->getLabel() ? $block->getLabel() : __('Sign In');
             init() {
                 this.updateHref();
             },
-            // Read the URL on click too, history.pushState() may have changed it since init
             updateHref() {
                 this.$el.href = '<?= $escaper->escapeJs($block->getUrl('customer/account/login')) ?>'
                     + 'referer/' + hyva.getUenc() + '/';
