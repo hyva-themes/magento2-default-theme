@@ -34,8 +34,7 @@ $label = $block->getLabel() ? $block->getLabel() : __('Sign In');
                 this.updateHref();
             },
             updateHref() {
-                this.$el.href = '<?= $escaper->escapeJs($block->getUrl('customer/account/login')) ?>'
-                    + 'referer/' + hyva.getUenc() + '/';
+                this.$el.href = `<?= $escaper->escapeJs($block->getUrl('customer/account/login')) ?>referer/${hyva.getUenc()}/`;
             }
         }
     }
