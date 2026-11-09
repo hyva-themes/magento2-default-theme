@@ -22,7 +22,7 @@ $label = $block->getLabel() ? $block->getLabel() : __('Sign In');
    class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
    href="<?= $escaper->escapeUrl($block->getUrl('customer/account/index')) ?>"
    x-data="initSignInLink"
-   :href="loginUrl"
+   @click="updateHref"
    title="<?= $escaper->escapeHtmlAttr($label) ?>"
 >
     <?= $escaper->escapeHtml($label) ?>
@@ -30,9 +30,12 @@ $label = $block->getLabel() ? $block->getLabel() : __('Sign In');
 <script>
     function initSignInLink() {
         return {
-            loginUrl() {
-                // Pass the current page as referer, so the customer is redirected back after logging in
-                return '<?= $escaper->escapeJs($block->getUrl('customer/account/login')) ?>'
+            init() {
+                this.updateHref();
+            },
+            // Read the URL on click too, history.pushState() may have changed it since init
+            updateHref() {
+                this.$el.href = '<?= $escaper->escapeJs($block->getUrl('customer/account/login')) ?>'
                     + 'referer/' + hyva.getUenc() + '/';
             }
         }
