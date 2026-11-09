@@ -8,24 +8,36 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Block\SortableItem;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Framework\Escaper;
-use Magento\Customer\Model\Account\Redirect;
 
 /** @var SortableItem $block */
 /** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
 
 $label = $block->getLabel() ? $block->getLabel() : __('Sign In');
 ?>
 
 <a id="<?= $escaper->escapeHtmlAttr($block->getNameInLayout()) ?>"
    class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
-   onclick="hyva.setCookie && hyva.setCookie(
-       '<?= $escaper->escapeJs(Redirect::LOGIN_REDIRECT_URL) ?>',
-       window.location.href,
-       1
-   )"
    href="<?= $escaper->escapeUrl($block->getUrl('customer/account/index')) ?>"
+   x-data="initSignInLink"
+   @click="updateHref"
    title="<?= $escaper->escapeHtmlAttr($label) ?>"
 >
     <?= $escaper->escapeHtml($label) ?>
 </a>
+<script>
+    function initSignInLink() {
+        return {
+            init() {
+                this.updateHref();
+            },
+            updateHref() {
+                this.$el.href = `<?= $escaper->escapeJs($block->getUrl('customer/account/login')) ?>referer/${hyva.getUenc()}/`;
+            }
+        }
+    }
+    window.addEventListener('alpine:init', () => Alpine.data('initSignInLink', initSignInLink), {once: true})
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
