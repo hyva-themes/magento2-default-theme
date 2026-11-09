@@ -432,7 +432,11 @@ $miniCartOptionShowSku = $block->getShowSku() !== null ? (bool) $block->getShowS
         </div>
     </template>
 
-    <?= $block->getChildHtml('cart-drawer.shortcut-buttons'); ?>
+    <?php if ($shortcutButtons = $block->getChildHtml('cart-drawer.shortcut-buttons')): ?>
+        <div class="flex flex-col gap-y-4 mt-4" x-show="itemsCount">
+            <?= /* @noEscape */ $shortcutButtons ?>
+        </div>
+    <?php endif; ?>
 
     <template x-if="cartIsEmpty">
         <div class="flex flex-col">
