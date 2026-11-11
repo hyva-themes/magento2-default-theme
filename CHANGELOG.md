@@ -58,6 +58,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
     Many thanks to Vincent MARMIESSE (ph2m) for the contribution!
 
+-   **Fixed custom options showing on products without the has_options flag**  
+    Magento ignores submitted custom options when `has_options` is off, so they are no longer rendered.
+
+    For more information, please refer to [issue #1061](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1061).
+
 ### Removed
 
 -   Nothing Removed
