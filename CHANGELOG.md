@@ -69,6 +69,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
     For more information, please refer to [issue #1391](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1391).
 
+-   **Fixed aggregateRating microdata with a ratingValue of 0 for reviews without rating votes**  
+    For more information, please refer to [issue #1393](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1393).
+
 ### Removed
 
 -   Nothing Removed
