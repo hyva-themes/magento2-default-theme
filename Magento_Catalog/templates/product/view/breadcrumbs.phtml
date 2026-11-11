@@ -19,6 +19,7 @@ use Magento\Theme\Block\Html\Breadcrumbs as BreadcrumbsBlock;
 /** @var ViewModelRegistry $viewModels */
 /** @var Escaper $escaper */
 /** @var BreadcrumbsBlock $block */
+/** @var array[] $crumbs */
 
 $storeConfigViewModel = $viewModels->require(StoreConfig::class);
 $breadcrumbsViewModel = $viewModels->require(Breadcrumbs::class);
@@ -32,6 +33,22 @@ $categoryUrlSuffix = $breadcrumbsViewModel->getCategoryUrlSuffix();
 $skipLinkedDataJsonSchema = $block->getData('skip_ld_json_schema');
 
 $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() : null;
+
+// Structured data uses the server side crumbs, the client side category trail differs per visitor
+$schemaBreadcrumbs = [];
+if (! $skipLinkedDataJsonSchema) {
+    $currentPageUrl = preg_replace('/[?#].*$/', '', $block->getUrl('', ['_current' => true, '_use_rewrite' => true]));
+    foreach (array_values($crumbs ?: []) as $i => $crumbInfo) {
+        $schemaBreadcrumbs[] = [
+            "@type" => "ListItem",
+            "position" => $i + 1,
+            "item" => [
+                "@id" => $crumbInfo['last'] ? $currentPageUrl : $crumbInfo['link'],
+                "name" => $crumbInfo['label']
+            ]
+        ];
+    }
+}
 
 ?>
 <nav class="breadcrumbs bg-surface shadow-sm" aria-label="Breadcrumb">
@@ -113,32 +130,11 @@ $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() 
         });
         <?php endif; ?>
 
-        <?php if (! $skipLinkedDataJsonSchema): ?>
-        function addJsonBreadcrumbsHead(breadcrumbs) {
-            const script = document.createElement('script');
-            script.type = 'application/ld+json';
-
-            const itemListElement = breadcrumbs.map((crumb, i) => {
-                return {
-                    "@type": "ListItem",
-                    "position": i + 1,
-                    "name": crumb.label,
-                    "item": crumb.link
-                }
-            });
-
-            script.appendChild(document.createTextNode(JSON.stringify({
-                "@context": "https://schema.org",
-                "@type": "BreadcrumbList",
-                "itemListElement": itemListElement
-            })));
-
-            document.head.appendChild(script);
-        }
-
-        addJsonBreadcrumbsHead(breadcrumbs);
-        <?php endif; ?>
-
         return {breadcrumbs};
     }
 </script>
+<?php if ($schemaBreadcrumbs): ?>
+    <script type="application/ld+json">
+        { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": <?= /* @noEscape */ json_encode($schemaBreadcrumbs) ?> }
+    </script>
+<?php endif; ?>
