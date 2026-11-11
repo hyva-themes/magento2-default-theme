@@ -136,7 +136,12 @@ $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() 
             document.head.appendChild(script);
         }
 
+        <?php if ($breadcrumbsViewModel->isCategoryUsedInProductUrl()): ?>
         addJsonBreadcrumbsHead(breadcrumbs);
+        <?php else: ?>
+        // The referrer based category trail differs per visitor, so structured data only gets the static path
+        addJsonBreadcrumbsHead(breadcrumbs.filter(crumb => crumb.name !== 'category'));
+        <?php endif; ?>
         <?php endif; ?>
 
         return {breadcrumbs};

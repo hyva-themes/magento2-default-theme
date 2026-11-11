@@ -63,6 +63,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
     For more information, please refer to [issue #1061](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1061).
 
+-   **Fixed the BreadcrumbList structured data on product pages using the referring category**  
+    With client-side breadcrumbs and without the category path in product URLs, the structured data now only contains
+    Home and the product, since the referring category differs per visitor and may not contain the product.
+
+    For more information, please refer to [issue #1391](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1391).
+
 ### Removed
 
 -   Nothing Removed
