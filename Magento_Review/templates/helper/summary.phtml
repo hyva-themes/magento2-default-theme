@@ -25,20 +25,20 @@ $starsEmpty = floor($ratingSteps - $starsFilled - $starFragment);
 $starIconSize = $block->getData('rating_icon_size') ?: 20;
 
 $reviewCount = $block->getReviewsCount();
+// Reviews without rating votes give a rating of 0, which is not a valid ratingValue
+$hasAggregateRating = $reviewCount && $rating;
 $product = $block->getProduct();
 ?>
 <?php if ($block->isReviewEnabled()): ?>
     <a
-        <?php if ($reviewCount): ?>
-            href="#customer-review-list"
+        href="<?= $reviewCount ? '#customer-review-list' : '#review-form' ?>"
+        <?php if ($hasAggregateRating): ?>
             itemprop="aggregateRating"
             itemscope
             itemtype="https://schema.org/AggregateRating"
-        <?php else: ?>
-            href="#review-form"
         <?php endif; ?>
     >
-        <?php if ($reviewCount): ?>
+        <?php if ($hasAggregateRating): ?>
             <span hidden itemprop="ratingValue"><?= $starsFilled + $starFragment; ?></span>
             <span hidden itemprop="reviewCount"><?= (int) $reviewCount; ?></span>
         <?php endif; ?>
