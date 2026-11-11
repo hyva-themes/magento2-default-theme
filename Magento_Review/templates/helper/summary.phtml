@@ -30,11 +30,13 @@ $product = $block->getProduct();
 ?>
 <?php if ($block->isReviewEnabled()): ?>
     <a
-            href="<?= $reviewCount ? '#customer-review-list' : '#review-form' ?>"
         <?php if ($hasAggregateRating): ?>
+            href="#customer-review-list"
             itemprop="aggregateRating"
             itemscope
             itemtype="https://schema.org/AggregateRating"
+        <?php else: ?>
+            href="#review-form"
         <?php endif; ?>
     >
         <?php if ($hasAggregateRating): ?>
