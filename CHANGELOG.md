@@ -90,9 +90,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 -   **Fixed layout shift of the PayPal buttons**  
     The undefined `min-h-a11y` class is replaced with `min-h-11`, so the buttons reserve their height before loading.
 
--   **Fixed the shortcut buttons not wrapping in the bundle product summary**  
-    The PayPal buttons now use the full width below the Add to Cart button, like on other product pages.
-
 ### Removed
 
 -   Nothing Removed
