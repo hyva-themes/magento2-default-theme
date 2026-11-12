@@ -24,7 +24,7 @@ $widgetConfigJson = json_encode($widgetData['components']['payLater']['config'])
     <div x-intersect.once="checkAndInitializeButtons()"
          x-data="paypalPaylater(<?= $escaper->escapeHtmlAttr($widgetConfigJson) ?>)"
          @private-content-loaded.window="getData($event.detail.data)"
-         class="min-h-a11y w-full order-last">
+         class="min-h-11 w-full order-last">
         <div x-ref="ppMessage"
              class="paypal checkout paypal-logo <?= $escaper->escapeHtmlAttr($block->getContainerId()) ?>-container"
              data-pp-message>
