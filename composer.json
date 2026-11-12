@@ -9,7 +9,7 @@
         "php": ">=7.3.0",
         "magento/framework": ">=102.0.0",
         "hyva-themes/magento2-base-layout-reset": "^2.0.1",
-        "hyva-themes/magento2-theme-module": ">=1.5.3",
+        "hyva-themes/magento2-theme-module": ">=1.5.4",
         "hyva-themes/magento2-email-module": "*",
         "hyva-themes/magento2-order-cancellation-webapi": "^1.0.0"
     },

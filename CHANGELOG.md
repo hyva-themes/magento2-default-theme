@@ -6,7 +6,93 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.5.3...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.5.4...main
+
+## [1.5.4] - 2026-11-12
+
+[1.5.4]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.5.3...1.5.4
+
+### Added
+
+-   **`cart-drawer.shortcut-buttons` container for payment shortcut buttons**  
+    Payment modules can add a block with their own Alpine component to this container, as a CSP compatible replacement
+    for the now deprecated `extra_actions` HTML in the `cart` section data. The container is hidden while the cart is
+    empty, and unlike the `extra_actions` container its scripts run once at page load, so component state is kept.
+    Read cart data from the read-only `$store.privateContent.cart`.
+
+    For more information, please refer to [issue #545](https://gitlab.hyva.io/hyva-themes/magento2-theme-module/-/work_items/545).
+
+### Changed
+
+-   **Updated Tailwind CSS from v4.3.1 to v4.3.5**  
+    For more information, please refer to [merge request #1598](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1598).
+
+-   **Fixes fallback bg opacity calc**  
+    For more information, please refer to [merge request #1583](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1583).
+
+-   **Fixed Cart page shipping estimate for guests without `hyva-themes/magento2-graphql-tokens`**  
+    The guest REST requests for the shipping estimate and totals used the `cartId` of the `cart` section, which is only
+    added by `hyva-themes/magento2-graphql-tokens`, so they were sent to `guest-carts/undefined`. They now use the masked
+    quote id from `window.checkoutConfig.quoteData.entity_id`.
+
+    For more information, please refer to [issue #1386](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1386).
+
+-   **Fixed PayPal Express shortcut sending `quote_id=undefined` without `hyva-themes/magento2-graphql-tokens`**  
+    The `quote_id` is now sent empty, like in Luma, so Magento uses the quote of the current session.
+
+    For more information, please refer to [issue #1386](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1386).
+
+-   **Restored `x-html` for the cart drawer extra actions from section data**  
+    Since 1.5.3 `x-html-safe` stripped the attributes that shortcut buttons (Apple Pay, Google Pay, PayPal and the like)
+    need, so they rendered but did nothing when clicked. With "Map x-html-safe to x-html" enabled, the buttons are still
+    sanitized.
+
+    For more information, please refer to [issue #545](https://gitlab.hyva.io/hyva-themes/magento2-theme-module/-/work_items/545).
+
+-   **Fixes overflow for when extra buttons are added to the main btn strip**  
+    For more information, please refer to [merge request #1584](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1584).
+
+-   **Fixes gallery back navigation**  
+    For more information, please refer to [merge request #1587](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1587).
+
+-   **Fixes 500 error on configurable products without available children on Magento 2.4.7 and 2.4.8**  
+    For more information, please refer to [issue #1388](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1388).
+
+-   **Sign in link uses the referer param instead of the login redirect cookie**  
+    Previously a stale `login_redirect` cookie from an earlier click could redirect the customer to the wrong page after logging in.
+
+    For more information, please refer to [issue #839](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/839).
+
+    Many thanks to Vincent MARMIESSE (ph2m) for the contribution!
+
+-   **Fixed custom options showing on products without the has_options flag**  
+    Magento ignores submitted custom options when `has_options` is off, so they are no longer rendered.
+
+    For more information, please refer to [issue #1061](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1061).
+
+-   **Fixed the BreadcrumbList structured data on product pages using the referring category**  
+    With client-side breadcrumbs and without the category path in product URLs, the structured data now only contains
+    Home and the product, since the referring category differs per visitor and may not contain the product.
+
+    For more information, please refer to [issue #1391](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1391).
+
+-   **Fixed aggregateRating microdata with a ratingValue of 0 for reviews without rating votes**  
+    For more information, please refer to [issue #1393](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1393).
+
+-   **Removed the duplicate Page Builder button styles from the CSS**  
+    Primary and secondary buttons now get the `btn` classes in the markup, so the `@apply` rules are no longer needed.
+
+    For more information, please refer to [merge request #1597](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1597).
+
+-   **Fixed the missing margin on the Page Builder divider**  
+    For more information, please refer to [merge request #1597](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1597).
+
+-   **Fixed layout shift of the PayPal buttons**  
+    The undefined `min-h-a11y` class is replaced with `min-h-11`, so the buttons reserve their height before loading.
+
+### Removed
+
+-   Nothing Removed
 
 ## [1.5.3] - 2026-10-12
 

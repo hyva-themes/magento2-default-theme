@@ -62,6 +62,7 @@
                     <container name="cart-drawer.items.before"/>
                     <container name="cart-drawer.totals.before"/>
                     <container name="cart-drawer.bottom"/>
+                    <container name="cart-drawer.shortcut-buttons"/>
                 </block>
 
                 <block name="topmenu_generic"

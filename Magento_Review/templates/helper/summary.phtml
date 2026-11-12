@@ -25,11 +25,12 @@ $starsEmpty = floor($ratingSteps - $starsFilled - $starFragment);
 $starIconSize = $block->getData('rating_icon_size') ?: 20;
 
 $reviewCount = $block->getReviewsCount();
+$hasAggregateRating = $reviewCount && $rating;
 $product = $block->getProduct();
 ?>
 <?php if ($block->isReviewEnabled()): ?>
     <a
-        <?php if ($reviewCount): ?>
+        <?php if ($hasAggregateRating): ?>
             href="#customer-review-list"
             itemprop="aggregateRating"
             itemscope
@@ -38,7 +39,7 @@ $product = $block->getProduct();
             href="#review-form"
         <?php endif; ?>
     >
-        <?php if ($reviewCount): ?>
+        <?php if ($hasAggregateRating): ?>
             <span hidden itemprop="ratingValue"><?= $starsFilled + $starFragment; ?></span>
             <span hidden itemprop="reviewCount"><?= (int) $reviewCount; ?></span>
         <?php endif; ?>

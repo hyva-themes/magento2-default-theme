@@ -178,18 +178,9 @@ body:where(:not([class*="-full-width"])) {
     }
 }
 
-:is(a, button, div) {
-    &.pagebuilder-button-primary {
-        @apply btn btn-primary;
-    }
-
-    &.pagebuilder-button-secondary {
-        @apply btn btn-secondary;
-    }
-}
-
 /* Divider */
 [data-content-type="divider"] hr {
+    margin-block: --spacing(6);
     border-block-end: 0;
     border-inline: 0;
 }
