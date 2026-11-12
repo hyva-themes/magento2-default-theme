@@ -6,7 +6,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.5.3...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.5.4...main
+
+## [1.5.4] - 2026-11-12
+
+[1.5.4]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.5.3...1.5.4
 
 ### Added
 
@@ -42,7 +46,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
     For more information, please refer to [issue #545](https://gitlab.hyva.io/hyva-themes/magento2-theme-module/-/work_items/545).
 
--   **Fixes overflow for when extra buttons are added the the main btn strip**  
+-   **Fixes overflow for when extra buttons are added to the main btn strip**  
     For more information, please refer to [merge request #1584](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1584).
 
 -   **Fixes gallery back navigation**  
