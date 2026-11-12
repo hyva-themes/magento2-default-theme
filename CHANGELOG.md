@@ -24,6 +24,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+-   **Updated Tailwind CSS from v4.3.1 to v4.3.5**  
+    For more information, please refer to [merge request #1598](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1598).
+
 -   **Fixes fallback bg opacity calc**  
     For more information, please refer to [merge request #1583](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1583).
 
