@@ -180,6 +180,7 @@ body:where(:not([class*="-full-width"])) {
 
 /* Divider */
 [data-content-type="divider"] hr {
+    margin-block: --spacing(6);
     border-block-end: 0;
     border-inline: 0;
 }
