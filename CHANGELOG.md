@@ -76,6 +76,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 -   **Fixed aggregateRating microdata with a ratingValue of 0 for reviews without rating votes**  
     For more information, please refer to [issue #1393](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1393).
 
+-   **Removed the duplicate Page Builder button styles from the CSS**  
+    Primary and secondary buttons now get the `btn` classes in the markup, so the `@apply` rules are no longer needed.
+
+    For more information, please refer to [merge request #1597](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1597).
+
+-   **Fixed the missing margin on the Page Builder divider**  
+    For more information, please refer to [merge request #1597](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1597).
+
 ### Removed
 
 -   Nothing Removed
