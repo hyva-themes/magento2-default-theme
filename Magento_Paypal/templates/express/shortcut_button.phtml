@@ -25,7 +25,7 @@ $clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/product-ex
 <div x-data="initPayPalInContext('paypalInContextPDP', <?= $escaper->escapeHtmlAttr($clientConfig) ?>)"
      x-intersect="checkAndInitializeButtons()"
      @private-content-loaded.window="getData($event.detail.data)"
-     class="min-h-a11y"
+     class="min-h-a11y w-full"
 >
     <div id="paypalInContextPDP" class="paypal checkout paypal-logo product-shortcuts-container isolate">
     </div>
@@ -41,7 +41,7 @@ $clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/product-ex
             getData(data) {
                 if (data.cart) {
                     this.cart = data.cart;
-                    
+
                     if (this.intersected && !this.alreadyLoaded) {
                         this.alreadyLoaded = true;
                         this.initializeButtons();
