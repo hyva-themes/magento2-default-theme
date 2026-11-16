@@ -8,6 +8,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 [Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.5.4...main
 
+### Changed
+
+-   **Header account menu sizes to its content on desktop**  
+    Longer link labels no longer wrap. The mobile width is unchanged.
+
+    For more information, please refer to [issue #1394](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/work_items/1394).
+
 ## [1.5.4] - 2026-11-12
 
 [1.5.4]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.5.3...1.5.4
