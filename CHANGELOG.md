@@ -11,8 +11,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 ### Added
 
 -   **`css_classes` argument for the product info card**  
-    Classes set on the `product.info` block are appended to the card wrapper, so a theme can add classes like
-    `md:sticky md:top-4` without overriding `Magento_Catalog::product/view/product-info.phtml`.
+    Classes set on the `product.info` block replace the default `card mb-6` wrapper classes, so a theme can change them
+    without overriding `Magento_Catalog::product/view/product-info.phtml`.
 
     For more information, please refer to [issue #1403](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1403).
 
