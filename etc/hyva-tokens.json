@@ -1,6 +1,7 @@
 {
   "groups": {
-    "brand": "Brand"
+    "brand": "Brand",
+    "surface": "Surfaces and text"
   },
   "tokens": {
     "color-primary": {
@@ -64,6 +65,43 @@
       "default": "color-mix(in oklch, var(--color-secondary) 80%, var(--color-black))",
       "resolved": "color-mix(in oklch, var(--color-secondary) 80%, #000)",
       "note": "Set it only to pick a shade by hand."
+    },
+    "color-bg": {
+      "label": "Background",
+      "group": "surface",
+      "type": "color",
+      "default": "var(--color-slate-50)",
+      "resolved": "oklch(98.4% 0.003 247.858)",
+      "contrast": "color-ink",
+      "note": "Page background."
+    },
+    "color-surface": {
+      "label": "Surface",
+      "group": "surface",
+      "type": "color",
+      "default": "var(--color-white)",
+      "resolved": "#fff",
+      "contrast": "color-ink",
+      "note": "Cards, panels and form fields."
+    },
+    "color-ink": {
+      "label": "Text",
+      "group": "surface",
+      "type": "color",
+      "default": "var(--color-slate-950)",
+      "resolved": "oklch(12.9% 0.042 264.695)",
+      "aliases": ["color-fg"],
+      "note": "Body text and headings."
+    },
+    "color-ink-muted": {
+      "label": "Muted text",
+      "group": "surface",
+      "type": "color",
+      "default": "var(--color-slate-600)",
+      "resolved": "oklch(44.6% 0.043 257.281)",
+      "contrast": "color-bg",
+      "aliases": ["color-fg-secondary"],
+      "note": "Hints, labels and other secondary text."
     }
   }
 }
