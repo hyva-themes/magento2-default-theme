@@ -204,7 +204,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                 x-show="(hasAvailableRegions() && isRegionRequired) || showOptionalRegions"
                 :class="{ 'required': isRegionRequired }"
             >
-                <label class="label" for="region_id">
+                <label class="label" :for="regionLabelFor">
                     <span><?= /* @noEscape */ $regionLabel ?></span>
                 </label>
                 <div class="control">
@@ -375,6 +375,9 @@ function initCustomerAddressEdit() {
         },
         showRegionField() {
             return this.hasAvailableRegions() && (this.isRegionRequired || this.showOptionalRegions);
+        },
+        regionLabelFor() {
+            return this.showRegionField() ? 'region_id' : 'region';
         },
         onRegionIdChange(event) {
             this.$refs.region.value = this.selectedRegion.length > 0 ?
