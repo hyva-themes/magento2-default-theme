@@ -29,9 +29,10 @@ $attributesViewModel = $viewModels->require(ProductAttributes::class);
 /** @var Product $product */
 $product = $productViewModel->getProduct();
 $productType = $product->getTypeId();
+$cssClasses = (string) $block->getData('css_classes');
 
 ?>
-<div class="card mb-6">
+<div class="card mb-6<?= $cssClasses ? ' ' . $escaper->escapeHtmlAttr($cssClasses) : '' ?>">
     <?= $block->getChildHtml('product.info.title') ?>
 
     <div class="my-2 flex">

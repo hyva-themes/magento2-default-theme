@@ -8,6 +8,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 [Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.5.4...main
 
+### Added
+
+-   **`css_classes` argument for the product info card**  
+    Classes set on the `product.info` block are appended to the card wrapper, so a theme can add classes like
+    `md:sticky md:top-4` without overriding `Magento_Catalog::product/view/product-info.phtml`.
+
+    For more information, please refer to [issue #1403](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1403).
+
 ## [1.5.4] - 2026-11-12
 
 [1.5.4]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.5.3...1.5.4
