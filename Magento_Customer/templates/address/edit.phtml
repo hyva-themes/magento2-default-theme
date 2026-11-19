@@ -342,7 +342,9 @@ function initCustomerAddressEdit() {
 
             const initialRegionId = Object.keys(this.availableRegions).filter(regionId => this.availableRegions[regionId].name === initialRegion)[0];
             this.selectedRegion = initialRegionId || '0';
-            this.setRegionInputValue(initialRegionId && this.availableRegions[initialRegionId].name || '');
+            this.setRegionInputValue(this.showRegionField()
+                ? initialRegionId && this.availableRegions[initialRegionId].name || ''
+                : initialRegion || '');
 
         },
         changeCountry(event, initialRegion) {
@@ -370,6 +372,9 @@ function initCustomerAddressEdit() {
         },
         hasAvailableRegions() {
             return Object.keys(this.availableRegions).length > 0;
+        },
+        showRegionField() {
+            return this.hasAvailableRegions() && (this.isRegionRequired || this.showOptionalRegions);
         },
         onRegionIdChange(event) {
             this.$refs.region.value = this.selectedRegion.length > 0 ?
