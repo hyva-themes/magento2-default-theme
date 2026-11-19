@@ -12,7 +12,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 -   **Design token config for the Hyvä UI Tokens tab**  
     The theme ships `etc/hyva-tokens.json`, so the Tokens tab of the Theme edit page is available for `Hyva/default`
-    and its child themes. It covers the brand colors, surfaces and text, form fields and the gray scale.
+    and its child themes. It covers the brand colors.
 
     The theme preview image is now a screenshot of the theme. Magento only copies it when a theme is first registered,
     so existing installs keep the old image.
