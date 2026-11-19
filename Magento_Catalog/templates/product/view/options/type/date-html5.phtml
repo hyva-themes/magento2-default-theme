@@ -48,10 +48,11 @@ $htmlInputTypes = [
  * To change to the (prettier) browser native input types rename this template to date.phtml in a theme.
  */
 ?>
-<div class="flex flex-col sm:flex-row border-t border-gray-300 py-2 last:mb-6 last:border-b w-full items-center">
-    <label class="label text-gray-700 text-left w-full sm:w-1/2"
-           for="options_<?= $escaper->escapeHtmlAttr($optionId) ?>"
-           x-html="updateOptionPrice('<?= $escaper->escapeJs($optionId) ?>', $el)"
+<div class="mb-4">
+    <label
+        class="mb-1 text-base font-normal"
+        for="options_<?= $escaper->escapeHtmlAttr($optionId) ?>"
+        x-html-safe="updateOptionPrice('<?= $escaper->escapeJs($optionId) ?>', $el)"
     >
         <span><?= $escaper->escapeHtml($option->getTitle()) ?></span>
         <?php if ($option->getIsRequire()): ?>
@@ -60,7 +61,7 @@ $htmlInputTypes = [
         <span><?= /* @noEscape */ $block->getFormattedPrice() ?></span>
     </label>
 
-    <div class="flex flex-wrap gap-y-2 sm:ml-2 text-gray-900 text-left w-full sm:w-1/2">
+    <div class="flex flex-wrap gap-y-2">
         <input type="<?= /* @noEscape */ $htmlInputTypes[$option->getType()] ?>"
                id="options_<?= $escaper->escapeHtmlAttr($optionId) ?>"
                x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>"

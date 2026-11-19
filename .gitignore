@@ -2,3 +2,4 @@
 /vendor/
 grumphp.yml
 !grumphp.yml.sample
+.delta

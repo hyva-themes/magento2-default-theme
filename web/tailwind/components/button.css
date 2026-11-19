@@ -80,9 +80,15 @@
 }
 
 .btn-size-lg {
-    @apply px-10 py-4 text-lg;
+    padding-inline: --spacing(10);
+    padding-block: --spacing(4);
+    font-size: var(--text-lg);
+    line-height: var(--text-lg--line-height);
 }
 
 .btn-size-sm {
-    @apply px-2 py-2 text-sm;
+    padding-inline: --spacing(2);
+    padding-block: --spacing(2);
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
 }

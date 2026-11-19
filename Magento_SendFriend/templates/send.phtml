@@ -8,7 +8,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Hyva\Theme\ViewModel\ReCaptcha;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
@@ -22,10 +22,10 @@ use Magento\SendFriend\Block\Send;
  * @var Escaper $escaper
  * @var ReCaptcha $recaptcha
  * @var ViewModelRegistry $viewModels
- * @var HeroiconsOutline $icons
+ * @var LucideIcons $lucideIcons
  */
 
-$icons = $viewModels->require(HeroiconsOutline::class);
+$lucideIcons = $viewModels->require(LucideIcons::class);
 
 // Do not replace this with $viewModels->require(ReCaptcha::class); that might break the dependency
 // on Magento_ReCaptchaSendFriend module
@@ -151,7 +151,7 @@ $recipients = $formData->getRecipientData() ?? '[]';
                                                 :disabled="fields.length <= 1"
                                                 :class="{'opacity-60': fields.length <= 1}"
                                         >
-                                            <?= $icons->trashHtml('', 24, 24, ['title' => __('Remove')]) ?>
+                                            <?= $lucideIcons->trashHtml('', 24, 24, ['title' => __('Remove')]) ?>
                                         </button>
                                     </div>
                                 </div>

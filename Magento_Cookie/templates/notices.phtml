@@ -8,7 +8,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Hyva\Theme\ViewModel\HyvaCsp;
 use Hyva\Theme\ViewModel\Store as StoreViewModel;
 use Magento\Cookie\Block\Html\Notices;
@@ -21,8 +21,8 @@ use Magento\Cookie\Helper\Cookie;
 /** @var HyvaCsp $hyvaCsp */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 
 /** @var StoreViewModel $storeViewModel */
 $storeViewModel = $viewModels->require(StoreViewModel::class);
@@ -93,7 +93,7 @@ if ($cookieHelper->isCookieRestrictionModeEnabled()): ?>
                 title="<?= $escaper->escapeHtmlAttr(__('Close panel')) ?>"
                 class="absolute right-0 top-0 p-4"
             >
-                <?= $heroicons->xHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
+                <?= $lucideIcons->xHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
             </button>
 
             <div class="p-2 pr-4">

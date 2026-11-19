@@ -1,10 +1,11 @@
 @layer components {
     .cms-content {
-        @apply prose max-w-full;
+        @apply prose;
+        max-width: 100%;
     }
 
     /* Alias for overflow-auto, commonly used in cms content */
     .table-wrapper {
-        @apply overflow-auto;
+        overflow: auto;
     }
 }

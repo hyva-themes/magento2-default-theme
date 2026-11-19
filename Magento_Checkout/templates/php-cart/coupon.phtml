@@ -35,10 +35,6 @@ $recaptcha = $block->getData('viewModelRecaptcha');
             errors: 0,
             hasCaptchaToken: 0,
             showCouponForm: <?= $hasCouponCode ? 1 : 0 ?>,
-            formData: {
-                coupon_code: '<?= $escaper->escapeJs($block->getCouponCode()) ?>',
-                remove: '<?= (int) $hasCouponCode ?>'
-            },
             init(){
                 const browserStorageShowCouponForm = hyva.getBrowserStorage().getItem('hyva.showCouponForm');
                 this.showCouponForm = browserStorageShowCouponForm === 'true' ? true : false;
@@ -101,7 +97,6 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                     name="coupon_code"
                     class="form-input w-full"
                     value="<?= $escaper->escapeHtmlAttr($block->getCouponCode()) ?>"
-                    x-model="formData.coupon_code"
                     x-ref="couponInput"
                     placeholder="<?= $escaper->escapeHtmlAttr(__('Enter discount code')) ?>"
                     <?php if ($hasCouponCode): ?>

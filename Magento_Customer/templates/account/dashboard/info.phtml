@@ -6,7 +6,7 @@
  */
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Customer\Block\Account\Dashboard\Info;
 use Magento\Framework\Escaper;
 
@@ -14,8 +14,8 @@ use Magento\Framework\Escaper;
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 ?>
 <h2 class="mb-6 text-2xl block-title">
     <?= $escaper->escapeHtml(__('Account Information')) ?>
@@ -26,7 +26,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             <div
                 class="inline-flex items-center justify-center shrink-0 w-16 h-16 mb-4
                     rounded-full sm:mr-8 sm:mb-0 bg-gray-100">
-                <?= $heroicons->userHtml('', 32, 32, ['aria-hidden' => 'true']) ?>
+                <?= $lucideIcons->userHtml('', 32, 32, ['aria-hidden' => 'true']) ?>
             </div>
             <div class="grow">
                 <h3 class="mb-3 text-lg font-medium text-gray-900 title-font">
@@ -43,14 +43,14 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     aria-label="<?= $escaper->escapeHtml(__('Edit contact information')) ?>"
                 >
                     <span><?= $escaper->escapeHtml(__('Edit')) ?></span>
-                    <?= $heroicons->arrowRightHtml('ml-2', 16, 16, ['aria-hidden' => 'true']); ?>
+                    <?= $lucideIcons->arrowRightHtml('ml-2', 16, 16, ['aria-hidden' => 'true']); ?>
                 </a>
                 <a
                     class="inline-flex items-center w-full md:text-sm"
                     href="<?= $escaper->escapeUrl($block->getChangePasswordUrl()) ?>"
                 >
                     <?= $escaper->escapeHtml(__('Change Password')) ?>
-                    <?= $heroicons->arrowRightHtml('ml-2', 16, 16, ['aria-hidden' => 'true']); ?>
+                    <?= $lucideIcons->arrowRightHtml('ml-2', 16, 16, ['aria-hidden' => 'true']); ?>
                 </a>
             </div>
         </div>
@@ -61,7 +61,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 <div
                     class="inline-flex items-center justify-center shrink-0 w-16 h-16 mb-4
                         rounded-full sm:mr-8 sm:mb-0 bg-gray-100">
-                    <?= $heroicons->mailHtml('', 32, 32, ['aria-hidden' => 'true']) ?>
+                    <?= $lucideIcons->mailHtml('', 32, 32, ['aria-hidden' => 'true']) ?>
                 </div>
                 <div class="grow">
                     <h3 class="mb-3 text-lg font-medium text-gray-900 title-font">
@@ -80,7 +80,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                         aria-label="<?= $escaper->escapeHtml(__('Edit newsletters')) ?>"
                     >
                         <span><?= $escaper->escapeHtml(__('Edit')) ?></span>
-                        <?= $heroicons->arrowRightHtml('ml-2', 16, 16, ['aria-hidden' => 'true']); ?>
+                        <?= $lucideIcons->arrowRightHtml('ml-2', 16, 16, ['aria-hidden' => 'true']); ?>
                     </a>
                 </div>
             </div>

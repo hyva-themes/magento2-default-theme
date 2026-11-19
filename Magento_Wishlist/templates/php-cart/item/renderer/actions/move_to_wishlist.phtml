@@ -16,15 +16,13 @@ use Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist;
 
 /** @var LucideIcons $lucideIcons */
 $lucideIcons = $viewModels->require(LucideIcons::class);
-
 ?>
 <?php if ($block->isAllowInCart() && $block->isProductVisibleInSiteVisibility()): ?>
     <button
         type="button"
         class="btn p-2"
-        x-data
-        @click.prevent='hyva.postForm(<?= /* @noEscape */ $block->getMoveFromCartParams() ?>)'
-        title="<?= $escaper->escapeHtmlAttr(__('Move to Wishlist')) ?>"
+        @click='moveToWishlist'
+        data-post-form="<?= $escaper->escapeHtmlAttr($block->getMoveFromCartParams()) ?>"
         aria-label="<?= $escaper->escapeHtmlAttr(__('Move to Wishlist')) ?>"
     >
         <?= $lucideIcons->heartHtml('', 20, 20, ['aria-hidden' => 'true']) ?>

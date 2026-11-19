@@ -8,16 +8,18 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 
 $blockId = $block->getBlockId() ?: 'collapsible';
 $blockClass = $block->getBlockCss();
@@ -25,20 +27,19 @@ $blockTitle = $block->getBlockTitle() ?: __('Details');
 $isNav = $block->getIsNav() !== null ? $block->getIsNav() : false;
 ?>
 
-<div class="card py-2 px-8 mb-6 <?= $escaper->escapeHtmlAttr($blockClass) ?>"
-     x-data="initAccountNavigation()"
-     x-init="checkIsMobileResolution()"
-     @resize.window.debounce="checkIsMobileResolution()"
-     @visibilitychange.window.debounce="checkIsMobileResolution()"
+<div
+    class="card py-2 px-8 mb-6 <?= $escaper->escapeHtmlAttr($blockClass) ?>"
+    x-data="initAccountNavigation"
+    x-bind="eventListeners"
 >
     <button
         type="button"
         id="<?= $escaper->escapeHtmlAttr($blockId) ?>-title"
-        class="group py-2 flex justify-between items-center w-full"
-        @click="blockOpen = !blockOpen"
-        :aria-expanded="blockOpen"
-        :aria-disabled="!isMobile"
-        :disabled="!isMobile ? '' : null"
+        class="group py-2 flex justify-between items-center w-full text-start md:cursor-text md:select-text"
+        @click="toggleOpen"
+        aria-controls="<?= $escaper->escapeHtmlAttr($blockId) ?>"
+        :aria-expanded="isOpen"
+        :disabled="isNotMobile"
     >
 
         <span class="text-lg">
@@ -48,7 +49,7 @@ $isNav = $block->getIsNav() !== null ? $block->getIsNav() : false;
             class="px-1 py-1 border rounded border-gray-300 md:hidden"
             x-ref="AccountNavigationMobileToggleIcon"
         >
-            <?= $heroicons->chevronDownHtml(
+            <?= $lucideIcons->chevronDownHtml(
                 'transition-transform duration-300 ease-in-out transform group-aria-expanded:rotate-180',
                 24,
                 24,
@@ -60,16 +61,16 @@ $isNav = $block->getIsNav() !== null ? $block->getIsNav() : false;
         <nav
             id="<?= $escaper->escapeHtmlAttr($blockId) ?>"
             aria-labelledby="<?= $escaper->escapeHtmlAttr($blockId) ?>-title"
-            class="hidden md:block border-t pt-3 my-2 border-gray-300"
-            :class="{ 'hidden': !blockOpen }"
+            class="hidden md:block data-[open=true]:block border-t pt-3 my-2 border-gray-300"
+            :data-open="isOpen"
         >
             <?= $block->getChildHtml() ?>
         </nav>
     <?php else: ?>
         <div
             id="<?= $escaper->escapeHtmlAttr($blockId) ?>"
-            class="hidden md:block border-t pt-3 my-2 border-gray-300"
-            :class="{ 'hidden': !blockOpen }"
+            class="hidden md:block data-[open=true]:block border-t pt-3 my-2 border-gray-300"
+            :data-open="isOpen"
         >
             <?= $block->getChildHtml() ?>
         </div>
@@ -79,13 +80,33 @@ $isNav = $block->getIsNav() !== null ? $block->getIsNav() : false;
     function initAccountNavigation() {
         return {
             isMobile: false,
-            blockOpen: false,
+            isOpen: false,
+            init() {
+                this.checkIsMobileResolution();
+            },
+            isNotMobile() {
+                return !this.isMobile;
+            },
+            toggleOpen() {
+                this.isOpen = !this.isOpen;
+            },
             checkIsMobileResolution() {
                 const mobileElement = this.$refs.AccountNavigationMobileToggleIcon;
                 this.isMobile = mobileElement
                     ? getComputedStyle(mobileElement).display !== 'none'
                     : window.matchMedia('(max-width: 767px)').matches; // Fallback to `md` breakpoint
+            },
+            eventListeners: {
+                ['@resize.window.debounce']() {
+                    this.checkIsMobileResolution();
+                },
+                ['@visibilitychange.window.debounce']() {
+                    this.checkIsMobileResolution();
+                }
             }
         }
     }
+
+    window.addEventListener('alpine:init', () => Alpine.data('initAccountNavigation', initAccountNavigation), {once: true})
 </script>
+<?php $hyvaCsp->registerInlineScript() ?>

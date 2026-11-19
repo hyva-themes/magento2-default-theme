@@ -80,6 +80,7 @@ $suffix = $block->showSuffix();
                    value="<?= $escaper->escapeHtmlAttr($block->getObject()->getFirstname()) ?>"
                    required
                    title="<?= $escaper->escapeHtmlAttr($block->getStoreLabel('firstname')) ?>"
+                   autocomplete="given-name"
                    class="form-input w-full <?= $escaper->escapeHtmlAttr(
                        $block->getAttributeValidationClass('firstname')
                    ) ?>"
@@ -121,6 +122,7 @@ $suffix = $block->showSuffix();
                    required
                    value="<?= $escaper->escapeHtmlAttr($block->getObject()->getLastname()) ?>"
                    title="<?= $escaper->escapeHtmlAttr($block->getStoreLabel('lastname')) ?>"
+                   autocomplete="family-name"
                    class="form-input w-full <?= $escaper->escapeHtmlAttr(
                        $block->getAttributeValidationClass('lastname')
                    ) ?>"

@@ -8,62 +8,67 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Msrp\Block\Popup;
 use Magento\Framework\Escaper;
 
 /** @var Popup $block */
 /** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
+
+$explanationMessage = $escaper->escapeHtml($block->getExplanationMessage(), ["br"]);
+$whatsThisMessage = $escaper->escapeHtml($block->getExplanationMessageWhatsThis(), ["br"]);
 ?>
 
 <?php if ($block->isEnabled()): ?>
     <div
-        class="z-10 fixed bottom-4 inset-x-4 sm:w-96 max-w-prose mx-auto p-4 rounded shadow-2xl bg-white
-            lg:absolute lg:bottom-auto lg:right-auto lg:top-[var(--msrp-block-offset)] lg:left-[var(--msrp-inline-offset)] lg:shadow-lg lg:max-w-xs"
-        :style="setPosition()"
-        x-data="initMsrpPopover()"
+        class="z-10 fixed bottom-4 inset-x-4 sm:w-96 max-w-prose mx-auto card shadow-2xl
+            lg:absolute lg:bottom-auto lg:right-auto lg:top-[var(--msrp-block-offset)]
+            lg:left-[var(--msrp-inline-offset)] lg:shadow-lg lg:max-w-xs"
+        :style="setPosition"
+        x-data="initMsrpPopover"
         x-cloak
         x-show="open"
         x-transition:enter="transition ease-out duration-300 opacity-0 translate-y-full lg:-translate-y-0"
         x-transition:enter-end="transition ease-out duration-300 opacity-100 translate-y-0"
         x-transition:leave="transition ease-in duration-150 opacity-0 translate-y-full lg:-translate-y-0"
-        @click.outside="closePopover($event)"
-        @msrp-popover.window="showPopover($event.detail)"
-        @resize.window.debounce="closePopover()"
-        @keydown.window.escape="closePopover()"
+        @click.outside="closePopover"
+        @msrp-popover.window="showPopover"
+        @resize.window.debounce="closePopover"
+        @keydown.window.escape="closeOnEscape"
     >
         <div class="flex justify-between gap-2 mb-2">
             <strong id="map-popup-heading-price" class="font-bold" x-text="title"></strong>
             <button
                 type="button"
-                @click="closePopover()"
+                @click="closePopover"
                 aria-label="<?= $escaper->escapeHtmlAttr(__('Close panel')) ?>"
-                title="<?= $escaper->escapeHtmlAttr(__('Close panel')) ?>"
+                class="btn p-1"
             >
-                <?= $heroicons->xHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
+                <?= $lucideIcons->xHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
             </button>
         </div>
 
-        <template x-if="type !== 'help'">
+        <template x-if="isNotHelpPopup">
             <div class="mb-4 text-sm">
                 <dl class="price-box">
                     <div class="flex gap-2">
                         <dt class="font-semibold whitespace-nowrap"><?= $escaper->escapeHtml(__('Price')) ?>:</dt>
-                        <dd x-html="msrpPrice" class="flex flex-col"></dd>
+                        <dd x-html-safe="msrpPrice" class="flex flex-col"></dd>
                     </div>
                     <div class="flex gap-2">
                         <dt class="font-semibold whitespace-nowrap"><?= $escaper->escapeHtml(__('Actual Price')) ?>:</dt>
-                        <dd x-html="actualPrice" class="flex flex-col"></dd>
+                        <dd x-html-safe="actualPrice" class="flex flex-col"></dd>
                     </div>
                 </dl>
             </div>
         </template>
 
-        <div class="text-sm" x-html="content"></div>
+        <div class="text-sm" x-html-safe="content"></div>
 
         <script>
             function initMsrpPopover() {
@@ -71,7 +76,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     open: false,
                     type: "price", // price or help
                     title: '',
-                    content: '<?= $escaper->escapeHtml($block->getExplanationMessage(), ["br"]) ?>',
+                    content: '<?= $escaper->escapeJs($explanationMessage) ?>',
                     isSaleable: false,
                     actualPrice: null,
                     msrpPrice: null,
@@ -103,8 +108,13 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                         if (event && event.target === this.anchor) return;
                         this.open = false;
                     },
+                    closeOnEscape() {
+                        if (!this.open) return;
+                        this.open = false;
+                        this.anchor?.focus();
+                    },
                     showPopover(event) {
-                        const data = event.msrpData;
+                        const data = event.detail.msrpData;
                         if (!data) return;
 
                         this.open = true;
@@ -117,16 +127,34 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                             ? ''
                             : data.productName;
                         this.content = this.type === 'help'
-                            ? '<?= $escaper->escapeHtml($block->getExplanationMessageWhatsThis(), ["br"]) ?>'
-                            : '<?= $escaper->escapeHtml($block->getExplanationMessage(), ["br"]) ?>';
+                            ? '<?= $escaper->escapeJs($whatsThisMessage) ?>'
+                            : '<?= $escaper->escapeJs($explanationMessage) ?>';
 
                         if (event.target) {
                             this.anchor = event.target;
                             this.$nextTick(() => this.calcPosition());
                         }
+                    },
+                    isNotHelpPopup() {
+                        return this.type !== 'help'
                     }
                 }
             }
+
+            function initMsrpPrice() {
+                return {
+                    onClick() {
+                        const msrpData = JSON.parse(this.$el.dataset.msrpData);
+                        this.$dispatch('msrp-popover', { msrpData, target: this.$el });
+                    }
+                };
+            }
+
+            window.addEventListener('alpine:init', () => {
+                Alpine.data('initMsrpPopover', initMsrpPopover);
+                Alpine.data('initMsrpPrice', initMsrpPrice);
+            }, { once: true })
         </script>
+        <?php $hyvaCsp->registerInlineScript() ?>
     </div>
 <?php endif; ?>

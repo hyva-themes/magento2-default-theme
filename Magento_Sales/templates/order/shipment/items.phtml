@@ -6,7 +6,7 @@
  */
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Framework\Escaper;
 use Magento\Sales\Block\Order\Items;
 use Magento\Shipping\Helper\Data as ShippingHelper;
@@ -18,8 +18,8 @@ use Magento\Shipping\Helper\Data as ShippingHelper;
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 
 $order = $block->getOrder();
 $shippingHelper = $this->helper(ShippingHelper::class);
@@ -32,14 +32,14 @@ $shippingHelper = $this->helper(ShippingHelper::class);
            class="inline-block ml-2 pl-2 border-l text-sm font-normal"
            target="_blank"
            rel="noopener">
-            <?= $heroicons->printerHtml('inline-block', 20, 20); ?>
+            <?= $lucideIcons->printerHtml('inline-block', 20, 20); ?>
             <span class="inline-block ml-1 underline"><?= $escaper->escapeHtml(__('Print Shipment')) ?></span>
         </a>
         <?php if ($tracks->count()): ?>
             <a href="<?= $escaper->escapeUrl($shippingHelper->getTrackingPopupUrlBySalesModel($shipment)) ?>"
                target="_blank" rel="noopener" title="<?= $escaper->escapeHtml(__('Track Shipment')) ?>"
                class="inline-block ml-2 pl-2 border-l text-sm font-normal">
-                <?= $heroicons->searchHtml('inline-block', 20, 20); ?>
+                <?= $lucideIcons->searchHtml('inline-block', 20, 20); ?>
                 <span class="inline-block ml-1 underline"><?= $escaper->escapeHtml(__('Track Shipment')) ?></span>
             </a>
         <?php endif; ?>

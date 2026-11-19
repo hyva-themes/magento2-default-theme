@@ -23,7 +23,7 @@ $magento = $viewModels->require(MagentoMetadata::class);
             <div x-text="hyva.formatPrice(segment.value)" class="justify-self-end"></div>
         </div>
         <div :class="wrapperClass" class="text-base">
-            <div x-html="`${segment.title} ${excludingTaxMessage}`"></div>
+            <div x-html-safe="`${segment.title} ${excludingTaxMessage}`"></div>
             <div
                 class="justify-self-end"
                 <?php /* All Mage-OS releases with a version < 2.4.6 match Magento code >= 2.4.6 */ ?>

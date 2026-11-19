@@ -61,12 +61,27 @@ $showWishlist = $block->getShowWishlist() !== null ? (bool) $block->getShowWishl
                 this.searchOpen = !this.searchOpen;
                 this.$dispatch('search-open');
             },
+            toggleSearchOpen() {
+                this.searchOpen = true;
+                this.$dispatch('search-open');
+            },
             searchClose() {
                 this.searchOpen = false;
                 this.$refs.searchButton.focus();
             },
             searchEscape() {
                 this.searchClose();
+            },
+            isMac: /Mac|iPod|iPhone|iPad/.test(navigator.platform),
+            textShortcutModifier() {
+                return this.isMac ? '⌘ K' : 'Ctrl+K';
+            },
+            searchShortcut(e) {
+                const modifier = this.isMac ? e.metaKey : e.ctrlKey;
+                if (modifier && e.key === 'k') {
+                    e.preventDefault();
+                    this.toggleSearchOpen();
+                }
             }
         }
     }
@@ -100,9 +115,11 @@ $showWishlist = $block->getShowWishlist() !== null ? (bool) $block->getShowWishl
                 id="menu-search-icon"
                 class="btn bg-transparent border-transparent p-1"
                 @click.prevent="toggleSearch"
+                @keydown.window="searchShortcut"
                 aria-label="<?= $escaper->escapeHtmlAttr(__('Toggle search form')) ?>"
                 aria-haspopup="true"
                 :aria-expanded="searchOpen"
+                :aria-keyshortcuts="textShortcutModifier"
                 x-ref="searchButton"
             >
                 <?= $lucideIcons->searchHtml('', 24, 24, ["aria-hidden" => "true"]) ?>
@@ -128,8 +145,7 @@ $showWishlist = $block->getShowWishlist() !== null ? (bool) $block->getShowWishl
                 :aria-label="cartAriaLabel"
                 <?php if ($showMiniCart): ?>
                     @click="toggleCart"
-                    :aria-expanded="isCartOpen"
-                    aria-haspopup="dialog"
+                    aria-label="<?= $escaper->escapeHtmlAttr(__('Toggle minicart')) ?>"
                 <?php else: ?>
                     href="<?= $escaper->escapeUrl($block->getUrl('checkout/cart/index')) ?>"
                     aria-label="<?= $escaper->escapeHtmlAttr(__('View cart')) ?>"
@@ -169,4 +185,3 @@ $showWishlist = $block->getShowWishlist() !== null ? (bool) $block->getShowWishl
     <!--Authentication Pop-Up-->
     <?= $block->getChildHtml('authentication-popup'); ?>
 </div>
-

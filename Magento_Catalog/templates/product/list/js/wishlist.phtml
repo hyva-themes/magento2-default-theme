@@ -23,11 +23,22 @@ $wishlistViewModel = $viewModels->require(Wishlist::class);
                 const formKey = hyva.getFormKey();
                 const postUrl = BASE_URL + 'wishlist/index/add/';
 
+                const params = new URLSearchParams({
+                    form_key: formKey,
+                    product: productId,
+                    uenc: hyva.getUenc()
+                });
+
+                const form = document.getElementById(`product_addtocart_form_${productId}`);
+                if (form) {
+                    new FormData(form).forEach((value, key) => params.set(key, value));
+                }
+
                 fetch(postUrl, {
                     "headers": {
                         "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
                     },
-                    "body": "form_key=" + formKey + "&product=" + productId + "&uenc=" + hyva.getUenc(),
+                    "body": params.toString(),
                     "method": "POST",
                     "mode": "cors",
                     "credentials": "include"

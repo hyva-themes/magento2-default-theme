@@ -28,16 +28,16 @@ $modalViewModel = $viewModels->require(Modal::class);
 
 /** @var ItemOutput $cartItemOutputViewModel */
 $cartItemOutputViewModel = $viewModels->require(ItemOutput::class);
+
+$mergedCells = ($cartItemOutputViewModel->isItemPriceDisplayBoth() ? 2 : 1);
 ?>
-<?php $mergedCells = ($cartItemOutputViewModel->isItemPriceDisplayBoth() ? 2 : 1); ?>
 <?= $block->getChildHtml('form_before') ?>
 <form
     id="form-validate"
     class="form form-cart"
     action="<?= $escaper->escapeUrl($block->getUrl('checkout/cart/updatePost')) ?>"
     method="post"
-    x-data
-    @submit.prevent="hyva.postCart($event.target)"
+    @submit.prevent="postCart"
 >
     <?= $block->getBlockHtml('formkey') ?>
     <div class="<?= $mergedCells == 2 ? 'cart detailed' : 'cart' ?>">
@@ -45,9 +45,9 @@ $cartItemOutputViewModel = $viewModels->require(ItemOutput::class);
             <legend class="sr-only">
                 <h2><?= $escaper->escapeHtml(__('Shopping Cart Items')) ?></h2>
             </legend>
-            <ul>
+            <ul class="divide-y divide-gray-300">
                 <?php foreach ($block->getItems() as $item): ?>
-                    <li class="py-6 border-b border-gray-300 first:pt-0 last:pb-0 last:border-b-0">
+                    <li class="py-6 first:pt-0 last:pb-0">
                         <?= $block->getItemHtml($item) ?>
                     </li>
                 <?php endforeach ?>

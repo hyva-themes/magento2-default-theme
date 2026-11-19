@@ -49,9 +49,9 @@ $product = $block->getProduct();
                     <ul role="list" class="bundle items">
                         <template x-for="option in selectedOptions">
                             <li class="mb-2" x-show="option.products.length">
-                                <span class="text-base font-semibold" x-html="option.label"></span>
+                                <span class="text-base font-semibold" x-text="option.label"></span>
                                 <template x-for="product in option.products">
-                                    <div><span x-html="product.qty"></span> x <span x-html="product.name"></span></div>
+                                    <div><span x-text="product.qty"></span> x <span x-text="product.name"></span></div>
                                 </template>
                             </li>
                         </template>
@@ -62,11 +62,11 @@ $product = $block->getProduct();
             <?= $block->getChildHtml("product.info.bundle.price") ?>
 
             <?php if ($product->isSaleable()): ?>
-                <div class="flex mb-4 sm:mt-0 lg:justify-start">
+                <div class="flex gap-2">
                     <?= $block->getChildHtml("product.info.quantity") ?>
                     <?= $block->getChildHtml("product.info.addtocart") ?>
                 </div>
-                <div class="flex my-4 sm:mt-0">
+                <div class="flex flex-wrap gap-2 mt-2 mb-4">
                     <?= $block->getChildHtml("addtocart.shortcut.buttons") ?>
                 </div>
             <?php endif; ?>

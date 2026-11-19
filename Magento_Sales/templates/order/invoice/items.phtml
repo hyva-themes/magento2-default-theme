@@ -6,7 +6,7 @@
  */
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\Escaper;
 use Magento\Sales\Block\Order\Invoice\Items;
@@ -15,8 +15,8 @@ use Magento\Sales\Block\Order\Invoice\Items;
 /** @var Items $block */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 
 $order = $block->getOrder();
 ?>
@@ -27,7 +27,7 @@ $order = $block->getOrder();
            class="inline-block ml-2 pl-2 border-l text-sm font-normal"
            target="_blank"
            rel="noopener">
-            <?= $heroicons->printerHtml('inline-block', 20, 20); ?>
+            <?= $lucideIcons->printerHtml('inline-block', 20, 20); ?>
             <span class="inline-block ml-1 underline"><?= $escaper->escapeHtml(__('Print Invoice')) ?></span>
         </a>
     </div>

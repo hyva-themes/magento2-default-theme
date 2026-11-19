@@ -22,13 +22,15 @@ $ratingSteps = 5;
 $starsFilled = is_numeric($rating) ? floor($rating / 100 * $ratingSteps) : 0;
 $starFragment = $rating / 100 * $ratingSteps - $starsFilled;
 $starsEmpty = floor($ratingSteps - $starsFilled - $starFragment);
+$starIconSize = $block->getData('rating_icon_size') ?: 20;
 
 $reviewCount = $block->getReviewsCount();
+$hasAggregateRating = $reviewCount && $rating;
 $product = $block->getProduct();
 ?>
 <?php if ($block->isReviewEnabled()): ?>
     <a
-        <?php if ($reviewCount): ?>
+        <?php if ($hasAggregateRating): ?>
             href="#customer-review-list"
             itemprop="aggregateRating"
             itemscope
@@ -37,7 +39,7 @@ $product = $block->getProduct();
             href="#review-form"
         <?php endif; ?>
     >
-        <?php if ($reviewCount): ?>
+        <?php if ($hasAggregateRating): ?>
             <span hidden itemprop="ratingValue"><?= $starsFilled + $starFragment; ?></span>
             <span hidden itemprop="reviewCount"><?= (int) $reviewCount; ?></span>
         <?php endif; ?>
@@ -51,7 +53,7 @@ $product = $block->getProduct();
             <?php if ($rating): ?>
                 <?php $i = 0; ?>
                 <?php while ($i < $starsFilled): ?>
-                    <?= $lucideIcons->starHtml('fill-current', 24, 24, ['aria-hidden' => 'true']); ?>
+                    <?= $lucideIcons->starHtml('fill-current', $starIconSize, $starIconSize, ['aria-hidden' => 'true']); ?>
                     <?php $i++; ?>
                 <?php endwhile; ?>
                 <?php if ($starFragment): ?>
@@ -72,7 +74,7 @@ $product = $block->getProduct();
                                 </linearGradient>
                             </defs>
                         </svg>
-                        <?= $lucideIcons->starHtml('', 24, 24, [
+                        <?= $lucideIcons->starHtml('', $starIconSize, $starIconSize, [
                             'style' => 'fill: url(#partialFill' . (int)$block->getProduct()->getId() . ')',
                             'aria-hidden' => 'true'
                         ]); ?>
@@ -80,13 +82,13 @@ $product = $block->getProduct();
                 <?php endif; ?>
                 <?php $i = 0; ?>
                 <?php while ($i < $starsEmpty): ?>
-                    <?= $lucideIcons->starHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
+                    <?= $lucideIcons->starHtml('', $starIconSize, $starIconSize, ['aria-hidden' => 'true']); ?>
                     <?php $i++; ?>
                 <?php endwhile; ?>
             <?php else: ?>
                 <?php $i = 0; ?>
                 <?php while ($i < $ratingSteps): ?>
-                    <?= $lucideIcons->starHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
+                    <?= $lucideIcons->starHtml('', $starIconSize, $starIconSize, ['aria-hidden' => 'true']); ?>
                     <?php $i++; ?>
                 <?php endwhile; ?>
             <?php endif; ?>

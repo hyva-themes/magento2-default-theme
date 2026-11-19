@@ -1,34 +1,59 @@
 @layer components {
     .message {
-        @apply flex items-center justify-between w-full p-2 pl-5 bg-gray-100 shadow rounded text-black font-semibold mb-2;
+        --message-color: var(--color-ink);
+        display: flex;
+        gap: --spacing(3);
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding-block: --spacing(2.5);
+        padding-inline-start: --spacing(5);
+        padding-inline-end: --spacing(4);
+        box-shadow: var(--shadow-sm);
+        border-radius: var(--radius-sm);
+        color: var(--color-ink);
+        font-weight: var(--font-weight-semibold);
+        line-height: var(--leading-tight);
+        margin-block-end: --spacing(2);
+        border-width: 2px;
+        border-color: var(--message-color);
+        background-color: color-mix(
+            in oklch,
+            var(--message-color) 7.5%,
+            var(--color-white)
+        );
 
         &.error {
-            @apply border-2 border-red-500 bg-red-50;
+            --message-color: var(--color-red-500);
         }
 
         &.success {
-            @apply border-2 border-green-500 bg-green-50;
+            --message-color: var(--color-green-500);
         }
 
         &.info,
         &.notice {
-            @apply border-2 border-blue-500 bg-blue-50;
+            --message-color: var(--color-blue-500);
         }
 
         &.warning {
-            @apply border-2 border-yellow-500 bg-yellow-50;
+            --message-color: var(--color-yellow-500);
         }
 
         a {
-            @apply underline;
+            text-decoration-line: underline;
         }
     }
 }
 
 .page.messages {
-    @apply sticky top-0 z-20;
+    position: sticky;
+    top: 0;
+    z-index: 20;
 
     .messages section#messages {
-        @apply container mx-auto py-3;
+        @apply container;
+        margin-inline: auto;
+        padding-block: --spacing(3);
     }
 }

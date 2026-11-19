@@ -41,6 +41,7 @@ $itemClasses = (string) $block->getItemClasses() ?: "flex items-center gap-2 py-
         <?= $lucideIcons->menuHtml('', 24, 24, ["aria-hidden" => "true"]) ?>
     </button>
     <dialog
+        aria-label="<?= $escaper->escapeHtmlAttr(__('Main menu')) ?>"
         class="size-full max-h-full ms-0 p-0 open:flex flex-col transition ease-out duration-300 motion-reduce:duration-0 rounded-s-none"
         x-show="isOpen"
         x-htmldialog="close"

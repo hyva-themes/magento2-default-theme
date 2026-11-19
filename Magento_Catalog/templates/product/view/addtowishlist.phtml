@@ -58,36 +58,19 @@ $uniqueId = '_' . uniqid();
                 }
                 <?php endif; ?>
 
-                postParams.data['form_key'] = hyva.getFormKey();
-                postParams.data['qty'] = document.getElementById(`qty[${productId}]`)
-                    ? document.getElementById(`qty[${productId}]`).value || 1
-                    : 1;
+                const params = new URLSearchParams(postParams.data);
+                params.set('form_key', hyva.getFormKey());
 
-                let postData = Object.keys(postParams.data).map(key => {
-                    return `${key}=${postParams.data[key]}`;
-                }).join('&');
+                const form = document.getElementById('product_addtocart_form');
+                if (form) {
+                    new FormData(form).forEach((value, key) => params.set(key, value));
+                }
 
-                // take the all the input fields that configure this product
-                // includes custom, configurable, grouped and bundled options
-                Array.from(document.querySelectorAll(
-                    '[name^=options], [name^=super_attribute], [name^=bundle_option], [name^=super_group], [name^=links]')
-                ).map(input => {
-                    if (input.type === "select-multiple") {
-                        Array.from(input.selectedOptions).forEach(option => {
-                            postData += `&${input.name}=${option.value}`
-                        })
-                    } else {
-                        // skip "checkable inputs" that are not checked
-                        if(!(['radio', 'checkbox', 'select'].includes(input.type) && !input.checked)) {
-                            postData += `&${input.name}=${input.value}`
-                        }
-                    }
-                });
                 fetch(postParams.action, {
                     "headers": {
                         "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
                     },
-                    "body": postData,
+                    "body": params.toString(),
                     "method": "POST",
                     "mode": "cors",
                     "credentials": "include"
@@ -100,7 +83,7 @@ $uniqueId = '_' . uniqid();
                         typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
                             [{
                                 type: "warning",
-                                text: "<?= $escaper->escapeHtml(__('Could not add item to wishlist.')) ?>"
+                                text: "<?= $escaper->escapeJs(__('Could not add item to wishlist.')) ?>"
                             }], 5000
                         );
                     }
@@ -112,7 +95,7 @@ $uniqueId = '_' . uniqid();
                         [{
                             type: (response.success) ? "success" : "error",
                             text: (response.success)
-                                ? "<?= $escaper->escapeHtml(
+                                ? "<?= $escaper->escapeJs(
                                     __("%1 has been added to your Wish List.", __("Product"))
                                 ) ?>"
                                 : response.error_message
@@ -143,7 +126,7 @@ $uniqueId = '_' . uniqid();
             ($updateParams) ? __('Update Wish List') : __('Add to Wish List')
         ) ?>"
         id="add-to-wishlist"
-        class="btn p-2 rounded-full ml-4"
+        class="btn p-2 rounded-full"
         data-addto="wishlist"
 >
     <?= $lucideIcons->heartHtml('', 20, 20, ['aria-hidden' => 'true']) ?>

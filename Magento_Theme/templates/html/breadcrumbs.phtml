@@ -22,12 +22,12 @@ if (!$crumbs && !is_array($crumbs)) {
 $skipLinkedDataJsonSchema = $block->getData('skip_ld_json_schema');
 $schemaBreadcrumbs = [];
 $crumbsCount = 1;
-$currentPageUrl = $block->getUrl('', ['_current' => true, '_use_rewrite' => true]);
+$currentPageUrl = preg_replace('/[?#].*$/', '', $block->getUrl('', ['_current' => true, '_use_rewrite' => true]));
 ?>
 
 <nav class="breadcrumbs bg-surface shadow-sm" aria-label="Breadcrumb">
     <div class="container">
-        <ol class="items list-reset py-4 rounded flex flex-wrap text-grey text-sm">
+        <ol class="items list-reset py-4 rounded flex flex-wrap text-sm">
             <?php foreach ($crumbs as $crumbName => $crumbInfo): ?>
                 <li class="item flex <?= $escaper->escapeHtmlAttr($crumbName) ?>">
                 <?php if (!$crumbInfo['first']): ?>
@@ -42,7 +42,7 @@ $currentPageUrl = $block->getUrl('', ['_current' => true, '_use_rewrite' => true
                     ><?= $escaper->escapeHtml($crumbInfo['label']) ?></a>
                 <?php elseif ($crumbInfo['last']): ?>
                     <a
-                        href="<?= $escaper->escapeUrl($block->getUrl('', ['_current' => true, '_use_rewrite' => true])) ?>"
+                        href="<?= $escaper->escapeUrl($currentPageUrl) ?>"
                         class="text-fg-secondary"
                         aria-current="page"
                     ><?= $escaper->escapeHtml($crumbInfo['label']) ?></a>

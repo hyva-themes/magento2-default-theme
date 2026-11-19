@@ -114,9 +114,9 @@ $maxSalesQtyLength = ($maxSalesQty ? strlen((string) $maxSalesQty) : 4)
                             </dt>
                             <dd class="table-cell font-bold pb-1">
                                 <?php if (isset($formatedOptionValue['full_view'])): ?>
-                                    <?= $escaper->escapeHtml($formatedOptionValue['full_view']) ?>
+                                    <?= $escaper->escapeHtml($formatedOptionValue['full_view'], ['span', 'a', 'br']) ?>
                                 <?php else: ?>
-                                    <?= $escaper->escapeHtml($formatedOptionValue['value'], ['span', 'a']) ?>
+                                    <?= $escaper->escapeHtml($formatedOptionValue['value'], ['span', 'a', 'br']) ?>
                                 <?php endif; ?>
                             </dd>
                         </div>

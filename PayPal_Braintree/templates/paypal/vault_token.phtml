@@ -44,10 +44,10 @@ $block->getParentBlock()->setData('tokens_row_number', $i);
                    type="hidden">
 
         <?php $message = $escaper->escapeHtml(__('Are you sure you want to delete this PayPal account?')) ?>
-        <?php $confirmation = $modalViewModel->confirm($message)
-                                             ->withDetails(<<<EOHTML
-<div class="mt-4 text-lg">{$block->getPayerEmail()}</div>
-EOHTML) ?>
+        <?php $details = <<<EOHTML
+<div class="mt-4 text-lg">{$escaper->escapeHtml($block->getPayerEmail())}</div>
+EOHTML; ?>
+        <?php $confirmation = $modalViewModel->confirm($message)->withDetails($details) ?>
         <button type="button"
                 @click="<?= /** @noEscape */ $confirmation->getShowJs() ?>.then(ok => ok && $refs.form.submit())">
             <?= $escaper->escapeHtml(__('Delete')) ?>

@@ -7,13 +7,9 @@
 
 declare(strict_types=1);
 
-use Hyva\GraphqlViewModel\ViewModel\GraphqlViewModel;
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HyvaCsp;
-use Hyva\Theme\ViewModel\Currency;
 use Hyva\Theme\ViewModel\ProductPage;
-use Hyva\Theme\ViewModel\RecentlyViewedProducts;
-use Hyva\Theme\ViewModel\Store;
 use Hyva\Theme\ViewModel\StoreConfig;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
@@ -23,71 +19,35 @@ use Magento\Framework\View\Element\Template;
 /** @var ViewModelRegistry $viewModels */
 /** @var HyvaCsp $hyvaCsp */
 
-/** @var GraphqlViewModel $gqlViewModel */
-$gqlViewModel = $viewModels->require(GraphqlViewModel::class);
-
 /** @var ProductPage $viewModelProducts */
 $viewModelProducts = $viewModels->require(ProductPage::class);
 
-/** @var RecentlyViewedProducts $recentlyViewed */
-$recentlyViewed = $viewModels->require(RecentlyViewedProducts::class);
-
 $currentProduct    = $viewModelProducts->getProduct();
 $currentProductSku = $currentProduct ? $currentProduct->getSku() : '';
-
-/** @var Store $viewModelStore */
-$viewModelStore = $viewModels->require(Store::class);
 
 /** @var StoreConfig $storeConfig */
 $storeConfig = $viewModels->require(StoreConfig::class);
 
 $noOfProductsToShow = (int) $storeConfig->getStoreConfig('catalog/recently_products/viewed_count');
-
-/** @var Currency $viewModelCurrency */
-$viewModelCurrency = $viewModels->require(Currency::class);
-
-$gqlRecentlyViewedProductsQuery = 'query ($skus: [String!]!) {
-products(filter: { sku: { in: $skus } }) {
-    items {
-      sku
-      id
-      name
-      small_image {
-        label
-        url
-      }
-      url_key
-      url_suffix
-      visibility
-      status
-      price_range {
-        minimum_price {
-          regular_price {
-            value
-            currency
-          }
-          final_price {
-            value
-            currency
-          }
-        }
-      }
-    }
-  }
-}';
 ?>
 <script>
     function initRecentlyViewedProductsComponent() {
         const config = {
-            useGraphQL: <?= $escaper->escapeJs($recentlyViewed->isFetchRecentlyViewedEnabled() ? 'true' : 'false') ?>,
             noOfProductsToShow: this.$root.dataset.productsToShow || <?= $escaper->escapeJs($noOfProductsToShow) ?>
         }
 
+        <?php /*
+            The product data is written to local storage by register-viewed-product.phtml.
+            With catalog/recently_products/synchronize_with_backend enabled this used to be fetched
+            over GraphQL. Hyvä never posted the viewed product ids to the backend, so that fetch
+            returned what this storage already held and the setting made no difference.
+            To fetch from the backend again, use GET /V1/products-render-info.
+        */ ?>
         function readRecentlyViewedFromStorage () {
             const data = hyva.getBrowserStorage().getItem('recently_viewed_products');
             return data ? JSON.parse(data).filter(product => {
-                <?php /** Remove items that are invalid after switching config.useGraphQL to false */ ?>
-                return config.useGraphQL || product.id;
+                <?php /** Remove records stored by earlier versions, which held only the sku */ ?>
+                return product.id;
             }) : [];
         }
 
@@ -118,51 +78,7 @@ products(filter: { sku: { in: $skus } }) {
 
                 itemsToShow = itemsToShow.slice(0, this.maxProductsToShow);
 
-                config.useGraphQL
-                    ? this.fetchProducts(itemsToShow)
-                    : this.renderRecentlyViewedProducts(itemsToShow);
-            },
-            fetchProducts(itemsToShow) {
-                const skusToFetch = itemsToShow.map(product => product.sku);
-
-                <?php /* It is not possible to query prices incl and excl tax from the GraphQL api */ ?>
-                <?php /* If display incl + excl is required, ensure catalog/recently_products/synchronize_with_backend is set to No */ ?>
-                const query = `<?= /** @noEscape */ $gqlViewModel->query("recently_viewed_products_query", $gqlRecentlyViewedProductsQuery) ?>`;
-                const variables = JSON.stringify({ skus: skusToFetch });
-
-                window.fetch(BASE_URL + 'graphql?' + new URLSearchParams({ query, variables }), {
-                    method: 'GET',
-                    headers: {
-                        'Store': '<?= $escaper->escapeJs($viewModelStore->getStoreCode()) ?>',
-                        'Content-Currency': '<?= $escaper->escapeJs($viewModelCurrency->getCurrentCurrencyCode()) ?>'
-                    },
-                })
-                    .then((response) =>  response.json())
-                    .then((result) => {
-                            this.currency = (result &&
-                                result.data &&
-                                result.data.currency);
-
-                            const responseProducts = (
-                                result &&
-                                result.data &&
-                                result.data.products &&
-                                result.data.products.items
-                            ) || [];
-
-                            // fix sorting of the response-products according to the sorting of the requested-products
-                            const sortedProducts = [];
-                            skusToFetch.forEach(sku => {
-                                responseProducts.forEach(productData => {
-                                    if (sku === productData.sku) {
-                                        sortedProducts.push(productData);
-                                    }
-                                });
-                            });
-                            this.renderRecentlyViewedProducts(sortedProducts);
-                        }
-                    )
-                    .finally(() => this.loading = false)
+                this.renderRecentlyViewedProducts(itemsToShow);
             },
             renderRecentlyViewedProducts(products) {
                 this.products = products;
@@ -190,7 +106,7 @@ products(filter: { sku: { in: $skus } }) {
                         typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
                             [{
                                 type: "warning",
-                                text: "<?= $escaper->escapeHtml(__('Could not add item to wishlist.')) ?>"
+                                text: "<?= $escaper->escapeJs(__('Could not add item to wishlist.')) ?>"
                             }], 5000
                         );
                     }
@@ -200,7 +116,7 @@ products(filter: { sku: { in: $skus } }) {
                         [{
                             type: (response.success) ? "success" : "error",
                             text: (response.success)
-                                ? "<?= $escaper->escapeHtml(
+                                ? "<?= $escaper->escapeJs(
                                     __("%1 has been added to your Wish List.", __("Product"))
                                 ) ?>" : response.error_message
                         }], 5000

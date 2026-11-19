@@ -6,8 +6,8 @@
  */
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Hyva\Theme\ViewModel\HyvaCsp;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Hyva\Theme\ViewModel\ReCaptcha;
 use Magento\Framework\Escaper;
 use Magento\Newsletter\Block\Subscribe;
@@ -17,9 +17,9 @@ use Magento\Newsletter\Block\Subscribe;
 /** @var HyvaCsp $hyvaCsp */
 /** @var ViewModelRegistry $viewModels */
 /** @var ReCaptcha $recaptcha */
-/** @var HeroiconsOutline $heroicons */
+/** @var LucideIcons $lucideIcons */
 
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+$lucideIcons = $viewModels->require(LucideIcons::class);
 
 // Do not replace this with $viewModels->require(ReCaptcha::class); that might break the dependency
 // on the Magento_ReCaptchaNewsletter module
@@ -36,7 +36,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
         aria-label="<?= $escaper->escapeHtmlAttr(__('Subscribe to Newsletter')) ?>"
     >
         <h2
-            class="mb-3 text-sm font-medium tracking-widest text-gray-900 uppercase title-font"
+            class="text-md leading-5 font-semibold tracking-wider uppercase mb-4"
             id="footer-newsletter-heading"
         >
             <?= $escaper->escapeHtml(__('Newsletter')) ?>
@@ -65,10 +65,10 @@ $recaptcha = $block->getData('viewModelRecaptcha');
             <template x-if="displayErrorMessage">
                 <p class="flex items-center text-red">
                     <span class="inline-block w-8 h-8 mr-3">
-                        <?= $heroicons->exclamationCircleHtml('', 24, 24, ['aria-hidden' => true]); ?>
+                        <?= $lucideIcons->circleAlertHtml('', 24, 24, ['aria-hidden' => true]); ?>
                     </span>
                     <template x-for="errorMessage in errorMessages">
-                        <span x-html="errorMessage"></span>
+                        <span x-html-safe="errorMessage"></span>
                     </template>
                 </p>
             </template>

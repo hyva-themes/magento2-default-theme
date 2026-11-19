@@ -19,7 +19,7 @@ $jarallaxVideoUrl = $block->getViewFileUrl('Magento_PageBuilder::js/jarallax-vid
 <script>
     (() => {
         const initParallaxImage = (element) => {
-            if (!window.jarallax)  eturn;
+            if (!window.jarallax) return;
 
             element.classList.add('jarallax');
             element.dataset.jarallax = '';
@@ -94,15 +94,17 @@ $jarallaxVideoUrl = $block->getViewFileUrl('Magento_PageBuilder::js/jarallax-vid
                         initParallaxImage(row);
                     });
 
-                    const jarallaxVideoScript = document.createElement('script');
-                    jarallaxVideoScript.addEventListener('load', () => {
-                        videoBackgroundsElements.forEach(element => {
-                            initVideoBackground(element);
+                    if (videoBackgroundsElements.length > 0) {
+                        const jarallaxVideoScript = document.createElement('script');
+                        jarallaxVideoScript.addEventListener('load', () => {
+                            videoBackgroundsElements.forEach(element => {
+                                initVideoBackground(element);
+                            });
                         });
-                    });
 
-                    jarallaxVideoScript.src = '<?= $escaper->escapeJs($escaper->escapeUrl($jarallaxVideoUrl)) ?>';
-                    document.head.appendChild(jarallaxVideoScript);
+                        jarallaxVideoScript.src = '<?= $escaper->escapeJs($escaper->escapeUrl($jarallaxVideoUrl)) ?>';
+                        document.head.appendChild(jarallaxVideoScript);
+                    }
                 });
 
                 jarallaxScript.src = '<?= $escaper->escapeJs($escaper->escapeUrl($jarallaxUrl)) ?>';

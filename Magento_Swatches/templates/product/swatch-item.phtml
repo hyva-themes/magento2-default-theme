@@ -8,11 +8,11 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\SwatchRenderer;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
+use Magento\Swatches\Model\Swatch;
 use Magento\Swatches\ViewModel\Product\Renderer\Configurable as ConfigurableViewModel;
-
-// phpcs:disable Generic.Files.LineLength.TooLong
 
 /** @var Template $block */
 /** @var Escaper $escaper */
@@ -21,80 +21,90 @@ use Magento\Swatches\ViewModel\Product\Renderer\Configurable as ConfigurableView
 /** @var ConfigurableViewModel $configurableViewModel */
 $configurableViewModel = $viewModels->require(ConfigurableViewModel::class);
 
+/** @var SwatchRenderer $swatchRendererViewModel */
+$swatchRendererViewModel = $viewModels->require(SwatchRenderer::class);
+
 $productId = $block->getProductId();
 $attributeId = $block->getAttributeId();
+$option = $block->getOption();
 
-if (!$productId || !$attributeId) {
+if (!$block->hasData('option')) {
+    throw new \RuntimeException(
+        'product.swatch.item rendered without "option" data — your theme likely overrides '
+        . 'Magento_Swatches::product/.../renderer.phtml from a pre-1.5 Hyvä version. See the upgrade guide.'
+    );
+}
+if (!$productId || !$attributeId || !$option) { return ''; }
+
+$optionId = $option['value_index'];
+$optionLabel = $option['store_label'];
+$id = "attribute-option" . $productId . "-" . $optionId;
+
+$swatchData = $block->getSwatchData();
+if (!$swatchData) {
     return '';
 }
+$swatchType = (int) ($swatchData['type'] ?? Swatch::SWATCH_TYPE_TEXTUAL);
+$isVisual = in_array($swatchType, [Swatch::SWATCH_TYPE_VISUAL_COLOR, Swatch::SWATCH_TYPE_VISUAL_IMAGE], true);
+
+$swatchImgWidth = $swatchRendererViewModel->getSwatchDimension('swatch_image', 'width', 30);
+$swatchImgHeight = $swatchRendererViewModel->getSwatchDimension('swatch_image', 'height', 30);
+$swatchImgThumbWidth = $swatchRendererViewModel->getSwatchDimension('swatch_thumb', 'width', 90);
+$swatchImgThumbHeight = $swatchRendererViewModel->getSwatchDimension('swatch_thumb', 'height', 90);
+
+$toolTipData = [
+    'preview' => $swatchData['thumb'] ?? $swatchData['value'] ?? null,
+    'label' => $optionLabel,
+    'type' => $swatchType === Swatch::SWATCH_TYPE_VISUAL_COLOR
+        ? 'color'
+        : ($swatchType === Swatch::SWATCH_TYPE_VISUAL_IMAGE ? 'image' : 'text'),
+    'width' => $swatchImgThumbWidth,
+    'height' => $swatchImgThumbHeight,
+];
 ?>
-
-<div x-id="['attribute-option-<?= (int) $productId ?>-'+item.id]">
-    <template x-if="optionIsEnabled(<?= (int) $attributeId ?>, item.id) && optionIsActive(<?= (int) $attributeId ?>, item.id)">
-        <label
-            :for="$id('attribute-option-<?= (int) $productId ?>-'+item.id)"
-            class="swatch-option relative shadow-sm cursor-pointer select-none bg-white product-option-value-label"
-            :class="{
-                'border-gray-100 ring ring-primary/50':
-                    (selectedValues[<?= (int)$attributeId ?>] === item.id),
-                'border-gray-300':
-                    (selectedValues[<?= (int)$attributeId ?>] !== item.id),
-                'w-6 h-6' : !isTextSwatch(<?= (int) $attributeId ?>, item.id),
-                'border-gray-100 ring ring-primary/75' : focusedLabel === item.id
-            }"
-            :style="getSwatchBackgroundStyle('<?= (int) $attributeId ?>',item.id)"
-            <?php if ($configurableViewModel->getShowSwatchTooltip()): ?>
-                @mouseenter.self="activeTooltipItem = {
-                    attribute: '<?= (int) $attributeId ?>',
-                    item: item.id,
-                    index
-                }; tooltipPositionElement = $event.target;"
-                @mouseleave.self="activeTooltipItem = false"
-            <?php endif; ?>
+<label
+    for="<?= $escaper->escapeHtmlAttr($id) ?>"
+    class="swatch-option my-0"
+    data-swatch-type="<?= $escaper->escapeHtmlAttr($isVisual ? 'visual' : 'text') ?>"
+    <?php if ($isVisual && $configurableViewModel->getShowSwatchTooltip()): ?>
+        @mouseenter.self="showTooltip"
+        @mouseleave.self="hideTooltip"
+    <?php endif; ?>
+>
+    <?php if ($swatchType === Swatch::SWATCH_TYPE_VISUAL_COLOR): ?>
+        <span
+            class="block"
+            style="<?= $escaper->escapeHtmlAttr(implode(';', [
+                'width:' . $swatchImgWidth . 'px',
+                'height:' . $swatchImgHeight . 'px',
+                'background-color:' . $swatchData['value'],
+            ])); ?>"
+        ></span>
+        <span class="sr-only"><?= $escaper->escapeHtml($optionLabel) ?></span>
+    <?php elseif ($swatchType === Swatch::SWATCH_TYPE_VISUAL_IMAGE): ?>
+        <img
+            src="<?= $escaper->escapeUrl($swatchData['value']) ?>"
+            alt="<?= $escaper->escapeHtmlAttr($optionLabel) ?>"
+            width="<?= $escaper->escapeHtmlAttr($swatchImgWidth) ?>"
+            height="<?= $escaper->escapeHtmlAttr($swatchImgHeight) ?>"
+            loading="lazy"
         >
-            <input
-                :id="$id('attribute-option-<?= (int) $productId ?>-'+item.id)"
-                :value="item.id"
-                name="super_attribute[<?= (int) $attributeId ?>]"
-                type="radio"
-                class="inline-block absolute p-0 border-0 focus:border-0 focus:ring-0 product-option-value-input"
-                style="z-index:-1"
-                x-on:focus="focusLabel(item.id)"
-                x-on:blur="blurLabel()"
-                x-on:change="changeOption(<?= (int) $attributeId ?>, $event.target.value)"
-                x-on:click="clearOptionIfActive(<?= (int) $attributeId ?>, item.id)"
-                x-model="selectedValues[<?= (int) $attributeId ?>]"
-                :required="getAllowedAttributeOptions(<?= (int) $attributeId ?>).filter(
-                    attributeOption => selectedValues[attributeOption]
-                ).length === 0"
-                :aria-label="getSwatchText(<?= $escaper->escapeHtmlAttr($attributeId) ?>, item.id)"
-                aria-describedby="attribute-label-<?= $escaper->escapeHtmlAttr($productId . '-' . $attributeId) ?>"
-            >
-            <template x-if="isTextSwatch(<?= (int) $attributeId ?>, item.id)">
-                <div
-                    x-html="getSwatchText(<?= (int) $attributeId ?>, item.id)"
-                    class="pointer-events-none select-none whitespace-nowrap"
-                    aria-hidden="true"
-                ></div>
-            </template>
-        </label>
-    </template>
-
-    <template x-if="optionIsEnabled(<?= (int) $attributeId ?>, item.id) && !optionIsActive(<?= (int) $attributeId ?>, item.id)">
-        <div
-            class="relative border-2 shadow-sm opacity-50 cursor-pointer select-none border-gray-300 swatch-option bg-white"
-            :class="{
-                                                        'w-6 h-6' : !isTextSwatch(<?= (int) $attributeId ?>, item.id),
-                                                    }"
-            :style="getSwatchBackgroundStyle('<?= (int) $attributeId ?>',item.id)"
-        >
-            <div x-html="getSwatchText(<?= (int) $attributeId ?>, item.id)"
-                 class="whitespace-nowrap"
-                 :class="{ 'sr-only' : !isTextSwatch(<?= (int) $attributeId ?>, item.id) }"
-            ></div>
-            <svg class="absolute inset-0 w-full h-full text-gray-500 bg-white/25">
-                <line x1="0" y1="100%" x2="100%" y2="0" class="stroke-current stroke-1"></line>
-            </svg>
-        </div>
-    </template>
-</div>
+    <?php else: ?>
+        <span><?= $escaper->escapeHtml($optionLabel) ?></span>
+    <?php endif; ?>
+    <input
+        id="<?= $escaper->escapeHtmlAttr($id) ?>"
+        type="radio"
+        name="super_attribute[<?= $escaper->escapeHtml($attributeId) ?>]"
+        value="<?= $escaper->escapeHtml($optionId) ?>"
+        @change="reflectOption"
+        data-attribute-id="<?= $escaper->escapeHtmlAttr($attributeId) ?>"
+        data-option-label="<?= $escaper->escapeHtmlAttr($optionLabel) ?>"
+        <?php if ($isVisual && $configurableViewModel->getShowSwatchTooltip()): ?>
+            data-tooltip="<?= $escaper->escapeHtmlAttr(json_encode($toolTipData)) ?>"
+        <?php endif; ?>
+        :disabled="optionIsDisabled"
+        required
+        class="opacity-0 size-full m-0"
+    >
+</label>

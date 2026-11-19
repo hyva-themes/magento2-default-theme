@@ -8,30 +8,34 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Hyva\Theme\ViewModel\HyvaCsp;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Hyva\Theme\ViewModel\StoreConfig;
 use Magento\Framework\Escaper;
 
 /** @var Escaper $escaper */
 /** @var HyvaCsp $hyvaCsp */
 /** @var ViewModelRegistry $viewModels */
-/** @var HeroiconsOutline $heroicons */
+
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
+
 /** @var StoreConfig $storeConfig */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
 $storeConfig = $viewModels->require(StoreConfig::class);
 
 $defaultSuccessMessageTimeout = $storeConfig->getStoreConfig('hyva_theme_general/messages/success_message_timeout');
-
 ?>
 <script>
     <?php if ($defaultSuccessMessageTimeout): ?>
     window.defaultSuccessMessageTimeout = <?= (int) $defaultSuccessMessageTimeout ?>;
     <?php endif; ?>
+
     function initMessages() {
-        "use strict";
         return {
-            messages: window.mageMessages || [],
+            messages: [],
+            init() {
+                this.addMessages(window.mageMessages || []);
+            },
             isEmpty() {
                 return this.messages.reduce(
                     function (isEmpty, message) {
@@ -50,14 +54,31 @@ $defaultSuccessMessageTimeout = $storeConfig->getStoreConfig('hyva_theme_general
             },
             addMessages(messages, hideAfter) {
                 messages.map((message) => {
-                    this.messages = this.messages.concat(message);
+                    if (!message || !message.text || !message.text.trim()) return;
+                    const duplicate = this.messages.findIndex(
+                        (m) => m && m.type === message.type && m.text === message.text
+                    );
+                    const index = duplicate === -1
+                        ? this.messages.push(message) - 1
+                        : duplicate;
                     if (hideAfter === undefined && message.type === 'success' && window.defaultSuccessMessageTimeout) {
                         hideAfter = window.defaultSuccessMessageTimeout;
                     }
                     if (hideAfter) {
-                        this.setHideTimeOut(this.messages.length -1, hideAfter);
+                        this.setHideTimeOut(index, hideAfter);
                     }
                 });
+            },
+            <?php
+            /*
+             * Cookie messages reach the component through window.mageMessages, the same messages can also
+             * arrive through a dispatch, so the identical text would be shown twice.
+             */
+            ?>
+            isDisplayed(message) {
+                return this.messages.some(
+                    (displayed) => displayed && displayed.type === message.type && displayed.text === message.text
+                );
             },
             setHideTimeOut(messageIndex, hideAfter) {
                 setTimeout((messageIndex) => {
@@ -96,35 +117,35 @@ $defaultSuccessMessageTimeout = $storeConfig->getStoreConfig('hyva_theme_general
     window.addEventListener('alpine:init', () => Alpine.data('initMessages', initMessages), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
-<section id="messages"
-         x-data="initMessages"
-         x-bind="eventListeners"
-         role="alert"
+<section
+    id="messages"
+    x-data="initMessages"
+    x-bind="eventListeners"
+    role="alert"
 >
     <template x-if="hasMessages">
-        <div class="w-full">
-            <div class="messages container mx-auto py-3">
-                <template x-for="(message, index) in messages" :key="index">
-                    <div>
-                        <template x-if="hasMessage">
-                            <div class="message"
-                                 :class="message.type"
-                                 :ui-id="getMessageUiId"
+        <div class="messages container py-3">
+            <template x-for="(message, index) in messages" :key="index">
+                <div>
+                    <template x-if="hasMessage">
+                        <div
+                            class="message"
+                            :class="message.type"
+                            :ui-id="getMessageUiId"
+                        >
+                            <span x-html-safe="message.text"></span>
+                            <button
+                                type="button"
+                                class="text-ink-muted hover:text-ink"
+                                aria-label="<?= $escaper->escapeHtml(__('Close message')) ?>"
+                                @click.prevent="removeMessage"
                             >
-                                <span x-html="message.text"></span>
-                                <button
-                                    type="button"
-                                    class="text-gray-600 hover:text-black"
-                                    aria-label="<?= $escaper->escapeHtml(__('Close message')) ?>"
-                                    @click.prevent="removeMessage"
-                                >
-                                    <?= $heroicons->xHtml('stroke-current', 18, 18, ['aria-hidden' => 'true']); ?>
-                                </button>
-                            </div>
-                        </template>
-                    </div>
-                </template>
-            </div>
+                                <?= $lucideIcons->xHtml('stroke-current', 18, 18, ['aria-hidden' => 'true']); ?>
+                            </button>
+                        </div>
+                    </template>
+                </div>
+            </template>
         </div>
     </template>
 </section>

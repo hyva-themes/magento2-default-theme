@@ -2,17 +2,20 @@
     .account-nav li {
         & a,
         & strong {
-            @apply flex justify-between py-1;
+            display: flex;
+            justify-content: space-between;
+            padding-block: --spacing(1);
             color: var(--color-fg-secondary);
         }
 
         & a:hover {
-            @apply underline;
+            text-decoration: underline;
             color: var(--color-fg);
         }
 
         & strong {
-            @apply underline font-normal;
+            text-decoration: underline;
+            font-weight: var(--font-weight-normal);
             color: var(--color-fg);
         }
     }

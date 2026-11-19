@@ -9,7 +9,7 @@
  */
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Downloadable\Block\Customer\Products\ListProducts;
 use Magento\Downloadable\Model\Link\Purchased\Item;
 use Magento\Framework\Escaper;
@@ -23,8 +23,8 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
 /** @var SecureHtmlRenderer $secureRenderer */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 ?>
 <h2 id="downloadableProducts" class="text-2xl mb-6"><?= $escaper->escapeHtml(__('My Downloadable Products')) ?></h2>
 <?php $items = $block->getItems(); ?>
@@ -98,7 +98,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                     aria-label="<?= $escaper->escapeHtmlAttr(__('Start Download')) ?>"
                                     class="action download"
                                 >
-                                    <?= $heroicons->documentDownloadHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
+                                    <?= $lucideIcons->fileDownHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
                                 </a>
                                 <?php if ($block->getIsOpenInNewWindow()): ?>
                                     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(

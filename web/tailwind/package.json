@@ -4,18 +4,17 @@
   "description": "Hyvä-Themes Default Theme, a TailwindCSS and Alpine.js based Magento frontend theme that makes eCommerce happy.",
   "type": "module",
   "dependencies": {
-    "@hyva-themes/hyva-modules": "^1.2.4",
-    "@tailwindcss/cli": "^4.1.17",
-    "tailwindcss": "^4.1.17"
+    "@hyva-themes/hyva-modules": "^1.5.0",
+    "@tailwindcss/cli": "^4.3.5",
+    "tailwindcss": "^4.3.5"
   },
   "scripts": {
     "start": "npm run watch",
-    "generate": "npx hyva-sources && npx hyva-tokens",
-    "prewatch": "npm run generate",
-    "watch": "npx tailwindcss -i tailwind-source.css -o ../css/styles.css --watch",
+    "generate": "npx hyva-sources && npx hyva-tokens && npx hyva-fonts",
+    "watch": "npm run generate && npx tailwindcss -i tailwind-source.css -o ../css/styles.css --watch",
     "browser-sync": "npx browser-sync start --config ./browser-sync.config.cjs",
-    "prebuild": "npm run generate",
-    "build": "npx tailwindcss -i tailwind-source.css -o ../css/styles.css --minify"
+    "build": "npm run generate && npx tailwindcss -i tailwind-source.css -o ../css/styles.css --minify",
+    "build-prod": "npm run build"
   },
   "engine-strict": true,
   "engines": {

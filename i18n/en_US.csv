@@ -124,6 +124,7 @@ Invitees,Invitees
 "Remove product ""%1"" from the comparison","Remove product ""%1"" from the comparison"
 "Review score","Review score"
 "Select product ""%1"" to reorder","Select product ""%1"" to reorder"
+"See all %1","See all %1"
 "Show Add To Compare In Product List","Show Add To Compare In Product List"
 "Show Add To Compare On Product Page","Show Add To Compare On Product Page"
 "Show Compare Sidebar On Product List","Show Compare Sidebar On Product List"
@@ -154,9 +155,7 @@ Subcategories,Subcategories
 "View cart","View cart"
 "View order","View order"
 Watches,Watches
-"We found other products you might like!
-                            ","We found other products you might like!
-                            "
+"We found other products you might like!","We found other products you might like!"
 "You are sharing","You are sharing"
 "You have signed out","You have signed out"
 "You have signed out and will be redirected to our homepage in 5 seconds.","You have signed out and will be redirected to our homepage in 5 seconds."

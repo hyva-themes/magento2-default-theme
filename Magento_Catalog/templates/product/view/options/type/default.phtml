@@ -15,7 +15,9 @@ use Magento\Framework\Escaper;
 ?>
 <?php $option = $block->getOption() ?>
 <div class="field">
-    <label class="label"><span><?= $escaper->escapeHtml($option->getTitle()) ?></span></label>
+    <label class="mb-1 text-base font-normal">
+        <span><?= $escaper->escapeHtml($option->getTitle()) ?></span>
+    </label>
     <?php if ($option->getIsRequire()): ?>
         <span class="sup text-sm">*</span>
     <?php endif; ?>

@@ -36,10 +36,11 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
     $optionBasePrice = $productPriceViewModel->getCustomOptionPriceExclTax($option, CustomOptionPrice::PRICE_CODE, $product);
 }
 ?>
-<div class="flex flex-col sm:flex-row border-t border-gray-300 py-2 last:mb-6 last:border-b w-full items-center">
-    <label class="label text-gray-700 text-left w-full sm:w-1/2"
-           for="options_<?= $escaper->escapeHtmlAttr($optionId) ?>_text"
-           x-html="updateOptionPrice('<?= $escaper->escapeJs($optionId) ?>', $el)"
+<div class="mb-4">
+    <label
+        class="mb-1 text-base font-normal"
+        for="options_<?= $escaper->escapeHtmlAttr($optionId) ?>_text"
+        x-html-safe="updateOptionPrice('<?= $escaper->escapeJs($optionId) ?>', $el)"
     >
         <span><?= $escaper->escapeHtml($option->getTitle()) ?></span>
         <?php if ($option->getIsRequire()): ?>
@@ -49,7 +50,7 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
     </label>
 
     <?php if ($fileExists): ?>
-    <div class="ml-2 text-gray-900 text-left w-full sm:w-1/2">
+    <div>
         <span class="<?= /* @noEscape */ $fileNamed ?> inline-block my-2 mr-2">
             <?= $escaper->escapeHtml($fileInfo->getTitle()) ?>
         </span>
@@ -70,7 +71,7 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
         </a>
     </div>
     <?php endif; ?>
-    <div class="sm:ml-2 text-gray-900 text-left w-full sm:w-1/2 <?= $fileExists ? 'hidden' : ''?>"
+    <div class="w-full <?= $fileExists ? 'hidden' : ''?>"
          id="input-box-<?= /* @noEscape */ $fileName ?>"
     >
         <input type="file"

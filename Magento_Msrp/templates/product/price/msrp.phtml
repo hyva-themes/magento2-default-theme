@@ -10,6 +10,10 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\ProductPage;
+use Hyva\Theme\ViewModel\ProductPrice;
+use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Msrp\Pricing\Render\PriceBox;
 use Magento\Framework\Escaper;
 use Magento\Msrp\Pricing\Price\MsrpPriceInterface;
@@ -18,6 +22,7 @@ use Magento\Framework\Pricing\Render as PricingRender;
 
 /** @var PriceBox $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
 
 /** @var MsrpPriceInterface $priceType */
 $priceType = $block->getPrice();
@@ -38,27 +43,30 @@ $msrpPrice = $block->renderAmount(
 );
 $priceElementIdPrefix = $block->getPriceElementIdPrefix() ?: 'product-price-';
 
+
+$msrpData = [
+    'type' => 'price',
+    'productId' => $productId,
+    'productName' => $product->getName(),
+    'productIdInput' => '',
+    'isSaleable' => (bool) $product->isSaleable(),
+    'realPrice' => $block->getRealPriceHtml(),
+    'msrpPrice' => $msrpPrice
+];
+
 ?>
 
 <?php if ($amount): ?>
     <span class="map-old-price old-price inline-block"><?= /* @noEscape */ $msrpPrice ?></span>
     <span class="map-fallback-price normal-price hidden"><?= /* @noEscape */ $msrpPrice ?></span>
 <?php endif; ?>
-
 <?php if ($priceType->isShowPriceOnGesture()): ?>
     <button
         type="button"
         class="underline hover:no-underline"
-        x-data="{ msrpData: {
-            type: 'price',
-            productId: '<?= $escaper->escapeHtml($productId) ?>',
-            productName: '<?= $escaper->escapeHtml($product->getName()) ?>',
-            productIdInput: '',
-            isSaleable: <?= $product->isSaleable() ? 'true' : 'false' ?>,
-            realPrice: <?= $escaper->escapeHtml(json_encode($block->getRealPriceHtml())); ?>,
-            msrpPrice: <?= $escaper->escapeHtml(json_encode($msrpPrice)); ?>
-        }}"
-        @click="$dispatch('msrp-popover', { msrpData, target: $el, })"
+        x-data="initMsrpPrice"
+        @click="onClick"
+        data-msrp-data="<?= $escaper->escapeHtmlAttr(json_encode($msrpData)) ?>"
     >
         <?= $escaper->escapeHtml(__('Click for price')) ?>
     </button>
@@ -69,12 +77,41 @@ $priceElementIdPrefix = $block->getPriceElementIdPrefix() ?: 'product-price-';
 <?php endif; ?>
 
 <?php if ($block->getZone() == PricingRender::ZONE_ITEM_VIEW): ?>
-    <button
-        type="button"
-        class="underline hover:no-underline"
-        x-data=""
-        @click="$dispatch('msrp-popover', { msrpData: { type: 'help' }, target: $el })"
-    >
-        <?= $escaper->escapeHtml(__("What's this?")) ?>
-    </button>
+    <?php
+    /** @var ProductPrice $productPriceViewModel */
+    $productPriceViewModel = $viewModels->require(ProductPrice::class);
+    /** @var ProductPage $productViewModel */
+    $productViewModel = $viewModels->require(ProductPage::class);
+    $priceValidUntil = $product->getSpecialToDate();
+    ?>
+    <?php /* The actual price stays hidden on the page, but crawlers still need it in the structured data */ ?>
+    <div itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+        <meta
+            itemprop="price"
+            content="<?= $escaper->escapeHtmlAttr($productPriceViewModel->getPriceValue(FinalPrice::PRICE_CODE, $product)) ?>"
+        >
+        <meta itemprop="priceCurrency" content="<?= $escaper->escapeHtmlAttr($productViewModel->getCurrencyData()['code']) ?>">
+        <?php if ($priceValidUntil): ?>
+            <meta
+                itemprop="priceValidUntil"
+                content="<?= $escaper->escapeHtmlAttr(date('Y-m-d', strtotime($priceValidUntil))) ?>"
+            >
+        <?php endif; ?>
+        <link
+            itemprop="availability"
+            href="<?= $escaper->escapeHtmlAttr($product->getIsSalable() ? 'http://schema.org/InStock' : 'http://schema.org/OutOfStock') ?>"
+        >
+    </div>
+    <?php /* "Click for price" already shows the same explanation, so only offer it when the price is not shown on click */ ?>
+    <?php if (! $priceType->isShowPriceOnGesture()): ?>
+        <button
+            type="button"
+            class="underline hover:no-underline"
+            x-data="initMsrpPrice"
+            @click="onClick"
+            data-msrp-data="<?= $escaper->escapeHtmlAttr(json_encode(['type' => 'help'])) ?>"
+        >
+            <?= $escaper->escapeHtml(__("What's this?")) ?>
+        </button>
+    <?php endif; ?>
 <?php endif; ?>

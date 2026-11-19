@@ -21,21 +21,27 @@ use Magento\Framework\View\Element\Template;
 /** @var LucideIcons $lucideIcons */
 $lucideIcons = $viewModels->require(LucideIcons::class);
 
-$modalBtnLabel = $block->getModalBtnLabel() ?: 'Open Modal';
+$cssClasses = $block->getCssClasses() ?: 'modal';
+$btnCssClasses = $block->getBtnCssClasses() ?: 'btn';
+
+/** @deprecated use `'close_by' 'any'` instead of `close_on_backdrop` */
 $closeOnBackdrop = $block->getCloseOnBackdrop() ?? true;
+
+$modalBtnLabel = $block->getModalBtnLabel() ?: 'Open Modal';
+$closeBy = $block->getCloseBy() ?: ($closeOnBackdrop ? 'any' : null);
 ?>
 
 <div x-data="hyvaModal">
-    <button @click="open" class="btn">
+    <button @click="open" class="<?= $escaper->escapeHtmlAttr($btnCssClasses) ?>">
         <?= $escaper->escapeHtml(__($modalBtnLabel)); ?>
     </button>
     <dialog
-        class="modal"
+        class="<?= $escaper->escapeHtmlAttr($cssClasses) ?>"
         x-show="isOpen"
         x-transition
         x-htmldialog="close"
-        <?php if ($closeOnBackdrop): ?>
-            closeby="any"
+        <?php if ($closeBy): ?>
+            closeby="<?= $escaper->escapeHtmlAttr($closeBy) ?>"
         <?php endif; ?>
     >
         <?= $block->getChildHtml() ?>

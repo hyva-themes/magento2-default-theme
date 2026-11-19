@@ -8,7 +8,6 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Theme\Block\Html\Notices;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
@@ -19,9 +18,6 @@ use Magento\Framework\Escaper;
 /** @var ViewModelRegistry $viewModels */
 /** @var HyvaCsp $hyvaCsp */
 /** @var SecureHtmlRenderer $secureRenderer */
-
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
 
 <?php if ($block->displayNoscriptNotice()): ?>

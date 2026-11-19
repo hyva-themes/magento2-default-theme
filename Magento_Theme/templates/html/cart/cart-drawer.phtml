@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Cart\ItemOrder;
 use Hyva\Theme\ViewModel\HyvaCsp;
 use Hyva\Theme\ViewModel\StoreConfig;
 use Hyva\Theme\ViewModel\LucideIcons;
@@ -22,6 +23,9 @@ use Magento\Framework\View\Element\Template;
 $storeConfig = $viewModels->require(StoreConfig::class);
 $maxItemsToDisplay = $storeConfig->getStoreConfig('checkout/sidebar/max_items_display_count');
 
+/** @var ItemOrder $itemOrder */
+$itemOrder = $viewModels->require(ItemOrder::class);
+
 /** @var LucideIcons $lucideIcons */
 $lucideIcons = $viewModels->require(LucideIcons::class);
 
@@ -35,6 +39,7 @@ $miniCartOptionShowSku = $block->getShowSku() !== null ? (bool) $block->getShowS
             isLoading: false,
             cart: {},
             maxItemsToDisplay: <?= (int) $maxItemsToDisplay ?>,
+            showNewestItemsFirst: <?= $itemOrder->isShowNewestItemsFirst() ? 'true' : 'false' ?>,
             itemsCount: 0,
             showSku: <?= $miniCartOptionShowSku ? 'true' : 'false' ?>,
             autocompleteNumber: 100,
@@ -71,11 +76,27 @@ $miniCartOptionShowSku = $block->getShowSku() !== null ? (bool) $block->getShowS
                 return this.maxItemsToDisplay && this.maxItemsToDisplay < this.itemsCount;
             },
             setCartItems() {
-                this.cartItems = this.cart.items && this.cart.items.sort((a, b) => b.item_id - a.item_id) || [];
+                <?php /* The limit always keeps the most recently added items, the setting only changes their order */ ?>
+                this.cartItems = [...(this.cart.items || [])].sort((a, b) => b.item_id - a.item_id);
 
                 if (this.maxItemsToDisplay > 0) {
                     this.cartItems = this.cartItems.slice(0, parseInt(this.maxItemsToDisplay, 10));
                 }
+
+                if (!this.showNewestItemsFirst) {
+                    this.cartItems.reverse();
+                }
+
+                // Angle brackets stay escaped so a name can never resolve into a tag.
+                const entities = { '&amp;': '&', '&quot;': '"', '&#039;': "'", '&#39;': "'" };
+                this.cartItems = this.cartItems.map((item) => ({
+                    ...item,
+                    product_name: item.product_name.replace(/&(?:amp|quot|#0?39);/g, (entity) => entities[entity]),
+                    options: (item.options || []).map((option) => Array.isArray(option.value)
+                        ? { ...option, value: option.value.join('<br>') }
+                        : option
+                    )
+                }));
             },
             updateItemQty(event) {
                 const form = event.target;
@@ -98,11 +119,7 @@ $miniCartOptionShowSku = $block->getShowSku() !== null ? (bool) $block->getShowS
                 });
             },
             toggleCartDrawer(event) {
-                if (event.detail && event.detail.isOpen) {
-                    this.open = event.detail.isOpen;
-                } else {
-                    this.open = !this.open;
-                }
+                this.open = event.detail?.isOpen ?? !this.open;
             },
             openCartDrawer() {
                 this.open = true;
@@ -110,6 +127,12 @@ $miniCartOptionShowSku = $block->getShowSku() !== null ? (bool) $block->getShowS
             closeCartDrawer() {
                 this.open = false;
             },
+            <?php
+            /**
+             * @deprecated The section data extra actions don't work with Alpine CSP.
+             *             Add shortcut buttons as a block to the cart-drawer.shortcut-buttons container instead.
+             */
+            ?>
             getSectionDataExtraActions() {
                 if (!this.cart.extra_actions) {
                     return '';
@@ -167,6 +190,7 @@ $miniCartOptionShowSku = $block->getShowSku() !== null ? (bool) $block->getShowS
                 ["@pageshow.window"](event) {
                     if (event.persisted) {
                         this.open = false;
+                        window.dispatchEvent(new CustomEvent("reload-customer-section-data"));
                     }
                 }
             }
@@ -294,9 +318,9 @@ $miniCartOptionShowSku = $block->getShowSku() !== null ? (bool) $block->getShowS
                     <template x-if="productIsVisibleInSite">
                         <a
                             class="block shrink-0 max-w-[25%]"
-                            :href="item.product_url"
                             data-aria-label="<?= $escaper->escapeHtmlAttr(__('Product "%0"')) ?>"
-                            :title="item.product_name"
+                            :href="item.product_url"
+                            :aria-label="productAriaLabel"
                         >
                             <img
                                 :src="item.product_image.src"
@@ -321,9 +345,9 @@ $miniCartOptionShowSku = $block->getShowSku() !== null ? (bool) $block->getShowS
                     <div class="grow space-y-4">
                         <div class="flex gap-2 justify-between items-center">
                             <p class="text-lg">
-                                <span x-html="item.qty"></span> x <strong x-html="item.product_name"></strong>
+                                <span x-text="item.qty"></span> x <strong x-text="item.product_name"></strong>
                             </p>
-                            <span class="price-box" x-html="item.product_price"></span>
+                            <span class="price-box" x-html-safe="item.product_price"></span>
                         </div>
                         <template x-if="showDetails">
                             <dl class="table text-sm">
@@ -332,7 +356,7 @@ $miniCartOptionShowSku = $block->getShowSku() !== null ? (bool) $block->getShowS
                                         <dt class="table-cell font-normal min-w-16 pe-2 pb-2">
                                             <?= $escaper->escapeHtml(__('Sku')) ?>
                                         </dt>
-                                        <dd class="table-cell font-bold pb-2" x-html="item.product_sku"></dd>
+                                        <dd class="table-cell font-bold pb-2" x-text="item.product_sku"></dd>
                                     </div>
                                 </template>
                                 <template x-for="option in item.options">
@@ -341,7 +365,7 @@ $miniCartOptionShowSku = $block->getShowSku() !== null ? (bool) $block->getShowS
                                             class="table-cell font-normal min-w-16 pe-2 pb-2"
                                             x-text="option.label"
                                         ></dt>
-                                        <dd class="table-cell font-bold pb-2" x-html="option.value"></dd>
+                                        <dd class="table-cell font-bold pb-2" x-html-safe="option.value"></dd>
                                     </div>
                                 </template>
                             </dl>
@@ -385,7 +409,7 @@ $miniCartOptionShowSku = $block->getShowSku() !== null ? (bool) $block->getShowS
 
             <dl class="flex gap-2 justify-between items-center text-sm font-bold">
                 <dt><?= $escaper->escapeHtml(__('Subtotal')) ?></dt>
-                <dd x-html="cart.subtotal"></dd>
+                <dd x-html-safe="cart.subtotal"></dd>
             </dl>
 
             <div class="flex flex-col gap-y-4 mt-8">
@@ -407,6 +431,12 @@ $miniCartOptionShowSku = $block->getShowSku() !== null ? (bool) $block->getShowS
             </div>
         </div>
     </template>
+
+    <?php if ($shortcutButtons = $block->getChildHtml('cart-drawer.shortcut-buttons')): ?>
+        <div class="flex flex-col gap-y-4 mt-4" x-show="itemsCount">
+            <?= /* @noEscape */ $shortcutButtons ?>
+        </div>
+    <?php endif; ?>
 
     <template x-if="cartIsEmpty">
         <div class="flex flex-col">

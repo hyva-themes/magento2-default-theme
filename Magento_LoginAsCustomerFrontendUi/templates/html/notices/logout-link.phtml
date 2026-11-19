@@ -6,8 +6,8 @@
  */
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Hyva\Theme\ViewModel\HyvaCsp;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Customer\Block\Account\AuthorizationLink;
 use Magento\Framework\Escaper;
 
@@ -16,8 +16,8 @@ use Magento\Framework\Escaper;
 /** @var ViewModelRegistry $viewModels */
 /** @var HyvaCsp $hyvaCsp */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 
 $dataPostParam = '';
 if ($block->isLoggedIn()) {
@@ -43,5 +43,5 @@ if ($block->isLoggedIn()) {
     title="<?= $escaper->escapeHtmlAttr(__('Close Session')) ?>"
 >
     <span class="hidden md:block"><?= $escaper->escapeHtml(__('Close Session')) ?></span>
-    <?= $heroicons->xHtml('', 24, 24, ['aria-hidden' => true]); ?>
+    <?= $lucideIcons->xHtml('', 24, 24, ['aria-hidden' => true]); ?>
 </a>

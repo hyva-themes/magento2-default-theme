@@ -1,0 +1,34 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var HyvaCsp $hyvaCsp */
+?>
+<script>
+    (() => {
+        <?php
+        /*
+         * The Facebook and Instagram apps on Android ship their own Chromium based WebView, which starts the
+         * cross-document view transition from the theme CSS but never finishes it, so the page stays blank after
+         * navigating. This rule is rendered after the theme stylesheet, so it wins and disables the transition.
+         * Only remove it once these apps are confirmed to handle view transitions (issue #1342).
+         */
+        ?>
+        const userAgent = navigator.userAgent;
+        if (!/android/i.test(userAgent) || !/FBAN|FBAV|FB_IAB|Instagram/.test(userAgent)) return;
+
+        const style = document.createElement('style');
+        style.textContent = '@view-transition { navigation: none; }';
+        document.head.append(style);
+    })();
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

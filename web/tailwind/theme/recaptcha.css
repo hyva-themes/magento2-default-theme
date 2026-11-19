@@ -1,3 +1,7 @@
 .grecaptcha-badge {
     visibility: hidden;
+
+    &[data-style="inline"] {
+        position: absolute;
+    }
 }

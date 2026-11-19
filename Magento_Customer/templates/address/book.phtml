@@ -6,7 +6,7 @@
  */
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Customer\Block\Address\Book;
 use Magento\Framework\Escaper;
 
@@ -14,8 +14,8 @@ use Magento\Framework\Escaper;
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 ?>
 <div class="block block-addresses-default my-6">
     <div class="block-title text-2xl mb-6">
@@ -39,7 +39,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                         <span>
                             <?= $escaper->escapeHtml(__('Change Billing Address')) ?>
                         </span>
-                        <?= $heroicons->arrowRightHtml('ml-2', 16, 16); ?>
+                        <?= $lucideIcons->arrowRightHtml('ml-2', 16, 16); ?>
                     </a>
                 </div>
             </div>
@@ -71,7 +71,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                        class="inline-flex items-center w-full mt-3 md:text-sm"
                        >
                         <span><?= $escaper->escapeHtml(__('Change Shipping Address')) ?></span>
-                        <?= $heroicons->arrowRightHtml('ml-2', 16, 16); ?>
+                        <?= $lucideIcons->arrowRightHtml('ml-2', 16, 16); ?>
                     </a>
                 </div>
             </div>

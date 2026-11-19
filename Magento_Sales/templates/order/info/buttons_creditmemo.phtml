@@ -8,7 +8,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Framework\Escaper;
 use Magento\Sales\Block\Order\Info\Buttons;
 
@@ -16,8 +16,8 @@ use Magento\Sales\Block\Order\Info\Buttons;
 /** @var Buttons $block */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 ?>
 <div class="flex items-center justify-center md:justify-start flex-wrap gap-4 md:gap-x-6 my-4 md:my-0">
     <?php $order = $block->getOrder() ?>
@@ -25,7 +25,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
        class="btn btn-secondary"
        target="_blank"
        rel="noopener">
-        <?= $heroicons->printerHtml('mr-1 inline-block'); ?>
+        <?= $lucideIcons->printerHtml('mr-1 inline-block'); ?>
         <span><?= $escaper->escapeHtml(__('Print All Refunds')) ?></span>
     </a>
     <?= $block->getChildHtml() ?>

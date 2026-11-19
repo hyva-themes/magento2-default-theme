@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\Customer\CreateAccountButton;
-use Hyva\Theme\ViewModel\HeroiconsSolid;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Hyva\Theme\ViewModel\ReCaptcha;
 use Magento\Customer\Block\Form\Register;
 use Magento\Customer\Block\Widget\Dob;
@@ -28,14 +28,14 @@ use Magento\Framework\Escaper;
 /** @var ReCaptcha $recaptcha */
 /** @var CreateAccountButton $createAccountButtonViewModel */
 /** @var ViewModelRegistry $viewModels */
-/** @var HeroiconsSolid $heroicons */
+/** @var LucideIcons $lucideIcons */
 
 $formId = 'accountcreate';
 
 // Do not replace this with $viewModels->require(ReCaptcha::class); that might break the dependency
 // on the Magento_ReCaptchaCustomer module
 $recaptcha = $block->getData('viewModelRecaptcha');
-$heroicons = $viewModels->require(HeroiconsSolid::class);
+$lucideIcons = $viewModels->require(LucideIcons::class);
 $createAccountButtonViewModel = $viewModels->require(CreateAccountButton::class);
 $region = $block->getAttributeData()->getFrontendLabel('region');
 $selectRegion = 'Please select a region, state or province.';
@@ -168,10 +168,10 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                                 :aria-label="showPassword ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
                             >
                                 <template x-if="!showPassword">
-                                    <?= $heroicons->eyeHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
+                                    <?= $lucideIcons->eyeHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                                 </template>
                                 <template x-if="showPassword">
-                                    <?= $heroicons->eyeOffHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
+                                    <?= $lucideIcons->eyeOffHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                                 </template>
                             </button>
                         </div>
@@ -230,10 +230,10 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                             "
                         >
                             <template x-if="!showPasswordConfirm">
-                                <?= $heroicons->eyeHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
+                                <?= $lucideIcons->eyeHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                             </template>
                             <template x-if="showPasswordConfirm">
-                                <?= $heroicons->eyeOffHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
+                                <?= $lucideIcons->eyeOffHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                             </template>
                         </button>
                     </div>

@@ -28,10 +28,13 @@
 /* Import generated styles for Hyvä Compatible Modules and Design Tokens */
 @import "./generated/hyva-source.css";
 @import "./generated/hyva-tokens.css";
+@import "./generated/hyva-fonts.css";
 
 @theme {
+    --color-ink: var(--color-slate-950);
+    --color-ink-muted: var(--color-slate-600);
+    --color-fg: var(--color-ink);
+    --color-fg-secondary: var(--color-ink-muted);
     --color-bg: var(--color-slate-50);
-    --color-fg: var(--color-slate-950);
-    --color-fg-secondary: var(--color-slate-600);
     --color-surface: var(--color-white);
 }

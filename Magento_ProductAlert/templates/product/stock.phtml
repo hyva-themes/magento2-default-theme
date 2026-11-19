@@ -7,7 +7,7 @@
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\CurrentProduct;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Hyva\Theme\ViewModel\ProductAlert;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Escaper;
@@ -23,8 +23,8 @@ $productAlertViewModel = $viewModels->require(ProductAlert::class);
 /** @var CurrentProduct $currentProduct */
 $currentProduct = $viewModels->require(CurrentProduct::class);
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 
 /** @var Product $product */
 $product = $currentProduct->get();
@@ -39,7 +39,7 @@ $signupLabel = __("Notify me when this product is in stock");
     <a href="<?= $escaper->escapeUrl($productAlertViewModel->getSaveUrl($currentProduct->get(), 'stock')) ?>"
        title="<?= $escaper->escapeHtml($signupLabel) ?>" class="action alert">
         <span class="text-orange-400">
-            <?= $heroicons->bellHtml('inline', 24, 24, ['aria-hidden' => 'true']) ?>
+            <?= $lucideIcons->bellHtml('inline', 24, 24, ['aria-hidden' => 'true']) ?>
         </span>
         <span class="underline">
             <?= $escaper->escapeHtml($signupLabel) ?>

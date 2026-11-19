@@ -73,11 +73,7 @@ $jsTemplate = 'Magento_Catalog::product/widget/viewed/js/recently-viewed-product
             class="snap-slider <?= $escaper->escapeHtmlAttr($cssClasses) ?>"
             aria-label="<?= $escaper->escapeHtmlAttr($ariaLabel); ?>"
             data-slider-type="<?= $escaper->escapeHtmlAttr($type) ?>"
-            <?php if ($showPager): ?>
-            x-snap-slider.auto-pager.group-pager
-            <?php else: ?>
-            x-snap-slider
-            <?php endif; ?>
+            x-snap-slider<?= $showPager ? '.auto-pager.group-pager' : '' ?>
         >
             <a
                 href="#<?= $escaper->escapeHtmlAttr($sliderName) ?>-slider-end"
@@ -95,16 +91,16 @@ $jsTemplate = 'Magento_Catalog::product/widget/viewed/js/recently-viewed-product
                 <div class="flex gap-2">
                     <button
                         class="btn btn-secondary p-2 invisible"
-                        aria-label="Previous Slide"
+                        aria-label="<?= $escaper->escapeHtmlAttr(__('Previous slide')) ?>"
                         data-prev
                         disabled
-                    ><?= $lucideIcons->arrowLeftHtml('rtl:-rotate-180', 18, 18, ['aria-hidden' => 'true']); ?></button>
+                    ><?= $lucideIcons->arrowLeftHtml('rtl:rotate-180', 18, 18, ['aria-hidden' => 'true']); ?></button>
                     <button
                         class="btn btn-secondary p-2 invisible"
-                        aria-label="Next Slide"
+                        aria-label="<?= $escaper->escapeHtmlAttr(__('Next slide')) ?>"
                         data-next
                         disabled
-                    ><?= $lucideIcons->arrowRightHtml('rtl:-rotate-180', 18, 18, ['aria-hidden' => 'true']); ?></button>
+                    ><?= $lucideIcons->arrowRightHtml('rtl:rotate-180', 18, 18, ['aria-hidden' => 'true']); ?></button>
                 </div>
             </div>
 
@@ -131,7 +127,7 @@ $jsTemplate = 'Magento_Catalog::product/widget/viewed/js/recently-viewed-product
                             <?php if (in_array("name", $widgetAttributesToShow)): ?>
                                 <p class="mt-2 mb-1 items-center justify-center font-semibold text-lg text-center">
                                     <a :href="productUrl" class="product-item-link">
-                                        <span x-html="product.name"></span>
+                                        <span x-text="product.name"></span>
                                     </a>
                                 </p>
                             <?php endif; ?>
@@ -199,4 +195,3 @@ $jsTemplate = 'Magento_Catalog::product/widget/viewed/js/recently-viewed-product
         </section>
     </template>
 </div>
-

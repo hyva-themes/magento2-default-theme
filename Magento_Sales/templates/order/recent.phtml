@@ -6,7 +6,7 @@
  */
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Framework\Data\Helper\PostHelper;
 use Magento\Framework\Escaper;
 use Magento\Sales\Block\Order\Recent;
@@ -20,8 +20,8 @@ use Magento\Sales\Model\Order;
 /** @var Recent $block */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 /** @var Order[] $orders */
 $orders = $block->getOrders();
 $count  = count($orders);
@@ -138,7 +138,7 @@ if ($extraActionTitleBlocks = $block->getLayout()->getChildBlocks('order-list-ex
                                             title="<?= $escaper->escapeHtmlAttr(__('View Order')) ?>"
                                             aria-label="<?= $escaper->escapeHtmlAttr(__('View order') . ' ' . ltrim($order->getRealOrderId(), '0')) ?>"
                                         >
-                                            <?= $heroicons->eyeHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
+                                            <?= $lucideIcons->eyeHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
                                         </a>
                                         <?php if ($this->helper(Reorder::class)->canReorder($order->getEntityId())): ?>
                                             <?php $formData = json_decode(
@@ -160,11 +160,11 @@ if ($extraActionTitleBlocks = $block->getLayout()->getChildBlocks('order-list-ex
                                                     class="inline-block text-sm"
                                                     aria-label="<?= $escaper->escapeHtmlAttr(__('Reorder') . ' ' . ltrim($order->getRealOrderId(), '0')) ?>"
                                                 >
-                                                    <?= $heroicons->refreshHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
+                                                    <?= $lucideIcons->refreshCwHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
                                                 </button>
                                             </form>
                                         <?php else: ?>
-                                            <?= $heroicons->refreshHtml('text-gray-300', 24, 24, ['aria-hidden' => 'true']) ?>
+                                            <?= $lucideIcons->refreshCwHtml('text-gray-300', 24, 24, ['aria-hidden' => 'true']) ?>
                                         <?php endif ?>
                                         <?php foreach (array_keys($extraActions) as $alias): ?>
                                             <?php $button = $block->getLayout()->getChildBlock('order-list-extra-action-buttons', $alias) ?>

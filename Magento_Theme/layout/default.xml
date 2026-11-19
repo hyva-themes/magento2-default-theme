@@ -62,6 +62,7 @@
                     <container name="cart-drawer.items.before"/>
                     <container name="cart-drawer.totals.before"/>
                     <container name="cart-drawer.bottom"/>
+                    <container name="cart-drawer.shortcut-buttons"/>
                 </block>
 
                 <block name="topmenu_generic"
@@ -113,13 +114,14 @@
 
         <referenceContainer name="after.body.start">
             <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Theme::html/container.phtml"/>
-            <block name="mobile-safari-bug-workaround" template="Magento_Theme::html/mobile-safari-bug-workaround.phtml"/>
         </referenceContainer>
 
         <referenceContainer name="before.body.end">
             <block class="Magento\Theme\Block\Html\Footer" name="absolute_footer" template="Magento_Theme::html/absolute_footer.phtml" />
         </referenceContainer>
 
-        <block name="head.additional" as="head.additional" template="Magento_Theme::html/container.phtml"/>
+        <block name="head.additional" as="head.additional" template="Magento_Theme::html/container.phtml">
+            <block name="view-transition.in-app-browser" template="Magento_Theme::page/js/view-transition-in-app-browser.phtml"/>
+        </block>
     </body>
 </page>

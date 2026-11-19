@@ -1,18 +1,21 @@
 @layer base {
     :where(form label) {
-        @apply mb-2 block;
+        margin-block-end: --spacing(2);
+        display: block;
         color: var(--color-fg-secondary);
     }
 
     :where(form legend) {
-        @apply text-xl mb-3;
+        font-size: var(--text-xl);
+        line-height: var(--text-xl--line-height);
+        margin-block-end: --spacing(3);
 
         & + br {
-            @apply hidden;
+            display: none;
         }
     }
 
     :where(fieldset ~ fieldset) {
-        @apply mt-8;
+        margin-block-start: --spacing(8);
     }
 }

@@ -7,3 +7,17 @@
         display: none;
     }
 }
+
+/*
+ * Shorthand for `grid *:[grid-area:1/1]`,
+ * this is content aware and beter then position absolute
+ */
+@utility stack {
+    display: grid;
+
+    > *,
+    > ::before,
+    > ::after {
+        grid-area: 1/1;
+    }
+}

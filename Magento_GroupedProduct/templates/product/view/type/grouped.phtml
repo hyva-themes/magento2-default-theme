@@ -7,7 +7,6 @@
 
 declare(strict_types=1);
 
-use Magento\Catalog\Block\Product\View\BaseImage;
 use Magento\Catalog\Pricing\Price\TierPrice;
 use Magento\Framework\Escaper;
 use Magento\GroupedProduct\Block\Product\View\Type\Grouped;
@@ -15,7 +14,6 @@ use Magento\GroupedProduct\Block\Product\View\Type\Grouped;
 // phpcs:disable Generic.WhiteSpace.ScopeIndent
 
 /**
- * @var BaseImage $block
  * @var Grouped $block
  * @var Escaper $escaper
  */
@@ -81,7 +79,7 @@ $hasAssociatedProducts = count($associatedProducts) > 0;
     </div>
 
     <?php foreach ($associatedProducts as $item): ?>
-        <div class="sm:flex border-t border-gray-300 py-2 items-center justify-between gap-4"
+        <div class="flex flex-wrap border-t border-gray-300 py-2 items-center justify-between gap-4"
              <?php foreach ($block->getData('product_data_attributes') ?? [] as $attribute => $include): ?>
                  <?php if ($include): ?>
                      <?php /** Append data-* attributes based on layout XML arguments */ ?>
@@ -132,7 +130,7 @@ $hasAssociatedProducts = count($associatedProducts) > 0;
                     $item,
                     TierPrice::PRICE_CODE
                 ))): ?>
-                <div class="flex pt-2 w-full items-center">
+                <div class="w-full">
                     <?= $block->getProductPriceHtml(
                         $item,
                         TierPrice::PRICE_CODE
