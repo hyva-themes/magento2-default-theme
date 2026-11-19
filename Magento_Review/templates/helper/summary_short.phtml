@@ -22,6 +22,7 @@ $ratingSteps = 5;
 $starsFilled = is_numeric($rating) ? floor($rating / 100 * $ratingSteps) : 0;
 $starFragment = $rating / 100 * $ratingSteps - $starsFilled;
 $starsEmpty = floor($ratingSteps - $starsFilled - $starFragment);
+$starIconSize = $block->getData('rating_icon_size') ?: 20;
 
 $product = $block->getProduct();
 ?>
@@ -34,7 +35,7 @@ $product = $block->getProduct();
         <?php if ($rating): ?>
             <?php $i = 0; ?>
             <?php while ($i < $starsFilled): ?>
-                <?= $lucideIcons->starHtml('fill-current', 24, 24, ['aria-hidden' => 'true']); ?>
+                <?= $lucideIcons->starHtml('fill-current', $starIconSize, $starIconSize, ['aria-hidden' => 'true']); ?>
                 <?php $i++; ?>
             <?php endwhile; ?>
             <?php if ($starFragment): ?>
@@ -55,7 +56,7 @@ $product = $block->getProduct();
                             </linearGradient>
                         </defs>
                     </svg>
-                    <?= $lucideIcons->starHtml('', 24, 24, [
+                    <?= $lucideIcons->starHtml('', $starIconSize, $starIconSize, [
                         'style' => 'fill: url(#partialFill' . (int)$block->getProduct()->getId() . ')',
                         'aria-hidden' => 'true'
                     ]); ?>
@@ -63,13 +64,13 @@ $product = $block->getProduct();
             <?php endif; ?>
             <?php $i = 0; ?>
                 <?php while ($i < $starsEmpty): ?>
-                    <?= $lucideIcons->starHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
+                    <?= $lucideIcons->starHtml('', $starIconSize, $starIconSize, ['aria-hidden' => 'true']); ?>
                     <?php $i++; ?>
             <?php endwhile; ?>
         <?php else: ?>
             <?php $i = 0; ?>
             <?php while ($i < $ratingSteps): ?>
-                <?= $lucideIcons->starHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
+                <?= $lucideIcons->starHtml('', $starIconSize, $starIconSize, ['aria-hidden' => 'true']); ?>
                 <?php $i++; ?>
             <?php endwhile; ?>
         <?php endif; ?>

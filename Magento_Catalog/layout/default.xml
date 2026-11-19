@@ -15,6 +15,7 @@
             <block
                 name="view-transition.gallery"
                 template="Magento_Catalog::page/js/view-transition-between-gallery.phtml"
+                ifconfig="hyva_theme_general/animations/enable_view_transition_gallery"
             />
         </referenceContainer>
 

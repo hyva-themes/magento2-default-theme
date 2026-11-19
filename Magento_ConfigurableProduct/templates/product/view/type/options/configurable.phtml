@@ -5,71 +5,81 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Hyva\Theme\ViewModel\Product\Options as ProductOptions;
 use Magento\ConfigurableProduct\Block\Product\View\Type\Configurable;
 use Magento\Framework\Escaper;
 
 /** @var Configurable $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
+
+/** @var ProductOptions $productOptionsViewModel */
+$productOptionsViewModel = $viewModels->require(ProductOptions::class);
 
 $product = $block->getProduct();
 $productId = $product->getId();
 $attributes = $block->decorateArray($block->getAllowAttributes());
+$jsonConfig = $block->getJsonConfig();
 ?>
 <?php if ($product->isSaleable() && count($attributes)): ?>
-
     <script>
-        function initConfigurableDropdownOptions_<?= (int) $productId ?>() {
-            return initConfigurableOptions(
-                '<?= (int) $productId ?>',
-                <?= /* @noEscape */ $block->getJsonConfig() ?>
-            );
-        }
-    </script>
+        function initConfigurableDropdownOptions() {
+            const { productId } = this.$root.dataset;
+            const configEl = this.$root.querySelector('script[type="application/json"]');
 
-    <div x-data="initConfigurableDropdownOptions_<?= (int) $productId ?>()"
-         @private-content-loaded.window="onGetCartData($event.detail.data)"
-         class="mb-6"
+            return initConfigurableOptions(productId, JSON.parse(configEl.textContent));
+        }
+
+        window.addEventListener('alpine:init', () => {
+            Alpine.data('initConfigurableDropdownOptions', initConfigurableDropdownOptions)
+        }, { once: true });
+    </script>
+    <?php $hyvaCsp->registerInlineScript() ?>
+
+    <div
+        x-data="initConfigurableDropdownOptions"
+        data-product-id="<?= (int) $productId ?>"
+        class="mb-6"
     >
-        <h2 class="text-gray-900 text-xl title-font font-medium mb-4">
-            <?= $escaper->escapeHtml(__('Options')) ?>
-        </h2>
+        <script type="application/json"><?= /* @noEscape */ str_replace('</script>', '<\/script>', $jsonConfig) ?></script>
 
         <?php foreach ($attributes as $attribute): ?>
-            <?php $attributeId = $attribute->getAttributeId(); ?>
-        <div class="flex flex-col sm:flex-row border-t last:border-b border-gray-300 py-2 w-full items-center">
-
-            <label class="w-full sm:w-1/2 text-left text-gray-700 label"
-                   for="attribute<?= $escaper->escapeHtmlAttr($attributeId) ?>"
-            >
-                <span>
+            <?php
+            $attributeId = $attribute->getAttributeId();
+            $productOptions = $productOptionsViewModel->getEnabledAttributeOptions($block, $attribute);
+            ?>
+            <div role="group" class="mb-4">
+                <label
+                    class="mb-1 text-base font-medium"
+                    for="attribute<?= $escaper->escapeHtmlAttr($attributeId) ?>"
+                >
                     <?= $escaper->escapeHtml($attribute->getProductAttribute()->getStoreLabel()) ?>
-                </span>
-            </label>
-            <div class="w-full sm:ml-2 sm:w-1/2 text-left text-gray-900">
-                <select name="super_attribute[<?= $escaper->escapeHtmlAttr($attributeId) ?>]"
-                        id="attribute<?= $escaper->escapeHtmlAttr($attributeId) ?>"
-                        class="form-select super-attribute-select max-w-full"
-                        x-on:change="changeOption(<?= (int) $attributeId ?>, event.target.value)"
-                        required>
-                    <option value="">
-                        <?= $escaper->escapeHtml(__('Choose an Option...')) ?>
-                    </option>
-                    <template
-                        x-for="(item, index) in getAllAttributeOptions(<?= (int) $attributeId ?>)"
-                        :key="item.id"
-                    >
-                        <template x-if="optionIsEnabled(<?= (int) $attributeId ?>, item.id)">
+                </label>
+                <select
+                    id="attribute<?= $escaper->escapeHtmlAttr($attributeId) ?>"
+                    name="super_attribute[<?= $escaper->escapeHtmlAttr($attributeId) ?>]"
+                    class="form-select w-full"
+                    required
+                    data-attribute-id="<?= $escaper->escapeHtmlAttr($attributeId) ?>"
+                    @change="reflectOption"
+                >
+                    <option value=""><?= $escaper->escapeHtml(__('Choose an Option...')) ?></option>
+                    <?php foreach ($productOptions as $option): ?>
                         <option
-                            :value="item.id"
-                            x-html="getAttributeOptionLabel(item)"
-                            :disabled="!optionIsActive(<?= (int) $attributeId ?>, item.id)"
-                            :selected="selectedValues[<?= $escaper->escapeHtmlAttr($attributeId) ?>] === item.id">
-                        </option>
-                        </template>
-                    </template>
+                            value="<?= $escaper->escapeHtmlAttr($option['value_index']) ?>"
+                            data-attribute-id="<?= $escaper->escapeHtmlAttr($attributeId) ?>"
+                            data-option-label="<?= $escaper->escapeHtmlAttr($option['store_label']) ?>"
+                            :disabled="optionIsDisabled"
+                            x-text="getOptionLabel"
+                        ><?= $escaper->escapeHtml($option['store_label']) ?></option>
+                    <?php endforeach; ?>
                 </select>
             </div>
-        </div>
         <?php endforeach; ?>
     </div>
-<?php endif;?>
+<?php endif; ?>

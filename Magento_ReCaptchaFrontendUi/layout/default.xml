@@ -19,7 +19,7 @@
         <block name="recaptcha_input_field"
                template="Magento_ReCaptchaFrontendUi::recaptcha.phtml" />
 
-        <!-- Legal notice blocks (only for v3 invisible) -->
+        <!-- Legal notice blocks (only for v3 and v2 invisible) -->
         <block name="recaptcha_legal_notice" template="Magento_ReCaptchaFrontendUi::legal_notice.phtml" />
 
         <!-- Script Token blocks to process the validation and submit the form if successful -->

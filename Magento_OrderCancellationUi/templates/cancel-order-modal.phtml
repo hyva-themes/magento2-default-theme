@@ -20,14 +20,14 @@ $modalViewModel = $viewModels->require(Modal::class);
 $storeViewModel = $viewModels->require(Store::class);
 $order = $block->getData('order');
 
-$modal = $modalViewModel->createModal()->withContent(<<<END_OF_CONTENT
+$modalContent = <<<END_OF_CONTENT
 <div
     id="cancel-order-modal-title"
     class="text-xl mb-2" x-text="`{$escaper->escapeJs(__('Cancel order'))} \${increment_id}`"
 ></div>
 <div class="field field-reserved required">
     <label for="cancel-order-reason">
-        <span>{$block->escapeHtml(__('Provide a cancellation reason:'))}</span>
+        <span>{$escaper->escapeHtml(__('Provide a cancellation reason:'))}</span>
     </label>
     <select id="cancel-order-reason" class="form-select max-w-full" x-ref="reason" required>
         <option value=""></option>
@@ -44,10 +44,12 @@ $modal = $modalViewModel->createModal()->withContent(<<<END_OF_CONTENT
         {$escaper->escapeHtml(__('Close'))}
     </button>
 </div>
-END_OF_CONTENT
-)
-->withAriaLabelledby('cancel-order-modal-title')
-->addDialogClass('m-4');
+END_OF_CONTENT;
+
+$modal = $modalViewModel->createModal()
+    ->withContent($modalContent)
+    ->withAriaLabelledby('cancel-order-modal-title')
+    ->addDialogClass('m-4');
 
 ?>
 <script>

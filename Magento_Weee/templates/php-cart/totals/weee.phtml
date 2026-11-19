@@ -1,6 +1,6 @@
 <template x-if="segment.code === 'weee_tax'">
     <div :class="wrapperClass">
-        <div x-html="segment.title"></div>
+        <div x-html-safe="segment.title"></div>
         <div x-text="hyva.formatPrice(segment.value)" class="justify-self-end"></div>
     </div>
 </template>

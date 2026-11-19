@@ -1,14 +1,72 @@
 @layer components {
-    .form-swatch {
-        /* TODO: create HTML swatches */
-    }
-
-    .swatch-attribute-options {
-        @apply flex flex-row flex-wrap;
-    }
-
     .swatch-option {
-        @apply px-2 py-1 m-1 flex border justify-center;
-        min-width: 40px;
+        --swatch-size: --spacing(9);
+        display: grid;
+        place-items: center;
+        min-block-size: var(--swatch-size);
+        min-inline-size: var(--swatch-size);
+        padding-block: var(--swatch-py, 3px);
+        padding-inline: var(--swatch-px, 6px);
+        border-radius: var(--swatch-radius, 0.5em);
+        border-width: 1px;
+        border-color: var(--form-stroke);
+        background: var(--swatch-visual, var(--form-bg)) center/contain
+            no-repeat;
+        color: var(--form-color);
+        line-height: 1.1;
+        cursor: pointer;
+
+        img,
+        > * {
+            border-radius: calc(
+                var(--swatch-radius, 0.5em) - var(--swatch-px, 6px)
+            );
+        }
+
+        > * {
+            grid-area: 1/1;
+        }
+
+        &[data-swatch-type="visual"] {
+            --swatch-radius: 5rem;
+            --swatch-px: 3px;
+        }
+
+        &:hover {
+            border-color: var(--form-active-color);
+        }
+
+        &:is(
+            :has(:checked),
+            [aria-checked="true"],
+            [aria-selected="true"],
+            [aria-current="page"]
+        ) {
+            border-color: var(--form-active-color);
+            box-shadow: inset 0 0 0 1px var(--form-active-color);
+        }
+
+        &:is(:focus-visible, :has(:focus-visible)) {
+            border-color: var(--form-active-color);
+            outline: var(--outline-size, 2px) solid var(--form-active-color);
+            outline-offset: var(--outline-offset, 2px);
+        }
+
+        &:is(:has(:disabled), [aria-disabled="true"]) {
+            border-color: color-mix(in srgb, var(--form-stroke) 80%, #0000);
+            border-style: dashed;
+            cursor: not-allowed;
+
+            > :is(span, img) {
+                opacity: 80%;
+            }
+        }
+    }
+
+    /* Deprecated, avoid using for upgradabilty */
+    .swatch-attribute-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: --spacing(2);
     }
 }

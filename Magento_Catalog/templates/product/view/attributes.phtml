@@ -19,7 +19,6 @@ use Magento\Catalog\Model\Product;
 /** @var CatalogOutputHelper $output */
 /** @var Attributes $block */
 
-
 /** @var CatalogOutputHelper $catalogOutputHelper */
 $catalogOutputHelper = $this->helper(CatalogOutputHelper::class);
 
@@ -29,15 +28,21 @@ $product = $block->getProduct();
 
 <?php if ($attributes = $block->getAdditionalData()): ?>
     <div class="table-wrapper max-w-prose overflow-x-auto" id="product-attributes">
-        <table class="additional-attributes w-full">
+        <table class="additional-attributes w-full divide-y divide-gray-300">
             <?php foreach ($attributes as $attribute): ?>
-                <tr class="border-b border-gray-300 last:border-b-0">
-                    <th class="col label w-1/2 py-2 text-left text-fg-secondary font-normal product-attribute-label"
-                        scope="row"><?= $escaper->escapeHtml($attribute['label']) ?></th>
-                    <td class="col data w-1/2 py-2 pl-2 text-left product-attribute-value"
+                <tr>
+                    <th
+                        class="w-1/2 py-2 text-left text-fg-secondary font-normal product-attribute-label"
+                        scope="row"
+                    >
+                        <?= $escaper->escapeHtml($attribute['label']) ?>
+                    </th>
+                    <td
+                        class="w-1/2 py-2 pl-2 text-left product-attribute-value"
                         data-th="<?= $escaper->escapeHtmlAttr($attribute['label']) ?>"
-                    ><?= /* @noEscape */
-                     $catalogOutputHelper->productAttribute($product, $attribute['value'], $attribute['code']) ?></td>
+                    >
+                        <?= /* @noEscape */ $catalogOutputHelper->productAttribute($product, $attribute['value'], $attribute['code']) ?>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </table>

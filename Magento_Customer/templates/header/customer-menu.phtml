@@ -40,7 +40,7 @@ $lucideIcons = $viewModels->require(LucideIcons::class);
     </button>
     <nav
         class="z-10 absolute right-0 w-40 sm:w-48 mt-2 lg:mt-3 -me-4 py-2 px-1 rounded-md shadow-lg bg-white overflow-auto"
-        aria-labelledby="customer-menu"
+        aria-label="<?= $escaper->escapeHtmlAttr(__('My Account')) ?>"
         x-show="open"
         x-transition
         x-cloak

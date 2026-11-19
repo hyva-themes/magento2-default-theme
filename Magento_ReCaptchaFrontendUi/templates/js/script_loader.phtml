@@ -31,8 +31,6 @@ if (!$siteKeyV2checkbox && !$siteKeyV2invisible && !$siteKeyV3) {
 }
 ?>
 <script>
-    'use strict';
-
     const grecaptchaV2LoadCallbacks = [];
 
     function executeRecaptchaLoadCallbacks () {
@@ -42,12 +40,16 @@ if (!$siteKeyV2checkbox && !$siteKeyV2invisible && !$siteKeyV3) {
         }
     }
 
-    (function() {
-        const loadRecaptchaScript = (event) => {
+    (() => {
+        const recaptchaFieldSelector = '.g-recaptcha, [data-recaptcha], [name="g-recaptcha-response"]';
+        const interactionEvents = ['focusin', 'input'];
+        let isScriptRequested = false;
 
-            if (window.grecaptcha || !event.target.form) {
-                return;
-            }
+        const loadRecaptchaScript = () => {
+            if (window.grecaptcha || isScriptRequested) return;
+
+            isScriptRequested = true;
+            interactionEvents.forEach(type => document.removeEventListener(type, onFormInteraction, true));
 
             const url = 'https://www.google.com/recaptcha/api.js?onload=executeRecaptchaLoadCallbacks';
             const siteKey = '<?= $escaper->escapeJs($siteKeyV3) /* will be empty if only v2 is configured, which is okay */ ?>';
@@ -60,17 +62,25 @@ if (!$siteKeyV2checkbox && !$siteKeyV2invisible && !$siteKeyV3) {
             script.addEventListener('load', () => {
                 Array.from(document.querySelectorAll('button[data-recaptcha-btn]:disabled')).forEach(btn => btn.removeAttribute('disabled'));
             });
-        }
+        };
 
-        window.forceLoadRecaptchaScript = (form) => {
-            loadRecaptchaScript({target: {form: form || 'dummy'}});
+        /**
+         * Load the reCAPTCHA script on the first interaction with a form that contains a reCAPTCHA field.
+         *
+         * @param {Event} event
+         */
+        const onFormInteraction = (event) => {
+            if (!event.target.form?.querySelector(recaptchaFieldSelector)) return;
+
+            loadRecaptchaScript();
+        };
+
+        window.forceLoadRecaptchaScript = () => {
+            loadRecaptchaScript();
             executeRecaptchaLoadCallbacks();
         };
 
-        document.body.addEventListener('input', loadRecaptchaScript, { once: true });
-        document.body.addEventListener('focus', loadRecaptchaScript, { once: true });
-
-    }());
-
+        interactionEvents.forEach(type => document.addEventListener(type, onFormInteraction, true));
+    })();
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>

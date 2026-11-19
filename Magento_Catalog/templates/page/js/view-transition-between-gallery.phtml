@@ -19,44 +19,52 @@ use Magento\Framework\View\Element\Template;
 ?>
 
 <script>
-    const viewTransitionToGalleryPageStorage = 'view-transition-to-gallery-page-type';
-    const setTransitionNameBetweenGallery = async (url, promise) => {
-        if (window.matchMedia('(prefers-reduced-motion)').matches) return;
+    (() => {
+        const pageTypeStorageKey = 'view-transition-to-gallery-page-type';
+        const transitionName = 'view-transition-to-gallery';
 
-        const productGallery = document.getElementById('gallery-main');
-        const productListItem = document.querySelector(`.product-item-photo[href="${url}"]`);
-        const targetElement = productListItem || productGallery;
+        const setTransitionName = async (url, promise) => {
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-        if (targetElement) {
-            targetElement.style.viewTransitionName = 'view-transition-to-gallery';
+            const productGallery = document.getElementById('gallery-main');
+            const productListItem = Array.from(document.querySelectorAll('.product-item-photo'))
+                .find((anchor) => anchor.href === url);
+            const targetElement = productListItem || productGallery;
 
-            await promise;
-            targetElement.style.viewTransitionName = '';
-        }
-    };
+            if (targetElement) {
+                targetElement.style.viewTransitionName = transitionName;
 
-    const getViewTransitionToGalleryPageIsProduct = () => {
-        return document.body.classList.contains('catalog-product-view') ? 'product-page' : 'other'
-    }
+                try {
+                    await promise;
+                } finally {
+                    targetElement.style.viewTransitionName = '';
+                }
+            }
+        };
 
-    window.addEventListener('pageswap', async (e) => {
-        if (!e.viewTransition) return;
-        const pageType = getViewTransitionToGalleryPageIsProduct();
-        const target = new URL(e.activation.entry.url);
+        const getPageType = () => {
+            return document.body.classList.contains('catalog-product-view') ? 'product-page' : 'other';
+        };
 
-        sessionStorage.setItem(viewTransitionToGalleryPageStorage, pageType);
-        setTransitionNameBetweenGallery(target.href, e.viewTransition.finished);
-    });
+        window.addEventListener('pageswap', (e) => {
+            if (!e.viewTransition) return;
+            const pageType = getPageType();
+            const target = new URL(e.activation.entry.url);
 
-    window.addEventListener('pagereveal', async (e) => {
-        if (!e.viewTransition || (window.navigation && !window.navigation.activation.from)) return;
-        const previousPageType = sessionStorage.getItem(viewTransitionToGalleryPageStorage);
-        const pageType = getViewTransitionToGalleryPageIsProduct();
-        sessionStorage.removeItem(viewTransitionToGalleryPageStorage);
+            sessionStorage.setItem(pageTypeStorageKey, pageType);
+            setTransitionName(target.href, e.viewTransition.finished);
+        });
 
-        if (previousPageType === pageType) return;
-        const target = new URL(window.navigation.activation.from.url);
-        setTransitionNameBetweenGallery(target.href, e.viewTransition.ready);
-    });
+        window.addEventListener('pagereveal', (e) => {
+            if (!e.viewTransition || (window.navigation && !window.navigation.activation.from)) return;
+            const previousPageType = sessionStorage.getItem(pageTypeStorageKey);
+            const pageType = getPageType();
+            sessionStorage.removeItem(pageTypeStorageKey);
+
+            if (previousPageType === pageType) return;
+            const target = new URL(window.navigation.activation.from.url);
+            setTransitionName(target.href, e.viewTransition.finished);
+        });
+    })();
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>

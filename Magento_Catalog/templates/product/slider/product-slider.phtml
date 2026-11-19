@@ -39,10 +39,10 @@ $title = $block->getTitle() ?: '';
 $headingTag = $block->getHeadingTag() ?: 'h3';
 $cssClasses = $block->getCssClasses() ?: 'product-slider my-8';
 $headingCssClasses = $block->getHeadingCssClasses() ?: 'text-2xl font-medium';
-$columnCount = $block->getColumnCount() ?? 4;
+$columnCount = $block->getData('column_count') ?? 4;
 $sliderClasses = implode(' ', array_filter([
     'snap-track',
-    $columnCount > 1 ? 'md:[--snap-cols:2]' : '',
+    $columnCount > 1 ? 'sm:[--snap-cols:2]' : '',
     $columnCount > 2 ? 'lg:[--snap-cols:3]' : '',
     $columnCount > 3 ? 'xl:[--snap-cols:4]' : '',
     $columnCount > 4 ? '2xl:[--snap-cols:5]' : '',
@@ -155,16 +155,16 @@ $itemRenderer->setData('hide_details', $hideDetails);
         <div class="flex gap-2">
             <button
                 class="btn btn-secondary p-2 invisible"
-                aria-label="Previous Slide"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Previous slide')) ?>"
                 data-prev
                 disabled
-            ><?= $lucideIcons->arrowLeftHtml('rtl:-rotate-180', 18, 18, ['aria-hidden' => 'true']); ?></button>
+            ><?= $lucideIcons->arrowLeftHtml('rtl:rotate-180', 18, 18, ['aria-hidden' => 'true']); ?></button>
             <button
                 class="btn btn-secondary p-2 invisible"
-                aria-label="Next Slide"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Next slide')) ?>"
                 data-next
                 disabled
-            ><?= $lucideIcons->arrowRightHtml('rtl:-rotate-180', 18, 18, ['aria-hidden' => 'true']); ?></button>
+            ><?= $lucideIcons->arrowRightHtml('rtl:rotate-180', 18, 18, ['aria-hidden' => 'true']); ?></button>
         </div>
     </div>
 

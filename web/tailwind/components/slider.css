@@ -52,7 +52,7 @@
 
         &[aria-current="true"] {
             inline-size: --spacing(7);
-            border-color: #0000;
+            border-color: var(--color-primary);
             background-color: var(--color-primary);
         }
     }

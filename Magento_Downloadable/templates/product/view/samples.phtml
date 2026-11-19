@@ -8,7 +8,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Downloadable\Block\Catalog\Product\Samples;
 use Magento\Framework\Escaper;
 
@@ -16,8 +16,8 @@ use Magento\Framework\Escaper;
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 ?>
 
 <?php if ($block->hasSamples()): ?>
@@ -34,7 +34,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                    <?= $block->getIsOpenInNewWindow() ? 'target="_blank" rel="noopener"' : '' ?>
                    class="item-link samples-item-link"
                 >
-                    <?= $heroicons->documentDownloadHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
+                    <?= $lucideIcons->fileDownHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
                     <?= $escaper->escapeHtml($sample->getTitle()) ?>
                 </a>
             </div>

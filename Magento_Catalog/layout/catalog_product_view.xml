@@ -79,7 +79,8 @@
 
                         <block class="Magento\Theme\Block\Html\Title" name="product.info.title" template="Magento_Theme::html/title.phtml">
                             <arguments>
-                                <argument name="wrapper_css_classes" xsi:type="string">hidden mb-6 md:block</argument>
+                                <argument name="css_classes" xsi:type="string">text-3xl font-bold</argument>
+                                <argument name="wrapper_css_classes" xsi:type="string">hidden md:block</argument>
                                 <argument name="heading_tag" xsi:type="string">div</argument>
                                 <argument name="add_base_attribute" xsi:type="string">aria-hidden=true</argument>
                             </arguments>
@@ -143,14 +144,15 @@
                         <container name="product.info.additional" />
                     </block>
 
-                    <block class="Magento\Catalog\Block\Product\View\Gallery" name="product.media"
-                           template="Magento_Catalog::product/view/gallery.phtml">
+                    <block
+                        class="Magento\Catalog\Block\Product\View\Gallery"
+                        name="product.media"
+                        template="Magento_Catalog::product/view/gallery.phtml"
+                    >
                         <arguments>
-                            <argument name="gallery_options"
-                                      xsi:type="object">Magento\Catalog\Block\Product\View\GalleryOptions
-                            </argument>
-                            <argument name="imageHelper" xsi:type="object">Magento\Catalog\Helper\Image</argument>
+                            <argument name="gallery_options" xsi:type="object">Magento\Catalog\Block\Product\View\GalleryOptions</argument>
                         </arguments>
+                        <container name="gallery.additional" />
                     </block>
 
                     <block class="Magento\Catalog\Block\Product\View"
@@ -162,9 +164,7 @@
                            template="Magento_Catalog::product/slider/product-slider.phtml">
                         <arguments>
                             <argument name="type" xsi:type="string">upsell</argument>
-                            <argument name="title" xsi:type="string"
-                                      translate="true">We found other products you might like!
-                            </argument>
+                            <argument name="title" xsi:type="string" translate="true">We found other products you might like!</argument>
                             <argument name="heading_tag" xsi:type="string">h2</argument>
                         </arguments>
                     </block>

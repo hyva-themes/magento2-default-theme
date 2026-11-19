@@ -9,25 +9,36 @@ declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\Escaper\EscapeHtmlAllowingAnchorAttributes;
+use Hyva\Theme\ViewModel\StoreConfig;
 use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
 
 // phpcs:disable Generic.Files.LineLength.TooLong
 
 /** @var ViewModelRegistry $viewModels */
+/** @var Template $block */
 /** @var Escaper $escaper */
-/** @var EscapeHtmlAllowingAnchorAttributes $specialEscaper */
 
+/** @var EscapeHtmlAllowingAnchorAttributes $specialEscaper */
 $specialEscaper = $viewModels->require(EscapeHtmlAllowingAnchorAttributes::class);
+
+/** @var StoreConfig $storeConfig */
+$storeConfig = $viewModels->require(StoreConfig::class);
+
+$legalNoticeMode = $storeConfig->getStoreConfig('recaptcha_frontend/legal_notice/legal_notice_mode') ?? 'default';
+$legalNotice = $legalNoticeMode === 'default'
+    ? __(
+        'This form is protected by reCAPTCHA - the <a class="underline" href="%1" target="_blank" rel="noopener">Google Privacy Policy</a> and <a class="underline" href="%2" target="_blank" rel="noopener">Terms of Service</a> apply.',
+        'https://policies.google.com/privacy',
+        'https://policies.google.com/terms'
+    )
+    : trim($storeConfig->getStoreConfig('recaptcha_frontend/legal_notice/notice') ?? '');
+
+if ($legalNoticeMode === 'custom' && $legalNotice === '') {
+    return;
+}
+
 ?>
-<p class="my-4 text-sm">
-    <em>
-        <?= $specialEscaper->escapeHtml(
-            __(
-                'This form is protected by reCAPTCHA - the <a class="underline" href="%1" target="_blank" rel="noopener">Google Privacy Policy</a> and <a class="underline" href="%2" target="_blank" rel="noopener">Terms of Service</a> apply.',
-                'https://policies.google.com/privacy',
-                'https://policies.google.com/terms'
-            ),
-            ['a']
-        ) ?>
-    </em>
+<p class="prose my-4 text-sm">
+    <em><?= $specialEscaper->escapeHtml($legalNotice, ['a']) ?></em>
 </p>

@@ -8,7 +8,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Hyva\Theme\ViewModel\Sales\OrderCancellation;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
@@ -18,8 +18,8 @@ use Magento\OrderCancellationUi\ViewModel\Config as OrderCancellationUiConfig;
 /** @var Template $block */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 
 /** @var OrderCancellation $orderCancellation */
 $orderCancellation = $viewModels->require(OrderCancellation::class);
@@ -44,8 +44,8 @@ $reasons = $orderCancellationUiConfig->getCancellationReasons((int) $order->getI
             reasons: <?= $escaper->escapeHtmlAttr(json_encode(array_values($reasons))) ?>,
         })"
     >
-        <?= $heroicons->xCircleHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
+        <?= $lucideIcons->circleXHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
     </button>
 <?php else: ?>
-    <?= $heroicons->xCircleHtml('text-gray-300', 24, 24, ['aria-hidden' => 'true']) ?>
+    <?= $lucideIcons->circleXHtml('text-gray-300', 24, 24, ['aria-hidden' => 'true']) ?>
 <?php endif ?>

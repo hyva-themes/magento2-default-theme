@@ -39,7 +39,7 @@ $renderTargetElementId = sprintf('paypalInContextRenderTarget%d', $isMinicart)
      x-init="cartSection = cart"
      x-intersect="checkAndInitializeButtons()"
     <?php endif; ?>
-     class="paypal checkout paypal-logo min-h-a11y cart-extra-actions-container isolate"
+     class="paypal checkout paypal-logo min-h-11 cart-extra-actions-container isolate"
     <?php if ($isCartPage): ?>
      @private-content-loaded.window="getData($event.detail.data); checkAndInitializeButtons()"
     <?php endif; ?>

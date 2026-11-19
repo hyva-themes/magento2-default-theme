@@ -24,6 +24,7 @@ $recaptcha = $viewModels->require(ReCaptcha::class);
 <div class="control">
     <input type="hidden"
            value=""
+           data-recaptcha
            name="<?= $escaper->escapeHtmlAttr($recaptcha->getResultTokenFieldName($formId)) ?>"
     >
 </div>

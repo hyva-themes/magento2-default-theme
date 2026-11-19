@@ -14,8 +14,17 @@
         transition-duration: var(--default-transition-duration);
     }
 
-    .card-interactive:is(:hover, :focus-within) {
-        --card-stroke: #0000;
-        box-shadow: var(--shadow-lg);
+    .card-interactive {
+        @media (hover: hover) {
+            &:hover {
+                --card-stroke: #0000;
+                box-shadow: var(--shadow-lg);
+            }
+        }
+
+        &:focus-within {
+            --card-stroke: #0000;
+            box-shadow: var(--shadow-lg);
+        }
     }
 }

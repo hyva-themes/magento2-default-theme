@@ -32,10 +32,11 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
 }
 ?>
 
-<div class="flex flex-col sm:flex-row border-t border-gray-300 py-2 last:mb-6 last:border-b w-full items-center">
-    <label class="label text-gray-700 text-left w-full sm:w-1/2"
-           for="options_<?= $escaper->escapeHtmlAttr($optionId) ?>_text"
-           x-html="updateOptionPrice('<?= $escaper->escapeJs($optionId) ?>', $el)"
+<div class="mb-4">
+    <label
+        class="mb-1 text-base font-normal"
+        for="options_<?= $escaper->escapeHtmlAttr($optionId) ?>_text"
+        x-html-safe="updateOptionPrice('<?= $escaper->escapeJs($optionId) ?>', $el)"
     >
         <span><?= $escaper->escapeHtml($option->getTitle()) ?></span>
         <?php if ($option->getIsRequire()): ?>
@@ -44,7 +45,7 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
         <span><?= /* @noEscape */ $block->getFormattedPrice() ?></span>
     </label>
 
-    <div class="sm:ml-2 text-gray-900 text-left w-full sm:w-1/2">
+    <div>
         <?php if ($option->getType() == ProductCustomOptionInterface::OPTION_TYPE_FIELD): ?>
             <input type="text"
                    id="options_<?= $escaper->escapeHtmlAttr($optionId) ?>_text"
@@ -67,7 +68,7 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
             >
         <?php elseif ($option->getType() == ProductCustomOptionInterface::OPTION_TYPE_AREA): ?>
             <textarea id="options_<?= $escaper->escapeHtmlAttr($optionId) ?>_text"
-                      class="product-custom-option form-textarea"
+                      class="product-custom-option form-textarea w-full"
                       <?php if ($option->getMaxCharacters()): ?>
                       maxlength="<?= (int)$option->getMaxCharacters() ?>"
                       <?php endif; ?>

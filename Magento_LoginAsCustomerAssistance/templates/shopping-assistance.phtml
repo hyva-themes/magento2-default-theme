@@ -8,7 +8,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 use \Magento\LoginAsCustomerAssistance\ViewModel\ShoppingAssistanceViewModel;
@@ -20,8 +20,8 @@ use \Magento\LoginAsCustomerAssistance\ViewModel\ShoppingAssistanceViewModel;
 /** @var ShoppingAssistanceViewModel $shoppingAssistanceViewModel */
 $shoppingAssistanceViewModel = $viewModels->require(ShoppingAssistanceViewModel::class);
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 
 if (!$shoppingAssistanceViewModel->isLoginAsCustomerEnabled()) {
     return;
@@ -52,7 +52,6 @@ if (!$shoppingAssistanceViewModel->isLoginAsCustomerEnabled()) {
            name="assistance_allowed_checkbox"
            id="assistance_allowed_checkbox"
            value="1"
-           title="<?= $escaper->escapeHtmlAttr(__('Allow remote shopping assistance')) ?>"
            class="checkbox"
            aria-describedby="assistance_allowed_checkbox_tooltip"
         <?php if ($shoppingAssistanceViewModel->isAssistanceAllowed()): ?>
@@ -79,7 +78,7 @@ if (!$shoppingAssistanceViewModel->isLoginAsCustomerEnabled()) {
             aria-labelledby="assistance_allowed_checkbox_tooltip"
             aria-disabled="true"
         >
-            <?= $heroicons->questionMarkCircleHtml('cursor-hand', 24, 24, ['aria-hidden' => 'true']) ?>
+            <?= $lucideIcons->circleQuestionMarkHtml('cursor-hand', 24, 24, ['aria-hidden' => 'true']) ?>
         </button>
         <div class="relative" x-cloak x-show="showTooltip">
             <div class="absolute top-0 left-0 z-10 w-64 -mt-6 text-sm leading-tight text-black transform

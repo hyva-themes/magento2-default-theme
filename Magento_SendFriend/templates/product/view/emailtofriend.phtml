@@ -10,7 +10,7 @@ declare(strict_types=1);
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\CurrentProduct;
 use Hyva\Theme\ViewModel\EmailToFriend;
-use Hyva\Theme\ViewModel\HeroiconsSolid;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Catalog\Block\Product\View;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Escaper;
@@ -24,8 +24,8 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
 /** @var EmailToFriend $sendFriendViewModel */
 $sendFriendViewModel = $viewModels->require(EmailToFriend::class);
 
-/** @var HeroiconsSolid $heroicons */
-$heroicons = $viewModels->require(HeroiconsSolid::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 
 /** @var Product $product */
 $product = $currentProduct->exists() ? $currentProduct->get() : false;
@@ -43,7 +43,7 @@ $mailtoUrl = $sendFriendViewModel->getEmailToFriendUrl($product);
        class="mailto friend rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex
        items-center justify-center text-gray-500 hover:text-blue-600 ml-2"
     >
-        <?= $heroicons->mailHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
+        <?= $lucideIcons->mailHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
         <span class="sr-only"><?= $escaper->escapeHtml(__('Email to a Friend')) ?></span>
     </a>
 <?php endif; ?>

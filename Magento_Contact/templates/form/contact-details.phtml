@@ -8,7 +8,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Hyva\Theme\ViewModel\StoreConfig;
 use Magento\Framework\Escaper;
 
@@ -16,7 +16,8 @@ use Magento\Framework\Escaper;
 /** @var Escaper $escaper */
 
 $storeConfig = $viewModels->require(StoreConfig::class);
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+$lucideIcons = $viewModels->require(LucideIcons::class);
+$storeName = $storeConfig->getStoreConfig('general/store_information/name') ?? '';
 $storePhoneNumber = $storeConfig->getStoreConfig('general/store_information/phone') ?? '';
 $storeEmail = $storeConfig->getStoreConfig('trans_email/ident_general/email') ?? '';
 
@@ -24,7 +25,9 @@ $storeEmail = $storeConfig->getStoreConfig('trans_email/ident_general/email') ??
 <h2 class="sm:text-2xl text-xl font-medium title-font mb-4 text-gray-900">
     <span><?= $escaper->escapeHtml(__('Contact Details')) ?></span>
 </h2>
-<h3 class="title-font font-bold"><?= $escaper->escapeHtml($storeConfig->getStoreConfig('general/store_information/name') ?? ''); ?></h3>
+<?php if ($storeName): ?>
+    <h3 class="title-font font-bold"><?= $escaper->escapeHtml($storeName) ?></h3>
+<?php endif; ?>
 <address>
     <?= $escaper->escapeHtml($storeConfig->getStoreConfig('general/store_information/street_line1') ?? ''); ?><br>
     <?= $escaper->escapeHtml($storeConfig->getStoreConfig('general/store_information/city') ?? ''); ?><br>
@@ -33,14 +36,14 @@ $storeEmail = $storeConfig->getStoreConfig('trans_email/ident_general/email') ??
 <ul role="list">
     <?php if ($storePhoneNumber): ?>
     <li class="mt-10">
-        <?= $heroicons->phoneHtml("inline mr-1", 20, 20, ['aria-hidden' => 'true']) ?>
+        <?= $lucideIcons->phoneHtml("inline mr-1", 20, 20, ['aria-hidden' => 'true']) ?>
         <a class="inline" href="tel:<?= $escaper->escapeHtmlAttr(preg_replace("/[^0-9+]/", "", $storePhoneNumber)) ?>">
             <?= $escaper->escapeHtml($storePhoneNumber); ?>
         </a>
     </li>
     <?php endif; ?>
     <li>
-        <?= $heroicons->mailHtml("inline mr-1", 20, 20, ['aria-hidden' => 'true']) ?>
+        <?= $lucideIcons->mailHtml("inline mr-1", 20, 20, ['aria-hidden' => 'true']) ?>
         <a href="mailto:<?= $escaper->escapeHtmlAttr($storeEmail); ?>">
             <?= $escaper->escapeHtml($storeEmail); ?>
         </a>

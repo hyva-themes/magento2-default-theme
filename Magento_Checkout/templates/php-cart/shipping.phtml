@@ -86,7 +86,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
 
                 const path = this.customer && this.customer.fullname
                     ? '/V1/carts/mine/estimate-shipping-methods'
-                    : '/V1/guest-carts/' + this.cart.cartId + '/estimate-shipping-methods';
+                    : '/V1/guest-carts/' + window.checkoutConfig.quoteData.entity_id + '/estimate-shipping-methods';
 
                 // ensure a new controller is used for the new request
                 this.abortShippingController = new AbortController();
@@ -163,7 +163,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
                 }
                 const path = this.customer && this.customer.fullname
                     ? '/V1/carts/mine/totals-information'
-                    : '/V1/guest-carts/' + this.cart.cartId + '/totals-information';
+                    : '/V1/guest-carts/' + window.checkoutConfig.quoteData.entity_id + '/totals-information';
 
                 // ensure a new controller is used for the new request
                 this.abortTotalsController = new AbortController();
@@ -401,7 +401,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
         class="list-none flex justify-between items-center gap-2 py-2 font-semibold"
     >
         <span class="inline-flex items-center gap-2">
-            <?= $showIcon ? $lucideIcons->giftHtml('text-primary', 20, 20, ['aria-hidden' => 'true']) : ''; ?>
+            <?= $showIcon ? $lucideIcons->truckHtml('text-primary', 20, 20, ['aria-hidden' => 'true']) : ''; ?>
             <?= $block->getQuote()->isVirtual()
                 ? $escaper->escapeHtml(__('Estimate Tax'))
                 : $escaper->escapeHtml(__('Estimate Shipping and Tax'))

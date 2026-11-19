@@ -3,6 +3,9 @@
  * Hyvä Themes - https://hyva.io
  * Copyright © Hyvä Themes. All rights reserved.
  * See COPYING.txt for license details.
+ *
+ * This file includes sections of software developed by Magento, Inc.
+ * (https://github.com/magento/magento2) and distributed under the AFL v3.0.
  */
 
 declare(strict_types=1);

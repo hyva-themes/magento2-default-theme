@@ -3,11 +3,15 @@
  * Hyvä Themes - https://hyva.io
  * Copyright © Hyvä Themes. All rights reserved.
  * See COPYING.txt for license details.
+ *
+ * This file includes sections of software developed by Magento, Inc.
+ * (https://github.com/magento/magento2) and distributed under the AFL v3.0.
  */
 
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Customer\Block\Address\Edit;
 use Magento\Customer\ViewModel\Address as AddressViewModel;
 use Magento\Framework\Escaper;
@@ -15,6 +19,7 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /** @var Edit $block */
 /** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
 /** @var SecureHtmlRenderer $secureRenderer */
 /** @var ViewModelRegistry $viewModels */
 
@@ -275,11 +280,14 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
     </fieldset>
     <div class="actions-toolbar">
         <div class="primary">
-            <button type="submit"
-                    class="action save primary"
-                    data-action="save-address"
-                    title="<?= $escaper->escapeHtmlAttr(__('Save Address')) ?>">
-                <span><?= $escaper->escapeHtml(__('Save Address')) ?></span>
+            <button
+                type="submit"
+                class="action save btn btn-primary"
+                data-action="save-address"
+                x-text="updateSubmitBtnText"
+                :disabled="isSubmitting"
+            >
+                <?= $escaper->escapeHtml(__('Save Address')) ?>
             </button>
         </div>
         <div class="secondary">
@@ -369,6 +377,11 @@ function initCustomerAddressEdit() {
                 ''
             this.onChange(event)
             this.validateField(this.fields['region'])
+        },
+        updateSubmitBtnText() {
+            return this.isSubmitting
+                ? '<?= $escaper->escapeJs(__('Saving...')) ?>'
+                : '<?= $escaper->escapeJs(__('Save Address')) ?>'
         }
     }
 }
@@ -410,3 +423,4 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 })
 </script>
+<?php $hyvaCsp->registerInlineScript() ?>

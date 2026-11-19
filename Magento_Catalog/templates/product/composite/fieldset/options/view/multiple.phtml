@@ -3,6 +3,9 @@
  * Hyvä Themes - https://hyva.io
  * Copyright © Hyvä Themes. All rights reserved.
  * See COPYING.txt for license details.
+ *
+ * This file includes sections of software developed by Magento, Inc.
+ * (https://github.com/magento/magento2) and distributed under the AFL v3.0.
  */
 
 declare(strict_types=1);
@@ -38,7 +41,6 @@ if ($option): ?>
     $optionId = $option->getId();
     $require = $option->getIsRequire() ? ' required' : '';
     $arraySign = $optionType === Option::OPTION_TYPE_MULTIPLE ? '[]' : '';
-    $count = 1;
     ?>
 
 <div class="options-list nested" id="options-<?= $escaper->escapeHtmlAttr($option->getId()) ?>-list">
@@ -72,7 +74,6 @@ if ($option): ?>
     <?php foreach ($option->getValues() as $value): ?>
         <?php
         $checked = '';
-        $count++;
         if ($arraySign) {
             $checked = is_array($configValue) && in_array($value->getOptionTypeId(), $configValue) ? 'checked' : '';
         } else {
@@ -104,7 +105,7 @@ if ($option): ?>
                 <?php if (in_array($value->getOptionTypeId(), $configValue)): ?>
                    selected="selected"
                 <?php endif; ?>
-                x-html="'<?= $escaper->escapeJs($escaper->escapeHtml($value->getTitle())) ?> '
+                x-text="'<?= $escaper->escapeJs($escaper->escapeHtml($value->getTitle())) ?> '
                     + (getFormattedOptionPrice('<?= $escaper->escapeJs($optionId) ?>') || '')
                     <?php if ($productPriceViewModel->displayPriceInclAndExclTax() && $valueBasePrice > 0): ?>
                     + ' (<?= $escaper->escapeJs(__('Excl. Tax')) ?>: '

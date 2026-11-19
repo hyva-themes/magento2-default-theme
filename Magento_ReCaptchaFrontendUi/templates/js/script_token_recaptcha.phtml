@@ -39,10 +39,13 @@ $fieldName = $recaptcha->getResultTokenFieldName($formId);
     this.errors = this.hasCaptchaToken ? 0 : 1;
 
     if (this.errors) {
+        // Lock submit button after failed ReCaptcha validation
+        $form.querySelector('[type="submit"]')?.setAttribute('disabled', true);
+
         window.dispatchMessages && window.dispatchMessages(
             [{
                 type: "error",
-                text: '<?= $escaper->escapeJs(__('ReCaptcha validation failed, please try again')) ?>'
+                text: '<?= $escaper->escapeJs(__('ReCaptcha validation failed. Please refresh the page and try again.')) ?>'
             }], 5000
         );
     }

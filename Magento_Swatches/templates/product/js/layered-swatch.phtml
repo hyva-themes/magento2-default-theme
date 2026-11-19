@@ -1,0 +1,70 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
+/** @var ViewModelRegistry $viewModels */
+?>
+<script>
+    function initLayeredSwatch() {
+        return {
+            activeTooltipItem: false,
+            tooltipPositionElement: false,
+            isTooltipVisible() {
+                return !!this.activeTooltipItem;
+            },
+            getTooltipImageStyle() {
+                const item = this.activeTooltipItem;
+                if (item?.type === 'color') return {
+                    backgroundColor: item.preview,
+                    width: `${item.width ?? 90}px`,
+                    height: `${item.height ?? 90}px`
+                };
+                if (item?.type === 'image') return {
+                    backgroundImage: `url(${item.preview})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                    width: `${item.width ?? 90}px`,
+                    height: `${item.height ?? 90}px`
+                };
+                return null;
+            },
+            getTooltipPosition() {
+                if (!this.tooltipPositionElement) return null;
+                const el = this.tooltipPositionElement;
+                const elRect = el.getBoundingClientRect();
+                const left = elRect.left + elRect.width / 2;
+                return {
+                    bottom: `${window.innerHeight - elRect.top}px`,
+                    left: `${left}px`,
+                    translate: '-50% 0'
+                };
+            },
+            getTooltipLabel() {
+                return this.activeTooltipItem ? this.activeTooltipItem.label : '';
+            },
+            showTooltip() {
+                if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+                this.activeTooltipItem = JSON.parse(this.$event.currentTarget.dataset.tooltip);
+                this.tooltipPositionElement = this.$event.currentTarget;
+            },
+            hideTooltip() {
+                this.activeTooltipItem = false;
+            }
+        }
+    }
+
+    window.addEventListener('alpine:init', () => {
+        Alpine.data('initLayeredSwatch', initLayeredSwatch)
+    }, { once: true });
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

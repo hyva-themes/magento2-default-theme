@@ -39,7 +39,12 @@ try {
         port: 3000,
         rewriteRules: [
             {
-                match: new RegExp(`${new URL(proxy).origin}`, "g"),
+                // Skip the origin used for `var BASE_URL = '...'`, so frontend JS
+                // relying on window.BASE_URL keeps the full URL instead of just "/".
+                match: new RegExp(
+                    `(?<!BASE_URL = ['"])${new URL(proxy).origin}`,
+                    "g",
+                ),
                 replace: "",
             },
         ],

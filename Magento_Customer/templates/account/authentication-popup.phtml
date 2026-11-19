@@ -35,6 +35,8 @@ $lucideIcons = $viewModels->require(LucideIcons::class);
 /** @var StoreConfig $storeConfig */
 $storeConfig = $viewModels->require(StoreConfig::class);
 $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocomplete_on_storefront');
+$customerLoginRecaptchaType = $storeConfig->getStoreConfig('recaptcha_frontend/type_for/customer_login');
+$isV2Recaptcha = in_array($customerLoginRecaptchaType, ['recaptcha', 'invisible'], true);
 
 ?>
 <script>
@@ -144,135 +146,146 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 
-<dialog
-    id="authentication-popup"
-    aria-labelledby="cart-drawer-title"
-    class="open:flex flex-col transition ease-out duration-300 motion-reduce:duration-0 p-0"
-    x-data="initAuthentication"
-    x-bind="eventListeners"
-    x-show="open"
-    x-htmldialog="close"
-    closeby="any"
-    x-transition
->
-    <div class="pt-8 px-8">
-        <div class="flex gap-2 justify-between items-center">
-            <p class="text-xl">
-                <strong><?= $escaper->escapeHtml(__('Customer Login')) ?></strong>
-            </p>
-            <button
-                type="button"
-                class="btn bg-transparent border-transparent p-2"
-                @click="close"
-                aria-label="<?= $escaper->escapeHtmlAttr(__('Close panel')) ?>"
-            >
-                <?= $lucideIcons->xHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
-            </button>
-        </div>
-
-        <div class="message error" x-show="errors" x-cloak>
-            <template x-for="(message, index) in errorMessages" :key="index">
-                <div>
-                    <template x-if="message">
-                        <span x-html="message"></span>
-                    </template>
-                </div>
-            </template>
-        </div>
-    </div>
-
-    <div class="block-customer-login p-8">
-        <p id="authenticate-customer-login" class="text-lg mb-2">
-            <strong><?= $escaper->escapeHtml(__('Checkout using your account')) ?></strong>
-        </p>
-
-        <form
-            id="login-form"
-            class="form form-login"
-            method="post"
-            @submit.prevent="submitForm"
-        >
-            <?= $recaptcha ? $recaptcha->getInputHtml('customer_login', 'auth-popup') : '' ?>
-            <input name="context" type="hidden" value="checkout">
-
-            <div class="flex flex-col gap-4">
-                <div class="field email required">
-                    <label for="form-login-username">
-                        <span><?= $escaper->escapeHtml(__('Email Address')) ?></span>
-                    </label>
-                    <div class="control">
-                        <input
-                            id="form-login-username"
-                            name="username"
-                            type="email"
-                            class="form-input w-full"
-                            required
-                            autocomplete="<?= $isAutocompleteEnabled ? 'email' : 'off' ?>"
-                            x-ref="customer-email"
-                            @change="resetErrors"
-                        >
-                    </div>
-                </div>
-                <div class="field password required">
-                    <label for="form-login-password">
-                        <span><?= $escaper->escapeHtml(__('Password')) ?></span>
-                    </label>
-                    <div class="control">
-                        <input
-                            id="form-login-password"
-                            name="password"
-                            type="password"
-                            class="form-input w-full"
-                            required
-                            autocomplete="<?= $isAutocompleteEnabled ? 'current-password' : 'off' ?>"
-                            x-ref="customer-password"
-                            @change="resetErrors"
-                        >
-                    </div>
-                </div>
-            </div>
-
-            <div class="actions-toolbar">
+<div x-data="initAuthentication" x-bind="eventListeners">
+    <?php if ($isV2Recaptcha): ?>
+        <div
+            class="fixed inset-0 bg-black/20 z-40"
+            x-show="open"
+            x-cloak
+            @click="close"
+        ></div>
+    <?php endif; ?>
+    <dialog
+        id="authentication-popup"
+        aria-labelledby="authentication-popup-title"
+        class="open:flex flex-col transition ease-out duration-300 motion-reduce:duration-0 w-xl p-0 <?= $isV2Recaptcha ? 'z-50' : '' ?>"
+        x-show="open"
+        x-htmldialog<?= $isV2Recaptcha ? '.modeless' : '' ?>="close"
+        closeby="any"
+        x-transition
+    >
+        <div class="pt-8 px-8">
+            <div class="flex gap-2 justify-between items-center">
+                <p id="authentication-popup-title" class="text-xl">
+                    <strong><?= $escaper->escapeHtml(__('Customer Login')) ?></strong>
+                </p>
                 <button
-                    type="submit"
-                    <?php if ($loginButtonViewModel->disabled()): ?>
-                        disabled
-                        data-recaptcha-btn
-                    <?php endif; ?>
-                    class="btn btn-primary"
+                    type="button"
+                    class="btn bg-transparent border-transparent p-2"
+                    @click="close"
+                    aria-label="<?= $escaper->escapeHtmlAttr(__('Close panel')) ?>"
                 >
-                    <?= $escaper->escapeHtml(__('Sign In')) ?>
+                    <?= $lucideIcons->xHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                 </button>
-                <a
-                    href="<?= $escaper->escapeUrl($block->getUrl('customer/account/forgotpassword')) ?>"
-                    class="underline hover:no-underline"
-                >
-                    <?= $escaper->escapeHtml(__('Forgot Your Password?')) ?>
-                </a>
             </div>
-        </form>
-        <?= $recaptcha ? $recaptcha->getLegalNoticeHtml('customer_login') : '' ?>
-    </div>
-    <div class="block-new-customer p-8 border-t border-gray-300">
-        <p id="authenticate-new-customer" class="text-lg mb-2">
-            <strong><?= $escaper->escapeHtml(__('Checkout as a new customer')) ?></strong>
-        </p>
 
-        <div class="block-content">
-            <p class="mb-1">
-                <?= $escaper->escapeHtml(__('Creating an account has many benefits:')) ?>
-            </p>
-            <ul class="list-disc pl-5">
-                <li> <?= $escaper->escapeHtml(__('See order and shipping status')) ?></li>
-                <li> <?= $escaper->escapeHtml(__('Track order history')) ?></li>
-                <li> <?= $escaper->escapeHtml(__('Check out faster')) ?></li>
-            </ul>
-            <div class="actions-toolbar mt-6 mb-2">
-                <a href="<?= $escaper->escapeUrl($block->getUrl('customer/account/create')) ?>"
-                    class="inline-flex btn btn-primary">
-                    <?= $escaper->escapeHtml(__('Create an Account')) ?>
-                </a>
+            <div class="message error" x-show="errors" x-cloak>
+                <template x-for="(message, index) in errorMessages" :key="index">
+                    <div>
+                        <template x-if="message">
+                            <span x-html-safe="message"></span>
+                        </template>
+                    </div>
+                </template>
             </div>
         </div>
-    </div>
-</dialog>
+
+        <div class="block-customer-login p-8">
+            <p id="authenticate-customer-login" class="text-lg mb-2">
+                <strong><?= $escaper->escapeHtml(__('Checkout using your account')) ?></strong>
+            </p>
+
+            <form
+                id="login-form"
+                class="form form-login"
+                method="post"
+                @submit.prevent="submitForm"
+            >
+                <input name="context" type="hidden" value="checkout">
+
+                <div class="flex flex-col gap-4 mb-3">
+                    <div class="field email required">
+                        <label for="form-login-username">
+                            <span><?= $escaper->escapeHtml(__('Email Address')) ?></span>
+                        </label>
+                        <div class="control">
+                            <input
+                                id="form-login-username"
+                                name="username"
+                                type="email"
+                                class="form-input w-full"
+                                required
+                                autocomplete="<?= $isAutocompleteEnabled ? 'email' : 'off' ?>"
+                                x-ref="customer-email"
+                                @change="resetErrors"
+                            >
+                        </div>
+                    </div>
+                    <div class="field password required">
+                        <label for="form-login-password">
+                            <span><?= $escaper->escapeHtml(__('Password')) ?></span>
+                        </label>
+                        <div class="control">
+                            <input
+                                id="form-login-password"
+                                name="password"
+                                type="password"
+                                class="form-input w-full"
+                                required
+                                autocomplete="<?= $isAutocompleteEnabled ? 'current-password' : 'off' ?>"
+                                x-ref="customer-password"
+                                @change="resetErrors"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <?= $recaptcha ? $recaptcha->getInputHtml('customer_login', 'auth-popup') : '' ?>
+
+                <div class="actions-toolbar">
+                    <button
+                        type="submit"
+                        <?php if ($loginButtonViewModel->disabled()): ?>
+                            disabled
+                            data-recaptcha-btn
+                        <?php endif; ?>
+                        class="btn btn-primary"
+                    >
+                        <?= $escaper->escapeHtml(__('Sign In')) ?>
+                    </button>
+                    <a
+                        href="<?= $escaper->escapeUrl($block->getUrl('customer/account/forgotpassword')) ?>"
+                        class="underline hover:no-underline"
+                    >
+                        <?= $escaper->escapeHtml(__('Forgot Your Password?')) ?>
+                    </a>
+                </div>
+            </form>
+
+            <?= $recaptcha ? $recaptcha->getLegalNoticeHtml('customer_login') : '' ?>
+        </div>
+
+        <div class="block-new-customer p-8 border-t border-gray-300">
+            <p id="authenticate-new-customer" class="text-lg mb-2">
+                <strong><?= $escaper->escapeHtml(__('Checkout as a new customer')) ?></strong>
+            </p>
+
+            <div class="block-content">
+                <p class="mb-1">
+                    <?= $escaper->escapeHtml(__('Creating an account has many benefits:')) ?>
+                </p>
+                <ul class="list-disc pl-5">
+                    <li> <?= $escaper->escapeHtml(__('See order and shipping status')) ?></li>
+                    <li> <?= $escaper->escapeHtml(__('Track order history')) ?></li>
+                    <li> <?= $escaper->escapeHtml(__('Check out faster')) ?></li>
+                </ul>
+                <div class="actions-toolbar mt-6 mb-2">
+                    <a href="<?= $escaper->escapeUrl($block->getUrl('customer/account/create')) ?>"
+                        class="inline-flex btn btn-primary">
+                        <?= $escaper->escapeHtml(__('Create an Account')) ?>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </dialog>
+</div>

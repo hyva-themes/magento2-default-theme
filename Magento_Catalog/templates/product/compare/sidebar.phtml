@@ -8,7 +8,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
@@ -16,19 +16,19 @@ use Magento\Framework\View\Element\Template;
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 ?>
 
 <script>
 function compareSidebarFetchHandler(postUrl, postHeaders, isSingleItem = true) {
     const messages = {
         "success": isSingleItem
-            ? "<?= $escaper->escapeHtml(__("You removed product %1 from the comparison list", __("Product"))) ?>"
-            : "<?= $escaper->escapeHtml(__("You removed all products from the comparison list")) ?>",
+            ? "<?= $escaper->escapeJs(__("You removed product %1 from the comparison list", __("Product"))) ?>"
+            : "<?= $escaper->escapeJs(__("You removed all products from the comparison list")) ?>",
         "warning": isSingleItem
-            ? "<?= $escaper->escapeHtml(__('Could not remove item from compare.')) ?>"
-            : "<?= $escaper->escapeHtml(__('Could not remove all item from compare.')) ?>",
+            ? "<?= $escaper->escapeJs(__('Could not remove item from compare.')) ?>"
+            : "<?= $escaper->escapeJs(__('Could not remove all item from compare.')) ?>",
     }
 
     return fetch(postUrl, postHeaders).then(function (response) {
@@ -74,7 +74,7 @@ function initCompareOnCompareSidebar() {
             const formKey = hyva.getFormKey();
             const postUrl = BASE_URL + 'catalog/product_compare/remove/';
             const confirmMessage = "<?= $escaper
-                ->escapeHtml(__('Are you sure you want to remove this item from your Compare Products list?')) ?>";
+                ->escapeJs(__('Are you sure you want to remove this item from your Compare Products list?')) ?>";
             if (!window.confirm(confirmMessage)) return;
             const postHeaders = {
                 "headers": {
@@ -97,7 +97,7 @@ function initCompareSidebarClear() {
             const formKey = hyva.getFormKey();
             const postUrl = BASE_URL + 'catalog/product_compare/clear/';
             const confirmMessage = "<?= $escaper
-                ->escapeHtml(__('Are you sure you want to remove all items from your Compare Products list?')) ?>";
+                ->escapeJs(__('Are you sure you want to remove all items from your Compare Products list?')) ?>";
             if (!window.confirm(confirmMessage)) return;
             const postHeaders = {
                 "headers": {
@@ -142,7 +142,7 @@ function initCompareSidebarClear() {
                             >
                         </a>
                         <strong class="mr-2 text-sm leading-6 font-normal">
-                            <a :href="product.product_url" :title="product.name" x-html="product.name"></a>
+                            <a :href="product.product_url" :title="product.name" x-text="product.name"></a>
                         </strong>
                         <button
                             type="button"
@@ -151,7 +151,7 @@ function initCompareSidebarClear() {
                             class="p-1 inline-flex shrink-0 items-center justify-center text-slate-400
                                    hover:text-slate-800 ml-auto"
                         >
-                            <?= $heroicons->xHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
+                            <?= $lucideIcons->xHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
                         </button>
                     </li>
                 </template>

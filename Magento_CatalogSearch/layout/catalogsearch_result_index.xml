@@ -9,7 +9,6 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="catalog_list_item" />
     <body>
-        <move element="div.sidebar.main" destination="columns" after="main"/>
         <referenceContainer name="content">
             <block class="Magento\CatalogSearch\Block\Result" name="search.result" template="Magento_CatalogSearch::result.phtml">
                 <block class="Magento\CatalogSearch\Block\SearchResult\ListProduct" name="search_result_list" template="Magento_Catalog::product/list.phtml">

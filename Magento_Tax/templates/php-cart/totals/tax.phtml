@@ -6,7 +6,7 @@
  */
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
@@ -14,8 +14,8 @@ use Magento\Framework\View\Element\Template;
 /** @var Template $block */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 
 /**
  * The AlpineJS scope of this file is the method `initCartTotals()` in Magento_Checkout::php-cart/totals.phtml
@@ -32,11 +32,11 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 
         <template x-if="segment.value > 0 && checkoutConfig.isFullTaxSummaryDisplayed">
             <details class="group">
-                <summary class="block cursor-pointer [&::-webkit-details-marker]:hidden"  :class="wrapperClass">
+                <summary class="list-none block cursor-pointer" :class="wrapperClass">
                     <span x-text="segment.title"></span>
                     <span class="inline-flex items-center gap-x-1 justify-self-end">
                         <span x-text="hyva.formatPrice(segment.value)"></span>
-                        <?= $heroicons->chevronDownHtml('transform group-open:rotate-180', 18, 18, ['aria-hidden' => 'true']); ?>
+                        <?= $lucideIcons->chevronDownHtml('transform group-open:rotate-180', 18, 18, ['aria-hidden' => 'true']); ?>
                     </span>
                 </summary>
                 <template x-for="(taxItem, index) in segment.extension_attributes.tax_grandtotal_details" :key="index">
@@ -49,7 +49,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                         <div x-text="hyva.formatPrice(taxItem.amount)" class="justify-self-end"></div>
                     </div>
                 </template>
-            </div>
+            </details>
         </template>
     </div>
 </template>

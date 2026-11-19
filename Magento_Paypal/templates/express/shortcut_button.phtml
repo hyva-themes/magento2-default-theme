@@ -25,7 +25,7 @@ $clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/product-ex
 <div x-data="initPayPalInContext('paypalInContextPDP', <?= $escaper->escapeHtmlAttr($clientConfig) ?>)"
      x-intersect="checkAndInitializeButtons()"
      @private-content-loaded.window="getData($event.detail.data)"
-     class="min-h-a11y"
+     class="min-h-11 w-full"
 >
     <div id="paypalInContextPDP" class="paypal checkout paypal-logo product-shortcuts-container isolate">
     </div>
@@ -37,9 +37,15 @@ $clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/product-ex
             actions: {},
             alreadyLoaded: false,
             cartDataUpdated: false,
+            intersected: false,
             getData(data) {
                 if (data.cart) {
                     this.cart = data.cart;
+
+                    if (this.intersected && !this.alreadyLoaded) {
+                        this.alreadyLoaded = true;
+                        this.initializeButtons();
+                    }
                     return true;
                 }
             },
@@ -107,7 +113,7 @@ $clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/product-ex
                                 });
                         },
                         createOrder() {
-                            const params = 'quote_id=' + cart.cartId +
+                            const params = 'quote_id=' +
                                 '&customer_id=' + (config.customerId || '') +
                                 '&form_key=' + hyva.getFormKey() +
                                 '&button=' + config.button;
@@ -183,6 +189,7 @@ $clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/product-ex
                 if (!form) {
                     return;
                 }
+                this.intersected = true;
                 if (this.cart && !this.alreadyLoaded) {
                     this.alreadyLoaded = true;
                     this.initializeButtons();

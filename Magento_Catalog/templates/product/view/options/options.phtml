@@ -30,7 +30,7 @@ $displayTax = $productPriceViewModel->displayPriceIncludingTax();
 $options = $block->decorateArray($block->getOptions());
 
 ?>
-<?php if (count($options)): ?>
+<?php if ($product->getHasOptions() && count($options)): ?>
     <script>
         function initOptions() {
             return {
@@ -221,9 +221,6 @@ $options = $block->decorateArray($block->getOptions());
             }
         }
     </script>
-    <h2 class="text-gray-900 text-xl title-font font-medium mb-4">
-        <?= $escaper->escapeHtml(__('Customizable Options')) ?>:
-    </h2>
     <div x-data="initOptions()"
          x-init="
             refs = $refs;

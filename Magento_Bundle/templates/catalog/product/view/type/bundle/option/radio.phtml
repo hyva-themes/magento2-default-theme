@@ -58,10 +58,7 @@ $activeSelectOptions = [];
                         $nextTick(() => {calculateTotalPrice()});
                    "
             >
-            <label
-                class="label text-sm"
-                for="bundle-option-<?= (int)$optionId ?>"
-            >
+            <label for="bundle-option-<?= (int)$optionId ?>">
                 <?= $escaper->escapeHtml(__('None')) ?>
             </label>
         </div>
@@ -93,10 +90,7 @@ $activeSelectOptions = [];
                             $nextTick(() => {calculateTotalPrice()});
                     "
                 >
-                <label
-                    class="label text-sm"
-                    for="bundle-option-<?= $escaper->escapeHtmlAttr($optionSelectionId) ?>"
-                >
+                <label for="bundle-option-<?= $escaper->escapeHtmlAttr($optionSelectionId) ?>">
                     <?= /* @noEscape */ $radioPriceRenderer->getSelectionTitlePrice($selection) ?>
                 </label>
             </div>
@@ -110,7 +104,7 @@ $activeSelectOptions = [];
 <?php endif; ?>
 <div class="field qty qty-holder mt-2">
     <label
-        class="label font-semibold mr-4"
+        class="font-semibold mr-4"
         for="bundle-option-<?= (int)$optionId ?>-qty-input"
     >
         <?= $escaper->escapeHtml(__('Quantity')) ?>

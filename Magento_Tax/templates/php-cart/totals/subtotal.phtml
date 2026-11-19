@@ -12,9 +12,9 @@
 <!-- display subtotal including and excluding tax -->
 <template x-if="segment.code === 'subtotal' && 'both' === checkoutConfig.reviewTotalsDisplayMode">
     <div :class="wrapperClass">
-        <div x-html="`${segment.title} (${excludingTaxMessage})`"></div>
+        <div x-html-safe="`${segment.title} (${excludingTaxMessage})`"></div>
         <div x-text="hyva.formatPrice(totalsData.subtotal)" class="justify-self-end"></div>
-        <div x-html="`${segment.title} (${includingTaxMessage})`"></div>
+        <div x-html-safe="`${segment.title} (${includingTaxMessage})`"></div>
         <div x-text="hyva.formatPrice(totalsData.subtotal_incl_tax)" class="justify-self-end"></div>
     </div>
 </template>
@@ -22,7 +22,7 @@
 <!-- display subtotal excluding tax -->
 <template x-if="segment.code === 'subtotal' && 'excluding' === checkoutConfig.reviewTotalsDisplayMode">
     <div :class="wrapperClass">
-        <div x-html="segment.title"></div>
+        <div x-html-safe="segment.title"></div>
         <div x-text="hyva.formatPrice(totalsData.subtotal)" class="justify-self-end"></div>
     </div>
 </template>
@@ -30,7 +30,7 @@
 <!-- display subtotal including tax -->
 <template x-if="segment.code === 'subtotal' && 'including' === checkoutConfig.reviewTotalsDisplayMode">
     <div :class="wrapperClass">
-        <div x-html="segment.title"></div>
+        <div x-html-safe="segment.title"></div>
         <div x-text="hyva.formatPrice(totalsData.subtotal_incl_tax)" class="justify-self-end"></div>
     </div>
 </template>

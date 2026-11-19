@@ -45,6 +45,28 @@ $formId     = $block->getData('form_id') ?? '';
     if (!this.hasCaptchaToken) {
         this.errors = 1;
 
+        const lockSubmitButton = () => {
+            $form.querySelector('[type="submit"]')?.setAttribute('disabled', true);
+        };
+
+        const failCaptcha = (errorMessage, exception = null) => {
+            this.errors = 1;
+            lockSubmitButton();
+
+            if (this.setErrorMessages) {
+                this.setErrorMessages([errorMessage]);
+                this.displayErrorMessage = true;
+            } else {
+                window.dispatchMessages && window.dispatchMessages([{ type: "error", text: errorMessage }], 5000);
+            }
+
+            if (exception) {
+                console.error(
+                    exception ||
+                    'An unknown error occurred during ReCaptcha validation. Are the tokens and the domain correctly set up in the Google console?'
+                );
+            }
+        };
 
         const executeGreCaptcha = () => {
             grecaptcha.ready(() => {
@@ -60,22 +82,22 @@ $formId     = $block->getData('form_id') ?? '';
                         this.hasCaptchaToken = 1;
                         (this.submitForm || $form.submit).call(this);
                     } else {
-                        this.errors = 1;
-                        const error = tokenElement
-                            ? '<?= $escaper->escapeJs(__('ReCaptcha validation failed, please try again')) ?>'
-                            : '<?= $escaper->escapeJs(__('ReCaptcha token element is missing. Please refresh the page and trying again.')) ?>';
-                        if (this.setErrorMessages) {
-                            this.setErrorMessages([error])
-                            this.displayErrorMessage = true;
-                        } else {
-                            window.dispatchMessages && window.dispatchMessages([{type: "error", text: error}], 5000);
-                        }
+                        failCaptcha(
+                            tokenElement
+                                ? '<?= $escaper->escapeJs(__('ReCaptcha validation failed. Please refresh the page and try again.')) ?>'
+                                : '<?= $escaper->escapeJs(__('ReCaptcha token element is missing. Please refresh the page and try again.')) ?>'
+                        );
                     }
-                }).catch(exception => {
-                    console.error(exception || `An unknown error occurred during ReCaptcha validation. Are the tokens and the domain correctly set up in the Google console?`)
+                }).catch((exception) => {
+                    failCaptcha(
+                        '<?= $escaper->escapeJs(
+                            __('ReCaptcha validation failed due to a technical error. Please refresh the page and try again.')
+                        ) ?>',
+                        exception
+                    );
                 });
-            })
-        }
+            });
+        };
 
         if (window.grecaptcha) {
             executeGreCaptcha();

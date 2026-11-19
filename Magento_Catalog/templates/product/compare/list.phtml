@@ -62,7 +62,7 @@ function initCompareOnCompareList() {
         removeFromCompare(productId, productName) {
             const formKey = hyva.getFormKey();
             const postUrl = BASE_URL + 'catalog/product_compare/remove/';
-            const confirmMessage = "<?= $escaper->escapeHtml(
+            const confirmMessage = "<?= $escaper->escapeJs(
                 __('Are you sure you want to remove this item from your Compare Products list?')
             ) ?>";
             if (!window.confirm(confirmMessage)) {
@@ -86,7 +86,7 @@ function initCompareOnCompareList() {
                     typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
                         [{
                             type: "warning",
-                            text: "<?= $escaper->escapeHtml(__('Could not remove item from compare.')) ?>"
+                            text: "<?= $escaper->escapeJs(__('Could not remove item from compare.')) ?>"
                         }], 5000
                     );
                 }
@@ -96,7 +96,7 @@ function initCompareOnCompareList() {
                     [{
                         type: (response.success) ? "success" : "error",
                         text: (response.success)
-                            ? "<?= $escaper->escapeHtml(
+                            ? "<?= $escaper->escapeJs(
                                 __("You removed product %1 from the comparison list")
                             ) ?>".replace('%1', productName)
                             : response.error_message

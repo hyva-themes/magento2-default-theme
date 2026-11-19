@@ -25,6 +25,12 @@ $configurationViewModel = $viewModels->require(Configuration::class);
 if (!$configurationViewModel->isEnabled()) {
     return;
 }
+
+$notificationText = str_replace(
+    ['%1', '%2'],
+    ['<span x-text="fullname"></span>', '<span x-text="websiteName"></span>'],
+    $escaper->escapeHtml(__('You are connected as <strong>%1</strong> on %2'), ['strong'])
+);
 ?>
 <div class="bg-gray-900"
      x-data="initLoginAsCustomer"
@@ -37,7 +43,7 @@ if (!$configurationViewModel->isEnabled()) {
                    <img class="logo-img" src="<?= $escaper->escapeUrl($viewFileUrl) ?>" alt="Magento">
                 </span>
                 <p class="ml-3 font-medium text-white truncate">
-                    <span x-text="notificationText"></span>
+                    <?= /* @noEscape */ $notificationText ?>
                 </p>
             </div>
             <div class="order-2 shrink-0 sm:order-3 sm:ml-3">
@@ -56,7 +62,6 @@ if (!$configurationViewModel->isEnabled()) {
             adminUserId: null,
             websiteName: null,
             fullname: null,
-            notificationText: '',
             receiveCustomerData: function receiveCustomerData() {
                 const data = this.$event.detail.data
                 if (data.customer) {
@@ -73,13 +78,6 @@ if (!$configurationViewModel->isEnabled()) {
 
             updateBanner: function updateBanner() {
                 this.isVisible = !!this.adminUserId;
-
-                if (this.fullname !== undefined && this.websiteName !== undefined) {
-                    this.notificationText = '<?=
-                        $escaper->escapeHtml(__('You are connected as <strong>%1</strong> on %2'), ['<strong>']) ?>'
-                        .replace('%1', this.fullname)
-                        .replace('%2', this.websiteName);
-                }
             }
         }
     }

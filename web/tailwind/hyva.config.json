@@ -15,25 +15,10 @@
   "tokens": {
     "values": {
       "color": {
-        "primary": {
-          "lighter": "oklch(52% 0.2 265)",
-          "DEFAULT": "oklch(46% 0.2 265)",
-          "darker": "oklch(28% 0.2 265)"
-        },
-        "secondary": {
-          "lighter": "oklch(72% 0.2 150)",
-          "DEFAULT": "oklch(53% 0.15 150)",
-          "darker": "oklch(39% 0.1 153)"
-        },
-        "on": {
-          "primary": "#fff",
-          "secondary": "#fff"
-        }
-      },
-      "form": {
-        "radius": "var(--radius-lg)",
-        "stroke": "var(--color-slate-400)",
-        "active-color": "var(--color-primary)"
+        "primary": "oklch(46% 0.2 265)",
+        "secondary": "oklch(53% 0.15 150)",
+        "on-primary": "#fff",
+        "on-secondary": "#fff"
       }
     }
   }

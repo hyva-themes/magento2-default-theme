@@ -12,9 +12,7 @@
     <body>
         <referenceContainer name="content">
             <block class="Magento\Review\Block\Customer\ListCustomer" name="review_customer_list"
-                   template="Magento_Review::customer/list.phtml" cacheable="false" ifconfig="catalog/review/active">
-                <block name="loading" template="Hyva_Theme::ui/loading.phtml"/>
-            </block>
+                   template="Magento_Review::customer/list.phtml" cacheable="false" ifconfig="catalog/review/active"/>
         </referenceContainer>
     </body>
 </page>

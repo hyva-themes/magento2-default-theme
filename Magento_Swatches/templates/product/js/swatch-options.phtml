@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
@@ -15,140 +17,57 @@ use Magento\Framework\View\Element\Template;
 
 ?>
 <script>
-    function initSwatchOptions(swatchConfig) {
+    function initSwatchOptions() {
         return {
-            swatchConfig,
-            getAttributeSwatchData(attributeId) {
-                const swatchConfig = Object.assign({}, this.swatchConfig[attributeId]);
-                swatchConfig['details'] = JSON.parse(swatchConfig['additional_data']);
-
-                return swatchConfig;
-            },
-            mapSwatchTypeNumberToTypeCode(typeNumber) {
-                switch ("" + typeNumber) {
-                    case "1":
-                        return "color"
-                    case "2":
-                        return "image"
-                    case "3":
-                        return "empty"
-                    case "0":
-                    default:
-                        return "text"
-                }
-            },
-            getTypeOfFirstOption(attributeId) {
-                for (const optionId in this.swatchConfig[attributeId]) {
-                    const option = this.swatchConfig[attributeId][optionId];
-                    if (typeof option.type !== 'undefined') {
-                        return this.mapSwatchTypeNumberToTypeCode(option.type);
-                    }
-                }
-            },
-            getVisualSwatchType(attributeId, targetOptionId) {
-                // If a type configuration is present for the given option id, use it
-                const config = this.swatchConfig[attributeId];
-                if (config[targetOptionId] && typeof config[targetOptionId].type !== 'undefined') {
-                    return this.mapSwatchTypeNumberToTypeCode(config[targetOptionId].type);
-                }
-
-                // Otherwise - if no config is present for the target option - use the type of the first option
-                // with a type property from the attribute, thus assuming its the same type as the target option.
-                // (This edge case condition can occur on single swatch products if some options are not salable)
-                return this.getTypeOfFirstOption(attributeId);
-            },
-            getSwatchType(attributeId, optionId) {
-                // Deserialize the attribute details the first time they are used
-                if (this.swatchConfig[attributeId] && ! this.swatchConfig[attributeId].details) {
-                    this.swatchConfig[attributeId] = this.getAttributeSwatchData(attributeId);
-                }
-                const type =  this.swatchConfig[attributeId] &&
-                    this.swatchConfig[attributeId].details &&
-                    this.swatchConfig[attributeId].details.swatch_input_type ||
-                    "empty";
-                return type === 'visual' ? this.getVisualSwatchType(attributeId, optionId) : type;
-            },
-            isTextSwatch(attributeId, optionId) {
-                return this.getSwatchType(attributeId, optionId) === 'text';
-            },
-            isVisualSwatch(attributeId, optionId) {
-                const type = this.getSwatchType(attributeId, optionId);
-
-                return ['image', 'color'].includes(type);
-            },
-            getSwatchBackgroundStyle(attributeId, optionId) {
-                const config = this.getSwatchConfig(attributeId, optionId);
-                const type = this.getSwatchType(attributeId, optionId);
-
-                if (type === "color") {
-                        return 'background-color:' + config.value;
-                } else if (type === "image") {
-                        return "background: #fff url('" + config.value + "') no-repeat center";
-                } else {
-                    return '';
-                }
-            },
-            getSwatchText(attributeId, optionId) {
-                const config = this.getSwatchConfig(attributeId, optionId);
-                return config.label || config.value || this.getOptionLabelFromOptionConfig(attributeId, optionId);
-            },
-            getOptionLabelFromOptionConfig(attributeId, optionId) {
-                // Fallback if no value is present in swatchConfig data
-                // Reference issue https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/190
-                const option = this.getAllAttributeOptions(attributeId).filter(option => option.id === optionId);
-                return option && option[0] && option[0].label ||'';
-            },
-            getSwatchConfig(attributeId, optionId) {
-                return this.swatchConfig[attributeId] && this.swatchConfig[attributeId][optionId]
-                    ? this.swatchConfig[attributeId][optionId]
-                    : false;
-            },
             activeTooltipItem: false,
             tooltipPositionElement: false,
             isTooltipVisible() {
-                return this.activeTooltipItem &&
-                    this.getSwatchConfig(
-                        this.activeTooltipItem.attribute,
-                        this.activeTooltipItem.item
-                    );
+                return !!this.activeTooltipItem;
             },
-            isFirstItemCol() {
-                return this.activeTooltipItem.index === 0;
+            isCurrentTooltipVisual() {
+                return this.activeTooltipItem && ['color', 'image'].includes(this.activeTooltipItem.type);
             },
-            getTooltipImageStyle(attributeId, optionId) {
-                const config = this.getSwatchConfig(attributeId, optionId);
-                const type = this.getSwatchType(attributeId, optionId);
-
-                if (type === "color") {
-                    return 'background-color:' + config.value + '; width: 110px; height: 90px;';
-                } else if (type === "image") {
-                    return "background: #ffffff url('" + config.thumb +
-                        "') center center no-repeat; width: 110px; height: 90px;";
-                } else {
-                    return 'display:none';
-                }
+            getTooltipImageStyle() {
+                const item = this.activeTooltipItem;
+                if (item?.type === 'color') return {
+                    backgroundColor: item.preview,
+                    width: `${item.width ?? 90}px`,
+                    height: `${item.height ?? 90}px`
+                };
+                if (item?.type === 'image') return {
+                    backgroundImage: `url(${item.preview})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                    width: `${item.width ?? 90}px`,
+                    height: `${item.height ?? 90}px`
+                };
+                return null;
             },
             getTooltipPosition() {
-                return this.tooltipPositionElement ?
-                    `top: ${this.tooltipPositionElement.offsetTop}px;` +
-                    `left: ${
-                        this.tooltipPositionElement.offsetLeft - (
-                            this.tooltipPositionElement.closest('.snap') &&
-                            this.tooltipPositionElement.closest('.snap').scrollLeft ||
-                            0
-                        )
-                    }px;` : ''
+                if (!this.tooltipPositionElement) return null;
+                const el = this.tooltipPositionElement;
+                const elRect = el.getBoundingClientRect();
+                const left = elRect.left + elRect.width / 2;
+
+                return {
+                    bottom: `${window.innerHeight - elRect.top}px`,
+                    left: `${left}px`,
+                    translate: '-50% 0'
+                };
             },
             getTooltipLabel() {
-                return this.getSwatchConfig(this.activeTooltipItem.attribute, this.activeTooltipItem.item).label
+                return this.activeTooltipItem ? this.activeTooltipItem.label : '';
             },
-            focusedLabel: false,
-            focusLabel(optionId) {
-                this.focusedLabel = optionId;
+            showTooltip(event) {
+                if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+                const input = event.currentTarget.querySelector('input');
+                this.activeTooltipItem = JSON.parse(input.dataset.tooltip);
+                this.tooltipPositionElement = event.currentTarget;
             },
-            blurLabel() {
-                this.focusedLabel = false;
-            }
+            hideTooltip() {
+                this.activeTooltipItem = false;
+            },
         }
     }
 </script>

@@ -14,25 +14,19 @@ use Magento\Framework\View\Element\Template;
 /** @var Template $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
-
 ?>
-<template x-if="isTooltipVisible()">
-    <div class="absolute pointer-events-none select-none"
-         :style="getTooltipPosition()"
+<template x-if="isTooltipVisible">
+    <div
+        role="tooltip"
+        class="z-10 fixed pointer-events-none rounded bg-white text-fg shadow-lg p-2 mb-4 text-sm font-medium text-center"
+        :style="getTooltipPosition"
     >
-        <div class="absolute top-0 left-0 z-10 min-w-20 p-2 -mt-6 text-sm leading-tight text-black
-                transform -translate-x-1/2 -translate-y-full bg-white rounded-lg shadow-lg text-center"
-                :class="{'-translate-x-5' : isFirstItemCol()}"
-        >
-        <template x-if="isVisualSwatch(activeTooltipItem.attribute, activeTooltipItem.item)">
-            <div class="inline-block border shadow-sm border-gray-300"
-                    :style="getTooltipImageStyle(activeTooltipItem.attribute, activeTooltipItem.item)"
-            ></div>
-        </template>
-            <span class="mx-2 text-lg font-semibold whitespace-nowrap subtitle"
-                    x-html="getTooltipLabel()"
-            ></span>
-        </div>
-        <div class="absolute z-10 w-3 h-3 bg-white origin-top-left rotate-45 translate-x-4 -translate-y-8 shadow-xl" aria-hidden="true"></div>
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 size-3 rotate-45 bg-inherit"></div>
+        <div
+            role="img"
+            x-show="getTooltipImageStyle"
+            :style="getTooltipImageStyle"
+        ></div>
+        <p class="mt-1 whitespace-nowrap" x-text="getTooltipLabel"></p>
     </div>
 </template>

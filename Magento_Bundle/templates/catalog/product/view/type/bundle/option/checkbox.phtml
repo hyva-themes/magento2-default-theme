@@ -51,8 +51,7 @@ $optionId = $option->getId();
                    data-option-id="<?= $escaper->escapeHtmlAttr($optionSelectionId) ?>"
                    x-on:change="calculateTotalPrice()"
             >
-            <label class="label"
-                   for="bundle-option-<?= $escaper->escapeHtmlAttr($optionSelectionId) ?>">
+            <label for="bundle-option-<?= $escaper->escapeHtmlAttr($optionSelectionId) ?>">
                 <span><?= /* @noEscape */ $block->getSelectionQtyTitlePrice($selection) ?></span>
             </label>
         </div>

@@ -1,17 +1,24 @@
 <?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
 declare(strict_types=1);
 
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Product\Options as ProductOptions;
 use Hyva\Theme\ViewModel\SwatchRenderer;
 use Magento\Framework\Escaper;
 use Magento\Swatches\Block\Product\Renderer\Listing\Configurable;
 use Magento\Swatches\ViewModel\Product\Renderer\Configurable as ConfigurableViewModel;
 
-// phpcs:disable Generic.Files.LineLength.TooLong
-
 /** @var Configurable $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
 
 /** @var ConfigurableViewModel $configurableViewModel */
 $configurableViewModel = $viewModels->require(ConfigurableViewModel::class);
@@ -24,181 +31,138 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
 /** @var SwatchRenderer $swatchRendererViewModel */
 $swatchRendererViewModel = $viewModels->require(SwatchRenderer::class);
 
+/** @var ProductOptions $productOptionsViewModel */
+$productOptionsViewModel = $viewModels->require(ProductOptions::class);
+
 $layout = $block->getLayout();
 $swatchItemBlock = $layout->getBlock('product.swatch.item');
 $swatchItemBlock->setData('product_id', $productId);
+
+// getJsonConfig() resets and populates allow_products for this product; calling it first
+// means getJsonSwatchConfig() hits the warm cache instead of re-querying.
+$jsonConfig = $block->getJsonConfig();
+$jsonSwatchConfig = $block->getJsonSwatchConfig();
+$swatchConfig = json_decode($jsonSwatchConfig, true);
 ?>
 <?php if ($product->isSaleable() && count($attributes)): ?>
-
     <script>
-        function initConfigurableSwatchOptions_<?= (int) $productId ?>() {
-            const configurableOptionsComponent = initConfigurableOptions(
-                '<?= (int) $productId ?>',
-                <?= /* @noEscape */ $block->getJsonConfig() ?>
-            );
-            const swatchOptionsComponent = initSwatchOptions(<?= /* @noEscape */ $block->getJsonSwatchConfig() ?>);
+        function initConfigurableSwatchOptions() {
+            const { productId, mediaCallback } = this.$root.dataset;
+            const configEl = this.$root.querySelector('script[type="application/json"]');
+            if (!configEl) {
+                throw new Error(`initConfigurableSwatchOptions:
+                    missing inline JSON config in component root,
+                    outdated renderer.phtml override?`);
+            }
 
+            const configurableOptionsComponent = initConfigurableOptions(productId, JSON.parse(configEl.textContent));
+            const swatchOptionsComponent = initSwatchOptions();
             return Object.assign(
                 configurableOptionsComponent,
                 swatchOptionsComponent,
                 {
-                    mediaCallback: "<?= $escaper->escapeJs($escaper->escapeUrl($block->getMediaCallback())) ?>",
-                    changeOption(optionId, value, skipUpdateGallery) {
-                        if (value === '') {
-                            this.selectedValues = this.removeAttrFromSelection(this.selectedValues, optionId)
-                        } else {
-                            this.selectedValues[optionId] = value;
-                        }
-                        this.findSimpleIndex();
-                        this.findAllowedAttributeOptions();
-                        this.updatePrices();
-                        !skipUpdateGallery && this.updateGallery();
-
-                        const candidates = this.findProductIdsForPartialSelection(this.selectedValues);
-
-                        <?php /* The skuCandidates property is not set if the Magento_Inventory (MSI) modules are disabled. */ ?>
+                    init() {
+                        this.baseInit();
+                        this.preselectQuerystringItems();
+                        this.applyCheckedState();
+                        this.applySelectionToLinks();
+                    },
+                    applySelectionToLinks() {
+                        const form = this.$root.closest('form');
+                        if (!form) return;
+                        form.querySelectorAll('a.product-item-link, a.product-item-photo').forEach(link => {
+                            try {
+                                const url = new URL(link.href);
+                                Object.values(this.optionConfig.attributes).forEach(attr => {
+                                    const val = this.selectedValues[attr.id];
+                                    if (val) url.searchParams.set(attr.code, val);
+                                });
+                                link.href = url.toString();
+                            } catch (e) {}
+                        });
+                    },
+                    changeOption(attributeId, value) {
+                        this.baseChangeOption(attributeId, value);
                         window.dispatchEvent(new CustomEvent('listing-configurable-selection-changed', {
                             detail: {
                                 productId: this.productId,
-                                optionId,
+                                optionId: attributeId,
                                 value,
-                                productIndex: this.productIndex,
                                 selectedValues: this.selectedValues,
-                                candidates: candidates,
-                                skuCandidates: Object.values(candidates).map(id => this.optionConfig.sku?.[id] ?? null).filter(Boolean),
+                                productIndex: this.productIndex,
                             }
                         }));
                     },
                     updateGallery() {
-                        if (!this.productIndex) {
-                            return;
-                        }
-
-                        fetch(`${this.mediaCallback}?product_id=${this.productIndex}&isAjax=true`, {
-                                method: 'GET',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'X-Requested-With': 'XMLHttpRequest'
-                                }
+                        if (!this.productIndex) return;
+                        fetch(`${mediaCallback}?product_id=${this.productIndex}&isAjax=true`, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest'
                             }
-                        ).then(response => {
-                                return response.json()
-                            }
-                        ).then(data => {
-                            if (data.errors) {
-                                // non critical failure only console logged
-                                console.warn(data.errors);
-                            } else {
-                                data && window.dispatchEvent(
-                                    new CustomEvent(
-                                        `update-gallery-${productId}`,
-                                        { detail: data }
-                                    )
-                                );
-                            }
-                        }).catch(error => {
-                            console.warn(error)
-                        });
-                    },
-                    preselectQuerystringItems() {
-                        // pre-select option like ?size=167
-                        const urlQueryParams = new URLSearchParams(window.location.search.replace('?', ''));
-                        Object.values(this.optionConfig.attributes).map(attribute => {
-                            // Don't update images on load, since PLPs already set the main image to the selected options
-                            const skipUpdateGallery = true;
-                            urlQueryParams.get(attribute.code) &&
-                            this.changeOption(attribute.id, urlQueryParams.get(attribute.code), skipUpdateGallery);
-                        });
-                    },
-                    mouseDown: false,
-                    startX: 0,
-                    maxScroll: 0,
-                    scrollLeft: null,
-                    slider: null,
-                    scrollEvents: {
-                        ['@mousedown'](e) {
-                            this.slider = e.target.closest('.snap');
-                            if (!this.slider) {
-                                return;
-                            }
-                            this.maxScroll = this.slider.scrollWidth - this.slider.offsetWidth;
-                            this.startX = e.pageX - this.slider.offsetLeft;
-                            this.scrollLeft = this.slider.scrollLeft;
-                            this.mouseDown = true;
-                        },
-                        ['@mouseout.self']() {
-                            this.mouseDown = false;
-                        },
-                        ['@mouseup']() {
-                            this.mouseDown = false;
-                        },
-                        ['@mousemove'](e) {
-                            e.preventDefault();
-                            if (!this.mouseDown) {
-                                return;
-                            }
-                            const x = e.pageX - this.slider.offsetLeft;
-                            const scroll = x - this.startX;
-                            const scrollLeft = this.scrollLeft - scroll;
-
-                            if (scrollLeft > this.maxScroll) {
-                                this.slider.scrollLeft = this.maxScroll;
-                                return
-                            }
-                            this.slider.scrollLeft = this.scrollLeft - scroll;
-                        },
-                        ['@onselectstart']() {
-                            return false;
-                        }
-                    },
-                    resizeEvent() {
-                        Array.from(this.$root.querySelectorAll('.snap')).forEach(slider => {
-                            slider.scrollLeft = 0;
                         })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.errors) {
+                                console.warn(data.errors);
+                                return;
+                            }
+                            data && window.dispatchEvent(
+                                new CustomEvent(`update-gallery-${this.productId}`, { detail: data })
+                            );
+                        })
+                        .catch(error => console.warn(error));
                     }
                 }
             );
         }
 
+        window.addEventListener('alpine:init', () => {
+            Alpine.data('initConfigurableSwatchOptions', initConfigurableSwatchOptions)
+        }, { once: true });
     </script>
+    <?php $hyvaCsp->registerInlineScript() ?>
 
-<div x-data="initConfigurableSwatchOptions_<?= (int) $productId ?>()"
-     x-defer="intersect"
-     x-init="findAllowedAttributeOptions()"
-     @private-content-loaded.window="onGetCartData($event.detail.data)"
-     @resize.window="resizeEvent()"
-     class="mb-2 relative"
->
-    <div>
+    <div
+        x-data="initConfigurableSwatchOptions"
+        x-defer="intersect"
+        data-product-id="<?= (int) $productId ?>"
+        data-media-callback="<?= $escaper->escapeUrl($block->getMediaCallback()) ?>"
+        class="mb-2 relative"
+    >
+        <script type="application/json"><?= /* @noEscape */ str_replace('</script>', '<\/script>', $jsonConfig) ?></script>
+
         <?php foreach ($attributes as $attribute): ?>
-            <?php $attributeId = $attribute->getAttributeId(); ?>
-            <?php $productAttribute = $attribute->getProductAttribute(); ?>
+            <?php
+            $attributeId = $attribute->getAttributeId();
+            $productAttribute = $attribute->getProductAttribute();
 
-            <?php if (!$productAttribute->getUsedInProductListing() || !$swatchRendererViewModel->isSwatchAttribute($productAttribute)) {
+            if (!$productAttribute->getUsedInProductListing() ||
+                !$swatchRendererViewModel->isSwatchAttribute($productAttribute)) {
                 continue;
-            } ?>
-        <div class="swatch-attribute border-t last:border-b border-container
-            <?= $escaper->escapeHtmlAttr($productAttribute->getAttributeCode()) ?>"
-        >
-            <div class="w-full overflow-x-hidden swatch-attribute-options min-h-14">
-                <div class="flex flex-nowrap w-full overflow-auto snap items-center py-1"
-                    id="attribute-label-<?= $escaper->escapeHtmlAttr($productId . '-' . $attributeId) ?>"
-                    role="radiogroup"
-                    x-bind="scrollEvents"
-                    aria-label="<?= $escaper->escapeHtml($productAttribute->getStoreLabel()) ?>"
-                >
-                    <template x-for="(item, index) in optionConfig.attributes[<?= (int) $attributeId ?>].options"
-                              :key="item.id"
-                    >
-                        <?= /* @noEscape */ $swatchItemBlock->setData('attribute_id', $attributeId)->toHtml(); ?>
-                    </template>
+            }
+
+            $productOptions = $productOptionsViewModel->getEnabledAttributeOptions($block, $attribute);
+            $attributeSwatchConfig = $swatchConfig[$attributeId] ?? [];
+            ?>
+            <fieldset class="mt-4">
+                <legend class="mb-1 text-sm font-medium">
+                    <?= $escaper->escapeHtml($productAttribute->getStoreLabel()) ?>
+                </legend>
+                <div class="flex flex-wrap gap-1">
+                    <?php foreach ($productOptions as $option): ?>
+                        <?= /* @noEscape */ $swatchItemBlock
+                            ->setData('option', $option)
+                            ->setData('swatch_data', $attributeSwatchConfig[$option['value_index']] ?? null)
+                            ->setData('attribute_id', $attributeId)
+                            ->toHtml(); ?>
+                    <?php endforeach; ?>
                 </div>
-            </div>
-        </div>
+            </fieldset>
         <?php endforeach; ?>
+        <?php if ($configurableViewModel->getShowSwatchTooltip()): ?>
+            <?= /* @noEscape */ $block->getBlockHtml('product.swatch.tooltip') ?>
+        <?php endif; ?>
     </div>
-    <?php if ($configurableViewModel->getShowSwatchTooltip()): ?>
-        <?= /* @noEscape */ $block->getBlockHtml('product.swatch.tooltip') ?>
-    <?php endif; ?>
-</div>
 <?php endif; ?>

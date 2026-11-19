@@ -9,28 +9,25 @@ declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\Cart\CheckoutConfig;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Checkout\Block\Cart;
 use Magento\Framework\Escaper;
 
 /** @var Cart $block */
 /** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
 /** @var ViewModelRegistry $viewModels */
-?>
 
-<?php
 /** @var CheckoutConfig $checkoutConfigViewModel */
 $checkoutConfigViewModel = $viewModels->require(CheckoutConfig::class);
 $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel->getSerializedCheckoutConfig() : 'false';
 
 ?>
 <script>
-    window.checkoutConfig = <?= /* @noEscape  */ $serializedCheckoutConfig ?>;
-    window.customerData = window.checkoutConfig.customerData;
-    window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
-</script>
+    window.checkoutConfig = null;
+    window.customerData = {};
+    window.isCustomerLoggedIn = false;
 
-<script>
-    'use strict';
     (function( hyva, undefined ) {
 
         let controller = new AbortController();
@@ -80,30 +77,33 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
                     );
                 }
             }).finally(() => {
-                window.dispatchEvent(new CustomEvent("cart-is-loading", { detail: {
-                    isLoading: false
-                }}));
+                window.dispatchEvent(new CustomEvent('cart-is-loading', {
+                    detail: {isLoading: false}
+                }))
             })
         }
     }( window.hyva = window.hyva || {} ));
-</script>
-
-<script>
 
     function initCartForm() {
         let cartIsReloading = false;
 
         return {
-            cartIsEmpty: window.checkoutConfig === false,
+            cartIsEmpty: true,
             isLoading: false,
-            checkCartShouldUpdate(data) {
-                const cart = data.cart;
+            init() {
+                window.checkoutConfig = JSON.parse(this.$root.dataset.checkoutConfig);
+                window.customerData = window.checkoutConfig.customerData;
+                window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
+
+                this.cartIsEmpty = window.checkoutConfig === false;
+            },
+            checkCartShouldUpdate() {
+                const cart = this.$event.detail.data.cart;
                 if (!cart) return;
 
                 const cartIsEmptyState = window.checkoutConfig === false;
                 if (this.cartIsEmpty !== cartIsEmptyState) {
                     this.cartIsEmpty = cartIsEmptyState;
-
                     this.reloadCartContent();
                     return;
                 }
@@ -159,21 +159,40 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
                     cartIsReloading = false;
                 })
             },
-            onStorageChange(event) {
-                if (event.key === 'private_content_version') {
+            onStorageChange() {
+                if (this.$event.key === 'private_content_version') {
                     window.dispatchEvent(new CustomEvent("reload-customer-section-data"));
                 }
+            },
+            onCartIsLoading() {
+                this.isLoading = (this.$event.detail && this.$event.detail.isLoading) || false
+            },
+            proceedToCheckout() {
+                this.$dispatch('toggle-authentication', { url: this.$el.href });
+            },
+            postCart() {
+                hyva.postCart(this.$event.target)
+            },
+            removeItem() {
+                hyva.postForm(JSON.parse(this.$el.dataset.deletePostJson));
+                this.$dispatch('cart-item-removed', [JSON.parse(this.$el.dataset.cartItemRemovedPayload)]);
+            },
+            moveToWishlist() {
+                hyva.postForm(JSON.parse(this.$el.dataset.postForm));
             }
         }
     }
+    window.addEventListener('alpine:init', () => Alpine.data('initCartForm', initCartForm), { once: true })
 </script>
+<?php $hyvaCsp->registerInlineScript() ?>
 <section
-    x-data="initCartForm()"
+    x-data="initCartForm"
     class="cart-form"
     aria-label="<?= $escaper->escapeHtmlAttr(__('Shopping Cart')) ?>"
-    @private-content-loaded.window="checkCartShouldUpdate($event.detail.data)"
-    @storage.window="onStorageChange($event)"
-    @cart-is-loading.window="isLoading = ($event.detail && $event.detail.isLoading) || false"
+    @private-content-loaded.window="checkCartShouldUpdate"
+    @storage.window="onStorageChange"
+    @cart-is-loading.window="onCartIsLoading"
+    data-checkout-config="<?= $escaper->escapeHtmlAttr($serializedCheckoutConfig) ?>"
 >
     <?php if ($block->getItemsCount()): ?>
         <?= $block->getChildHtml('with-items') ?>

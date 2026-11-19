@@ -8,7 +8,8 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Framework\Escaper;
 use Magento\LayeredNavigation\Block\Navigation;
 
@@ -17,19 +18,19 @@ use Magento\LayeredNavigation\Block\Navigation;
 /** @var Navigation $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 ?>
+
 <?php if ($block->canShowBlock()): ?>
     <div
-        x-data="initLayeredNavigation()"
-        x-init="checkIsMobileResolution()"
-        @resize.window.debounce="checkIsMobileResolution()"
-        @visibilitychange.window.debounce="checkIsMobileResolution()"
-        class="block border border-gray-300 bg-gray-100 p-4 md:border-0 md:bg-transparent md:py-0 md:px-0 my-6"
         role="region"
         aria-label="<?= $escaper->escapeHtmlAttr(__('Product filters')) ?>"
+        class="block border border-gray-300 bg-gray-100 p-4 md:border-0 md:bg-transparent md:py-0 md:px-0 my-6"
+        x-data="initLayeredNavigation"
+        x-bind="eventListeners"
     >
         <h2
             id="filters-heading"
@@ -37,91 +38,61 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         >
             <button
                 type="button"
-                @click="blockOpen = !blockOpen"
-                class="block-title flex items-center justify-between w-full text-start"
+                @click="toggleBlockOpen"
+                class="group block-title flex items-center justify-between w-full text-start md:cursor-text md:select-text"
                 aria-controls="filters-content"
                 :aria-expanded="blockOpen"
-                :aria-disabled="!isMobile"
-                :disabled="!isMobile ? '' : null"
+                :disabled="isNotMobile"
             >
                 <span class="text-md md:text-3xl font-medium uppercase">
                     <?= $escaper->escapeHtml(__('Shop By')) ?>
                 </span>
                 <span
-                    class="py-1 px-1 bg-white rounded border border-gray-300 md:hidden"
+                    class="py-1 px-1 bg-white rounded-lg border border-gray-300 md:hidden"
                     x-ref="LayeredNavigationMobileToggleIcon"
                 >
-                    <?= $heroicons->chevronDownHtml(
-                        'transition-transform transform duration-300 ease-in-out',
+                    <?= $lucideIcons->chevronDownHtml(
+                        'transition-transform group-aria-expanded:rotate-180',
                         24,
                         24,
-                        [
-                            ":class" => "{ 'rotate-180': blockOpen }",
-                            "aria-hidden" => "true",
-                            "focusable" => "false"
-                        ]
+                        ["aria-hidden" => "true"]
                     ); ?>
                 </span>
             </button>
         </h2>
         <div
             id="filters-content"
-            class="block-content filter-content hidden md:block pt-4"
-            :class="{ 'hidden': !blockOpen }"
+            class="block-content filter-content pt-4 hidden md:block data-[open=true]:block"
+            :data-open="blockOpen"
         >
             <?= $block->getChildHtml('state') ?>
             <a
                 href="#product-list"
-                class="sr-only focus:not-sr-only bg-blue-600 text-white px-12 py-4 text-center block rounded-sm"
+                class="sr-only focus:not-sr-only btn btn-primary flex"
             >
                 <?= $escaper->escapeHtml(__('Skip to product list')) ?>
             </a>
             <?php foreach ($block->getFilters() as $filter): ?>
                 <?php if ($filter->getItemsCount()): ?>
-                    <div
-                        x-data="{
-                            open: false,
-                            id: $id('filter-option')
-                        }"
-                        x-defer="intersect"
-                        class="filter-option card my-4"
-                    >
-                        <h3 :id="`${id}-title`">
-                            <button
-                                type="button"
-                                @click="open = !open"
-                                class="filter-options-title flex justify-between items-center cursor-pointer text-start border-gray-300 w-full"
-                                :class="{ 'border-b pb-4': open }"
-                                :aria-controls="`${id}-content`"
-                                :aria-expanded="open"
-                            >
-                                <span class="title text-md md:text-lg font-semibold">
-                                    <?= $escaper->escapeHtml(__($filter->getName())) ?>
-                                    <span class="sr-only"> <?= $escaper->escapeHtml(__('filter')) ?></span>
-                                </span>
-                                    <span class="py-1 px-1 rounded border border-gray-300">
-                                    <?= $heroicons->chevronDownHtml(
-                                        'transition-transform transform duration-300 ease-in-out',
-                                        24,
-                                        24,
-                                        [
-                                            ":class" => "{ 'rotate-180': open }",
-                                            "aria-hidden" => "true",
-                                            "focusable" => "false"
-                                        ]
-                                    ); ?>
-                                </span>
-                            </button>
-                        </h3>
-                        <template x-if="open">
-                            <div
-                                :id="`${id}-content`"
-                                class="filter-options-content pt-3"
-                            >
-                                <?= /* @noEscape */ $block->getChildBlock('renderer')->setFilterTitle($filter->getName())->render($filter); ?>
-                            </div>
-                        </template>
-                    </div>
+                    <details class="group filter-option card p-0 my-4">
+                        <summary class="filter-options-title list-none flex justify-between items-center cursor-pointer py-4 px-5">
+                            <h3 class="inline-block text-md md:text-lg font-semibold">
+                                <?= $escaper->escapeHtml(__($filter->getName())) ?>
+                                <span class="sr-only"> <?= $escaper->escapeHtml(__('filter')) ?></span>
+                            </h3>
+                            <span class="p-1 rounded-lg border border-gray-300">
+                                <?= $lucideIcons->chevronDownHtml(
+                                    'transition-transform group-open:rotate-180',
+                                    24,
+                                    24,
+                                    ["aria-hidden" => "true"]
+                                ); ?>
+                            </span>
+                        </summary>
+                        <div class="filter-options-content py-4 px-5 border-t border-gray-300">
+                            <?= /* @noEscape */ $block->getChildBlock('renderer')->setFilterTitle($filter->getName())->render($filter); ?>
+                        </div>
+                    </details>
                 <?php endif; ?>
             <?php endforeach; ?>
         </div>
@@ -131,13 +102,35 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             return {
                 isMobile: false,
                 blockOpen: false,
+                init() {
+                    this.checkIsMobileResolution();
+                },
+                isNotMobile() {
+                    return !this.isMobile;
+                },
+                toggleBlockOpen() {
+                    this.blockOpen = !this.blockOpen;
+                },
                 checkIsMobileResolution() {
                     const mobileElement = this.$refs.LayeredNavigationMobileToggleIcon;
                     this.isMobile = mobileElement
                         ? getComputedStyle(mobileElement).display !== "none"
                         : window.matchMedia('(max-width: 767px)').matches; // Fallback to `md` breakpoint
+                },
+                eventListeners: {
+                    ['@resize.window.debounce']() {
+                        this.checkIsMobileResolution();
+                    },
+                    ['@visibilitychange.window.debounce']() {
+                        this.checkIsMobileResolution();
+                    }
                 }
             }
         }
+
+        window.addEventListener('alpine:init', () => {
+            Alpine.data('initLayeredNavigation', initLayeredNavigation)
+        }, { once: true })
     </script>
+    <?php $hyvaCsp->registerInlineScript() ?>
 <?php endif; ?>

@@ -162,13 +162,12 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
             <?= /* @noEscape */ $productListItemViewModel->getProductPriceHtml($product) ?>
         </div>
 
-        <div class="mt-auto pt-3 flex flex-wrap items-center gap-y-4 gap-x-2
-            <?= $viewIsGrid ? '' : 'md:justify-center' ?>">
+        <div class="mt-auto pt-3 flex flex-wrap justify-between items-center gap-y-4 gap-x-2">
             <?php if ($product->isSaleable()): ?>
                 <?php if ($isProductGroupedOrBundle): ?>
                 <a
                     href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>"
-                    class="btn btn-primary text-sm <?= $viewIsGrid ? 'me-auto' : 'me-auto md:me-0' ?>"
+                    class="btn btn-primary text-sm"
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Configure %1 on the product page', $productName)) ?>"
                 >
                     <?= $lucideIcons->pencilHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
@@ -178,7 +177,7 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
                 </a>
                 <?php else: ?>
                 <button
-                    class="btn btn-primary text-sm <?= $viewIsGrid ? 'me-auto' : 'me-auto md:me-0' ?>"
+                    class="btn btn-primary text-sm"
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Cart') . ' ' . $productName) ?>"
                     data-addto="cart"
                 >
@@ -190,7 +189,7 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
                 <?php endif; ?>
 
             <?php else: ?>
-            <div class="<?= $viewIsGrid ? 'me-auto' : 'me-auto md:me-0' ?>">
+            <div>
                 <?= $block->getChildBlock('stockstatus')->setData('product', $product)->toHtml() ?>
             </div>
             <?php endif; ?>

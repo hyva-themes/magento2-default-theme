@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" ?>
 <!--
 /**
  * Hyvä Themes - https://hyva.io
@@ -6,7 +6,10 @@
  * See COPYING.txt for license details.
  */
 -->
-<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd">
+<view
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd"
+>
     <media>
         <images module="Magento_Catalog">
             <image id="bundled_product_customization_page" type="thumbnail">
@@ -73,16 +76,16 @@
                 <width>140</width>
                 <height>140</height>
             </image>
-            <image id="product_page_image_large" type="image"/>
+            <image id="product_page_image_large" type="image" />
             <image id="product_page_image_medium" type="image">
                 <width>700</width>
                 <height>700</height>
             </image>
             <image id="product_page_image_small" type="thumbnail">
-                <width>90</width>
-                <height>90</height>
+                <width>80</width>
+                <height>80</height>
             </image>
-            <image id="product_swatch_image_large" type="image"/>
+            <image id="product_swatch_image_large" type="image" />
             <image id="product_swatch_image_medium" type="image">
                 <width>360</width>
                 <height>360</height>
@@ -100,8 +103,8 @@
                 <height>700</height>
             </image>
             <image id="product_page_more_views" type="thumbnail">
-                <width>90</width>
-                <height>90</height>
+                <width>80</width>
+                <height>80</height>
             </image>
             <image id="product_stock_alert_email_product_image" type="small_image">
                 <width>76</width>
@@ -187,6 +190,15 @@
                 <width>240</width>
                 <height>300</height>
             </image>
+            <!-- Width and height define the bounding box. Images scale to fit while preserving the original aspect ratio. -->
+            <image id="swatch_image" type="swatch_image">
+                <width>30</width>
+                <height>30</height>
+            </image>
+            <image id="swatch_thumb" type="swatch_thumb">
+                <width>90</width>
+                <height>90</height>
+            </image>
         </images>
     </media>
     <vars module="Magento_Catalog">
@@ -203,12 +215,32 @@
         </var>
 
         <var name="product_image_white_borders">1</var>
+
+        <var name="gallery">
+            <var name="loop">1</var>            <!-- Enable infinite loop -->
+            <var name="caption">1</var>         <!-- Show image caption -->
+            <var name="pager">thumbs</var>      <!-- Pager style: thumbs or dots -->
+            <var name="pagerdir">vertical</var> <!-- Pager direction: vertical or horizontal -->
+            <var name="nav">end</var>           <!-- Nav arrow position: end, start or center -->
+            <var name="maxthumbs">0</var>       <!-- Max thumbnails shown, 0 falls back to auto calculation -->
+        </var>
     </vars>
     <vars module="Magento_Bundle">
         <var name="product_summary_image_size">58</var>         <!-- New Product image size used for summary block-->
     </vars>
     <vars module="Magento_ConfigurableProduct">
         <var name="gallery_switch_strategy">append</var> <!-- 'append' or 'replace' -->
+    </vars>
+    <vars module="Magento_PageBuilder">
+        <var name="breakpoints">
+            <var name="mobile">
+                <!-- Everything below the Tailwind md breakpoint -->
+                <var name="conditions">
+                    <var name="max-width">767px</var>
+                    <var name="min-width">0px</var>
+                </var>
+            </var>
+        </var>
     </vars>
     <vars module="Js_Bundle">
         <var name="bundle_size">1MB</var>

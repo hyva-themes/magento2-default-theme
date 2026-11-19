@@ -8,7 +8,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Hyva\Theme\ViewModel\ProductPrice;
 use Magento\Downloadable\Block\Catalog\Product\Links as DownloadableLinks;
 use Magento\Framework\Escaper;
@@ -17,14 +17,14 @@ use Magento\Framework\Escaper;
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 /** @var ProductPrice $productPriceViewModel */
-/** @var HeroiconsOutline $iconViewModel */
+/** @var LucideIcons $lucideIcons */
 
 if (!$block->getProduct()->isSaleable() && $block->hasLinks()) {
     return;
 }
 
 $productPriceViewModel    = $viewModels->require(ProductPrice::class);
-$iconViewModel            = $viewModels->require(HeroiconsOutline::class);
+$lucideIcons              = $viewModels->require(LucideIcons::class);
 $displayTax               = $productPriceViewModel->displayPriceIncludingTax();
 $linksPurchasedSeparately = $block->getLinksPurchasedSeparately();
 $links                    = $block->getLinks();
@@ -127,7 +127,7 @@ $configuredLinks          = $configuredValues->getLinks() ?? [];
                     <a class="item-link samples-item-link"
                        href="<?= $escaper->escapeUrl($block->getLinkSampleUrl($link)) ?>"
                        <?= $block->getIsOpenInNewWindow() ? 'target="_blank" rel="noopener"' : '' ?>>
-                       <?= $iconViewModel->documentDownloadHtml('inline-block mr-1', 24, 24) ?>
+                       <?= $lucideIcons->fileDownHtml('inline-block mr-1', 24, 24) ?>
                        <?= $escaper->escapeHtml(__('sample')) ?>
                     </a>
                 <?php endif; ?>
@@ -136,7 +136,7 @@ $configuredLinks          = $configuredValues->getLinks() ?? [];
         <?php if ($linksPurchasedSeparately && count($links) > 1): ?>
             <div class="field choice downloads-all">
                 <button type="button" class="" @click="toggleAll">
-                    <?= $iconViewModel->checkCircleHtml('inline-flex mr-1', 24, 24, ['aria-hidden' => 'true']) ?>
+                    <?= $lucideIcons->circleCheckHtml('inline-flex mr-1', 24, 24, ['aria-hidden' => 'true']) ?>
                     <span x-text="
                         areAllSelected()
                             ? '<?= $escaper->escapeJs(__('Unselect all')) ?>'

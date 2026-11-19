@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use Magento\Catalog\Block\Product\View;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\Escaper;
 
 // phpcs:disable Generic.WhiteSpace.ScopeIndent
@@ -24,13 +25,16 @@ $product = $block->getProduct();
  * @see \Magento\Checkout\Block\Cart\Item\Configure::_prepareLayout
  */
 $productInfoBlock = $block->getLayout()->getBlock('product.info');
+
+$productOptions = $product->getOptions() ?? [];
+$hasMultiFormInputOption = (bool) array_filter($productOptions, fn($o) => $o->getType() === Option::OPTION_TYPE_FILE);
 ?>
 <?php if ($product->isSaleable()): ?>
     <form method="post"
           action="<?= $escaper->escapeUrl($productInfoBlock->getSubmitUrl($product)) ?>"
           class="mb-6"
           id="product_addtocart_form"
-          <?php if ($product->getOptions()): ?>
+          <?php if ($hasMultiFormInputOption): ?>
               enctype="multipart/form-data"
           <?php endif; ?>
           <?php foreach ($block->getData('product_data_attributes') ?? [] as $attribute => $include): ?>

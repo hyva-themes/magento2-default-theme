@@ -69,7 +69,7 @@ $jsTemplate = 'Magento_Catalog::product/widget/viewed/js/recently-viewed-product
                         <div class="product-item-details">
                             <?php if (in_array("name", $widgetAttributesToShow)): ?>
                                 <p class="text-sm">
-                                    <a :href="productUrl" x-html="product.name"></a>
+                                    <a :href="productUrl" x-text="product.name"></a>
                                 </p>
                             <?php endif; ?>
                             <?php if (in_array("price", $widgetAttributesToShow)): ?>
