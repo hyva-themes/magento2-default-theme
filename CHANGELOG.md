@@ -11,8 +11,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 -   **Fixed Page Builder Vimeo video backgrounds without a fallback image**  
-    The minified Jarallax video extension is updated to v2.0.3, matching the source file, so it uses the Vimeo oEmbed API
-    instead of the deprecated v2 API.
+    Jarallax and its video extension are updated from v1.12.5 to v2.2.1. The minified video extension still called the
+    deprecated Vimeo v2 API, it now uses the oEmbed API.
+
+    Slide videos no longer use the `elementInViewport` option, since Jarallax v2 detects visibility with an
+    IntersectionObserver and throws on that option. Themes overriding `Magento_PageBuilder::widgets/parallax.phtml`
+    should remove it as well.
 
     For more information, please refer to [issue #1395](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1395).
 
