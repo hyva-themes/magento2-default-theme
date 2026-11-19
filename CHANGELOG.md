@@ -8,6 +8,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 [Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.5.4...main
 
+### Changed
+
+-   **Fixed Page Builder Vimeo video backgrounds without a fallback image**  
+    The minified Jarallax video extension is updated to v2.0.3, matching the source file, so it uses the Vimeo oEmbed API
+    instead of the deprecated v2 API.
+
+    For more information, please refer to [issue #1395](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1395).
+
 ## [1.5.4] - 2026-11-12
 
 [1.5.4]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.5.3...1.5.4
