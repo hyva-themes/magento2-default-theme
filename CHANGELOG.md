@@ -8,6 +8,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 [Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.5.4...main
 
+### Added
+
+-   **Design token config for the Hyvä UI Tokens tab**  
+    The theme ships `etc/hyva-tokens.json`, so the Tokens tab of the Theme edit page is available for `Hyva/default`
+    and its child themes. It covers the brand colors, surfaces and text, form fields and the gray scale.
+
+    The theme preview image is now a screenshot of the theme. Magento only copies it when a theme is first registered,
+    so existing installs keep the old image.
+
+    For more information, please refer to [issue #1398](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1398).
+
 ## [1.5.4] - 2026-11-12
 
 [1.5.4]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.5.3...1.5.4
