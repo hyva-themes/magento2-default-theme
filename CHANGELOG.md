@@ -8,8 +8,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 [Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.5.4...main
 
-### Changed
-
 -   **Cart shipping estimate selects the only available shipping method**  
     For more information, please refer to [issue #1325](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1325).
 
