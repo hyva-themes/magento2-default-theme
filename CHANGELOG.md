@@ -8,6 +8,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 [Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.5.4...main
 
+### Added
+
+-   **`css_classes` argument for the product info card**  
+    Classes set on the `product.info` block replace the default `card mb-6` wrapper classes, so a theme can change them
+    without overriding `Magento_Catalog::product/view/product-info.phtml`.
+
+    For more information, please refer to [issue #1403](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1403).
+
 ### Changed
 
 -   **Fixed saved region not showing in the customer address text input**  
