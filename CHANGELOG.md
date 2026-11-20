@@ -8,7 +8,34 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 [Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.5.4...main
 
+### Added
+
+-   **`css_classes` argument for the product info card**  
+    Classes set on the `product.info` block replace the default `card mb-6` wrapper classes, so a theme can change them
+    without overriding `Magento_Catalog::product/view/product-info.phtml`.
+
+    For more information, please refer to [issue #1403](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1403).
+
 ### Changed
+
+-   **Fixed saved region not showing in the customer address text input**  
+    For more information, please refer to [issue #1307](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1307).
+
+-   **Fixed customer address region label not targeting the text input**  
+    For more information, please refer to [issue #1397](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1397).
+
+-   **Fixed cart totals shipping label not showing the selected shipping method**  
+    For more information, please refer to [issue #721](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/721).
+
+-   **Fixed Page Builder Vimeo video backgrounds without a fallback image**  
+    Jarallax and its video extension are updated from v1.12.5 to v2.2.1. The minified video extension still called the
+    deprecated Vimeo v2 API, it now uses the oEmbed API.
+
+    Slide videos no longer use the `elementInViewport` option, since Jarallax v2 detects visibility with an
+    IntersectionObserver and throws on that option. Themes overriding `Magento_PageBuilder::widgets/parallax.phtml`
+    should remove it as well.
+
+    For more information, please refer to [issue #1395](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1395).
 
 -   **Header account menu sizes to its content on desktop**  
     Longer link labels no longer wrap. The mobile width is unchanged.
