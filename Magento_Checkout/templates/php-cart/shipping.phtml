@@ -107,8 +107,9 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
                         this.availableShippingMethods = result;
 
                         if(!this.availableShippingMethods.find(method => { return method.carrier_code + '_' + method.method_code === this.shippingMethod})) {
-                            this.$dispatch('update-shipping-method', {method: false});
-                            this.shippingMethod = false;
+                            const onlyRate = result.length === 1 && result[0];
+                            this.shippingMethod = onlyRate ? `${onlyRate.carrier_code}_${onlyRate.method_code}` : false;
+                            this.$dispatch('update-shipping-method', {method: this.shippingMethod});
                         }
                     })
                     .catch(this.displayError)
