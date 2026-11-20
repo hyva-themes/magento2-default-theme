@@ -16,6 +16,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
     For more information, please refer to [issue #1403](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1403).
 
+### Changed
+
+-   **Fixed saved region not showing in the customer address text input**  
+    For more information, please refer to [issue #1307](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1307).
+
+-   **Fixed customer address region label not targeting the text input**  
+    For more information, please refer to [issue #1397](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1397).
+
+-   **Fixed cart totals shipping label not showing the selected shipping method**  
+    For more information, please refer to [issue #721](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/721).
+
 ## [1.5.4] - 2026-11-12
 
 [1.5.4]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.5.3...1.5.4
