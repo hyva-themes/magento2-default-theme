@@ -178,6 +178,15 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
                                 totalFromConfig && (total.title = totalFromConfig.title);
                             })
                         }
+
+                        const rate = this.availableShippingMethods.find(
+                            method => `${method.carrier_code}_${method.method_code}` === this.shippingMethod
+                        );
+                        const shippingSegment = result.total_segments.find(total => total.code === 'shipping');
+                        if (rate && shippingSegment) {
+                            const description = [rate.carrier_title, rate.method_title].filter(Boolean).join(' - ');
+                            shippingSegment.title = '<?= $escaper->escapeJs(__('Shipping & Handling (%1)', '%1')) ?>'.replace('%1', description);
+                        }
                         return result;
                     })
                     .then(result => {
