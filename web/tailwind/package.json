@@ -18,7 +18,7 @@
   },
   "engine-strict": true,
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.0.0"
   },
   "browserslist": [
     "> 0.5% and not dead"

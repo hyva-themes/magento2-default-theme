@@ -31,6 +31,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+-   **Require Node.js 22 or newer for the Tailwind build**  
+    Node.js 20 has been end of life since April 2026.
+    The `.nvmrc` and the `engines` field of `web/tailwind/package.json` are updated.
+
 -   **Fixed saved region not showing in the customer address text input**  
     For more information, please refer to [issue #1307](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1307).
 
