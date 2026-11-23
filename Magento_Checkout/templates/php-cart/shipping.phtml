@@ -107,8 +107,9 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
                         this.availableShippingMethods = result;
 
                         if(!this.availableShippingMethods.find(method => { return method.carrier_code + '_' + method.method_code === this.shippingMethod})) {
-                            this.$dispatch('update-shipping-method', {method: false});
-                            this.shippingMethod = false;
+                            const onlyRate = result.length === 1 && result[0];
+                            this.shippingMethod = onlyRate ? `${onlyRate.carrier_code}_${onlyRate.method_code}` : false;
+                            this.$dispatch('update-shipping-method', {method: this.shippingMethod});
                         }
                     })
                     .catch(this.displayError)
@@ -176,6 +177,15 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
                                 const totalFromConfig = checkoutConfigTotals.find(fromConfig => fromConfig.code === total.code)
                                 totalFromConfig && (total.title = totalFromConfig.title);
                             })
+                        }
+
+                        const rate = this.availableShippingMethods.find(
+                            method => `${method.carrier_code}_${method.method_code}` === this.shippingMethod
+                        );
+                        const shippingSegment = result.total_segments.find(total => total.code === 'shipping');
+                        if (rate && shippingSegment) {
+                            const description = [rate.carrier_title, rate.method_title].filter(Boolean).join(' - ');
+                            shippingSegment.title = '<?= $escaper->escapeJs(__('Shipping & Handling (%1)', '%1')) ?>'.replace('%1', description);
                         }
                         return result;
                     })
