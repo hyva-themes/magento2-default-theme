@@ -10,6 +10,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+-   **Design token config for the Hyvä UI Tokens tab**  
+    The theme ships `etc/hyva-tokens.json`, so the Tokens tab of the Theme edit page is available for `Hyva/default`
+    and its child themes. It covers the brand, surface and text colors.
+
+    The theme preview image is now a screenshot of the theme. Magento only copies it when a theme is first registered,
+    so existing installs keep the old image.
+
+    For more information, please refer to [issue #1398](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1398).
+
 -   **`css_classes` argument for the product info card**  
     Classes set on the `product.info` block replace the default `card mb-6` wrapper classes, so a theme can change them
     without overriding `Magento_Catalog::product/view/product-info.phtml`.

@@ -1,0 +1,107 @@
+{
+  "groups": {
+    "brand": "Brand",
+    "surface": "Surfaces and text"
+  },
+  "tokens": {
+    "color-primary": {
+      "label": "Primary",
+      "group": "brand",
+      "type": "color",
+      "default": "oklch(46% 0.2 265)",
+      "note": "Buttons, links and accents. The lighter and darker shades follow it. Pair with On primary."
+    },
+    "color-on-primary": {
+      "label": "On primary",
+      "group": "brand",
+      "type": "color",
+      "default": "#fff",
+      "contrast": "color-primary",
+      "note": "Text and icons on a primary background. Keep enough contrast with Primary."
+    },
+    "color-primary-lighter": {
+      "label": "Primary lighter",
+      "group": "brand",
+      "type": "color",
+      "default": "color-mix(in oklch, var(--color-primary) 80%, var(--color-white))",
+      "resolved": "color-mix(in oklch, var(--color-primary) 80%, #fff)",
+      "note": "Set it only to pick a shade by hand."
+    },
+    "color-primary-darker": {
+      "label": "Primary darker",
+      "group": "brand",
+      "type": "color",
+      "default": "color-mix(in oklch, var(--color-primary) 80%, var(--color-black))",
+      "resolved": "color-mix(in oklch, var(--color-primary) 80%, #000)",
+      "note": "Hover and active states. Set it only to pick a shade by hand."
+    },
+    "color-secondary": {
+      "label": "Secondary",
+      "group": "brand",
+      "type": "color",
+      "default": "oklch(53% 0.15 150)",
+      "note": "Second accent color. The lighter and darker shades follow it."
+    },
+    "color-on-secondary": {
+      "label": "On secondary",
+      "group": "brand",
+      "type": "color",
+      "default": "#fff",
+      "contrast": "color-secondary",
+      "note": "Text and icons on a secondary background. Keep enough contrast with Secondary."
+    },
+    "color-secondary-lighter": {
+      "label": "Secondary lighter",
+      "group": "brand",
+      "type": "color",
+      "default": "color-mix(in oklch, var(--color-secondary) 80%, var(--color-white))",
+      "resolved": "color-mix(in oklch, var(--color-secondary) 80%, #fff)",
+      "note": "Set it only to pick a shade by hand."
+    },
+    "color-secondary-darker": {
+      "label": "Secondary darker",
+      "group": "brand",
+      "type": "color",
+      "default": "color-mix(in oklch, var(--color-secondary) 80%, var(--color-black))",
+      "resolved": "color-mix(in oklch, var(--color-secondary) 80%, #000)",
+      "note": "Set it only to pick a shade by hand."
+    },
+    "color-bg": {
+      "label": "Background",
+      "group": "surface",
+      "type": "color",
+      "default": "var(--color-slate-50)",
+      "resolved": "oklch(98.4% 0.003 247.858)",
+      "contrast": "color-ink",
+      "note": "Page background."
+    },
+    "color-surface": {
+      "label": "Surface",
+      "group": "surface",
+      "type": "color",
+      "default": "var(--color-white)",
+      "resolved": "#fff",
+      "contrast": "color-ink",
+      "note": "Cards, panels and form fields."
+    },
+    "color-ink": {
+      "label": "Text",
+      "group": "surface",
+      "type": "color",
+      "default": "var(--color-slate-950)",
+      "resolved": "oklch(12.9% 0.042 264.695)",
+      "aliases": ["color-fg"],
+      "note": "Body text and headings."
+    },
+    "color-ink-muted": {
+      "label": "Muted text",
+      "group": "surface",
+      "type": "color",
+      "default": "var(--color-slate-600)",
+      "resolved": "oklch(44.6% 0.043 257.281)",
+      "contrast": "color-bg",
+      "aliases": ["color-fg-secondary"],
+      "note": "Hints, labels and other secondary text."
+    }
+  }
+}
