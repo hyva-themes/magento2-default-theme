@@ -40,6 +40,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 -   **Fixed cart totals shipping label not showing the selected shipping method**  
     For more information, please refer to [issue #721](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/721).
 
+    Many thanks to Ivan Martsii (Perspective) for the contribution!
+
 -   **Fixed Page Builder Vimeo video backgrounds without a fallback image**  
     Jarallax and its video extension are updated from v1.12.5 to v2.2.1. The minified video extension still called the
     deprecated Vimeo v2 API, it now uses the oEmbed API.
@@ -57,6 +59,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 -   **Cart shipping estimate selects the only available shipping method**  
     For more information, please refer to [issue #1325](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1325).
+
+    Many thanks to Valeriia Prokhina (Perspective) for the contribution!
 
 ## [1.5.4] - 2026-11-12
 
