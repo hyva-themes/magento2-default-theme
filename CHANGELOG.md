@@ -6,7 +6,71 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.5.4...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.5.5...main
+
+## [1.5.5] - 2026-11-25
+
+[1.5.5]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.5.4...1.5.5
+
+### Added
+
+-   **Design token config for the Hyvä UI Tokens tab**  
+    The theme ships `etc/hyva-tokens.json`, so the Tokens tab of the Theme edit page is available for `Hyva/default`
+    and its child themes. It covers the brand, surface and text colors.
+
+    The theme preview image is now a screenshot of the theme. Magento only copies it when a theme is first registered,
+    so existing installs keep the old image.
+
+    For more information, please refer to [issue #1398](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1398).
+
+-   **`css_classes` argument for the product info card**  
+    Classes set on the `product.info` block replace the default `card mb-6` wrapper classes, so a theme can change them
+    without overriding `Magento_Catalog::product/view/product-info.phtml`.
+
+    For more information, please refer to [issue #1403](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1403).
+
+### Changed
+
+-   **Require Node.js 22 or newer for the Tailwind build**  
+    Node.js 20 has been end of life since April 2026.
+    The `.nvmrc` and the `engines` field of `web/tailwind/package.json` are updated.
+
+-   **Updated `@hyva-themes/hyva-modules` from v1.5.0 to v1.6.0**  
+    The `hyva-tokens` command reads the Design Tokens 2025.10 format, and token references to a camel case key point to
+    the generated kebab case variable. Version 1.6.0 requires Node.js 22.
+
+    For more information, please refer to the [hyva-modules changelog](https://github.com/hyva-themes/hyva-modules-tailwind-js/blob/main/CHANGELOG.md).
+
+-   **Fixed saved region not showing in the customer address text input**  
+    For more information, please refer to [issue #1307](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1307).
+
+-   **Fixed customer address region label not targeting the text input**  
+    For more information, please refer to [issue #1397](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1397).
+
+-   **Fixed cart totals shipping label not showing the selected shipping method**  
+    For more information, please refer to [issue #721](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/721).
+
+    Many thanks to Ivan Martsii (Perspective) for the contribution!
+
+-   **Fixed Page Builder Vimeo video backgrounds without a fallback image**  
+    Jarallax and its video extension are updated from v1.12.5 to v2.2.1. The minified video extension still called the
+    deprecated Vimeo v2 API, it now uses the oEmbed API.
+
+    Slide videos no longer use the `elementInViewport` option, since Jarallax v2 detects visibility with an
+    IntersectionObserver and throws on that option. Themes overriding `Magento_PageBuilder::widgets/parallax.phtml`
+    should remove it as well.
+
+    For more information, please refer to [issue #1395](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1395).
+
+-   **Header account menu sizes to its content on desktop**  
+    Longer link labels no longer wrap. The mobile width is unchanged.
+
+    For more information, please refer to [issue #1394](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/work_items/1394).
+
+-   **Cart shipping estimate selects the only available shipping method**  
+    For more information, please refer to [issue #1325](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1325).
+
+    Many thanks to Valeriia Prokhina (Perspective) for the contribution!
 
 ## [1.5.4] - 2026-11-12
 
